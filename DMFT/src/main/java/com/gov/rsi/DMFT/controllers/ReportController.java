@@ -12,44 +12,44 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gov.rsi.DMFT.models.Reports;
-import com.gov.rsi.DMFT.repositories.ReportsRepository;
+import com.gov.rsi.DMFT.models.Report;
+import com.gov.rsi.DMFT.repositories.ReportRepository;
 
 
 @RestController
 @RequestMapping("/reports")
-public class ReportsController {
+public class ReportController {
 	
 	@Autowired
-	private ReportsRepository repository;
+	private ReportRepository repository;
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public List<Reports> getAllReports() {
+	public List<Report> getAllReports() {
 		
 		return repository.findAll();
 	  
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public Reports getReportById(@PathVariable("id") ObjectId id) {
+	public Report getReportById(@PathVariable("id") ObjectId id) {
 		
 		return repository.findBy_id(id);
 	  
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public Reports modifyReportById(@PathVariable("id") ObjectId id, 
+	public Report modifyReportById(@PathVariable("id") ObjectId id, 
 			@Valid @RequestBody Object report) {
 		
-		Reports driversReport = new Reports(id, "In-Progress", report);
+		Report driversReport = new Report(id, "In-Progress", report);
 		repository.save(driversReport);
 		return driversReport;
 	}
 	
 	@RequestMapping(value = "/", method = RequestMethod.POST)
-	public Reports createReport(@Valid @RequestBody Object report) {
+	public Report createReport(@Valid @RequestBody Object report) {
 		
-		Reports driversReport = new Reports(ObjectId.get(), "New", report);
+		Report driversReport = new Report(ObjectId.get(), "New", report);
 		repository.save(driversReport);
 		return driversReport;		
 	}

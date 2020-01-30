@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class Reports {
+public class Report {
 	
 	@Id
 	private ObjectId _id;
@@ -14,7 +14,7 @@ public class Reports {
 	
 	private Object report;
 
-	public Reports(ObjectId _id, String status, Object report) {
+	public Report(ObjectId _id, String status, Object report) {
 		this._id = _id;
 		this.status = status;
 		this.report = report;
@@ -43,14 +43,6 @@ public class Reports {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 }
