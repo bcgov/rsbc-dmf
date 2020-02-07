@@ -1,48 +1,47 @@
 package com.gov.rsi.DMFT.models;
 
-import org.bson.types.ObjectId;
+import java.time.LocalDateTime;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import lombok.Data;
+
+/**
+ * A Report wraps the DMER JSON document along with status and timestamps to 
+ * implement a queue
+ */
 @Document
+@Data
 public class Report {
 	
+	public enum Status {NEW, INPROCESS, FINISHED} 
+	
 	@Id
-	private ObjectId _id;
+	private String			id;
 	
-	private String status;
+	private Status 			status;
+	private LocalDateTime	timeNew;
+	private LocalDateTime	timeInProcess;
+	private LocalDateTime	timeFinished;
 	
-	private Object report;
+	@Indexed(unique = true)
+	private String			licenseNumber;	
+	
+	private String 			json;
 
-	public Report(ObjectId _id, String status, Object report) {
-		this._id = _id;
+	public Report(String licenseNumber, String json) {
+		this.licenseNumber = licenseNumber;
+		this.json = json;
+	}
+	
+	public void setStatus(Status status) {
 		this.status = status;
-		this.report = report;
+		switch (status) {
+			case NEW: 		timeNew = LocalDateTime.now(); break;
+			case INPROCESS: timeInProcess = LocalDateTime.now(); break;
+			case FINISHED: 	timeFinished = LocalDateTime.now(); break;
+		}
 	}
-
-	public ObjectId get_id() {
-		return _id;
-	}
-
-	public void set_id(ObjectId _id) {
-		this._id = _id;
-	}
-
-	public Object getReport() {
-		return report;
-	}
-
-	public void setReport(Object report) {
-		this.report = report;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	
-
 }
