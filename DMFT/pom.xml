@@ -39,6 +39,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+    		<groupId>com.jayway.jsonpath</groupId>
+    		<artifactId>json-path</artifactId>
+    		<version>2.4.0</version>
+		</dependency>
+		
+		<!-- This appeared transitively in the Effective POM, but won't compile without specific inclusion here  -->
+		<dependency>
+        	<groupId>org.projectlombok</groupId>
+        	<artifactId>lombok</artifactId>
+        	<version>1.18.10</version>
+      	</dependency>	
+		
+		
 	</dependencies>
 
 	<build>
