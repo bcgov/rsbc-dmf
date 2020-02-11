@@ -1,4 +1,4 @@
-package com.gov.rsi.DMFT;
+package com.gov.rsi.dmft;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
