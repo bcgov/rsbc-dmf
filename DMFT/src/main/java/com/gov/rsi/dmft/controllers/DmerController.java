@@ -1,24 +1,16 @@
 package com.gov.rsi.dmft.controllers;
 
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-import javax.validation.Valid;
-
-//import javax.ws.rs.core.Response;
-
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.gov.rsi.dmft.ApplicationProperties;
 import com.gov.rsi.dmft.models.Dmer;
 import com.gov.rsi.dmft.repositories.DmerRepository;
 import com.jayway.jsonpath.JsonPath;
@@ -35,11 +27,9 @@ import org.slf4j.LoggerFactory;
 public class DmerController extends AbstractController {
 	
 	// The JSONPath expression to find the element containing the driver's license
-	// Note that in the assumed schema, it is within an "item" element in the Questionnaire
-	// resource, rather than in the "Patient" resource
-	private static final String LICENSE_NUMBER_PATH = "$..item[?(@.linkId==\"{0}\")]";
+	private static final String LICENSE_NUMBER_PATH = ApplicationProperties.get("validation.license.number.path");
 	// The linkId of the "item" element holding the license number
-	private static final String LICENSE_NUMBER_ELEMENT = "patientDriversLicenseNumber";
+	private static final String LICENSE_NUMBER_ELEMENT = ApplicationProperties.get("validation.license.number.element");
 	
 	private static Logger log = LoggerFactory.getLogger(DmerController.class);
 	
