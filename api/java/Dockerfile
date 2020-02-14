@@ -1,22 +1,29 @@
-FROM maven:3-jdk-8-openj9 AS build-env
+FROM maven:3-jdk-8-openj9 as build
+WORKDIR /workspace/app
 
-# Copy source files.
-COPY ./src /app/src
-COPY pom.xml /app
-WORKDIR /app
+COPY mvnw .
+# COPY .mvn .mvn
+COPY pom.xml .
+COPY src src
+COPY .env .env
 
-# Compile the application.
-RUN mvn -f pom.xml -DskipTests clean package
+RUN mvn clean install
+RUN ./mvnw package -DskipTests
+# For now will start in the copied folder set below rather than the jar
+RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-# Build runtime image
-FROM registry.redhat.io/openjdk/openjdk-8-rhel8 AS runtime
+FROM openjdk:8-jdk-alpine
+#FROM registry.redhat.io/openjdk/openjdk-8-rhel8 AS runtime
 
-# Copy compiled assemblies into image.
-COPY --from=build-env /app/target/*.jar /app/app.jar
-WORKDIR /app
+VOLUME /tmp
+ARG DEPENDENCY=/workspace/app/target/dependency
+COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib
+COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
+COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
+COPY --from=build ${DEPENDENCY}/org /app/org
 
-ENTRYPOINT ["java","-jar","app.jar"]
+WORKDIR app
 
-# CMD tail -f /dev/null
+CMD ["java", "-cp", "./:lib/*", "org.springframework.boot.loader.JarLauncher"]
 
-EXPOSE 8080
+EXPOSE 80 433
