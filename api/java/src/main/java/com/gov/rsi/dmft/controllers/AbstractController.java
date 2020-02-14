@@ -18,6 +18,15 @@ public abstract class AbstractController {
      }
 	
     /**
+     * Generates an error response (400 Bad Request) containing 
+     * an explanatory message
+     * @return  the ResponseEntity
+     */
+    protected ResponseEntity responseBadRequest(String message){
+    	return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+     }
+	
+    /**
      * Generates a normal return (200 Ok) without a body
      * @return  the ResponseEntity
      */
@@ -50,62 +59,4 @@ public abstract class AbstractController {
     	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-//
-//    /**
-//     * Creates a 201 Created response with the key as body content and an Authorization header
-//     * @param key the key
-//     * @param token the token to be returned in the Authorization header
-//     * @return the Response
-//     */
-//    protected Response responseCreated(Long id, String token){
-//    	ResponseBuilder builder = Response.status(Response.Status.CREATED);
-//    	builder.header("Content-Location", contentLocation);
-//    	builder.header(HttpHeaders.AUTHORIZATION, "Bearer " + token);
-//    	builder.entity(id);
-//    	return builder.build();
-//    }
-//    
-//    /**
-//     * Creates a 201 Created response with the key as body content
-//     * @param key the key
-//     * @return the Response
-//     */
-//    protected Response responseCreated(Long id){
-//    	ResponseBuilder builder = Response.status(Response.Status.CREATED);
-//    	builder.header("Content-Location", contentLocation);
-//    	builder.entity(id);
-//    	return builder.build();
-//    }
-//    
-//    /**
-//     * Creates a 201 Created response with an array of keys as body content
-//     * @param key the key
-//     * @return the Response
-//     */
-//    protected Response responseCreated(List<Long> ids){
-//    	ResponseBuilder builder = Response.status(Response.Status.CREATED);
-//    	builder.header("Content-Location", contentLocation);
-//    	builder.entity(ids);
-//    	return builder.build();
-//    }
-//    
-//    
-//    /**
-//     * Creates a 500 Internal Server Error response with no body 
-//     * @return the Response
-//     */
-//    protected Response responseError(){
-//    	ResponseBuilder builder = Response.status(Response.Status.INTERNAL_SERVER_ERROR);
-//    	return builder.build();
-//    }
-//
-//    /**
-//     * Creates a 501 Not Implemented response with no body 
-//     * @return the Response
-//     */
-//    protected Response responseNotImplemented(){
-//    	ResponseBuilder builder = Response.status(Response.Status.NOT_IMPLEMENTED);
-//    	return builder.build();
-//    }
-//
 }
