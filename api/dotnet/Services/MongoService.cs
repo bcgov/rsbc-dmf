@@ -29,6 +29,7 @@ namespace Dmft.Api.Services
             var db_password = configuration["MONGODB_PASSWORD"];
 
             var cs = $"mongodb://{db_user}:{db_password}@{db_domain}:{db_port}/{db_name}";
+            _logger.LogDebug(cs);
             var client = new MongoClient(cs);
             var db = client.GetDatabase(db_name);
 
