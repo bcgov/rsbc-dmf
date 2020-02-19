@@ -24,7 +24,7 @@ namespace Dmft.Api.Services
 
             var db_domain = configuration["MONGODB_DOMAIN"];
             var db_port = configuration["MONGODB_PORT"];
-            var db_name = configuration["MONGODB_NAME"];
+            var db_name = configuration["MONGODB_DATABASE"];
             var db_user = configuration["MONGODB_USER"];
             var db_password = configuration["MONGODB_PASSWORD"];
 
