@@ -22,10 +22,14 @@ namespace Dmft.Api.Services
             _logger = logger;
             _configuration = configuration;
 
-            var cs = configuration.GetConnectionString("Dmer");
-            var client = new MongoClient(cs);
+            var db_domain = configuration["MONGODB_DOMAIN"];
+            var db_port = configuration["MONGODB_PORT"];
+            var db_name = configuration["MONGODB_NAME"];
+            var db_user = configuration["MONGODB_USER"];
+            var db_password = configuration["MONGODB_PASSWORD"];
 
-            var db_name = configuration["MONGODB_DATABASE"];
+            var cs = $"mongodb://{db_user}:{db_password}@{db_domain}:{db_port}/{db_name}";
+            var client = new MongoClient(cs);
             var db = client.GetDatabase(db_name);
 
             _queue = db.GetCollection<Queue>("queue");
