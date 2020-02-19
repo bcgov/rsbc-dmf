@@ -16,6 +16,16 @@ import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
+/**
+ * Configures the MongoDB connection with values from environment variables.
+ * The following environment variables are examined:
+ * 
+ * MONGODB_HOST        defaults to localhost
+ * MONGODB_PORT        defaults to 27017
+ * MONGODB_DATABASE    defaults to test
+ * MONGODB_USER        optional (if specified, both user and password are required)
+ * MONGODB_PASSWORD    optional (if specified, both user and password are required)
+ */
 @Configuration
 public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 
@@ -54,8 +64,6 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 		ConnectionString cs = new ConnectionString(sb.toString());
 		MongoClient client = MongoClients.create(cs);
 		
-		log.info("Connecting to database " + database + " on port " + port);
-		
 		return client;
 	}
 	
@@ -64,7 +72,10 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 		host = env.getOrDefault("MONGODB_HOST", "localhost");
 		port = env.getOrDefault("MONGODB_PORT", "27017");
 		database = env.getOrDefault("MONGODB_DATABASE", "test");
-		user = env.get("MONGODB_HOST");
-		password = env.get("MONGODB_HOST");
+		user = env.get("MONGODB_USER");
+		password = env.get("MONGODB_PASSWORD");
+		
+		user = password == null ? null : user;
+		password = user == null ? null : password;
 	}
 }
