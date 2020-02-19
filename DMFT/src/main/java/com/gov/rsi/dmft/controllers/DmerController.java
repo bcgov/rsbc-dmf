@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gov.rsi.dmft.ApplicationProperties;
@@ -47,12 +50,13 @@ public class DmerController extends AbstractController {
 
 		if (reports.size() == 0) {
 			// No new ones left in queue
+			log.info("New DMER queue empty");
 			return responseNoContent();
 		}
 		
 		// Switch status to In Process
 		Dmer nextOne = reports.get(0);
-		nextOne.setStatus(Dmer.Status.INPROCESS);
+		nextOne.setStatus(Dmer.Status.IN_PROCESS);
 		repository.save(nextOne);
 		
 		return responseOkWithBody(nextOne.getJson());
@@ -60,8 +64,8 @@ public class DmerController extends AbstractController {
 	
 	/**
 	 * Inserts a DMER JSON report into the queue
-	 * @param dmerJson
-	 * @return
+	 * @param dmerJson the DMER document in JSON format
+	 * @return a ResponseEntity
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.POST)
 	public ResponseEntity<?> createDmer(@RequestBody String dmerJson) {
@@ -93,6 +97,7 @@ public class DmerController extends AbstractController {
 			for(Dmer report: reports){
 				if (report.getJson().equals(dmerJson)){
 					// Ignore the duplicate
+					log.info("Ignoring DMER with duplicate license number");
 					return responseOkNoBody();
 				}
 			}
@@ -106,28 +111,29 @@ public class DmerController extends AbstractController {
 		return responseCreated();	
 	}
 	
-//	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//	public Dmer getDmerById(@PathVariable("id") ObjectId id) {
-//		
-//		return repository.findBy_id(id);
-//	  
-//	}
-	
-//	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//	public Dmer modifyDmerById(@PathVariable("id") ObjectId id, 
-//			@Valid @RequestBody Object report) {
-//		
-//		Dmer driversDmer = new Dmer(id, "In-Progress", report);
-//		repository.save(driversDmer);
-//		return driversDmer;
-//	}
-	
-	
-//	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//	public void deleteDmer(@PathVariable ObjectId id) {
-//		
-//		repository.delete(repository.findBy_id(id));
-//		
-//	}	
-
+	/**
+	 * Updates the status of a specified DMER
+	 * @param licenseNumber the license number
+	 * @param status the new status
+	 * @return a ResponseEntity 
+	 */
+	@RequestMapping(value = "/{licenseNumber}", method = RequestMethod.PUT)
+	public ResponseEntity updateDmerStatus(@PathVariable("licenseNumber") String licenseNumber, 
+			@Validated @RequestParam("status") Dmer.Status status) {
+		
+		// Look for records with matching DL
+		List<Dmer> reports = repository.findByLicenseNumber(licenseNumber);
+		if (reports == null || reports.size() == 0) {
+			log.error("Cannot update DMER status: license number not found");
+			return responseBadRequest("Cannot update DMER status: license number not found");
+		}
+		
+		// Update the status and save
+		Dmer report = reports.get(0);
+		report.setStatus(status);
+		repository.save(report);
+		log.info("Received DMER for license number " + licenseNumber);
+		
+		return responseOkNoBody();
+	}
 }

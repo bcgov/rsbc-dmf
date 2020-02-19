@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class Dmer {
 	
-	public enum Status {NEW, IN_PROCESS, CLEAN_PASS} 
+	public enum Status {NEW, IN_PROCESS, CLEAN_PASS, NON_CLEAN_PASS} 
 	
 	@Id
 	private String			id;
