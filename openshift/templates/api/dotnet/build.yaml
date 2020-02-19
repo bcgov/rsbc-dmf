@@ -77,7 +77,7 @@ parameters:
   displayName: App Name
   description: The name of the application (grouped).
   required: true
-  value: "pims"
+  value: "dmft"
 - name: COMP_NAME
   displayName: Component Name
   description: The name of the application component.
@@ -86,7 +86,7 @@ parameters:
 - name: GIT_REPO_URL
   displayName: Git Repository URL
   description: The URL of the repository with your application source code.
-  value: "https://github.com/bcgov/PIMS.git"
+  value: "https://github.com/bcgov/rsbc-dmf.git"
 - name: GIT_REF
   displayName: Git Reference
   required: true
@@ -97,11 +97,11 @@ parameters:
 - name: SOURCE_CONTEXT_DIR
   displayName: Context Directory
   description: Set this to use a subdirectory of the source code repository
-  value: "backend"
+  value: "api/dotnet"
 - name: SOURCEIMAGE_NAMESPACE
   displayName: Source Image Namespace
   description: The s2i image namespace which is used to build the code.
-  value: "jcxjin-tools"
+  value: "yalhhm-tools"
 - name: SOURCEIMAGE_NAME
   displayName: Source Image Name
   description: The s2i image name which is used to build the code.
@@ -120,7 +120,7 @@ parameters:
   description:
     Set this to a project file (e.g. csproj) or a folder containing a single
     project file.
-  value: BackendApi.csproj
+  value: Dmft.Api.csproj
 - name: DOTNET_PUBLISH_READYTORUN
   displayName: Ahead-of-time compilation
   description: Set this to 'true' to perform an ahead-of-time compilation.

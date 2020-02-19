@@ -106,12 +106,26 @@ objects:
               protocol: TCP
             env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: "${ASPNETCORE_ENVIRONMENT}"
-            - name: DB_PASSWORD
+              value: ${ASPNETCORE_ENVIRONMENT}
+            - name: MONGODB_DOMAIN
+              value: ${MONGODB_DOMAIN}
+            - name: MONGODB_PORT
+              value: ${MONGODB_PORT}
+            - name: MONGODB_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: ${APP_NAME}-db-${ENV_NAME}-secret
-                  key: MSSQL_SA_PASSWORD
+                  name: ${DB_SECRET}
+                  key: database-name
+            - name: MONGODB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ${DB_SECRET}
+                  key: database-user
+            - name: MONGODB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${DB_SECRET}
+                  key: database-password
             resources:
               limits:
                 cpu: "${CPU_LIMIT}"
@@ -166,7 +180,7 @@ parameters:
   displayName: App Name
   description: The name of the application (grouped).
   required: true
-  value: "pims"
+  value: "dmft"
 - name: COMP_NAME
   displayName: Component Name
   description: The name of the application component.
@@ -177,7 +191,7 @@ parameters:
   description:
     The namespace of the OpenShift project containing the application.
   required: true
-  value: "jcxjin"
+  value: "yalhhm"
 - name: ENV_NAME
   displayName: Environment name
   description: The name for this environment [dev, test, prod]
@@ -189,7 +203,7 @@ parameters:
     The namespace of the OpenShift project containing the imagestream for the
     application.
   required: true
-  value: "jcxjin-tools"
+  value: "yalhhm-tools"
 - name: SOURCEIMAGE_TAG
   displayName: Source branch TAG name
   description: The TAG name for this branch [dev, test, prod]
@@ -207,7 +221,7 @@ parameters:
   description:
     The exposed hostname that will route to the the .NET Core service, if left blank a
     value will be defaulted.
-  value: "pims-dev.pathfinder.gov.bc.ca"
+  value: "dmft-dev.pathfinder.gov.bc.ca"
 - name: DOMAIN_PATH
   displayName: Application URL path
   description: The URL path to the application
@@ -216,23 +230,21 @@ parameters:
   displayName: Application Port
   description: The port used to communicate with the Pod
   value: "8080"
-- name: KEYCLOAK_AUTHORITY
-  displayName: KeyCloak realm URL
-  description:
-    The KeyCloak realm URL for the client.
+- name: DB_SECRET
+  displayName: The MongoDB Secret Name
+  description: The Secret name that stores the mongodb related secrets.
   required: true
-  value: "https://sso-dev.pathfinder.gov.bc.ca/auth/realms/xz0xtue5"
-- name: KEYCLOAK_AUDIENCE
-  displayName: KeyCloak client name
-  description:
-    The KeyCloak client name for the client.
+  value: "mongodb"
+- name: MONGODB_DOMAIN
+  displayName: MongoDB Domain Name
+  description: The domain name of the mongoDB.
   required: true
-  value: "pims-api"
-- name: KEYCLOAK_SECRET
-  displayName: KeyCloak Secret
-  description:
-    The KeyCloak secret key for the client.
-  value:
+  value: "mongodb"
+- name: MONGODB_PORT
+  displayName: MongoDB Port
+  description: The port of the mongodb.
+  required: true
+  value: "27017"
 - name: CPU_LIMIT
   displayName: CPU Limit
   description: Maximum amount of CPU the container can use.
