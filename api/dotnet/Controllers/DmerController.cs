@@ -14,7 +14,7 @@ namespace Dmft.Api.Controllers
 {
     [ApiController]
     [Route("/api/queue/[controller]")]
-    public class DmerController : ControllerBase
+    public class DmerController : Controller
     {
         #region Variables
         private readonly ILogger<DmerController> _logger;
@@ -94,14 +94,20 @@ namespace Dmft.Api.Controllers
         public IActionResult Get(string id)
         {
             var queue = _mongo.Get(id);
-            var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
 
-            return new JsonResult(new
+            if (queue != null)
             {
-                Id = queue.Id,
-                Status = queue.Status,
-                Dmer = dmer
-            });
+                var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
+
+                return new JsonResult(new
+                {
+                    Id = queue.Id,
+                    Status = queue.Status,
+                    Dmer = dmer
+                });
+            }
+
+            return NoContent();
         }
 
         /// <summary>
@@ -122,6 +128,17 @@ namespace Dmft.Api.Controllers
                 };
             });
             return new JsonResult(queue);
+        }
+
+        /// <summary>
+        /// Returns an HTML page to view the contents of the queue.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("table")]
+        public IActionResult QueueTable()
+        {
+            var queue = _mongo.GetList("All");
+            return View(queue);
         }
 
         /// <summary>

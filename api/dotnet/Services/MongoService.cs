@@ -42,8 +42,16 @@ namespace Dmft.Api.Services
         #region Methods
         public IEnumerable<Queue> GetList(string status = "New")
         {
-            var result = _queue.Find<Queue>(q => q.Status == status);
-            return result.ToList();
+            if (status == "All")
+            {
+                var result = _queue.Find<Queue>(q => true);
+                return result.ToList();
+            }
+            else
+            {
+                var result = _queue.Find<Queue>(q => q.Status == status);
+                return result.ToList();
+            }
         }
 
         public Queue Get(string id)
