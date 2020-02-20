@@ -69,14 +69,20 @@ namespace Dmft.Api.Controllers
         public IActionResult GetToProcess()
         {
             var queue = _mongo.GetToProcess();
-            var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
 
-            return new JsonResult(new
+            if (queue != null)
             {
-                Id = queue.Id,
-                Status = queue.Status,
-                Dmer = dmer
-            });
+                var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
+
+                return new JsonResult(new
+                {
+                    Id = queue.Id,
+                    Status = queue.Status,
+                    Dmer = dmer
+                });
+            }
+
+            return NoContent();
         }
 
         /// <summary>
