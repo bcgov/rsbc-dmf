@@ -2,12 +2,13 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Dmft.Api.Services;
 using Dmft.Api.Models;
+using System.Text.Json;
+using MongoDB.Driver;
 
 namespace Dmft.Api.Controllers
 {
@@ -45,10 +46,19 @@ namespace Dmft.Api.Controllers
         [HttpPost]
         public IActionResult AddDmer([FromBody] object dmer)
         {
-            var json = JsonSerializer.Serialize(dmer);
-            var queue = _mongo.Add(json);
-
-            return Created($"/api/dmer/{queue.Id}", queue.Id);
+            try
+            {
+                var queue = _mongo.Add(dmer);
+                return Created($"/api/dmer/{queue.Id}", queue.Id);
+            }
+            catch (MongoWriteException ex)
+            {
+                if (ex.Message.Contains("duplicate key error"))
+                {
+                    return Ok("Duplicate DMER submitted");
+                }
+                throw ex;
+            }
         }
 
         /// <summary>
@@ -59,7 +69,14 @@ namespace Dmft.Api.Controllers
         public IActionResult GetToProcess()
         {
             var queue = _mongo.GetToProcess();
-            return new JsonResult(queue);
+            var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
+
+            return new JsonResult(new
+            {
+                Id = queue.Id,
+                Status = queue.Status,
+                Dmer = dmer
+            });
         }
 
         /// <summary>
@@ -68,10 +85,17 @@ namespace Dmft.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public IActionResult Get(Guid id)
+        public IActionResult Get(string id)
         {
             var queue = _mongo.Get(id);
-            return new JsonResult(queue);
+            var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
+
+            return new JsonResult(new
+            {
+                Id = queue.Id,
+                Status = queue.Status,
+                Dmer = dmer
+            });
         }
 
         /// <summary>
@@ -81,7 +105,16 @@ namespace Dmft.Api.Controllers
         [HttpGet("list/{status}")]
         public IActionResult GetList(string status = "New")
         {
-            var queue = _mongo.GetList(status);
+            var queue = _mongo.GetList(status).Select(q =>
+            {
+                var dmer = JsonSerializer.Deserialize<object>(q.Dmer);
+                return new
+                {
+                    Id = q.Id,
+                    Status = q.Status,
+                    Dmer = dmer
+                };
+            });
             return new JsonResult(queue);
         }
 
@@ -91,8 +124,11 @@ namespace Dmft.Api.Controllers
         /// <param name="queue"></param>
         /// <returns></returns>
         [HttpPut("processed")]
-        public IActionResult Processed(Queue queue)
+        public IActionResult Processed(string id, string status)
         {
+            var queue = _mongo.Get(id);
+            if (queue == null) return BadRequest("DMER does not exist.");
+
             var result = _mongo.Processed(queue);
 
             return Ok("Success");
