@@ -139,6 +139,25 @@ namespace Dmft.Api.Controllers
 
             return Ok("Success");
         }
+
+        /// <summary>
+        /// Delete the specified DMER from the queue.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete("{id}")]
+        public IActionResult Delete(string id)
+        {
+            var queue = _mongo.Get(id);
+
+            if (queue != null)
+            {
+                _mongo.Remove(queue);
+                return Ok("success");
+            }
+
+            return BadRequest("DMER does not exist.");
+        }
         #endregion
     }
 }
