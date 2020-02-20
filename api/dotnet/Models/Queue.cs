@@ -1,6 +1,8 @@
 using System;
+using System.Text.Json;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json.Linq;
 
 namespace Dmft.Api.Models
 {
@@ -9,7 +11,7 @@ namespace Dmft.Api.Models
         #region Properties
         [BsonId]
         [BsonRepresentation(BsonType.String)]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         public string Status { get; set; }
 
@@ -28,16 +30,15 @@ namespace Dmft.Api.Models
         /// </summary>
         public Queue()
         {
-            this.Id = Guid.NewGuid();
         }
 
         /// <summary>
         /// Creates a new instance of a Queue object, and initializes it.
         /// </summary>
         /// <param name="dmer"></param>
-        public Queue(string dmer)
+        public Queue(string id, string dmer)
         {
-            this.Id = Guid.NewGuid();
+            this.Id = id;
             this.Status = "New";
             this.Dmer = dmer;
             this.CreatedOn = DateTime.UtcNow;

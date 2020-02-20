@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Dmft.Api.Models;
+using Newtonsoft.Json.Linq;
+using Dmft.Api.Helpers.Json;
 
 namespace Dmft.Api.Services
 {
@@ -29,7 +32,6 @@ namespace Dmft.Api.Services
             var db_password = configuration["MONGODB_PASSWORD"];
 
             var cs = $"mongodb://{db_user}:{db_password}@{db_domain}:{db_port}/{db_name}";
-            _logger.LogDebug(cs);
             var client = new MongoClient(cs);
             var db = client.GetDatabase(db_name);
 
@@ -44,7 +46,7 @@ namespace Dmft.Api.Services
             return result.ToList();
         }
 
-        public Queue Get(Guid id)
+        public Queue Get(string id)
         {
             return _queue.Find<Queue>(q => q.Id == id).FirstOrDefault();
         }
@@ -78,11 +80,19 @@ namespace Dmft.Api.Services
             return queue;
         }
 
-        public Queue Add(string dmer)
+        /// <summary>
+        /// Add the DMER object to the datasource.
+        /// Extract the driver's license number and use it as the ID.
+        /// </summary>
+        /// <param name="dmer"></param>
+        /// <returns></returns>
+        public Queue Add(object dmer)
         {
             if (dmer == null) throw new ArgumentNullException(nameof(dmer));
 
-            var queue = new Queue(dmer);
+            var json = JsonParser.Serialize(dmer);
+            var id = JsonParser.GetDriverLicenseNumber(json);
+            var queue = new Queue(id, json);
             _queue.InsertOne(queue);
 
             return queue;
