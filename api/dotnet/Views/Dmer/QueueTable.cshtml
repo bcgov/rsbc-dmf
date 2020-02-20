@@ -1,0 +1,25 @@
+@using System.Collections.Generic
+@model IEnumerable<Dmft.Api.Models.Queue>
+
+<html>
+    <head>
+        <title>DMER Queue</title>
+    </head>
+    <body>
+        <table>
+            <thead>
+            <tr>
+                <td>DLN</td>
+                <td>Status</td>
+            </tr>
+            </thead>
+            @foreach (var item in @Model)
+            {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Status</td>
+            </tr>
+            }
+        </table>
+    </body>
+</html>
