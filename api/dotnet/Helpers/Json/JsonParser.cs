@@ -18,10 +18,20 @@ namespace Dmft.Api.Helpers.Json
         public static string GetDriverLicenseNumber(string dmer)
         {
             var jo = JObject.Parse(dmer);
-            var patientDriversLicenseNumber = "patientDriversLicenseNumber";
-            var token = jo.SelectToken($"$..item[?(@.linkId=='{patientDriversLicenseNumber}')].answer[0].valueDecimal");
+            var dlnPath = "patientDriversLicenseNumber";
+            var token = jo.SelectToken($"$..item[?(@.linkId=='{dlnPath}')].answer[0].valueDecimal");
             var id = token.Value<string>();
             return id;
+        }
+
+        public static string GetDriverName(string dmer)
+        {
+            var jo = JObject.Parse(dmer);
+            var familyNamePath = "patient.name.family";
+            var givenNamePath = "patient.name.given";
+            var familyName = jo.SelectToken($"$..item[?(@.linkId=='{familyNamePath}')].answer[0].valueString").Value<string>();
+            var givenName = jo.SelectToken($"$..item[?(@.linkId=='{givenNamePath}')].answer[0].valueString").Value<string>();
+            return $"{familyName}, {givenName}";
         }
     }
 }

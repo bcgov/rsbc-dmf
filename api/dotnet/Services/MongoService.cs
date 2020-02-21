@@ -20,6 +20,11 @@ namespace Dmft.Api.Services
         #endregion
 
         #region Constructors
+        /// <summary>
+        /// Creates a new instance of a MongoService class, and initializes it with the specified arguments.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="logger"></param>
         public MongoService(IConfiguration configuration, ILogger<MongoService> logger)
         {
             _logger = logger;
@@ -40,22 +45,50 @@ namespace Dmft.Api.Services
         #endregion
 
         #region Methods
+        /// <summary>
+        /// Get an array of queued items with the specified status.
+        /// If status="All", then all items will be returned.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <returns></returns>
         public IEnumerable<Queue> GetList(string status = "New")
         {
-            var result = _queue.Find<Queue>(q => q.Status == status);
-            return result.ToList();
+            if (status == "All")
+            {
+                var result = _queue.Find<Queue>(q => true);
+                return result.ToList();
+            }
+            else
+            {
+                var result = _queue.Find<Queue>(q => q.Status == status);
+                return result.ToList();
+            }
         }
 
+        /// <summary>
+        /// Get the item in the queue with the specified 'id'.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Queue Get(string id)
         {
             return _queue.Find<Queue>(q => q.Id == id).FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get the next item in the queue (FIFO).
+        /// </summary>
+        /// <returns></returns>
         public Queue GetFirstInQueue()
         {
             return _queue.Find<Queue>(q => q.Status == "New").FirstOrDefault();
         }
 
+        /// <summary>
+        /// Get the next item in the queue (FIFO).
+        /// Update the status to 'Processing' to identify it so that it isn't selected by the next request.
+        /// </summary>
+        /// <returns></returns>
         public Queue GetToProcess()
         {
             var queue = GetFirstInQueue();
@@ -70,11 +103,18 @@ namespace Dmft.Api.Services
             return queue;
         }
 
-        public Queue Processed(Queue queue)
+        /// <summary>
+        /// Change the status of the queued item.
+        /// </summary>
+        /// <param name="queue"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public Queue Processed(Queue queue, string status)
         {
             if (queue == null) throw new ArgumentNullException(nameof(queue));
+            if (String.IsNullOrWhiteSpace(status)) throw new ArgumentException("Argument required", nameof(status));
 
-            queue.Status = "Processed";
+            queue.Status = status;
             queue.ProcessedOn = DateTime.UtcNow;
             Replace(queue);
             return queue;
