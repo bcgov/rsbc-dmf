@@ -53,6 +53,7 @@ namespace Dmft.Api
 
             services.AddOptions();
             services.AddHttpClient();
+            services.AddMvc();
 
             services.AddSingleton<MongoService>();
         }
@@ -69,6 +70,7 @@ namespace Dmft.Api
 
             app.UseRouting();
             app.UseCors();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
            {

@@ -2,13 +2,14 @@ using System.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using Dmft.Api.Services;
 using Dmft.Api.Models;
-using System.Text.Json;
-using MongoDB.Driver;
+using Dmft.Api.Helpers.Json;
 
 namespace Dmft.Api.Controllers
 {
@@ -72,13 +73,11 @@ namespace Dmft.Api.Controllers
 
             if (queue != null)
             {
-                var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
-
                 return new JsonResult(new
                 {
                     Id = queue.Id,
                     Status = queue.Status,
-                    Dmer = dmer
+                    Dmer = JsonParser.Deserialize(queue.Dmer)
                 });
             }
 
@@ -97,13 +96,11 @@ namespace Dmft.Api.Controllers
 
             if (queue != null)
             {
-                var dmer = JsonSerializer.Deserialize<object>(queue.Dmer);
-
                 return new JsonResult(new
                 {
                     Id = queue.Id,
                     Status = queue.Status,
-                    Dmer = dmer
+                    Dmer = JsonParser.Deserialize(queue.Dmer)
                 });
             }
 
@@ -119,12 +116,11 @@ namespace Dmft.Api.Controllers
         {
             var queue = _mongo.GetList(status).Select(q =>
             {
-                var dmer = JsonSerializer.Deserialize<object>(q.Dmer);
                 return new
                 {
                     Id = q.Id,
                     Status = q.Status,
-                    Dmer = dmer
+                    Dmer = JsonParser.Deserialize(q.Dmer)
                 };
             });
             return new JsonResult(queue);
@@ -138,7 +134,7 @@ namespace Dmft.Api.Controllers
         public IActionResult QueueTable()
         {
             var queue = _mongo.GetList("All");
-            return View(queue);
+            return View(queue.Select(q => new Dmer(q)));
         }
 
         /// <summary>
@@ -152,7 +148,7 @@ namespace Dmft.Api.Controllers
             var queue = _mongo.Get(id);
             if (queue == null) return BadRequest("DMER does not exist.");
 
-            var result = _mongo.Processed(queue);
+            var result = _mongo.Processed(queue, status);
 
             return Ok("Success");
         }
