@@ -2,13 +2,13 @@ FROM maven:3-jdk-8-openj9 as build
 WORKDIR /workspace/app
 
 COPY mvnw .
-# COPY .mvn .mvn
+COPY .mvn .mvn
 COPY pom.xml .
 COPY src src
 COPY .env .env
 
-RUN mvn clean install
-RUN ./mvnw package -DskipTests
+RUN mvn clean package
+
 # For now will start in the copied folder set below rather than the jar
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
@@ -26,4 +26,5 @@ WORKDIR app
 
 CMD ["java", "-cp", "./:lib/*", "org.springframework.boot.loader.JarLauncher"]
 
-EXPOSE 80 433
+# By default Sring Boot runs on 8080
+EXPOSE 8080 433
