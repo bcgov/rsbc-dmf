@@ -1,6 +1,5 @@
 package com.gov.rsi.dmft;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,10 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
 
-import com.gov.rsi.dmft.controllers.DmerController;
 import com.mongodb.ConnectionString;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 
@@ -60,7 +56,6 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 		}
 		sb.append(host).append(':').append(port);
 		
-		String connection = sb.toString();
 		ConnectionString cs = new ConnectionString(sb.toString());
 		MongoClient client = MongoClients.create(cs);
 		
