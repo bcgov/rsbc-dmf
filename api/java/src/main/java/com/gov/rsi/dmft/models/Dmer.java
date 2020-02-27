@@ -11,6 +11,8 @@ import lombok.Data;
 /**
  * A Dmer wraps the DMER JSON document along with status and timestamps to 
  * implement a queue
+ * TODO: May want to implement configurable Status values to accomodate
+ *       changing requirements
  */
 @Document
 @Data
@@ -42,7 +44,8 @@ public class Dmer {
 		switch (status) {
 			case NEW: 			timeNew = LocalDateTime.now(); break;
 			case IN_PROCESS: 	timeInProcess = LocalDateTime.now(); break;
-			case CLEAN_PASS: 	timeFinished = LocalDateTime.now(); break;
+			case CLEAN_PASS:
+			case NON_CLEAN_PASS:timeFinished = LocalDateTime.now(); break;
 		}
 	}
 }
