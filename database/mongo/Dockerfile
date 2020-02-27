@@ -1,4 +1,5 @@
-FROM registry.redhat.io/rhscl/mongodb-26-rhel7
+#FROM registry.redhat.io/rhscl/mongodb-26-rhel7
+FROM mongo:4.0.4
 
 # Define mountable directories.
 VOLUME ["/data/db"]
