@@ -28,10 +28,15 @@ import com.gov.rsi.dmft.repositories.DmerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//@DataMongoTest
+/**
+ * Tests of the endpoint methods of the DMER controller. 
+ * 
+ * These are intended to be run against the embedded MongoDB implemented
+ * in the de.flapdoodle.embed.mongo packages. Contrary to expectation,
+ * the database is persisted in the <user>\AppData\Local. 
+ */
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
-@Disabled
 public class DmerTests {
 	
 	// Valid message for driver 77788899
@@ -70,14 +75,6 @@ public class DmerTests {
 		Assertions.assertEquals(HttpStatus.CREATED, controller.createDmer(ANOTHER_VALID).getStatusCode());		
 	}
 	
-	private void dump(){
-		List<Dmer> all = repository.findAll();
-		log.info("-----------------------\n Count: " + all.size());
-		for (Dmer d: all) {
-			log.info(d.getLicenseNumber());
-		}
-	}
-	
 	/**
 	 * Get the next DMER in the "New" queue and confirm it is from the front of the queues and that
 	 * status is switched to IN_PROCESS
@@ -112,8 +109,17 @@ public class DmerTests {
 	@Order(4)
 	public void processInvalidDmer() {
 		dump();
-		log.info("Process Invalid");
+		log.info("Process Invalid DMER");
 		Assertions.assertEquals(HttpStatus.BAD_REQUEST, controller.createDmer(INVALID_FHIR_SYNTAX).getStatusCode());		
+	}
+	
+	// Logs the license number of every DMER in the database
+	private void dump(){
+		List<Dmer> all = repository.findAll();
+		log.info("-----------------------\n Count: " + all.size());
+		for (Dmer d: all) {
+			log.info(d.getLicenseNumber());
+		}
 	}
 	
 }
