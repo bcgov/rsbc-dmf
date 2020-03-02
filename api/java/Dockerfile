@@ -7,7 +7,9 @@ COPY pom.xml .
 COPY src src
 COPY .env .env
 
-RUN mvn clean package
+ENV SIMULATE_MONGO true
+RUN mvn clean install 
+ENV SIMULATE_MONGO false
 
 # For now will start in the copied folder set below rather than the jar
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
