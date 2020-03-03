@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
@@ -21,8 +22,15 @@ import com.mongodb.client.MongoClients;
  * MONGODB_DATABASE    defaults to test
  * MONGODB_USER        optional (if specified, both user and password are required)
  * MONGODB_PASSWORD    optional (if specified, both user and password are required)
+ * 
+ * Use of this class for configuration is disabled during the Maven Test phase,
+ * when an embedded database is used 
  */
 @Configuration
+@ConditionalOnProperty(
+	    value="SIMULATE_MONGO", 
+	    havingValue = "false", 
+	    matchIfMissing = true)
 public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 
 	private static Logger log = LoggerFactory.getLogger(MongoDbConfiguration.class);
@@ -46,6 +54,8 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 	@Override
 	@Bean
 	public MongoClient mongoClient() {
+
+		log.info("Configuring connection to MongoDB");
 		if (env == null) {
 			load();
 		}
