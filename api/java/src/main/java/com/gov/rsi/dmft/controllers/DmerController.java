@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * Implements endpoints for DMER document requests
  */
 @RestController
-@RequestMapping("/queue/dmer")
+@RequestMapping("/api/queue/dmer")
 public class DmerController extends AbstractController {
 	
 	// The JSONPath expression to find the element containing the driver's license
@@ -61,6 +60,35 @@ public class DmerController extends AbstractController {
 		
 		return responseOkWithBody(nextOne.getJson());
 	}
+	
+	/**
+	 * Fetches all DMERS
+	 * @return the DMER Json report
+	 */
+	@RequestMapping(value = "/status", method = RequestMethod.GET)
+	public ResponseEntity<?> getAllDmers() {
+		
+		List<Dmer> reports = repository.findAll();
+
+		if (reports.size() == 0) {
+			return responseNoContent();
+		}
+		
+		return responseOkWithBody(reports);
+	}
+	
+	/**
+	 * Deletes all DMERS
+	 * @return the DMER Json report
+	 */
+	@RequestMapping(value = "/", method = RequestMethod.DELETE)
+	public ResponseEntity<?> deleteAllDmers() {
+		
+		repository.deleteAll();
+
+		return responseOkNoBody();
+	}
+
 	
 	/**
 	 * Inserts a DMER JSON report into the queue
@@ -117,8 +145,8 @@ public class DmerController extends AbstractController {
 	 * @param status the new status
 	 * @return a ResponseEntity 
 	 */
-	@RequestMapping(value = "/{licenseNumber}", method = RequestMethod.PUT)
-	public ResponseEntity updateDmerStatus(@PathVariable("licenseNumber") String licenseNumber, 
+	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	public ResponseEntity updateDmerStatus(@RequestParam("id") String licenseNumber, 
 			@Validated @RequestParam("status") Dmer.Status status) {
 		
 		// Look for records with matching DL
