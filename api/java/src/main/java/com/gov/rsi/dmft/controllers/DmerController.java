@@ -42,7 +42,7 @@ public class DmerController extends AbstractController {
 	 * Fetches the oldest report with NEW status from the queue
 	 * @return the DMER Json report
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<?> getNextNewDmer() {
 		
 		List<Dmer> reports = repository.findFirst1ByStatusOrderByTimeNewAsc(Dmer.Status.NEW);
@@ -81,7 +81,7 @@ public class DmerController extends AbstractController {
 	 * Deletes all DMERS
 	 * @return the DMER Json report
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.DELETE)
+	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteAllDmers() {
 		
 		repository.deleteAll();
@@ -95,7 +95,7 @@ public class DmerController extends AbstractController {
 	 * @param dmerJson the DMER document in JSON format
 	 * @return a ResponseEntity
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createDmer(@RequestBody String dmerJson) {
 		
 		String licenseNumber = null;
@@ -145,7 +145,7 @@ public class DmerController extends AbstractController {
 	 * @param status the new status
 	 * @return a ResponseEntity 
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	@RequestMapping(value = "", method = RequestMethod.PUT)
 	public ResponseEntity updateDmerStatus(@RequestParam("id") String licenseNumber, 
 			@Validated @RequestParam("status") Dmer.Status status) {
 		
