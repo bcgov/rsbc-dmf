@@ -39,12 +39,29 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-   
+   <!--
  		<dependency>
    			<groupId>de.flapdoodle.embed</groupId>
    			<artifactId>de.flapdoodle.embed.mongo</artifactId>
    			<scope>test</scope>
  		</dependency>
+	-->
+    	<dependency>
+        	<groupId>ca.uhn.hapi.fhir</groupId>
+        	<artifactId>hapi-fhir-structures-dstu2</artifactId>
+        	<version>4.1.0</version>
+    	</dependency>
+    	<dependency>
+        	<groupId>ca.uhn.hapi.fhir</groupId>
+        	<artifactId>hapi-fhir-structures-r4</artifactId>
+        	<version>4.1.0</version>
+    	</dependency>
+
+		<dependency>
+    		<groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>6.2.0</version>
+		</dependency>
 
 		<!-- Artifacts below appeared transitively in the Effective POM, but won't compile without specific inclusion  -->
 		
