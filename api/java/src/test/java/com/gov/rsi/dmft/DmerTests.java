@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 @SpringBootTest
 @TestMethodOrder(OrderAnnotation.class)
+@Disabled
 public class DmerTests {
 	
 	// Valid message for driver 77788899
