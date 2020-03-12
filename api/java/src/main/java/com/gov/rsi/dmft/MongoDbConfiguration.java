@@ -65,7 +65,9 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 			sb.append(user).append(':').append(password).append('@');
 		}
 		sb.append(host).append(':').append(port);
-		
+
+		log.info("Connecting to MongoDB at " + sb.toString());
+
 		ConnectionString cs = new ConnectionString(sb.toString());
 		MongoClient client = MongoClients.create(cs);
 		
