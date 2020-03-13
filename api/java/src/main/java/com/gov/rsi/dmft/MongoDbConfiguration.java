@@ -66,6 +66,11 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 		}
 		sb.append(host).append(':').append(port);
 
+		if (!database.equals("test")){
+			// Must append the database name for authentication
+			sb.append('/').append(database);
+		}
+
 		log.info("Connecting to MongoDB at " + sb.toString());
 
 		ConnectionString cs = new ConnectionString(sb.toString());
@@ -78,20 +83,20 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 		env = System.getenv();
 
 		host = env.getOrDefault("MONGODB_HOST", "localhost");
-		log.info("MONGODB_HOST " + host);
+		log.debug("MONGODB_HOST " + host);
 
 		port = env.getOrDefault("MONGODB_PORT", "27017");
-		log.info("MONGODB_PORT " + port);
+		log.debug("MONGODB_PORT " + port);
 
 		database = env.getOrDefault("MONGODB_DATABASE", "test");
-		log.info("MONGODB_DATABASE " + database);
+		log.debug("MONGODB_DATABASE " + database);
 
 		user = env.get("MONGODB_USER");
-		log.info("MONGODB_USER " + user);
+		log.debug("MONGODB_USER " + user);
 
 		password = env.get("MONGODB_PASSWORD");
-		log.info("MONGODB_PASSWORD " + password);
-		
+		log.debug("MONGODB_PASSWORD " + password);
+
 		user = password == null ? null : user;
 		password = user == null ? null : password;
 	}
