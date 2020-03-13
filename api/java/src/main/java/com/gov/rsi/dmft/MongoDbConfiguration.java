@@ -76,7 +76,8 @@ public class MongoDbConfiguration extends AbstractMongoClientConfiguration {
 	
 	private void load() {
 		env = System.getenv();
-		host = env.getOrDefault("MONGODB_HOST", "localhost");
+//		host = env.getOrDefault("MONGODB_HOST", "localhost");
+		host = env.getOrDefault("FOOBAR", "localhost");
 		port = env.getOrDefault("MONGODB_PORT", "27017");
 		database = env.getOrDefault("MONGODB_DATABASE", "test");
 		user = env.get("MONGODB_USER");
