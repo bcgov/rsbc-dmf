@@ -92,6 +92,75 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+            <!--
+            1. used for local installation of node and npm
+            2. to install dependencies with npm install
+            3. building the application
+            -->
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.7.6</version>
+                <configuration>
+                    <nodeVersion>v10.0.0</nodeVersion>
+                    <npmVersion>6.13.7</npmVersion>
+                    <workingDirectory>src/main/app</workingDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>Install node and npm locally to the project</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+						<!-- This is default phase for that goal -->
+						<phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+						<!-- This is default phase for that goal -->
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>install</arguments>
+						</configuration>
+                    </execution>
+                    <execution>
+                        <id>Build frontend</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+						<!-- This is default phase for that goal -->
+						<phase>generate-resources</phase>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>Copy frontend build to target</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target/classes/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/app/build</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 
