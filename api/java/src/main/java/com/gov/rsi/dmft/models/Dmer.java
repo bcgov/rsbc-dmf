@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 public class Dmer {
 	
-	public enum Status {NEW, IN_PROCESS, CLEAN_PASS, NON_CLEAN_PASS} 
+	public enum Status {NEW, IN_PROCESS, CLEAN_PASS, PRIORITY_URGENT, PRIORITY_REGULAR, PRIORITY_CASEMANAGER, ADJUDICATION, INTAKE} 
 	
 	@Id
 	private String			id;
@@ -45,7 +45,11 @@ public class Dmer {
 			case NEW: 			timeNew = LocalDateTime.now(); break;
 			case IN_PROCESS: 	timeInProcess = LocalDateTime.now(); break;
 			case CLEAN_PASS:
-			case NON_CLEAN_PASS:timeFinished = LocalDateTime.now(); break;
+			case PRIORITY_URGENT:
+			case PRIORITY_REGULAR:
+			case PRIORITY_CASEMANAGER:
+			case ADJUDICATION:
+			case INTAKE:		timeFinished = LocalDateTime.now(); break;
 		}
 	}
 }
