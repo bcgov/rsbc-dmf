@@ -38,8 +38,8 @@ public class DmerController extends AbstractController {
 	// Same for family and given names
 	private static final String FAMILY_NAME_PATH = ApplicationProperties.get("patient.name.family.path");
 	private static final String FAMILY_NAME_ELEMENT = ApplicationProperties.get("patient.name.family.element");
-	private static final String GIVEN_NAME_PATH = ApplicationProperties.get("given.name.family.path");
-	private static final String GIVEN_NAME_ELEMENT = ApplicationProperties.get("given.name.family.element");
+	private static final String GIVEN_NAME_PATH = ApplicationProperties.get("patient.name.given.path");
+	private static final String GIVEN_NAME_ELEMENT = ApplicationProperties.get("patient.name.given.element");
 	
 	private static Logger log = LoggerFactory.getLogger(DmerController.class);
 	
