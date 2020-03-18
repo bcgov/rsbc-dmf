@@ -30,8 +30,9 @@ public class Dmer {
 	private LocalDateTime	timeFinished;
 	
 	@Indexed(unique = true)
-	private String			licenseNumber;	
+	private String			licenseNumber;
 	
+	private String			displayName;	
 	private String 			json;
 
 	public Dmer(String licenseNumber, String json) {

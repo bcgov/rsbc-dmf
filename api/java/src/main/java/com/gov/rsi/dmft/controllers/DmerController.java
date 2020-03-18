@@ -4,6 +4,8 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,6 +34,12 @@ public class DmerController extends AbstractController {
 	private static final String LICENSE_NUMBER_PATH = ApplicationProperties.get("validation.license.number.path");
 	// The linkId of the "item" element holding the license number
 	private static final String LICENSE_NUMBER_ELEMENT = ApplicationProperties.get("validation.license.number.element");
+	
+	// Same for family and given names
+	private static final String FAMILY_NAME_PATH = ApplicationProperties.get("patient.name.family.path");
+	private static final String FAMILY_NAME_ELEMENT = ApplicationProperties.get("patient.name.family.element");
+	private static final String GIVEN_NAME_PATH = ApplicationProperties.get("given.name.family.path");
+	private static final String GIVEN_NAME_ELEMENT = ApplicationProperties.get("given.name.family.element");
 	
 	private static Logger log = LoggerFactory.getLogger(DmerController.class);
 	
@@ -74,7 +82,11 @@ public class DmerController extends AbstractController {
 			return responseNoContent();
 		}
 		
-		return responseOkWithBody(reports);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Access-Control-Allow-Origin", "*");
+		ResponseEntity response = new ResponseEntity(reports, headers, HttpStatus.OK);
+		
+		return response;
 	}
 	
 	/**
@@ -131,9 +143,29 @@ public class DmerController extends AbstractController {
 			}
 		}
 		
+		
+		
 		// Store in the queue with status NEW 
 		Dmer report = new Dmer(licenseNumber, dmerJson);
 		report.setStatus(Dmer.Status.NEW);
+
+		// Extract the drivers name
+		try {
+			String query = MessageFormat.format(FAMILY_NAME_PATH, FAMILY_NAME_ELEMENT);		
+			String familyName = JsonPath.read(
+					JsonPath.read(dmerJson, query)
+					.toString(), "$[0].answer[0].valueString");
+			query = MessageFormat.format(GIVEN_NAME_PATH, GIVEN_NAME_ELEMENT);		
+			String givenName = JsonPath.read(
+					JsonPath.read(dmerJson, query)
+					.toString(), "$[0].answer[0].valueString");
+			report.setDisplayName(familyName + ", " + givenName);
+			
+		}
+		catch (PathNotFoundException e) {
+			// Treat same as if path found but element is empty
+		}
+
 		repository.save(report);
 		
 		return responseCreated();	

@@ -116,7 +116,7 @@
 						<phase>generate-resources</phase>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>Install npm</id>
                         <goals>
                             <goal>npm</goal>
                         </goals>
@@ -124,6 +124,17 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>install</arguments>
+						</configuration>
+                    </execution>
+                    <execution>
+                        <id>Install axios</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+						<!-- This is default phase for that goal -->
+						<phase>generate-resources</phase>
+						<configuration>
+							<arguments>install axios</arguments>
 						</configuration>
                     </execution>
                     <execution>
