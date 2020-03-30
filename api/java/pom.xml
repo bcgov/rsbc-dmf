@@ -63,6 +63,12 @@
 		    <version>6.2.0</version>
 		</dependency>
 
+		<dependency>
+    		<groupId>net.minidev</groupId>
+    		<artifactId>json-smart</artifactId>
+    		<version>2.3</version>
+		</dependency>
+		
 		<!-- Artifacts below appeared transitively in the Effective POM, but won't compile without specific inclusion  -->
 		
 		<dependency>
