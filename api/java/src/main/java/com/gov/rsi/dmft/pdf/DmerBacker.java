@@ -113,7 +113,8 @@ public class DmerBacker extends Backer{
     public Boolean         referralCompleted;            
     public Boolean         referralRequired;             
 
-    Map<String, Object> requiredItems;
+    private Map<String, Object> requiredItems;
+    private String				json;
 	
 	private static final String PARAM_BC_LOGO_GRAPHIC		= "BC_LOGO";
 	private static final String PARAM_BOX_GRAPHIC			= "BOX";
@@ -130,25 +131,45 @@ public class DmerBacker extends Backer{
 		p1 = p1.substring(0, p1.lastIndexOf('.'));
 		
 		DmerBacker backer = new DmerBacker();
-		backer.initialize();
+//		backer.initialize();
 		
-		String path = System.getProperty("user.dir") + "\\samples\\" + "bundle4.json";
-		try {
-			String json = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
-			Extractor extractor = new Extractor();
-			extractor.execute(json, backer.requiredItems);
-			
-			backer.populate();
+		String jsonPath = System.getProperty("user.dir") + "\\samples\\" + "bundle4.json";
+//		try {
+//			String json = new String(Files.readAllBytes(Paths.get(jsonPath)), StandardCharsets.UTF_8);
+//			Extractor extractor = new Extractor();
+//			extractor.execute(json, backer.requiredItems);
+//			
+//			backer.populateReportFields();
 			backer.compile("dmer");
-			
-			backer.createDmerPdf(backer);
-		}
-		catch (IOException | JRException e) {
-			System.out.println(e);
-		}
+//
+//			String pdfOutputPath = (new File("./")).getAbsolutePath();
+//			pdfOutputPath = pdfOutputPath.substring(0, pdfOutputPath.lastIndexOf('.')) + "dmer.pdf";
+//			OutputStream os = new FileOutputStream(new File(pdfOutputPath));
+//
+//			backer.createDmerPdf(backer, os);
+//		}
+//		catch (IOException | JRException e) {
+//			System.out.println(e);
+//		}
 	}
 	
-	public void createDmerPdf(DmerBacker backer) throws JRException, IOException{
+	public DmerBacker() {
+		initialize();
+	}
+	
+	public DmerBacker(String json) {
+		initialize();
+		this.json = json;
+	}
+	
+	public void generatePdf(OutputStream os) throws IOException , JRException{
+		Extractor extractor = new Extractor();
+		extractor.execute(json, requiredItems);		
+		populateReportFields();
+		createDmerPdf(os);
+	}
+	
+	private void createDmerPdf(DmerBacker backer, OutputStream os) throws JRException, IOException{
 		
 		ClassLoader loader = getClass().getClassLoader();
 
@@ -159,9 +180,6 @@ public class DmerBacker extends Backer{
 
 		ReportGenerator generator = new ReportGenerator();
 		
-		String path = (new File("./")).getAbsolutePath();
-		path = path.substring(0,path.lastIndexOf('.')) + "dmer.pdf";
-		OutputStream os = new FileOutputStream(new File(path));
 		InputStream is = loader.getSystemResourceAsStream("dmer.jasper");
 
 		generator.generate(
@@ -170,7 +188,9 @@ public class DmerBacker extends Backer{
 				os);
 	}
 	
-	
+	private void createDmerPdf(OutputStream os) throws JRException, IOException{
+		createDmerPdf(this, os);
+	}
 	
 	private void initialize() {
 		requiredItems = new LinkedHashMap();
@@ -256,7 +276,7 @@ public class DmerBacker extends Backer{
         requiredItems.put("referralRequired", null);                         
 	}
 	
-	public void populate() {
+	private void populateReportFields() {
         physician =                       (Boolean)     requiredItems.get("physician");                        
         np =                              (Boolean)     requiredItems.get("np");                               
         attachedPatient =                 (Boolean)     requiredItems.get("attachedPatient");                  

@@ -59,4 +59,19 @@ public abstract class AbstractController {
     	return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * Creates a 404 Not found response with no body 
+     * @return the ResponseEntity
+     */
+    protected ResponseEntity responseNotFound(){
+    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Creates a 500 Server Error response with no body 
+     * @return the ResponseEntity
+     */
+    protected ResponseEntity responseServerError(){
+    	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

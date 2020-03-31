@@ -37,15 +37,15 @@ public abstract class Backer{
 	protected void compile(String reportName){
 		try {
 			
-			URL u1 = this.getClass().getClassLoader().getResource("dmer.jasper");
-			String jasperPath = u1.getFile();
+//			URL u1 = this.getClass().getClassLoader().getResource("dmer.jasper");
+//			String jasperPath = u1.getFile();
 			
 			
 			String projectPath = (new File("./")).getAbsolutePath();
 			projectPath = projectPath.substring(0, projectPath.lastIndexOf('.'));
 			
 			String jrxmlPath = projectPath + "reports\\" + reportName + ".jrxml";
-//			String jasperPath = projectPath + "reports\\" + reportName + ".jasper";
+			String jasperPath = projectPath + "reports\\" + reportName + ".jasper";
 			
 			File jrxmlFile = new File(jrxmlPath);
 			File jasperFile = new File(jasperPath);

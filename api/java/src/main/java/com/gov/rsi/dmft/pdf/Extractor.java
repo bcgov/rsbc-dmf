@@ -109,13 +109,4 @@ public class Extractor {
 			}
 		});
 	}
-
-	
-	
-	class Descriptor {
-		String	id;
-		Descriptor(String id){
-			this.id = id;
-		}
-	}	
 }

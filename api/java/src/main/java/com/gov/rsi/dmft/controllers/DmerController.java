@@ -1,21 +1,29 @@
 package com.gov.rsi.dmft.controllers;
 
+import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.gov.rsi.dmft.ApplicationProperties;
 import com.gov.rsi.dmft.models.Dmer;
+import com.gov.rsi.dmft.pdf.DmerBacker;
 import com.gov.rsi.dmft.repositories.DmerRepository;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
@@ -45,6 +53,8 @@ public class DmerController extends AbstractController {
 	
 	@Autowired
 	private DmerRepository repository;
+	
+	private enum DMER_FORMAT {json, pdf}
 
 	/**
 	 * Fetches the oldest report with NEW status from the queue
@@ -90,14 +100,47 @@ public class DmerController extends AbstractController {
 	}
 	
 	/**
+	 * Fetches a DMER identified by id as a PDF
+	 * 
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public void getById(
+			@PathVariable("id") String id, 
+			@Validated @RequestParam("format") DMER_FORMAT format,
+			final HttpServletResponse response) {
+		
+		Optional<Dmer> optional = repository.findById(id);
+		if (optional.isPresent()) {
+			Dmer dmer = optional.get();
+			if (format == DMER_FORMAT.json) {
+				
+			}
+			else {
+				DmerBacker pdfBacker = new DmerBacker(dmer.getJson());
+				try {
+					OutputStream os = response.getOutputStream();
+					pdfBacker.generatePdf(os);
+					response.setContentType("application/pdf");
+					response.setHeader("Content-Disposition", "attachment;filename=dmer.pdf");
+				}
+				catch (Exception e) {
+					response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+				}
+			}
+		}
+		else {
+			response.setStatus(HttpStatus.NOT_FOUND.value());
+		}
+	}
+	
+	
+	/**
 	 * Deletes all DMERS
 	 * @return the DMER Json report
 	 */
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
-	public ResponseEntity<?> deleteAllDmers() {
-		
+	public ResponseEntity<?> deleteAllDmers() {		
 		repository.deleteAll();
-
 		return responseOkNoBody();
 	}
 
@@ -142,8 +185,6 @@ public class DmerController extends AbstractController {
 				}
 			}
 		}
-		
-		
 		
 		// Store in the queue with status NEW 
 		Dmer report = new Dmer(licenseNumber, dmerJson);
