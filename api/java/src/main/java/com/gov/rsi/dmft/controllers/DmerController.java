@@ -109,11 +109,12 @@ public class DmerController extends AbstractController {
 			@Validated @RequestParam("format") DMER_FORMAT format,
 			final HttpServletResponse response) {
 		
+		log.info("GET pdf for dmer " + id);
 		Optional<Dmer> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Dmer dmer = optional.get();
 			if (format == DMER_FORMAT.json) {
-				
+				// TODO 
 			}
 			else {
 				DmerBacker pdfBacker = new DmerBacker(dmer.getJson());
@@ -124,6 +125,7 @@ public class DmerController extends AbstractController {
 					response.setHeader("Content-Disposition", "attachment;filename=dmer.pdf");
 				}
 				catch (Exception e) {
+					log.error("Failed to create pdf: " + e);
 					response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
 				}
 			}

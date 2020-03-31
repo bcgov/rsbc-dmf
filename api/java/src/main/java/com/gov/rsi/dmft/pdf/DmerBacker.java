@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import lombok.Data;
 import net.sf.jasperreports.engine.JRException;
@@ -124,6 +126,7 @@ public class DmerBacker extends Backer{
 	private static final String FILE_BOX_GRAPHIC			= "Box.png";
 	private static final String FILE_BOX_CHECKED_GRAPHIC	= "Box-Checked.png";
 	
+	private static Logger log = LoggerFactory.getLogger(DmerBacker.class);
 
 	public static void main(String[] args) {
 		
@@ -131,26 +134,9 @@ public class DmerBacker extends Backer{
 		p1 = p1.substring(0, p1.lastIndexOf('.'));
 		
 		DmerBacker backer = new DmerBacker();
-//		backer.initialize();
 		
 		String jsonPath = System.getProperty("user.dir") + "\\samples\\" + "bundle4.json";
-//		try {
-//			String json = new String(Files.readAllBytes(Paths.get(jsonPath)), StandardCharsets.UTF_8);
-//			Extractor extractor = new Extractor();
-//			extractor.execute(json, backer.requiredItems);
-//			
-//			backer.populateReportFields();
 			backer.compile("dmer");
-//
-//			String pdfOutputPath = (new File("./")).getAbsolutePath();
-//			pdfOutputPath = pdfOutputPath.substring(0, pdfOutputPath.lastIndexOf('.')) + "dmer.pdf";
-//			OutputStream os = new FileOutputStream(new File(pdfOutputPath));
-//
-//			backer.createDmerPdf(backer, os);
-//		}
-//		catch (IOException | JRException e) {
-//			System.out.println(e);
-//		}
 	}
 	
 	public DmerBacker() {
@@ -171,17 +157,18 @@ public class DmerBacker extends Backer{
 	
 	private void createDmerPdf(DmerBacker backer, OutputStream os) throws JRException, IOException{
 		
-		ClassLoader loader = getClass().getClassLoader();
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put(PARAM_BC_LOGO_GRAPHIC, 		loader.getResource(FILE_BC_LOGO_GRAPHIC).getFile());
-		params.put(PARAM_BOX_GRAPHIC, 			loader.getResource(FILE_BOX_GRAPHIC).getFile());
-		params.put(PARAM_BOX_CHECKED_GRAPHIC, 	loader.getResource(FILE_BOX_CHECKED_GRAPHIC).getFile());
+		
+		params.put(PARAM_BC_LOGO_GRAPHIC, 		loader.getResource(FILE_BC_LOGO_GRAPHIC).toString());
+		params.put(PARAM_BOX_GRAPHIC, 			loader.getResource(FILE_BOX_GRAPHIC).toString());
+		params.put(PARAM_BOX_CHECKED_GRAPHIC, 	loader.getResource(FILE_BOX_CHECKED_GRAPHIC).toString());
 
 		ReportGenerator generator = new ReportGenerator();
 		
-		InputStream is = loader.getSystemResourceAsStream("dmer.jasper");
-
+		InputStream is = loader.getResourceAsStream("dmer.jasper");
+		
 		generator.generate(
 				backer.asDataSource(), params, 
 				is, 
