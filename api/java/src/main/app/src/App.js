@@ -8,6 +8,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.fetchData = this.fetchData.bind(this);
+        this.fetchPdf = this.fetchPdf.bind(this);
     }
 
 	componentDidMount() {
@@ -33,6 +34,13 @@ class App extends Component {
         axios.get('/api/queue/dmer/status')
 		.then( response => {
             this.setState({ "dmers": response.data })
+        })        
+    }
+
+    fetchPdf(id) {
+        axios.get('/api/queue/dmer/' + id + '?format=pdf')
+		.then( response => {
+            console.log(response)
         })        
     }
 
@@ -94,6 +102,7 @@ class App extends Component {
                     <th style={header}>Status</th>
                     <th style={header}>Name</th>
                     <th style={header}>Time</th>
+                    <th style={header}></th>
                 </tr>
             </thead>
             <tbody>
@@ -113,6 +122,11 @@ class App extends Component {
                                 dmer.status === 'NEW' ? dmer.timeNew : 
                                     dmer.status === 'IN_PROCESS' ? dmer.timeInProcess : dmer.timeFinished
                                 }
+                            </td>
+                            <td style={cell}>
+                                <button type="button" className='button-large' onClick={() => this.fetchPdf(dmer.id)}>
+                                    PDF
+                                </button>
                             </td>
                         </tr>
                     )
