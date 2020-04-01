@@ -1,5 +1,6 @@
 package com.gov.rsi.dmft.controllers;
 
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.text.MessageFormat;
 import java.util.List;
@@ -118,11 +119,11 @@ public class DmerController extends AbstractController {
 			}
 			else {
 				DmerBacker pdfBacker = new DmerBacker(dmer.getJson());
-				try {
-					OutputStream os = response.getOutputStream();
-					pdfBacker.generatePdf(os);
+				try (OutputStream os = response.getOutputStream()) {
+					
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition", "attachment;filename=dmer.pdf");
+					pdfBacker.generatePdf(os);
 				}
 				catch (Exception e) {
 					log.error("Failed to create pdf: " + e);

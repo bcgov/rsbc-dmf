@@ -38,10 +38,18 @@ class App extends Component {
     }
 
     fetchPdf(id) {
-        axios.get('/api/queue/dmer/' + id + '?format=pdf')
-		.then( response => {
-            console.log(response)
-        })        
+        axios({
+            url: '/api/queue/dmer/' + id + '?format=pdf', 
+            method: 'GET',
+            responseType: 'blob', // important
+        }).then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'dmer-'+ id + '.pdf'); //or any other extension
+            document.body.appendChild(link);
+            link.click();
+        });              
     }
 
 	render() {
