@@ -1,11 +1,15 @@
 package com.gov.rsi.dmft.pdf;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -113,7 +117,17 @@ public class DmerBacker extends Backer{
     public String          detailsCondition;             
     public Boolean         attached;                     
     public Boolean         referralCompleted;            
-    public Boolean         referralRequired;             
+    public Boolean         referralRequired; 
+    
+    public String       	patientName;
+    public String       	patientAddress;
+    public String       	patientPhone;
+    public String       	patientGender;
+    public Date         	patientBirthDate;
+    public String       	practitionerName;
+    public String       	practitionerAddress;
+    public String       	practitionerPhone;
+    
 
     private Map<String, Object> requiredItems;
     private String				json;
@@ -130,18 +144,48 @@ public class DmerBacker extends Backer{
 
 	public static void main(String[] args) {
 		
-		String p1 = (new File("./")).getAbsolutePath();
-		p1 = p1.substring(0, p1.lastIndexOf('.'));
-		
-		DmerBacker backer = new DmerBacker();
-		
-		String jsonPath = System.getProperty("user.dir") + "\\samples\\" + "bundle4.json";
-			backer.compile("dmer");
+
+		String jsonToProcess = args.length == 0 ? null : args[0];
+		if (jsonToProcess == null) {
+			(new DmerBacker()).compile("dmer");
+		}
+		else {
+//			String p1 = (new File("./")).getAbsolutePath();
+//			p1 = p1.substring(0, p1.lastIndexOf('.'));		
+			String jsonPath = samplesFolder() + jsonToProcess;
+			
+			try (OutputStream os = new FileOutputStream(
+					new File(samplesFolder() + "dmer.pdf"))){
+				String json = readFile(jsonPath);
+				DmerBacker backer = new DmerBacker(json);
+				backer.initialize();
+				backer.generatePdf(os);				
+			}
+			catch (IOException | JRException e) {
+				System.out.println(e);
+			}
+		}
 	}
 	
-	public DmerBacker() {
-		initialize();
+	private static String readFile(String path) throws IOException {
+		File file = new File(path);
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		// file size will always exceed string length
+		int length = (int)file.length();
+		CharBuffer buffer = CharBuffer.allocate((int)file.length());
+		reader.read(buffer);
+		
+		return buffer.rewind().toString();
 	}
+	
+	private static String samplesFolder() {
+		String path = System.getProperty("user.dir");
+		path = path.substring(0, path.lastIndexOf("\\") + 1);
+		path += "samples\\";
+		return path;
+	}
+	
+	public DmerBacker() {}
 	
 	public DmerBacker(String json) {
 		initialize();
@@ -264,85 +308,95 @@ public class DmerBacker extends Backer{
 	}
 	
 	private void populateReportFields() {
-        physician =                       (Boolean)     requiredItems.get("physician");                        
-        np =                              (Boolean)     requiredItems.get("np");                               
-        attachedPatient =                 (Boolean)     requiredItems.get("attachedPatient");                  
-        walkInClinic =                    (Boolean)     requiredItems.get("walkInClinic");                     
-        locum =                           (Boolean)     requiredItems.get("locum");                            
-        specialist =                      (Boolean)     requiredItems.get("specialist");                       
+        physician =                       (Boolean)     fixBool(requiredItems.get("physician"));                        
+        np =                              (Boolean)     fixBool(requiredItems.get("np"));                               
+        attachedPatient =                 (Boolean)     fixBool(requiredItems.get("attachedPatient"));                  
+        walkInClinic =                    (Boolean)     fixBool(requiredItems.get("walkInClinic"));                     
+        locum =                           (Boolean)     fixBool(requiredItems.get("locum"));                            
+        specialist =                      (Boolean)     fixBool(requiredItems.get("specialist"));                       
         columns7MedicalIssued1 =          (Date)        requiredItems.get("columns7MedicalIssued1");           
         patientDL1 =                      (Long)        requiredItems.get("patientDL1");                   
-        reasonForExam2 =           fromCC((String)      requiredItems.get("reasonForExam2"));                   
-        licenceClass2 =            fromCC((String)      requiredItems.get("licenceClass2"));                    
+        reasonForExam2 =           fromCC((String)      fixString(requiredItems.get("reasonForExam2")));                   
+        licenceClass2 =            fromCC((String)      fixString(requiredItems.get("licenceClass2")));                    
         licenceRestrictions =             (List<String>)requiredItems.get("licenceRestrictions");              
         driverConsentDate =               (Date)        requiredItems.get("driverConsentDate");                
-        leftUncorrected =                 (String)      requiredItems.get("leftUncorrected");                  
-        rightUncorrected =                (String)      requiredItems.get("rightUncorrected");                 
-        bothUncorrected =                 (String)      requiredItems.get("bothUncorrected");                  
-        leftCorrected =                   (String)      requiredItems.get("leftCorrected");                    
-        rightCorrected =                  (String)      requiredItems.get("rightCorrected");                   
-        acuityLoss =                      (String)      requiredItems.get("AcuityLoss");                       
-        acuityLossProgressiveYN =         (String)      requiredItems.get("AcuityLossProgressiveYN");          
+        leftUncorrected =                 (String)      fixString(requiredItems.get("leftUncorrected"));                  
+        rightUncorrected =                (String)      fixString(requiredItems.get("rightUncorrected"));                 
+        bothUncorrected =                 (String)      fixString(requiredItems.get("bothUncorrected"));                  
+        leftCorrected =                   (String)      fixString(requiredItems.get("leftCorrected"));                    
+        rightCorrected =                  (String)      fixString(requiredItems.get("rightCorrected"));                   
+        bothCorrected =                   (String)      fixString(requiredItems.get("bothCorrected"));                  
+        acuityLoss =                      (String)      fixString(requiredItems.get("AcuityLoss"));                       
+        acuityLossProgressiveYN =         (String)      fixString(requiredItems.get("AcuityLossProgressiveYN"));          
         acuityDiagnosis =                 (List<String>)requiredItems.get("AcuityDiagnosis");                  
-        AbnormalVFC =                     (String)      requiredItems.get("AbnormalVFC");                      
+        AbnormalVFC =                     (String)      fixString(requiredItems.get("AbnormalVFC"));                      
         diagnosisVisualFieldImpairment =  (List<String>)requiredItems.get("DiagnosisVisualFieldImpairment");   
         dateOfOnset =                     (Date)        requiredItems.get("dateOfOnset");                      
-        diplopiaPresentYN =               (String)      requiredItems.get("diplopiaPresentYN");                
-        adequateAdjustmentYN =            (String)      requiredItems.get("adequateAdjustmentYN");             
-        prism =                           (Boolean)     requiredItems.get("prism");                            
-        patch =                           (Boolean)     requiredItems.get("patch");                            
-        impairmentEvidence =              (String)      requiredItems.get("impairmentEvidence");               
-        diagnosisCausingDecline =         (String)      requiredItems.get("diagnosisCausingDecline");          
-        alzheimers =                      (Boolean)     requiredItems.get("alzheimers");                       
-        lewyBodyDementia =                (Boolean)     requiredItems.get("lewyBodyDementia");                 
-        parkinsonsWDementia =             (Boolean)     requiredItems.get("parkinsonsWDementia");              
-        picksDiseaseOrComplex =           (Boolean)     requiredItems.get("picksDiseaseOrComplex");            
-        vascularDementia =                (Boolean)     requiredItems.get("vascularDementia");                 
-        conductedScreening =              (String)      requiredItems.get("conductedScreening");               
+        diplopiaPresentYN =               (String)      fixString(requiredItems.get("diplopiaPresentYN"));                
+        adequateAdjustmentYN =            (String)      fixString(requiredItems.get("adequateAdjustmentYN"));             
+        prism =                           (Boolean)     fixBool(requiredItems.get("prism"));                            
+        patch =                           (Boolean)     fixBool(requiredItems.get("patch"));                            
+        impairmentEvidence =              (String)      fixString(requiredItems.get("impairmentEvidence"));               
+        diagnosisCausingDecline =         (String)      fixString(requiredItems.get("diagnosisCausingDecline"));          
+        alzheimers =                      (Boolean)     fixBool(requiredItems.get("alzheimers"));                       
+        lewyBodyDementia =                (Boolean)     fixBool(requiredItems.get("lewyBodyDementia"));                 
+        parkinsonsWDementia =             (Boolean)     fixBool(requiredItems.get("parkinsonsWDementia"));              
+        picksDiseaseOrComplex =           (Boolean)     fixBool(requiredItems.get("picksDiseaseOrComplex"));            
+        vascularDementia =                (Boolean)     fixBool(requiredItems.get("vascularDementia"));                 
+        conductedScreening =              (String)      fixString(requiredItems.get("conductedScreening"));               
         mocaScore =                       (Long)        requiredItems.get("mocaScore");                        
         gdsScore =                        (Long)        requiredItems.get("gdsScore");                         
         trailsB =                         (Long)        requiredItems.get("trailsB");                          
-        contributingFactors =             (String)      requiredItems.get("contributingFactors");              
-        education =                       (Boolean)     requiredItems.get("education");                        
-        hearingLoss =                     (Boolean)     requiredItems.get("hearingLoss");                      
-        infection =                       (Boolean)     requiredItems.get("infection");                        
-        thyroidDeficiencyOrExcess =       (Boolean)     requiredItems.get("thyroidDeficiencyOrExcess");        
-        historyDebility =                 (String)      requiredItems.get("historyDebility");                  
-        lossStrength =                    (Boolean)     requiredItems.get("lossStrength");                     
-        romLoss =                         (Boolean)     requiredItems.get("romLoss");                          
-        fatigue =                         (Boolean)     requiredItems.get("fatigue");                          
-        lossextremityFlexion =            (Boolean)     requiredItems.get("lossextremityFlexion");             
-        lossjointMobility =               (Boolean)     requiredItems.get("lossjointMobility");                
-        losstrunkMobility =               (Boolean)     requiredItems.get("losstrunkMobility");                
-        amputation =                      (Boolean)     requiredItems.get("amputation");                       
-        rightArmAboveElbow =              (Boolean)     requiredItems.get("rightArmAboveElbow");               
-        rightArmBelowElbow =              (Boolean)     requiredItems.get("rightArmBelowElbow");               
-        leftArmAboveElbow =               (Boolean)     requiredItems.get("leftArmAboveElbow");                
-        leftArmBelowElbow =               (Boolean)     requiredItems.get("leftArmBelowElbow");                
-        rightLegBelowKnee =               (Boolean)     requiredItems.get("right Leg Below Knee");             
-        leftLegBelowKnee =                (Boolean)     requiredItems.get("leftLegBelowKnee");                 
-        rightLegAboveKnee =               (Boolean)     requiredItems.get("rightLegAboveKnee");                
-        leftLegAboveKnee =                (Boolean)     requiredItems.get("leftLegAboveKnee");                 
-        prosthesis =                      (String)      requiredItems.get("prosthesis");                       
-        historychronicCondition =         (String)      requiredItems.get("historychronicCondition");          
-        rheumatoidArthritis =             (Boolean)     requiredItems.get("rheumatoidArthritis");              
-        osteoarthritis =                  (Boolean)     requiredItems.get("osteoarthritis");                   
-        degenerativeDiscDisease =         (Boolean)     requiredItems.get("degenerativeDiscDisease");          
-        permanentSpineInjury =            (Boolean)     requiredItems.get("permanentSpineInjury");             
-        adaptiveEquipmentYN =             (String)      requiredItems.get("adaptiveEquipmentYN");              
-        spinnerKnob =                     (Boolean)     requiredItems.get("spinnerKnob");                      
-        handControls =                    (Boolean)     requiredItems.get("handControls");                     
-        vehicleModifications =            (Boolean)     requiredItems.get("vehicleModifications");             
-        yes =                             (Boolean)     requiredItems.get("yes");                              
-        recommendFollowUp =               (Boolean)     requiredItems.get("recommendFollowUp");                
-        recommendRoadTest =               (Boolean)     requiredItems.get("recommendRoadTest");                
-        no =                              (Boolean)     requiredItems.get("no");                               
-        OneYear =                         (Boolean)     requiredItems.get("1Year");                            
-        TwoYears =                        (Boolean)     requiredItems.get("2Years");                           
-        detailsCondition =                (String)      requiredItems.get("detailsCondition");                 
-        attached =                        (Boolean)     requiredItems.get("attached");                         
-        referralCompleted =               (Boolean)     requiredItems.get("referralCompleted");                
-        referralRequired =                (Boolean)     requiredItems.get("referralRequired");   
+        contributingFactors =             (String)      fixString(requiredItems.get("contributingFactors"));              
+        education =                       (Boolean)     fixBool(requiredItems.get("education"));                        
+        hearingLoss =                     (Boolean)     fixBool(requiredItems.get("hearingLoss"));                      
+        infection =                       (Boolean)     fixBool(requiredItems.get("infection"));                        
+        thyroidDeficiencyOrExcess =       (Boolean)     fixBool(requiredItems.get("thyroidDeficiencyOrExcess"));        
+        historyDebility =                 (String)      fixString(requiredItems.get("historyDebility"));                  
+        lossStrength =                    (Boolean)     fixBool(requiredItems.get("lossStrength"));                     
+        romLoss =                         (Boolean)     fixBool(requiredItems.get("romLoss"));                          
+        fatigue =                         (Boolean)     fixBool(requiredItems.get("fatigue"));                          
+        lossextremityFlexion =            (Boolean)     fixBool(requiredItems.get("lossextremityFlexion"));             
+        lossjointMobility =               (Boolean)     fixBool(requiredItems.get("lossjointMobility"));                
+        losstrunkMobility =               (Boolean)     fixBool(requiredItems.get("losstrunkMobility"));                
+        amputation =                      (Boolean)     fixBool(requiredItems.get("amputation"));                       
+        rightArmAboveElbow =              (Boolean)     fixBool(requiredItems.get("rightArmAboveElbow"));               
+        rightArmBelowElbow =              (Boolean)     fixBool(requiredItems.get("rightArmBelowElbow"));               
+        leftArmAboveElbow =               (Boolean)     fixBool(requiredItems.get("leftArmAboveElbow"));                
+        leftArmBelowElbow =               (Boolean)     fixBool(requiredItems.get("leftArmBelowElbow"));                
+        rightLegBelowKnee =               (Boolean)     fixBool(requiredItems.get("right Leg Below Knee"));             
+        leftLegBelowKnee =                (Boolean)     fixBool(requiredItems.get("leftLegBelowKnee"));                 
+        rightLegAboveKnee =               (Boolean)     fixBool(requiredItems.get("rightLegAboveKnee"));                
+        leftLegAboveKnee =                (Boolean)     fixBool(requiredItems.get("leftLegAboveKnee"));                 
+        prosthesis =                      (String)      fixString(requiredItems.get("prosthesis"));                       
+        historychronicCondition =         (String)      fixString(requiredItems.get("historychronicCondition"));          
+        rheumatoidArthritis =             (Boolean)     fixBool(requiredItems.get("rheumatoidArthritis"));              
+        osteoarthritis =                  (Boolean)     fixBool(requiredItems.get("osteoarthritis"));                   
+        degenerativeDiscDisease =         (Boolean)     fixBool(requiredItems.get("degenerativeDiscDisease"));          
+        permanentSpineInjury =            (Boolean)     fixBool(requiredItems.get("permanentSpineInjury"));             
+        adaptiveEquipmentYN =             (String)      fixString(requiredItems.get("adaptiveEquipmentYN"));              
+        spinnerKnob =                     (Boolean)     fixBool(requiredItems.get("spinnerKnob"));                      
+        handControls =                    (Boolean)     fixBool(requiredItems.get("handControls"));                     
+        vehicleModifications =            (Boolean)     fixBool(requiredItems.get("vehicleModifications"));             
+        yes =                             (Boolean)     fixBool(requiredItems.get("yes"));                              
+        recommendFollowUp =               (Boolean)     fixBool(requiredItems.get("recommendFollowUp"));                
+        recommendRoadTest =               (Boolean)     fixBool(requiredItems.get("recommendRoadTest"));                
+        no =                              (Boolean)     fixBool(requiredItems.get("no"));                               
+        OneYear =                         (Boolean)     fixBool(requiredItems.get("1Year"));                            
+        TwoYears =                        (Boolean)     fixBool(requiredItems.get("2Years"));                           
+        detailsCondition =                (String)      fixString(requiredItems.get("detailsCondition"));                 
+        attached =                        (Boolean)     fixBool(requiredItems.get("attached"));                         
+        referralCompleted =               (Boolean)     fixBool(requiredItems.get("referralCompleted"));                
+        referralRequired =                (Boolean)     fixBool(requiredItems.get("referralRequired"));   
+
+        patientName =                   (String)fixString(requiredItems.get("patientName"));
+        patientAddress =                (String)fixString(requiredItems.get("patientAddress"));
+        patientPhone =                  (String)fixString(requiredItems.get("patientPhone"));
+        patientGender =                 (String)fixString(requiredItems.get("patientGender"));
+        patientBirthDate =              (Date)requiredItems.get("patientBirthDate");
+        practitionerName =              (String)fixString(requiredItems.get("practitionerName"));
+        practitionerAddress =           (String)fixString(requiredItems.get("practitionerAddress"));
+        practitionerPhone =             (String)fixString(requiredItems.get("practitionerPhone"));        
         
         licenceRestrictionsCombined = combineListItems(licenceRestrictions, false);  
         acuityDiagnosisCombined = combineListItems(acuityDiagnosis, true);
@@ -350,6 +404,9 @@ public class DmerBacker extends Backer{
 	}
 	
 	private String combineListItems(List<String> items, boolean convertFromCamelCase) {
+		if (items == null) {
+			return "";
+		}
 		StringBuilder sb = new StringBuilder();
 		while(items.size() > 0) {
 			String item = items.remove(0);
@@ -364,5 +421,12 @@ public class DmerBacker extends Backer{
 	private String fromCC(String cc){
 		String s = StringUtils.capitalize(StringUtils.join(StringUtils.splitByCharacterTypeCamelCase(cc), " "));
 		return s;
+	}
+	
+	private Object fixBool(Object o) {
+		return o == null ? false: o;
+	}
+	private Object fixString(Object o) {
+		return o == null ? "": o;
 	}
 }

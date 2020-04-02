@@ -2,15 +2,22 @@ package com.gov.rsi.dmft.pdf;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.DecimalType;
+import org.hl7.fhir.r4.model.HumanName;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Property;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
@@ -33,37 +40,85 @@ public class Extractor {
 	private void extract(Resource resource) {
 		List<Property> properties = resource.children();
 		
-		properties.forEach(p -> {
-			if (p.hasValues()){
-				if (p.isList()) {
-					p.getValues().forEach(p2 -> {
-						if (p2 instanceof Bundle.BundleEntryComponent) {
-							extract(((Bundle.BundleEntryComponent)p2).getResource());
-						}
-						else {
-							String className = p2.getClass().getName();
-							className = className.substring(className.lastIndexOf('.') + 1);
-							if (className.equals("QuestionnaireResponse$QuestionnaireResponseItemComponent")){ 
-								QuestionnaireResponseItemComponent responseItem = (QuestionnaireResponseItemComponent)p2;
-								List<QuestionnaireResponseItemComponent> item = responseItem.getItem();
+		if (resource instanceof Patient) {
+			extractPatient((Patient)resource);
+		}
+		else if (resource instanceof Practitioner) {
+			extractPractitioner((Practitioner)resource);
+		}
+		else {		
+			properties.forEach(p -> {
+				if (p.hasValues()){
+					if (p.isList()) {
+						p.getValues().forEach(p2 -> {
+							if (p2 instanceof Bundle.BundleEntryComponent) {
+								extract(((Bundle.BundleEntryComponent)p2).getResource());
+							}
+							else {
+								String className = p2.getClass().getName();
+								className = className.substring(className.lastIndexOf('.') + 1);
+								if (className.equals("QuestionnaireResponse$QuestionnaireResponseItemComponent")){ 
+									QuestionnaireResponseItemComponent responseItem = (QuestionnaireResponseItemComponent)p2;
+									List<QuestionnaireResponseItemComponent> item = responseItem.getItem();
 
-								String linkId = responseItem.getLinkId();
-								List<QuestionnaireResponseItemAnswerComponent> answers = responseItem.getAnswer();
-								if (answers != null && answers.size() > 0) {
-									QuestionnaireResponseItemAnswerComponent answer = answers.get(0);
-									Type type = answer.getValue();
-								}
-								if (item!= null) {
-									extractItemList(linkId, item);
+									String linkId = responseItem.getLinkId();
+									List<QuestionnaireResponseItemAnswerComponent> answers = responseItem.getAnswer();
+									if (answers != null && answers.size() > 0) {
+										QuestionnaireResponseItemAnswerComponent answer = answers.get(0);
+										Type type = answer.getValue();
+									}
+									if (item!= null) {
+										extractItemList(linkId, item);
+									}
 								}
 							}
-						}
-					});
+						});
+					}
 				}
-			}
-		});	
+			});	
+		}
 	}
 	
+	private void extractPatient(Patient patient) {
+		requiredItems.put("patientName", formatName(patient.getName().get(0)));
+		requiredItems.put("patientAddress", formatAddress(patient.getAddress().get(0)));
+		requiredItems.put("patientPhone", patient.getTelecom().get(0).getValue());
+		requiredItems.put("patientGender", patient.getGender().name());
+		requiredItems.put("patientBirthDate", patient.getBirthDate());
+	}
+
+	private void extractPractitioner(Practitioner practitioner) {
+		requiredItems.put("practitionerName", formatName(practitioner.getName().get(0)));
+		requiredItems.put("practitionerAddress", formatAddress(practitioner.getAddress().get(0)));
+		requiredItems.put("practitionerPhone", practitioner.getTelecom().get(0).getValue());
+	}
+	
+	private String formatAddress(Address address) {
+		StringBuffer sb = new StringBuffer();
+		
+		String street = address.getLine().stream()
+			.map(StringType:: toString).collect(Collectors.joining(", "));
+		
+		sb.append(street.equals("null") ? "" : street).append('\n')
+			.append(address.getCity()).append(", ")
+			.append(address.getState()).append(" ")
+			.append(address.getPostalCode());
+
+		return sb.toString();
+	}
+	
+	private String formatName(HumanName name) {
+		return (new StringBuffer())
+			.append(name.getFamily()).append(", ")
+			.append(name.getGivenAsSingleString())
+			.toString();
+	}
+	
+	
+	
+	
+	
+
 	
 	private void extractItemList(String parentLinkId, List <QuestionnaireResponseItemComponent> itemList){
 		List answerItems = new ArrayList();

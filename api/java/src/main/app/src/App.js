@@ -34,6 +34,8 @@ class App extends Component {
         axios.get('/api/queue/dmer/status')
 		.then( response => {
             this.setState({ "dmers": response.data })
+        }).catch(error => {
+            alert('A server error has occurred:\n' + error)
         })        
     }
 
@@ -43,12 +45,17 @@ class App extends Component {
             method: 'GET',
             responseType: 'blob', // important
         }).then((response) => {
+            if (response.data.size === 0){
+                alert('A server error has occurred');
+            }
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
             link.setAttribute('download', 'dmer-'+ id + '.pdf'); //or any other extension
             document.body.appendChild(link);
             link.click();
+        }).catch(error => {
+            alert('A server error has occurred:\n' + error)
         });              
     }
 
