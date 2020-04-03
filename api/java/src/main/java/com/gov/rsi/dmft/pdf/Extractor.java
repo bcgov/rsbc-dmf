@@ -90,7 +90,8 @@ public class Extractor {
 	private void extractPractitioner(Practitioner practitioner) {
 		requiredItems.put("practitionerName", formatName(practitioner.getName().get(0)));
 		requiredItems.put("practitionerAddress", formatAddress(practitioner.getAddress().get(0)));
-		requiredItems.put("practitionerPhone", practitioner.getTelecom().get(0).getValue());
+		requiredItems.put("practitionerPhone", 
+				practitioner.getTelecom() == null  || practitioner.getTelecom().size() == 0 ? "" : practitioner.getTelecom().get(0).getValue());
 	}
 	
 	private String formatAddress(Address address) {

@@ -1,7 +1,9 @@
 package com.gov.rsi.dmft.controllers;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,8 @@ import com.gov.rsi.dmft.pdf.DmerBacker;
 import com.gov.rsi.dmft.repositories.DmerRepository;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
+
+import net.sf.jasperreports.engine.JRException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,21 +118,32 @@ public class DmerController extends AbstractController {
 		Optional<Dmer> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			Dmer dmer = optional.get();
-			if (format == DMER_FORMAT.json) {
-				// TODO 
-			}
-			else {
-				DmerBacker pdfBacker = new DmerBacker(dmer.getJson());
-				try (OutputStream os = response.getOutputStream()) {
-					
-					response.setContentType("application/pdf");
-					response.setHeader("Content-Disposition", "attachment;filename=dmer.pdf");
+			String licenseNumber = dmer.getLicenseNumber();
+			try (
+				OutputStream os = response.getOutputStream()
+				) {
+				response.setHeader("Access-Control-Allow-Origin", "*");
+				if (format == DMER_FORMAT.json) {
+					response.setContentType("application/json");
+					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".json");
+					OutputStreamWriter writer = new OutputStreamWriter(os);
+					String json = dmer.getJson();
+					writer.write(json, 0, json.length());
+					writer.close();
+				}
+				else {
+					DmerBacker pdfBacker = new DmerBacker(dmer.getJson());					
 					pdfBacker.generatePdf(os);
+					response.setContentType("application/pdf");
+					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".pdf");
 				}
-				catch (Exception e) {
-					log.error("Failed to create pdf: " + e);
-					response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-				}
+			}
+			catch (IOException e) {
+				log.error("Failure retrieving dmer\n" + e);
+				response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			}
+			catch (JRException e) {
+				log.error("Failure rendering pdf\n" + e);
 			}
 		}
 		else {

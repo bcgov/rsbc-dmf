@@ -8,7 +8,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.fetchData = this.fetchData.bind(this);
-        this.fetchPdf = this.fetchPdf.bind(this);
+        this.fetchDmer = this.fetchDmer.bind(this);
     }
 
 	componentDidMount() {
@@ -39,9 +39,9 @@ class App extends Component {
         })        
     }
 
-    fetchPdf(id) {
+    fetchDmer(id, format) {
         axios({
-            url: '/api/queue/dmer/' + id + '?format=pdf', 
+            url: '/api/queue/dmer/' + id + '?format=' + format, 
             method: 'GET',
             responseType: 'blob', // important
         }).then((response) => {
@@ -51,7 +51,7 @@ class App extends Component {
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const link = document.createElement('a');
             link.href = url;
-            link.setAttribute('download', 'dmer-'+ id + '.pdf'); //or any other extension
+            link.setAttribute('download', 'dmer-'+ id + '.' + format); 
             document.body.appendChild(link);
             link.click();
         }).catch(error => {
@@ -118,6 +118,7 @@ class App extends Component {
                     <th style={header}>Name</th>
                     <th style={header}>Time</th>
                     <th style={header}></th>
+                    <th style={header}></th>
                 </tr>
             </thead>
             <tbody>
@@ -138,12 +139,17 @@ class App extends Component {
                                     dmer.status === 'IN_PROCESS' ? dmer.timeInProcess : dmer.timeFinished
                                 }
                             </td>
-                            <td style={cell}>
-                                <button type="button" className='button-large' onClick={() => this.fetchPdf(dmer.id)}>
-                                    PDF
+                             <td style={cell}>
+                                <button type="button" className='button-large' onClick={() => this.fetchDmer(dmer.id, "pdf")}>
+                                    Create PDF
                                 </button>
                             </td>
-                        </tr>
+                            <td style={cell}>
+                                <button type="button" className='button-large' onClick={() => this.fetchDmer(dmer.id, "json")}>
+                                    Fetch eDMER JSON
+                                </button>
+                            </td>
+                       </tr>
                     )
                 })
             :
