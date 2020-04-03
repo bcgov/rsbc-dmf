@@ -668,7 +668,7 @@
 						<property name="com.jaspersoft.studio.unit.height" value="px"/>
 						<property name="com.jaspersoft.studio.unit.width" value="px"/>
 						<property name="com.jaspersoft.studio.unit.y" value="px"/>
-						<printWhenExpression><![CDATA[$F{leftCorrected} != null]]></printWhenExpression>
+						<printWhenExpression><![CDATA[$F{leftCorrected}.length() > 0]]></printWhenExpression>
 					</reportElement>
 					<staticText>
 						<reportElement x="0" y="0" width="79" height="18" uuid="37f817b2-510e-4e35-bff0-84e3f046f0f2">
@@ -834,6 +834,7 @@
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<property name="com.jaspersoft.studio.unit.y" value="px"/>
 							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+							<printWhenExpression><![CDATA[$F{abnormalVFC}.equals("yes")]]></printWhenExpression>
 						</reportElement>
 						<staticText>
 							<reportElement x="0" y="0" width="100" height="16" uuid="abe2368b-e013-4ba1-b014-e601a6183de1">
@@ -859,6 +860,7 @@
 						<reportElement x="0" y="80" width="210" height="50" uuid="a796e173-aead-4b84-88f7-98e57813da9b">
 							<property name="com.jaspersoft.studio.unit.width" value="px"/>
 							<property name="com.jaspersoft.studio.unit.y" value="px"/>
+							<printWhenExpression><![CDATA[$F{abnormalVFC}.equals("yes")]]></printWhenExpression>
 						</reportElement>
 						<staticText>
 							<reportElement x="0" y="0" width="65" height="16" uuid="e70e2e53-728e-427c-b5d7-34b192ce358c">
@@ -1035,7 +1037,9 @@
 							<textFieldExpression><![CDATA[$F{diagnosisCausingDecline}.equals("yes") ? "Medical diagnosis causing progressive cognitive decline: " : "No medical diagnosis causing progressive cognitive decline"]]></textFieldExpression>
 						</textField>
 						<frame>
-							<reportElement x="5" y="20" width="354" height="90" uuid="5e2c6b70-ca4c-411b-90d0-f1bfeaa9471e"/>
+							<reportElement x="5" y="20" width="354" height="90" uuid="5e2c6b70-ca4c-411b-90d0-f1bfeaa9471e">
+								<printWhenExpression><![CDATA[$F{diagnosisCausingDecline}.equals("yes")]]></printWhenExpression>
+							</reportElement>
 							<image>
 								<reportElement x="0" y="0" width="12" height="12" uuid="d4a7aa0b-b8c4-4a6b-830a-5480de8b22e3">
 									<printWhenExpression><![CDATA[!$F{alzheimers}]]></printWhenExpression>
