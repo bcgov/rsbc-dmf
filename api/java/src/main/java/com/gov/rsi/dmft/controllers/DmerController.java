@@ -125,7 +125,7 @@ public class DmerController extends AbstractController {
 				response.setHeader("Access-Control-Allow-Origin", "*");
 				if (format == DMER_FORMAT.json) {
 					response.setContentType("application/json");
-					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".json");
+//					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".json");
 					OutputStreamWriter writer = new OutputStreamWriter(os);
 					String json = dmer.getJson();
 					writer.write(json, 0, json.length());
@@ -135,7 +135,7 @@ public class DmerController extends AbstractController {
 					DmerBacker pdfBacker = new DmerBacker(dmer.getJson());					
 					pdfBacker.generatePdf(os);
 					response.setContentType("application/pdf");
-					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".pdf");
+//					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".pdf");
 				}
 			}
 			catch (IOException e) {

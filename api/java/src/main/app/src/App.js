@@ -8,7 +8,7 @@ class App extends Component {
     constructor(props){
         super(props);
         this.fetchData = this.fetchData.bind(this);
-        this.fetchDmer = this.fetchDmer.bind(this);
+//        this.fetchDmer = this.fetchDmer.bind(this);
     }
 
 	componentDidMount() {
@@ -39,25 +39,25 @@ class App extends Component {
         })        
     }
 
-    fetchDmer(id, format) {
-        axios({
-            url: '/api/queue/dmer/' + id + '?format=' + format, 
-            method: 'GET',
-            responseType: 'blob', // important
-        }).then((response) => {
-            if (response.data.size === 0){
-                alert('A server error has occurred');
-            }
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'dmer-'+ id + '.' + format); 
-            document.body.appendChild(link);
-            link.click();
-        }).catch(error => {
-            alert('A server error has occurred:\n' + error)
-        });              
-    }
+    // fetchDmer(id, format) {
+    //     axios({
+    //         url: '/api/queue/dmer/' + id + '?format=' + format, 
+    //         method: 'GET',
+    //         responseType: 'blob', // important
+    //     }).then((response) => {
+    //         if (response.data.size === 0){
+    //             alert('A server error has occurred');
+    //         }
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', 'dmer-'+ id + '.' + format); 
+    //         document.body.appendChild(link);
+    //         link.click();
+    //     }).catch(error => {
+    //         alert('A server error has occurred:\n' + error)
+    //     });              
+    // }
 
 	render() {
 
@@ -97,7 +97,18 @@ class App extends Component {
             width: "200px"
         };
 
-
+        let baseURI = document.baseURI;
+        if (!baseURI) {
+            // For IE
+            baseURI = window.location.href;
+        }
+        console.log(baseURI);
+        if (baseURI === "http://localhost:3000/"){
+            // Client loaded from VSCode local server 
+            baseURI ="http://localhost:8080/"; 
+        }
+        console.log("Base URI " + baseURI);
+        
         const formatter = new Intl.DateTimeFormat('default', {
             hour: 'numeric',
             minute: 'numeric',
@@ -140,14 +151,10 @@ class App extends Component {
                                 }
                             </td>
                              <td style={cell}>
-                                <button type="button" className='button-large' onClick={() => this.fetchDmer(dmer.id, "pdf")}>
-                                    Create PDF
-                                </button>
+                                <a href={baseURI + 'api/queue/dmer/' + dmer.id + '?format=pdf'} target='_blank' style={{color: "white"}}>VIEW PDF</a>
                             </td>
                             <td style={cell}>
-                                <button type="button" className='button-large' onClick={() => this.fetchDmer(dmer.id, "json")}>
-                                    Fetch eDMER JSON
-                                </button>
+                                <a href={baseURI + 'api/queue/dmer/' + dmer.id + '?format=json'} target='_blank' style={{color: "white"}}>VIEW DMER JSON</a>
                             </td>
                        </tr>
                     )
