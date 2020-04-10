@@ -159,7 +159,7 @@ public class DmerBacker extends Backer{
 
 			
 			try (OutputStream os = new FileOutputStream(
-					new File(samplesFolder() + "dmer.pdf"))){
+					new File(System.getProperty("user.dir") + "\\dmer.pdf"))){
 				String json = readFile(jsonPath);
 				DmerBacker backer = new DmerBacker(json);
 				backer.initialize();
