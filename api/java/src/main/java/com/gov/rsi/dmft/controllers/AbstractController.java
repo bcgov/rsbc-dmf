@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
- * Base class for all controller classes ("Controller.*"), providing common methods
+ * Base class for all Spring controller classes, providing common methods
  * for response creation
  */
 public abstract class AbstractController {
@@ -20,6 +20,7 @@ public abstract class AbstractController {
     /**
      * Generates an error response (400 Bad Request) containing 
      * an explanatory message
+     * @param message the message
      * @return  the ResponseEntity
      */
     protected ResponseEntity responseBadRequest(String message){

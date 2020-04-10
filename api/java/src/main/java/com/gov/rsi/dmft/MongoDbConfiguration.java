@@ -16,13 +16,14 @@ import com.mongodb.client.MongoClients;
 /**
  * Configures the MongoDB connection with values from environment variables.
  * The following environment variables are examined:
- * 
- * MONGODB_HOST        defaults to localhost
- * MONGODB_PORT        defaults to 27017
- * MONGODB_DATABASE    defaults to test
- * MONGODB_USER        optional (if specified, both user and password are required)
- * MONGODB_PASSWORD    optional (if specified, both user and password are required)
- * 
+ * <ul>
+ * <li>MONGODB_HOST        defaults to localhost</li>
+ * <li>MONGODB_PORT        defaults to 27017</li>
+ * <li>MONGODB_DATABASE    defaults to test</li>
+ * <li>MONGODB_USER        optional (if specified, both user and password are required)</li>
+ * <li>MONGODB_PASSWORD    optional (if specified, both user and password are required)</li>
+ * </ul>
+ * <p>
  * Use of this class for configuration is disabled during the Maven Test phase,
  * when an embedded database is used 
  */

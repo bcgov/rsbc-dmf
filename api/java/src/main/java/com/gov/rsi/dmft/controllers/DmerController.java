@@ -1,6 +1,5 @@
 package com.gov.rsi.dmft.controllers;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -13,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.gov.rsi.dmft.ApplicationProperties;
 import com.gov.rsi.dmft.models.Dmer;
@@ -37,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implements endpoints for DMER document requests
+ * Implements the REST endpoints for all entities of class {@link com.gov.rsi.dmft.models.Dmer Dmer}
  */
 @RestController
 @RequestMapping("/api/queue/dmer")
@@ -59,11 +56,11 @@ public class DmerController extends AbstractController {
 	@Autowired
 	private DmerRepository repository;
 	
-	private enum DMER_FORMAT {json, pdf}
+	public enum DMER_FORMAT {json, pdf}
 
 	/**
-	 * Fetches the oldest report with NEW status from the queue
-	 * @return the DMER Json report
+	 * Fetches the oldest eDMER with NEW status from the queue
+	 * @return the eDMER JSON document
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<?> getNextNewDmer() {
@@ -85,8 +82,8 @@ public class DmerController extends AbstractController {
 	}
 	
 	/**
-	 * Fetches all DMERS
-	 * @return the DMER Json report
+	 * Fetches all Dmer entities
+	 * @return the a JSON array of converted {@link com.gov.rsi.dmft.models.Dmer Dmer} entities
 	 */
 	@RequestMapping(value = "/status", method = RequestMethod.GET)
 	public ResponseEntity<?> getAllDmers() {
@@ -105,8 +102,10 @@ public class DmerController extends AbstractController {
 	}
 	
 	/**
-	 * Fetches a DMER identified by id as a PDF
-	 * 
+	 * Fetches a DMER identified by id as either a PDF or JSON
+	 * @param id the id portion of the request path
+	 * @param format specfies the desired {@link com.gov.rsi.dmft.controllers.DmerController.DMER_FORMAT format} 
+	 * @param response the JSON or PDF representation
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public void getById(
@@ -125,17 +124,15 @@ public class DmerController extends AbstractController {
 				response.setHeader("Access-Control-Allow-Origin", "*");
 				if (format == DMER_FORMAT.json) {
 					response.setContentType("application/json");
-//					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".json");
 					OutputStreamWriter writer = new OutputStreamWriter(os);
 					String json = dmer.getJson();
 					writer.write(json, 0, json.length());
 					writer.close();
 				}
 				else {
-					DmerBacker pdfBacker = new DmerBacker(dmer.getJson());					
-					pdfBacker.generatePdf(os);
+					DmerBacker dmerBacker = new DmerBacker(dmer.getJson());					
+					dmerBacker.generatePdf(os);
 					response.setContentType("application/pdf");
-//					response.setHeader("Content-Disposition", "attachment;filename=dmer-"+ licenseNumber +  ".pdf");
 				}
 			}
 			catch (IOException e) {
@@ -154,7 +151,6 @@ public class DmerController extends AbstractController {
 	
 	/**
 	 * Deletes all DMERS
-	 * @return the DMER Json report
 	 */
 	@RequestMapping(value = "", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteAllDmers() {		
@@ -164,9 +160,8 @@ public class DmerController extends AbstractController {
 
 	
 	/**
-	 * Inserts a DMER JSON report into the queue
+	 * Creates a {@link com.gov.rsi.dmft.models.Dmer Dmer} entity
 	 * @param dmerJson the DMER document in JSON format
-	 * @return a ResponseEntity
 	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createDmer(@RequestBody String dmerJson) {
@@ -233,8 +228,7 @@ public class DmerController extends AbstractController {
 	/**
 	 * Updates the status of a specified DMER
 	 * @param licenseNumber the license number
-	 * @param status the new status
-	 * @return a ResponseEntity 
+	 * @param status the new {@link com.gov.rsi.dmft.models.Dmer.Status status} 
 	 */
 	@RequestMapping(value = "", method = RequestMethod.PUT)
 	public ResponseEntity updateDmerStatus(@RequestParam("id") String licenseNumber, 

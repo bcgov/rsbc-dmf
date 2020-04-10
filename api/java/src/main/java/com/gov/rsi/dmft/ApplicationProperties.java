@@ -6,10 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A singleton holding configurable properties for the application. 
- * In this implementation the properties are stored in the "application.properties" 
+ * A singleton holding loaded from in the "application.properties" 
  * file in the conventional "resources" folder in the project root. 
- * Future versions could incorporate e.g. a database or url source.
+ * For the Mongo database configuration:
+ * 
+ * @see MongoDbConfiguration
  */
 public class ApplicationProperties {
 	

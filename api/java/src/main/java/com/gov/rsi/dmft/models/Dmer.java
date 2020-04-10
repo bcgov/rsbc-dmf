@@ -9,15 +9,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
 
 /**
- * A Dmer wraps the DMER JSON document along with status and timestamps to 
- * implement a queue
- * TODO: May want to implement configurable Status values to accomodate
- *       changing requirements
+ * A Dmer entity wraps the DMER JSON document along with driver information, processing status, and and status change timestamps.
+ * <p> 
+ * The status values are representd as Strings. Each value corresponds to a 
+ * sematically identical status in the DFCMS Database. Note that these
+ * are a subset of the full status set.
  */
 @Document
 @Data
 public class Dmer {
 	
+	/**
+	 * The possible status values
+	 */
 	public enum Status {NEW, IN_PROCESS, CLEAN_PASS, NON_CLEAN_PASS, PRIORITY_URGENT, PRIORITY_REGULAR, PRIORITY_CASEMANAGER, ADJUDICATION, INTAKE} 
 	
 	@Id
@@ -26,6 +30,7 @@ public class Dmer {
 	private Status 			status;
 	private LocalDateTime	timeNew;
 	private LocalDateTime	timeInProcess;
+	
 	// timeFinished is for any status other than NEW or IN_PROCESS
 	private LocalDateTime	timeFinished;
 	

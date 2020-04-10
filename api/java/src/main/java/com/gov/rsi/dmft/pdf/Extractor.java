@@ -1,9 +1,6 @@
 package com.gov.rsi.dmft.pdf;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,7 +8,6 @@ import java.util.stream.Collectors;
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.ContactPoint;
 import org.hl7.fhir.r4.model.DateTimeType;
 import org.hl7.fhir.r4.model.DateType;
 import org.hl7.fhir.r4.model.DecimalType;
@@ -21,17 +17,26 @@ import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.Property;
 import org.hl7.fhir.r4.model.Resource;
 import org.hl7.fhir.r4.model.StringType;
-import org.hl7.fhir.r4.model.Type;
 import org.hl7.fhir.r4.model.QuestionnaireResponse.QuestionnaireResponseItemAnswerComponent;
 import org.hl7.fhir.r4.model.QuestionnaireResponse.QuestionnaireResponseItemComponent;
 
 import com.gov.rsi.dmft.fhir.r4.Parser;
 
+/**
+ * Methods to traverse through the HAPI FHIR objects to retrieve the data items
+ * required to populate the PDF    
+ */
 public class Extractor {
 	
 	private Map<String, Object> requiredItems;	
 	
-	public void execute(String json, Map<String, Object> requiredItems) throws IOException{
+	/**
+	 * Converts a JSON string into a HAPI FHIR Bundle, and extracts the items specified
+	 * by a set of keys
+	 * @param json the JSON string to convert
+	 * @param requiredItems Map to store the extracted items, specified by the key set of the map
+	 */
+	public void execute(String json, Map<String, Object> requiredItems) {
 		this.requiredItems = requiredItems;
 		Bundle bundle = Parser.parse(json);
 		extract(bundle);
@@ -65,7 +70,6 @@ public class Extractor {
 									List<QuestionnaireResponseItemAnswerComponent> answers = responseItem.getAnswer();
 									if (answers != null && answers.size() > 0) {
 										QuestionnaireResponseItemAnswerComponent answer = answers.get(0);
-										Type type = answer.getValue();
 									}
 									if (item!= null) {
 										extractItemList(linkId, item);
@@ -114,12 +118,6 @@ public class Extractor {
 			.append(name.getGivenAsSingleString())
 			.toString();
 	}
-	
-	
-	
-	
-	
-
 	
 	private void extractItemList(String parentLinkId, List <QuestionnaireResponseItemComponent> itemList){
 		List answerItems = new ArrayList();

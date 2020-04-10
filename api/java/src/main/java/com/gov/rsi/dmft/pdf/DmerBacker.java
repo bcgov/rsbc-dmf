@@ -2,17 +2,12 @@ package com.gov.rsi.dmft.pdf;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import lombok.Data;
 import net.sf.jasperreports.engine.JRException;
 
+/**
+ * Backer for the dmer.jasper report template. This class also provides a 
+ * main method to invoke the compliation of the .jrxml report definition
+ * file into the .jasper template
+ */
 @Data
 public class DmerBacker extends Backer{
 
@@ -142,17 +142,21 @@ public class DmerBacker extends Backer{
 	
 	private static Logger log = LoggerFactory.getLogger(DmerBacker.class);
 
+	/**
+	 * Entry point to compile the .jrxml file, or to generate the pdf from a sample eDMER
+	 * @param args if present, arg[0] specifies the path to an eDMER JSON file relative to 
+	 *             the execution folder, i.e. the system "user.dir" property
+	 */
 	public static void main(String[] args) {
-		
 
-		String jsonToProcess = args.length == 0 ? null : args[0];
-		if (jsonToProcess == null) {
+		String jsonFileName = args.length == 0 ? null : args[0];
+		if (jsonFileName == null) {
 			(new DmerBacker()).compile("dmer");
 		}
 		else {
-//			String p1 = (new File("./")).getAbsolutePath();
-//			p1 = p1.substring(0, p1.lastIndexOf('.'));		
-			String jsonPath = samplesFolder() + jsonToProcess;
+			String jsonPath = System.getProperty("user.dir");
+			jsonPath = jsonPath.substring(0, jsonPath.lastIndexOf("\\") + 1) + jsonFileName;
+
 			
 			try (OutputStream os = new FileOutputStream(
 					new File(samplesFolder() + "dmer.pdf"))){
@@ -170,28 +174,31 @@ public class DmerBacker extends Backer{
 	private static String readFile(String path) throws IOException {
 		File file = new File(path);
 		BufferedReader reader = new BufferedReader(new FileReader(file));
-		// file size will always exceed string length
-		int length = (int)file.length();
+		
+		// file size (byte count) will always exceed string length (char count)
 		CharBuffer buffer = CharBuffer.allocate((int)file.length());
 		reader.read(buffer);
 		
 		return buffer.rewind().toString();
 	}
 	
-	private static String samplesFolder() {
-		String path = System.getProperty("user.dir");
-		path = path.substring(0, path.lastIndexOf("\\") + 1);
-		path += "samples\\";
-		return path;
-	}
-	
 	public DmerBacker() {}
 	
+	/**
+	 * Constructor
+	 * @param json the eDMER JSON document which is to populate the generated PDF
+	 */
 	public DmerBacker(String json) {
 		initialize();
 		this.json = json;
 	}
 	
+	/**
+	 * Generates the PDF representation of the eDMER
+	 * @param os stream to which the PDF is to be written
+	 * @throws IOException if I/O errors occur
+	 * @throws JRException if the PDF generation fails
+	 */
 	public void generatePdf(OutputStream os) throws IOException , JRException{
 		Extractor extractor = new Extractor();
 		extractor.execute(json, requiredItems);		

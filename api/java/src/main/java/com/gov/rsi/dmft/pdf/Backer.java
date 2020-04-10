@@ -2,7 +2,6 @@ package com.gov.rsi.dmft.pdf;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
 
@@ -11,7 +10,9 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.data.JRBeanArrayDataSource;
 
 /**
- * Base class for all Jasper Reports backer classes  
+ * Base class for all Jasper Reports backer classes. 
+ * <p>
+ * Subclasses of Backer define all the data fields required to populate a PDF  
  */
 public abstract class Backer{
 	
@@ -27,8 +28,7 @@ public abstract class Backer{
 		backer[0] = this;
 		dataSource = new JRBeanArrayDataSource(backer);
 		return dataSource;
-	}
-	
+	}	
 
 	/**
 	 * Compiles the jrxml file into a jasper file in the resources folder folder
@@ -36,10 +36,6 @@ public abstract class Backer{
 	 */
 	protected void compile(String reportName){
 		try {
-			
-//			URL u1 = this.getClass().getClassLoader().getResource("dmer.jasper");
-//			String jasperPath = u1.getFile();
-			
 			
 			String projectPath = (new File("./")).getAbsolutePath();
 			projectPath = projectPath.substring(0, projectPath.lastIndexOf('.'));
