@@ -1,1 +1,7 @@
 *.env
+*.tmp
+*.doc
+*.docx
+*.log
+*.json
+*.pdf

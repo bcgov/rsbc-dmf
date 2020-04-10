@@ -1,0 +1,2 @@
+rem Use this to generate the Javadoc
+javadoc -subpackages -nohelp -protected -sourcepath .\src\main\java -d .\doc com.gov.rsi.dmft com.gov.rsi.dmft.controllers com.gov.rsi.dmft.fhir.v4 com.gov.rsi.dmft.models com.gov.rsi.dmft.pdf com.gov.rsi.dmft.repositories

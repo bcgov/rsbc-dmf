@@ -99,10 +99,10 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
             <!--
-            1. used for local installation of node and npm
-            2. to install dependencies with npm install
-            3. building the application
-            -->
+            1. Installs local installation of node and npm
+            2. Installs React applicatoion dependencies
+            3. Assembles the React application
+			-->
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -118,7 +118,6 @@
                         <goals>
                             <goal>install-node-and-npm</goal>
                         </goals>
-						<!-- This is default phase for that goal -->
 						<phase>generate-resources</phase>
                     </execution>
                     <execution>
@@ -126,7 +125,6 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-						<!-- This is default phase for that goal -->
 						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>install</arguments>
@@ -137,7 +135,6 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-						<!-- This is default phase for that goal -->
 						<phase>generate-resources</phase>
 						<configuration>
 							<arguments>install axios</arguments>
@@ -148,7 +145,6 @@
                         <goals>
                             <goal>npm</goal>
                         </goals>
-						<!-- This is default phase for that goal -->
 						<phase>generate-resources</phase>
                         <configuration>
                             <arguments>run build</arguments>
@@ -156,6 +152,9 @@
                     </execution>
                 </executions>
             </plugin>
+			<!-- 
+			Copies the assmmbled React application to the resources folder
+			-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
@@ -178,7 +177,22 @@
                     </execution>
                 </executions>
             </plugin>
-		</plugins>
+			<!-- 
+			Generates the Javadoc
+			-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+ 		</plugins>
 	</build>
 
 </project>
