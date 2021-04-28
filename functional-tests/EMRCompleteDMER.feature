@@ -1,10 +1,10 @@
-Feature: DMERBusinessRules.feature
-    As a RSBC Driver Medical Fitness SME
-    I want to validate the DMER business rules
+Feature: DMERSpecialCharacters.feature
+    As a medical professional
+    I want to submit a DMER with special characters
 
-Scenario: DMER Business Rules
+Scenario: DMER Special Characters
     Given I am logged in to the PHSA Portal
     And I click on the DMER link for the patient named Sam McDonald
-    And I do not complete any fields
+    And I enter special characters into the fields
     And I submit the DMER form
-    Then the DMER validation is displayed
+    Then the DMER is successfully processed
