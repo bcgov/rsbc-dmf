@@ -1,0 +1,21 @@
+name: ci-doctors-portal-api
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "doctors-portal/src/API/**"
+      - ".github/workflows/ci-doctors-portal-api.yml"
+
+env:
+  IMAGE_NAME: doctors-portal-api
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        working-directory: ./doctors-portal/src/API
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
