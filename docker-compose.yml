@@ -1,0 +1,22 @@
+version: "3.4"
+
+services:
+  doctors-portal-api:
+    build:
+      context: ./doctors-portal/src/API
+    image: dmf-doctors-portal-api:dev
+    ports:
+      - 3020:8080
+    env_file:
+      - .env
+
+  doctors-portal-ui:
+    build:
+      context: ./doctors-portal/src/UI
+    image: dmf-doctors-portal-ui:dev
+    ports:
+      - 3200:2015
+    environment:
+      - "API_URL=doctors-portal-api:3020"
+    depends_on:
+      - doctors-portal-api
