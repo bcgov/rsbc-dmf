@@ -1,0 +1,21 @@
+name: ci-doctors-portal-ui
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "doctors-portal/src/UI/**"
+      - ".github/workflows/ci-doctors-portal-ui.yml"
+
+env:
+  IMAGE_NAME: evdoctors-portal-ui
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        working-directory: ./doctors-portal/src/UI
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
