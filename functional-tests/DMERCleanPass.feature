@@ -34,18 +34,6 @@ Scenario: Non-Commercial DMER Supplemental O2 Not Driving Clean Pass
     And I submit the DMER form
     Then the DMER has a clean pass
 
-Scenario: Non-Commercial DMER Supplemental O2 Not Driving Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
-    And the patient is a not commercial driver
-    And corrected vision is 20/50 or better
-    And uncorrected vision is 20/50 or better
-    And the acuity and visual field meets the criteria for license class
-    And I select 'Yes' for Prescription of Supplemental O2
-    And I select 'Yes' for Not While Driving
-    And I submit the DMER form
-    Then the DMER has a clean pass
-
 Scenario: Commercial DMER Sleep Apnea, Mild, Hypopnea 0-14 Clean Pass
     Given I am logged in to the Doctors' Portal
     When I click on the DMER link for the patient
@@ -210,7 +198,7 @@ Scenario: Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance Cle
     And uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
     And I select 'Yes' for Diagnosis of Narcolepsy
-    And I select 'No' for Daytime Sleep Attacks or Cataplexy with past 12 months
+    And I select 'No' for Daytime Sleep Attacks or Cataplexy within the past 12 months
     And I select 'Yes' for Compliant with Medical Control Recommendations
     And I submit the DMER form
     Then the DMER has a clean pass
