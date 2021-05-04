@@ -211,7 +211,7 @@ Scenario: Non-Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance
     And uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
     And I select 'Yes' for Diagnosis of Narcolepsy
-    And I select 'No' for Daytime Sleep Attacks or Cataplexy with past 12 months
+    And I select 'No' for Daytime Sleep Attacks or Cataplexy within the past 12 months
     And I select 'Yes' for Compliant with Medical Control Recommendations
     And I submit the DMER form
     Then the DMER has a clean pass
