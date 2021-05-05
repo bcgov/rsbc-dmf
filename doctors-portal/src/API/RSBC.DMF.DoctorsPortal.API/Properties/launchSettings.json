@@ -4,8 +4,7 @@
     "RSBC.DMF.DoctorsPortal.API": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+      "launchBrowser": false,
       "applicationUrl": "http://localhost:3020",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
