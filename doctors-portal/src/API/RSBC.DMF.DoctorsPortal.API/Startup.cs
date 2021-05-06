@@ -68,7 +68,7 @@ namespace RSBC.DMF.DoctorsPortal.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
