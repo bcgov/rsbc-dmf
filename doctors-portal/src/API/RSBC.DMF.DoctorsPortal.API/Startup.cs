@@ -31,6 +31,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             });
             services.AddSwaggerGen(c =>
             {
+                c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "RSBC.DMF.DoctorsPortal.API.xml"), true);
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.DoctorsPortal.API", Version = "v1" });
             });
             var dpBuilder = services.AddDataProtection();
@@ -70,10 +71,13 @@ namespace RSBC.DMF.DoctorsPortal.API
         {
             if (!env.IsProduction())
             {
-                app.UseSwagger();
+                app.UseSwagger(c =>
+                {
+                    c.RouteTemplate = "api/{documentName}/openapi.json";
+                });
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "RSBC.DMF.DoctorsPortal.API v1");
+                    c.SwaggerEndpoint("v1/openapi.json", "RSBC.DMF.DoctorsPortal.API v1");
                     c.RoutePrefix = "api";
                 });
             }
