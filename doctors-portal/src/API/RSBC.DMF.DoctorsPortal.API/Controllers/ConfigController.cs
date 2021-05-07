@@ -9,7 +9,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
     /// Configuration endpoint
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ConfigController : ControllerBase
     {
         private readonly ILogger<ConfigController> _logger;
