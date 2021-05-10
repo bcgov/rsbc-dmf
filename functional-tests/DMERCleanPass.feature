@@ -8,6 +8,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass
     And the patient is a not commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
+    And I complete the optional fields
+    And I complete the required fields
     And I submit the DMER form
     Then the DMER has a clean pass
 
@@ -17,6 +19,8 @@ Scenario: Commercial DMER Vision Only Clean Pass
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
+    And I complete the optional fields
+    And I complete the required fields
     And I submit the DMER form
     Then the DMER has a clean pass
 
