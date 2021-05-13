@@ -226,3 +226,4 @@ C:\git\rsbc-dmf\functional-tests\bdd-tests\obj\Debug\netcoreapp3.1\bdd-tests.csp
 C:\git\rsbc-dmf\functional-tests\bdd-tests\obj\Debug\netcoreapp3.1\bdd-tests.dll
 C:\git\rsbc-dmf\functional-tests\bdd-tests\obj\Debug\netcoreapp3.1\bdd-tests.pdb
 C:\git\rsbc-dmf\functional-tests\bdd-tests\obj\Debug\netcoreapp3.1\bdd-tests.genruntimeconfig.cache
+C:\git\rsbc-dmf\functional-tests\bdd-tests\obj\Debug\netcoreapp3.1\bdd-tests.csprojAssemblyReference.cache
