@@ -14,7 +14,6 @@ Scenario: Doctors' Portal Health Check
 namespace bdd_tests
 {
     [FeatureFile("./DoctorsPortalHealthCheck.feature")]
-    [Collection("Liquor")]
     public sealed class DoctorsPortalHealthCheck : TestBase
     {
         [When(@"I click on the doctors' portal")]
