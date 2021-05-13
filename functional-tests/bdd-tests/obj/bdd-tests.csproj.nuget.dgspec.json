@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\git\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj": {}
+    "C:\\Users\\GeorgeWalker\\projects\\PSSG\\dmft\\repo\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj": {}
   },
   "projects": {
-    "C:\\git\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj": {
+    "C:\\Users\\GeorgeWalker\\projects\\PSSG\\dmft\\repo\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\git\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj",
+        "projectUniqueName": "C:\\Users\\GeorgeWalker\\projects\\PSSG\\dmft\\repo\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj",
         "projectName": "bdd-tests",
-        "projectPath": "C:\\git\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj",
-        "packagesPath": "C:\\Users\\Elizabeth Wolfe\\.nuget\\packages\\",
-        "outputPath": "C:\\git\\rsbc-dmf\\functional-tests\\bdd-tests\\obj\\",
+        "projectPath": "C:\\Users\\GeorgeWalker\\projects\\PSSG\\dmft\\repo\\rsbc-dmf\\functional-tests\\bdd-tests\\bdd-tests.csproj",
+        "packagesPath": "C:\\Users\\GeorgeWalker\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\GeorgeWalker\\projects\\PSSG\\dmft\\repo\\rsbc-dmf\\functional-tests\\bdd-tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Elizabeth Wolfe\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\GeorgeWalker\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -110,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.203\\RuntimeIdentifierGraph.json"
         }
       }
     }
