@@ -39,6 +39,9 @@
     <None Remove="map-search.feature" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="PHSANavigation.feature">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="DoctorsPortalHealthCheck.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
