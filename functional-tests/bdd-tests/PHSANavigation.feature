@@ -8,4 +8,4 @@ Scenario: PHSA Navigation
     And I click on the authorization button
     And I click on Test Elizabeth's ID
     And I click on the calendar
-    Then I click on the Submit button
+    # Then I click on the Submit button
