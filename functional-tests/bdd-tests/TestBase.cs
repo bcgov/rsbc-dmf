@@ -29,7 +29,7 @@ namespace bdd_tests
 
             configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .AddUserSecrets("a004e634-29c7-48b6-becc-87fe16be7538")
+                .AddUserSecrets("151C3067-C181-4482-A8C8-0628D14E5FF8")
                 .Build();
 
             //bool runlocal = true;
