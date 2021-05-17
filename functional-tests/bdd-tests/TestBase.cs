@@ -10,7 +10,8 @@ using Xunit;
 
 namespace bdd_tests
 {
-    public abstract partial class TestBase : Feature, IDisposable
+    public abstract partial class TestBase : Feature 
+        //, IDisposable
     {
         protected string applicationID;
         protected string baseUri;
@@ -132,7 +133,7 @@ namespace bdd_tests
             return result;
         }
 
-        
+        /*
         public void Dispose()
         {
             ngDriver.Quit();
@@ -140,5 +141,6 @@ namespace bdd_tests
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }
+        */
     }
 }
