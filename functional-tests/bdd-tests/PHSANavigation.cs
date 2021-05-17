@@ -55,7 +55,7 @@ namespace bdd_tests
         }
 
 
-        [And(@"I click on Test Elizabeth's ID")]
+        [And(@"I click on the DMER")]
         public void SampleForm()
         {
             ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/grid/form/609db688d00b15327e93dc7c");
