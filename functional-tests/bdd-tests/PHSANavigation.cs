@@ -26,7 +26,8 @@ namespace bdd_tests
         [When(@"I click on the PHSA link")]
         public void PHSALinkClick()
         {
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/auth");
+            var baseUri = configuration["PHSAUri"];
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{baseUri}");
         }
 
 
@@ -58,7 +59,8 @@ namespace bdd_tests
         [And(@"I click on the DMER")]
         public void SampleForm()
         {
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/grid/form/609db688d00b15327e93dc7c");
+            var DMERUri = configuration["DMERUri"];
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DMERUri}");
         }
 
 
@@ -72,7 +74,7 @@ namespace bdd_tests
         [Then(@"I click on the Submit button")]
         public void SubmitButton()
         {
-            ngDriver.WrappedDriver.FindElement(By.Id("esoswoa")).Click();
+            ngDriver.WrappedDriver.FindElement(By.Id("e666wzs")).Click();
         }
     }
 }
