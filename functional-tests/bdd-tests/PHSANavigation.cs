@@ -59,7 +59,8 @@ namespace bdd_tests
         [And(@"I click on the DMER")]
         public void SampleForm()
         {
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/grid/form/609eb617894b2ab618b917ac");
+            var DMERUri = configuration["DMERUri"];
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DMERUri}");
         }
 
 
