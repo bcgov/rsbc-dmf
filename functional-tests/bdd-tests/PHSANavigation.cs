@@ -13,8 +13,7 @@ Scenario: PHSA Navigation
     When I click on the PHSA link
     And I enter the PHSA credentials
     And I click on the authorization button
-    And I click on Test Elizabeth's ID
-    And I click on the calendar
+    And I click on the DMER
     Then I click on the Submit button
 */
 
@@ -59,22 +58,18 @@ namespace bdd_tests
         [And(@"I click on the DMER")]
         public void SampleForm()
         {
-            var DMERUri = configuration["DMERUri"];
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DMERUri}");
         }
 
 
         [And(@"I click on the calendar")]
         public void SampleElement()
         {
-            ngDriver.WrappedDriver.FindElement(By.Id("ew9my2j-textFieldWithCalendarWidget")).Click();
         }
 
 
         [Then(@"I click on the Submit button")]
         public void SubmitButton()
         {
-            ngDriver.WrappedDriver.FindElement(By.Id("e666wzs")).Click();
         }
     }
 }
