@@ -19,7 +19,7 @@ namespace bdd_tests
         [When(@"I click on the doctors' portal")]
         public void DoctorsPortalHealthCheckClick()
         {
-            var DoctorsPortalUri = configuration["DoctorsPortalUri"];
+            var DoctorsPortalUri = configuration["baseUri"];
             ngDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
             ngDriver.WaitForAngular();
         }
