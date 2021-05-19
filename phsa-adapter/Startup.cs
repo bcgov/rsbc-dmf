@@ -1,26 +1,23 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Serilog;
+using Serilog.Debugging;
+using Serilog.Events;
 using Serilog.Exceptions;
+using Serilog.Sinks.Splunk;
 
-namespace PhsaAdapter
+namespace Rsbc.Dmf.PhsaAdapter
 {
     public class Startup
     {
@@ -38,16 +35,18 @@ namespace PhsaAdapter
 
             // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { });
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",
+                    options => { });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("BasicAuthentication", new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
+                options.AddPolicy("BasicAuthentication",
+                    new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
             });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PHSA Adapter", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "PHSA Adapter", Version = "v1"});
             });
 
             // health checks. 
@@ -68,15 +67,11 @@ namespace PhsaAdapter
             // enable Splunk logger using Serilog
             if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
                 !string.IsNullOrEmpty(Configuration["SPLUNK_TOKEN"])
-                )
+            )
             {
-
-                Serilog.Sinks.Splunk.CustomFields fields = new Serilog.Sinks.Splunk.CustomFields();
+                var fields = new CustomFields();
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
-                {
-                    fields.CustomFieldList.Add(new Serilog.Sinks.Splunk.CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
-                }
-                var splunkUri = new Uri(Configuration["SPLUNK_COLLECTOR_URL"]);
+                    fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
 
                 // Fix for bad SSL issues 
 
@@ -85,20 +80,20 @@ namespace PhsaAdapter
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
-                    .WriteTo.EventCollector(splunkHost: Configuration["SPLUNK_COLLECTOR_URL"],
-                       sourceType: "phsa", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
-                       restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information,
+                    .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
+                        sourceType: "phsa", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                        restrictedToMinimumLevel: LogEventLevel.Information,
 #pragma warning disable CA2000 // Dispose objects before losing scope
-                       messageHandler: new HttpClientHandler
-                       {
-                           ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; }
-                       }
+                        messageHandler: new HttpClientHandler
+                        {
+                            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+                            {
+                                return true;
+                            }
+                        }
 #pragma warning restore CA2000 // Dispose objects before losing scope
-                     )
+                    )
                     .CreateLogger();
-
-
-
             }
             else
             {
@@ -109,7 +104,7 @@ namespace PhsaAdapter
                     .CreateLogger();
             }
 
-            Serilog.Debugging.SelfLog.Enable(Console.Error);
+            SelfLog.Enable(Console.Error);
 
             Log.Logger.Information("PHSA Adapter Container Starting");
 
@@ -130,10 +125,7 @@ namespace PhsaAdapter
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
