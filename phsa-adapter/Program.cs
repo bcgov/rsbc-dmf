@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace PhsaAdapter
+namespace Rsbc.Dmf.PhsaAdapter
 {
     public class Program
     {
@@ -12,14 +12,12 @@ namespace PhsaAdapter
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .UseSerilog()
-                .ConfigureAppConfiguration((hostingContext, config) =>
-                {
-                    config.AddEnvironmentVariables();
-                })
-
+                .ConfigureAppConfiguration((hostingContext, config) => { config.AddEnvironmentVariables(); })
                 .UseStartup<Startup>();
+        }
     }
 }

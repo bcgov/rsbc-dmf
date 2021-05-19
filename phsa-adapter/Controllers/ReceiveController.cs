@@ -1,19 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace PhsaAdapter.Controllers
+namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class ReceiveController : ControllerBase
     {
-
         private readonly ILogger<ReceiveController> _logger;
 
         public ReceiveController(ILogger<ReceiveController> logger)
@@ -25,7 +19,7 @@ namespace PhsaAdapter.Controllers
         [BasicAuthorization]
         public IActionResult Post([FromBody] object data)
         {
-            string jsonString = JsonSerializer.Serialize(data);
+            var jsonString = JsonSerializer.Serialize(data);
             _logger.LogInformation(jsonString);
             return Ok();
         }

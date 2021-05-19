@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Threading.Tasks;
+﻿using System.Security.Principal;
 
-namespace PhsaAdapter
+namespace Rsbc.Dmf.PhsaAdapter
 {
     // AuthenticatedUser.cs
     public class AuthenticatedUser : IIdentity
