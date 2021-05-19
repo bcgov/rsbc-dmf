@@ -10,7 +10,8 @@ using Xunit;
 
 namespace bdd_tests
 {
-    public abstract partial class TestBase : Feature, IDisposable
+    public abstract partial class TestBase : Feature 
+        //, IDisposable
     {
         protected string applicationID;
         protected string baseUri;
@@ -29,7 +30,7 @@ namespace bdd_tests
 
             configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables()
-                .AddUserSecrets("a004e634-29c7-48b6-becc-87fe16be7538")
+                .AddUserSecrets("151C3067-C181-4482-A8C8-0628D14E5FF8")
                 .Build();
 
             //bool runlocal = true;
@@ -132,7 +133,7 @@ namespace bdd_tests
             return result;
         }
 
-        
+        /*
         public void Dispose()
         {
             ngDriver.Quit();
@@ -140,5 +141,6 @@ namespace bdd_tests
             // Suppress finalization.
             GC.SuppressFinalize(this);
         }
+        */
     }
 }

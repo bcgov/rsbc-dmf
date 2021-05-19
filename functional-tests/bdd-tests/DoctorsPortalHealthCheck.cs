@@ -19,7 +19,8 @@ namespace bdd_tests
         [When(@"I click on the doctors' portal")]
         public void DoctorsPortalHealthCheckClick()
         {
-            ngDriver.Navigate().GoToUrl($"http://dev1-dft-doctors.silver.devops.bcgov/");
+            var DoctorsPortalUri = configuration["baseUri"];
+            ngDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
             ngDriver.WaitForAngular();
         }
 

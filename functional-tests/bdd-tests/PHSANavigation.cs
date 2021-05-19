@@ -13,8 +13,7 @@ Scenario: PHSA Navigation
     When I click on the PHSA link
     And I enter the PHSA credentials
     And I click on the authorization button
-    And I click on Test Elizabeth's ID
-    And I click on the calendar
+    And I click on the DMER
     Then I click on the Submit button
 */
 
@@ -26,7 +25,8 @@ namespace bdd_tests
         [When(@"I click on the PHSA link")]
         public void PHSALinkClick()
         {
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/auth");
+            var baseUri = configuration["PHSAUri"];
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{baseUri}");
         }
 
 
@@ -55,24 +55,21 @@ namespace bdd_tests
         }
 
 
-        [And(@"I click on Test Elizabeth's ID")]
+        [And(@"I click on the DMER")]
         public void SampleForm()
         {
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"https://apps.form.io/phsa/#/grid/form/609db688d00b15327e93dc7c");
         }
 
 
         [And(@"I click on the calendar")]
         public void SampleElement()
         {
-            ngDriver.WrappedDriver.FindElement(By.Id("ew9my2j-textFieldWithCalendarWidget")).Click();
         }
 
 
         [Then(@"I click on the Submit button")]
         public void SubmitButton()
         {
-            ngDriver.WrappedDriver.FindElement(By.Id("esoswoa")).Click();
         }
     }
 }
