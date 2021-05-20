@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.IO;
+using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -17,10 +20,15 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
         [HttpPost]
         [BasicAuthorization]
-        public IActionResult Post([FromBody] object data)
+        public async Task<IActionResult> Post()
         {
-            var jsonString = JsonSerializer.Serialize(data);
-            _logger.LogInformation(jsonString);
+            using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+            {
+                string body = await reader.ReadToEndAsync();
+                _logger.LogInformation(body);
+
+            }
+
             return Ok();
         }
     }
