@@ -30,6 +30,6 @@ describe('AppComponent', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('RSBC - DFT - Doctor\'s portal');
+    expect(compiled.querySelector('h1').textContent).toContain('RSBC - DFT - Doctor\'s portal');
   });
 });
