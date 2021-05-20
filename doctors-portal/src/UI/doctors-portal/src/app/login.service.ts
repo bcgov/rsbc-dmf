@@ -7,30 +7,38 @@ import { Observable, of } from 'rxjs';
 })
 export class LoginService {
 
-  private loggedIn = false;
+  private get token(): null | string { return window.sessionStorage.getItem('auth:token') || null; }
+  private set token(v: null | string) {
+    if (v != null) {
+      window.sessionStorage.setItem('auth:token', v);
+    } else {
+      window.sessionStorage.removeItem('auth:token');
+    }
+  }
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
-  public Login(returnUrl: string = '/'): Observable<boolean> {
-    console.log(this.loggedIn);
-    if (this.loggedIn) {
+  public login(returnUrl: string = '/'): Observable<boolean> {
+    console.debug('token', this.token);
+    if (this.token !== null) {
       return of(true);
     }
     this.router.navigate(['login']);
     return of(false);
   }
-  public Logout(): Observable<boolean> {
-    this.loggedIn = false;
+  public logout(): Observable<boolean> {
+    this.token = null;
     this.router.navigate(['login']);
     return of(false);
   }
 
   public isLoggedIn(): boolean {
-    return this.loggedIn;
+    return this.token !== null;
   }
 
   public setLoggedIn(): void {
-    this.loggedIn = true;
+    this.token = 'token';
     this.router.navigate(['/']);
   }
 
