@@ -1,13 +1,9 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatSelectModule } from '@angular/material/select';
 
 import { LoginComponent } from './login.component';
+import { MaterialModule } from '../material.module';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,15 +11,11 @@ describe('LoginComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginComponent ],
+      declarations: [LoginComponent],
       imports: [
-        NoopAnimationsModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatCardModule,
-        MatInputModule,
-        MatRadioModule,
-        MatSelectModule,
+        MaterialModule,
+        RouterTestingModule,
+        NoopAnimationsModule
       ]
     }).compileComponents();
   }));
