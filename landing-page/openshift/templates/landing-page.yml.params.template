@@ -1,0 +1,4 @@
+NAMESPACE_PREFIX=<openshift namespace>
+ENV=<openshift namespace env>
+APP_NAME=<app name>
+TAG=<image stream tag to deploy from>
