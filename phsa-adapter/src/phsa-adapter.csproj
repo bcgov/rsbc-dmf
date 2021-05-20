@@ -2,13 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>phsa_adapter</RootNamespace>
+    <RootNamespace>Rsbc.Dmf.PhsaAdapter</RootNamespace>
     <UserSecretsId>b36b8909-80de-4073-b0e0-cdffd2c44a5d</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
+    <AssemblyName>Rsbc.Dmf.PhsaAdapter</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Hl7.Fhir.R4" Version="1.8.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
