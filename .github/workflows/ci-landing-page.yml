@@ -1,0 +1,21 @@
+name: ci-landing-page
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "landing-page/src/**"
+      - ".github/workflows/ci-landing-page.yml"
+
+env:
+  IMAGE_NAME: landing-page
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        working-directory: ./landing-page/src/
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
