@@ -16,21 +16,28 @@ parameters:
   - description: image tag for deployments
     name: TAG
     required: true
+  - description: Hostname
+    name: HOST
+    required: true
   - description: Reverse proxy known network
     name: KNOWN_NETWORKS
     value: ::ffff:10.97.0.0/16
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
+  - description: Password used for authentication
+    from: '[A-Z0-9]{8}'
+    generate: expression
+    name: PASSWORD
 
 objects:
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-phsa-adapter-config
+      name: ${APP_NAME}-config
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
@@ -40,20 +47,22 @@ objects:
     apiVersion: v1
     type: Opaque
     metadata:
-      name: ${APP_NAME}-phsa-adapter-secrets
+      name: ${APP_NAME}-secrets
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
+      USERNAME: "phsa"
+      PASSWORD: "${PASSWORD}"
 
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-phsa-adapter-api
+      name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       ports:
@@ -62,19 +71,19 @@ objects:
           protocol: TCP
           targetPort: 8080
       selector:
-        deploymentconfig: ${APP_NAME}-phsa-adapter-api
+        deploymentconfig: ${APP_NAME}
       type: ClusterIP
 
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-phsa-adapter-api
+      name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: -${ENV}.silver.devops.bcgov
+      host: ${HOST}
       port:
         targetPort: 8080-tcp
       # tls:
@@ -82,22 +91,25 @@ objects:
       #   termination: edge
       to:
         kind: Service
-        name: ${APP_NAME}-phsa-adapter-api
+        name: ${APP_NAME}
         weight: 100
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Allow
       wildcardPolicy: None
 
   - kind: NetworkPolicy
     apiVersion: networking.k8s.io/v1
     metadata:
-      name: ${APP_NAME}-phsa-adapter
+      name: ${APP_NAME}
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       podSelector:
         matchLabels:
-          app: ${APP_NAME}-phsa-adapter
+          app: ${APP_NAME}
       ingress:
         - ports:
             - protocol: TCP
@@ -107,14 +119,14 @@ objects:
     apiVersion: apps.openshift.io/v1
     metadata:
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-phsa-adapter-api
+      name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       replicas: 2
       selector:
-        deploymentconfig: ${APP_NAME}-phsa-adapter-api
+        deploymentconfig: ${APP_NAME}
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -128,18 +140,18 @@ objects:
       template:
         metadata:
           labels:
-            app: ${APP_NAME}-phsa-adapter
+            app: ${APP_NAME}
             app.kubernetes.io/part-of: ${APP_NAME}
-            deploymentconfig: ${APP_NAME}-phsa-adapter-api
+            deploymentconfig: ${APP_NAME}
         spec:
           containers:
-            - name: phsa-adapter-api
+            - name: ${APP_NAME}
               envFrom:
                 - configMapRef:
-                    name: ${APP_NAME}-phsa-adapter-config
+                    name: ${APP_NAME}-config
                 - secretRef:
-                    name: ${APP_NAME}-phsa-adapter-secrets
-              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/phsa-adapter-api:${TAG}
+                    name: ${APP_NAME}-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${APP_NAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
                 - mountPath: /dpkeys
@@ -152,7 +164,7 @@ objects:
           volumes:
             - name: dp-keys
               persistentVolumeClaim:
-                claimName: ${APP_NAME}-doctors-key-ring
+                claimName: ${APP_NAME}-key-ring
       test: false
       triggers:
         - type: ConfigChange
@@ -160,20 +172,20 @@ objects:
           imageChangeParams:
             automatic: true
             containerNames:
-              - phsa-adapter-api
+              - phsa-adapter
             from:
               kind: ImageStreamTag
-              name: phsa-adapter-api:${TAG}
+              name: ${APP_NAME}:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
 
 
   - kind: "PersistentVolumeClaim"
     apiVersion: "v1"
     metadata:
-      name: ${APP_NAME}-phsa-adapter-key-ring
+      name: ${APP_NAME}-key-ring
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-phsa-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     spec:
       accessModes:
