@@ -2,28 +2,6 @@ Feature: DMERCleanPass.feature
     As a Driver Medical Fitness SME
     I want to confirm the clean pass business rules for a DMER
 
-Scenario: Non-Commercial DMER Vision Only Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
-    And the patient is a not commercial driver
-    And binocular, corrected, or uncorrected vision is 20/50 or better
-    And the acuity and visual field meets the criteria for license class
-    And I complete the optional fields
-    And I complete the required fields
-    And I submit the DMER form
-    Then the DMER has a clean pass
-
-Scenario: Commercial DMER Vision Only Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
-    And the patient is a commercial driver
-    And binocular, corrected, or uncorrected vision is 20/30 or better
-    And the acuity and visual field meets the criteria for license class
-    And I complete the optional fields
-    And I complete the required fields
-    And I submit the DMER form
-    Then the DMER has a clean pass
-
 Scenario: Non-Commercial DMER Supplemental O2 Not Driving Clean Pass
     Given I am logged in to the Doctors' Portal
     When I click on the DMER link for the patient
