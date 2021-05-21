@@ -128,7 +128,7 @@ objects:
             deploymentconfig: ${APP_NAME}-landing-page
         spec:
           containers:
-            - name: landing-page-ui
+            - name: landing-page
               image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/landing-page:${TAG}
               imagePullPolicy: Always
               ports:
