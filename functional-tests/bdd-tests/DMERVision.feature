@@ -127,7 +127,7 @@ Scenario: Non-Commercial DMER Uncorrected Binocular Vision Contradicts 20/50 Sta
     When I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
-    And I enter the Uncorrected Binocular Vision as higher than 20/50
+    And I enter the Uncorrected Binocular Vision as 20/55
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
@@ -141,7 +141,7 @@ Scenario: Non-Commercial DMER Uncorrected Left Eye Vision Contradicts 20/50 Stat
     When I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
-    And I enter the Uncorrected Left Eye Vision as higher than 20/50
+    And I enter the Uncorrected Left Eye Vision as 20/55
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
@@ -155,7 +155,7 @@ Scenario: Non-Commercial DMER Uncorrected Right Eye Vision Contradicts 20/50 Sta
     When I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
-    And I enter the Uncorrected Right Eye Vision as higher than 20/50
+    And I enter the Uncorrected Right Eye Vision as 20/55
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
@@ -169,7 +169,7 @@ Scenario: Commercial DMER Uncorrected Binocular Vision Contradicts 20/30 Stateme
     When I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
-    And I enter the Uncorrected Binocular Vision as higher than 20/30
+    And I enter the Uncorrected Binocular Vision as 20/35
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
@@ -183,7 +183,7 @@ Scenario: Commercial DMER Uncorrected Left Eye Vision Contradicts 20/30 Statemen
     When I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
-    And I enter the Uncorrected Left Eye Vision as higher than 20/30
+    And I enter the Uncorrected Left Eye Vision as 20/35
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
@@ -197,7 +197,7 @@ Scenario: Commercial DMER Uncorrected Right Eye Vision Contradicts 20/30 Stateme
     When I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
-    And I enter the Uncorrected Right Eye Vision as higher than 20/30
+    And I enter the Uncorrected Right Eye Vision as 20/35
     And I do not select the corrected vision checkbox
     And I select 'No' for 'Has the patient experienced any visual field defects?'
     And I select 'No' for 'Has the patient experienced loss of visual acuity?'
