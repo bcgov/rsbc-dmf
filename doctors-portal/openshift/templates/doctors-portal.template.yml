@@ -92,13 +92,13 @@ objects:
       name: ${APP_NAME}-doctors-portal-api
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: ${APP_NAME}-dft-doctors.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
       path: /api
       port:
         targetPort: 8080-tcp
-      # tls:
-      #   insecureEdgeTerminationPolicy: Redirect
-      #   termination: edge
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
       to:
         kind: Service
         name: ${APP_NAME}-doctors-portal-api
@@ -114,13 +114,13 @@ objects:
       name: ${APP_NAME}-doctors-portal-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: ${APP_NAME}-dft-doctors.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
       path: /
       port:
         targetPort: 2015-tcp
-      # tls:
-      #   insecureEdgeTerminationPolicy: Redirect
-      #   termination: edge
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
       to:
         kind: Service
         name: ${APP_NAME}-doctors-portal-ui
