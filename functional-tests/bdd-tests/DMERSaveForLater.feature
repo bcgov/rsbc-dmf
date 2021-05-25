@@ -4,8 +4,8 @@ Feature: DMERSaveForLater.feature
 
 Scenario: DMER Save For Later
     Given I am logged in to the RSBC Portal
-    And I click on the DMER link for the patient named Sam McDonald
+    And I click on the DMER link
     And I complete the DMER fields
     And I click on the Save For Later button
-    And I click on the DMER link for the patient named Sam McDonald
+    And I click on the DMER link
     Then the previously entered data is displayed
