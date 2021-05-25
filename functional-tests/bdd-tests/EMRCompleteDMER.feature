@@ -4,7 +4,7 @@ Feature: EMRCompleteDMER.feature
 
 Scenario: EMR Complete DMER 
     Given I am logged in to the EMR solution
-    And I click on the DMER link for the patient named Sam McDonald
+    And I click on the DMER link
     And I complete the DMER form
     And I submit the DMER form
     Then I see the DMER is processed
