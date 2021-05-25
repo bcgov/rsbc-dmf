@@ -30,6 +30,13 @@ Scenario: DMER Minimum Lengths Not Met
     And I submit the DMER form
     Then the DMER is not successfully processed
 
+Scenario: DMER DL Length Not Met
+    Given I am logged in to the PHSA Portal
+    And I click on the DMER link
+    And I enter DL number not equal to seven digits
+    And I submit the DMER form
+    Then the DMER is not successfully processed
+
 Scenario: DMER Required Fields Completed
     Given I am logged in to the PHSA Portal
     And I click on the DMER link
