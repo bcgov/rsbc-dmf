@@ -131,3 +131,90 @@ Scenario: Commercial DMER Patient Postal Code Missing
     And the patient's postal code is missing
     And I submit the DMER form
     Then the DMER must be reviewed
+
+Scenario: Empty DMER Doesn't Save
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not completed
+    And I submit the DMER form
+    Then the DMER does not save
+
+Scenario: Non-Commercial DMER Provider First Name Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not to be processed for commercial purposes
+    And the provider's first name is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Commercial DMER Provider First Name Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is to be processed for commercial purposes
+    And the provider's first name is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Non-Commercial DMER Provider Last Name Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not to be processed for commercial purposes
+    And the provider's last name is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Commercial DMER Provider Last Name Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is to be processed for commercial purposes
+    And the provider's last name is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Non-Commercial DMER Provider ID Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not to be processed for commercial purposes
+    And the provider's ID is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Commercial DMER Provider ID Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is to be processed for commercial purposes
+    And the provider's ID is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Non-Commercial DMER Provider ID Type Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not to be processed for commercial purposes
+    And the provider's ID type is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Commercial DMER Provider ID Type Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is to be processed for commercial purposes
+    And the provider's ID type is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Non-Commercial DMER Provider Role Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is not to be processed for commercial purposes
+    And the provider's role is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
+
+Scenario: Commercial DMER Provider Role Missing
+    Given I am logged in to the Doctors' Portal
+    When I click on the DMER link for the patient
+    And the DMER is to be processed for commercial purposes
+    And the provider's role is missing
+    And I submit the DMER form
+    Then the DMER must be reviewed
