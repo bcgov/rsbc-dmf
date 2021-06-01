@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SharedModule } from './shared/shared.module';
+import { LayoutModule as PortalLayoutModule } from './layout/layout.module'
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
-    SharedModule
+    SharedModule,
+    PortalLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
