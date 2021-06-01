@@ -9,12 +9,9 @@ import { LoginService } from './login.service';
 
 export class AppComponent {
 
-  public title = 'RSBC - DFT - Doctor\'s portal';
-
   constructor(private loginService: LoginService) { }
 
   public showNavigation(): boolean {
-    console.debug('showNav', this.loginService.isLoggedIn());
     return this.loginService.isLoggedIn();
   }
 }
