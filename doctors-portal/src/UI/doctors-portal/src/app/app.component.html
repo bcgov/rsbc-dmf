@@ -1,2 +1,14 @@
-<h1>{{title}}</h1>
-<router-outlet></router-outlet>
+<header>
+  <app-header></app-header>
+  <div class="page-divider"></div>
+</header>
+<nav *ngIf="showNavigation()">
+  <app-nav-menu></app-nav-menu>
+</nav>
+<main>
+  <router-outlet></router-outlet>
+</main>
+<footer>
+  <div class="page-divider"></div>
+  <app-footer></app-footer>
+</footer>
