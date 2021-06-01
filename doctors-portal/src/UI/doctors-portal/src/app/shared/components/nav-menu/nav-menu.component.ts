@@ -6,11 +6,8 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
   styleUrls: ['./nav-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavMenuComponent implements OnInit {
+export class NavMenuComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
