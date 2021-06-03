@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.181
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3", "Rsbc\Dmf\Interfaces\S3\S3.csproj", "{1A13CC52-EA03-46C8-BA62-E28F6D7BAB3F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Document Storage Adapter", "Rsbc\Dmf\DocumentStorageAdapter\Document Storage Adapter.csproj", "{728AA7C9-DF67-4D9C-BBE7-73EEB43C9AA4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A13CC52-EA03-46C8-BA62-E28F6D7BAB3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A13CC52-EA03-46C8-BA62-E28F6D7BAB3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A13CC52-EA03-46C8-BA62-E28F6D7BAB3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A13CC52-EA03-46C8-BA62-E28F6D7BAB3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728AA7C9-DF67-4D9C-BBE7-73EEB43C9AA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728AA7C9-DF67-4D9C-BBE7-73EEB43C9AA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728AA7C9-DF67-4D9C-BBE7-73EEB43C9AA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728AA7C9-DF67-4D9C-BBE7-73EEB43C9AA4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D0E6DFDB-CB6F-493F-92FA-33CD84407A98}
+	EndGlobalSection
+EndGlobal
