@@ -1,22 +1,29 @@
 .top-nav {
   width: 100%;
   height: 60px;
-  padding: 0, 15px;
-  display: flex;
-  flex-flow: row;
-  justify-content: stretch;
-  align-items: center;
+  padding: 0 !important;
 
-  a.mat-button {
-    min-width: 200px;
-    margin: 0;
-    padding: 0;
+  div {
     height: 100%;
-    vertical-align: middle;
-    font-size: 1em;
-  }
+    display: flex;
+    flex-flow: row;
+    justify-content: stretch;
+    align-items: center;
 
-  a.active {
-    background-color: #0000007f;
+    a.mat-flat-button {
+      min-width: 250px;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-size: 1em;
+      border-radius: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    a.active {
+      background-color: #0000007f;
+    }
   }
 }

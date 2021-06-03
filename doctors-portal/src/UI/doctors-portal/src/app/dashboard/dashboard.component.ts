@@ -1,33 +1,29 @@
-import { Component } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
-  /** Based on the screen size, switch from standard to one column per row */
-  cards = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
-    map(({ matches }) => {
-      if (matches) {
-        return [
-          { title: 'Card 1', cols: 1, rows: 1 },
-          { title: 'Card 2', cols: 1, rows: 1 },
-          { title: 'Card 3', cols: 1, rows: 1 },
-          { title: 'Card 4', cols: 1, rows: 1 }
-        ];
-      }
+export class DashboardComponent implements OnInit {
 
-      return [
-        { title: 'Card 1', cols: 2, rows: 1 },
-        { title: 'Card 2', cols: 1, rows: 1 },
-        { title: 'Card 3', cols: 1, rows: 2 },
-        { title: 'Card 4', cols: 1, rows: 1 }
-      ];
-    })
-  );
+  public dataSource: DMERForm[] = [];
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor() { }
+
+  public ngOnInit(): void {
+    this.dataSource = [
+      { caseId: 'DMR1234', patientName: 'Rahul Minto', lastUpdatedOn: new Date('05/10/2021'), lastUpdatedBy: 'Sharon Torres' },
+      { caseId: 'DMR9723', patientName: 'Randy Norman', lastUpdatedOn: new Date('04/27/2021'), lastUpdatedBy: 'Dr. Shelby Drew' },
+      { caseId: 'DMR6430', patientName: 'Daniel Hoffman', lastUpdatedOn: new Date('04/24/2021'), lastUpdatedBy: 'Dr. Devi Iyer' },
+      { caseId: 'DMR8245', patientName: 'Margy Klein', lastUpdatedOn: new Date('04/23/2021'), lastUpdatedBy: 'Dr. Tarik Haiga' },
+    ];
+  }
+}
+
+export interface DMERForm {
+  caseId: string;
+  patientName: string;
+  lastUpdatedOn: Date;
+  lastUpdatedBy: string;
 }

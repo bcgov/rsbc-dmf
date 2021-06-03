@@ -8,13 +8,15 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SharedModule } from './shared/shared.module';
-import { LayoutModule as PortalLayoutModule } from './layout/layout.module'
+import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
+import { SearchComponent } from './search/search.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DashboardComponent
+    DashboardComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
