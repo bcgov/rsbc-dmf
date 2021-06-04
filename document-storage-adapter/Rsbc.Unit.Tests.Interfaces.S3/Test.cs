@@ -70,7 +70,6 @@ namespace Rsbc.Unit.Tests.Interfaces
             string name = "test-name" + rnd.Next() + ".txt";
             string testFolder = "O'Test " + rnd.Next();
             string listTitle = "Shared Documents";
-            string url = serverAppIdUri + "/cannabisdev/Shared Documents/" + testFolder + "/" + name;
 
             string contentType = "text/plain";
 
@@ -100,10 +99,7 @@ namespace Rsbc.Unit.Tests.Interfaces
             string fileName = documentType + "__" + "test-file-name" + rnd.Next() + ".txt";
             string folderName = "test-folder-name" + rnd.Next();
             string path = "/";
-            if (!string.IsNullOrEmpty(s3.WebName))
-            {
-                path += $"{s3.WebName}/";
-            }
+    
             path += S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string contentType = "text/plain";
             string testData = "This is just a test.";
@@ -111,7 +107,7 @@ namespace Rsbc.Unit.Tests.Interfaces
 
             // add file to SP
 
-            await s3.AddFile(folderName, fileName, fileData, contentType);
+            await s3.AddFile(S3.DefaultDocumentListTitle, folderName, fileName, fileData, contentType);
 
             // get file details list in SP folder
 
@@ -217,7 +213,7 @@ namespace Rsbc.Unit.Tests.Interfaces
             string documentType = "Document Type";
             string fileName = documentType + "__" + "test-'-name" + rnd.Next() + ".txt";
             string folderName = "test-folder-name" + rnd.Next();
-            string path = "/" + s3.WebName + "/" + S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
+            string path =  "/" + S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string url = serverAppIdUri + s3.WebName + "/" + S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string contentType = "text/plain";
             string testData = "This is just a test.";
@@ -283,10 +279,19 @@ namespace Rsbc.Unit.Tests.Interfaces
             await s3.CreateFolder(S3.DefaultDocumentUrlTitle, folderName);
 
 
+            string testData = "This is just a test.";
+            MemoryStream fileData = new MemoryStream(System.Text.Encoding.ASCII.GetBytes(testData));
+
+            // add file to SP
+
+            string fileName = "TestFile.txt";
+            string contentType = "text/plain";
+
+            await s3.AddFile(S3.DefaultDocumentUrlTitle, folderName, fileName, fileData, contentType);
+
             bool exists = await s3.FolderExists(S3.DefaultDocumentUrlTitle, folderName);
 
             Assert.True(exists);
-
 
             await s3.DeleteFolder(S3.DefaultDocumentUrlTitle, folderName);
 
