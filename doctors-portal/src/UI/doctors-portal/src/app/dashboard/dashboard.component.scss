@@ -2,6 +2,10 @@
   .search {
     .mat-card-header {
       padding-left: 10px;
+
+      .mat-icon {
+        height: auto;
+      }
     }
 
     .mat-card-content {
