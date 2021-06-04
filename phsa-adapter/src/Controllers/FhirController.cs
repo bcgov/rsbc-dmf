@@ -46,33 +46,43 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return result;
         }
 
-        [HttpGet("Patient")]
+        [HttpGet("Patient/{id}")]
         [AllowAnonymous]
-        public Patient GetPatient()
+        public Patient GetPatient([FromRoute] string id)
         {
             Patient result = new Patient()
             {
+                Id = id,
+                Name = new List<HumanName>(){new HumanName(){
+                    Given = new List<string>() {"Test"},
+                    Family = "Patient"
+                }},
                 BirthDateElement = new Date(DateTimeOffset.Now.Year - 20, DateTimeOffset.Now.Month,
                     DateTimeOffset.Now.Day)
             };
             return result;
         }
 
-        [HttpGet("Practitioner")]
+        [HttpGet("Practitioner/{id}")]
         [AllowAnonymous]
-        public Practitioner GetPractitioner()
+        public Practitioner GetPractitioner([FromRoute] string id)
         {
             Practitioner result = new Practitioner()
             {
+                Id = id,
+                Name = new List<HumanName>(){new HumanName(){
+                    Given = new List<string>() {"Test"},
+                    Family = "Patient"
+                }},
                 BirthDateElement = new Date(DateTimeOffset.Now.Year - 30, DateTimeOffset.Now.Month,
                     DateTimeOffset.Now.Day)
             };
             return result;
         }
 
-        [HttpGet("Bundle")]
+        [HttpGet("Bundle/{id}")]
         [AllowAnonymous]
-        public Bundle GetBundle()
+        public Bundle GetBundle([FromRoute] string id)
         {
             Bundle result = new Bundle()
             {
@@ -83,7 +93,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
         [HttpPut("Bundle/{id}")]
         [AllowAnonymous]
-        public void PutBundle([FromBody] Bundle bundle)
+        public void PutBundle([FromBody] Bundle bundle, [FromRoute] string id)
         {
             // do something with bundle or id.
             _logger.LogInformation(JsonSerializer.Serialize(bundle));
