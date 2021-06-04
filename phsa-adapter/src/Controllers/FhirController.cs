@@ -58,6 +58,18 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return result;
         }
 
+        [HttpGet("Practitioner")]
+        [AllowAnonymous]
+        public Practitioner GetPractitioner()
+        {
+            Practitioner result = new Practitioner()
+            {
+                BirthDateElement = new Date(DateTimeOffset.Now.Year - 30, DateTimeOffset.Now.Month,
+                    DateTimeOffset.Now.Day)
+            };
+            return result;
+        }
+
 
     }
 }
