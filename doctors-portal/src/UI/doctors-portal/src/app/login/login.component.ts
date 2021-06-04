@@ -15,7 +15,11 @@ export class LoginComponent {
     password: [null, Validators.required],
   });
 
-  constructor(private fb: FormBuilder, private loginService: LoginService) { }
+  constructor(private fb: FormBuilder, private loginService: LoginService) {
+    if (loginService.isLoggedIn()) {
+      loginService.logout();
+    }
+  }
 
   onSubmit(): void {
     console.log('submit');
