@@ -26,11 +26,30 @@ namespace Rsbc.Dmf.PhsaAdapter
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "script-src 'self' 'unsafe-eval' 'unsafe-inline'";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost",
+                            "https://rsbc-dfp-phsa-dev.apps.silver.devops.gov.bc.ca",
+                            "https://rsbc-dfp-phsa-test.apps.silver.devops.gov.bc.ca"
+                            );
+                        builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                        builder.WithHeaders("X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type",
+                            "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization",
+                            "Location","Content-Location");
+                    });
+                
+            });
+
             services.AddControllers();
 
             // configure basic authentication 
