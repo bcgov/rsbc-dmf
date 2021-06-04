@@ -14,4 +14,8 @@ export class AppComponent {
   public showNavigation(): boolean {
     return this.loginService.isLoggedIn();
   }
+
+  public showProfile(): boolean {
+    return this.loginService.isLoggedIn();
+  }
 }
