@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>fe2fd249-51a1-4055-93ed-3f64fd3176a7</UserSecretsId>
+    <UserSecretsId>92EA2A69-676E-4877-9993-E69C61DFC9B2</UserSecretsId>
     <RootNamespace>Rsbc.Dmf.DocumentStorageAdapter</RootNamespace>
   </PropertyGroup>
 
@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Interfaces\S3\S3.csproj" />
+    <ProjectReference Include="..\Rsbc.Dmf.Interfaces.S3\S3.csproj" />
   </ItemGroup>
 
 
