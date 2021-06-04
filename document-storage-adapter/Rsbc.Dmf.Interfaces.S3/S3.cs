@@ -67,7 +67,11 @@ namespace Rsbc.Dmf.Interfaces
 
                 var config = new AmazonS3Config
                 {
-                    ServiceURL = Configuration["SERVICE_URL"]
+                    ServiceURL = Configuration["SERVICE_URL"],
+                    ForcePathStyle = true,
+                    SignatureVersion = "2",
+                    SignatureMethod = SigningAlgorithm.HmacSHA1,
+                    UseHttp = false,
                 };
 
                 S3Client = new AmazonS3Client(credentials, config);
@@ -134,27 +138,27 @@ namespace Rsbc.Dmf.Interfaces
             };
 
             var response = await S3Client.ListObjectsV2Async(request);
+            var fileDetailsList = new List<FileDetailsList>();
 
             foreach (var o in response.S3Objects)
             {
                 var fdl = new FileDetailsList();
                 fdl.Length = o.Size.ToString();
-                fdl.ServerRelativeUrl = o.Key.Substring(0, o.Key.LastIndexOf("/"));
+                fdl.ServerRelativeUrl = o.Key;
                 fdl.Name = o.Key.Substring(o.Key.LastIndexOf("/") + 1);
                 var fileDoctypeEnd = fdl.Name.IndexOf("__");
                 if (fileDoctypeEnd > -1)
                 {
                     var fileDoctype = fdl.Name.Substring(0, fileDoctypeEnd);
-                    if (fileDoctype == documentType) fdl.DocumentType = documentType;
+                    fdl.DocumentType = documentType;
+                }
+
+                if (documentType == null || fdl.DocumentType == documentType)
+                {
+                    fileDetailsList.Add(fdl);
                 }
             }
 
-            // create file details list to add from response
-            var fileDetailsList = new List<FileDetailsList>();
-            // create .NET objects
-
-            if (documentType != null)
-                fileDetailsList = fileDetailsList.Where(f => f.DocumentType == documentType).ToList();
             return fileDetailsList;
         }
 
@@ -489,11 +493,11 @@ namespace Rsbc.Dmf.Interfaces
             byte[] result = null;
 
             var strings = serverRelativeUrl.Split("/");
-            if (strings.Length != 3) return result;
+            if (strings.Length != 4) return result;
 
-            var prefix = GetPrefix(strings[0], strings[1]);
+            var prefix = GetPrefix(strings[1], strings[2]);
 
-            var fileKey = prefix + strings[2];
+            var fileKey = prefix + strings[3];
 
             var request = new GetObjectRequest();
             request.BucketName = Bucket;
@@ -554,7 +558,7 @@ namespace Rsbc.Dmf.Interfaces
         public async Task<bool> DeleteFile(string serverRelativeUrl)
         {
             var strings = serverRelativeUrl.Split("/");
-            if (strings.Length == 3) return await DeleteFile(strings[0], strings[1], strings[2]);
+            if (strings.Length == 4) return await DeleteFile(strings[1], strings[2], strings[3]);
 
             return false;
         }
