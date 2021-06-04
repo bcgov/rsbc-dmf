@@ -17,7 +17,7 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private loginService: LoginService) {
     if (loginService.isLoggedIn()) {
-      loginService.logout();
+      loginService.logout().subscribe();
     }
   }
 
