@@ -70,6 +70,24 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return result;
         }
 
+        [HttpGet("Bundle")]
+        [AllowAnonymous]
+        public Bundle GetBundle()
+        {
+            Bundle result = new Bundle()
+            {
+                Id = Guid.NewGuid().ToString()
+            };
+            return result;
+        }
+
+        [HttpPut("Bundle/{id}")]
+        [AllowAnonymous]
+        public void PutBundle([FromBody] Bundle bundle)
+        {
+            // do something with bundle or id.
+            _logger.LogInformation(JsonSerializer.Serialize(bundle));
+        }
 
     }
 }
