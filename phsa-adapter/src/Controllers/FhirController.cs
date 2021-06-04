@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,14 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 Introspection_endpoint = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
                 Capabilities = capabilities 
             };
+            return result;
+        }
+
+        [HttpGet("Patient")]
+        [AllowAnonymous]
+        public Patient GetPatient()
+        {
+            Patient result = new Patient();
             return result;
         }
     }
