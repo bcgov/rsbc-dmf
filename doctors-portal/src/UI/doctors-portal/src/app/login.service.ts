@@ -20,7 +20,7 @@ export class LoginService {
   }
 
   public login(returnUrl: string = '/'): Observable<boolean> {
-    console.debug('token', this.token);
+    console.debug('login');
     if (this.token !== null) {
       return of(true);
     }
@@ -28,6 +28,7 @@ export class LoginService {
     return of(false);
   }
   public logout(): Observable<boolean> {
+    console.log('logout');
     this.token = null;
     this.router.navigate(['login']);
     return of(false);
