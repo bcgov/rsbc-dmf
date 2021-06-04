@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -49,8 +50,14 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         [AllowAnonymous]
         public Patient GetPatient()
         {
-            Patient result = new Patient();
+            Patient result = new Patient()
+            {
+                BirthDateElement = new Date(DateTimeOffset.Now.Year - 20, DateTimeOffset.Now.Month,
+                    DateTimeOffset.Now.Day)
+            };
             return result;
         }
+
+
     }
 }
