@@ -1,28 +1,11 @@
 .container {
-  .mat-card {
-    width: 100%;
-    padding: 20px 0 !important;
-    margin-bottom: 30px;
-
-    .mat-card-header {
-      width: auto;
-      height: 50px;
-      padding: 0, 15px;
-      display: flex;
-      flex-flow: row;
-      justify-content: stretch;
-      align-items: center;
-    }
-
-    .mat-card-title {
-      margin: 0 !important;
-      height: 100%;
-    }
-  }
-
   .search {
     .mat-card-header {
       padding-left: 10px;
+
+      .mat-icon {
+        height: auto;
+      }
     }
 
     .mat-card-content {
@@ -49,6 +32,7 @@
 
   .list {
     .loadMoreLink {
+      margin-top: 10px;
       width: 100%;
       height: 50px;
       text-align: center;

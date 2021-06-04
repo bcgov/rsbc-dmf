@@ -2,6 +2,10 @@
 @import "./_theme.scss";
 
 //app specific styles
+
+body {
+  margin: 0;
+}
 .page-divider {
   background-color: rgba(231, 184, 85, 1);
   height: 6px;
@@ -22,11 +26,32 @@
 
 .mat-card {
   background-color: #f7f7f7;
+  box-shadow: none !important;
+  margin: 30px 0;
+  padding: 0 !important;
+
+  .mat-card-header {
+    width: auto;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    flex-flow: row;
+    justify-content: stretch;
+    align-items: center;
+    line-height: 50px;
+  }
+
+  .mat-card-title {
+    margin: 0 !important;
+    height: 100%;
+  }
+  .mat-card-content {
+    padding: 5px 10px;
+  }
 }
 
 .mat-table {
   width: 100%;
-  padding: 5px 10px !important;
   .mat-header-row {
     background-color: #376579;
 
