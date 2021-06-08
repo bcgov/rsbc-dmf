@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -38,19 +40,28 @@ namespace Rsbc.Dmf.PhsaAdapter
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("https://localhost",
-                            "https://rsbc-dfp-phsa-dev.apps.silver.devops.gov.bc.ca",
-                            "https://rsbc-dfp-phsa-test.apps.silver.devops.gov.bc.ca"
-                            );
-                        builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                        builder.AllowAnyOrigin();
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+                        
+                        /*
+                        builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH");
                         builder.WithHeaders("X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type",
                             "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization",
                             "Location","Content-Location");
+                        */
                     });
                 
             });
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.WriteIndented = true;
+                    options.JsonSerializerOptions.Converters.Insert(0,
+                        new JsonStringEnumConverter()
+                    );
+                });
 
             // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
@@ -82,6 +93,8 @@ namespace Rsbc.Dmf.PhsaAdapter
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PHSA Adapter v1"));
             }
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             // enable Splunk logger using Serilog
             if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
@@ -145,6 +158,8 @@ namespace Rsbc.Dmf.PhsaAdapter
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+
         }
     }
 }
