@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { FormServerOptions } from '../shared/components/phsa-form-viewer/phsa-form-viewer.component';
+import { EFormsServerOptions } from '../shared/components/phsa-form-viewer/phsa-form-viewer.component';
+import { ConfigurationService } from '../shared/services/configuration.service';
 
 @Component({
   selector: 'app-search',
@@ -9,10 +10,10 @@ import { FormServerOptions } from '../shared/components/phsa-form-viewer/phsa-fo
 })
 export class SearchComponent {
 
-  constructor() { }
+  constructor(private configService: ConfigurationService) { }
 
-  public serverOptions(): FormServerOptions {
-    return environment.eformConfiguration;
+  public serverOptions(): EFormsServerOptions {
+    return this.configService.getEFormsServerOptions();
   }
   public formId(): string { return '609eb6475d3fe59e856d8eea'; }
   public patientId(): string { return '123' };
