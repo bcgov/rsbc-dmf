@@ -9,7 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
-import { SearchComponent } from './search/search.component'
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
