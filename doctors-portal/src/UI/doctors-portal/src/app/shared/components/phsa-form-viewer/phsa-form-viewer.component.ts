@@ -7,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class PhsaFormViewerComponent implements OnInit {
 
-  @Input() formServerOptions: FormServerOptions | null = null;
+  @Input() formServerOptions: EFormsServerOptions | null = null;
   @Input() patientId: string | null = null;
   @Input() practitionerId: string | null = null;
   @Input() formId: string | null = null;
@@ -30,7 +30,7 @@ export class PhsaFormViewerComponent implements OnInit {
 
 }
 
-export interface FormServerOptions {
+export interface EFormsServerOptions {
   formServerUrl: string;
   fhirServerUrl: string;
   emrVendorId: string;
