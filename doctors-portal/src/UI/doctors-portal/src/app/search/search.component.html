@@ -1,1 +1,7 @@
-<p>search works!</p>
+<p>formId: {{formId()}}</p>
+<p>practitionerId: {{practitionerId()}}</p>
+<p>patientId: {{patientId()}}</p>
+<p>sessionId: {{sessionId()}}</p>
+<p>submissionId: {{submissionId()}}</p>
+<app-phsa-form-viewer [formServerOptions]="serverOptions()" [formId]="formId()" [practitionerId]="practitionerId()"
+  [patientId]="patientId()" [sessionId]="sessionId()" [submissionId]="submissionId()"></app-phsa-form-viewer>

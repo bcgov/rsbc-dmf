@@ -22,6 +22,15 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
+  - description: eForms server url
+    name: EFORMS_FORM_SERVER_URL
+    required: true
+  - description: fhir server url
+    name: EFORMS_FHIR_SERVER_URL
+    required: true
+  - description: eForms vendor id
+    name: EFORMS_VENDOR_ID
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -35,6 +44,8 @@ objects:
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
+      EFORMS__FHIRSERVERURL: ${EFORMS_FHIR_SERVER_URL}
+      EFORMS__FORMSERVERURL: ${EFORMS_FORM_SERVER_URL}
 
   - kind: Secret
     apiVersion: v1
@@ -46,6 +57,7 @@ objects:
         app: ${APP_NAME}-doctors-portal
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
+      EFORMS__EMRVENDORID: ${EFORMS_VENDOR_ID}
 
   - kind: Service
     apiVersion: v1
