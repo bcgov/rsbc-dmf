@@ -3,3 +3,6 @@ ENV=<openshift namespace env>
 APP_NAME=<app name>
 TAG=<image stream tag to deploy from>
 RUNTIME_ENVIRONMENT=<ASP.Net core environment: development|staging|production>
+EFORMS_VENDOR_ID=<eForms vendor ID>
+EFORMS_FHIR_SERVER_URL=<eForms FHIR server url>
+EFORMS_FORM_SERVER_URL=<eForms server url>
