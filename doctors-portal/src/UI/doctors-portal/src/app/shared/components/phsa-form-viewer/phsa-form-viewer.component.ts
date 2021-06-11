@@ -17,7 +17,6 @@ export class PhsaFormViewerComponent implements OnInit {
   constructor() { }
 
   public ngOnInit(): void {
-    console.debug(this.formUrl());
     return;
   }
 
