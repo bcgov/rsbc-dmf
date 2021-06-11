@@ -9,7 +9,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
-import { SearchComponent } from './search/search.component'
+import { SearchComponent } from './search/search.component';
+import { ApiModule } from './shared/api/api.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { SearchComponent } from './search/search.component'
     BrowserAnimationsModule,
     LayoutModule,
     SharedModule,
-    PortalLayoutModule
+    PortalLayoutModule,
+    HttpClientModule,
+    ApiModule.forRoot({ rootUrl: '' })
   ],
   providers: [],
   bootstrap: [AppComponent]

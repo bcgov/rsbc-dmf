@@ -5,7 +5,7 @@
 <nav *ngIf="showNavigation()">
   <app-nav-menu></app-nav-menu>
 </nav>
-<main>
+<main *ngIf="!isLoading">
   <router-outlet></router-outlet>
 </main>
 <footer>
