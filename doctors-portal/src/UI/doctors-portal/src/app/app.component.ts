@@ -10,6 +10,8 @@ import { ConfigurationService } from './shared/services/configuration.service';
 
 export class AppComponent implements OnInit {
 
+  public isLoading: boolean = true;
+
   constructor(
     private loginService: LoginService,
     private configService: ConfigurationService
@@ -17,7 +19,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.configService.load().subscribe(
-      (result) => { },
+      (result) => { this.isLoading = false; },
       (error) => {
         //TODO: navigate to service unavailable page
         console.error('failed to load configuration from the server');
