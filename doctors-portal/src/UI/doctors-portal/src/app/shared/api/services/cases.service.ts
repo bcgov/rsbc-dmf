@@ -37,6 +37,7 @@ export class CasesService extends BaseService {
     ByCaseId?: string;
     ByPatientName?: string;
     ByDriverLicense?: string;
+    ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<Case>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
@@ -44,6 +45,7 @@ export class CasesService extends BaseService {
       rb.query('ByCaseId', params.ByCaseId, {});
       rb.query('ByPatientName', params.ByPatientName, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
+      rb.query('ByStatus', params.ByStatus, {});
     }
 
     return this.http.request(rb.build({
@@ -67,6 +69,7 @@ export class CasesService extends BaseService {
     ByCaseId?: string;
     ByPatientName?: string;
     ByDriverLicense?: string;
+    ByStatus?: Array<string>;
   }): Observable<Array<Case>> {
 
     return this.apiCasesGet$Plain$Response(params).pipe(
@@ -84,6 +87,7 @@ export class CasesService extends BaseService {
     ByCaseId?: string;
     ByPatientName?: string;
     ByDriverLicense?: string;
+    ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<Case>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
@@ -91,6 +95,7 @@ export class CasesService extends BaseService {
       rb.query('ByCaseId', params.ByCaseId, {});
       rb.query('ByPatientName', params.ByPatientName, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
+      rb.query('ByStatus', params.ByStatus, {});
     }
 
     return this.http.request(rb.build({
@@ -114,6 +119,7 @@ export class CasesService extends BaseService {
     ByCaseId?: string;
     ByPatientName?: string;
     ByDriverLicense?: string;
+    ByStatus?: Array<string>;
   }): Observable<Array<Case>> {
 
     return this.apiCasesGet$Json$Response(params).pipe(
