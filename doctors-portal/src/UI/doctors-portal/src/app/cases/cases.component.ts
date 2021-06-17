@@ -10,6 +10,7 @@ export class CasesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    return;
   }
 
 }
