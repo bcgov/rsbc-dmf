@@ -1,0 +1,36 @@
+<mat-card class="list">
+  <mat-card-header class="primary">
+    <mat-card-title>Submitted DMER Forms</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table #formsList [dataSource]="dataSource">
+
+      <ng-container matColumnDef="caseId">
+        <th mat-header-cell *matHeaderCellDef> DMER Case ID </th>
+        <td mat-cell *matCellDef="let row">
+          <a [routerLink]="['../case', row.caseId]" routerLinkActive="router-link-active"> {{row.caseId}} </a>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="patientName">
+        <th mat-header-cell *matHeaderCellDef> Patient's Name </th>
+        <td mat-cell *matCellDef="let row"> {{row.patientName}} </td>
+      </ng-container>
+      <ng-container matColumnDef="lastUpdatedOn">
+        <th mat-header-cell *matHeaderCellDef> Last Date Modified </th>
+        <td mat-cell *matCellDef="let row"> {{row.lastUpdatedOn | date}} </td>
+      </ng-container>
+      <ng-container matColumnDef="lastUpdatedBy">
+        <th mat-header-cell *matHeaderCellDef> Last Modified By </th>
+        <td mat-cell *matCellDef="let row"> {{row.lastUpdatedBy}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="['caseId', 'patientName', 'lastUpdatedOn', 'lastUpdatedBy']"></tr>
+      <tr mat-row *matRowDef="let row; columns: ['caseId', 'patientName', 'lastUpdatedOn', 'lastUpdatedBy'];">
+      </tr>
+    </table>
+    <div class="loadMoreLink">
+      <a href="#">View more records<mat-icon>arrow_drop_down</mat-icon>
+      </a>
+    </div>
+  </mat-card-content>
+</mat-card>
