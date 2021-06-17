@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CaseManagementService, DMERForm } from '../shared/services/case-management/case-management.service';
+import { Router } from '@angular/router';
+import { CaseManagementService, DMERCase } from '../shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,12 +9,21 @@ import { CaseManagementService, DMERForm } from '../shared/services/case-managem
 })
 export class DashboardComponent implements OnInit {
 
-  public dataSource: DMERForm[] = [];
+  public dataSource: DMERCase[] = [];
+  public searchBox: string = '';
 
-  constructor(private caseManagementService: CaseManagementService) { }
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private router: Router
+  ) { }
 
   public ngOnInit(): void {
-    this.dataSource = this.caseManagementService.getCases();
+    this.caseManagementService.getCases({ byStatus: ['Pending'] }).subscribe(cases => this.dataSource = cases);
+  }
+
+  public search(): void {
+    console.debug('search', this.searchBox);
+    this.router.navigate(['/cases/list', { 'id': this.searchBox }])
   }
 
 }
