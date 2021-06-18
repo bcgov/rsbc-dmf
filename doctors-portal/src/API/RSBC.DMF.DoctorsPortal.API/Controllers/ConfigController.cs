@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Text.Json;
 
 namespace RSBC.DMF.DoctorsPortal.API.Controllers
 {
@@ -14,11 +17,13 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
     {
         private readonly ILogger<ConfigController> _logger;
         private readonly IHostEnvironment env;
+        private readonly IConfiguration configuration;
 
-         public ConfigController(ILogger<ConfigController> logger, IHostEnvironment env)
+        public ConfigController(ILogger<ConfigController> logger, IHostEnvironment env, IConfiguration configuration)
         {
             _logger = logger;
             this.env = env;
+            this.configuration = configuration;
         }
 
         /// <summary>
@@ -31,7 +36,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
         {
             var config = new Configuration
             {
-                Environment = env.EnvironmentName
+                Environment = env.EnvironmentName,
+                EformsConfiguration = configuration.GetSection("eforms").Get<EFormsOptions>()
             };
 
             return Ok(config);
@@ -43,6 +49,28 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
         public class Configuration
         {
             public string Environment { get; set; }
+            public EFormsOptions EformsConfiguration { get; set; }
+        }
+
+        public class EFormsOptions
+        {
+            public string FormServerUrl { get; set; }
+
+            public string EmrVendorId { get; set; }
+
+            public string FhirServerUrl { get; set; }
+            public string FormsMap { get; set; }
+
+            public EFormDetails[] Forms =>
+                string.IsNullOrEmpty(FormsMap)
+                ? Array.Empty<EFormDetails>()
+                : JsonSerializer.Deserialize<EFormDetails[]>(FormsMap, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+
+        public class EFormDetails
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
         }
     }
 }

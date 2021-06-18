@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -22,6 +24,7 @@ namespace RSBC.DMF.DoctorsPortal.API
         }
 
         private IConfiguration configuration { get; }
+        private const string HealthCheckReadyTag = "ready";
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -65,6 +68,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                 }
             }));
             services.AddResponseCompression();
+            services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -109,6 +113,15 @@ namespace RSBC.DMF.DoctorsPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
+                {
+                    Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)
+                });
+
+                endpoints.MapHealthChecks("/hc/live", new HealthCheckOptions()
+                {
+                    Predicate = (_) => false
+                });
             });
         }
     }
