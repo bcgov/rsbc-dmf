@@ -11,8 +11,11 @@ export class ConfigurationStubService extends ConfigurationService {
     return {
       emrVendorId: 'testid',
       fhirServerUrl: 'fhirurl',
-      formServerUrl: 'formurl'
+      formServerUrl: 'formurl',
     };
+  }
+  public getEFormsFormId(name: string): string {
+    return '1';
   }
 
 }
