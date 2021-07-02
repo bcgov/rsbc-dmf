@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { CaseManagementService, DMERCase } from '../shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,23 +9,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  public dataSource: DMERForm[] = [];
+  public dataSource: DMERCase[] = [];
+  public searchBox: string = '';
 
-  constructor() { }
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private router: Router
+  ) { }
 
   public ngOnInit(): void {
-    this.dataSource = [
-      { caseId: 'DMR1234', patientName: 'Rahul Minto', lastUpdatedOn: new Date('05/10/2021'), lastUpdatedBy: 'Sharon Torres' },
-      { caseId: 'DMR9723', patientName: 'Randy Norman', lastUpdatedOn: new Date('04/27/2021'), lastUpdatedBy: 'Dr. Shelby Drew' },
-      { caseId: 'DMR6430', patientName: 'Daniel Hoffman', lastUpdatedOn: new Date('04/24/2021'), lastUpdatedBy: 'Dr. Devi Iyer' },
-      { caseId: 'DMR8245', patientName: 'Margy Klein', lastUpdatedOn: new Date('04/23/2021'), lastUpdatedBy: 'Dr. Tarik Haiga' },
-    ];
+    this.caseManagementService.getCases({ byStatus: ['Pending'] }).subscribe(cases => this.dataSource = cases);
   }
-}
 
-export interface DMERForm {
-  caseId: string;
-  patientName: string;
-  lastUpdatedOn: Date;
-  lastUpdatedBy: string;
+  public search(): void {
+    console.debug('search', this.searchBox);
+    this.router.navigate(['/cases/list', { 'id': this.searchBox }])
+  }
+
 }
