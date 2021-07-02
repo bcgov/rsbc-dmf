@@ -1,22 +1,25 @@
 syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "RSBC.DMF.CaseManagement.Service";
 
 package CaseManagement;
 
-// The greeting service definition.
 service CaseManager {
-  // Sends a greeting
-  rpc SubmitDmer (DmerRequest) returns (DmerReply);
+  rpc Search (SearchRequest) returns (SearchReply);
 }
 
-// The request message containing the user's name.
-message DmerRequest {
+message SearchRequest {
   string caseId = 1;
-  string data = 2;
 }
 
-// The response message containing the greetings.
-message DmerReply {
-  string caseId = 1;
+message SearchReply {
+  repeated Case items = 1;
+}
+
+message Case{
+	string caseId = 1;
+	string createdBy = 2;
+	google.protobuf.Timestamp createdOn = 3;
 }
