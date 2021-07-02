@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>6d695abe-4ce7-4ef4-8d39-9a32440be826</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\greet.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\CaseManager.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>

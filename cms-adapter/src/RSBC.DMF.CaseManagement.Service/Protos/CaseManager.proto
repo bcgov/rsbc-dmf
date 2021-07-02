@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "RSBC.DMF.CaseManagement.Service";
+
+package CaseManagement;
+
+// The greeting service definition.
+service CaseManager {
+  // Sends a greeting
+  rpc SubmitDmer (DmerRequest) returns (DmerReply);
+}
+
+// The request message containing the user's name.
+message DmerRequest {
+  string caseId = 1;
+  string data = 2;
+}
+
+// The response message containing the greetings.
+message DmerReply {
+  string caseId = 1;
+}
