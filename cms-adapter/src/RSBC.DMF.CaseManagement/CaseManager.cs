@@ -8,15 +8,15 @@ namespace RSBC.DMF.CaseManagement
 {
     public interface ICaseManager
     {
-        Task<SearchReply> Search(SearchRequest request);
+        Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
     }
 
-    public class SearchRequest
+    public class CaseSearchRequest
     {
         public string ByCaseId { get; set; }
     }
 
-    public class SearchReply
+    public class CaseSearchReply
     {
         public IEnumerable<Case> Items { get; set; }
     }
@@ -37,11 +37,11 @@ namespace RSBC.DMF.CaseManagement
             this.dynamicsContext = dynamicsContext;
         }
 
-        public async Task<SearchReply> Search(SearchRequest request)
+        public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
             var cases = await dynamicsContext.tasks.GetAllPagesAsync();
 
-            return new SearchReply
+            return new CaseSearchReply
             {
                 Items = cases.Select(c => new Case
                 {

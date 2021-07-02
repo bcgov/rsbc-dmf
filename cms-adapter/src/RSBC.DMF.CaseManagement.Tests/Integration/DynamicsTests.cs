@@ -27,7 +27,7 @@ namespace RSBC.DMF.CaseManagement.Tests.Integration
         public async Task CanConnectToDynamics()
         {
             var caseManager = services.GetRequiredService<ICaseManager>();
-            var result = await caseManager.Search(new SearchRequest());
+            var result = await caseManager.CaseSearch(new CaseSearchRequest());
             result.ShouldNotBeNull().Items.ShouldBeEmpty();
         }
     }
