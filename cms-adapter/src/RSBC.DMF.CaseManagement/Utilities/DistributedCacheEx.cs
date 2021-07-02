@@ -35,6 +35,6 @@ namespace RSBC.DMF.CaseManagement
 
         private static string Serialize<T>(T obj) => JsonSerializer.Serialize(obj);
 
-        private static T Deserialize<T>(string serializedObj) => serializedObj != null ? default : JsonSerializer.Deserialize<T>(serializedObj);
+        private static T Deserialize<T>(string serializedObj) => serializedObj == null ? default : JsonSerializer.Deserialize<T>(serializedObj);
     }
 }
