@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 
 namespace RSBC.DMF.CaseManagement.Dynamics
 {
-    public static class Configuration
+    internal static class Configuration
     {
         public static IServiceCollection AddDynamics(this IServiceCollection services, IConfiguration configuration)
         {
@@ -16,13 +17,13 @@ namespace RSBC.DMF.CaseManagement.Dynamics
                 c.BaseAddress = new Uri(options.Adfs.OAuth2TokenEndpoint);
             });
             services.AddTransient<ISecurityTokenProvider, CachedADFSSecurityTokenProvider>();
-            //services.AddScoped(sp =>
-            //{
-            //    var options = sp.GetRequiredService<IOptions<DynamicsOptions>>().Value;
-            //    var tokenProvider = sp.GetRequiredService<ISecurityTokenProvider>();
-            //    var logger = sp.GetRequiredService<ILogger<EssContext>>();
-            //    return new EssContext(new Uri(options.DynamicsApiBaseUri), new Uri(options.DynamicsApiEndpoint), async () => await tokenProvider.AcquireToken(), logger);
-            //});
+            services.AddScoped(sp =>
+            {
+                var options = sp.GetRequiredService<IOptions<DynamicsOptions>>().Value;
+                var tokenProvider = sp.GetRequiredService<ISecurityTokenProvider>();
+                var logger = sp.GetRequiredService<ILogger<DynamicsContext>>();
+                return new DynamicsContext(new Uri(options.DynamicsApiBaseUri), new Uri(options.DynamicsApiEndpoint), async () => await tokenProvider.AcquireToken(), logger);
+            });
 
             return services;
         }

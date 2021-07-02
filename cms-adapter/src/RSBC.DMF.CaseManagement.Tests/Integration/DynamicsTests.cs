@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RSBC.DMF.CaseManagement.Dynamics;
 using RSBC.DMF.CaseManagement.Service;
+using Shouldly;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -20,6 +21,14 @@ namespace RSBC.DMF.CaseManagement.Tests.Integration
         {
             var tokenProvider = services.GetRequiredService<ISecurityTokenProvider>();
             testLogger.LogDebug("Authorization: Bearer {0}", await tokenProvider.AcquireToken());
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanConnectToDynamics()
+        {
+            var caseManager = services.GetRequiredService<ICaseManager>();
+            var result = await caseManager.Search(new SearchRequest());
+            result.ShouldNotBeNull().Items.ShouldBeEmpty();
         }
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RSBC.DMF.CaseManagement.Dynamics;
 
 namespace RSBC.DMF.CaseManagement.Service
 {
@@ -23,7 +22,7 @@ namespace RSBC.DMF.CaseManagement.Service
             services.AddAuthorization();
             services.AddGrpc();
             services.AddDistributedMemoryCache();
-            services.AddDynamics(configuration);
+            services.AddCaseManagement(configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
