@@ -8,6 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { DashboardComponent } from './dashboard.component';
+import { CaseManagementStubService } from '../shared/stubs/case-management.service.stub';
+import { CaseManagementService } from '../shared/services/case-management/case-management.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -24,6 +28,11 @@ describe('DashboardComponent', () => {
         MatGridListModule,
         MatIconModule,
         MatMenuModule,
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      providers: [
+        { provide: CaseManagementService, useClass: CaseManagementStubService }
       ]
     }).compileComponents();
   }));
