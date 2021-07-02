@@ -19,6 +19,8 @@ namespace RSBC.DMF.CaseManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication();
+            services.AddAuthorization();
             services.AddGrpc();
             services.AddDistributedMemoryCache();
             services.AddDynamics(configuration);
