@@ -5,7 +5,7 @@
     "Uri": "http://odata.github.io/odata.net/"
   },
   "ExtendedData": {
-    "EnableNamingAlias": true,
+    "EnableNamingAlias": false,
     "IgnoreUnexpectedElementsAndAttributes": true,
     "IncludeT4File": false,
     "ExcludedOperationImports": [],
@@ -164,7 +164,7 @@
     "GeneratedFileNamePrefix": "Reference",
     "UseNamespacePrefix": true,
     "NamespacePrefix": "RSBC.DMF.Dynamics",
-    "UseDataServiceCollection": true,
+    "UseDataServiceCollection": false,
     "MakeTypesInternal": true,
     "OpenGeneratedFilesInIDE": false,
     "GenerateMultipleFiles": false,
