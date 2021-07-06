@@ -1,13 +1,12 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace RSBC.DMF.CaseManagement.Service
 {
-    [Authorize]
+    //[Authorize]
     public class CaseService : CaseManager.CaseManagerBase
     {
         private readonly ILogger<CaseService> _logger;
