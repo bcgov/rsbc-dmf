@@ -4,8 +4,11 @@ using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Hl7.Fhir.ElementModel;
 using Hl7.Fhir.Model;
+using Hl7.Fhir.Rest;
 using Hl7.Fhir.Serialization;
+using Hl7.Fhir.Specification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +16,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Hl7.Fhir.Model
 {
@@ -37,6 +41,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
     {
         private readonly ILogger<ReceiveController> _logger;
         private readonly IConfiguration Configuration;
+        private readonly IStructureDefinitionSummaryProvider _provider = new PocoStructureDefinitionSummaryProvider();
 
         public FhirController(ILogger<ReceiveController> logger, IConfiguration configuration)
         {
@@ -202,7 +207,19 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 string body = await reader.ReadToEndAsync();
-                _logger.LogInformation(body);
+
+                // FhirJsonParser can return a typed object.  
+                // There is also a more generic FhirJsonNode.Parse
+                // The built in Json Deserializer does not seem to work
+
+                var parser = new FhirJsonParser();
+                var bundle = parser.Parse<Bundle>(body);
+
+                
+                _logger.LogInformation(bundle.ToJson());
+
+                //_logger.LogInformation(body);
+
 
             }
 
