@@ -34,6 +34,10 @@ services:
     image: dmf-cms-adapter:dev
     ports:
       - 4020:8080
+    environment:
+      - "ASPNETCORE_Kestrel__Certificates__Default__Path=/ssl/aspnetapp.pfx"
+    volumes:
+      - ~/.aspnet/https:/ssl/:ro
     env_file:
       - .env
 

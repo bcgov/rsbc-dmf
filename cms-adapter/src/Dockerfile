@@ -13,6 +13,6 @@ RUN dotnet publish "RSBC.DMF.CaseManagement.Service/RSBC.DMF.CaseManagement.Serv
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS final
 WORKDIR /app
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://*:8080
+ENV ASPNETCORE_URLS=https://*:8080
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "RSBC.DMF.CaseManagement.Service"]
+ENTRYPOINT ["dotnet", "RSBC.DMF.CaseManagement.Service.dll"]
