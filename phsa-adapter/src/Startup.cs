@@ -57,6 +57,7 @@ namespace Rsbc.Dmf.PhsaAdapter
             services.AddControllers()
                 .AddJsonOptions(options =>
                 {
+                    //options.JsonSerializerOptions.IgnoreNullValues = false;
                     options.JsonSerializerOptions.WriteIndented = true;
                     options.JsonSerializerOptions.Converters.Insert(0,
                         new JsonStringEnumConverter()
