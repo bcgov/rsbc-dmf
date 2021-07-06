@@ -1,0 +1,21 @@
+name: ci-cms-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "cms-adapter/src/**"
+      - ".github/workflows/ci-cms-adapter.yml"
+
+env:
+  IMAGE_NAME: cms-adapter
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        working-directory: ./cms-adapter/src
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
