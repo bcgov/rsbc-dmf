@@ -82,7 +82,7 @@ namespace bdd_tests
         [And(@"I click on the Case ID for 111")]
         public void CaseID()
         {
-            var caseID = ngDriver.FindElement(By.LinkText(" 111 "));
+            var caseID = ngDriver.FindElement(By.LinkText("111"));
             caseID.Click();
         }
 
@@ -97,21 +97,24 @@ namespace bdd_tests
         [And(@"I select the RoadSafetyBC environment")]
         public void selectRSBC()
         {
-
+            var selectRSBC = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[1]/label/select/option[10]"));
+            selectRSBC.Click();
         }
 
 
         [And(@"I select the Testing Resources Quality Assurance form")]
         public void testingForm()
         {
-
+            var selectForm = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[2]/label/select/option[4]"));
+            selectForm.Click();
         }
 
 
         [And(@"I click on the Visual Assessment tab")]
         public void visualAssessmentTab()
         {
-
+            var visualAssessment = ngDriver.FindElement(By.LinkText("Visual Assessment"));
+            visualAssessment.Click();
         }
 
         
