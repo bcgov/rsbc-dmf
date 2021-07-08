@@ -69,5 +69,70 @@ namespace bdd_tests
 
             ngDriver.WrappedDriver.PageSource.Contains("Submitted DMER Forms");
         }
+
+
+        [And(@"I click on the DMER Forms tab")]
+        public void DMERFormsTab()
+        {
+            var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+            DMERFormsTab.Click();
+        }
+
+
+        [And(@"I click on the Case ID for 111")]
+        public void CaseID()
+        {
+            var caseID = ngDriver.FindElement(By.LinkText(" 111 "));
+            caseID.Click();
+        }
+
+
+        [And(@"I refresh the page")]
+        public void pageRefresh()
+        {
+            ngDriver.Navigate().Refresh();
+        }
+
+
+        [And(@"I select the RoadSafetyBC environment")]
+        public void selectRSBC()
+        {
+
+        }
+
+
+        [And(@"I select the Testing Resources Quality Assurance form")]
+        public void testingForm()
+        {
+
+        }
+
+
+        [And(@"I click on the Visual Assessment tab")]
+        public void visualAssessmentTab()
+        {
+
+        }
+
+        
+        [And(@"I enter the Uncorrected Binocular Vision as 20")]
+        public void uncorrectedBinocularVision()
+        {
+
+        }
+
+
+        [And(@"I click on the Next button")]
+        public void nextButton()
+        {
+
+        }
+
+
+        [Then(@"this message is displayed: PASS! No Clean Pass responses failed.")]
+        public void cleanPassMessage()
+        {
+
+        }
     }
 }
