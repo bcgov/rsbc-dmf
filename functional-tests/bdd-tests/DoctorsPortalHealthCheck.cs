@@ -69,5 +69,73 @@ namespace bdd_tests
 
             ngDriver.WrappedDriver.PageSource.Contains("Submitted DMER Forms");
         }
+
+
+        [And(@"I click on the DMER Forms tab")]
+        public void DMERFormsTab()
+        {
+            var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+            DMERFormsTab.Click();
+        }
+
+
+        [And(@"I click on the Case ID for 111")]
+        public void CaseID()
+        {
+            var caseID = ngDriver.FindElement(By.LinkText("111"));
+            caseID.Click();
+        }
+
+
+        [And(@"I refresh the page")]
+        public void pageRefresh()
+        {
+            ngDriver.Navigate().Refresh();
+        }
+
+
+        [And(@"I select the RoadSafetyBC environment")]
+        public void selectRSBC()
+        {
+            var selectRSBC = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[1]/label/select/option[10]"));
+            selectRSBC.Click();
+        }
+
+
+        [And(@"I select the Testing Resources Quality Assurance form")]
+        public void testingForm()
+        {
+            var selectForm = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[2]/label/select/option[4]"));
+            selectForm.Click();
+        }
+
+
+        [And(@"I click on the Visual Assessment tab")]
+        public void visualAssessmentTab()
+        {
+            var visualAssessment = ngDriver.FindElement(By.LinkText("Visual Assessment"));
+            visualAssessment.Click();
+        }
+
+        
+        [And(@"I enter the Uncorrected Binocular Vision as 20")]
+        public void uncorrectedBinocularVision()
+        {
+
+        }
+
+
+        [And(@"I click on the Next button")]
+        public void nextButton()
+        {
+
+        }
+
+
+        [Then(@"this message is displayed: PASS! No Clean Pass responses failed.")]
+        public void cleanPassMessage()
+        {
+
+        }
     }
 }
