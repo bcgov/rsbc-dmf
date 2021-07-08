@@ -26,8 +26,16 @@ namespace bdd_tests
         public void DoctorsPortalHealthCheckClick()
         {
             var DoctorsPortalUri = configuration["baseUri"];
-            ngDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
-            ngDriver.WaitForAngular();
+            
+            ngDriver.IgnoreSynchronization = true;
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
+            //ngDriver.WaitForAngular();
+
+            var advancedButton = ngDriver.WrappedDriver.FindElement(By.Id("details-button"));
+            advancedButton.Click();
+
+            var proceedLink = ngDriver.WrappedDriver.FindElement(By.Id("proceed-link"));
+            proceedLink.Click();
         }
 
 
