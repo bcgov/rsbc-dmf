@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using Protractor;
+using System;
 using Xunit;
 using Xunit.Gherkin.Quick;
 
@@ -33,6 +34,8 @@ namespace bdd_tests
         }
 
 
+        /* Temp workaround for S3DMFT-24 - to be removed
+         */
         [And(@"I accept the cert request")]
         public void CertRequest()
         {
@@ -44,10 +47,27 @@ namespace bdd_tests
         }
 
 
-        [And(@"the portal is displayed")]
-        public void DoctorsPortalDisplayed()
+        [And(@"the content is displayed for (.*)")]
+        public void ContentDisplayed(string contentType)
         {
-            ngDriver.WrappedDriver.PageSource.Contains("Welcome to the doctor's portal!");
+            if (contentType == "the doctors portal")
+            {
+                ngDriver.WrappedDriver.PageSource.Contains("Welcome to the doctor's portal!");
+            }
+
+            if (contentType == "the DMER dashboard")
+            {
+                ngDriver.WrappedDriver.PageSource.Contains("Dashboard");
+
+                ngDriver.WrappedDriver.PageSource.Contains("Search DMER Case");
+
+                ngDriver.WrappedDriver.PageSource.Contains("Submitted DMER Forms");
+            }
+
+            if (contentType == "the DMER clean pass")
+            {
+                ngDriver.WrappedDriver.PageSource.Contains("PASS! No Clean Pass responses failed.");
+            }
         }
 
 
@@ -60,19 +80,21 @@ namespace bdd_tests
         [And(@"I click on the Submit button")]
         public void SubmitButton()
         {
-            var submitButton = ngDriver.WrappedDriver.FindElement(By.CssSelector("button.mat-primary"));
+            NgWebElement submitButton = null;
+            for (var i = 0; i < 20; i++)
+                try
+                {
+                    var names = ngDriver.FindElements(By.CssSelector("button.mat-primary"));
+                    if (names.Count > 0)
+                    {
+                        submitButton = names[0];
+                        break;
+                    }
+                }
+                catch (Exception)
+                {
+                }
             submitButton.Click();
-        }
-
-
-        [Then(@"the DMER dashboard is displayed")]
-        public void DashboardDisplayed()
-        {
-            ngDriver.WrappedDriver.PageSource.Contains("Dashboard");
-
-            ngDriver.WrappedDriver.PageSource.Contains("Search DMER Case");
-
-            ngDriver.WrappedDriver.PageSource.Contains("Submitted DMER Forms");
         }
 
 
@@ -93,14 +115,14 @@ namespace bdd_tests
 
 
         [And(@"I refresh the page")]
-        public void pageRefresh()
+        public void PageRefresh()
         {
             ngDriver.Navigate().Refresh();
         }
 
 
         [And(@"I select the RoadSafetyBC environment")]
-        public void selectRSBC()
+        public void SelectRSBC()
         {
             var selectRSBC = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[1]/label/select/option[10]"));
             selectRSBC.Click();
@@ -108,7 +130,7 @@ namespace bdd_tests
 
 
         [And(@"I select the Testing Resources Quality Assurance form")]
-        public void testingForm()
+        public void TstingForm()
         {
             var selectForm = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[2]/label/select/option[4]"));
             selectForm.Click();
@@ -116,7 +138,7 @@ namespace bdd_tests
 
 
         [And(@"I click on the Visual Assessment tab")]
-        public void visualAssessmentTab()
+        public void VisualAssessmentTab()
         {
             var visualAssessment = ngDriver.FindElement(By.LinkText("Visual Assessment"));
             visualAssessment.Click();
@@ -124,21 +146,21 @@ namespace bdd_tests
 
         
         [And(@"I enter the Uncorrected Binocular Vision as 20")]
-        public void uncorrectedBinocularVision()
+        public void UncorrectedBinocularVision()
         {
 
         }
 
 
         [And(@"I click on the Next button")]
-        public void nextButton()
+        public void NextButton()
         {
 
         }
 
 
-        [Then(@"this message is displayed: PASS! No Clean Pass responses failed.")]
-        public void cleanPassMessage()
+        [Then(@"I log out of the portal")]
+        public void PortalLogOut()
         {
 
         }
