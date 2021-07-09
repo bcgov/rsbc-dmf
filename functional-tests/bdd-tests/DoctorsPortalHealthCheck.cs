@@ -77,40 +77,40 @@ namespace bdd_tests
         }
 
 
-        [And(@"I click on the Submit button")]
-        public void SubmitButton()
+        [And(@"I click on (.*)")]
+        public void ClickOnElement(string element)
         {
-            NgWebElement submitButton = null;
-            for (var i = 0; i < 20; i++)
-                try
-                {
-                    var names = ngDriver.FindElements(By.CssSelector("button.mat-primary"));
-                    if (names.Count > 0)
+            if (element == "the Submit button")
+            {
+                NgWebElement submitButton = null;
+                for (var i = 0; i < 20; i++)
+                    try
                     {
-                        submitButton = names[0];
-                        break;
+                        // Submit button
+                        var names = ngDriver.FindElements(By.CssSelector("button.mat-primary"));
+                        if (names.Count > 0)
+                        {
+                            submitButton = names[0];
+                            break;
+                        }
                     }
-                }
-                catch (Exception)
-                {
-                }
-            submitButton.Click();
-        }
+                    catch (Exception)
+                    {
+                    }
+                submitButton.Click();
+            }
 
+            if (element == "the DMER Forms tab")
+            {
+                var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+                DMERFormsTab.Click();
+            }
 
-        [And(@"I click on the DMER Forms tab")]
-        public void DMERFormsTab()
-        {
-            var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
-            DMERFormsTab.Click();
-        }
-
-
-        [And(@"I click on the Case ID for 111")]
-        public void CaseID()
-        {
-            var caseID = ngDriver.FindElement(By.LinkText("111"));
-            caseID.Click();
+            if (element == "the Case ID for 111")
+            {
+                var caseID = ngDriver.FindElement(By.LinkText("111"));
+                caseID.Click();
+            }
         }
 
 
