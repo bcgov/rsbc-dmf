@@ -17,6 +17,7 @@ Scenario: Doctors' Portal Health Check with Cert
     And I accept the cert request
     And the content is displayed for the doctors portal
     And I enter the login credentials
+    And I click on the Submit button
     And the content is displayed for the DMER dashboard
     Then I log out of the portal
 
