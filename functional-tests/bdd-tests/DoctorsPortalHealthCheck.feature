@@ -1,27 +1,28 @@
 ﻿Feature: DoctorsPortalHealthCheck
     As a medical professional
-    I want to confirm that I can view the doctors' portal
+    I want to test the doctors' portal
 
 @pipeline
 Scenario: Doctors' Portal Health Check
     When I click on the doctors' portal
-    And the portal is displayed
+    And the content is displayed for the doctors portal
     And I enter the login credentials
     And I click on the Submit button
-    Then the DMER dashboard is displayed
+    And the content is displayed for the DMER dashboard
+    Then I log out of the portal
 
 @browseronly
 Scenario: Doctors' Portal Health Check with Cert
     When I click on the doctors' portal
     And I accept the cert request
-    And the portal is displayed
+    And the content is displayed for the doctors portal
     And I enter the login credentials
-    And I click on the Submit button
-    Then the DMER dashboard is displayed
+    And the content is displayed for the DMER dashboard
+    Then I log out of the portal
 
 Scenario: Vision Assessment
     When I click on the doctors' portal
-    And the portal is displayed
+    And I accept the cert request
     And I enter the login credentials
     And I click on the Submit button
     And I click on the DMER Forms tab
@@ -35,4 +36,5 @@ Scenario: Vision Assessment
     And I click on the Next button
     And I click on the Next button
     And I click on the Next button
-    Then this message is displayed: PASS! No Clean Pass responses failed.
+    And the content is displayed for the DMER clean pass
+    Then I log out of the portal
