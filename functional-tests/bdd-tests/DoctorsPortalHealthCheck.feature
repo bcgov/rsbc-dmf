@@ -10,6 +10,15 @@ Scenario: Doctors' Portal Health Check
     And I click on the Submit button
     Then the DMER dashboard is displayed
 
+@browseronly
+Scenario: Doctors' Portal Health Check with Cert
+    When I click on the doctors' portal
+    And I accept the cert request
+    And the portal is displayed
+    And I enter the login credentials
+    And I click on the Submit button
+    Then the DMER dashboard is displayed
+
 Scenario: Vision Assessment
     When I click on the doctors' portal
     And the portal is displayed

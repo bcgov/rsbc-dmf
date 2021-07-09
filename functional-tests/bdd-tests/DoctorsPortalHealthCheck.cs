@@ -30,7 +30,12 @@ namespace bdd_tests
             ngDriver.IgnoreSynchronization = true;
             ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
             //ngDriver.WaitForAngular();
+        }
 
+
+        [And(@"I accept the cert request")]
+        public void CertRequest()
+        {
             var advancedButton = ngDriver.WrappedDriver.FindElement(By.Id("details-button"));
             advancedButton.Click();
 
