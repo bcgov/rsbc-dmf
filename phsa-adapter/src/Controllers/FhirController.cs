@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -16,8 +17,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
+using static Hl7.Fhir.Model.CapabilityStatement;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-
+/*
 namespace Hl7.Fhir.Model
 {
     public partial class Resource
@@ -30,7 +32,7 @@ namespace Hl7.Fhir.Model
         }
     }
 }
-
+*/
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
 
@@ -48,19 +50,19 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             _logger = logger;
             Configuration = configuration;
         }
-
+        
         [HttpGet("metadata")]
         [AllowAnonymous]
-        public CapabilityStatement GetMetaData()
+        public FhirResponse GetMetaData()
         {
-            CapabilityStatement result = new CapabilityStatement()
+            CapabilityStatement capabilityStatement = new CapabilityStatement()
             {
                 Date = DateTimeOffset.Now.ToString(),
                 Kind = CapabilityStatementKind.Instance,
                 FhirVersion = FHIRVersion.N4_0_0,
-                Software = new CapabilityStatement.SoftwareComponent() {Name = "RSBC PHSA Adapter"},
+                Software = new CapabilityStatement.SoftwareComponent() { Name = "RSBC PHSA Adapter" },
                 Status = PublicationStatus.Active,
-                Format = new List<string>() {"application/fhir+json"},
+                Format = new List<string>() { "application/fhir+json" },
                 Implementation = new CapabilityStatement.ImplementationComponent()
                 {
                     Description = "RSBC FHIR",
@@ -110,13 +112,16 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     }
                 }
             };
+            var result = Respond.WithResource(capabilityStatement);
             return result;
         }
 
         [HttpGet(".well-known/smart-configuration")]
         [AllowAnonymous]
-        public SmartConfiguration GetSmartConfiguration()
+        
+        public IActionResult GetSmartConfiguration()
         {
+            Response.ContentType = "application/json";
             List<string> capabilities = new List<string>();
             capabilities.Add("launch-ehr");
             capabilities.Add("client-public");
@@ -130,12 +135,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 Introspection_endpoint = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
                 Capabilities = capabilities 
             };
-            return result;
+            return new JsonResult(result);
         }
 
         [HttpGet("Patient/{id}")]
         [AllowAnonymous]
-        public Patient GetPatient([FromRoute] string id)
+        public IActionResult GetPatient([FromRoute] string id)
         {
             Patient result = new Patient()
             {
@@ -156,12 +161,15 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 BirthDateElement = new Date(DateTimeOffset.Now.Year - 20, DateTimeOffset.Now.Month,
                     DateTimeOffset.Now.Day)
             };
-            return result;
+
+            //return Respond.WithResource(result);
+            return new JsonResult(result);
+
         }
 
         [HttpGet("Practitioner/{id}")]
         [AllowAnonymous]
-        public Practitioner GetPractitioner([FromRoute] string id)
+        public IActionResult GetPractitioner([FromRoute] string id)
         {
             Practitioner result = new Practitioner()
             {
@@ -174,20 +182,314 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 BirthDateElement = new Date(DateTimeOffset.Now.Year - 30, DateTimeOffset.Now.Month,
                     DateTimeOffset.Now.Day)
             };
-            return result;
+
+            //return Respond.WithResource(result);
+            return new JsonResult(result);
         }
 
+        
+
+        /// <summary>
+        ///
+        /// GET bundle.This will need to provide the following fields:
+        /// Provider First Name
+        ///    Provider Last Name
+        /// Provider ID
+        /// Provider ID Type
+        /// Provider Role
+        /// BC Personal Health Number
+        /// Patient Last Name
+        /// Patient First Name
+        /// Date of Birth
+        /// Gender
+        /// Country
+        /// Province/Territory
+        /// State
+        /// City/Town
+        /// City/Town
+        /// Address Use
+        /// Driver Last Name
+        /// Driver First Name
+        /// Driver Date of Birth
+        /// Driver Gender
+        /// Country
+        /// Province/Territory
+        /// City/Town
+        /// Street Address Line 1
+        /// Street Address Line 2
+        /// Postal Code
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("Bundle/{id}")]
         [AllowAnonymous]
-        public Bundle GetBundle([FromRoute] string id)
+        public FhirResponse GetBundle([FromRoute] string id)
         {
+            Response.ContentType = "application/json";
+            /*
+             * Issues - meta is null,
+             * Identifier needs to be added
+             */
+
+            Payload payload = new Payload()
+            {
+                data = new Dictionary<string, object>()
+                {
+                    {"checkIsCommercialDMER", false},
+                    {"providerNameGiven", "providerNameGiven"},
+                    {"providerNameFamily", "providerNameFamily"},
+                    {"providerId", "1234"},
+                    {"providerIdType", "providerIdType"},
+                    {"providerRole", "providerRole"},
+                    {"providerSpecialty", "providerSpecialty"},
+                    {"phoneUse", "phoneUse"},
+                    {"providerPhoneNumber", "1231231234"},
+                    {"faxUse", "faxUse"},
+                    {"providerFaxNumber", "1231231233"},
+                    {"providerStreetAddressLine1", ""},
+                    {"providerStreetAddressLine2", ""},
+                    {"providerCityTown", ""},
+                    {"patientIdentifier", Configuration["TEST_PHN"]},
+                    {"patientNameFamily", "Family"},
+                    {"patientNameGiven", "Given"},
+                    {"patientBirthDate", ""},
+                    {"gender", "Unknown"},
+                    {"patientCountry", "CA"},
+                    {"patientProvince1", "BC"},
+                    {"patientCityTown", "CityTown"},
+                    {
+                        "patientStreetAddressLine1", "patientStreetAddressLine1"
+                    },
+                    {
+                        "patientStreetAddressLine2", "patientStreetAddressLine2"
+                    },
+                    {
+                        "patientCanadianAddressPostalCode", "V1V2V2"
+                    },
+                    {
+                        "patientAddressUse", "patientAddressUse"
+                    },
+                    {
+                        "patientNameGivenMiddle", "patientNameGivenMiddle"
+                    },
+                    {
+                        "patientPrimaryPhoneNumber", "1231234"
+                    },
+                    {
+                        "patientPrimaryPhoneUse", "patientPrimaryPhoneUse"
+                    },
+                    {
+                        "patientAlternatePhoneNumber", "patientAlternatePhoneNumber"
+                    },
+                    {
+                        "patientAlternatePhoneUse", "patientAlternatePhoneUse"
+                    },
+                    {
+                        "patientPrimaryEmail", "patientPrimaryEmail"
+                    },
+                    {
+                        "patientPrimaryEmailUse", "patientPrimaryEmailUse"
+                    },
+                    {
+                        "patientAlternateEmail", "patientAlternateEmail"
+                    },
+                    {
+                        "patientAlternateEmailUse", "patientAlternateEmailUse"
+                    },
+                    {
+                        "textTargetDriverName", "textTargetDriverName"
+                    },
+                    {
+                        "textTargetDriverFirstname", "textTargetDriverFirstname"
+                    },
+                    {
+                        "tDateTargetDriverBirthdate", "1999-01-01"
+                    },
+                    {
+                        "radioTargetDriverGender", "radioTargetDriverGender"
+                    },
+                    {
+                        "selTargetDriverCountry", "selTargetDriverCountry"
+                    },
+                    {
+                        "textTargetDriverProvince", "textTargetDriverProvince"
+                    },
+                    {
+                        "textTargetDriverCity", "textTargetDriverCity"
+                    },
+                    {
+                        "textTargetDriverAddr1", "textTargetDriverAddr1"
+                    },
+                    {
+                        "textTargetDriverAddr2", "textTargetDriverAddr2"
+                    },
+                    {
+                        "textTargetDriverPostal", "V1V1V1"
+                    },
+                    {
+                        "textTargetKnownNotice", "textTargetKnownNotice"
+                    },
+                    {
+                        "selectMISC_0_0", "selectMISC_0_0y"
+                    },
+                    {
+                        "yornMISC_1_1", "yornMISC_1_1"
+                    },
+                    {
+                        "yornMISC_2_1", "yornMISC_2_1"
+                    },
+                    {
+                        "yornMISC_3_1", "yornMISC_3_1"
+                    },
+                    {
+                        "patientProvince", "BC"
+                    },
+                    {"patientBCcity", "patientBCcity"}
+                }
+            };
+
+            // convert the data to json.
+            string jsonPayload = JsonConvert.SerializeObject(payload);
+            var jsonAsBytes = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
+            
 
             Bundle result = new Bundle()
             {
                 Id = Guid.NewGuid().ToString(),
+                Meta = new Meta()
+                {
+                    LastUpdated = DateTimeOffset.Now,
+                    Tag = new List<Coding>()
+                    {
+                        new Coding() { System = "https://ehealthbc.ca/NamingSystem/eforms/correlationId",
+                            Code = "de487905-b0e1-49ed-911b-6a8de0806544"},
+                        new Coding()
+                        {
+                            System="https://ehealthbc.ca/NamingSystem/eforms/formName",
+                            Code = "DMFT-FULL-DMER-Container"
+                        },
+                        new Coding()
+                        {
+                            System = "https://ehealthbc.ca/NamingSystem/eforms/formTitle",
+                            Code = "Development Testing Structured Form"
+                        },
+                        new Coding()
+                        {
+                            System="https://ehealthbc.ca/NamingSystem/eforms/formID",
+                            Code = "609eb617894b2ab618b917ac"
+                        },
+                        new Coding()
+                        {
+                            System="https://ehealthbc.ca/NamingSystem/eforms/referenceNum",
+                            Code = "276fcdf2-d5bc-4c74-b81d-e0a8e2c71732"
+                        },
+                        new Coding()
+                        {
+                            System="https://ehealthbc.ca/NamingSystem/eforms/formStatus",
+                            Code ="InProgress"
+                        }
+                    }
+                },
+                Entry = new List<Bundle.EntryComponent>()
+            {
+                new Bundle.EntryComponent()
+                {
+                    Resource = new Binary()
+                    {
+                        ContentType = "application/eforms",
+                        Data = jsonAsBytes
+                    }
+                },
 
+                new Bundle.EntryComponent()
+                {
+                    Resource = new Patient()
+                    {
+                        Id = "Patient1",
+                        Gender = AdministrativeGender.Unknown,
+                        Identifier = new List<Identifier>()
+                        {
+                            new Identifier()
+                            {
+                                Type = new CodeableConcept()
+                                {
+                                    Text = "BC"
+                                },
+                                System = Configuration["TEST_PHN_SYSTEM"],
+                                Value = Configuration["TEST_PHN"]
+                            }
+                        },
+                        Name = new List<HumanName>()
+                        {
+                            new HumanName()
+                            {
+                                Use = HumanName.NameUse.Official,
+                                FamilyElement = new FhirString("Surname"),
+                                GivenElement = new List<FhirString>()
+                                    {new FhirString("Given"), new FhirString("Middle")}
+                            }
+                        },
+                        Address = new List<Address>()
+                        {
+                            new Address()
+                            {
+                                Use = Address.AddressUse.Home,
+                                Line = new List<string>() {"123 Main St."},
+                                State = "British Columbia",
+                                Country = "Canada",
+                                PostalCode = "V1V1V1"
+                            }
+                        }
+                    }
+                },
+                new Bundle.EntryComponent()
+                {
+                    Resource = new Practitioner()
+                    {
+                        Id = "Submitter1",
+                        Identifier = new List<Identifier>()
+                        {
+                            new Identifier()
+                            {
+                                Type = new CodeableConcept()
+                                {
+                                    Text = "BC"
+                                },
+                                System = "[id-system-local-base]/ca-bc-provider-dummy-id",
+                                Value = new Random().Next().ToString()
+                            }
+                        },
+                        Gender = AdministrativeGender.Unknown,
+                        Name = new List<HumanName>()
+                        {
+                            new HumanName()
+                            {
+                                Use = HumanName.NameUse.Official,
+                                FamilyElement = new FhirString("DrSurname"),
+                                GivenElement = new List<FhirString>()
+                                    {new FhirString("DrGiven"), new FhirString("DrMiddle")}
+                            }
+                        },
+                        Address = new List<Address>()
+                        {
+                            new Address()
+                            {
+                                Use = Address.AddressUse.Home,
+                                Line = new List<string>() {"123 Main St."},
+                                State = "British Columbia",
+                                Country = "Canada",
+                                PostalCode = "V2V2V2"
+                            }
+                        }
+                    }
+                }
+            }
             };
-            return result;
+
+
+
+            
+            return Respond.WithResource(result);
         }
 
         [HttpPut("Bundle/{id}")]
