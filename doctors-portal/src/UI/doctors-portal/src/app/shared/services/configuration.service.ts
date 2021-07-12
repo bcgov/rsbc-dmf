@@ -33,6 +33,10 @@ export class ConfigurationService {
     };
   }
 
+  public getEFormsFormId(name: string): string {
+    return this.config?.eformsConfiguration?.forms?.find(f => f.name?.toLowerCase() === name.toLowerCase())?.id || '';
+  }
+
   public isConfigured(): boolean {
     return this.config !== null;
   }

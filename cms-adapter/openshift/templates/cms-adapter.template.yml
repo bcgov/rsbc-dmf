@@ -1,0 +1,223 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: cms-adapter-template
+
+parameters:
+  - description: openshift namespace prefix
+    name: NAMESPACE_PREFIX
+    required: true
+  - description: openshift namespace env name
+    name: ENV
+    required: true
+  - description: app name
+    name: APP_NAME
+    required: true
+  - description: image tag for deployments
+    name: TAG
+    required: true
+  - description: ASPNET runtime environment (Development/Staging/Production)
+    name: RUNTIME_ENVIRONMENT
+    value: Staging
+  - name: DYNAMICS_OAUTH_ENDPOINT
+    required: true
+  - description: Dynamics ADFS client ID
+    name: DYNAMICS_OAUTH_CLIENT_ID
+    required: true
+  - description: Dynamics ADFS client secret
+    name: DYNAMICS_OAUTH_CLIENT_SECRET
+    required: true
+  - description: Dynamics ADFS resource name
+    name: DYNAMICS_OAUTH_RESOURCE
+    required: true
+  - description: Dynamics API endpoint
+    name: DYNAMICS_ENDPOINT
+    required: true
+  - description: Dynamics entities base URI
+    name: DYNAMICS_URI
+    required: true
+  - description: Dynamics service account domain
+    name: DYNAMICS_SERVICE_ACCOUNT_DOMAIN
+    required: true
+  - description: Dynamics service account name
+    name: DYNAMICS_SERVICE_ACCOUNT_NAME
+    required: true
+  - description: Dynamics service account password
+    name: DYNAMICS_SERVICE_ACCOUNT_PASSWORD
+    required: true
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-cms-adapter-config
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+    data:
+      ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
+      KEY_RING_PATH: "/dpkeys"
+      Dynamics__ADFS__OAuth2TokenEndpoint: ${DYNAMICS_OAUTH_ENDPOINT}
+      Dynamics__DynamicsApiEndpoint: ${DYNAMICS_ENDPOINT}
+      Dynamics__DynamicsApiBaseUri: ${DYNAMICS_URI}
+
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+      name: ${APP_NAME}-cms-adapter-secrets
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+    stringData:
+      Dynamics__ADFS__ClientId: ${DYNAMICS_OAUTH_CLIENT_ID}
+      Dynamics__ADFS__ClientSecret: ${DYNAMICS_OAUTH_CLIENT_SECRET}
+      Dynamics__ADFS__ResourceName: ${DYNAMICS_OAUTH_RESOURCE}
+      Dynamics__ADFS__serviceAccountDomain: ${DYNAMICS_SERVICE_ACCOUNT_DOMAIN}
+      Dynamics__ADFS__serviceAccountName: ${DYNAMICS_SERVICE_ACCOUNT_NAME}
+      Dynamics__ADFS__serviceAccountPassword: ${DYNAMICS_SERVICE_ACCOUNT_PASSWORD}
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-cms-adapter
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cms-adapter-ssl
+    spec:
+      ports:
+        - name: 4020-tcp
+          port: 4020
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${APP_NAME}-cms-adapter
+      type: ClusterIP
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${APP_NAME}-cms-adapter
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      podSelector:
+        matchLabels:
+          app: ${APP_NAME}-cms-adapter
+      policyTypes:
+        - Ingress
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: ${APP_NAME}
+                  role: api
+          ports:
+            - protocol: TCP
+              port: 8080
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-cms-adapter
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 2
+      selector:
+        deploymentconfig: ${APP_NAME}-cms-adapter
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-cms-adapter
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-cms-adapter
+        spec:
+          containers:
+            - name: cms-adapter
+              env:
+                - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
+                  value: "/ssl/tls.crt"
+                - name: "ASPNETCORE_Kestrel__Certificates__Default__KeyPath"
+                  value: "/ssl/tls.key"
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}-cms-adapter-config
+                - secretRef:
+                    name: ${APP_NAME}-cms-adapter-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/cms-adapter:${TAG}
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /dpkeys
+                  name: dp-keys
+                - mountPath: /ssl
+                  name: ssl
+                  readonly: true
+              livenessProbe:
+                httpGet:
+                  scheme: HTTPS
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  scheme: HTTPS
+                  path: /hc/ready
+                  port: 8080
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: dp-keys
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-cms-adapter-key-ring
+            - name: ssl
+              secret:
+                secretName: ${APP_NAME}-cms-adapter-ssl
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - cms-adapter
+            from:
+              kind: ImageStreamTag
+              name: cms-adapter:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-cms-adapter-key-ring
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-cms-adapter
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "100Mi"
