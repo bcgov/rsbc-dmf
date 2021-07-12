@@ -2,7 +2,9 @@
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Hl7.Fhir.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Logging;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
@@ -25,6 +27,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 string body = await reader.ReadToEndAsync();
+
+                // TODO - centralize the receive bundle code.
+
                 _logger.LogInformation(body);
 
             }

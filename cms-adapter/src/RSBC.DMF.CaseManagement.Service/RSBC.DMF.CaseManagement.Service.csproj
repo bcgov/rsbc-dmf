@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>6d695abe-4ce7-4ef4-8d39-9a32440be826</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\CaseManager.proto" GrpcServices="Server" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.38.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.38.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RSBC.DMF.CaseManagement\RSBC.DMF.CaseManagement.csproj" />
+  </ItemGroup>
+
+</Project>

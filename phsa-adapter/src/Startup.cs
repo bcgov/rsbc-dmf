@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+
+using Newtonsoft.Json;
 using System.Net.Http;
-using System.Text.Json.Serialization;
 using HealthChecks.UI.Client;
+using Hl7.Fhir.Serialization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +20,14 @@ using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Rsbc.Dmf.PhsaAdapter.Handlers;
+using Rsbc.Dmf.PhsaAdapter.Formatters;
+using Spark.Engine.Formatters;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -54,14 +64,53 @@ namespace Rsbc.Dmf.PhsaAdapter
                 
             });
 
-            services.AddControllers()
-                .AddJsonOptions(options =>
+            ParserSettings parserSettings = new ParserSettings();
+            SerializerSettings serializerSettings = new SerializerSettings();
+
+            services.TryAddSingleton((provider) => new FhirJsonParser(parserSettings));
+            services.TryAddSingleton((provider) => new FhirXmlParser(parserSettings));
+            services.TryAddSingleton((provder) => new FhirJsonSerializer(serializerSettings));
+            services.TryAddSingleton((provder) => new FhirXmlSerializer(serializerSettings));
+
+            services.TryAddTransient<ResourceJsonInputFormatter>();
+            services.TryAddTransient<ResourceJsonOutputFormatter>();
+
+            services.AddControllers(options =>
                 {
-                    options.JsonSerializerOptions.WriteIndented = true;
-                    options.JsonSerializerOptions.Converters.Insert(0,
-                        new JsonStringEnumConverter()
-                    );
+                    options.InputFormatters.RemoveType<SystemTextJsonInputFormatter>();
+                    options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
+                    // We remove StringOutputFormatter to make Swagger happy by not 
+                    // showing text/plain in the list of available media types.
+                    options.OutputFormatters.RemoveType<StringOutputFormatter>();
+
+                    options.InputFormatters.Add(new AsyncResourceJsonInputFormatter(new FhirJsonParser(null)));
+                    options.InputFormatters.Add(new BinaryInputFormatter());
+                    options.OutputFormatters.Add(new AsyncResourceJsonOutputFormatter());
+                    options.OutputFormatters.Add(new BinaryOutputFormatter());
+                })
+                /*
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.Formatting = Formatting.Indented;
+                    opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+
+                    // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                    opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
+                */
+             // JSON.NET
+            .AddJsonOptions(options =>
+            {
+                //options.JsonSerializerOptions.IgnoreNullValues = false;
+                options.JsonSerializerOptions.WriteIndented = true;
+                options.JsonSerializerOptions.Converters.Insert(0,
+                    new JsonStringEnumConverter()
+                );
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
+            
+            services.RemoveAll<OutputFormatterSelector>();
+            services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
 
             // configure basic authentication 
             services.AddAuthentication("BasicAuthentication")
@@ -144,18 +193,20 @@ namespace Rsbc.Dmf.PhsaAdapter
 
             app.UseRouting();
 
-            app.UseAuthentication();
-
             app.UseHealthChecks("/hc", new HealthCheckOptions
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
 
+            app.UseAuthentication();
+            app.UseCors(MyAllowSpecificOrigins);
+
             // by positioning this after the health check, no need to filter out health checks from request logging.
             app.UseSerilogRequestLogging();
 
             app.UseAuthorization();
+            app.UseMiddleware<FormatTypeHandler>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 

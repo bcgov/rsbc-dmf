@@ -1,0 +1,14 @@
+NAMESPACE_PREFIX=<openshift namespace>
+ENV=<openshift namespace env>
+APP_NAME=<app name>
+TAG=<image stream tag to deploy from>
+RUNTIME_ENVIRONMENT=<ASP.Net core environment: development|staging|production>
+OAUTH_ENDPOINT=<ADFS token endpoint url>
+OAUTH_CLIENT_ID=<client ID>
+OAUTH_CLIENT_SECRET=<client secret>
+OAUTH_RESOURCE=<ADFS resource name>
+DYNAMICS_ENDPOINT=<Dynamics host base url>
+DYNAMICS_URI=<Dynamics base uri>/api/data/v9.0/
+DYNAMICS_SERVICE_ACCOUNT_DOMAIN=<service account domain>
+OAUTH_DYNAMICS_SERVICE_ACCOUNT_NAME=<service account name>
+OAUTH_DYNAMICS_SERVICE_ACCOUNT_PASSWORD=<service account password>
