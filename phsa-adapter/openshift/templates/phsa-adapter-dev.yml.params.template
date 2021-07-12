@@ -1,0 +1,6 @@
+NAMESPACE_PREFIX=0137d5
+ENV=dev
+APP_NAME=phsa-adapter
+TAG=latest
+RUNTIME_ENVIRONMENT=development
+HOST=rsbc-dfp-phsa-dev.apps.silver.devops.gov.bc.ca
