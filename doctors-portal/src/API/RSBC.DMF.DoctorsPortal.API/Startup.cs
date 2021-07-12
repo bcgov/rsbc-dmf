@@ -68,7 +68,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                 }
             }));
             services.AddResponseCompression();
-            services.AddHealthChecks().AddCheck("ESS Backend", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
