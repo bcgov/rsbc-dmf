@@ -231,119 +231,64 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
              * Identifier needs to be added
              */
 
-            Payload payload = new Payload()
+            Payload payload = new Payload
             {
-                data = new Dictionary<string, object>()
+                data = new Dictionary<string, object>
                 {
-                    {"checkIsCommercialDMER", false},
+                    {"checkIsCommercialDMER", true},
+                    {"isCommercialDMER", true},
                     {"providerNameGiven", "providerNameGiven"},
                     {"providerNameFamily", "providerNameFamily"},
                     {"providerId", "1234"},
-                    {"providerIdType", "providerIdType"},
-                    {"providerRole", "providerRole"},
-                    {"providerSpecialty", "providerSpecialty"},
-                    {"phoneUse", "phoneUse"},
+                    {"providerIdType", "OPTID"},
+                    {"providerRole", "Physician"},
+                    {"providerSpecialty", "Cardiology"},
+                    {"phoneUse", "work"},
                     {"providerPhoneNumber", "1231231234"},
-                    {"faxUse", "faxUse"},
+                    {"providerPhoneNumberExt","123"},
+                    {"faxUse", "work"},
                     {"providerFaxNumber", "1231231233"},
-                    {"providerStreetAddressLine1", ""},
-                    {"providerStreetAddressLine2", ""},
-                    {"providerCityTown", ""},
+                    {"providerStreetAddressLine1", "providerStreetAddressLine1"},
+                    {"providerStreetAddressLine2", "providerStreetAddressLine2"},
+                    {"providerCityTown", "providerCityTown"},
                     {"patientIdentifier", Configuration["TEST_PHN"]},
                     {"patientNameFamily", "Family"},
                     {"patientNameGiven", "Given"},
-                    {"patientBirthDate", ""},
-                    {"gender", "Unknown"},
-                    {"patientCountry", "CA"},
-                    {"patientProvince1", "BC"},
-                    {"patientCityTown", "CityTown"},
-                    {
-                        "patientStreetAddressLine1", "patientStreetAddressLine1"
-                    },
-                    {
-                        "patientStreetAddressLine2", "patientStreetAddressLine2"
-                    },
-                    {
-                        "patientCanadianAddressPostalCode", "V1V2V2"
-                    },
-                    {
-                        "patientAddressUse", "patientAddressUse"
-                    },
-                    {
-                        "patientNameGivenMiddle", "patientNameGivenMiddle"
-                    },
-                    {
-                        "patientPrimaryPhoneNumber", "1231234"
-                    },
-                    {
-                        "patientPrimaryPhoneUse", "patientPrimaryPhoneUse"
-                    },
-                    {
-                        "patientAlternatePhoneNumber", "patientAlternatePhoneNumber"
-                    },
-                    {
-                        "patientAlternatePhoneUse", "patientAlternatePhoneUse"
-                    },
-                    {
-                        "patientPrimaryEmail", "patientPrimaryEmail"
-                    },
-                    {
-                        "patientPrimaryEmailUse", "patientPrimaryEmailUse"
-                    },
-                    {
-                        "patientAlternateEmail", "patientAlternateEmail"
-                    },
-                    {
-                        "patientAlternateEmailUse", "patientAlternateEmailUse"
-                    },
-                    {
-                        "textTargetDriverName", "textTargetDriverName"
-                    },
-                    {
-                        "textTargetDriverFirstname", "textTargetDriverFirstname"
-                    },
-                    {
-                        "tDateTargetDriverBirthdate", "1999-01-01"
-                    },
-                    {
-                        "radioTargetDriverGender", "radioTargetDriverGender"
-                    },
-                    {
-                        "selTargetDriverCountry", "selTargetDriverCountry"
-                    },
-                    {
-                        "textTargetDriverProvince", "textTargetDriverProvince"
-                    },
-                    {
-                        "textTargetDriverCity", "textTargetDriverCity"
-                    },
-                    {
-                        "textTargetDriverAddr1", "textTargetDriverAddr1"
-                    },
-                    {
-                        "textTargetDriverAddr2", "textTargetDriverAddr2"
-                    },
-                    {
-                        "textTargetDriverPostal", "V1V1V1"
-                    },
-                    {
-                        "textTargetKnownNotice", "textTargetKnownNotice"
-                    },
-                    {
-                        "selectMISC_0_0", "selectMISC_0_0y"
-                    },
-                    {
-                        "yornMISC_1_1", "yornMISC_1_1"
-                    },
-                    {
-                        "yornMISC_2_1", "yornMISC_2_1"
-                    },
-                    {
-                        "yornMISC_3_1", "yornMISC_3_1"
-                    },
-                    {
-                        "patientProvince", "BC"
-                    },
+                    {"patientBirthDate", "1970-01-01"},
+                    {"gender", "male"},
+                    {"patientCountry", "Canada"},
+                    {"patientProvinceState", "British Columbia"},
+                    {"patientCityTown", "Victoria"},
+                    {"patientStreetAddressLine1", "patientStreetAddressLine1"},
+                    {"patientStreetAddressLine2", "patientStreetAddressLine2"},
+                    {"patientAddressPostalCode", "V1V 2V2"},
+                    {"patientAddressUse", "patientAddressUse"},
+                    {"patientNameGivenMiddle", "patientNameGivenMiddle"},
+                    {"patientPrimaryPhoneNumber", "1231231234"},
+                    {"patientPrimaryPhoneUse", "patientPrimaryPhoneUse"},
+                    {"patientAlternatePhoneNumber", "patientAlternatePhoneNumber"},
+                    {"patientAlternatePhoneUse", "patientAlternatePhoneUse"},
+                    {"patientPrimaryEmail", "patientPrimaryEmail"},
+                    {"patientPrimaryEmailUse", "home"},
+                    {"patientAlternateEmail", "patientAlternateEmail"},
+                    {"patientAlternateEmailUse", "work"},
+                    {"textTargetDriverName", "DriverLastName"},
+                    {"textTargetDriverFirstname", "DriverFirstname"},
+                    {"textTargetDriverLicense","5888888"},
+                    {"radioTargetDriverGender","male"},
+                    {"tDateTargetDriverBirthdate", "1999-01-01"},
+                    {"selTargetDriverCountry", "Canada"},
+                    {"textTargetDriverProvince", "British Columbia"},
+                    {"textTargetDriverCity", "Victoria"},
+                    {"textTargetDriverAddr1", "textTargetDriverAddr1"},
+                    {"textTargetDriverAddr2", "textTargetDriverAddr2"},
+                    {"textTargetDriverPostal", "V1V 1V1"},
+                    {"textTargetKnownNotice", "textTargetKnownNotice"},
+                    {"selectMISC_0_0", "selectMISC_0_0y"},
+                    {"yornMISC_1_1", "yornMISC_1_1"},
+                    {"yornMISC_2_1", "yornMISC_2_1"},
+                    {"yornMISC_3_1", "yornMISC_3_1"},
+                    {"patientProvince", "BC"},
                     {"patientBCcity", "patientBCcity"}
                 }
             };
