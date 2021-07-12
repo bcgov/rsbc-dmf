@@ -102,7 +102,6 @@ namespace Rsbc.Dmf.PhsaAdapter
              // JSON.NET
             .AddJsonOptions(options =>
             {
-                //options.JsonSerializerOptions.IgnoreNullValues = false;
                 options.JsonSerializerOptions.WriteIndented = true;
                 options.JsonSerializerOptions.Converters.Insert(0,
                     new JsonStringEnumConverter()
@@ -188,8 +187,6 @@ namespace Rsbc.Dmf.PhsaAdapter
             SelfLog.Enable(Console.Error);
 
             Log.Logger.Information("PHSA Adapter Container Starting");
-
-            app.UseHttpsRedirection();
 
             app.UseRouting();
 
