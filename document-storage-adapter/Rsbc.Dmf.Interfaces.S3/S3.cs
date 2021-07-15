@@ -19,6 +19,12 @@ namespace Rsbc.Dmf.Interfaces
 {
     public class S3
     {
+        public const string METADATA_KEY_ENTITY = "Entity";
+        public const string METADATA_KEY_ENTITY_ID = "EntityId";
+        public const string METADATA_KEY_TAG1 = "Tag1";
+        public const string METADATA_KEY_TAG2 = "Tag2";
+        public const string METADATA_KEY_TAG3 = "Tag3";
+
         public const string DefaultDocumentListTitle = "Account";
         public const string DefaultDocumentUrlTitle = "account";
         public const string ApplicationDocumentListTitle = "Application";
@@ -467,13 +473,45 @@ namespace Rsbc.Dmf.Interfaces
                 var prefix = GetPrefix(listTitle, folderName);
                 var fileKey = prefix + fileName;
 
+                result = await UploadFile(fileKey, data, contentType);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Upload a file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="listTitle"></param>
+        /// <param name="folderName"></param>
+        /// <param name="fileData"></param>
+        /// <param name="contentType"></param>
+        /// <returns>Uploaded Filename, or Null if not successful.</returns>
+        public async Task<string> UploadFile(string fileName, byte[] data, string contentType, Dictionary< string, string> metadata = null )
+        {
+            string result = null;
+            if (IsValid())
+            {
+
                 using (var inputStream = new MemoryStream(data))
                 {
-                    var request = new PutObjectRequest();
-                    request.BucketName = Bucket;
-                    request.Key = fileKey;
-                    request.ContentType = contentType;
-                    request.InputStream = inputStream;
+                    var request = new PutObjectRequest()
+                    {
+                        BucketName = Bucket,
+                        Key = fileName,
+                        ContentType = contentType,
+                        InputStream = inputStream
+                    };
+
+                    if (metadata != null)
+                    {
+                        foreach (var item in metadata)
+                        {
+                            request.Metadata.Add(item.Key, item.Value);
+                        }
+                    }
+
                     await S3Client.PutObjectAsync(request);
                     result = fileName;
                 }
