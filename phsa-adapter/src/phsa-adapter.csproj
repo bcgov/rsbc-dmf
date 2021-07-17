@@ -29,4 +29,8 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\interfaces\icbc-adapter\icbc-adapter.csproj" />
+  </ItemGroup>
+
 </Project>
