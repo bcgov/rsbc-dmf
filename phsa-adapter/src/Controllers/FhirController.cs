@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
 using static Hl7.Fhir.Model.CapabilityStatement;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -44,11 +45,13 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private readonly ILogger<ReceiveController> _logger;
         private readonly IConfiguration Configuration;
         private readonly IStructureDefinitionSummaryProvider _provider = new PocoStructureDefinitionSummaryProvider();
+        private readonly IIcbcClient IcbcClient;
 
-        public FhirController(ILogger<ReceiveController> logger, IConfiguration configuration)
+        public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration)
         {
             _logger = logger;
             Configuration = configuration;
+            IcbcClient = icbcClient;
         }
         
         [HttpGet("metadata")]
@@ -223,13 +226,14 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         /// <returns></returns>
         [HttpGet("Bundle/{id}")]
         [AllowAnonymous]
-        public FhirResponse GetBundle([FromRoute] string id)
+        public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
-            /*
-             * Issues - meta is null,
-             * Identifier needs to be added
-             */
+            
+            // get the ICBC data
+
+            var icbcData = IcbcClient.GetDriver(Configuration["TEST_DL"]);
+            
 
             Payload payload = new Payload
             {
@@ -272,17 +276,17 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientPrimaryEmailUse", "home"},
                     {"patientAlternateEmail", "patientAlternateEmail"},
                     {"patientAlternateEmailUse", "work"},
-                    {"textTargetDriverName", "DriverLastName"},
-                    {"textTargetDriverFirstname", "DriverFirstname"},
-                    {"textTargetDriverLicense","5888888"},
+                    {"textTargetDriverName", $"{icbcData?.INAM.SURN}"},
+                    {"textTargetDriverFirstname", $"{icbcData?.INAM.GIV1}"},
+                    {"textTargetDriverLicense",$"{icbcData?.DR1MST?.LNUM}"},
                     {"radioTargetDriverGender","male"},
-                    {"tDateTargetDriverBirthdate", "1999-01-01"},
+                    {"tDateTargetDriverBirthdate", $"{icbcData?.BIDT}"},
                     {"selTargetDriverCountry", "Canada"},
                     {"textTargetDriverProvince", "British Columbia"},
-                    {"textTargetDriverCity", "Victoria"},
-                    {"textTargetDriverAddr1", "textTargetDriverAddr1"},
-                    {"textTargetDriverAddr2", "textTargetDriverAddr2"},
-                    {"textTargetDriverPostal", "V1V 1V1"},
+                    {"textTargetDriverCity", icbcData?.ADDR?.CITY},
+                    {"textTargetDriverAddr1", $"{icbcData?.ADDR?.STNO} {icbcData?.ADDR?.STNM} {icbcData?.ADDR?.STTY}"}, //  {icbcData?.ADDR.STDI}
+                    {"textTargetDriverAddr2", ""},
+                    {"textTargetDriverPostal", icbcData?.ADDR.POST},
                     {"textTargetKnownNotice", "textTargetKnownNotice"},
                     {"selectMISC_0_0", "selectMISC_0_0y"},
                     {"yornMISC_1_1", "yornMISC_1_1"},
