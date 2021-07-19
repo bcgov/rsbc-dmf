@@ -9,8 +9,9 @@ on:
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-    paths:
+    paths:    
       - "phsa-adapter/**"
+      - "interfaces/icbc-adapter/**"
       - ".github/workflows/cd-phsa-adapter.yml"
 
 env:

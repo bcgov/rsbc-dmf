@@ -5,6 +5,7 @@ on:
     types: [opened, reopened, edited, synchronize]
     paths:
       - "phsa-adapter/src/**"
+      - "interfaces/icbc-adapter/**"
       - ".github/workflows/ci-phsa-adapter.yml"
 
 env:
