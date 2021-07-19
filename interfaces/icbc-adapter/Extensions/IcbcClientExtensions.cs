@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Rest;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
 {
     public partial class IcbcClient : ServiceClient<IcbcClient>, IIcbcClient
     {
+        [ActivatorUtilitiesConstructor]
         public IcbcClient(HttpClient httpClient, IConfiguration configuration)
         {
             string icbc_adapter_base_uri = configuration["ICBC_ADAPTER_BASE_URI"];
