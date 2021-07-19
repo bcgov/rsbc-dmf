@@ -24,7 +24,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// Initializes a new instance of the CLNT class.
         /// </summary>
-        public CLNT(CLNTINAM iNAM = default(CLNTINAM), double? wGHT = default(double?), string sEX = default(string), System.DateTime? bIDT = default(System.DateTime?), int? hGHT = default(int?), string sECK = default(string), CLNTADDR aDDR = default(CLNTADDR), CLNTDR1MST dR1MST = default(CLNTDR1MST))
+        public CLNT(INAM iNAM = default(INAM), double? wGHT = default(double?), string sEX = default(string), System.DateTime? bIDT = default(System.DateTime?), double? hGHT = default(double?), string sECK = default(string), ADDR aDDR = default(ADDR), DR1MST dR1MST = default(DR1MST))
         {
             INAM = iNAM;
             WGHT = wGHT;
@@ -45,7 +45,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "INAM")]
-        public CLNTINAM INAM { get; set; }
+        public INAM INAM { get; set; }
 
         /// <summary>
         /// </summary>
@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "HGHT")]
-        public int? HGHT { get; set; }
+        public double? HGHT { get; set; }
 
         /// <summary>
         /// </summary>
@@ -76,12 +76,12 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "ADDR")]
-        public CLNTADDR ADDR { get; set; }
+        public ADDR ADDR { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "DR1MST")]
-        public CLNTDR1MST DR1MST { get; set; }
+        public DR1MST DR1MST { get; set; }
 
     }
 }

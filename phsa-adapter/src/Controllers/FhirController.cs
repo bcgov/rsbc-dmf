@@ -17,9 +17,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Rsbc.Dmf.Interfaces.IcbcAdapter;
+using Rsbc.Dmf.Interfaces.IcbcAdapter.Models;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
 using static Hl7.Fhir.Model.CapabilityStatement;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -177,7 +177,27 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return new JsonResult(result);
         }
 
-        
+        string ConvertGenderToString(string gender)
+        {
+            string result;
+            switch (gender)
+            {
+                case "M":
+                    result = "male";
+                    break;
+                case "F":
+                    result = "female";
+                    break;
+                case "O":
+                    result = "other";
+                    break;
+                default:
+                    result = "unknown";
+                    break;
+            }
+
+            return result;
+        }
 
         /// <summary>
         ///
@@ -218,9 +238,55 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             Response.ContentType = "application/json";
             
             // get the ICBC data
+            var x = new CLNT()
+            {
+                INAM = new INAM()
+                {
+                    SURN = "asdf",
+                    GIV1 = "asdf"
+                },
+                DR1MST = new DR1MST()
+                {
+                    LNUM = 1234
+                },
+                BIDT = DateTime.Now,
+                ADDR = new ADDR()
+                {
+                    STNO = "1234",
+                    STNM = "asdf",
+                    STTY = "asdf",
+                    POST = "asdf"
+                }
+            };
+
+            var jss = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+
+                NullValueHandling = NullValueHandling.Ignore,
+
+                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
+
+            var s = JsonConvert.SerializeObject(x, jss);
+
 
             var icbcData = IcbcClient.GetDriver(Configuration["TEST_DL"]);
-            
+
+            string driverBirthDate = "";
+            if (icbcData?.CLNT?.BIDT != null)
+            {
+                driverBirthDate = icbcData.CLNT.BIDT.Value.ToString("yyyy-MM-dd");
+            }
+
+            string driverGender = "";
+            if (icbcData.CLNT?.SEX != null)
+            {
+                driverGender = ConvertGenderToString(icbcData.CLNT?.SEX);
+            }
 
             Payload payload = new Payload
             {
@@ -263,17 +329,17 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientPrimaryEmailUse", "home"},
                     {"patientAlternateEmail", "patientAlternateEmail"},
                     {"patientAlternateEmailUse", "work"},
-                    {"textTargetDriverName", $"{icbcData?.INAM.SURN}"},
-                    {"textTargetDriverFirstname", $"{icbcData?.INAM.GIV1}"},
-                    {"textTargetDriverLicense",$"{icbcData?.DR1MST?.LNUM}"},
-                    {"radioTargetDriverGender","male"},
-                    {"tDateTargetDriverBirthdate", $"{icbcData?.BIDT}"},
+                    {"textTargetDriverName", $"{icbcData?.CLNT?.INAM?.SURN}"},
+                    {"textTargetDriverFirstname", $"{icbcData?.CLNT?.INAM?.GIV1}"},
+                    {"textTargetDriverLicense",$"{icbcData?.CLNT?.DR1MST?.LNUM}"},
+                    {"radioTargetDriverGender",$"{driverGender}"},
+                    {"tDateTargetDriverBirthdate", $"{driverBirthDate}"},
                     {"selTargetDriverCountry", "Canada"},
                     {"textTargetDriverProvince", "British Columbia"},
-                    {"textTargetDriverCity", icbcData?.ADDR?.CITY},
-                    {"textTargetDriverAddr1", $"{icbcData?.ADDR?.STNO} {icbcData?.ADDR?.STNM} {icbcData?.ADDR?.STTY}"}, //  {icbcData?.ADDR.STDI}
+                    {"textTargetDriverCity", icbcData?.CLNT?.ADDR?.CITY},
+                    {"textTargetDriverAddr1", $"{icbcData?.CLNT?.ADDR?.STNO} {icbcData?.CLNT?.ADDR?.STNM} {icbcData?.CLNT?.ADDR?.STTY}"}, //  {icbcData?.ADDR.STDI}
                     {"textTargetDriverAddr2", ""},
-                    {"textTargetDriverPostal", icbcData?.ADDR.POST},
+                    {"textTargetDriverPostal", $"{icbcData?.CLNT?.ADDR?.POST}"},
                     {"textTargetKnownNotice", "textTargetKnownNotice"},
                     {"selectMISC_0_0", "selectMISC_0_0y"},
                     {"yornMISC_1_1", "yornMISC_1_1"},
