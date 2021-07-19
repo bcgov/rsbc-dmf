@@ -6,23 +6,25 @@
 
 namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CLNTDR1MSTDR1MEDNItem
+    public partial class DR1MEDNITEM
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MSTDR1MEDNItem class.
+        /// Initializes a new instance of the DR1MEDNITEM class.
         /// </summary>
-        public CLNTDR1MSTDR1MEDNItem()
+        public DR1MEDNITEM()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MSTDR1MEDNItem class.
+        /// Initializes a new instance of the DR1MEDNITEM class.
         /// </summary>
-        public CLNTDR1MSTDR1MEDNItem(string mDSP = default(string), string mDSPDESC = default(string), int? iSOF = default(int?), string iSOFDESC = default(string), string mIDT = default(string), string mEDT = default(string), string pGN2 = default(string), string pGN1 = default(string))
+        public DR1MEDNITEM(string mDSP = default(string), string mDSPDESC = default(string), int? iSOF = default(int?), string iSOFDESC = default(string), System.DateTime? mIDT = default(System.DateTime?), System.DateTime? mEDT = default(System.DateTime?), string pGN2 = default(string), string pGN1 = default(string))
         {
             MDSP = mDSP;
             MDSPDESC = mDSPDESC;
@@ -62,13 +64,15 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
 
         /// <summary>
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         [JsonProperty(PropertyName = "MIDT")]
-        public string MIDT { get; set; }
+        public System.DateTime? MIDT { get; set; }
 
         /// <summary>
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         [JsonProperty(PropertyName = "MEDT")]
-        public string MEDT { get; set; }
+        public System.DateTime? MEDT { get; set; }
 
         /// <summary>
         /// </summary>

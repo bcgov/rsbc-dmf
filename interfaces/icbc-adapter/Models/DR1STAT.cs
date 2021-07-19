@@ -11,20 +11,20 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CLNTDR1MSTDR1STAT
+    public partial class DR1STAT
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MSTDR1STAT class.
+        /// Initializes a new instance of the DR1STAT class.
         /// </summary>
-        public CLNTDR1MSTDR1STAT()
+        public DR1STAT()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MSTDR1STAT class.
+        /// Initializes a new instance of the DR1STAT class.
         /// </summary>
-        public CLNTDR1MSTDR1STAT(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), int? nMCD = default(int?), int? sECT = default(int?), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
+        public DR1STAT(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), int? nMCD = default(int?), int? sECT = default(int?), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
         {
             EFDT = eFDT;
             EXDS = eXDS;

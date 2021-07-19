@@ -13,20 +13,20 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class CLNTDR1MST
+    public partial class DR1MST
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MST class.
+        /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public CLNTDR1MST()
+        public DR1MST()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MST class.
+        /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public CLNTDR1MST(int? mSCD = default(int?), IList<int?> rSCD = default(IList<int?>), System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), CLNTDR1MSTDR1STAT dR1STAT = default(CLNTDR1MSTDR1STAT), int? lCLS = default(int?), IList<CLNTDR1MSTDR1MEDNItem> dR1MEDN = default(IList<CLNTDR1MSTDR1MEDNItem>))
+        public DR1MST(int? mSCD = default(int?), IList<int?> rSCD = default(IList<int?>), System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), DR1STAT dR1STAT = default(DR1STAT), int? lCLS = default(int?), IList<DR1MEDNITEM> dR1MEDN = default(IList<DR1MEDNITEM>))
         {
             MSCD = mSCD;
             RSCD = rSCD;
@@ -67,7 +67,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "DR1STAT")]
-        public CLNTDR1MSTDR1STAT DR1STAT { get; set; }
+        public DR1STAT DR1STAT { get; set; }
 
         /// <summary>
         /// </summary>
@@ -77,7 +77,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "DR1MEDN")]
-        public IList<CLNTDR1MSTDR1MEDNItem> DR1MEDN { get; set; }
+        public IList<DR1MEDNITEM> DR1MEDN { get; set; }
 
     }
 }
