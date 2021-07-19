@@ -3,14 +3,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 
-COPY ../../ ../../
-
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
-WORKDIR /src
-COPY ["phsa-adapter.csproj", "."]
-RUN dotnet restore "./phsa-adapter.csproj"
+WORKDIR "./phsa-adapter/src/"
 COPY . .
-WORKDIR "/src/."
 RUN dotnet build "phsa-adapter.csproj" -c Release -o /app/build
 
 FROM build AS publish
