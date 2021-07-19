@@ -30,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\interfaces\icbc-adapter\icbc-adapter.csproj" />
+    <ProjectReference Include="../../interfaces/icbc-adapter/icbc-adapter.csproj" />
   </ItemGroup>
 
 </Project>
