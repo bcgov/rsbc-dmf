@@ -28,6 +28,7 @@ using Rsbc.Dmf.PhsaAdapter.Formatters;
 using Spark.Engine.Formatters;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -130,6 +131,11 @@ namespace Rsbc.Dmf.PhsaAdapter
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("phsa-adapter", () => HealthCheckResult.Healthy("OK"));
+
+            // Add ICBC adapter
+
+            services.AddHttpClient<IIcbcClient, IcbcClient>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
