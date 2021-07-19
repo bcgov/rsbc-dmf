@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Rsbc.Dmf.Interfaces.IcbcAdapter
 {
@@ -17,6 +18,18 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
             // string bearer_token = $"Bearer {configuration["ICBC_ADAPTER_JWT_TOKEN"]}";
 
             BaseUri = new Uri(icbc_adapter_base_uri);
+
+            DeserializationSettings = new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented,
+                DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+
+                NullValueHandling = NullValueHandling.Ignore,
+
+                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+            };
 
             // configure the HttpClient that is used for our direct REST calls.
             HttpClient = httpClient;

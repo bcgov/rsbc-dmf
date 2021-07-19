@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
             /// </param>
             /// <param name='id'>
             /// </param>
-            public static CLNT GetDriver(this IIcbcClient operations, string id)
+            public static CLNTRESPONSE GetDriver(this IIcbcClient operations, string id)
             {
                 return operations.GetDriverAsync(id).GetAwaiter().GetResult();
             }
@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CLNT> GetDriverAsync(this IIcbcClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CLNTRESPONSE> GetDriverAsync(this IIcbcClient operations, string id, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetDriverWithHttpMessagesAsync(id, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
             /// <param name='customHeaders'>
             /// Headers that will be added to request.
             /// </param>
-            public static HttpOperationResponse<CLNT> GetDriverWithHttpMessages(this IIcbcClient operations, string id, Dictionary<string, List<string>> customHeaders = null)
+            public static HttpOperationResponse<CLNTRESPONSE> GetDriverWithHttpMessages(this IIcbcClient operations, string id, Dictionary<string, List<string>> customHeaders = null)
             {
                 return operations.GetDriverWithHttpMessagesAsync(id, customHeaders, CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
             }

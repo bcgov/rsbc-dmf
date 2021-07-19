@@ -6,25 +6,27 @@
 
 namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
 {
+    using Microsoft.Rest;
+    using Microsoft.Rest.Serialization;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class CLNTDR1MST
+    public partial class DR1MST
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MST class.
+        /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public CLNTDR1MST()
+        public DR1MST()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTDR1MST class.
+        /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public CLNTDR1MST(int? mSCD = default(int?), IList<int?> rSCD = default(IList<int?>), string rRDT = default(string), int? lNUM = default(int?), DR1STAT dR1STAT = default(DR1STAT), int? lCLS = default(int?), IList<DR1MEDNITEM> dR1MEDN = default(IList<DR1MEDNITEM>))
+        public DR1MST(int? mSCD = default(int?), IList<int?> rSCD = default(IList<int?>), System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), DR1STAT dR1STAT = default(DR1STAT), int? lCLS = default(int?), IList<DR1MEDNITEM> dR1MEDN = default(IList<DR1MEDNITEM>))
         {
             MSCD = mSCD;
             RSCD = rSCD;
@@ -53,8 +55,9 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
 
         /// <summary>
         /// </summary>
+        [JsonConverter(typeof(DateJsonConverter))]
         [JsonProperty(PropertyName = "RRDT")]
-        public string RRDT { get; set; }
+        public System.DateTime? RRDT { get; set; }
 
         /// <summary>
         /// </summary>

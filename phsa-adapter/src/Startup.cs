@@ -89,25 +89,30 @@ namespace Rsbc.Dmf.PhsaAdapter
                     options.OutputFormatters.Add(new AsyncResourceJsonOutputFormatter());
                     options.OutputFormatters.Add(new BinaryOutputFormatter());
                 })
-                /*
+                
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.Formatting = Formatting.Indented;
                     opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
                     opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
 
+                    opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
                     // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                     opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                });
-                */
+                })
+                
              // JSON.NET
+                /*
             .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.WriteIndented = true;
+                {
+                    options.JsonSerializerOptions.WriteIndented = true;
                 options.JsonSerializerOptions.Converters.Insert(0,
                     new JsonStringEnumConverter()
                 );
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
+            })*/
+                
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
             
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
