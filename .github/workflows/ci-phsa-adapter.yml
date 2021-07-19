@@ -17,5 +17,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        working-directory: ./
-        run: docker build phsa-adapter/src --file Dockerfile --tag $IMAGE_NAME
+        run: docker build ./phsa-adapter/src --file ./phsa-adapter/src/Dockerfile --tag $IMAGE_NAME
