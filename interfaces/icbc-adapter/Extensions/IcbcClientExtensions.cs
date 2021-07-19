@@ -24,10 +24,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
                 Formatting = Formatting.Indented,
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-
                 NullValueHandling = NullValueHandling.Ignore,
-
-                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             };
 
