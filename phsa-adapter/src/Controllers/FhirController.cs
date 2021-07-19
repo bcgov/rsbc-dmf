@@ -20,20 +20,7 @@ using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
 using static Hl7.Fhir.Model.CapabilityStatement;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-/*
-namespace Hl7.Fhir.Model
-{
-    public partial class Resource
-    {
-        public Resource()
-        {
-            // just here for JSON...
-            int i = 1;
-            i++;
-        }
-    }
-}
-*/
+
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
 
