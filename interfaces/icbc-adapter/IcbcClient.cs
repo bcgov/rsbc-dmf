@@ -177,7 +177,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<CLNT>> GetDriverWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<CLNTRESPONSE>> GetDriverWithHttpMessagesAsync(string id, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (id == null)
             {
@@ -257,7 +257,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<CLNT>();
+            var _result = new HttpOperationResponse<CLNTRESPONSE>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -266,7 +266,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<CLNT>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<CLNTRESPONSE>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {

@@ -9,20 +9,20 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CLNTINAM
+    public partial class INAM
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTINAM class.
+        /// Initializes a new instance of the INAM class.
         /// </summary>
-        public CLNTINAM()
+        public INAM()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTINAM class.
+        /// Initializes a new instance of the INAM class.
         /// </summary>
-        public CLNTINAM(string sURN = default(string), string gIV1 = default(string), string gIV3 = default(string), string gIV2 = default(string))
+        public INAM(string sURN = default(string), string gIV1 = default(string), string gIV3 = default(string), string gIV2 = default(string))
         {
             SURN = sURN;
             GIV1 = gIV1;

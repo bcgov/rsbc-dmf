@@ -11,20 +11,20 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class CLNTADDR
+    public partial class ADDR
     {
         /// <summary>
-        /// Initializes a new instance of the CLNTADDR class.
+        /// Initializes a new instance of the ADDR class.
         /// </summary>
-        public CLNTADDR()
+        public ADDR()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the CLNTADDR class.
+        /// Initializes a new instance of the ADDR class.
         /// </summary>
-        public CLNTADDR(string sTDI = default(string), string sTTY = default(string), string sITE = default(string), int? sTNO = default(int?), string rURR = default(string), string pOST = default(string), string sTNM = default(string), string bUNO = default(string), string pROV = default(string), string aPR3 = default(string), string cNTY = default(string), string pOBX = default(string), string cOMP = default(string), string aPR1 = default(string), string aPR2 = default(string), System.DateTime? eFDT = default(System.DateTime?), string cITY = default(string), string pSTN = default(string))
+        public ADDR(string sTDI = default(string), string sTTY = default(string), string sITE = default(string), string sTNO = default(string), string rURR = default(string), string pOST = default(string), string sTNM = default(string), string bUNO = default(string), string pROV = default(string), string aPR3 = default(string), string cNTY = default(string), string pOBX = default(string), string cOMP = default(string), string aPR1 = default(string), string aPR2 = default(string), System.DateTime? eFDT = default(System.DateTime?), string cITY = default(string), string pSTN = default(string))
         {
             STDI = sTDI;
             STTY = sTTY;
@@ -70,7 +70,7 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "STNO")]
-        public int? STNO { get; set; }
+        public string STNO { get; set; }
 
         /// <summary>
         /// </summary>
