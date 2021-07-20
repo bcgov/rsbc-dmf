@@ -236,45 +236,13 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
-            
-            // get the ICBC data
-            var x = new CLNT()
-            {
-                INAM = new INAM()
-                {
-                    SURN = "asdf",
-                    GIV1 = "asdf"
-                },
-                DR1MST = new DR1MST()
-                {
-                    LNUM = 1234
-                },
-                BIDT = DateTime.Now,
-                ADDR = new ADDR()
-                {
-                    STNO = "1234",
-                    STNM = "asdf",
-                    STTY = "asdf",
-                    POST = "asdf"
-                }
-            };
 
-            var jss = new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+            // in future the id would be looked up in the case management system and then dl number, phn number retrieved.
 
-                NullValueHandling = NullValueHandling.Ignore,
-
-                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            };
-
-            var s = JsonConvert.SerializeObject(x, jss);
+            string icbcDl = Configuration["TEST_DL"];
 
 
-            var icbcData = IcbcClient.GetDriver(Configuration["TEST_DL"]);
+            var icbcData = IcbcClient.GetDriver(icbcDl);
 
             string driverBirthDate = "";
             if (icbcData?.CLNT?.BIDT != null)
@@ -331,7 +299,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientAlternateEmailUse", "work"},
                     {"textTargetDriverName", $"{icbcData?.CLNT?.INAM?.SURN}"},
                     {"textTargetDriverFirstname", $"{icbcData?.CLNT?.INAM?.GIV1}"},
-                    {"textTargetDriverLicense",$"{icbcData?.CLNT?.DR1MST?.LNUM}"},
+                    {"textTargetDriverLicense",$"{icbcDl}"},
                     {"radioTargetDriverGender",$"{driverGender}"},
                     {"tDateTargetDriverBirthdate", $"{driverBirthDate}"},
                     {"selTargetDriverCountry", "Canada"},
