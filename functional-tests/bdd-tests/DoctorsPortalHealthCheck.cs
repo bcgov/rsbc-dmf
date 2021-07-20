@@ -68,6 +68,12 @@ namespace bdd_tests
             {
                 ngDriver.WrappedDriver.PageSource.Contains("PASS! No Clean Pass responses failed.");
             }
+
+            if (contentType == "the ICBC tombstone data")
+            {
+                // find drivers licence
+                var driversLicence = ngDriver.WrappedDriver.FindElement(By.Id("e9egu0c-textTargetDriverLicense"));
+            }
         }
 
 
