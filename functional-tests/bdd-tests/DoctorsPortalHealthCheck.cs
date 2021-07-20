@@ -121,22 +121,6 @@ namespace bdd_tests
         }
 
 
-        [And(@"I select the RoadSafetyBC environment")]
-        public void SelectRSBC()
-        {
-            var selectRSBC = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[1]/label/select/option[10]"));
-            selectRSBC.Click();
-        }
-
-
-        [And(@"I select the Testing Resources Quality Assurance form")]
-        public void TstingForm()
-        {
-            var selectForm = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[2]/label/select/option[4]"));
-            selectForm.Click();
-        }
-
-
         [And(@"I click on the Visual Assessment tab")]
         public void VisualAssessmentTab()
         {
