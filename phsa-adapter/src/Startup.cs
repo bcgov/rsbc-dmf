@@ -2,6 +2,8 @@ using HealthChecks.UI.Client;
 using Hl7.Fhir.Serialization;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -113,9 +115,11 @@ namespace Rsbc.Dmf.PhsaAdapter
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
 
-            services.AddAuthentication("introspection")
+            services.AddAuthentication()
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { })
                 .AddOAuth2Introspection("introspection", options =>
                 {
+                    options.SkipTokensWithDots = true;
                     Configuration.GetSection("auth").Bind(options);
                     options.TokenRetriever = req =>
                     {
@@ -136,8 +140,11 @@ namespace Rsbc.Dmf.PhsaAdapter
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiScope", policy =>
+                options.AddPolicy("BasicAuthentication",
+                    new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
+                options.AddPolicy("OAuth", policy =>
                 {
+                    policy.AddAuthenticationSchemes("introspection");
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "phsa-adapter");
                 });
@@ -228,7 +235,7 @@ namespace Rsbc.Dmf.PhsaAdapter
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization("ApiScope"); ;
+                endpoints.MapControllers();
             });
         }
 

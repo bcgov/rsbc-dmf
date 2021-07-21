@@ -33,6 +33,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize("OAuth")]
     public class FhirController : ControllerBase
     {
         private readonly ILogger<ReceiveController> _logger;
