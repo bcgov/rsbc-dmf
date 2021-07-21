@@ -91,6 +91,8 @@ namespace bdd_tests
 
                 // confirm value of driver's surname
                 var driverSurname = ngDriver.WrappedDriver.FindElement(By.Id("ejdutis-textTargetDriverName"));
+                var executor = (IJavaScriptExecutor)ngDriver.WrappedDriver;
+                executor.ExecuteScript("document.getElementId('myfield1ID').value;", driverSurname);
                 // Assert.True(driverSurname.GetAttribute("value") == "PAKKER");
 
                 // confirm value of driver's given name
