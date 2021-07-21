@@ -52,6 +52,9 @@ export class ConfigurationService {
         responseType: 'code',
         scope: c.oidcConfiguration?.scope || undefined,
         showDebugInformation: !environment.production,
+        customQueryParams: {
+          acr_values: 'idp:bcsc',
+        }
       };
     }));
   }
