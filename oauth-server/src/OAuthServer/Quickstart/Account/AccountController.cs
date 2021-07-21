@@ -1,7 +1,6 @@
 // Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
-
 using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.Events;
@@ -44,7 +43,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            _users = users;//?? new TestUserStore(TestUsers.Users);
 
             _interaction = interaction;
             _clientStore = clientStore;
@@ -85,7 +84,7 @@ namespace IdentityServerHost.Quickstart.UI
             {
                 if (context != null)
                 {
-                    // if the user cancels, send a result back into IdentityServer as if they 
+                    // if the user cancels, send a result back into IdentityServer as if they
                     // denied the consent (even if this client does not require consent).
                     // this will send back an access denied OIDC error response to the client.
                     await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
@@ -115,7 +114,7 @@ namespace IdentityServerHost.Quickstart.UI
                     var user = _users.FindByUsername(model.Username);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(user.Username, user.SubjectId, user.Username, clientId: context?.Client.ClientId));
 
-                    // only set explicit expiration here if user chooses "remember me". 
+                    // only set explicit expiration here if user chooses "remember me".
                     // otherwise we rely upon expiration configured in cookie middleware.
                     AuthenticationProperties props = null;
                     if (AccountOptions.AllowRememberLogin && model.RememberLogin)
@@ -172,7 +171,6 @@ namespace IdentityServerHost.Quickstart.UI
             var vm = await BuildLoginViewModelAsync(model);
             return View(vm);
         }
-
 
         /// <summary>
         /// Show logout page
@@ -233,10 +231,10 @@ namespace IdentityServerHost.Quickstart.UI
             return View();
         }
 
-
         /*****************************************/
         /* helper APIs for the AccountController */
         /*****************************************/
+
         private async Task<LoginViewModel> BuildLoginViewModelAsync(string returnUrl)
         {
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);

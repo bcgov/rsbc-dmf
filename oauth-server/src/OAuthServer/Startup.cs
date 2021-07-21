@@ -66,7 +66,7 @@ namespace OAuthServer
                 ;
 
             // not recommended for production - you need to store your key material somewhere secure
-            //builder.AddDeveloperSigningCredential();
+            builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
