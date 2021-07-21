@@ -49,9 +49,9 @@ export class LoginService {
 
   public getUserProfile(): IUserProfile {
     return {
-      firstName: 'first',
-      lastName: 'last',
-      role: 'role'
+      firstName: 'First',
+      lastName: 'Last',
+      role: 'Role'
     };
   }
 }
