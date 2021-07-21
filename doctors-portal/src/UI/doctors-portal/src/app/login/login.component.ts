@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { LoginService } from '../login.service';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-login',

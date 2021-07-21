@@ -1,14 +1,14 @@
-<header>
+<header *ngIf="!isLoading">
   <app-header [showProfile]="showProfile()"></app-header>
   <div class="page-divider"></div>
 </header>
-<nav *ngIf="showNavigation()">
+<nav *ngIf="!isLoading && showNavigation()">
   <app-nav-menu></app-nav-menu>
 </nav>
 <main *ngIf="!isLoading">
   <router-outlet></router-outlet>
 </main>
-<footer>
+<footer *ngIf="!isLoading">
   <div class="page-divider"></div>
   <app-footer></app-footer>
 </footer>

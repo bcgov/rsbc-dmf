@@ -11,6 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,13 @@ import { HttpClientModule } from '@angular/common/http';
     SharedModule,
     PortalLayoutModule,
     HttpClientModule,
-    ApiModule.forRoot({ rootUrl: '' })
+    ApiModule.forRoot({ rootUrl: '' }),
+    OAuthModule.forRoot({
+      resourceServer: {
+        sendAccessToken: true,
+        customUrlValidation: url => url.toLowerCase().startsWith('/api') && !url.toLowerCase().endsWith('/config'),
+      }
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
