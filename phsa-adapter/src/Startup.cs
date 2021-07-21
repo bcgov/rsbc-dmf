@@ -116,7 +116,8 @@ namespace Rsbc.Dmf.PhsaAdapter
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
 
             services.AddAuthentication()
-                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", options => { })
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",
+                    options => { })
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     options.SkipTokensWithDots = true;
@@ -233,10 +234,7 @@ namespace Rsbc.Dmf.PhsaAdapter
             app.UseAuthorization();
             app.UseMiddleware<FormatTypeHandler>();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private async Task<string> ExtractUserReferenceTokenFromPhsaToken(string phsaReferenceToken)
