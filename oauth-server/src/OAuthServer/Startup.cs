@@ -2,7 +2,6 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityServer4;
-using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -11,8 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Linq;
 
 namespace OAuthServer
 {
@@ -40,10 +37,12 @@ namespace OAuthServer
                 options.Events.RaiseFailureEvents = true;
                 options.Events.RaiseSuccessEvents = true;
 
+                options.UserInteraction.LoginUrl = "~/login";
+
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 //options.EmitStaticAudienceClaim = true;
             })
-                .AddTestUsers(Array.Empty<TestUser>().ToList())
+                //.AddTestUsers(Array.Empty<TestUser>().ToList())
                 //// this adds the config data from DB (clients, resources, CORS)
                 //.AddConfigurationStore(options =>
                 //{
@@ -65,8 +64,11 @@ namespace OAuthServer
                 .AddInMemoryCaching()
                 ;
 
-            // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
+            services.AddOidcStateDataFormatterCache();
+            services.AddDistributedMemoryCache();
+            services.AddResponseCompression();
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
@@ -91,8 +93,6 @@ namespace OAuthServer
                     options.Scope.Add("address");
                     options.Scope.Add("email");
                 });
-
-            services.AddDatabaseDeveloperPageExceptionFilter();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -102,11 +102,23 @@ namespace OAuthServer
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseStaticFiles();
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opts => opts.NoReferrer());
+            app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
+
+            app.UseXfo(xfo => xfo.SameOrigin());
+            app.UseXRobotsTag(options => options.NoIndex().NoFollow());
+
+            app.UseCsp(opts => opts.BlockAllMixedContent());
+
+            app.UseResponseCompression();
+            app.UseCookiePolicy();
 
             app.UseRouting();
             app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
