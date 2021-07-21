@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -41,43 +40,23 @@ namespace RSBC.DMF.DoctorsPortal.API
                     };
 
                     options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    // if token does not contain a dot, it is a reference token
+                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
                     options.ForwardDefaultSelector = ctx =>
                     {
                         var authHeader = (string)ctx.Request.Headers["Authorization"];
                         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
                         return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
                     };
-                    options.Events = new JwtBearerEvents
-                    {
-                        //OnTokenValidated = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //    var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<OAuth2IntrospectionDefaults>>();
-                        //    logger.LogInformation("jwt token validated: {0}", ctx.Principal.Identity.Name);
-                        //}
-                    };
                 })
-
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     configuration.GetSection("auth:introspection").Bind(options);
-
-                    //options.Events = new OAuth2IntrospectionEvents
-                    //{
-                    //    OnTokenValidated = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //        var logger = ctx.HttpContext.RequestServices.GetRequiredService<ILogger<OAuth2IntrospectionDefaults>>();
-                    //        logger.LogInformation("introspection token validated: {0}", ctx.Principal.Identity.Name);
-                    //    }
-                    //};
                 });
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("ApiScope", policy =>
+                options.AddPolicy("OAuth", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     policy.RequireClaim("scope", "doctors-portal-api");
@@ -167,7 +146,7 @@ namespace RSBC.DMF.DoctorsPortal.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization("ApiScope");
+                endpoints.MapControllers().RequireAuthorization("OAuth");
                 endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
                 {
                     Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)
