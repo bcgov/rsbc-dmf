@@ -2,13 +2,17 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 using IdentityServer4;
-using IdentityServerHost.Quickstart.UI;
+using IdentityServer4.Test;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Linq;
 
 namespace OAuthServer
 {
@@ -39,7 +43,7 @@ namespace OAuthServer
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 //options.EmitStaticAudienceClaim = true;
             })
-                .AddTestUsers(TestUsers.Users)
+                .AddTestUsers(Array.Empty<TestUser>().ToList())
                 //// this adds the config data from DB (clients, resources, CORS)
                 //.AddConfigurationStore(options =>
                 //{
@@ -62,18 +66,30 @@ namespace OAuthServer
                 ;
 
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            //builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
-                .AddGoogle(options =>
+                .AddOpenIdConnect("bcsc", options =>
                 {
+                    options.ClientId = "ca.bc.gov.pssg.dmfw.dev";
+                    options.ClientSecret = "geuRHzWFbMfsO8jo0gLW";
+                    options.MetadataAddress = "https://idtest.gov.bc.ca/login/.well-known/openid-configuration";
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.UseTokenLifetime = true;
+                    options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
 
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        NameClaimType = "name",
+                        RoleClaimType = "role"
+                    };
+
+                    //add required scopes
+                    options.Scope.Add("address");
+                    options.Scope.Add("email");
                 });
 
             services.AddDatabaseDeveloperPageExceptionFilter();

@@ -61,7 +61,8 @@ namespace OAuthServer
                     // AllowOfflineAccess = true,
                     AllowedScopes = { "openid", "profile", "email", "doctors-portal-api", "phsa-adapter" },
 
-                    AllowedCorsOrigins = { "http://localhost:3200" }
+                    AllowedCorsOrigins = { "http://localhost:3200" },
+                    EnableLocalLogin = false,
                 },
             };
     }

@@ -46,4 +46,18 @@ export class LoginService {
   public getUserSession(): string {
     return btoa(this.oauthService.getAccessToken());
   }
+
+  public getUserProfile(): IUserProfile {
+    return {
+      firstName: 'first',
+      lastName: 'last',
+      role: 'role'
+    };
+  }
+}
+
+export interface IUserProfile {
+  firstName: string,
+  lastName: string,
+  role: string
 }
