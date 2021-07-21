@@ -1,11 +1,8 @@
-﻿using System.IO;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Hl7.Fhir.Model;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -21,7 +18,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         }
 
         [HttpPost]
-        [BasicAuthorization]
         public async Task<IActionResult> Post()
         {
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -31,7 +27,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 // TODO - centralize the receive bundle code.
 
                 _logger.LogInformation(body);
-
             }
 
             return Ok();
