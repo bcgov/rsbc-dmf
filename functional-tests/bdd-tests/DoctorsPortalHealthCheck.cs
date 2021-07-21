@@ -71,8 +71,10 @@ namespace bdd_tests
 
             if (contentType == "the ICBC tombstone data")
             {
+                ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
                 NgWebElement driversLicence = null;
-                for (var i = 0; i < 20; i++)
+                for (var i = 0; i < 30; i++)
                     try
                     {
                         var names = ngDriver.FindElements(By.Id("e9egu0c-textTargetDriverLicense"));
