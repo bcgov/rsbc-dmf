@@ -1,0 +1,20 @@
+name: ci-document-triage-service
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "document-triage-service/src/**"
+      - ".github/workflows/ci-document-triage-service.yml"
+
+env:
+  IMAGE_NAME: document-triage-service
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file ./document-triage-service/src/Dockerfile --tag $IMAGE_NAME
