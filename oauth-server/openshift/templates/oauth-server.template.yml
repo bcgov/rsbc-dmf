@@ -149,9 +149,6 @@ objects:
               volumeMounts:
                 - mountPath: /dpkeys
                   name: dp-keys
-                - mountPath: /ssl
-                  name: ssl
-                  readonly: true
               livenessProbe:
                 httpGet:
                   scheme: HTTP
