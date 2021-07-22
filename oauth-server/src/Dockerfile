@@ -14,4 +14,5 @@ WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 COPY --from=build /app/publish .
+RUN chmod a+rwx -R ./Data
 ENTRYPOINT ["dotnet", "OAuthServer.dll"]
