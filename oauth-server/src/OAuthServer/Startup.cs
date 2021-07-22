@@ -107,10 +107,9 @@ namespace OAuthServer
                 .DefaultSources(opts => opts.Self().CustomSources("https://*.gov.bc.ca", "https://*.bcgov"))
                 .BlockAllMixedContent());
 
-            app.UseCors(opts => opts.AllowAnyOrigin());
-
             app.UseResponseCompression();
             app.UseCookiePolicy();
+            app.UseForwardedHeaders();
 
             app.UseRouting();
             app.UseIdentityServer();
