@@ -1,9 +1,11 @@
 ﻿using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
@@ -14,6 +16,7 @@ namespace OAuthServer
 {
     public class Startup
     {
+        private const string HealthCheckReadyTag = "ready";
         public IWebHostEnvironment Environment { get; }
         public IConfiguration Configuration { get; }
 
@@ -82,6 +85,8 @@ namespace OAuthServer
                     options.Scope.Add("address");
                     options.Scope.Add("email");
                 });
+
+            services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
         }
 
         public void Configure(IApplicationBuilder app)
@@ -111,6 +116,15 @@ namespace OAuthServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
+                {
+                    Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)
+                });
+
+                endpoints.MapHealthChecks("/hc/live", new HealthCheckOptions()
+                {
+                    Predicate = (_) => false
+                });
             });
         }
     }
