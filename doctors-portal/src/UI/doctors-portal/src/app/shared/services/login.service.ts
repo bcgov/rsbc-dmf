@@ -10,7 +10,6 @@ import { ConfigurationService } from './configuration.service';
 })
 export class LoginService {
   constructor(
-    private router: Router,
     private oauthService: OAuthService,
     private configService: ConfigurationService
   ) { }
@@ -37,10 +36,6 @@ export class LoginService {
 
   public isLoggedIn(): boolean {
     return this.oauthService.hasValidIdToken();
-  }
-
-  public setLoggedIn(): void {
-    this.router.navigate(['/']);
   }
 
   public getUserSession(): string {
