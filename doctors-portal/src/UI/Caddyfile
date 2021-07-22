@@ -25,6 +25,7 @@
 
 	route {
 		reverse_proxy /api* {$API_URL}
+		uri strip_prefix /rsbc-dfp-medical-portal
 		try_files {path} {path}/ /index.html?{query}
 	}
 	
