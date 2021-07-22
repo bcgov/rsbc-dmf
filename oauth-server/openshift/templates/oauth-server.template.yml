@@ -71,7 +71,7 @@ objects:
       name: ${APP_NAME}-oauth-server
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-oidc-${APP_NAME}.apps.silver.devops.bcgov
+      host: rsbc-dfp-oidc-${APP_NAME}.silver.devops.bcgov
       path: /
       port:
         targetPort: 8080-tcp

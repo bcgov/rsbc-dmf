@@ -46,7 +46,6 @@
       "Scopes": [
         "phsa-adapter"
       ],
-
       "UserClaims": [
         "name",
         "family_name",
@@ -64,7 +63,10 @@
       ],
       "RequirePkce": true,
       "RedirectUris": [
-        "http://localhost:3200/"
+        "http://localhost:3200/",
+        "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
+        "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal/",
+        "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal"
       ],
       "AllowedScopes": [
         "openid",
@@ -74,7 +76,9 @@
         "phsa-adapter"
       ],
       "AllowedCorsOrigins": [
-        "http://localhost:3200"
+        "http://localhost:3200",
+        "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
+        "https://dev.justice.gov.bc.ca"
       ]
     }
   ]
