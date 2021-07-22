@@ -127,7 +127,7 @@ objects:
       name: ${APP_NAME}-doctors-portal-api
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.apps.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
       path: /api
       port:
         targetPort: 8080-tcp
@@ -149,7 +149,7 @@ objects:
       name: ${APP_NAME}-doctors-portal-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.apps.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
       path: /
       port:
         targetPort: 2015-tcp
