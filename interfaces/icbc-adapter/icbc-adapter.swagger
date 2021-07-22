@@ -1,0 +1,264 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "JAG ICBC Adapter",
+    "version": "1.0.1"
+  },
+  "host": "localhost",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/icbcadapter/v3/drivers/{id}": {
+      "get": {
+        "tags": [
+          "GetDriver"
+        ],
+        "operationId": "GetDriver",
+        "consumes": [
+          "application/json",
+          "text/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retrieved entity",
+            "schema": {
+              "$ref": "#/definitions/CLNTRESPONSE"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ADDR": {
+      "type": "object",
+      "properties": {
+        "STDI": {
+          "type": "string"
+        },
+        "STTY": {
+          "type": "string"
+        },
+        "SITE": {
+          "type": "string"
+        },
+        "STNO": {
+          "type": "string"
+        },
+        "RURR": {
+          "type": "string"
+        },
+        "POST": {
+          "type": "string"
+        },
+        "STNM": {
+          "type": "string"
+        },
+        "BUNO": {
+          "type": "string"
+        },
+        "PROV": {
+          "type": "string"
+        },
+        "APR3": {
+          "type": "string"
+        },
+        "CNTY": {
+          "type": "string"
+        },
+        "POBX": {
+          "type": "string"
+        },
+        "COMP": {
+          "type": "string"
+        },
+        "APR1": {
+          "type": "string"
+        },
+        "APR2": {
+          "type": "string"
+        },
+        "EFDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "CITY": {
+          "type": "string"
+        },
+        "PSTN": {
+          "type": "string"
+        }
+      }
+    },
+    "INAM": {
+      "type": "object",
+      "properties": {
+        "SURN": {
+          "type": "string"
+        },
+        "GIV1": {
+          "type": "string"
+        },
+        "GIV3": {
+          "type": "string"
+        },
+        "GIV2": {
+          "type": "string"
+        }
+      }
+    },
+    "DR1STAT": {
+      "type": "object",
+      "properties": {
+        "EFDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "EXDS": {
+          "type": "string"
+        },
+        "NMCD": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "SECT": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "SRDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "NECD": {
+          "type": "string"
+        }
+      }
+    },
+    "DR1MST": {
+      "type": "object",
+      "properties": {
+        "MSCD": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "RSCD": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "RRDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "LNUM": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "DR1STAT": {
+          "type": "object",
+          "$ref": "#/definitions/DR1STAT"
+        },
+        "LCLS": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "DR1MEDN": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/DR1MEDNITEM"
+          }
+        }
+      }
+    },
+    "DR1MEDNITEM": {
+      "type": "object",
+
+      "properties": {
+        "MDSP": {
+          "type": "string"
+        },
+        "MDSP-DESC": {
+          "type": "string"
+        },
+        "ISOF": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "ISOF-DESC": {
+          "type": "string"
+        },
+        "MIDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "MEDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "PGN2": {
+          "type": "string"
+        },
+        "PGN1": {
+          "type": "string"
+        }
+      }
+    },
+    "CLNTRESPONSE": {
+      "type": "object",
+      "properties": {
+        "CLNT": {
+          "type": "object",
+          "$ref": "#/definitions/CLNT"
+        }
+      }
+    },
+    "CLNT": {
+      "type": "object",
+      "properties": {
+        "INAM": {
+          "type": "object",
+          "$ref": "#/definitions/INAM"
+        },
+        "WGHT": {
+          "type": "number"
+        },
+        "SEX": {
+          "type": "string"
+        },
+        "BIDT": {
+          "type": "string",
+          "format": "date"
+        },
+        "HGHT": {
+          "type": "number"
+        },
+        "SECK": {
+          "type": "string"
+        },
+        "ADDR": {
+          "type": "object",
+          "$ref": "#/definitions/ADDR"
+        },
+        "DR1MST": {
+          "type": "object",
+          "$ref": "#/definitions/DR1MST"
+        }
+      }
+    }
+  }
+}

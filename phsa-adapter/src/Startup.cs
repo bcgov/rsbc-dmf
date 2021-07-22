@@ -18,6 +18,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using Rsbc.Dmf.PhsaAdapter.Formatters;
 using Rsbc.Dmf.PhsaAdapter.Handlers;
 using Serilog;
@@ -31,7 +33,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.PhsaAdapter
@@ -92,25 +93,18 @@ namespace Rsbc.Dmf.PhsaAdapter
                     options.OutputFormatters.Add(new AsyncResourceJsonOutputFormatter());
                     options.OutputFormatters.Add(new BinaryOutputFormatter());
                 })
-            /*
-            .AddNewtonsoftJson(opts =>
-            {
-                opts.SerializerSettings.Formatting = Formatting.Indented;
-                opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
-                opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
 
-                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
-                opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            });
-            */
-            // JSON.NET
-            .AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.WriteIndented = true;
-                options.JsonSerializerOptions.Converters.Insert(0,
-                    new JsonStringEnumConverter()
-                );
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.Formatting = Formatting.Indented;
+                    opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+
+                    opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+                    // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                    opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
@@ -159,6 +153,10 @@ namespace Rsbc.Dmf.PhsaAdapter
             // health checks.
             services.AddHealthChecks()
                 .AddCheck("phsa-adapter", () => HealthCheckResult.Healthy("OK"));
+
+            // Add ICBC adapter
+
+            services.AddHttpClient<IIcbcClient, IcbcClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

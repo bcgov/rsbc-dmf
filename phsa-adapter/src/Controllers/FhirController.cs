@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,6 @@ using System.IO;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-
-/*
-namespace Hl7.Fhir.Model
-{
-    public partial class Resource
-    {
-        public Resource()
-        {
-            // just here for JSON...
-            int i = 1;
-            i++;
-        }
-    }
-}
-*/
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -39,11 +25,13 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private readonly ILogger<ReceiveController> _logger;
         private readonly IConfiguration Configuration;
         private readonly IStructureDefinitionSummaryProvider _provider = new PocoStructureDefinitionSummaryProvider();
+        private readonly IIcbcClient IcbcClient;
 
-        public FhirController(ILogger<ReceiveController> logger, IConfiguration configuration)
+        public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration)
         {
             _logger = logger;
             Configuration = configuration;
+            IcbcClient = icbcClient;
         }
 
         [HttpGet("metadata")]
@@ -177,6 +165,31 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return new JsonResult(result);
         }
 
+        private string ConvertGenderToString(string gender)
+        {
+            string result;
+            switch (gender)
+            {
+                case "M":
+                    result = "male";
+                    break;
+
+                case "F":
+                    result = "female";
+                    break;
+
+                case "O":
+                    result = "other";
+                    break;
+
+                default:
+                    result = "unknown";
+                    break;
+            }
+
+            return result;
+        }
+
         /// <summary>
         ///
         /// GET bundle.This will need to provide the following fields:
@@ -210,13 +223,27 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Bundle/{id}")]
-        public FhirResponse GetBundle([FromRoute] string id)
+        public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
-            /*
-             * Issues - meta is null,
-             * Identifier needs to be added
-             */
+
+            // in future the id would be looked up in the case management system and then dl number, phn number retrieved.
+
+            string icbcDl = Configuration["TEST_DL"];
+
+            var icbcData = IcbcClient.GetDriver(icbcDl);
+
+            string driverBirthDate = "";
+            if (icbcData?.CLNT?.BIDT != null)
+            {
+                driverBirthDate = icbcData.CLNT.BIDT.Value.ToString("yyyy-MM-dd");
+            }
+
+            string driverGender = "";
+            if (icbcData.CLNT?.SEX != null)
+            {
+                driverGender = ConvertGenderToString(icbcData.CLNT?.SEX);
+            }
 
             Payload payload = new Payload
             {
@@ -259,17 +286,17 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientPrimaryEmailUse", "home"},
                     {"patientAlternateEmail", "patientAlternateEmail"},
                     {"patientAlternateEmailUse", "work"},
-                    {"textTargetDriverName", "DriverLastName"},
-                    {"textTargetDriverFirstname", "DriverFirstname"},
-                    {"textTargetDriverLicense","5888888"},
-                    {"radioTargetDriverGender","male"},
-                    {"tDateTargetDriverBirthdate", "1999-01-01"},
+                    {"textTargetDriverName", $"{icbcData?.CLNT?.INAM?.SURN}"},
+                    {"textTargetDriverFirstname", $"{icbcData?.CLNT?.INAM?.GIV1}"},
+                    {"textTargetDriverLicense",$"{icbcDl}"},
+                    {"radioTargetDriverGender",$"{driverGender}"},
+                    {"tDateTargetDriverBirthdate", $"{driverBirthDate}"},
                     {"selTargetDriverCountry", "Canada"},
                     {"textTargetDriverProvince", "British Columbia"},
-                    {"textTargetDriverCity", "Victoria"},
-                    {"textTargetDriverAddr1", "textTargetDriverAddr1"},
-                    {"textTargetDriverAddr2", "textTargetDriverAddr2"},
-                    {"textTargetDriverPostal", "V1V 1V1"},
+                    {"textTargetDriverCity", icbcData?.CLNT?.ADDR?.CITY},
+                    {"textTargetDriverAddr1", $"{icbcData?.CLNT?.ADDR?.STNO} {icbcData?.CLNT?.ADDR?.STNM} {icbcData?.CLNT?.ADDR?.STTY}"}, //  {icbcData?.ADDR.STDI}
+                    {"textTargetDriverAddr2", ""},
+                    {"textTargetDriverPostal", $"{icbcData?.CLNT?.ADDR?.POST}"},
                     {"textTargetKnownNotice", "textTargetKnownNotice"},
                     {"selectMISC_0_0", "selectMISC_0_0y"},
                     {"yornMISC_1_1", "yornMISC_1_1"},

@@ -1,0 +1,200 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: oauth-server-template
+
+parameters:
+  - description: openshift namespace prefix
+    name: NAMESPACE_PREFIX
+    required: true
+  - description: openshift namespace env name
+    name: ENV
+    required: true
+  - description: app name
+    name: APP_NAME
+    required: true
+  - description: image tag for deployments
+    name: TAG
+    required: true
+  - description: ASPNET runtime environment (Development/Staging/Production)
+    name: RUNTIME_ENVIRONMENT
+    value: Staging
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-oauth-server-config
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+    data:
+      ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
+      KEY_RING_PATH: "/dpkeys"
+
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+      name: ${APP_NAME}-oauth-server-secrets
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+    stringData:
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-oauth-server
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${APP_NAME}-oauth-server
+      type: ClusterIP
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-oauth-server
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      host: rsbc-dfp-oauth-server-${APP_NAME}.silver.devops.bcgov
+      path: /
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}-oauth-server
+        weight: 100
+      wildcardPolicy: None
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${APP_NAME}-oauth-server
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      podSelector:
+        matchLabels:
+          app: ${APP_NAME}-oauth-server
+      policyTypes:
+        - Ingress
+      ingress:
+        - from:
+            - podSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: ${APP_NAME}
+                  role: api
+          ports:
+            - protocol: TCP
+              port: 8080
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-oauth-server
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${APP_NAME}-oauth-server
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-oauth-server
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-oauth-server
+        spec:
+          containers:
+            - name: oauth-server
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}-oauth-server-config
+                - secretRef:
+                    name: ${APP_NAME}-oauth-server-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/oauth-server:${TAG}
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /dpkeys
+                  name: dp-keys
+                - mountPath: /ssl
+                  name: ssl
+                  readonly: true
+              livenessProbe:
+                httpGet:
+                  scheme: HTTP
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  scheme: HTTP
+                  path: /hc/ready
+                  port: 8080
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: dp-keys
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-oauth-server-key-ring
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - oauth-server
+            from:
+              kind: ImageStreamTag
+              name: oauth-server:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-oauth-server-key-ring
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-oauth-server
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "100Mi"
