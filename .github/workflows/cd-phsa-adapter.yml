@@ -9,8 +9,9 @@ on:
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-    paths:
+    paths:    
       - "phsa-adapter/**"
+      - "interfaces/icbc-adapter/**"
       - ".github/workflows/cd-phsa-adapter.yml"
 
 env:
@@ -32,8 +33,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./phsa-adapter/src
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build . --file ./phsa-adapter/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |
