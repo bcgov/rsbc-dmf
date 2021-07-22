@@ -19,6 +19,12 @@ Scenario: Doctors' Portal Health Check with Cert
     And I enter the login credentials
     And I click on the Submit button
     And the content is displayed for the DMER dashboard
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I click on the Known Medical Conditions and Histories tab
+    And I refresh the page
+    And the content is displayed for the ICBC tombstone data
     Then I log out of the portal
 
 Scenario: Vision Assessment
@@ -29,8 +35,6 @@ Scenario: Vision Assessment
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
     And I refresh the page
-    And I select the RoadSafetyBC environment
-    And I select the Testing Resources Quality Assurance form
     And I click on the Visual Assessment tab
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button

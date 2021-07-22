@@ -1,21 +1,56 @@
 ﻿using OpenQA.Selenium;
 using Protractor;
 using System;
+using System.Threading;
 using Xunit;
 using Xunit.Gherkin.Quick;
 
 /*
 Feature: DoctorsPortalHealthCheck
     As a medical professional
-    I want to confirm that I can view the doctors' portal
+    I want to test the doctors' portal
 
 @pipeline
 Scenario: Doctors' Portal Health Check
     When I click on the doctors' portal
-    And the portal is displayed
+    And the content is displayed for the doctors portal
     And I enter the login credentials
     And I click on the Submit button
-    Then the DMER dashboard is displayed
+    And the content is displayed for the DMER dashboard
+    Then I log out of the portal
+
+@browseronly
+Scenario: Doctors' Portal Health Check with Cert
+    When I click on the doctors' portal
+    And I accept the cert request
+    And the content is displayed for the doctors portal
+    And I enter the login credentials
+    And I click on the Submit button
+    And the content is displayed for the DMER dashboard
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I click on the the Known Medical Conditions and Histories tab
+    And I refresh the page
+    And the content is displayed for the ICBC tombstone data
+    Then I log out of the portal
+
+Scenario: Vision Assessment
+    When I click on the doctors' portal
+    And I accept the cert request
+    And I enter the login credentials
+    And I click on the Submit button
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I click on the Visual Assessment tab
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Next button
+    And I click on the Next button
+    And I click on the Next button
+    And the content is displayed for the DMER clean pass
+    Then I log out of the portal
 */
 
 namespace bdd_tests
@@ -68,6 +103,57 @@ namespace bdd_tests
             {
                 ngDriver.WrappedDriver.PageSource.Contains("PASS! No Clean Pass responses failed.");
             }
+
+            if (contentType == "the ICBC tombstone data")
+            {
+                Thread.Sleep(3000);
+
+                ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+                NgWebElement driversLicence = null;
+                for (var i = 0; i < 30; i++)
+                    try
+                    {
+                        var names = ngDriver.FindElements(By.Id("e9egu0c-textTargetDriverLicense"));
+                        if (names.Count > 0)
+                        {
+                            driversLicence = names[0];
+                            break;
+                        }
+                    }
+                    catch (Exception)
+                    {
+                    }
+                Assert.True(driversLicence.GetAttribute("value") == "0200700");
+
+                // confirm value of driver's surname
+                var driverSurname = ngDriver.WrappedDriver.FindElement(By.Id("ejdutis-textTargetDriverName"));
+                Assert.True(driverSurname.GetAttribute("value") == "PAKKER");
+
+                // confirm value of driver's given name
+                var driverGivenName = ngDriver.WrappedDriver.FindElement(By.Id("ewjvhp-textTargetDriverFirstname"));
+                Assert.True(driverGivenName.GetAttribute("value") == "PETER");
+
+                // confirm value of driver's date of birth
+                var driverDateOfBirth = ngDriver.WrappedDriver.FindElement(By.Id("evc5z8l-tDateTargetDriverBirthdate"));
+                Assert.True(driverDateOfBirth.GetAttribute("value") == "1987-03-26");
+
+                // confirm value of driver's gender
+                var driverGender = ngDriver.WrappedDriver.FindElement(By.Id("e1iwjqo-male"));
+                Assert.True(driverGender.GetAttribute("checked") == "true");
+
+                // confirm value of driver's city
+                var driverCity = ngDriver.WrappedDriver.FindElement(By.Id("ewoszlf-textTargetDriverCity"));
+                Assert.True(driverCity.GetAttribute("value") == "VICTORIA");
+
+                // confirm value of driver's street address 1
+                var driverStreetAddress1 = ngDriver.WrappedDriver.FindElement(By.Id("e94cf9y-textTargetDriverAddr1"));
+                Assert.True(driverStreetAddress1.GetAttribute("value") == "129 DEAN RD");
+
+                // confirm value of driver's postal code
+                var driverPostalCode = ngDriver.WrappedDriver.FindElement(By.Id("e3d39e-textTargetDriverPostal"));
+                Assert.True(driverPostalCode.GetAttribute("value") == "V8K 2K4");
+            }
         }
 
 
@@ -111,6 +197,12 @@ namespace bdd_tests
                 var caseID = ngDriver.FindElement(By.LinkText("111"));
                 caseID.Click();
             }
+
+            if (element == "the Known Medical Conditions and Histories tab")
+            {
+                var knownMedicalConditionsAndHistories = ngDriver.FindElement(By.LinkText("Known Medical Conditions and Histories"));
+                knownMedicalConditionsAndHistories.Click();
+            }
         }
 
 
@@ -118,22 +210,6 @@ namespace bdd_tests
         public void PageRefresh()
         {
             ngDriver.Navigate().Refresh();
-        }
-
-
-        [And(@"I select the RoadSafetyBC environment")]
-        public void SelectRSBC()
-        {
-            var selectRSBC = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[1]/label/select/option[10]"));
-            selectRSBC.Click();
-        }
-
-
-        [And(@"I select the Testing Resources Quality Assurance form")]
-        public void TstingForm()
-        {
-            var selectForm = ngDriver.FindElement(By.XPath("/html/body/div[1]/div/header/nav/div/div/div[2]/label/select/option[4]"));
-            selectForm.Click();
         }
 
 
