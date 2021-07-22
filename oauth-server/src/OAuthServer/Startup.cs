@@ -103,7 +103,9 @@ namespace OAuthServer
             app.UseXfo(xfo => xfo.SameOrigin());
             app.UseXRobotsTag(options => options.NoIndex().NoFollow());
 
-            app.UseCsp(opts => opts.BlockAllMixedContent());
+            app.UseCsp(opts => opts
+                .DefaultSources(opts => opts.Self().CustomSources("https://*.gov.bc.ca", "https://*.bcgov"))
+                .BlockAllMixedContent());
 
             app.UseResponseCompression();
             app.UseCookiePolicy();
