@@ -111,6 +111,7 @@ namespace OAuthServer
             app.UseCookiePolicy();
             app.UseForwardedHeaders();
 
+            app.UsePathBase(Configuration["BASE_PATH"] ?? "");
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthentication();
