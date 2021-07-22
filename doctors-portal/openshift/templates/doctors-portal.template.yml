@@ -16,9 +16,6 @@ parameters:
   - description: image tag for deployments
     name: TAG
     required: true
-  - description: Reverse proxy known network
-    name: KNOWN_NETWORKS
-    value: ::ffff:10.97.0.0/16
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
@@ -43,6 +40,12 @@ parameters:
   - description: oauth server client secret
     name: OAUTH_CLIENTSECRET
     required: true
+  - description: oidc client id
+    name: OIDC_CLIENTID
+    required: true
+  - description: oidc scopes
+    name: OIDC_SCOPE
+    value: "openid profile email phsa-adapter doctors-portal-api"
 
 objects:
   - kind: ConfigMap
@@ -75,6 +78,9 @@ objects:
       AUTH__INTROSPECTION__CLIENTID: ${OAUTH_CLIENTID}
       AUTH__INTROSPECTION__CLIENTSECRET: ${OAUTH_CLIENTSECRET}
       AUTH__TOKEN__AUTHORITY: ${OAUTH_SERVER_URL}
+      AUTH__OIDC__ISSUER: ${OAUTH_SERVER_URL}
+      AUTH__OIDC__SCOPE: ${OIDC_SCOPE}
+      AUTH__OIDC__CLIENTID: ${OIDC_CLIENTID}
 
   - kind: Service
     apiVersion: v1
@@ -121,7 +127,7 @@ objects:
       name: ${APP_NAME}-doctors-portal-api
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.apps.silver.devops.bcgov
       path: /api
       port:
         targetPort: 8080-tcp
@@ -143,7 +149,7 @@ objects:
       name: ${APP_NAME}-doctors-portal-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
+      host: rsbc-dfp-medical-portal-${APP_NAME}.apps.silver.devops.bcgov
       path: /
       port:
         targetPort: 2015-tcp
