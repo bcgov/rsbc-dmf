@@ -2,9 +2,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfigurationService } from 'src/app/shared/services/configuration.service';
-import { LoginService } from 'src/app/shared/services/login.service';
 import { ConfigurationStubService } from 'src/app/shared/stubs/configuration.service.stub';
-import { LoginStubService } from 'src/app/shared/stubs/login.service.stub';
 
 import { ViewComponent } from './view.component';
 
@@ -20,8 +18,7 @@ describe('ViewComponent', () => {
         HttpClientTestingModule
       ],
       providers: [
-        { provide: ConfigurationService, useClass: ConfigurationStubService },
-        { provide: LoginService, useClass: LoginStubService }
+        { provide: ConfigurationService, useClass: ConfigurationStubService }
       ]
     })
       .compileComponents();
