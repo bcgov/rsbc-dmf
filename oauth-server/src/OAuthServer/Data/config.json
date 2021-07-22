@@ -1,0 +1,81 @@
+{
+  "IdentityResources": [
+    {
+      "Name": "openid"
+    },
+    {
+      "Name": "profile"
+    },
+    {
+      "Name": "email"
+    }
+  ],
+  "ApiScopes": [
+    {
+      "Name": "doctors-portal-api"
+    },
+    {
+      "Name": "phsa-adapter"
+    }
+  ],
+  "ApiResources": [
+    {
+      "Name": "doctors-portal-api",
+      "ApiSecrets": [
+        {
+          "Value": "Ljl/xDyew9tA7HvWRQW47Z/Npt91qqipvSjKXTkxk0s="
+        }
+      ],
+      "Scopes": [
+        "doctors-portal-api"
+      ],
+      "UserClaims": [
+        "name",
+        "family_name",
+        "given_name",
+        "profile"
+      ]
+    },
+    {
+      "Name": "phsa-adapter",
+      "ApiSecrets": [
+        {
+          "Value": "c9wO54rDgpc/U1X9JosYZaZovRGeL9S9QMgjrxI7mLo="
+        }
+      ],
+      "Scopes": [
+        "phsa-adapter"
+      ],
+
+      "UserClaims": [
+        "name",
+        "family_name",
+        "given_name",
+        "profile"
+      ]
+    }
+  ],
+  "Clients": [
+    {
+      "ClientId": "doctors-portal-ui",
+      "RequireClientSecret": false,
+      "AllowedGrantTypes": [
+        "authorization_code"
+      ],
+      "RequirePkce": true,
+      "RedirectUris": [
+        "http://localhost:3200/"
+      ],
+      "AllowedScopes": [
+        "openid",
+        "profile",
+        "email",
+        "doctors-portal-api",
+        "phsa-adapter"
+      ],
+      "AllowedCorsOrigins": [
+        "http://localhost:3200"
+      ]
+    }
+  ]
+}

@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Hl7.Fhir.ElementModel;
-using Hl7.Fhir.Model;
-using Hl7.Fhir.Rest;
+﻿using Hl7.Fhir.Model;
 using Hl7.Fhir.Serialization;
 using Hl7.Fhir.Specification;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Rsbc.Dmf.Interfaces.IcbcAdapter;
-using Rsbc.Dmf.Interfaces.IcbcAdapter.Models;
 using Rsbc.Dmf.PhsaAdapter.ViewModels;
-using static Hl7.Fhir.Model.CapabilityStatement;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
-
-
     [ApiController]
     [Route("[controller]")]
+    [Authorize("OAuth")]
     public class FhirController : ControllerBase
     {
         private readonly ILogger<ReceiveController> _logger;
@@ -40,7 +33,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             Configuration = configuration;
             IcbcClient = icbcClient;
         }
-        
+
         [HttpGet("metadata")]
         [AllowAnonymous]
         public FhirResponse GetMetaData()
@@ -97,7 +90,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                         {Code = CapabilityStatement.TypeRestfulInteraction.Update}
                                 }
                             }
-
                         }
                     }
                 }
@@ -108,7 +100,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
         [HttpGet(".well-known/smart-configuration")]
         [AllowAnonymous]
-        
         public IActionResult GetSmartConfiguration()
         {
             Response.ContentType = "application/json";
@@ -116,20 +107,19 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             capabilities.Add("launch-ehr");
             capabilities.Add("client-public");
             capabilities.Add("client-confidential-symmetric");
-            capabilities.Add( "context-ehr-patient");
+            capabilities.Add("context-ehr-patient");
             capabilities.Add("sso-openid-connect");
             SmartConfiguration result = new SmartConfiguration()
             {
                 Authorization_endpoint = Configuration["FHIR_AUTHORIZATION_ENDPOINT"],
                 Token_endpoint = Configuration["FHIR_TOKEN_ENDPOINT"],
                 Introspection_endpoint = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
-                Capabilities = capabilities 
+                Capabilities = capabilities
             };
             return new JsonResult(result);
         }
 
         [HttpGet("Patient/{id}")]
-        [AllowAnonymous]
         public IActionResult GetPatient([FromRoute] string id)
         {
             Patient result = new Patient()
@@ -154,19 +144,17 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
             //return Respond.WithResource(result);
             return new JsonResult(result);
-
         }
 
         [HttpGet("Practitioner/{id}")]
-        [AllowAnonymous]
         public IActionResult GetPractitioner([FromRoute] string id)
         {
             Practitioner result = new Practitioner()
             {
                 Id = id,
                 Name = new List<HumanName>(){new HumanName(){
-                    Given = new List<string>() {"Test"},
-                    Family = "Practitioner",
+                    Given = new List<string>() {User.FindFirstValue("given_name")},
+                    Family = User.FindFirstValue("family_name"),
                     Use = HumanName.NameUse.Official
                 }},
                 BirthDateElement = new Date(DateTimeOffset.Now.Year - 30, DateTimeOffset.Now.Month,
@@ -177,7 +165,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return new JsonResult(result);
         }
 
-        string ConvertGenderToString(string gender)
+        private string ConvertGenderToString(string gender)
         {
             string result;
             switch (gender)
@@ -185,12 +173,15 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 case "M":
                     result = "male";
                     break;
+
                 case "F":
                     result = "female";
                     break;
+
                 case "O":
                     result = "other";
                     break;
+
                 default:
                     result = "unknown";
                     break;
@@ -232,7 +223,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Bundle/{id}")]
-        [AllowAnonymous]
         public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
@@ -240,7 +230,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             // in future the id would be looked up in the case management system and then dl number, phn number retrieved.
 
             string icbcDl = Configuration["TEST_DL"];
-
 
             var icbcData = IcbcClient.GetDriver(icbcDl);
 
@@ -321,7 +310,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             // convert the data to json.
             string jsonPayload = JsonConvert.SerializeObject(payload);
             var jsonAsBytes = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
-            
 
             Bundle result = new Bundle()
             {
@@ -456,14 +444,10 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             }
             };
 
-
-
-            
             return Respond.WithResource(result);
         }
 
         [HttpPut("Bundle/{id}")]
-        [AllowAnonymous]
         public void PutBundle([FromBody] Bundle bundle, [FromRoute] string id)
         {
             FhirJsonSerializer serializer = new FhirJsonSerializer();
@@ -473,40 +457,34 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
         // save draft functionality
         [HttpPost("Bundle")]
-        [AllowAnonymous]
         public async Task<IActionResult> PostBundle()
         {
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 string body = await reader.ReadToEndAsync();
 
-                // FhirJsonParser can return a typed object.  
+                // FhirJsonParser can return a typed object.
                 // There is also a more generic FhirJsonNode.Parse
                 // The built in Json Deserializer does not seem to work
 
                 var parser = new FhirJsonParser();
                 var bundle = parser.Parse<Bundle>(body);
 
-                
                 _logger.LogInformation(bundle.ToJson());
 
                 //_logger.LogInformation(body);
-
-
             }
 
             return Ok();
         }
 
         [HttpGet("QuestionnaireResponse/{id}")]
-        [AllowAnonymous]
         public Questionnaire GetQuestionnaire([FromRoute] string id)
         {
             Questionnaire result = new Questionnaire();
             // id would be userpref
-            
+
             return result;
         }
-
     }
 }
