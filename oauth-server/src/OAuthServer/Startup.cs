@@ -1,7 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-using IdentityServer4;
+﻿using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using System.IO;
+using System.Text.Json;
 
 namespace OAuthServer
 {
@@ -29,42 +28,32 @@ namespace OAuthServer
             services.AddControllersWithViews();
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"));
 
-            var builder = services.AddIdentityServer(options =>
-            {
-                options.Events.RaiseErrorEvents = true;
-                options.Events.RaiseInformationEvents = true;
-                options.Events.RaiseFailureEvents = true;
-                options.Events.RaiseSuccessEvents = true;
+            var builder = services
+                .AddIdentityServer(options =>
+                {
+                    options.Events.RaiseErrorEvents = true;
+                    options.Events.RaiseInformationEvents = true;
+                    options.Events.RaiseFailureEvents = true;
+                    options.Events.RaiseSuccessEvents = true;
 
-                options.UserInteraction.LoginUrl = "~/login";
+                    options.UserInteraction.LoginUrl = "~/login";
+                })
 
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                //options.EmitStaticAudienceClaim = true;
-            })
-                //.AddTestUsers(Array.Empty<TestUser>().ToList())
-                //// this adds the config data from DB (clients, resources, CORS)
-                //.AddConfigurationStore(options =>
-                //{
-                //    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
-                //})
-                //// this adds the operational data from DB (codes, tokens, consents)
-                //.AddOperationalStore(options =>
-                //{
-                //    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
-
-                //    // this enables automatic token cleanup. this is optional.
-                //    options.EnableTokenCleanup = true;
-                //})
-                .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddInMemoryClients(Config.Clients)
-                .AddInMemoryIdentityResources(Config.IdentityResources)
-                .AddInMemoryApiResources(Config.ApiResources)
-                .AddInMemoryPersistedGrants()
+                .AddOperationalStore(options =>
+                {
+                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
+                    options.EnableTokenCleanup = true;
+                })
+                .AddInMemoryApiScopes(config.ApiScopes)
+                .AddInMemoryClients(config.Clients)
+                .AddInMemoryIdentityResources(config.IdentityResources)
+                .AddInMemoryApiResources(config.ApiResources)
                 .AddInMemoryCaching()
                 ;
 
-            builder.AddDeveloperSigningCredential();
+            builder.AddDeveloperSigningCredential(filename: "./Data/tempkey.jwk");
             services.AddOidcStateDataFormatterCache();
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
