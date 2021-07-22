@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.IO;
@@ -28,6 +29,39 @@ namespace RSBC.DMF.DoctorsPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication("token")
+                //JWT tokens handling
+                .AddJwtBearer("token", options =>
+                {
+                    configuration.GetSection("auth:token").Bind(options);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+
+                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+                    options.ForwardDefaultSelector = ctx =>
+                    {
+                        var authHeader = (string)ctx.Request.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
+                    };
+                })
+                //reference tokens handling
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    configuration.GetSection("auth:introspection").Bind(options);
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("OAuth", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "doctors-portal-api");
+                });
+            });
             services.AddControllers(options =>
             {
                 options.Filters.Add(new HttpResponseExceptionFilter());
@@ -112,7 +146,7 @@ namespace RSBC.DMF.DoctorsPortal.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapControllers().RequireAuthorization("OAuth");
                 endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
                 {
                     Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)

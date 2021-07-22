@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { AuthConfig } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import { Configuration } from '../api/models';
 import { ConfigService } from '../api/services';
 import { EFormsServerOptions } from '../components/phsa-form-viewer/phsa-form-viewer.component';
@@ -39,5 +41,21 @@ export class ConfigurationService {
 
   public isConfigured(): boolean {
     return this.config !== null;
+  }
+
+  public getOAuthConfig(): Observable<AuthConfig> {
+    return this.load().pipe(map(c => {
+      return {
+        issuer: c.oidcConfiguration?.issuer || undefined,
+        clientId: c.oidcConfiguration?.clientId || undefined,
+        redirectUri: window.location.origin + '/',
+        responseType: 'code',
+        scope: c.oidcConfiguration?.scope || undefined,
+        showDebugInformation: !environment.production,
+        customQueryParams: {
+          acr_values: 'idp:bcsc',
+        }
+      };
+    }));
   }
 }
