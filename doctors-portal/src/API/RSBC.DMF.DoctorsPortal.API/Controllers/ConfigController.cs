@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +14,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
+    [AllowAnonymous]
     public class ConfigController : ControllerBase
     {
         private readonly ILogger<ConfigController> _logger;
@@ -37,7 +39,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
             var config = new Configuration
             {
                 Environment = env.EnvironmentName,
-                EformsConfiguration = configuration.GetSection("eforms").Get<EFormsOptions>()
+                EformsConfiguration = configuration.GetSection("eforms").Get<EFormsOptions>(),
+                OidcConfiguration = configuration.GetSection("auth:oidc").Get<OidcOptions>()
             };
 
             return Ok(config);
@@ -50,6 +53,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
         {
             public string Environment { get; set; }
             public EFormsOptions EformsConfiguration { get; set; }
+            public OidcOptions OidcConfiguration { get; set; }
         }
 
         public class EFormsOptions
@@ -71,6 +75,13 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
         {
             public string Id { get; set; }
             public string Name { get; set; }
+        }
+
+        public class OidcOptions
+        {
+            public string Issuer { get; set; }
+            public string Scope { get; set; }
+            public string ClientId { get; set; }
         }
     }
 }

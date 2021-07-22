@@ -34,6 +34,15 @@ parameters:
   - description: eForms forms map
     name: EFORMS_FORMS_MAP
     required: true
+  - description: oauth server url
+    name: OAUTH_SERVER_URL
+    required: true
+  - description: oauth server client id
+    name: OAUTH_CLIENTID
+    required: true
+  - description: oauth server client secret
+    name: OAUTH_CLIENTSECRET
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -62,6 +71,10 @@ objects:
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
       EFORMS__EMRVENDORID: ${EFORMS_VENDOR_ID}
+      AUTH__INTROSPECTION__AUTHORITY: ${OAUTH_SERVER_URL}
+      AUTH__INTROSPECTION__CLIENTID: ${OAUTH_CLIENTID}
+      AUTH__INTROSPECTION__CLIENTSECRET: ${OAUTH_CLIENTSECRET}
+      AUTH__TOKEN__AUTHORITY: ${OAUTH_SERVER_URL}
 
   - kind: Service
     apiVersion: v1
