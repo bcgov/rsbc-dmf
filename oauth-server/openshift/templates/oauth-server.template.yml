@@ -71,13 +71,13 @@ objects:
       name: ${APP_NAME}-oauth-server
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-oauth-server-${APP_NAME}.silver.devops.bcgov
+      host: rsbc-dfp-oidc-${APP_NAME}.apps.silver.devops.bcgov
       path: /
       port:
         targetPort: 8080-tcp
       tls:
-        insecureEdgeTerminationPolicy: Redirect
         termination: edge
+        insecureEdgeTerminationPolicy: Allow
       to:
         kind: Service
         name: ${APP_NAME}-oauth-server
