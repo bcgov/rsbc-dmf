@@ -1,34 +1,39 @@
-using System;
-using System.Collections.Generic;
-
-using Newtonsoft.Json;
-using System.Net.Http;
 using HealthChecks.UI.Client;
 using Hl7.Fhir.Serialization;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
+using Rsbc.Dmf.PhsaAdapter.Formatters;
+using Rsbc.Dmf.PhsaAdapter.Handlers;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Rsbc.Dmf.PhsaAdapter.Handlers;
-using Rsbc.Dmf.PhsaAdapter.Formatters;
 using Spark.Engine.Formatters;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
-using Rsbc.Dmf.Interfaces.IcbcAdapter;
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -39,7 +44,7 @@ namespace Rsbc.Dmf.PhsaAdapter
             Configuration = configuration;
         }
 
-        readonly string MyAllowSpecificOrigins = "script-src 'self' 'unsafe-eval' 'unsafe-inline'";
+        private readonly string MyAllowSpecificOrigins = "script-src 'self' 'unsafe-eval' 'unsafe-inline'";
 
         public IConfiguration Configuration { get; }
 
@@ -54,7 +59,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                         builder.AllowAnyOrigin();
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
-                        
+
                         /*
                         builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH");
                         builder.WithHeaders("X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type",
@@ -62,7 +67,6 @@ namespace Rsbc.Dmf.PhsaAdapter
                             "Location","Content-Location");
                         */
                     });
-                
             });
 
             ParserSettings parserSettings = new ParserSettings();
@@ -80,7 +84,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                 {
                     options.InputFormatters.RemoveType<SystemTextJsonInputFormatter>();
                     options.OutputFormatters.RemoveType<SystemTextJsonOutputFormatter>();
-                    // We remove StringOutputFormatter to make Swagger happy by not 
+                    // We remove StringOutputFormatter to make Swagger happy by not
                     // showing text/plain in the list of available media types.
                     options.OutputFormatters.RemoveType<StringOutputFormatter>();
 
@@ -89,7 +93,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                     options.OutputFormatters.Add(new AsyncResourceJsonOutputFormatter());
                     options.OutputFormatters.Add(new BinaryOutputFormatter());
                 })
-                
+
                 .AddNewtonsoftJson(opts =>
                 {
                     opts.SerializerSettings.Formatting = Formatting.Indented;
@@ -100,47 +104,59 @@ namespace Rsbc.Dmf.PhsaAdapter
 
                     // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                     opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                })
-                
-             // JSON.NET
-                /*
-            .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.WriteIndented = true;
-                options.JsonSerializerOptions.Converters.Insert(0,
-                    new JsonStringEnumConverter()
-                );
-            })*/
-                
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0); 
-            
+                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
 
-            // configure basic authentication 
-            services.AddAuthentication("BasicAuthentication")
+            services.AddAuthentication()
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",
-                    options => { });
+                    options => { })
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    options.SkipTokensWithDots = true;
+                    Configuration.GetSection("auth").Bind(options);
+                    options.TokenRetriever = req =>
+                    {
+                        var authHeader = (string)req.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                        var phsaReferenceToken = authHeader?.Substring("Bearer ".Length).Trim();
+                        if (string.IsNullOrEmpty(phsaReferenceToken)) return null;
+
+                        var logger = req.HttpContext.RequestServices.GetRequiredService<ILogger<OAuth2IntrospectionDefaults>>();
+                        logger.LogInformation("PHSA reference token: {0}", phsaReferenceToken);
+
+                        var userReferenceToken = ExtractUserReferenceTokenFromPhsaToken(phsaReferenceToken).GetAwaiter().GetResult();
+
+                        logger.LogInformation("user reference token: {0}", userReferenceToken);
+                        return userReferenceToken;
+                    };
+                });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("BasicAuthentication",
                     new AuthorizationPolicyBuilder("BasicAuthentication").RequireAuthenticatedUser().Build());
+                options.AddPolicy("OAuth", policy =>
+                {
+                    policy.AddAuthenticationSchemes("introspection");
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "phsa-adapter");
+                });
             });
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "PHSA Adapter", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PHSA Adapter", Version = "v1" });
             });
 
-            // health checks. 
+            // health checks.
             services.AddHealthChecks()
                 .AddCheck("phsa-adapter", () => HealthCheckResult.Healthy("OK"));
 
             // Add ICBC adapter
 
             services.AddHttpClient<IIcbcClient, IcbcClient>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -151,6 +167,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PHSA Adapter v1"));
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseCors(MyAllowSpecificOrigins);
@@ -164,8 +181,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
                     fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
 
-                // Fix for bad SSL issues 
-
+                // Fix for bad SSL issues
 
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
@@ -217,8 +233,29 @@ namespace Rsbc.Dmf.PhsaAdapter
             app.UseMiddleware<FormatTypeHandler>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
 
+        private async Task<string> ExtractUserReferenceTokenFromPhsaToken(string phsaReferenceToken)
+        {
+            var client = new HttpClient();
+            var introspectionResponse = await client.IntrospectTokenAsync(new TokenIntrospectionRequest
+            {
+                Address = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
+                ClientId = Configuration["FHIR_OAUTH_CLIENT_ID"],
+                ClientSecret = Configuration["FHIR_OAUTH_CLIENT_SECRET"],
+                Method = HttpMethod.Post,
+                ClientCredentialStyle = ClientCredentialStyle.AuthorizationHeader,
+                AuthorizationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617,
+                Token = phsaReferenceToken
+            });
+            if (introspectionResponse.IsError) throw new Exception($"Error introspecting token: {introspectionResponse.ErrorType} - {introspectionResponse.Error}");
+            if (!introspectionResponse.IsActive) throw new Exception($"Token {phsaReferenceToken} is not active");
 
+            //TODO: remove '+' removal when PHSA fixes the JWT format
+            var phsaIdToken = introspectionResponse.Claims.FirstOrDefault(c => c.Type == "id_token")?.Value.Trim().Replace("+", "");
+            var sessionKey = new JwtSecurityTokenHandler().ReadJwtToken(phsaIdToken).Claims.FirstOrDefault(c => c.Type == "sessionKey")?.Value;
+            if (sessionKey == null) return null;
+            return Encoding.UTF8.GetString(Convert.FromBase64String(sessionKey));
         }
     }
 }

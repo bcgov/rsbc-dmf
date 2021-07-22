@@ -1,0 +1,8 @@
+NAMESPACE_PREFIX=<openshift namespace>
+ENV=<openshift namespace env>
+APP_NAME=<app name>
+TAG=<image stream tag to deploy from>
+RUNTIME_ENVIRONMENT=<ASP.Net core environment: development|staging|production>
+OAUTH_SERVER_URL=<oauth server url>
+OAUTH_CLIENTID=<doctors portal oauth client id>
+OAUTH_CLIENTSECRET=<doctors portal oauth client secret>

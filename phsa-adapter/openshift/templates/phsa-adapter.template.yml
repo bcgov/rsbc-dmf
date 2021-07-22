@@ -19,16 +19,22 @@ parameters:
   - description: Hostname
     name: HOST
     required: true
-  - description: Reverse proxy known network
-    name: KNOWN_NETWORKS
-    value: ::ffff:10.97.0.0/16
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
   - description: Password used for authentication
-    from: '[A-Z0-9]{8}'
+    from: "[A-Z0-9]{8}"
     generate: expression
     name: PASSWORD
+  - description: oauth server url
+    name: OAUTH_SERVER_URL
+    required: true
+  - description: oauth server client id
+    name: OAUTH_CLIENTID
+    required: true
+  - description: oauth server client secret
+    name: OAUTH_CLIENTSECRET
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -55,6 +61,9 @@ objects:
     stringData:
       USERNAME: "phsa"
       PASSWORD: "${PASSWORD}"
+      AUTH__AUTHORITY: ${OAUTH_SERVER_URL}
+      AUTH__CLIENTID: ${OAUTH_CLIENTID}
+      AUTH__CLIENTSECRET: ${OAUTH_CLIENTSECRET}
 
   - kind: Service
     apiVersion: v1
@@ -177,7 +186,6 @@ objects:
               kind: ImageStreamTag
               name: ${APP_NAME}:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
-
 
   - kind: "PersistentVolumeClaim"
     apiVersion: "v1"

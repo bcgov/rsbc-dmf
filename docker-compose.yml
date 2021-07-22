@@ -46,6 +46,15 @@ services:
       context: ./phsa-adapter/src
     image: dmf-phsa-adapter:dev
     ports:
+      - 5000:8080
+    env_file:
+      - .env
+
+  oauth-server:
+    build:
+      context: ./oauth-server/src
+    image: dmf-oauth-server:dev
+    ports:
       - 5020:8080
     env_file:
       - .env
