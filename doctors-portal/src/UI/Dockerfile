@@ -6,7 +6,7 @@ COPY ./doctors-portal/ .
 RUN npm run lint
 RUN npm run test -- --no-watch --no-progress
 
-RUN npm run build -- --base-href /sbc-dfp-medical-portal/ --deploy-url /sbc-dfp-medical-portal/ --configuration production
+RUN npm run build -- --base-href /rsbc-dfp-medical-portal/ --deploy-url /rsbc-dfp-medical-portal/ --configuration production
 
 FROM caddy:alpine as final
 COPY Caddyfile /etc/caddy/Caddyfile
