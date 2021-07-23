@@ -25,7 +25,7 @@ export class CasesService extends BaseService {
   /**
    * Path part for operation apiCasesGet
    */
-  static readonly ApiCasesGetPath = '/api/Cases';
+  static readonly ApiCasesGetPath = 'api/Cases';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
