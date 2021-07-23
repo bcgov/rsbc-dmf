@@ -42,6 +42,8 @@ namespace OAuthServer
                     options.Events.RaiseSuccessEvents = true;
 
                     options.UserInteraction.LoginUrl = "~/login";
+
+                    if (!string.IsNullOrEmpty(Configuration["ISSUER_URI"])) options.IssuerUri = Configuration["ISSUER_URI"];
                 })
 
                 .AddOperationalStore(options =>
