@@ -29,7 +29,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
     OAuthModule.forRoot({
       resourceServer: {
         sendAccessToken: true,
-        customUrlValidation: url => url.toLowerCase().startsWith('/api') && !url.toLowerCase().endsWith('/config'),
+        customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
       }
     })
   ],
