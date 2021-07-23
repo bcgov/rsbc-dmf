@@ -5,7 +5,8 @@
       "launchBrowser": false,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "BASE_PATH": ""
+        "BASE_PATH": "",
+        "ISSUER_URI": ""
       },
       "applicationUrl": "https://localhost:5020"
     }
