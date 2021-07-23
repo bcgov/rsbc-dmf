@@ -282,6 +282,9 @@ objects:
         spec:
           containers:
             - name: doctors-portal-ui
+              env:
+                - name: API_URL
+                  value: ${APP_NAME}-doctors-portal-api:8080
               image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/doctors-portal-ui:${TAG}
               imagePullPolicy: Always
               ports:
