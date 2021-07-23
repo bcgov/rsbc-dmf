@@ -67,9 +67,7 @@ namespace OAuthServer
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
                 {
-                    options.ClientId = "ca.bc.gov.pssg.dmfw.dev";
-                    options.ClientSecret = "geuRHzWFbMfsO8jo0gLW";
-                    options.MetadataAddress = "https://idtest.gov.bc.ca/login/.well-known/openid-configuration";
+                    Configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;
                     options.UseTokenLifetime = true;
