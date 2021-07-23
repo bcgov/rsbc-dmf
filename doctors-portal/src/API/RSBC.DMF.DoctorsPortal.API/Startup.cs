@@ -103,10 +103,17 @@ namespace RSBC.DMF.DoctorsPortal.API
             }));
             services.AddResponseCompression();
             services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.All;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseForwardedHeaders();
             if (!env.IsProduction())
             {
                 app.UseSwagger(c =>
@@ -134,7 +141,6 @@ namespace RSBC.DMF.DoctorsPortal.API
                 };
             });
 
-            app.UseForwardedHeaders();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCors();
