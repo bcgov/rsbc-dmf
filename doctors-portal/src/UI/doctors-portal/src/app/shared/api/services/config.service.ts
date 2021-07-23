@@ -29,7 +29,7 @@ export class ConfigService extends BaseService {
   /**
    * Path part for operation apiConfigGet
    */
-  static readonly ApiConfigGetPath = 'api/Config';
+  static readonly ApiConfigGetPath = '/api/Config';
 
   /**
    * Get the client configuration for this environment.
