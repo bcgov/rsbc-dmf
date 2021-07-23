@@ -48,7 +48,7 @@ namespace OAuthServer
 
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString);
+                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
                     options.EnableTokenCleanup = true;
                 })
                 .AddInMemoryApiScopes(config.ApiScopes)
