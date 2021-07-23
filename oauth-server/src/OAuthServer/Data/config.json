@@ -66,7 +66,15 @@
         "http://localhost:3200/",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal/",
-        "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal"
+        "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal",
+        "https://dev.justice.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://dev.justice.gov.bc.ca/rsbc-dfp-icbc-portal",        
+        "https://test.justice.gov.bc.ca/rsbc-dfp-driver-portal",
+        "https://test.justice.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://test.justice.gov.bc.ca/rsbc-dfp-icbc-portal",        
+        "https://justice.gov.bc.ca/rsbc-dfp-driver-portal",
+        "https://justice.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://justice.gov.bc.ca/rsbc-dfp-icbc-portal"        
       ],
       "AllowedScopes": [
         "openid",
@@ -78,7 +86,9 @@
       "AllowedCorsOrigins": [
         "http://localhost:3200",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
-        "https://dev.justice.gov.bc.ca"
+        "https://dev.justice.gov.bc.ca",
+        "https://test.justice.gov.bc.ca",
+        "https://justice.gov.bc.ca"
       ]
     }
   ]
