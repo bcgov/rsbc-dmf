@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
@@ -13,7 +14,7 @@ import { EFormsServerOptions } from '../components/phsa-form-viewer/phsa-form-vi
 export class ConfigurationService {
   private config: Configuration | null = null;
 
-  constructor(private configurationService: ConfigService) { }
+  constructor(@Inject(APP_BASE_HREF) public baseHref: string, private configurationService: ConfigService) { }
 
   public load(): Observable<Configuration> {
     if (this.config != null) {
@@ -48,7 +49,7 @@ export class ConfigurationService {
       return {
         issuer: c.oidcConfiguration?.issuer || undefined,
         clientId: c.oidcConfiguration?.clientId || undefined,
-        redirectUri: window.location.origin + '/',
+        redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
         responseType: 'code',
         scope: c.oidcConfiguration?.scope || undefined,
         showDebugInformation: !environment.production,
