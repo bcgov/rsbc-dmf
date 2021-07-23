@@ -24,8 +24,8 @@
 	encode zstd gzip
 
 	route {
-		reverse_proxy /api* {$API_URL}
 		uri strip_prefix /rsbc-dfp-medical-portal
+		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 	}
 	
