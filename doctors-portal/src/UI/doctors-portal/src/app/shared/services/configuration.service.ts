@@ -49,7 +49,7 @@ export class ConfigurationService {
       return {
         issuer: c.oidcConfiguration?.issuer || undefined,
         clientId: c.oidcConfiguration?.clientId || undefined,
-        redirectUri: window.location.origin + '/' + this.baseHref, // concat base href to the redirect URI
+        redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
         responseType: 'code',
         scope: c.oidcConfiguration?.scope || undefined,
         showDebugInformation: !environment.production,
