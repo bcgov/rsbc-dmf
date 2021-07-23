@@ -25,7 +25,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
     SharedModule,
     PortalLayoutModule,
     HttpClientModule,
-    ApiModule.forRoot({ rootUrl: './' }),
+    ApiModule.forRoot({ rootUrl: '.' }),
     OAuthModule.forRoot({
       resourceServer: {
         sendAccessToken: true,
