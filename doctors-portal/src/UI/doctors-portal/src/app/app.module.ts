@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,6 +12,7 @@ import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { OAuthModule } from 'angular-oauth2-oidc';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,10 @@ import { OAuthModule } from 'angular-oauth2-oidc';
       }
     })
   ],
-  providers: [],
+  providers: [
+    { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+      deps: [PlatformLocation] }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
