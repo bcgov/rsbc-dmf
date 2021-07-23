@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -87,10 +88,17 @@ namespace OAuthServer
                 });
 
             services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.All;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseForwardedHeaders();
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -109,7 +117,6 @@ namespace OAuthServer
 
             app.UseResponseCompression();
             app.UseCookiePolicy();
-            app.UseForwardedHeaders();
 
             app.UsePathBase(Configuration["BASE_PATH"] ?? "");
             app.UseRouting();
