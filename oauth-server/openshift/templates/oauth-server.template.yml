@@ -19,6 +19,21 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
+  - description: oauth issuer uri
+    name: ISSUER_URI
+    required: true
+  - description: base path for the web server endpoints
+    name: BASE_PATH
+    required: true
+  - description: BCSC client id
+    name: BCSC_CLIENT_ID
+    required: true
+  - description: BCSC client id
+    name: BCSC_CLIENT_SECRET
+    required: true
+  - description: BCSC metadata url
+    name: BCSC_METADATA_ADDRESS
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -32,6 +47,8 @@ objects:
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
+      ISSUER_URI: ${ISSUER_URI}
+      BASE_PATH: ${BASE_PATH}
 
   - kind: Secret
     apiVersion: v1
@@ -43,6 +60,9 @@ objects:
         app: ${APP_NAME}-oauth-server
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
+      IDENTITYPROVIDERS__BCSC__METADATAADDRESS: ${BCSC_METADATA_ADDRESS}
+      IDENTITYPROVIDERS__BCSC__CLIENTID: ${BCSC_CLIENT_ID}
+      IDENTITYPROVIDERS__BCSC__CLIENTSECRET: ${BCSC_CLIENT_SECRET}
 
   - kind: Service
     apiVersion: v1
