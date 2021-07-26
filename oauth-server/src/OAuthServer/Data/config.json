@@ -87,6 +87,7 @@
         "doctors-portal-api",
         "phsa-adapter"
       ],
+      "AllowOfflineAccess": true,
       "AllowedCorsOrigins": [
         "http://localhost:3200",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
