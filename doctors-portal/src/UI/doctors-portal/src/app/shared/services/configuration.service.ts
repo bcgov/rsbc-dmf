@@ -52,7 +52,7 @@ export class ConfigurationService {
         redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
         responseType: 'code',
         scope: c.oidcConfiguration?.scope || undefined,
-        showDebugInformation: !environment.production,
+        showDebugInformation: true, //!environment.production,
         customQueryParams: {
           acr_values: 'idp:bcsc',
         }
