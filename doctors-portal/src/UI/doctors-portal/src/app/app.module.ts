@@ -36,7 +36,14 @@ import { OAuthModule } from 'angular-oauth2-oidc';
     })
   ],
   providers: [
-    { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => s.getBaseHrefFromDOM(),
+    { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => {
+      var result = s.getBaseHrefFromDOM()
+      let hasTrailingSlash = result[result.length-1] === '/';
+      if(hasTrailingSlash) {    
+        result = result.substr(0, result.length - 1);
+      }
+      return result;
+    },
       deps: [PlatformLocation] }
   ],
   bootstrap: [AppComponent]
