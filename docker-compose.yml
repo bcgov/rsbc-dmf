@@ -9,6 +9,11 @@ services:
       - 3020:8080
     env_file:
       - .env
+    environment:
+      - AUTH__INTROSPECTION__AUTHORITY=https://localhost:5020
+      - AUTH__TOKEN__AUTHORITY=https://localhost:5020
+      - AUTH__OIDC__ISSUER=https://localhost:5020
+      - AUTH__OIDC__SCOPE=openid profile email phsa-adapter doctors-portal-api
 
   doctors-portal-ui:
     build:
@@ -17,9 +22,10 @@ services:
     ports:
       - 3200:2015
     environment:
-      - "API_URL=doctors-portal-api:3020"
+      - API_URL=doctors-portal-api:8080
     depends_on:
       - doctors-portal-api
+      - oauth-server
 
   landing-page:
     build:
@@ -35,9 +41,9 @@ services:
     ports:
       - 4020:8080
     environment:
-      - "ASPNETCORE_Kestrel__Certificates__Default__Path=/ssl/aspnetapp.pfx"
+      - "ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx"
     volumes:
-      - ~/.aspnet/https:/ssl/:ro
+      - ~/.aspnet/https:/https/:ro
     env_file:
       - .env
 
@@ -58,3 +64,8 @@ services:
       - 5020:8080
     env_file:
       - .env
+    environment:
+      - ASPNETCORE_URLS=https://+:8080
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx
+    volumes:
+      - ~/.aspnet/https:/https:ro
