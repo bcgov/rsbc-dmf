@@ -80,6 +80,7 @@
         "openid",
         "profile",
         "email",
+        "offline_access",
         "doctors-portal-api",
         "phsa-adapter"
       ],
