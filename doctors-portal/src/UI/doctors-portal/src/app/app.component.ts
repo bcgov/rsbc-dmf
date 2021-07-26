@@ -25,16 +25,18 @@ export class AppComponent implements OnInit {
     this.configService.load().subscribe(
       (result) => {
         this.loginService.login(location.pathname.substring(1) || 'dashboard')
-          .subscribe(nextRoute => {
+          .subscribe(nextRoute => {            
             console.debug('logged in', nextRoute);
             //if (nextRoute) {
-            nextRoute = decodeURIComponent(nextRoute);
+            nextRoute = '/' + decodeURIComponent(nextRoute);
+
             // remove base path.
             if (this.baseHref && nextRoute.substring(0, this.baseHref.length) === this.baseHref)
             {
                 nextRoute = nextRoute.substring(this.baseHref.length);
             }
             
+            console.debug('navigate to', nextRoute);
             this.router.navigate([nextRoute]).then(() => this.isLoading = false)
             //}
           }, error => console.error(error));
