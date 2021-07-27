@@ -13,6 +13,7 @@ using Serilog;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 
 namespace RSBC.DMF.DoctorsPortal.API
@@ -33,6 +34,8 @@ namespace RSBC.DMF.DoctorsPortal.API
                 //JWT tokens handling
                 .AddJwtBearer("token", options =>
                 {
+                    options.BackchannelHttpHandler = new HttpClientHandler { ServerCertificateCustomValidationCallback = delegate { return true; } };
+
                     configuration.GetSection("auth:token").Bind(options);
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
