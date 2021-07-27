@@ -247,26 +247,39 @@ namespace Rsbc.Dmf.PhsaAdapter
 
         private async Task<string> ExtractUserReferenceTokenFromPhsaToken(string phsaReferenceToken)
         {
-            var client = new HttpClient();
-            var introspectionResponse = await client.IntrospectTokenAsync(new TokenIntrospectionRequest
+            try
             {
-                Address = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
-                ClientId = Configuration["FHIR_OAUTH_CLIENT_ID"],
-                ClientSecret = Configuration["FHIR_OAUTH_CLIENT_SECRET"],
-                Method = HttpMethod.Post,
-                ClientCredentialStyle = ClientCredentialStyle.AuthorizationHeader,
-                AuthorizationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617,
-                Token = phsaReferenceToken
-            });
-            if (introspectionResponse.IsError) throw new Exception($"Error introspecting token: {introspectionResponse.ErrorType} - {introspectionResponse.Error}");
-            if (introspectionResponse == null) throw new Exception($"Token is null");
-            if (!introspectionResponse.IsActive) throw new Exception($"Token {phsaReferenceToken} is not active");
+                var client = new HttpClient();
+                var introspectionResponse = await client.IntrospectTokenAsync(new TokenIntrospectionRequest
+                {
+                    Address = Configuration["FHIR_INTROSPECTION_ENDPOINT"],
+                    ClientId = Configuration["FHIR_OAUTH_CLIENT_ID"],
+                    ClientSecret = Configuration["FHIR_OAUTH_CLIENT_SECRET"],
+                    Method = HttpMethod.Post,
+                    ClientCredentialStyle = ClientCredentialStyle.AuthorizationHeader,
+                    AuthorizationHeaderStyle = BasicAuthenticationHeaderStyle.Rfc2617,
+                    Token = phsaReferenceToken
+                });
+                if (introspectionResponse.IsError)
+                    throw new Exception(
+                        $"Error introspecting token: {introspectionResponse.ErrorType} - {introspectionResponse.Error}");
+                if (introspectionResponse == null) throw new Exception($"Token is null");
+                if (!introspectionResponse.IsActive) throw new Exception($"Token {phsaReferenceToken} is not active");
 
-            //TODO: remove '+' removal when PHSA fixes the JWT format
-            var phsaIdToken = introspectionResponse.Claims.FirstOrDefault(c => c.Type == "id_token")?.Value.Trim().Replace("+", "");
-            var sessionKey = new JwtSecurityTokenHandler().ReadJwtToken(phsaIdToken).Claims.FirstOrDefault(c => c.Type == "sessionKey")?.Value;
-            if (sessionKey == null) return null;
-            return Encoding.UTF8.GetString(Convert.FromBase64String(sessionKey));
+                //TODO: remove '+' removal when PHSA fixes the JWT format
+                var phsaIdToken = introspectionResponse.Claims.FirstOrDefault(c => c.Type == "id_token")?.Value.Trim()
+                    .Replace("+", "");
+                var sessionKey = new JwtSecurityTokenHandler().ReadJwtToken(phsaIdToken).Claims
+                    .FirstOrDefault(c => c.Type == "sessionKey")?.Value;
+                if (sessionKey == null) return null;
+                return Encoding.UTF8.GetString(Convert.FromBase64String(sessionKey));
+            }
+            catch (Exception e)
+            {
+                Log.Logger.Error(e, "ExtractUserReferenceTokenFromPhsaToken error");
+                return null;
+            }
+            
         }
     }
 }
