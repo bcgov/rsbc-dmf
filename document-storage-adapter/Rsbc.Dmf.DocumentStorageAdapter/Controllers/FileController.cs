@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rsbc.Dmf.DocumentStorageAdapter.ViewModels;
 
 namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
 {
@@ -43,8 +44,9 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
                 {S3.METADATA_KEY_TAG3, upload.Tag3}
             };
 
-            await _S3.UploadFile(upload.FileName, data, upload.ContentType, metaData);
-            return Ok();
+            string fileUrl = await _S3.UploadFile(upload.FileName, data, upload.ContentType, metaData);
+            ViewModels.Download result = new ViewModels.Download() {FileUrl = fileUrl};
+            return new JsonResult(result);
         }
 
         /// <summary>
