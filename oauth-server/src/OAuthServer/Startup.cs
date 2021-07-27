@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using System.Text.Json;
+using IdentityServer4.Configuration;
 
 namespace OAuthServer
 {
@@ -41,7 +42,7 @@ namespace OAuthServer
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-
+                    
                     options.UserInteraction.LoginUrl = "~/login";
 
                     if (!string.IsNullOrEmpty(Configuration["ISSUER_URI"])) options.IssuerUri = Configuration["ISSUER_URI"];
@@ -75,7 +76,6 @@ namespace OAuthServer
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",
@@ -108,7 +108,7 @@ namespace OAuthServer
             app.UseReferrerPolicy(opts => opts.NoReferrer());
             app.UseXXssProtection(opts => opts.EnabledWithBlockMode());
 
-            app.UseXfo(xfo => xfo.SameOrigin());
+            //app.UseXfo(xfo => xfo.SameOrigin());
             app.UseXRobotsTag(options => options.NoIndex().NoFollow());
 
             app.UseCsp(opts => opts
