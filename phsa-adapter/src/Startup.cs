@@ -115,7 +115,8 @@ namespace Rsbc.Dmf.PhsaAdapter
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     options.SkipTokensWithDots = true;
-                    Configuration.GetSection("auth").Bind(options);
+                    Configuration.GetSection("auth:introspection").Bind(options);
+                    
                     options.TokenRetriever = req =>
                     {
                         var authHeader = (string)req.Headers["Authorization"];
