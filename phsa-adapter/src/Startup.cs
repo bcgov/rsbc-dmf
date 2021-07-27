@@ -56,7 +56,16 @@ namespace Rsbc.Dmf.PhsaAdapter
                 options.AddPolicy(MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.AllowAnyOrigin();
+                        if (Configuration["CORS_ORIGINS"] != null)
+                        {
+                            string[] origins = Configuration["CORS_ORIGINS"].Split(" ");
+                            builder.WithOrigins(origins);
+                        }
+                        else
+                        {
+                            builder.AllowAnyOrigin();
+                        }
+                        
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
 
@@ -250,6 +259,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                 Token = phsaReferenceToken
             });
             if (introspectionResponse.IsError) throw new Exception($"Error introspecting token: {introspectionResponse.ErrorType} - {introspectionResponse.Error}");
+            if (introspectionResponse == null) throw new Exception($"Token is null");
             if (!introspectionResponse.IsActive) throw new Exception($"Token {phsaReferenceToken} is not active");
 
             //TODO: remove '+' removal when PHSA fixes the JWT format
