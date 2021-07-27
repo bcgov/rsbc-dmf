@@ -40,7 +40,7 @@ namespace bdd_tests
             {
                 Console.Out.WriteLine("Enabling Headless Mode");
                 // could try --shm-size=1gb "disable-dev-shm-usage"
-                options.AddArguments("headless", "no-sandbox", "disable-web-security", "no-zygote", "disable-gpu",
+                options.AddArguments("headless", "no-sandbox", "no-zygote", "disable-gpu",
                     "disable-dev-shm-usage", "disable-infobars", "start-maximized", "hide-scrollbars",
                     "window-size=1920,1080");
                 if (!string.IsNullOrEmpty(configuration["CHROME_BINARY_LOCATION"]))
@@ -50,9 +50,13 @@ namespace bdd_tests
             {
                 options.AddArguments("start-maximized");
             }
-
+            
+            options.AddArgument("ignore-certificate-errors");
+           
             // setup ChromeDriver with a command timeout of 2 minutes.
             var driver = new ChromeDriver(path, options, TimeSpan.FromMinutes(2));
+
+            
 
             // var timeout = 45.0;
             // temp change to explore pipeline impact
