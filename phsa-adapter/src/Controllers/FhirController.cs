@@ -120,6 +120,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         }
 
         [HttpGet("Patient/{id}")]
+        [AllowAnonymous]
         public IActionResult GetPatient([FromRoute] string id)
         {
             Patient result = new Patient()
@@ -147,6 +148,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         }
 
         [HttpGet("Practitioner/{id}")]
+        [AllowAnonymous]
         public IActionResult GetPractitioner([FromRoute] string id)
         {
             Practitioner result = new Practitioner()
@@ -223,6 +225,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("Bundle/{id}")]
+        [AllowAnonymous]
         public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
@@ -448,6 +451,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         }
 
         [HttpPut("Bundle/{id}")]
+        [AllowAnonymous]
         public void PutBundle([FromBody] Bundle bundle, [FromRoute] string id)
         {
             FhirJsonSerializer serializer = new FhirJsonSerializer();
@@ -457,6 +461,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
         // save draft functionality
         [HttpPost("Bundle")]
+        [AllowAnonymous]
         public async Task<IActionResult> PostBundle()
         {
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -479,6 +484,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         }
 
         [HttpGet("QuestionnaireResponse/{id}")]
+        [AllowAnonymous]
         public Questionnaire GetQuestionnaire([FromRoute] string id)
         {
             Questionnaire result = new Questionnaire();
