@@ -12,7 +12,7 @@ Feature: DoctorsPortalHealthCheck
 
 @pipeline
 Scenario: Doctors' Portal Health Check
-    When I click on the doctors' portal
+    When I log in to the doctors' portal
     And the content is displayed for the doctors portal
     And I enter the login credentials
     And I click on the Submit button
@@ -21,7 +21,7 @@ Scenario: Doctors' Portal Health Check
 
 @browseronly
 Scenario: Doctors' Portal Health Check with Cert
-    When I click on the doctors' portal
+    When I log in to the doctors' portal
     And I accept the cert request
     And the content is displayed for the doctors portal
     And I enter the login credentials
@@ -30,13 +30,13 @@ Scenario: Doctors' Portal Health Check with Cert
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
     And I refresh the page
-    And I click on the the Known Medical Conditions and Histories tab
+    And I click on the Known Medical Conditions and Histories tab
     And I refresh the page
     And the content is displayed for the ICBC tombstone data
     Then I log out of the portal
 
 Scenario: Vision Assessment
-    When I click on the doctors' portal
+    When I log in to the doctors' portal
     And I accept the cert request
     And I enter the login credentials
     And I click on the Submit button
@@ -58,16 +58,11 @@ namespace bdd_tests
     [FeatureFile("./DoctorsPortalHealthCheck.feature")]
     public sealed class DoctorsPortalHealthCheck : TestBase
     {
-        [When(@"I click on the doctors' portal")]
-        public void DoctorsPortalHealthCheckClick()
+        [When(@"I log in to the doctors' portal")]
+        public void DoctorsPortalLogIn()
         {
-            var DoctorsPortalUri = configuration["baseUri"];
-            
-            ngDriver.IgnoreSynchronization = true;
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
-            //ngDriver.WaitForAngular();
-        }
 
+        }
 
         /* Temp workaround for S3DMFT-24 - to be removed
          */
@@ -202,6 +197,14 @@ namespace bdd_tests
             {
                 var knownMedicalConditionsAndHistories = ngDriver.FindElement(By.LinkText("Known Medical Conditions and Histories"));
                 knownMedicalConditionsAndHistories.Click();
+            }
+
+            if (element == "the doctors' portal")
+            {
+                var DoctorsPortalUri = configuration["baseUri"];
+
+                ngDriver.IgnoreSynchronization = true;
+                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
             }
         }
 
