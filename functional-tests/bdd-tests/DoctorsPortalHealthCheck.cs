@@ -16,8 +16,6 @@ Scenario: Doctors' Portal Health Check
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
     And I refresh the page
-    And I click on the Known Medical Conditions and Histories tab
-    And I refresh the page
     And the content is displayed for the ICBC tombstone data
     Then I log out of the portal
 
@@ -115,8 +113,10 @@ namespace bdd_tests
 
                 ngDriver.WrappedDriver.SwitchTo().Frame(0);
 
+                Thread.Sleep(10000);
+
                 NgWebElement driversLicence = null;
-                for (var i = 0; i < 30; i++)
+                for (var i = 0; i < 60; i++)
                     try
                     {
                         var names = ngDriver.FindElements(By.Id("e9egu0c-textTargetDriverLicense"));
