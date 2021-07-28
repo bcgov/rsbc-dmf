@@ -1,0 +1,20 @@
+name: ci-document-storage-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "document-storage-adapter/src/**"
+      - ".github/workflows/ci-document-storage-adapter.yml"
+
+env:
+  IMAGE_NAME: document-storage-adapter
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file ./document-storage-adapter/src/Dockerfile --tag $IMAGE_NAME
