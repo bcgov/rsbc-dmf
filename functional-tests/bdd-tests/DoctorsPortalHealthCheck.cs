@@ -8,38 +8,20 @@ using Xunit.Gherkin.Quick;
 /*
 Feature: DoctorsPortalHealthCheck
     As a medical professional
-    I want to test the doctors' portal
+    I want to perform basic tests on the doctors' portal
 
 @pipeline
 Scenario: Doctors' Portal Health Check
-    When I click on the doctors' portal
-    And the content is displayed for the doctors portal
-    And I enter the login credentials
-    And I click on the Submit button
-    And the content is displayed for the DMER dashboard
-    Then I log out of the portal
-
-@browseronly
-Scenario: Doctors' Portal Health Check with Cert
-    When I click on the doctors' portal
-    And I accept the cert request
-    And the content is displayed for the doctors portal
-    And I enter the login credentials
-    And I click on the Submit button
+    When I log in to the doctors' portal
     And the content is displayed for the DMER dashboard
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
-    And I refresh the page
-    And I click on the the Known Medical Conditions and Histories tab
     And I refresh the page
     And the content is displayed for the ICBC tombstone data
     Then I log out of the portal
 
 Scenario: Vision Assessment
-    When I click on the doctors' portal
-    And I accept the cert request
-    And I enter the login credentials
-    And I click on the Submit button
+    When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
     And I refresh the page
@@ -58,16 +40,38 @@ namespace bdd_tests
     [FeatureFile("./DoctorsPortalHealthCheck.feature")]
     public sealed class DoctorsPortalHealthCheck : TestBase
     {
-        [When(@"I click on the doctors' portal")]
-        public void DoctorsPortalHealthCheckClick()
+        [When(@"I log in to the doctors' portal")]
+        public void DoctorsPortalLogIn()
         {
             var DoctorsPortalUri = configuration["baseUri"];
-            
+            var cardSerialNumber = configuration["csn"];
+            var passcode = configuration["passcode"];
+
             ngDriver.IgnoreSynchronization = true;
             ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
-            //ngDriver.WaitForAngular();
-        }
 
+            // click on Virtual card testing button
+            var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
+            virtualCardTestingButton.Click();
+
+            Thread.Sleep(3000);
+
+            // enter Card Serial Number
+            var cardSerialNumberInput = ngDriver.WrappedDriver.FindElement(By.Id("csn"));
+            cardSerialNumberInput.SendKeys(cardSerialNumber);
+
+            // click on the Continue button
+            var continueButton = ngDriver.WrappedDriver.FindElement(By.Id("continue"));
+            continueButton.Click();
+
+            // enter Passcode
+            var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passcode"));
+            passcodeInput.SendKeys(passcode);
+
+            // click on the second Continue button
+            var secondContinueButton = ngDriver.WrappedDriver.FindElement(By.Id("btnSubmit"));
+            secondContinueButton.Click();
+        }
 
         /* Temp workaround for S3DMFT-24 - to be removed
          */
@@ -110,8 +114,10 @@ namespace bdd_tests
 
                 ngDriver.WrappedDriver.SwitchTo().Frame(0);
 
+                Thread.Sleep(10000);
+
                 NgWebElement driversLicence = null;
-                for (var i = 0; i < 30; i++)
+                for (var i = 0; i < 60; i++)
                     try
                     {
                         var names = ngDriver.FindElements(By.Id("e9egu0c-textTargetDriverLicense"));
@@ -202,6 +208,14 @@ namespace bdd_tests
             {
                 var knownMedicalConditionsAndHistories = ngDriver.FindElement(By.LinkText("Known Medical Conditions and Histories"));
                 knownMedicalConditionsAndHistories.Click();
+            }
+
+            if (element == "the doctors' portal")
+            {
+                var DoctorsPortalUri = configuration["baseUri"];
+
+                ngDriver.IgnoreSynchronization = true;
+                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
             }
         }
 
