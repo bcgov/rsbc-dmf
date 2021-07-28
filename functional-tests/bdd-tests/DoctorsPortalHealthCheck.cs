@@ -44,8 +44,12 @@ namespace bdd_tests
         [When(@"I log in to the doctors' portal")]
         public void DoctorsPortalLogIn()
         {
+            var DoctorsPortalUri = configuration["baseUri"];
             var cardSerialNumber = configuration["csn"];
             var passcode = configuration["passcode"];
+
+            ngDriver.IgnoreSynchronization = true;
+            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
 
             // click on Virtual card testing button
             var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
