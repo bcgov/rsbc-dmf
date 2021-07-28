@@ -10,6 +10,7 @@ Feature: DoctorsPortalHealthCheck
     As a medical professional
     I want to perform basic tests on the doctors' portal
 
+@pipeline
 Scenario: Doctors' Portal Health Check
     When I log in to the doctors' portal
     And the content is displayed for the DMER dashboard
