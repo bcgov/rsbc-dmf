@@ -21,20 +21,7 @@ parameters:
     required: true
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
-    value: Staging
-  - description: Password used for authentication
-    from: "[A-Z0-9]{8}"
-    generate: expression
-    name: PASSWORD
-  - description: oauth server url
-    name: OAUTH_SERVER_URL
-    required: true
-  - description: oauth server client id
-    name: OAUTH_CLIENTID
-    required: true
-  - description: oauth server client secret
-    name: OAUTH_CLIENTSECRET
-    required: true
+    value: Staging  
 
 objects:
   - kind: ConfigMap
@@ -59,12 +46,10 @@ objects:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
-      USERNAME: "phsa"
-      PASSWORD: "${PASSWORD}"
-      AUTH__AUTHORITY: ${OAUTH_SERVER_URL}
-      AUTH__CLIENTID: ${OAUTH_CLIENTID}
-      AUTH__CLIENTSECRET: ${OAUTH_CLIENTSECRET}
-
+      SERVICE_URL: "changeme"
+      BUCKET: "changeme"
+      ACCESS_KEY: "changeme"
+      SECRET_KEY: "changeme"
   - kind: Service
     apiVersion: v1
     metadata:
