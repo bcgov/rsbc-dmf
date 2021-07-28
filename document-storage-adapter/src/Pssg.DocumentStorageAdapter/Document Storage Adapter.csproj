@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Rsbc.Dmf.Interfaces.S3\S3.csproj" />
+    <ProjectReference Include="..\Pssg.Interfaces.S3\S3.csproj" />
   </ItemGroup>
 
 

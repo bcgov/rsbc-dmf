@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 COPY . .
-RUN dotnet build "./document-storage-adapter/src/document-storage-adapter" -c Release -o /app/build
+RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
 
 FROM build AS publish
-RUN dotnet publish "./document-storage-adapter/src/document-storage-adapter" -c Release -o /app/publish
+RUN dotnet publish ./document-storage-adapter/src/Pssg.DocumentStorageAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
