@@ -61,7 +61,20 @@ namespace bdd_tests
         [When(@"I log in to the doctors' portal")]
         public void DoctorsPortalLogIn()
         {
+            var cardSerialNumber = configuration["csn"];
+            var passcode = configuration["passcode"];
 
+            // click on Virtual card testing button
+            var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
+            virtualCardTestingButton.Click();
+
+            // enter Card Serial Number
+            var cardSerialNumberInput = ngDriver.WrappedDriver.FindElement(By.Id("csn"));
+            cardSerialNumberInput.SendKeys(cardSerialNumber);
+
+            // enter Passcode
+            var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passcode"));
+            passcodeInput.SendKeys(passcode);
         }
 
         /* Temp workaround for S3DMFT-24 - to be removed
