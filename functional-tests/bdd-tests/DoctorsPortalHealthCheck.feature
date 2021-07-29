@@ -1,6 +1,6 @@
 ﻿Feature: DoctorsPortalHealthCheck
     As a medical professional
-    I want to perform basic tests on the doctors' portal
+    I want to perform a health check on the doctors' portal
 
 @pipeline @release
 Scenario: Doctors' Portal Health Check
