@@ -3,8 +3,8 @@ Feature: DMERCleanPass.feature
     I want to confirm the clean pass business rules for a DMER
 
 Scenario: Non-Commercial DMER Supplemental O2 Not Driving Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a not commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -14,8 +14,8 @@ Scenario: Non-Commercial DMER Supplemental O2 Not Driving Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Mild, Hypopnea 0-14 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -26,8 +26,8 @@ Scenario: Commercial DMER Sleep Apnea, Mild, Hypopnea 0-14 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Mild, Hypopnea 0-14 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -38,8 +38,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Mild, Hypopnea 0-14 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Mild, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -50,8 +50,8 @@ Scenario: Commercial DMER Sleep Apnea, Mild, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Mild, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -62,8 +62,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Mild, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Moderate, Hypopnea 15-29 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -74,8 +74,8 @@ Scenario: Commercial DMER Sleep Apnea, Moderate, Hypopnea 15-29 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Moderate, Hypopnea 15-29 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -86,8 +86,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Moderate, Hypopnea 15-29 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Moderate, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -98,8 +98,8 @@ Scenario: Commercial DMER Sleep Apnea, Moderate, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Moderate, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -110,8 +110,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Moderate, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Severe, Hypopnea 30+ Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -122,8 +122,8 @@ Scenario: Commercial DMER Sleep Apnea, Severe, Hypopnea 30+ Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Severe, Hypopnea 30+ Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -134,8 +134,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Severe, Hypopnea 30+ Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Sleep Apnea, Severe, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -146,8 +146,8 @@ Scenario: Commercial DMER Sleep Apnea, Severe, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Sleep Apnea, Severe, Epworth 0-10 Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -158,8 +158,8 @@ Scenario: Non-Commercial DMER Sleep Apnea, Severe, Epworth 0-10 Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -170,8 +170,8 @@ Scenario: Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance Cle
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -182,8 +182,8 @@ Scenario: Non-Commercial DMER Narcolepsy, No Daytime Attacks, Medical Compliance
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Seizures, No Epilepsy Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -193,8 +193,8 @@ Scenario: Commercial DMER Seizures, No Epilepsy Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Seizures, No Epilepsy Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -204,8 +204,8 @@ Scenario: Non-Commercial DMER Seizures, No Epilepsy Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Head Injury, Stable Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -215,8 +215,8 @@ Scenario: Commercial DMER Head Injury, Stable Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Head Injury, Stable Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
@@ -226,8 +226,8 @@ Scenario: Non-Commercial DMER Head Injury, Stable Clean Pass
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Intracranial Tumours, Tumour Resected/Eliminated Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is a commercial driver
     And binocular, corrected, or uncorrected vision is 20/30 or better
     And the acuity and visual field meets the criteria for license class
@@ -237,8 +237,8 @@ Scenario: Commercial DMER Intracranial Tumours, Tumour Resected/Eliminated Clean
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Intracranial Tumours, Tumour Resected/Eliminated Clean Pass
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the patient is not a commercial driver
     And binocular, corrected, or uncorrected vision is 20/50 or better
     And the acuity and visual field meets the criteria for license class
