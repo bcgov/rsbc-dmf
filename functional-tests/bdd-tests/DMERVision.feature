@@ -3,8 +3,8 @@ Feature: DMERVision.feature
     I want to confirm the vision business rules for a DMER
 
 Scenario: Non-Commercial DMER Vision Not 20/50
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'No' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -15,8 +15,8 @@ Scenario: Non-Commercial DMER Vision Not 20/50
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Vision Not 20/30
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'No' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -27,8 +27,8 @@ Scenario: Commercial DMER Vision Not 20/30
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Visual Field Defects
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I select 'Yes' for 'Has the patient experienced any visual field defects?'
@@ -39,8 +39,8 @@ Scenario: Non-Commercial DMER Visual Field Defects
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Visual Field Defects
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I select 'Yes' for 'Has the patient experienced any visual field defects?'
@@ -51,8 +51,8 @@ Scenario: Commercial DMER Visual Field Defects
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Visual Acuity
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -63,8 +63,8 @@ Scenario: Non-Commercial DMER Visual Acuity
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Visual Acuity
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -75,8 +75,8 @@ Scenario: Commercial DMER Visual Acuity
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Monocular Vision
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -87,8 +87,8 @@ Scenario: Non-Commercial DMER Monocular Vision
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Monocular Vision
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -99,8 +99,8 @@ Scenario: Commercial DMER Monocular Vision
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Does Not Meet Physician's Guide Criteria
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -111,8 +111,8 @@ Scenario: Non-Commercial DMER Does Not Meet Physician's Guide Criteria
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Does Not Meet Physician's Guide Criteria
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I select 'No' for 'Has the patient experienced any visual field defects?'
@@ -123,8 +123,8 @@ Scenario: Commercial DMER Does Not Meet Physician's Guide Criteria
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Uncorrected Binocular Vision Contradicts 20/50 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/55
@@ -137,8 +137,8 @@ Scenario: Non-Commercial DMER Uncorrected Binocular Vision Contradicts 20/50 Sta
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Uncorrected Left Eye Vision Contradicts 20/50 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Left Eye Vision as 20/55
@@ -151,8 +151,8 @@ Scenario: Non-Commercial DMER Uncorrected Left Eye Vision Contradicts 20/50 Stat
     Then the DMER must be reviewed
 
 Scenario: Non-Commercial DMER Uncorrected Right Eye Vision Contradicts 20/50 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Right Eye Vision as 20/55
@@ -165,8 +165,8 @@ Scenario: Non-Commercial DMER Uncorrected Right Eye Vision Contradicts 20/50 Sta
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Uncorrected Binocular Vision Contradicts 20/30 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/35
@@ -179,8 +179,8 @@ Scenario: Commercial DMER Uncorrected Binocular Vision Contradicts 20/30 Stateme
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Uncorrected Left Eye Vision Contradicts 20/30 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Left Eye Vision as 20/35
@@ -193,8 +193,8 @@ Scenario: Commercial DMER Uncorrected Left Eye Vision Contradicts 20/30 Statemen
     Then the DMER must be reviewed
 
 Scenario: Commercial DMER Uncorrected Right Eye Vision Contradicts 20/30 Statement
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Right Eye Vision as 20/35

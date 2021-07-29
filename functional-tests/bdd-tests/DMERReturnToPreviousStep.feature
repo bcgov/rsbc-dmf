@@ -3,7 +3,7 @@ Feature: DMERReturnToPreviousStep.feature
     I want to confirm that I can return to previous steps of a DMER
 
 Scenario: DMER Previous Step
-    Given I am logged in to the RSBC Portal
+    When I log in to the doctors' portal
     And I click on the DMER link
     And I complete the DMER fields
     And I return to a previous step
