@@ -5,7 +5,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Rsbc.Dmf.Interfaces
+namespace Pssg.Interfaces
 {
     public class S3HealthCheck : IHealthCheck
     // reference https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/health-checks?view=aspnetcore-2.2
