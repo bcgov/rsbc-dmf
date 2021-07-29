@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>92EA2A69-676E-4877-9993-E69C61DFC9B2</UserSecretsId>
-    <RootNamespace>Rsbc.Dmf.DocumentStorageAdapter</RootNamespace>
+    <RootNamespace>Pssg.DocumentStorageAdapter</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

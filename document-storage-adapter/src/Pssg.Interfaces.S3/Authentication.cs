@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 
-namespace Rsbc.Dmf.Interfaces
+namespace Pssg.Interfaces
 {
 
     /*

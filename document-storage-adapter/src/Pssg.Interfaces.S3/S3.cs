@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory; // To interact with Amazo
 // reference - https://docs.aws.amazon.com/sdkfornet/v3/apidocs/Index.html
 // reference - https://docs.ceph.com/en/latest/radosgw/s3/csharp/
 
-namespace Rsbc.Dmf.Interfaces
+namespace Pssg.Interfaces
 {
     public class S3
     {
@@ -529,28 +529,29 @@ namespace Rsbc.Dmf.Interfaces
         public async Task<byte[]> DownloadFile(string serverRelativeUrl)
         {
             byte[] result = null;
-
+            /*
             var strings = serverRelativeUrl.Split("/");
             if (strings.Length != 4) return result;
 
             var prefix = GetPrefix(strings[1], strings[2]);
 
             var fileKey = prefix + strings[3];
-
+            */
             var request = new GetObjectRequest();
             request.BucketName = Bucket;
-            request.Key = fileKey;
+            request.Key = serverRelativeUrl;
             var response = await S3Client.GetObjectAsync(request);
             // convert the response stream into a byte array.
-            using (var memoryStream = new MemoryStream())
+            using (Stream responseStream = response.ResponseStream)
             {
-                using (var x = response.ResponseStream)
+                using (var memoryStream = new MemoryStream())
                 {
-                    x.CopyTo(memoryStream);
+                    responseStream.CopyTo(memoryStream);
+                    memoryStream.Flush();
+                    result = memoryStream.ToArray();
                 }
-
-                result = memoryStream.ToArray();
             }
+
 
             return result;
         }

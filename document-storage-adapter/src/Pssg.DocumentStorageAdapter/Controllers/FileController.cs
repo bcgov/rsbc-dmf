@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Rsbc.Dmf.Interfaces;
+using Pssg.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Rsbc.Dmf.DocumentStorageAdapter.ViewModels;
 
-namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
+namespace Pssg.DocumentStorageAdapter.Controllers
 {
 
     [ApiController]
@@ -58,7 +57,13 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
         {
             var _S3 = new S3(_configuration);
             var fileContents = await _S3.DownloadFile (download.FileUrl);
+            if (fileContents == null)
+            {
+                return new BadRequestResult();
+            }
             return new FileContentResult(fileContents, "application/octet-stream");
+            
+            
         }
 
     }
