@@ -15,12 +15,12 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using RedHat.OpenShift.Utils;
-using Rsbc.Dmf.DocumentStorageAdapter;
+using Pssg.DocumentStorageAdapter;
 
 
 // from https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore-ex/dotnetcore-2.1-https/app/OpenShift.cs
 
-namespace Rsbc.Dmf.DocumentStorageAdapter
+namespace Pssg.DocumentStorageAdapter
 {
     public static class PlatformEnvironment
     {
@@ -266,11 +266,11 @@ namespace Microsoft.AspNetCore.Hosting
     public static class OpenShiftWebHostBuilderExtensions
     {
         public static IWebHostBuilder UseOpenShiftIntegration(this IWebHostBuilder builder,
-            Action<Rsbc.Dmf.DocumentStorageAdapter.OpenShiftIntegrationOptions> configureOptions)
+            Action<Pssg.DocumentStorageAdapter.OpenShiftIntegrationOptions> configureOptions)
         {
             if (configureOptions == null) throw new ArgumentNullException(nameof(configureOptions));
 
-            if (Rsbc.Dmf.DocumentStorageAdapter.PlatformEnvironment.IsOpenShift)
+            if (Pssg.DocumentStorageAdapter.PlatformEnvironment.IsOpenShift)
             {
                 // Clear the urls. We'll explicitly configure Kestrel depending on the options.
                 builder.UseUrls();
@@ -278,9 +278,9 @@ namespace Microsoft.AspNetCore.Hosting
                 builder.ConfigureServices(services =>
                 {
                     services.Configure(configureOptions);
-                    services.AddSingleton<Rsbc.Dmf.DocumentStorageAdapter.OpenShiftCertificateLoader>();
+                    services.AddSingleton<Pssg.DocumentStorageAdapter.OpenShiftCertificateLoader>();
                     services.AddSingleton<IConfigureOptions<KestrelServerOptions>, KestrelOptionsSetup>();
-                    services.AddSingleton<IHostedService, Rsbc.Dmf.DocumentStorageAdapter.OpenShiftCertificateExpiration>();
+                    services.AddSingleton<IHostedService, Pssg.DocumentStorageAdapter.OpenShiftCertificateExpiration>();
                 });
             }
 

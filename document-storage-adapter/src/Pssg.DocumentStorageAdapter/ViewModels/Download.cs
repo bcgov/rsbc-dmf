@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Rsbc.Dmf.DocumentStorageAdapter.ViewModels
+namespace Pssg.DocumentStorageAdapter.ViewModels
 {
     public class Download
     {
