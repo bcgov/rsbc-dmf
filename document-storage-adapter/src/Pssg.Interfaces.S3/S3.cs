@@ -108,6 +108,40 @@ namespace Pssg.Interfaces
             return result;
         }
 
+        public string GetDocumentListTitle(string entityName)
+        {
+            string listTitle;
+            switch (entityName.ToLower())
+            {
+                case "account":
+                    listTitle = DefaultDocumentListTitle;
+                    break;
+                case "application":
+                    listTitle = ApplicationDocumentListTitle;
+                    break;
+                case "contact":
+                    listTitle = ContactDocumentListTitle;
+                    break;
+                case "worker":
+                    listTitle = WorkerDocumentListTitle;
+                    break;
+                case "event":
+                    listTitle = EventDocumentListTitle;
+                    break;
+                case "federal_report":
+                    listTitle = FederalReportListTitle;
+                    break;
+                case "licence":
+                    listTitle = LicenceDocumentListTitle;
+                    break;
+                default:
+                    listTitle = entityName;
+                    break;
+            }
+
+            return listTitle;
+        }
+
         /// <summary>
         ///     Escape the apostrophe character.  Since we use it to enclose the filename it must be escaped.
         /// </summary>
@@ -378,6 +412,12 @@ namespace Pssg.Interfaces
             return serverRelativeUrl;
         }
 
+        public string GetServerRelativeUrl(string listTitle, string folderName, string filename)
+        {
+            string prefix = GetServerRelativeURL(listTitle, folderName);
+            return $"{prefix}/{filename}";
+        }
+
 
         private string GenerateUploadRequestUriString(string folderServerRelativeUrl, string fileName)
         {
@@ -405,13 +445,11 @@ namespace Pssg.Interfaces
                 folderName = FixFoldername(folderName);
                 fileName = GetTruncatedFileName(fileName, listTitle, folderName);
 
-                // convert the stream into a byte array.
-                var prefix = GetPrefix(listTitle, folderName);
-                var fileKey = prefix + fileName;
+                var key = GetServerRelativeUrl(listTitle, folderName, fileName);
 
                 var request = new PutObjectRequest();
                 request.BucketName = Bucket;
-                request.Key = fileKey;
+                request.Key = key;
                 request.ContentType = contentType;
                 request.InputStream = fileData;
                 await S3Client.PutObjectAsync(request);
@@ -422,37 +460,8 @@ namespace Pssg.Interfaces
         }
 
 
-        /// <summary>
-        ///     SharePoint is very particular about the file name length and the total characters in the URL to access a file.
-        ///     This method returns the input file name or a truncated version of the file name if it is over the max number of
-        ///     characters.
-        /// </summary>
-        /// <param name="fileName">The file name to check; e.g. "abcdefg1111222233334444.pdf"</param>
-        /// <param name="listTitle">The list title</param>
-        /// <param name="folderName">The folder name where the file would be uploaded</param>
-        /// <returns>The (potentially truncated) file name; e.g. "abcd.pdf"</returns>
-        public string GetTruncatedFileName(string fileName, string listTitle, string folderName)
-        {
-            // return early if S3 is disabled.
-            if (!IsValid()) return fileName;
 
-            // S3 requires that filenames are less than 128 characters.
-            var maxLength = 128;
-            fileName = FixFilename(fileName, maxLength);
-
-            // S3 also imposes a limit on the whole URL
-            var serverRelativeUrl = GetServerRelativeURL(listTitle, folderName);
-            var requestUriString = GenerateUploadRequestUriString(serverRelativeUrl, fileName);
-            if (requestUriString.Length > MaxUrlLength)
-            {
-                var delta = requestUriString.Length - MaxUrlLength;
-                maxLength -= delta;
-                fileName = FixFilename(fileName, maxLength);
-            }
-
-            return fileName;
-        }
-
+       
         /// <summary>
         ///     Upload a file
         /// </summary>
@@ -463,17 +472,17 @@ namespace Pssg.Interfaces
         /// <param name="contentType"></param>
         /// <returns>Uploaded Filename, or Null if not successful.</returns>
         public async Task<string> UploadFile(string fileName, string listTitle, string folderName, byte[] data,
-            string contentType)
+            string contentType, Dictionary<string, string> metadata = null)
         {
             string result = null;
             if (IsValid())
             {
                 folderName = FixFoldername(folderName);
                 fileName = GetTruncatedFileName(fileName, listTitle, folderName);
-                var prefix = GetPrefix(listTitle, folderName);
-                var fileKey = prefix + fileName;
+                
+                var key = GetServerRelativeUrl (listTitle, folderName, fileName);
 
-                result = await UploadFile(fileKey, data, contentType);
+                result = await UploadFile(key, data, contentType, metadata);
             }
 
             return result;
@@ -482,13 +491,13 @@ namespace Pssg.Interfaces
         /// <summary>
         ///     Upload a file
         /// </summary>
-        /// <param name="fileName"></param>
+        /// <param name="key"></param>
         /// <param name="listTitle"></param>
         /// <param name="folderName"></param>
         /// <param name="fileData"></param>
         /// <param name="contentType"></param>
         /// <returns>Uploaded Filename, or Null if not successful.</returns>
-        public async Task<string> UploadFile(string fileName, byte[] data, string contentType, Dictionary< string, string> metadata = null )
+        public async Task<string> UploadFile(string key, byte[] data, string contentType, Dictionary< string, string> metadata = null )
         {
             string result = null;
             if (IsValid())
@@ -499,7 +508,7 @@ namespace Pssg.Interfaces
                     var request = new PutObjectRequest()
                     {
                         BucketName = Bucket,
-                        Key = fileName,
+                        Key = key,
                         ContentType = contentType,
                         InputStream = inputStream
                     };
@@ -513,7 +522,7 @@ namespace Pssg.Interfaces
                     }
 
                     await S3Client.PutObjectAsync(request);
-                    result = fileName;
+                    result = key;
                 }
             }
 
@@ -555,6 +564,38 @@ namespace Pssg.Interfaces
 
             return result;
         }
+
+        /// <summary>
+        ///     SharePoint is very particular about the file name length and the total characters in the URL to access a file.
+        ///     This method returns the input file name or a truncated version of the file name if it is over the max number of
+        ///     characters.
+        /// </summary>
+        /// <param name="fileName">The file name to check; e.g. "abcdefg1111222233334444.pdf"</param>
+        /// <param name="listTitle">The list title</param>
+        /// <param name="folderName">The folder name where the file would be uploaded</param>
+        /// <returns>The (potentially truncated) file name; e.g. "abcd.pdf"</returns>
+        public string GetTruncatedFileName(string fileName, string listTitle, string folderName)
+        {
+            // return early if S3 is disabled.
+            if (!IsValid()) return fileName;
+
+            // S3 requires that filenames are less than 128 characters.
+            var maxLength = 128;
+            fileName = FixFilename(fileName, maxLength);
+
+            // S3 also imposes a limit on the whole URL
+            var serverRelativeUrl = GetServerRelativeURL(listTitle, folderName);
+            var requestUriString = GenerateUploadRequestUriString(serverRelativeUrl, fileName);
+            if (requestUriString.Length > MaxUrlLength)
+            {
+                var delta = requestUriString.Length - MaxUrlLength;
+                maxLength -= delta;
+                fileName = FixFilename(fileName, maxLength);
+            }
+
+            return fileName;
+        }
+
 
         public async Task<string> GetDigest(HttpClient client)
         {
