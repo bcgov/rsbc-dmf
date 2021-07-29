@@ -3,7 +3,7 @@ Feature: DMERSaveForLater.feature
     I want to confirm that I can save a DMER for later
 
 Scenario: DMER Save For Later
-    Given I am logged in to the RSBC Portal
+    When I log in to the doctors' portal
     And I click on the DMER link
     And I complete the DMER fields
     And I click on the Save For Later button

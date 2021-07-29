@@ -3,7 +3,7 @@ Feature: DMERValidationRules.feature
     I want to confirm the business rules for a DMER
 
 Scenario: DMER Validation Rules
-    Given I am logged in to the RSBC Portal
+    When I log in to the doctors' portal
     And I click on the DMER link
     And I do not complete the DMER fields
     And I submit the DMER form
