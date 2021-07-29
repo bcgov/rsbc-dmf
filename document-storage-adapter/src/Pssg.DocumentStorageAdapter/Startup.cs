@@ -13,14 +13,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Rsbc.Dmf.DocumentStorageAdapter.Services;
+using Pssg.DocumentStorageAdapter.Services;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
 
-namespace Rsbc.Dmf.DocumentStorageAdapter
+namespace Pssg.DocumentStorageAdapter
 {
     public class Startup
     {

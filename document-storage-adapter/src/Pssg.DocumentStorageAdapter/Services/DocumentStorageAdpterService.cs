@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Rsbc.Dmf.Interfaces;
+using Pssg.Interfaces;
 using Serilog;
 
 /** makes use of the AWS S3 SDK
@@ -21,7 +21,7 @@ https://aws.amazon.com/sdk-for-net/
 
 */
 
-namespace Rsbc.Dmf.DocumentStorageAdapter.Services
+namespace Pssg.DocumentStorageAdapter.Services
 {
     // Default to require authorization
     [Authorize]
