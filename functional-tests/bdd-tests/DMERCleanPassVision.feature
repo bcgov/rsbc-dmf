@@ -2,6 +2,20 @@ Feature: DMERCleanPass.feature
     As a Driver Medical Fitness SME
     I want to confirm the vision only clean pass business rules for a DMER
 
+Scenario: Vision Assessment
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I click on the Visual Assessment tab
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Next button
+    And I click on the Next button
+    And I click on the Next button
+    And the content is displayed for the DMER clean pass
+    Then I log out of the portal
+
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path)
     Given I am logged in to the Doctors' Portal
     When I click on the DMER link for the patient
