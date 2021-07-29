@@ -37,13 +37,15 @@ namespace Pssg.DocumentStorageAdapter.Controllers
             Dictionary<string, string> metaData = new Dictionary<string, string>()
             {
                 {S3.METADATA_KEY_ENTITY, upload.EntityName},
-                {S3.METADATA_KEY_ENTITY_ID, upload.EntityId.ToString()},
+                {S3.METADATA_KEY_ENTITY_ID, $"{upload.EntityId}"},
                 {S3.METADATA_KEY_TAG1, upload.Tag1},
                 {S3.METADATA_KEY_TAG2, upload.Tag2},
                 {S3.METADATA_KEY_TAG3, upload.Tag3}
             };
 
-            string fileUrl = await _S3.UploadFile(upload.FileName, data, upload.ContentType, metaData);
+            var listTitle = _S3.GetDocumentListTitle(upload.EntityName);
+
+            string fileUrl = await _S3.UploadFile(upload.FileName, listTitle, upload.EntityId.ToString(), data, upload.ContentType, metaData);
             ViewModels.Download result = new ViewModels.Download() {FileUrl = fileUrl};
             return new JsonResult(result);
         }
