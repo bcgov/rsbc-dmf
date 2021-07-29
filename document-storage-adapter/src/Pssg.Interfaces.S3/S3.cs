@@ -415,7 +415,7 @@ namespace Pssg.Interfaces
         public string GetServerRelativeUrl(string listTitle, string folderName, string filename)
         {
             string prefix = GetServerRelativeURL(listTitle, folderName);
-            return $"{prefix}/{filename}";
+            return $"{prefix}{filename}";
         }
 
 
