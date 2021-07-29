@@ -17,8 +17,8 @@ Scenario: Clean Pass Vision Assessment
     Then I log out of the portal
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/20
@@ -33,8 +33,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/20
@@ -49,8 +49,8 @@ Scenario: Commercial DMER Vision Only Clean Pass (Happy Path)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/50)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/50
@@ -65,8 +65,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/50)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/45)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/45
@@ -81,8 +81,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/45)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/40)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/40
@@ -97,8 +97,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/40)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/35)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/35
@@ -113,8 +113,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/35)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/30
@@ -129,8 +129,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/25
@@ -145,8 +145,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/20
@@ -161,8 +161,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/15
@@ -177,8 +177,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
     Then the DMER has a clean pass
 
 Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/10)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is not to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/50 or better?'
     And I enter the Uncorrected Binocular Vision as 20/10
@@ -193,8 +193,8 @@ Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/10)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/30
@@ -209,8 +209,8 @@ Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/25
@@ -225,8 +225,8 @@ Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/20
@@ -241,8 +241,8 @@ Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/15
@@ -257,8 +257,8 @@ Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
     Then the DMER has a clean pass
 
 Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/10)
-    Given I am logged in to the Doctors' Portal
-    When I click on the DMER link for the patient
+    When I log in to the doctors' portal
+    And I click on the DMER link for the patient
     And the DMER is to be processed for commercial purposes
     And I select 'Yes' for 'Binocular vision, Corrected or Uncorrected is 20/30 or better?'
     And I enter the Uncorrected Binocular Vision as 20/10
