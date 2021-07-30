@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Pssg.DocumentStorageAdapter.ViewModels;
 
 namespace Pssg.DocumentStorageAdapter.Controllers
 {
@@ -58,14 +59,27 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         public async Task<ActionResult> Download([FromBody] ViewModels.Download download)
         {
             var _S3 = new S3(_configuration);
-            var fileContents = await _S3.DownloadFile (download.FileUrl);
+            Dictionary< string, string> metaData = new Dictionary<string, string>();
+            var fileContents = _S3.DownloadFile (download.FileUrl, ref metaData);
             if (fileContents == null)
             {
                 return new BadRequestResult();
             }
-            return new FileContentResult(fileContents, "application/octet-stream");
-            
-            
+            //return new FileContentResult(fileContents, "application/octet-stream");
+
+            var result = new Upload()
+            {
+                FileName = download.FileUrl,
+                Body = Convert.ToBase64String(fileContents),
+                EntityName = metaData[ S3.METADATA_KEY_ENTITY],
+                EntityId = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) && metaData[S3.METADATA_KEY_ENTITY_ID] != null ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID]) : new Guid(),
+                Tag1 = metaData[S3.METADATA_KEY_TAG1],
+                Tag2 = metaData[S3.METADATA_KEY_TAG2],
+                Tag3 = metaData[S3.METADATA_KEY_TAG3]
+            };
+
+            return new JsonResult(result);
+
         }
 
     }

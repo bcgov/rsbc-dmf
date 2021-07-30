@@ -154,8 +154,17 @@ namespace Pssg.DocumentStorageAdapter.Tests
             response.EnsureSuccessStatusCode();
 
             // content should match
+            /* test for download as file
             string result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
             Assert.Equal(result, testString);
+            */
+
+            // test for download as object
+            jsonString = await response.Content.ReadAsStringAsync();
+            Upload received = JsonConvert.DeserializeObject<Upload>(jsonString);
+
+            Assert.Equal(Convert.FromBase64String(received.Body), Encoding.ASCII.GetBytes(testString));
+
 
         }
 
