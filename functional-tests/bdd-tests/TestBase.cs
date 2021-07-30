@@ -343,7 +343,7 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
-                var nextButton = ngDriver.FindElement(By.XPath("//*[@id='wizard-epfl9n-nav']/li[2]/button"));
+                var nextButton = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body/div[1]/div/div[2]/div[1]/div/div/div/ul/li[2]/button"));
                 nextButton.Click();
             }
         }
@@ -359,7 +359,10 @@ namespace bdd_tests
         [And(@"I enter the Uncorrected Binocular Vision as 20")]
         public void UncorrectedBinocularVision()
         {
+            var twenty = "20";
 
+            var uncorrectedBinoVision = ngDriver.WrappedDriver.FindElement(By.Name("data[numVIS_2_1a3]"));
+            uncorrectedBinoVision.SendKeys(twenty);
         }
 
 
