@@ -123,8 +123,8 @@ namespace Pssg.DocumentStorageAdapter.Tests
             }
 
             // verify that we can download the same file.
-
-            byte[] data = await s3.DownloadFile(path);
+            Dictionary<string, string> metaData = new Dictionary<string, string>();
+            byte[] data = s3.DownloadFile(path, ref metaData);
             string stringData = System.Text.Encoding.ASCII.GetString(data);
             Assert.Equal(stringData, testData);
 
@@ -189,8 +189,8 @@ namespace Pssg.DocumentStorageAdapter.Tests
             }
 
             // verify that we can download the same file.
-
-            byte[] data = await s3.DownloadFile(path);
+            Dictionary<string, string> metaData = new Dictionary<string, string>();
+            byte[] data = s3.DownloadFile(path, ref metaData);
             string stringData = System.Text.Encoding.ASCII.GetString(data);
             Assert.Equal(stringData, testData);
 
@@ -235,8 +235,8 @@ namespace Pssg.DocumentStorageAdapter.Tests
             }
 
             // verify that we can download the same file.
-
-            byte[] data = await s3.DownloadFile(path);
+            Dictionary<string, string> metaData = new Dictionary<string, string>();
+            byte[] data = s3.DownloadFile(path, ref metaData);
             string stringData = System.Text.Encoding.ASCII.GetString(data);
             Assert.Equal(stringData, testData);
 

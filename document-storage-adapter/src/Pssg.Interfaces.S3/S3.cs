@@ -19,11 +19,11 @@ namespace Pssg.Interfaces
 {
     public class S3
     {
-        public const string METADATA_KEY_ENTITY = "Entity";
-        public const string METADATA_KEY_ENTITY_ID = "EntityId";
-        public const string METADATA_KEY_TAG1 = "Tag1";
-        public const string METADATA_KEY_TAG2 = "Tag2";
-        public const string METADATA_KEY_TAG3 = "Tag3";
+        public const string METADATA_KEY_ENTITY = "x-amz-meta-entity";
+        public const string METADATA_KEY_ENTITY_ID = "x-amz-meta-entity-id";
+        public const string METADATA_KEY_TAG1 = "x-amz-meta-tag1";
+        public const string METADATA_KEY_TAG2 = "x-amz-meta-tag2";
+        public const string METADATA_KEY_TAG3 = "x-amz-meta-tag3";
 
         public const string DefaultDocumentListTitle = "Account";
         public const string DefaultDocumentUrlTitle = "account";
@@ -529,13 +529,13 @@ namespace Pssg.Interfaces
             return result;
         }
 
-
+        
         /// <summary>
         ///     Download a file
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public async Task<byte[]> DownloadFile(string serverRelativeUrl)
+        public byte[] DownloadFile(string serverRelativeUrl, ref Dictionary<string, string> metaData)
         {
             byte[] result = null;
             /*
@@ -549,8 +549,18 @@ namespace Pssg.Interfaces
             var request = new GetObjectRequest();
             request.BucketName = Bucket;
             request.Key = serverRelativeUrl;
-            var response = await S3Client.GetObjectAsync(request);
+            var response = S3Client.GetObjectAsync(request).GetAwaiter().GetResult();
             // convert the response stream into a byte array.
+
+            if (metaData != null)
+            {
+                metaData[S3.METADATA_KEY_ENTITY] = response.Metadata[S3.METADATA_KEY_ENTITY];
+                metaData[S3.METADATA_KEY_ENTITY_ID] = response.Metadata[S3.METADATA_KEY_ENTITY_ID];
+                metaData[S3.METADATA_KEY_TAG1] = response.Metadata[S3.METADATA_KEY_TAG1];
+                metaData[S3.METADATA_KEY_TAG2] = response.Metadata[S3.METADATA_KEY_TAG2];
+                metaData[S3.METADATA_KEY_TAG3] = response.Metadata[S3.METADATA_KEY_TAG3];
+            }
+
             using (Stream responseStream = response.ResponseStream)
             {
                 using (var memoryStream = new MemoryStream())
