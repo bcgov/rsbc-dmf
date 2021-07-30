@@ -253,6 +253,14 @@ namespace bdd_tests
                 var driverGender = ngDriver.WrappedDriver.FindElement(By.Name("data[radioTargetDriverGender][eoz6u4e]"));
                 Assert.True(driverGender.GetAttribute("checked") == "true");
 
+                // confirm value of driver's country
+                var driverCountry = ngDriver.WrappedDriver.FindElement(By.Name("data[selTargetDriverCountry]"));
+                Assert.True(driverCountry.GetAttribute("value") == "Canada");
+
+                // confirm value of driver's province
+                var driverProvince = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverProvince]"));
+                Assert.True(driverProvince.GetAttribute("value") == "British Columbia");
+
                 // confirm value of driver's city
                 var driverCity = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverCity]"));
                 Assert.True(driverCity.GetAttribute("value") == "VICTORIA");
