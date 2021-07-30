@@ -1,4 +1,4 @@
-﻿namespace Rsbc.Dmf.Interfaces
+﻿namespace Pssg.Interfaces
 {
     using Microsoft.Rest;
 

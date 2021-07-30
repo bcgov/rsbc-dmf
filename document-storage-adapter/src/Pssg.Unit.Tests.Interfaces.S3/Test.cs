@@ -1,15 +1,15 @@
 
 
 using Microsoft.Extensions.Configuration;
-using Rsbc.Dmf.DocumentStorageAdapter;
-using Rsbc.Dmf.Interfaces;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
 
 
-namespace Rsbc.Unit.Tests.Interfaces
+namespace Pssg.DocumentStorageAdapter.Tests
 {
     public class Test
     {

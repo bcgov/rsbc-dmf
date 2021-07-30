@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Rsbc.Dmf.Interfaces;
+using Pssg.Interfaces;
 using Serilog;
 
 /** makes use of the AWS S3 SDK
@@ -21,7 +21,7 @@ https://aws.amazon.com/sdk-for-net/
 
 */
 
-namespace Rsbc.Dmf.DocumentStorageAdapter.Services
+namespace Pssg.DocumentStorageAdapter.Services
 {
     // Default to require authorization
     [Authorize]
@@ -42,9 +42,11 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Services
 
             var logFolder = WordSanitizer.Sanitize(request.FolderName);
 
-            var listTitle = GetDocumentListTitle(request.EntityName);
+            
 
             var _S3 = new S3(_configuration);
+            
+            var listTitle = _S3.GetDocumentListTitle(request.EntityName);
 
             CreateDocumentLibraryIfMissing(listTitle, GetDocumentTemplateUrlPart(request.EntityName));
 
@@ -65,7 +67,7 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Services
             else
                 try
                 {
-                    _S3.CreateFolder(GetDocumentListTitle(request.EntityName), request.FolderName)
+                    _S3.CreateFolder(_S3.GetDocumentListTitle(request.EntityName), request.FolderName)
                         .GetAwaiter().GetResult();
                     var folder = _S3.GetFolder(listTitle, request.FolderName).GetAwaiter()
                         .GetResult();
@@ -115,39 +117,7 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Services
             return Task.FromResult(result);
         }
 
-        private string GetDocumentListTitle(string entityName)
-        {
-            string listTitle;
-            switch (entityName.ToLower())
-            {
-                case "account":
-                    listTitle = S3.DefaultDocumentListTitle;
-                    break;
-                case "application":
-                    listTitle = S3.ApplicationDocumentListTitle;
-                    break;
-                case "contact":
-                    listTitle = S3.ContactDocumentListTitle;
-                    break;
-                case "worker":
-                    listTitle = S3.WorkerDocumentListTitle;
-                    break;
-                case "event":
-                    listTitle = S3.EventDocumentListTitle;
-                    break;
-                case "federal_report":
-                    listTitle = S3.FederalReportListTitle;
-                    break;
-                case "licence":
-                    listTitle = S3.LicenceDocumentListTitle;
-                    break;
-                default:
-                    listTitle = entityName;
-                    break;
-            }
-
-            return listTitle;
-        }
+        
 
         private string GetDocumentTemplateUrlPart(string entityName)
         {
@@ -254,7 +224,7 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Services
 
             var _S3 = new S3(_configuration);
 
-            CreateDocumentLibraryIfMissing(GetDocumentListTitle(request.EntityName),
+            CreateDocumentLibraryIfMissing(_S3.GetDocumentListTitle(request.EntityName),
                 GetDocumentTemplateUrlPart(request.EntityName));
 
             try
@@ -370,7 +340,7 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Services
                 var _S3 = new S3(_configuration);
 
                 // Ask SharePoint whether this filename would be truncated upon upload
-                var listTitle = GetDocumentListTitle(request.EntityName);
+                var listTitle = _S3.GetDocumentListTitle(request.EntityName);
                 var maybeTruncated =
                     _S3.GetTruncatedFileName(request.FileName, listTitle, request.FolderName);
                 result.FileName = maybeTruncated;
