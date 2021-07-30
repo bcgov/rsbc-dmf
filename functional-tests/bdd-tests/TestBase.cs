@@ -343,7 +343,9 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
-                var nextButton = ngDriver.FindElement(By.ClassName("btn btn-primary btn-wizard-nav-next"));
+                //            var yesButton = ngDriver.FindElement(By.CssSelector("button.btn-primary"));
+
+                var nextButton = ngDriver.FindElement(By.CssSelector("btn.btn-primary.btn-wizard-nav-next"));
                 nextButton.Click();
             }
         }
