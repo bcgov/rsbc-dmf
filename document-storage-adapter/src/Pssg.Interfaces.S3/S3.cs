@@ -15,7 +15,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory; // To interact with Amazo
 // reference - https://docs.aws.amazon.com/sdkfornet/v3/apidocs/Index.html
 // reference - https://docs.ceph.com/en/latest/radosgw/s3/csharp/
 
-namespace Rsbc.Dmf.Interfaces
+namespace Pssg.Interfaces
 {
     public class S3
     {
@@ -106,6 +106,40 @@ namespace Rsbc.Dmf.Interfaces
             var result = false;
             if (S3Client != null) result = true;
             return result;
+        }
+
+        public string GetDocumentListTitle(string entityName)
+        {
+            string listTitle;
+            switch (entityName.ToLower())
+            {
+                case "account":
+                    listTitle = DefaultDocumentListTitle;
+                    break;
+                case "application":
+                    listTitle = ApplicationDocumentListTitle;
+                    break;
+                case "contact":
+                    listTitle = ContactDocumentListTitle;
+                    break;
+                case "worker":
+                    listTitle = WorkerDocumentListTitle;
+                    break;
+                case "event":
+                    listTitle = EventDocumentListTitle;
+                    break;
+                case "federal_report":
+                    listTitle = FederalReportListTitle;
+                    break;
+                case "licence":
+                    listTitle = LicenceDocumentListTitle;
+                    break;
+                default:
+                    listTitle = entityName;
+                    break;
+            }
+
+            return listTitle;
         }
 
         /// <summary>
@@ -378,6 +412,12 @@ namespace Rsbc.Dmf.Interfaces
             return serverRelativeUrl;
         }
 
+        public string GetServerRelativeUrl(string listTitle, string folderName, string filename)
+        {
+            string prefix = GetServerRelativeURL(listTitle, folderName);
+            return $"{prefix}{filename}";
+        }
+
 
         private string GenerateUploadRequestUriString(string folderServerRelativeUrl, string fileName)
         {
@@ -405,13 +445,11 @@ namespace Rsbc.Dmf.Interfaces
                 folderName = FixFoldername(folderName);
                 fileName = GetTruncatedFileName(fileName, listTitle, folderName);
 
-                // convert the stream into a byte array.
-                var prefix = GetPrefix(listTitle, folderName);
-                var fileKey = prefix + fileName;
+                var key = GetServerRelativeUrl(listTitle, folderName, fileName);
 
                 var request = new PutObjectRequest();
                 request.BucketName = Bucket;
-                request.Key = fileKey;
+                request.Key = key;
                 request.ContentType = contentType;
                 request.InputStream = fileData;
                 await S3Client.PutObjectAsync(request);
@@ -421,6 +459,111 @@ namespace Rsbc.Dmf.Interfaces
             return result;
         }
 
+
+
+       
+        /// <summary>
+        ///     Upload a file
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="listTitle"></param>
+        /// <param name="folderName"></param>
+        /// <param name="fileData"></param>
+        /// <param name="contentType"></param>
+        /// <returns>Uploaded Filename, or Null if not successful.</returns>
+        public async Task<string> UploadFile(string fileName, string listTitle, string folderName, byte[] data,
+            string contentType, Dictionary<string, string> metadata = null)
+        {
+            string result = null;
+            if (IsValid())
+            {
+                folderName = FixFoldername(folderName);
+                fileName = GetTruncatedFileName(fileName, listTitle, folderName);
+                
+                var key = GetServerRelativeUrl (listTitle, folderName, fileName);
+
+                result = await UploadFile(key, data, contentType, metadata);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Upload a file
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="listTitle"></param>
+        /// <param name="folderName"></param>
+        /// <param name="fileData"></param>
+        /// <param name="contentType"></param>
+        /// <returns>Uploaded Filename, or Null if not successful.</returns>
+        public async Task<string> UploadFile(string key, byte[] data, string contentType, Dictionary< string, string> metadata = null )
+        {
+            string result = null;
+            if (IsValid())
+            {
+
+                using (var inputStream = new MemoryStream(data))
+                {
+                    var request = new PutObjectRequest()
+                    {
+                        BucketName = Bucket,
+                        Key = key,
+                        ContentType = contentType,
+                        InputStream = inputStream
+                    };
+
+                    if (metadata != null)
+                    {
+                        foreach (var item in metadata)
+                        {
+                            request.Metadata.Add(item.Key, item.Value);
+                        }
+                    }
+
+                    await S3Client.PutObjectAsync(request);
+                    result = key;
+                }
+            }
+
+            return result;
+        }
+
+
+        /// <summary>
+        ///     Download a file
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public async Task<byte[]> DownloadFile(string serverRelativeUrl)
+        {
+            byte[] result = null;
+            /*
+            var strings = serverRelativeUrl.Split("/");
+            if (strings.Length != 4) return result;
+
+            var prefix = GetPrefix(strings[1], strings[2]);
+
+            var fileKey = prefix + strings[3];
+            */
+            var request = new GetObjectRequest();
+            request.BucketName = Bucket;
+            request.Key = serverRelativeUrl;
+            var response = await S3Client.GetObjectAsync(request);
+            // convert the response stream into a byte array.
+            using (Stream responseStream = response.ResponseStream)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    responseStream.CopyTo(memoryStream);
+                    memoryStream.Flush();
+                    result = memoryStream.ToArray();
+                }
+            }
+
+
+            return result;
+        }
 
         /// <summary>
         ///     SharePoint is very particular about the file name length and the total characters in the URL to access a file.
@@ -453,107 +596,6 @@ namespace Rsbc.Dmf.Interfaces
             return fileName;
         }
 
-        /// <summary>
-        ///     Upload a file
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="listTitle"></param>
-        /// <param name="folderName"></param>
-        /// <param name="fileData"></param>
-        /// <param name="contentType"></param>
-        /// <returns>Uploaded Filename, or Null if not successful.</returns>
-        public async Task<string> UploadFile(string fileName, string listTitle, string folderName, byte[] data,
-            string contentType)
-        {
-            string result = null;
-            if (IsValid())
-            {
-                folderName = FixFoldername(folderName);
-                fileName = GetTruncatedFileName(fileName, listTitle, folderName);
-                var prefix = GetPrefix(listTitle, folderName);
-                var fileKey = prefix + fileName;
-
-                result = await UploadFile(fileKey, data, contentType);
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        ///     Upload a file
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="listTitle"></param>
-        /// <param name="folderName"></param>
-        /// <param name="fileData"></param>
-        /// <param name="contentType"></param>
-        /// <returns>Uploaded Filename, or Null if not successful.</returns>
-        public async Task<string> UploadFile(string fileName, byte[] data, string contentType, Dictionary< string, string> metadata = null )
-        {
-            string result = null;
-            if (IsValid())
-            {
-
-                using (var inputStream = new MemoryStream(data))
-                {
-                    var request = new PutObjectRequest()
-                    {
-                        BucketName = Bucket,
-                        Key = fileName,
-                        ContentType = contentType,
-                        InputStream = inputStream
-                    };
-
-                    if (metadata != null)
-                    {
-                        foreach (var item in metadata)
-                        {
-                            request.Metadata.Add(item.Key, item.Value);
-                        }
-                    }
-
-                    await S3Client.PutObjectAsync(request);
-                    result = fileName;
-                }
-            }
-
-            return result;
-        }
-
-
-        /// <summary>
-        ///     Download a file
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public async Task<byte[]> DownloadFile(string serverRelativeUrl)
-        {
-            byte[] result = null;
-
-            var strings = serverRelativeUrl.Split("/");
-            if (strings.Length != 4) return result;
-
-            var prefix = GetPrefix(strings[1], strings[2]);
-
-            var fileKey = prefix + strings[3];
-
-            var request = new GetObjectRequest();
-            request.BucketName = Bucket;
-            request.Key = fileKey;
-            var response = await S3Client.GetObjectAsync(request);
-            // convert the response stream into a byte array.
-            using (var memoryStream = new MemoryStream())
-            {
-                using (var x = response.ResponseStream)
-                {
-                    x.CopyTo(memoryStream);
-                }
-
-                result = memoryStream.ToArray();
-            }
-
-            return result;
-        }
 
         public async Task<string> GetDigest(HttpClient client)
         {

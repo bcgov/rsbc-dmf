@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace Rsbc.Dmf.DocumentStorageAdapter
+namespace Pssg.DocumentStorageAdapter
 {
     public class Program
     {

@@ -2,14 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Rsbc.Dmf.Interfaces;
+using Pssg.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Rsbc.Dmf.DocumentStorageAdapter.ViewModels;
 
-namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
+namespace Pssg.DocumentStorageAdapter.Controllers
 {
 
     [ApiController]
@@ -38,13 +37,15 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
             Dictionary<string, string> metaData = new Dictionary<string, string>()
             {
                 {S3.METADATA_KEY_ENTITY, upload.EntityName},
-                {S3.METADATA_KEY_ENTITY_ID, upload.EntityId.ToString()},
+                {S3.METADATA_KEY_ENTITY_ID, $"{upload.EntityId}"},
                 {S3.METADATA_KEY_TAG1, upload.Tag1},
                 {S3.METADATA_KEY_TAG2, upload.Tag2},
                 {S3.METADATA_KEY_TAG3, upload.Tag3}
             };
 
-            string fileUrl = await _S3.UploadFile(upload.FileName, data, upload.ContentType, metaData);
+            var listTitle = _S3.GetDocumentListTitle(upload.EntityName);
+
+            string fileUrl = await _S3.UploadFile(upload.FileName, listTitle, upload.EntityId.ToString(), data, upload.ContentType, metaData);
             ViewModels.Download result = new ViewModels.Download() {FileUrl = fileUrl};
             return new JsonResult(result);
         }
@@ -58,7 +59,13 @@ namespace Rsbc.Dmf.DocumentStorageAdapter.Controllers
         {
             var _S3 = new S3(_configuration);
             var fileContents = await _S3.DownloadFile (download.FileUrl);
+            if (fileContents == null)
+            {
+                return new BadRequestResult();
+            }
             return new FileContentResult(fileContents, "application/octet-stream");
+            
+            
         }
 
     }
