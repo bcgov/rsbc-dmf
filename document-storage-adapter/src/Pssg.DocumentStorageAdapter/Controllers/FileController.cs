@@ -45,7 +45,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
 
             var listTitle = _S3.GetDocumentListTitle(upload.EntityName);
 
-            string fileUrl = await _S3.UploadFile(upload.FileName, listTitle, upload.EntityId.ToString(), data, upload.ContentType, metaData);
+            string fileUrl = await _S3.UploadFile(upload.FileName, listTitle, $"{upload.EntityId}", data, upload.ContentType, metaData);
             ViewModels.Download result = new ViewModels.Download() {FileUrl = fileUrl};
             return new JsonResult(result);
         }
