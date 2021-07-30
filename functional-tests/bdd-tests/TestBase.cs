@@ -225,7 +225,7 @@ namespace bdd_tests
                 for (var i = 0; i < 60; i++)
                     try
                     {
-                        var names = ngDriver.FindElements(By.Id("e9egu0c-textTargetDriverLicense"));
+                        var names = ngDriver.FindElements(By.Name("data[textTargetDriverLicense]"));
                         if (names.Count > 0)
                         {
                             driversLicence = names[0];
@@ -238,31 +238,35 @@ namespace bdd_tests
                 Assert.True(driversLicence.GetAttribute("value") == "0200700");
 
                 // confirm value of driver's surname
-                var driverSurname = ngDriver.WrappedDriver.FindElement(By.Id("ejdutis-textTargetDriverName"));
+                var driverSurname = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverName]"));
                 Assert.True(driverSurname.GetAttribute("value") == "PAKKER");
 
                 // confirm value of driver's given name
-                var driverGivenName = ngDriver.WrappedDriver.FindElement(By.Id("ewjvhp-textTargetDriverFirstname"));
+                var driverGivenName = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverFirstname]"));
                 Assert.True(driverGivenName.GetAttribute("value") == "PETER");
 
                 // confirm value of driver's date of birth
-                var driverDateOfBirth = ngDriver.WrappedDriver.FindElement(By.Id("evc5z8l-tDateTargetDriverBirthdate"));
+                var driverDateOfBirth = ngDriver.WrappedDriver.FindElement(By.Name("data[tDateTargetDriverBirthdate]"));
                 Assert.True(driverDateOfBirth.GetAttribute("value") == "1987-03-26");
 
                 // confirm value of driver's gender
-                var driverGender = ngDriver.WrappedDriver.FindElement(By.Id("e1iwjqo-male"));
+                var driverGender = ngDriver.WrappedDriver.FindElement(By.Name("data[radioTargetDriverGender][eoz6u4e]"));
                 Assert.True(driverGender.GetAttribute("checked") == "true");
 
                 // confirm value of driver's city
-                var driverCity = ngDriver.WrappedDriver.FindElement(By.Id("ewoszlf-textTargetDriverCity"));
+                var driverCity = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverCity]"));
                 Assert.True(driverCity.GetAttribute("value") == "VICTORIA");
 
                 // confirm value of driver's street address 1
-                var driverStreetAddress1 = ngDriver.WrappedDriver.FindElement(By.Id("e94cf9y-textTargetDriverAddr1"));
+                var driverStreetAddress1 = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverAddr1]"));
                 Assert.True(driverStreetAddress1.GetAttribute("value") == "129 DEAN RD");
 
+                // confirm value of driver's street address 2
+                var driverStreetAddress2 = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverAddr2]"));
+                Assert.True(driverStreetAddress2.GetAttribute("value") == "");
+
                 // confirm value of driver's postal code
-                var driverPostalCode = ngDriver.WrappedDriver.FindElement(By.Id("e3d39e-textTargetDriverPostal"));
+                var driverPostalCode = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverPostal]"));
                 Assert.True(driverPostalCode.GetAttribute("value") == "V8K 2K4");
             }
         }
