@@ -337,8 +337,14 @@ namespace bdd_tests
 
             if (element == "the Preliminary Visual Assessment tab")
             {
-                var preliminaryVisualAssessment= ngDriver.FindElement(By.PartialLinkText("Preliminary Visual Assessment"));
+                var preliminaryVisualAssessment= ngDriver.WrappedDriver.FindElement(By.PartialLinkText("Preliminary Visual Assessment"));
                 preliminaryVisualAssessment.Click();
+            }
+
+            if (element == "the Next button")
+            {
+                var nextButton = ngDriver.FindElement(By.ClassName("btn btn-primary btn-wizard-nav-next"));
+                nextButton.Click();
             }
         }
 
@@ -357,25 +363,23 @@ namespace bdd_tests
         }
 
 
-        [And(@"I click on the Next button")]
-        public void NextButton()
-        {
-            var nextButton = ngDriver.WrappedDriver.FindElement(By.ClassName("btn btn-primary btn-wizard-nav-next"));
-            nextButton.Click();
-        }
-
-
         [And(@"I update the phone and fax numbers")]
         public void phoneFaxNumbers()
         {
             var phone = "123-123-1235";
             var fax = "123-123-1235";
 
-            var updatePhone = ngDriver.WrappedDriver.FindElement(By.Name("data[providerPhoneNumber]"));
+            Thread.Sleep(3000);
+
+            ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+            Thread.Sleep(10000);
+
+            var updatePhone = ngDriver.FindElement(By.Name("data[providerPhoneNumber]"));
             updatePhone.Clear();
             updatePhone.SendKeys(phone);
 
-            var updateFax = ngDriver.WrappedDriver.FindElement(By.Name("data[providerFaxNumber]"));
+            var updateFax = ngDriver.FindElement(By.Name("data[providerFaxNumber]"));
             updateFax.Clear();
             updateFax.SendKeys(fax);
         }
