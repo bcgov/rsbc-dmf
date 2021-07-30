@@ -7,6 +7,8 @@ Scenario: Clean Pass Vision Assessment
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
     And I refresh the page
+    # Workaround for S3DMFT-839
+    And I update the phone and fax numbers
     And I click on the Next button
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
