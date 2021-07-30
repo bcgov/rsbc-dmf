@@ -97,7 +97,7 @@ namespace Pssg.Interfaces
 
         private string GetPrefix(string listTitle, string folderName)
         {
-            var prefix = $"/{listTitle}/${folderName}/";
+            var prefix = $"/{listTitle}/{folderName}/";
             return prefix;
         }
 
