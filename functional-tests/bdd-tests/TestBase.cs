@@ -343,6 +343,8 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
+                Thread.Sleep(10000);
+
                 var nextButton = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body/div[1]/div/div[2]/div[1]/div/div/div/ul/li[2]/button"));
                 nextButton.Click();
             }
@@ -363,28 +365,6 @@ namespace bdd_tests
 
             var uncorrectedBinoVision = ngDriver.WrappedDriver.FindElement(By.Name("data[numVIS_2_1a3]"));
             uncorrectedBinoVision.SendKeys(twenty);
-        }
-
-
-        [And(@"I update the phone and fax numbers")]
-        public void phoneFaxNumbers()
-        {
-            var phone = "123-123-1235";
-            var fax = "123-123-1235";
-
-            Thread.Sleep(3000);
-
-            ngDriver.WrappedDriver.SwitchTo().Frame(0);
-
-            Thread.Sleep(10000);
-
-            var updatePhone = ngDriver.FindElement(By.Name("data[providerPhoneNumber]"));
-            updatePhone.Clear();
-            updatePhone.SendKeys(phone);
-
-            var updateFax = ngDriver.FindElement(By.Name("data[providerFaxNumber]"));
-            updateFax.Clear();
-            updateFax.SendKeys(fax);
         }
 
 
