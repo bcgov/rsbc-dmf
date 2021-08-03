@@ -264,6 +264,11 @@ namespace Rsbc.Dmf.PhsaAdapter
                     throw new Exception(
                         $"Error introspecting token: {introspectionResponse.ErrorType} - {introspectionResponse.Error}");
                 if (introspectionResponse == null) throw new Exception($"Token is null");
+                if (introspectionResponse.Claims.FirstOrDefault() != null &&
+                    introspectionResponse.Claims.FirstOrDefault().Type == "error")
+                {
+                    return null;
+                }
                 if (!introspectionResponse.IsActive) throw new Exception($"Token {phsaReferenceToken} is not active");
 
                 //TODO: remove '+' removal when PHSA fixes the JWT format
