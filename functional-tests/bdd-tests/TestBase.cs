@@ -6,6 +6,7 @@ using OpenQA.Selenium.Chrome;
 using Protractor;
 using Xunit.Gherkin.Quick;
 using System.Threading;
+using OpenQA.Selenium.Support.UI;
 using Xunit;
 
 namespace bdd_tests
@@ -72,7 +73,7 @@ namespace bdd_tests
             ngDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
             //ngDriver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(timeout * 2);
 
-            baseUri = configuration["baseUri"] ?? "https://dev.justice.gov.bc.ca/lcrb";
+            baseUri = configuration["BASE_URI"] ?? "https://dev.justice.gov.bc.ca/lcrb";
         }
 
         protected bool IsIdPresent(string id)
@@ -148,9 +149,9 @@ namespace bdd_tests
         [When(@"I log in to the doctors' portal")]
         public void DoctorsPortalLogIn()
         {
-            var DoctorsPortalUri = configuration["baseUri"];
-            var cardSerialNumber = configuration["csn"];
-            var passcode = configuration["passcode"];
+            var DoctorsPortalUri = configuration["BASE_URI"];
+            var cardSerialNumber = configuration["BC_SERVICE_CARD_VIRTUAL_TOKEN"];
+            var passcode = configuration["BC_SERVICE_CARD_PASSWORD"];
 
             ngDriver.IgnoreSynchronization = true;
             ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
@@ -215,26 +216,13 @@ namespace bdd_tests
 
             if (contentType == "the ICBC tombstone data")
             {
-                Thread.Sleep(3000);
+                WaitForFrame();
+                //Thread.Sleep(3000);
 
                 ngDriver.WrappedDriver.SwitchTo().Frame(0);
 
-                Thread.Sleep(10000);
-
-                NgWebElement driversLicence = null;
-                for (var i = 0; i < 60; i++)
-                    try
-                    {
-                        var names = ngDriver.FindElements(By.Name("data[textTargetDriverLicense]"));
-                        if (names.Count > 0)
-                        {
-                            driversLicence = names[0];
-                            break;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                    }
+                var driversLicence = GetSeleniumValueField("data[textTargetDriverLicense]");
+                    
                 Assert.True(driversLicence.GetAttribute("value") == "0200700");
 
                 // confirm value of driver's surname
@@ -329,7 +317,7 @@ namespace bdd_tests
 
             if (element == "the doctors' portal")
             {
-                var DoctorsPortalUri = configuration["baseUri"];
+                var DoctorsPortalUri = configuration["BASE_URI"];
 
                 ngDriver.IgnoreSynchronization = true;
                 ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
@@ -373,5 +361,50 @@ namespace bdd_tests
         {
 
         }
+
+
+        protected IWebElement GetSeleniumValueField(string fieldName )
+        {
+            IWebElement result = null;
+            for (var i = 0; i < 60; i++)
+            {
+                var names = ngDriver.WrappedDriver.FindElements(By.Name(fieldName));
+                if (names.Count > 0 && !string.IsNullOrEmpty(names[0].GetAttribute("value")))
+                {
+                    result = names[0];
+                    break;
+                }
+
+                Thread.Sleep(500);
+            }
+            
+            return result;
+        }
+            
+
+        // helper function for React.
+        protected void WaitForReact()
+        {
+            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
+            // hasHomeMounted
+            //readyState
+            wait.Until(iWebDriver =>
+                (bool) ((IJavaScriptExecutor) iWebDriver).ExecuteScript("return window.document.hasHomeMounted != undefined && window.document.hasHomeMounted"));
+
+            var x = ((IJavaScriptExecutor)ngDriver.WrappedDriver).ExecuteScript("return window.document");
+
+            var p = 2;
+        }
+
+        
+
+        // helper function for React.
+        protected void WaitForFrame()
+        {
+            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
+
+            wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
+        }
+
     }
 }
