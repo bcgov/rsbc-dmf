@@ -343,7 +343,7 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
-                Thread.Sleep(10000);
+                //Thread.Sleep(10000);
 
                 var nextButton = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body/div[1]/div/div[2]/div[1]/div/div/div/ul/li[2]/button"));
                 nextButton.Click();
