@@ -193,7 +193,8 @@ namespace Pssg.DocumentStorageAdapter.Services
 
             try
             {
-                var data = _S3.DownloadFile(request.ServerRelativeUrl).GetAwaiter().GetResult();
+                Dictionary<string, string> metaData = new Dictionary<string, string>();
+                var data = _S3.DownloadFile(request.ServerRelativeUrl, ref metaData);
 
                 if (data != null)
                 {
