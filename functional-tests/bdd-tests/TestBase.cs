@@ -8,6 +8,7 @@ using Xunit.Gherkin.Quick;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using Xunit;
+using System.Collections.Generic;
 
 namespace bdd_tests
 {
@@ -217,12 +218,11 @@ namespace bdd_tests
             if (contentType == "the ICBC tombstone data")
             {
                 WaitForFrame();
-                //Thread.Sleep(3000);
 
                 ngDriver.WrappedDriver.SwitchTo().Frame(0);
 
+                // confirm value of driver's licence
                 var driversLicence = GetSeleniumValueField("data[textTargetDriverLicense]");
-                    
                 Assert.True(driversLicence.GetAttribute("value") == "0200700");
 
                 // confirm value of driver's surname
@@ -264,6 +264,69 @@ namespace bdd_tests
                 // confirm value of driver's postal code
                 var driverPostalCode = ngDriver.WrappedDriver.FindElement(By.Name("data[textTargetDriverPostal]"));
                 Assert.True(driverPostalCode.GetAttribute("value") == "V8K 2K4");
+            }
+
+            if (contentType == "the provider")
+            {
+                WaitForFrame();
+
+                ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+                // confirm value of provider's given name
+                var providerGivenName = GetSeleniumValueField("data[providerNameGiven]");
+                Assert.True(providerGivenName.GetAttribute("value") == "providerNameGiven");
+                
+                // confirm value of provider's surname
+                //var providerSurname = GetSeleniumValueField("[data[providerNameFamily]");
+                //Assert.True(providerSurname.GetAttribute("value") == "providerNameFamily");                
+
+                // confirm value of provider ID
+                var providerID = GetSeleniumValueField("data[providerId]");
+                Assert.True(providerID.GetAttribute("value") == "1234");
+                
+                // confirm value of provider ID type
+                var providerIDType = GetSeleniumValueField("data[providerIdType]");
+                Assert.True(providerIDType.GetAttribute("value") == "OPTID");
+                
+                // confirm value of provider role
+                var providerRole = GetSeleniumValueField("data[providerRole]");
+                Assert.True(providerRole.GetAttribute("value") == "Physician");
+                
+                // confirm value of provider specialty
+                var providerSpecialty = GetSeleniumValueField("data[providerSpecialty]");
+                Assert.True(providerSpecialty.GetAttribute("value") == "Cardiology");
+                
+                // confirm value of provider phone use
+                var providerPhoneUse = GetSeleniumValueField("data[phoneUse][eg2m937]");
+                //Assert.True(providerPhoneUse.GetAttribute("value") == "Work");               
+               
+                // confirm value of provider phone number
+                var providerPhoneNumber = GetSeleniumValueField("data[providerPhoneNumber]");
+                Assert.True(providerPhoneNumber.GetAttribute("value") == "123-123-1234");
+                
+                // confirm value of provider extension
+                var providerPhoneExtension = GetSeleniumValueField("data[providerPhoneNumberExt]");
+                Assert.True(providerPhoneExtension.GetAttribute("value") == "123");
+                
+                // confirm value of provider fax use
+                var providerFaxUse = GetSeleniumValueField("data[faxUse][erx7c6f]");
+                //Assert.True(providerFaxUse.GetAttribute("value") == "Work");
+                
+                // confirm value of provider fax number
+                var providerFaxNumber = GetSeleniumValueField("data[providerFaxNumber]");
+                Assert.True(providerFaxNumber.GetAttribute("value") == "123-123-1233");
+              
+                // confirm value of provider street address 1
+                var providerStreetAddressLine1 = GetSeleniumValueField("data[providerStreetAddressLine1]");
+                Assert.True(providerStreetAddressLine1.GetAttribute("value") == "providerStreetAddressLine1");
+
+                // confirm value of provider street address 1
+                var providerStreetAddressLine2 = GetSeleniumValueField("data[providerStreetAddressLine2]");
+                Assert.True(providerStreetAddressLine2.GetAttribute("value") == "providerStreetAddressLine2");
+
+                // confirm value of provider city
+                var providerCity = GetSeleniumValueField("data[providerCityTown]");
+                Assert.True(providerCity.GetAttribute("value") == "providerCityTown");
             }
         }
 
@@ -338,6 +401,22 @@ namespace bdd_tests
         }
 
 
+        [And(@"I wait for the (.*) field to have a value")]
+        public void WaitForField(string field)
+        {
+            WaitForFrame();
+
+            ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+            Dictionary<string, string> fieldMap = new Dictionary<string, string>()
+            {
+                {"drivers licence","data[textTargetDriverLicense]"},
+                {"notice","data[dropCommercialDMER]"}
+            };
+            var fieldObject = GetSeleniumValueField(fieldMap[field]);
+        }
+
+
         [And(@"I refresh the page")]
         public void PageRefresh()
         {
@@ -408,7 +487,7 @@ namespace bdd_tests
         // helper function for React.
         protected void WaitForFrame()
         {
-            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
+            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
 
             wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
         }
