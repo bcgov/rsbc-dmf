@@ -2,6 +2,7 @@ Feature: DMERCleanPass.feature
     As a Driver Medical Fitness SME
     I want to confirm the vision only clean pass business rules for a DMER
 
+@pipeline
 Scenario: Clean Pass Vision Assessment
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
