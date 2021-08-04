@@ -8,6 +8,7 @@ using Xunit.Gherkin.Quick;
 using System.Threading;
 using OpenQA.Selenium.Support.UI;
 using Xunit;
+using System.Collections.Generic;
 
 namespace bdd_tests
 {
@@ -338,6 +339,22 @@ namespace bdd_tests
         }
 
 
+        [And(@"I wait for the (.*) field to have a value")]
+        public void WaitForField(string field)
+        {
+            WaitForFrame();
+
+            ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+            Dictionary<string, string> fieldMap = new Dictionary<string, string>()
+            {
+                {"drivers licence","data[textTargetDriverLicense]"},
+                {"notice","data[dropCommercialDMER]"}
+            };
+            var fieldObject = GetSeleniumValueField(fieldMap[field]);
+        }
+
+
         [And(@"I refresh the page")]
         public void PageRefresh()
         {
@@ -408,7 +425,7 @@ namespace bdd_tests
         // helper function for React.
         protected void WaitForFrame()
         {
-            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
+            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
 
             wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
         }
