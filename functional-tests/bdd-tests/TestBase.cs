@@ -355,28 +355,6 @@ namespace bdd_tests
         }
 
 
-        [And(@"I update the phone and fax numbers")]
-        public void phoneFaxNumbers()
-        {
-            var phone = "123-123-1235";
-            var fax = "123-123-1235";
-
-            Thread.Sleep(3000);
-
-            ngDriver.WrappedDriver.SwitchTo().Frame(0);
-
-            Thread.Sleep(10000);
-
-            var updatePhone = ngDriver.FindElement(By.Name("data[providerPhoneNumber]"));
-            updatePhone.Clear();
-            updatePhone.SendKeys(phone);
-
-            var updateFax = ngDriver.FindElement(By.Name("data[providerFaxNumber]"));
-            updateFax.Clear();
-            updateFax.SendKeys(fax);
-        }
-
-
         [Then(@"I log out of the portal")]
         public void PortalLogOut()
         {
@@ -427,7 +405,7 @@ namespace bdd_tests
         }
 
 
-        // helper function for the iFrame containing a React form.
+        // helper function for React.
         protected void WaitForFrame()
         {
             var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
