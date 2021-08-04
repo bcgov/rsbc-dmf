@@ -331,7 +331,8 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
-                var nextButton = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body/div[1]/div/div[2]/div[1]/div/div/div/ul/li[2]/button"));
+                // full class of the next button is "btn btn-primary btn-wizard-nav-next"
+                var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next");
                 nextButton.Click();
             }
         }
@@ -400,25 +401,33 @@ namespace bdd_tests
             
             return result;
         }
-            
 
-        // helper function for React.
-        protected void WaitForReact()
+        /// <summary>
+        /// Routine to get an element by CSS selector.  By default tries 3 times to get the element.
+        /// </summary>
+        /// <param name="css"></param>
+        /// <param name="attempts"></param>
+        /// <returns></returns>
+        protected IWebElement GetSeleniumElementByCss(string css, int attempts = 3)
         {
-            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
-            // hasHomeMounted
-            //readyState
-            wait.Until(iWebDriver =>
-                (bool) ((IJavaScriptExecutor) iWebDriver).ExecuteScript("return window.document.hasHomeMounted != undefined && window.document.hasHomeMounted"));
+            IWebElement result = null;
+            for (var i = 0; i < attempts; i++) 
+            {
+                var names = ngDriver.WrappedDriver.FindElements(By.CssSelector(css));
+                if (names.Count > 0)
+                {
+                    result = names[0];
+                    break;
+                }
 
-            var x = ((IJavaScriptExecutor)ngDriver.WrappedDriver).ExecuteScript("return window.document");
+                Thread.Sleep(500);
+            }
 
-            var p = 2;
+            return result;
         }
 
-        
 
-        // helper function for React.
+        // helper function for the iFrame containing a React form.
         protected void WaitForFrame()
         {
             var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
