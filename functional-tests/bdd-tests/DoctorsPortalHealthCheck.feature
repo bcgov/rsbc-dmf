@@ -2,7 +2,7 @@
     As a medical professional
     I want to perform a health check on the doctors' portal
 
-@pipeline @release
+@pipeline
 Scenario: Doctors' Portal Health Check
     When I log in to the doctors' portal
     And the content is displayed for the DMER dashboard
