@@ -331,9 +331,9 @@ namespace bdd_tests
 
             if (element == "the Next button")
             {
-                //Thread.Sleep(10000);
+                Thread.Sleep(10000);
 
-                var nextButton = ngDriver.WrappedDriver.FindElement(By.XPath("/html/body/div[1]/div/div[2]/div[1]/div/div/div/ul/li[2]/button"));
+                var nextButton = ngDriver.WrappedDriver.FindElement(By.CssSelector("button.btn.btn-primary.btn-wizard-nav-next"));
                 nextButton.Click();
             }
         }
@@ -398,7 +398,7 @@ namespace bdd_tests
 
         
 
-        // helper function for React.
+        // helper function for iFrame.
         protected void WaitForFrame()
         {
             var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(30));
