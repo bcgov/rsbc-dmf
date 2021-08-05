@@ -153,6 +153,10 @@ objects:
               volumeMounts:
                 - mountPath: /dpkeys
                   name: dp-keys
+                - name: service-cert
+                  secret:
+                    secretName: document-storage-adapter-cert
+                  defaultMode: 420
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -162,6 +166,8 @@ objects:
             - name: dp-keys
               persistentVolumeClaim:
                 claimName: ${APP_NAME}-key-ring
+            - name: service-cert
+              mountPath: /var/run/secrets/service-cert
       test: false
       triggers:
         - type: ConfigChange
