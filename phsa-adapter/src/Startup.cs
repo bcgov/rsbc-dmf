@@ -1,3 +1,4 @@
+using Grpc.Net.Client;
 using HealthChecks.UI.Client;
 using Hl7.Fhir.Serialization;
 using IdentityModel.AspNetCore.OAuth2Introspection;
@@ -31,22 +32,29 @@ using Spark.Engine.Formatters;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Rsbc.Dmf.DocumentTriage;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         private readonly string MyAllowSpecificOrigins = "script-src 'self' 'unsafe-eval' 'unsafe-inline'";
 
         public IConfiguration Configuration { get; }
+
+        public IWebHostEnvironment _env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -167,6 +175,86 @@ namespace Rsbc.Dmf.PhsaAdapter
             // Add ICBC adapter
 
             services.AddHttpClient<IIcbcClient, IcbcClient>();
+
+            // Add Document Storage Adapter
+
+            string documentStorageAdapterURI = Configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(documentStorageAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                    // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient  });
+
+                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                {
+                    Secret = Configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
+                }
+            }
+
+            string documentTriageServiceURI = Configuration["DOCUMENT_TRIAGE_SERVICE_URI"];
+
+            if (!string.IsNullOrEmpty(documentTriageServiceURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(documentTriageServiceURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                var initialClient = new DocumentTriage.DocumentTriageClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new Pssg.Rsbc.Dmf.DocumentTriage.TokenRequest 
+                {
+                    Secret = Configuration["DOCUMENT_TRIAGE_SERVICE_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.Rsbc.Dmf.DocumentTriage.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(documentTriageServiceURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new DocumentTriage.DocumentTriageClient(channel));
+                }
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
