@@ -147,49 +147,65 @@ namespace bdd_tests
             GC.SuppressFinalize(this);
         }
 
-        [When(@"I log in to the doctors' portal")]
-        public void DoctorsPortalLogIn()
+        [When(@"I log in to the (.*) portal")]
+        public void DoctorsPortalLogIn(string portal)
         {
-            var DoctorsPortalUri = configuration["BASE_URI"];
-            var cardSerialNumber = configuration["BC_SERVICE_CARD_VIRTUAL_TOKEN"];
-            var passcode = configuration["BC_SERVICE_CARD_PASSWORD"];
+            if (portal == "doctors'")
+            {
+                var DoctorsPortalUri = configuration["BASE_URI"];
+                var cardSerialNumber = configuration["BC_SERVICE_CARD_VIRTUAL_TOKEN"];
+                var passcode = configuration["BC_SERVICE_CARD_PASSWORD"];
 
-            ngDriver.IgnoreSynchronization = true;
-            ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
+                ngDriver.IgnoreSynchronization = true;
+                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
 
-            // click on Virtual card testing button
-            var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
-            virtualCardTestingButton.Click();
+                // click on Virtual card testing button
+                var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
+                virtualCardTestingButton.Click();
 
-            Thread.Sleep(3000);
+                Thread.Sleep(3000);
 
-            // enter Card Serial Number
-            var cardSerialNumberInput = ngDriver.WrappedDriver.FindElement(By.Id("csn"));
-            cardSerialNumberInput.SendKeys(cardSerialNumber);
+                // enter Card Serial Number
+                var cardSerialNumberInput = ngDriver.WrappedDriver.FindElement(By.Id("csn"));
+                cardSerialNumberInput.SendKeys(cardSerialNumber);
 
-            // click on the Continue button
-            var continueButton = ngDriver.WrappedDriver.FindElement(By.Id("continue"));
-            continueButton.Click();
+                // click on the Continue button
+                var continueButton = ngDriver.WrappedDriver.FindElement(By.Id("continue"));
+                continueButton.Click();
 
-            // enter Passcode
-            var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passcode"));
-            passcodeInput.SendKeys(passcode);
+                // enter Passcode
+                var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passcode"));
+                passcodeInput.SendKeys(passcode);
 
-            // click on the second Continue button
-            var secondContinueButton = ngDriver.WrappedDriver.FindElement(By.Id("btnSubmit"));
-            secondContinueButton.Click();
-        }
+                // click on the second Continue button
+                var secondContinueButton = ngDriver.WrappedDriver.FindElement(By.Id("btnSubmit"));
+                secondContinueButton.Click();
+            }
+            if (portal == "Dynamics")
+            {
+                var DynamicsPortalUri = configuration["DYNAMICS_BASE_URI"];
+                var account = configuration["DYNAMICS_ACCOUNT"];
+                var accountName = configuration["DYNAMICS_ACCOUNT_NAME"];
+                var passcode = configuration["DYNAMICS_PASSWORD"];
 
-        /* Temp workaround for S3DMFT-24 - to be removed
-         */
-        [And(@"I accept the cert request")]
-        public void CertRequest()
-        {
-            var advancedButton = ngDriver.WrappedDriver.FindElement(By.Id("details-button"));
-            advancedButton.Click();
+                ngDriver.IgnoreSynchronization = true;
+                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DynamicsPortalUri}");
 
-            var proceedLink = ngDriver.WrappedDriver.FindElement(By.Id("proceed-link"));
-            proceedLink.Click();
+                // concatenate the account and account name
+                var userName = account +  @"\" + accountName;
+
+                // enter the combined account name
+                var userNameInput = ngDriver.WrappedDriver.FindElement(By.Id("userNameInput"));
+                userNameInput.SendKeys(userName);
+
+                // enter Passcode
+                var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passwordInput"));
+                passcodeInput.SendKeys(passcode);
+
+                // click on the Submit button
+                var submitButton = ngDriver.WrappedDriver.FindElement(By.Id("submitButton"));
+                submitButton.Click();
+            }
         }
 
 
@@ -414,6 +430,21 @@ namespace bdd_tests
                 {"notice","data[dropCommercialDMER]"}
             };
             var fieldObject = GetSeleniumValueField(fieldMap[field]);
+        }
+
+
+        [And(@"I wait for the (.*) content to be displayed")]
+        public void WaitForContent(string field)
+        {
+            WaitForFrame();
+
+            ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+            if (field == "second page")
+            {
+                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'TO BE COMPLETED')]"))
+                        .Displayed);
+            }
         }
 
 
