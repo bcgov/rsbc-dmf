@@ -433,6 +433,21 @@ namespace bdd_tests
         }
 
 
+        [And(@"I wait for the (.*) content to be displayed")]
+        public void WaitForContent(string field)
+        {
+            WaitForFrame();
+
+            ngDriver.WrappedDriver.SwitchTo().Frame(0);
+
+            if (field == "second page")
+            {
+                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'TO BE COMPLETED')]"))
+                        .Displayed);
+            }
+        }
+
+
         [And(@"I refresh the page")]
         public void PageRefresh()
         {
