@@ -147,7 +147,7 @@ namespace bdd_tests
             GC.SuppressFinalize(this);
         }
 
-        [When(@"I log in to the doctors' portal")]
+        [When(@"I log in to the (.*) portal")]
         public void DoctorsPortalLogIn(string portal)
         {
             if (portal == "doctors'")
