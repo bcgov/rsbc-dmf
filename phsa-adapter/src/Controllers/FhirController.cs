@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Hl7.Fhir.ElementModel;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
@@ -537,6 +538,36 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             TimeCreated = Timestamp.FromDateTime(DateTime.Now),
                             Id = filename
                         };
+
+                        foreach (var item in q.Item)
+                        {
+                            QuestionItem qi = new QuestionItem()
+                            {
+                                Question = item.Text,
+                            };
+                            if (item.Answer.Count == 1) // simple response.
+                            {
+                                var value = item.Answer[0].Value.ToTypedElement();
+                                switch (item.Answer[0].Value.TypeName)
+                                {
+                                    case "valueBoolean":
+                                        // flag
+
+                                        FlagItem fi = new FlagItem()
+                                        {
+                                            Question = item.Text,
+                                            Result = (bool) value.Value
+                                        };
+                                        tr.Flags.Add(fi);
+                                        qi.Response = $"{(bool) value.Value}";
+                                        break;
+                                    case "valueString":
+                                        qi.Response = $"{(string)value.Value}";
+                                        break;
+                                }
+                            }
+                            tr.Questions.Add(qi);
+                        }
 
                         string jsonString = JsonConvert.SerializeObject(tr);
                         UploadFileRequest jsonData = new UploadFileRequest()
