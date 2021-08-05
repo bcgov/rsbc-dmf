@@ -14,6 +14,11 @@ using System.IO;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Rsbc.Dmf.DocumentTriage;
+using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -25,13 +30,20 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private readonly ILogger<ReceiveController> _logger;
         private readonly IConfiguration Configuration;
         private readonly IStructureDefinitionSummaryProvider _provider = new PocoStructureDefinitionSummaryProvider();
-        private readonly IIcbcClient IcbcClient;
+        private readonly IIcbcClient _icbcClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        private readonly DocumentTriage.DocumentTriageClient _documentTriageClient;
 
-        public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration)
+        public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration,
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
+            DocumentTriage.DocumentTriageClient documentTriageClient
+            )
         {
             _logger = logger;
             Configuration = configuration;
-            IcbcClient = icbcClient;
+            _icbcClient = icbcClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
+            _documentTriageClient = documentTriageClient;
         }
 
         [HttpGet("metadata")]
@@ -234,7 +246,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
             string icbcDl = Configuration["TEST_DL"];
 
-            var icbcData = IcbcClient.GetDriver(icbcDl);
+            var icbcData = _icbcClient.GetDriver(icbcDl);
 
             string driverBirthDate = "";
             if (icbcData?.CLNT?.BIDT != null)
@@ -475,9 +487,83 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 var parser = new FhirJsonParser();
                 var bundle = parser.Parse<Bundle>(body);
 
+                string filename = bundle.Id;
+
                 _logger.LogInformation(bundle.ToJson());
 
-                //_logger.LogInformation(body);
+                foreach (var entry in bundle.Entry)
+                {
+                    // find the PDF entry
+                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/pdf") ; 
+                    {
+
+                        var b = (Binary) entry.Resource;
+                        UploadFileRequest pdfData = new UploadFileRequest()
+                        {
+                            ContentType = "application/pdf",
+                            Data = ByteString.CopyFrom(b.Data),
+                            EntityName = "phsa-pdf",
+                            FileName = filename,
+                            FolderName = "pdf"
+                        };
+
+                        _documentStorageAdapterClient.UploadFile(pdfData);
+                    }
+
+                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/eforms") ;
+                    {
+                        var b = (Binary)entry.Resource;
+                        UploadFileRequest jsonData = new UploadFileRequest()
+                        {
+                            ContentType = "application/json",
+                            Data = ByteString.CopyFrom(b.Data),
+                            EntityName = "phsa-eforms",
+                            FileName = filename,
+                            FolderName = "data"
+                        };
+
+                        _documentStorageAdapterClient.UploadFile(jsonData);
+                    }
+
+                    if (entry.Resource.ResourceType == ResourceType.QuestionnaireResponse)
+                    {
+                        var q = (QuestionnaireResponse) entry.Resource;
+
+                        // convert the questionnaire response into json.
+
+                        TriageRequest tr = new TriageRequest()
+                        {
+                            Processed = false,
+                            TimeCreated = Timestamp.FromDateTime(DateTime.Now),
+                            Id = filename
+                        };
+
+                        string jsonString = JsonConvert.SerializeObject(tr);
+                        UploadFileRequest jsonData = new UploadFileRequest()
+                        {
+                            ContentType = "application/json",
+                            Data = ByteString.CopyFromUtf8(jsonString),
+                            EntityName = "dfp",
+                            FileName = filename,
+                            FolderName = "triage-request"
+                        };
+
+                        // save a copy in the S3.
+                        _documentStorageAdapterClient.UploadFile(jsonData);
+
+                        // and send to the triage service.
+                        _documentTriageClient.Triage(tr);
+
+                    }
+                }
+
+
+
+                
+
+                
+
+
             }
 
             return Ok();

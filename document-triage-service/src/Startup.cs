@@ -1,24 +1,24 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
+using System.Text;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
+using Pssg.Rsbc.Dmf.DocumentTriage.Services;
 
-namespace Rsbc.Dmf.DocumentTriageService
+namespace Rsbc.Dmf.DocumentTriage
 {
     public class Startup
     {
@@ -32,12 +32,39 @@ namespace Rsbc.Dmf.DocumentTriageService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+                // Configure JWT authentication
+                services.AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(o =>
+                {
+                    o.SaveToken = true;
+                    o.RequireHttpsMetadata = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        RequireExpirationTime = false,
+                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
+                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                    };
+                });
 
-            services.AddControllers();
-            services.AddSwaggerGen(c =>
+
+            services.AddAuthorization();
+
+            services.AddGrpc(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "document_triage_service", Version = "v1" });
+                options.EnableDetailedErrors = true;
+                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
             });
+
+            // health checks. 
+            services.AddHealthChecks()
+                .AddCheck("document-triage-service", () => HealthCheckResult.Healthy("OK"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,13 +73,30 @@ namespace Rsbc.Dmf.DocumentTriageService
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "document_triage_service v1"));
             }
 
+            app.UseRouting();
 
-            // enable Splunk logger using Serilog
-            if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecks("/hc/live", new HealthCheckOptions
+            {
+                // Exclude all checks and return a 200-Ok.
+                Predicate = _ => false
+            });
+
+            app.UseEndpoints(endpoints => { endpoints.MapGrpcService<DocumentTriageService>(); });
+
+
+                // enable Splunk logger using Serilog
+                if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&
                 !string.IsNullOrEmpty(Configuration["SPLUNK_TOKEN"])
             )
             {
@@ -93,18 +137,11 @@ namespace Rsbc.Dmf.DocumentTriageService
 
             SelfLog.Enable(Console.Error);
 
-            Log.Logger.Information("PHSA Adapter Container Starting");
+            Log.Logger.Information("Document Triage Service Container Starting");
 
-            // app.UseHttpsRedirection();
+            
 
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            
         }
     }
 }
