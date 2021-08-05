@@ -442,7 +442,7 @@ namespace bdd_tests
 
             if (field == "second page")
             {
-                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'TO BE COMPLETED')]"))
+                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'textTargetKnownNotice')]"))
                         .Displayed);
             }
 
