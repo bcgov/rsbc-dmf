@@ -184,36 +184,29 @@ namespace bdd_tests
             if (portal == "Dynamics")
             {
                 var DynamicsPortalUri = configuration["DYNAMICS_BASE_URI"];
-                var account = configuration["BC_SERVICE_CARD_VIRTUAL_TOKEN"];
-                var passcode = configuration["BC_SERVICE_CARD_PASSWORD"];
+                var account = configuration["DYNAMICS_ACCOUNT"];
+                var accountName = configuration["DYNAMICS_ACCOUNT_NAME"];
+                var passcode = configuration["DYNAMICS_PASSWORD"];
 
                 ngDriver.IgnoreSynchronization = true;
-                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DoctorsPortalUri}");
+                ngDriver.WrappedDriver.Navigate().GoToUrl($"{DynamicsPortalUri}");
 
-                // click on Virtual card testing button
-                var virtualCardTestingButton = ngDriver.WrappedDriver.FindElement(By.Id("tile_virtual_device_div_id"));
-                virtualCardTestingButton.Click();
+                // concatenate the account and account name
+                var userName = account +  @"\" + accountName;
 
-                Thread.Sleep(3000);
-
-                // enter Card Serial Number
-                var cardSerialNumberInput = ngDriver.WrappedDriver.FindElement(By.Id("csn"));
-                cardSerialNumberInput.SendKeys(cardSerialNumber);
-
-                // click on the Continue button
-                var continueButton = ngDriver.WrappedDriver.FindElement(By.Id("continue"));
-                continueButton.Click();
+                // enter the combined account name
+                var userNameInput = ngDriver.WrappedDriver.FindElement(By.Id("userNameInput"));
+                userNameInput.SendKeys(userName);
 
                 // enter Passcode
-                var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passcode"));
+                var passcodeInput = ngDriver.WrappedDriver.FindElement(By.Id("passwordInput"));
                 passcodeInput.SendKeys(passcode);
 
-                // click on the second Continue button
-                var secondContinueButton = ngDriver.WrappedDriver.FindElement(By.Id("btnSubmit"));
-                secondContinueButton.Click();
+                // click on the Submit button
+                var submitButton = ngDriver.WrappedDriver.FindElement(By.Id("submitButton"));
+                submitButton.Click();
             }
         }
-
 
 
         [And(@"the content is displayed for (.*)")]
