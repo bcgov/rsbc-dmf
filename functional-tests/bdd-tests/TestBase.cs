@@ -442,7 +442,7 @@ namespace bdd_tests
 
             if (field == "second page")
             {
-                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'textTargetKnownNotice')]"))
+                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'Commercial DMER')]"))
                         .Displayed);
             }
 
@@ -453,6 +453,18 @@ namespace bdd_tests
             }
         }
 
+
+
+        [And(@"the second page content is displayed")]
+        public void SecondPageContent()
+        {
+            //WaitForFrame();
+
+            //ngDriver.WrappedDriver.SwitchTo().Frame(0);
+                
+            Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'Commercial DMER')]"))
+                        .Displayed);
+        }
 
         [And(@"I refresh the page")]
         public void PageRefresh()
