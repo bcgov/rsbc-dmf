@@ -266,7 +266,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 data = new Dictionary<string, object>
                 {
                     {"checkIsCommercialDMER", true},
-                    {"isCommercialDMER", true},
+                    {"dropCommercialDMER", "yes"},
                     {"providerNameGiven", "providerNameGiven"},
                     {"providerNameFamily", "providerNameFamily"},
                     {"providerId", "1234"},
@@ -497,7 +497,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     // find the PDF entry
                     if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/pdf") ; 
                     {
-
                         var b = (Binary) entry.Resource;
                         UploadFileRequest pdfData = new UploadFileRequest()
                         {
@@ -587,12 +586,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                     }
                 }
-
-
-
-                
-
-                
 
 
             }
