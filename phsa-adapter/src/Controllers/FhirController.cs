@@ -20,6 +20,7 @@ using Hl7.Fhir.ElementModel;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
+using Rsbc.Dmf.PhsaAdapter.Extensions;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -495,7 +496,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 foreach (var entry in bundle.Entry)
                 {
                     // find the PDF entry
-                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/pdf") ; 
+                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/pdf")  
                     {
                         var b = (Binary) entry.Resource;
                         UploadFileRequest pdfData = new UploadFileRequest()
@@ -510,7 +511,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         _documentStorageAdapterClient.UploadFile(pdfData);
                     }
 
-                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/eforms") ;
+                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/eforms") 
                     {
                         var b = (Binary)entry.Resource;
                         UploadFileRequest jsonData = new UploadFileRequest()
@@ -527,63 +528,38 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                     if (entry.Resource.ResourceType == ResourceType.QuestionnaireResponse)
                     {
-                        var q = (QuestionnaireResponse) entry.Resource;
-
-                        // convert the questionnaire response into json.
-
-                        TriageRequest tr = new TriageRequest()
+                        var questionnaireResponse = (QuestionnaireResponse) entry.Resource;
+                        // only triage completed items.
+                        if (questionnaireResponse.StatusElement.Value ==
+                            QuestionnaireResponse.QuestionnaireResponseStatus.Completed)
                         {
-                            Processed = false,
-                            TimeCreated = Timestamp.FromDateTime(DateTime.Now),
-                            Id = filename
-                        };
 
-                        foreach (var item in q.Item)
-                        {
-                            QuestionItem qi = new QuestionItem()
+                            // convert the questionnaire response into json.
+                            TriageRequest triageRequest = new TriageRequest()
                             {
-                                Question = item.Text,
+                                Processed = false,
+                                TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
+                                Id = filename
                             };
-                            if (item.Answer.Count == 1) // simple response.
+
+                            triageRequest.AddItems(questionnaireResponse.Item);
+
+                            string jsonString = JsonConvert.SerializeObject(triageRequest);
+                            UploadFileRequest jsonData = new UploadFileRequest()
                             {
-                                var value = item.Answer[0].Value.ToTypedElement();
-                                switch (item.Answer[0].Value.TypeName)
-                                {
-                                    case "valueBoolean":
-                                        // flag
+                                ContentType = "application/json",
+                                Data = ByteString.CopyFromUtf8(jsonString),
+                                EntityName = "dfp",
+                                FileName = filename,
+                                FolderName = "triage-request"
+                            };
 
-                                        FlagItem fi = new FlagItem()
-                                        {
-                                            Question = item.Text,
-                                            Result = (bool) value.Value
-                                        };
-                                        tr.Flags.Add(fi);
-                                        qi.Response = $"{(bool) value.Value}";
-                                        break;
-                                    case "valueString":
-                                        qi.Response = $"{(string)value.Value}";
-                                        break;
-                                }
-                            }
-                            tr.Questions.Add(qi);
+                            // save a copy in the S3.
+                            _documentStorageAdapterClient.UploadFile(jsonData);
+
+                            // and send to the triage service.
+                            _documentTriageClient.Triage(triageRequest);
                         }
-
-                        string jsonString = JsonConvert.SerializeObject(tr);
-                        UploadFileRequest jsonData = new UploadFileRequest()
-                        {
-                            ContentType = "application/json",
-                            Data = ByteString.CopyFromUtf8(jsonString),
-                            EntityName = "dfp",
-                            FileName = filename,
-                            FolderName = "triage-request"
-                        };
-
-                        // save a copy in the S3.
-                        _documentStorageAdapterClient.UploadFile(jsonData);
-
-                        // and send to the triage service.
-                        _documentTriageClient.Triage(tr);
-
                     }
                 }
 
