@@ -4,10 +4,6 @@
 
 @pipeline
 Scenario: Dynamics Portal Authentication
-    When I log in to the doctors' portal
-    And the content is displayed for the DMER dashboard
-    And I click on the DMER Forms tab
-    And I click on the Case ID for 111
-    And I refresh the page
-    And the content is displayed for the ICBC tombstone data
+    When I log in to the Dynamics portal
+    And the content is displayed for the Dynamics UI
     Then I log out of the portal

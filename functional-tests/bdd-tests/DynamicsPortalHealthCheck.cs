@@ -6,35 +6,21 @@ using Xunit;
 using Xunit.Gherkin.Quick;
 
 /*
-Feature: DoctorsPortalHealthCheck
+Feature: DynamicsPortalHealthCheck
     As a medical professional
-    I want to perform a health check on the doctors' portal
+    I want to perform a health check on the Dynamics portal
 
 @pipeline
-Scenario: Doctors' Portal Tombstone Check
-    When I log in to the doctors' portal
-    And the content is displayed for the DMER dashboard
-    And I click on the DMER Forms tab
-    And I click on the Case ID for 111
-    And I refresh the page
-    And the content is displayed for the ICBC tombstone data
-    Then I log out of the portal
-
-@pipeline
-Scenario: Doctors' Portal Provider Check
-    When I log in to the doctors' portal
-    And the content is displayed for the DMER dashboard
-    And I click on the DMER Forms tab
-    And I click on the Case ID for 111
-    And I refresh the page
-    And the content is displayed for the provider
+Scenario: Dynamics Portal Authentication
+    When I log in to the Dynamics portal
+    And the content is displayed for the Dynamics UI
     Then I log out of the portal
 */
 
 namespace bdd_tests
 {
-    [FeatureFile("./DoctorsPortalHealthCheck.feature")]
-    public sealed class DoctorsPortalHealthCheck : TestBase
+    [FeatureFile("./DynamicsPortalHealthCheck.feature")]
+    public sealed class DynamicsPortalHealthCheck : TestBase
     {
     }
 }
