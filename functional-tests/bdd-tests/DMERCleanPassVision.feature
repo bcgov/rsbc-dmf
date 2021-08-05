@@ -10,7 +10,7 @@ Scenario: Clean Pass Vision Assessment
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
-    And I wait for the notice field to have a value
+    And I wait for the second page content to be displayed
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And the content is displayed for the DMER clean pass
