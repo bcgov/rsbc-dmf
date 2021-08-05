@@ -13,7 +13,7 @@ Feature: DynamicsPortalHealthCheck
 @pipeline
 Scenario: Dynamics Portal Authentication
     When I log in to the Dynamics portal
-    And the content is displayed for the Dynamics UI
+    And I wait for the Dynamics homepage content to be displayed
     Then I log out of the portal
 */
 
