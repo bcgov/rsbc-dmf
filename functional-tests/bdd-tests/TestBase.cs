@@ -180,17 +180,6 @@ namespace bdd_tests
             secondContinueButton.Click();
         }
 
-        /* Temp workaround for S3DMFT-24 - to be removed
-         */
-        [And(@"I accept the cert request")]
-        public void CertRequest()
-        {
-            var advancedButton = ngDriver.WrappedDriver.FindElement(By.Id("details-button"));
-            advancedButton.Click();
-
-            var proceedLink = ngDriver.WrappedDriver.FindElement(By.Id("proceed-link"));
-            proceedLink.Click();
-        }
 
 
         [And(@"the content is displayed for (.*)")]
