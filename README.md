@@ -13,11 +13,11 @@ Technology Stack
 | Front End Web Server | Caddy |
 | Application Server | Kestrel |
 | Data Storage | MS Dynamics On Premise V9 |
-| Authentication | ADFS, BCeID, BC Services Card |
+| Authentication | ADFS, BC Services Card |
 | Document Storage    | S3 |
 | Container Platform | OpenShift 4 |
 | Zero Trust Security Policy Type | Kubernetes |
-| Logging | Splunk, Console, MS Teams and Kibana |
+| Logging | Splunk, Console, and Kibana |
 | CI/CD Pipeline | Jenkins |
 
 Repository Map

@@ -12,6 +12,10 @@
   <ItemGroup>
     <!-- <PackageReference Include="Hl7.Fhir.STU3" Version="3.4.0" />    -->
 
+    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+
+    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
+
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
     <PackageReference Include="Hl7.Fhir.R4" Version="1.8.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
@@ -25,9 +29,27 @@
     <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     <PackageReference Include="Serilog.Sinks.Splunk" Version="3.6.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+    <PackageReference Include="Grpc.Tools" Version="2.37.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
+
   <ItemGroup>
-    <ProjectReference Include="../../interfaces/icbc-adapter/icbc-adapter.csproj" />
+    <Folder Include="gRPC Prototypes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
+      <Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
+    </Protobuf>
+
+    <Protobuf Include="../../document-triage-service/src/Protos/documentTriage.proto" GrpcServices="Client">
+      <Link>gRPC Prototypes\documentTriage.proto</Link>
+    </Protobuf>
+
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\interfaces\icbc-adapter\icbc-adapter-client.csproj" />
   </ItemGroup>
 </Project>
