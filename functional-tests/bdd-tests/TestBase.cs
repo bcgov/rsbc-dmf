@@ -445,6 +445,12 @@ namespace bdd_tests
                 Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'TO BE COMPLETED')]"))
                         .Displayed);
             }
+
+            if (field == "Dynamics homepage")
+            {
+                Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'Sales Activity Social Dashboard')]"))
+                        .Displayed);
+            }
         }
 
 
