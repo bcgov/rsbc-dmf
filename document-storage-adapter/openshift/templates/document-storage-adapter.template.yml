@@ -35,7 +35,8 @@ objects:
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
-
+      DOTNET_SSL_DIRS: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+      OPENSHIFT_BUILD_NAME": "1"
   - kind: Secret
     apiVersion: v1
     type: Opaque
@@ -53,6 +54,8 @@ objects:
   - kind: Service
     apiVersion: v1
     metadata:
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cert
       labels:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}

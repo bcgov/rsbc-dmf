@@ -73,7 +73,7 @@ namespace Pssg.DocumentStorageAdapter
 
             // health checks. 
             services.AddHealthChecks()
-                .AddCheck("file-manager-service", () => HealthCheckResult.Healthy("OK"));
+                .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -134,7 +134,7 @@ namespace Pssg.DocumentStorageAdapter
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
-                        sourceType: "filemanagerservice", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                        sourceType: "documentstorage", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
                         restrictedToMinimumLevel: LogEventLevel.Information,
 #pragma warning disable CA2000 // Dispose objects before losing scope
                         messageHandler: new HttpClientHandler
@@ -148,9 +148,7 @@ namespace Pssg.DocumentStorageAdapter
                     )
                     .CreateLogger();
 
-                SelfLog.Enable(Console.Error);
-
-                Log.Logger.Information("File Manager Service Container Started");
+                Log.Logger.Information("Document Storage Adapter Container Started");
             }
             else
             {
@@ -160,6 +158,7 @@ namespace Pssg.DocumentStorageAdapter
                     .WriteTo.Console()
                     .CreateLogger();
             }
+            SelfLog.Enable(Console.Error);
         }
     }
 }

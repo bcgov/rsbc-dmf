@@ -332,7 +332,7 @@ namespace bdd_tests
             if (element == "the Next button")
             {
                 // full class of the next button is "btn btn-primary btn-wizard-nav-next"
-                var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next");
+                var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next", 10);
                 nextButton.Click();
             }
         }

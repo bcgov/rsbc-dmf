@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Pssg.Rsbc.Dmf.DocumentTriage";
+
+package dmf;
+
+// The files service definition.
+service DocumentTriage {
+
+	// Upload File
+	rpc Triage (TriageRequest) returns (TriageReply);
+
+	// Get a token given a secret.
+	rpc GetToken (TokenRequest) returns (TokenReply);
+
+}
+
+message TriageRequest {
+	string id = 1;
+	repeated FlagItem flags = 2;
+	repeated QuestionItem questions = 3;
+	google.protobuf.Timestamp timeCreated = 4;
+	google.protobuf.Timestamp timeLastModified = 5;
+	google.protobuf.Timestamp timeProcessed = 6;
+	bool processed = 7;    
+}
+
+message QuestionItem {
+	string question = 1;
+	string response = 2;
+}
+
+message FlagItem {
+	string identifier = 1;
+	string question = 2;
+	bool result = 3;
+}
+
+message TriageReply {
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+}
+
+enum ResultStatus {
+	Fail = 0;
+	Success = 1;
+}
+
+
+message TokenRequest {
+	string secret = 1;
+}
+
+message TokenReply {
+	ResultStatus resultStatus = 1;
+	string token = 2;
+	string errorDetail = 3;
+}
+
+message UploadFileRequest {
+	string entityName = 1;
+	string folderName = 2;
+	string fileName = 3;
+	string contentType = 4;
+	bytes data = 5;
+}
+
+message UploadFileReply {
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	string fileName = 3;
+}
