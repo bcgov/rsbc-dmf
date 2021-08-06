@@ -470,13 +470,21 @@ namespace bdd_tests
         }
 
 
-        [And(@"I enter the Uncorrected Binocular Vision as 20")]
-        public void UncorrectedBinocularVision()
+        [And(@"I enter the (.*)")]
+        public void UncorrectedBinocularVision(string option)
         {
-            var twenty = "20";
+            if (option == "Uncorrected Binocular Vision as 20")
+            {
+                var twenty = "20";
 
-            var uncorrectedBinoVision = ngDriver.WrappedDriver.FindElement(By.Name("data[numVIS_2_1a3]"));
-            uncorrectedBinoVision.SendKeys(twenty);
+                var uncorrectedBinoVision = ngDriver.WrappedDriver.FindElement(By.Name("data[numVIS_2_1a3]"));
+                uncorrectedBinoVision.SendKeys(twenty);
+            }
+
+            if (option == "medical opinion and confirmations")
+            { 
+            
+            }
         }
 
 
