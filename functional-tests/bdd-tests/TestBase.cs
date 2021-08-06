@@ -462,6 +462,7 @@ namespace bdd_tests
                         .Displayed);
         }
 
+
         [And(@"I refresh the page")]
         public void PageRefresh()
         {
