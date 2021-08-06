@@ -19,7 +19,7 @@ Scenario: PHSA Navigation
 
 namespace bdd_tests
 {
-    [FeatureFile("./PHSANavigation.feature")]
+    [FeatureFile("./*.feature")]
     public sealed class PHSANavigation : TestBase
     {
         [When(@"I click on the PHSA link")]
