@@ -330,7 +330,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
             Bundle result = new Bundle()
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = id,
                 Meta = new Meta()
                 {
                     LastUpdated = DateTimeOffset.Now,
@@ -356,7 +356,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         new Coding()
                         {
                             System="https://ehealthbc.ca/NamingSystem/eforms/referenceNum",
-                            Code = "276fcdf2-d5bc-4c74-b81d-e0a8e2c71732"
+                            Code = id
                         },
                         new Coding()
                         {
@@ -375,7 +375,30 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         Data = jsonAsBytes
                     }
                 },
-
+               
+                new Bundle.EntryComponent()
+                {
+                    Resource = new QuestionnaireResponse()
+                    {
+                        Id = id,
+                        Item = new List<QuestionnaireResponse.ItemComponent>()
+                        {
+                            new QuestionnaireResponse.ItemComponent()
+                            {
+                                // "linkId":"dropCommercialDMER","text":"Is this a Commercial DMER?","answer":[{"valueString":"no"}
+                                LinkId = "dropCommercialDMER",
+                                Text = "Is this a Commercial DMER?",
+                                Answer = new List<QuestionnaireResponse.AnswerComponent>()
+                                {
+                                    new QuestionnaireResponse.AnswerComponent()
+                                    {
+                                        Value = new FhirString("yes")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 new Bundle.EntryComponent()
                 {
                     Resource = new Patient()
