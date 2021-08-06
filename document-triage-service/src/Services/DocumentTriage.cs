@@ -50,6 +50,9 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             // update data in Dynamics here.
 
+
+            // foreach flag that is true, lookup the Flag Entity, and then add a reference between the case and the flag entity
+
             result.ResultStatus = ResultStatus.Success;
 
             return Task.FromResult(result);
