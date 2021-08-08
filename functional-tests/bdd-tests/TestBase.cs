@@ -209,6 +209,13 @@ namespace bdd_tests
         }
 
 
+        [And(@"I log in to the (.*) portal")]
+        public void DoctorsPortalLogIn2(string portal)
+        {
+            DoctorsPortalLogIn(portal);
+        }
+
+
         [And(@"the content is displayed for (.*)")]
         public void ContentDisplayed(string contentType)
         {
@@ -492,6 +499,12 @@ namespace bdd_tests
         public void PortalLogOut()
         {
 
+        }
+
+        [And(@"I log out of the portal")]
+        public void PortalLogOut2()
+        {
+            PortalLogOut();
         }
 
 
