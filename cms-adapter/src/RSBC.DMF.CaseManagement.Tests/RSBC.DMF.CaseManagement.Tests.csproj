@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -22,6 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RSBC.DMF.CaseManagement.Service\RSBC.DMF.CaseManagement.Service.csproj" />
+    <ProjectReference Include="..\RSBC.DMF.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj" />
   </ItemGroup>
 </Project>

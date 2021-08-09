@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "RSBC.DMF.CaseManagement.Service": {
+    "Rsbc.Dmf.CaseManagement.Service": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": false,

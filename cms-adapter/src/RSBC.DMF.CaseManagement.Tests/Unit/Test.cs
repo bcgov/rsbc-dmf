@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace RSBC.DMF.CaseManagement.Tests.Unit
+namespace Rsbc.Dmf.CaseManagement.Tests.Unit
 {
     public class Test
     {

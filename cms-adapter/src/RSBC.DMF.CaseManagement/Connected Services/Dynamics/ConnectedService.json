@@ -163,7 +163,7 @@
     },
     "GeneratedFileNamePrefix": "Reference",
     "UseNamespacePrefix": true,
-    "NamespacePrefix": "RSBC.DMF.Dynamics",
+    "NamespacePrefix": "Rsbc.Dmf.Dynamics",
     "UseDataServiceCollection": false,
     "MakeTypesInternal": true,
     "OpenGeneratedFilesInIDE": false,

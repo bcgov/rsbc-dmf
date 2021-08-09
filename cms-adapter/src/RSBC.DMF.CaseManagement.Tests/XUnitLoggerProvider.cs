@@ -2,7 +2,7 @@
 using System;
 using Xunit.Abstractions;
 
-namespace RSBC.DMF.CaseManagement.Tests
+namespace Rsbc.Dmf.CaseManagement.Tests
 {
     public sealed class XUnitLoggerProvider : ILoggerProvider
     {

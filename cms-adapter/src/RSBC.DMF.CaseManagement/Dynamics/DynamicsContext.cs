@@ -4,9 +4,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.CaseManagement.Dynamics
+namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
-    internal class DynamicsContext : RSBC.DMF.Dynamics.Microsoft.Dynamics.CRM.System
+    internal class DynamicsContext : Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM.System
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {

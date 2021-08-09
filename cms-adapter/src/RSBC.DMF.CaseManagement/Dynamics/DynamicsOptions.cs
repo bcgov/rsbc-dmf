@@ -1,4 +1,4 @@
-﻿namespace RSBC.DMF.CaseManagement.Dynamics
+﻿namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     public class DynamicsOptions
     {
