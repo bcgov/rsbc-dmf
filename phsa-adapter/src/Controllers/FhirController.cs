@@ -514,6 +514,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                 string filename = bundle.Id;
 
+                string dataFileKey = "";
+                string pdfFileKey = "";
+
                 _logger.LogInformation(bundle.ToJson());
 
                 foreach (var entry in bundle.Entry)
@@ -531,7 +534,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             FolderName = "pdf"
                         };
 
-                        _documentStorageAdapterClient.UploadFile(pdfData);
+                        var reply = _documentStorageAdapterClient.UploadFile(pdfData);
+                        pdfFileKey = reply.FileName;
                     }
 
                     if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/eforms") 
@@ -546,7 +550,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             FolderName = "data"
                         };
 
-                        _documentStorageAdapterClient.UploadFile(jsonData);
+                        var reply = _documentStorageAdapterClient.UploadFile(jsonData);
+                        dataFileKey = reply.FileName;
                     }
 
                     if (entry.Resource.ResourceType == ResourceType.QuestionnaireResponse)
@@ -562,7 +567,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             {
                                 Processed = false,
                                 TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
-                                Id = filename
+                                Id = filename,
+                                PdfFileKey = pdfFileKey,
+                                DataFileKey = dataFileKey
                             };
 
                             triageRequest.AddItems(questionnaireResponse.Item);

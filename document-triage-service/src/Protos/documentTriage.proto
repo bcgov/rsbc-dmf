@@ -25,6 +25,8 @@ message TriageRequest {
 	google.protobuf.Timestamp timeLastModified = 5;
 	google.protobuf.Timestamp timeProcessed = 6;
 	bool processed = 7;    
+	string pdfFileKey = 8;
+	string dataFileKey = 9;
 }
 
 message QuestionItem {

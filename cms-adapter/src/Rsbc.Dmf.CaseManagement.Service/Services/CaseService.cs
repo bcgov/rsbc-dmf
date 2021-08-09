@@ -46,7 +46,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             var reply = new UpdateCaseReply();
 
-            _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}");
+            _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
 
             return reply;
         }

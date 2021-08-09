@@ -47,7 +47,9 @@ message TokenReply {
 
 message UpdateCaseRequest{
 	string caseId = 1;
-	bool isCleanPass = 2;	
+	bool isCleanPass = 2;
+	string pdfFileKey = 3;
+	string dataFileKey = 4;
 }
 
 message UpdateCaseReply{	
