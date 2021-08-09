@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 
 namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
@@ -23,9 +24,11 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
     {
             private readonly IConfiguration _configuration;
             private readonly ILogger<DocumentTriageService> _logger;
+            private readonly CaseManager.CaseManagerClient _caseManagerClient;
 
-            public DocumentTriageService(ILogger<DocumentTriageService> logger, IConfiguration configuration)
+            public DocumentTriageService(ILogger<DocumentTriageService> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
             {
+                _caseManagerClient = caseManagerClient;
                 _configuration = configuration;
                 _logger = logger;
             }
@@ -50,6 +53,13 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             // update data in Dynamics here.
 
+            _caseManagerClient.UpdateCase(new UpdateCaseRequest()
+            {
+                CaseId = request.Id,
+                IsCleanPass = cleanPass,
+                DataFileKey = request.DataFileKey,
+                PdfFileKey = request.PdfFileKey
+            })
 
             // foreach flag that is true, lookup the Flag Entity, and then add a reference between the case and the flag entity
 

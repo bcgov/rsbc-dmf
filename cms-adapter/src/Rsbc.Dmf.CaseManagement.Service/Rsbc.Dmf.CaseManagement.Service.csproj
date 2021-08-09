@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\CaseManager.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
