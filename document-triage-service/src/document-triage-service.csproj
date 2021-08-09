@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.38.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
     <PackageReference Include="Google.Protobuf" Version="3.17.2" />
@@ -25,6 +26,15 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
 
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="gRPC Prototypes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+      <Link>gRPC Prototypes\cmsAdapter.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 
