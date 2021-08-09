@@ -124,8 +124,7 @@ namespace Pssg.DocumentStorageAdapter
                 if (!string.IsNullOrEmpty(Configuration["SPLUNK_CHANNEL"]))
                     fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
                 var splunkUri = new Uri(Configuration["SPLUNK_COLLECTOR_URL"]);
-                var upperSplunkHost = splunkUri.Host?.ToUpperInvariant() ?? string.Empty;
-
+                
                 // Fix for bad SSL issues 
 
 
