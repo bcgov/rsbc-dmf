@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -6,22 +8,49 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class Startup
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration Configuration;
 
         public Startup(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHealthChecks().AddCheck("Case Management Service", () => HealthCheckResult.Healthy("OK"), new[] { "ready" });
-            services.AddAuthentication();
+
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                // Configure JWT authentication
+                services.AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(o =>
+                {
+                    o.SaveToken = true;
+                    o.RequireHttpsMetadata = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        RequireExpirationTime = false,
+                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
+                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                    };
+                });
+            }
+            else
+            {
+                services.AddAuthentication();
+            }
+                
             services.AddAuthorization();
             services.AddGrpc(opts =>
             {
@@ -29,7 +58,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
             services.AddGrpcReflection();
             services.AddDistributedMemoryCache();
-            services.AddCaseManagement(configuration);
+            services.AddCaseManagement(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

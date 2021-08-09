@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service";
+
+package CaseManagement;
+
+service CaseManager {
+  rpc Search (SearchRequest) returns (SearchReply);
+
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+
+  // Update a Case
+  rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
+}
+
+message SearchRequest {
+  string caseId = 1;
+}
+
+message SearchReply {
+  repeated Case items = 1;
+}
+
+message Case{
+	string caseId = 1;
+	string createdBy = 2;
+	google.protobuf.Timestamp createdOn = 3;
+}
+
+enum ResultStatus {
+	Fail = 0;
+	Success = 1;
+}
+
+message TokenRequest {
+	string secret = 1;
+}
+
+message TokenReply {
+	ResultStatus resultStatus = 1;
+	string token = 2;
+	string errorDetail = 3;
+}
+
+message UpdateCaseRequest{
+	string caseId = 1;
+	bool isCleanPass = 2;	
+}
+
+message UpdateCaseReply{	
+	ResultStatus resultStatus = 1;
+}
+
+
+
