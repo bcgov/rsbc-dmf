@@ -48,7 +48,6 @@ enum ResultStatus {
 	Success = 1;
 }
 
-
 message TokenRequest {
 	string secret = 1;
 }
@@ -57,18 +56,4 @@ message TokenReply {
 	ResultStatus resultStatus = 1;
 	string token = 2;
 	string errorDetail = 3;
-}
-
-message UploadFileRequest {
-	string entityName = 1;
-	string folderName = 2;
-	string fileName = 3;
-	string contentType = 4;
-	bytes data = 5;
-}
-
-message UploadFileReply {
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	string fileName = 3;
 }
