@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.CaseManagement.Dynamics
+namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     public interface ISecurityTokenProvider
     {

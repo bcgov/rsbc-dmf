@@ -4,12 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using RSBC.DMF.CaseManagement.Service;
+using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace RSBC.DMF.CaseManagement.Tests.Integration
+namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
     public class WebAppTestBase : IClassFixture<WebApplicationFactory<Startup>>
     {

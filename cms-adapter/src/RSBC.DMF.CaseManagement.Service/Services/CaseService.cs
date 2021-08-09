@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.CaseManagement.Service
+namespace Rsbc.Dmf.CaseManagement.Service
 {
     //[Authorize]
     public class CaseService : CaseManager.CaseManagerBase

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RSBC.DMF.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Dynamics;
 
-namespace RSBC.DMF.CaseManagement
+namespace Rsbc.Dmf.CaseManagement
 {
     public static class Configuration
     {

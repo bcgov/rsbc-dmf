@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 
-namespace RSBC.DMF.CaseManagement.Service
+namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class Startup
     {

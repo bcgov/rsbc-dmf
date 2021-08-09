@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option csharp_namespace = "RSBC.DMF.CaseManagement.Service";
+option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service";
 
 package CaseManagement;
 

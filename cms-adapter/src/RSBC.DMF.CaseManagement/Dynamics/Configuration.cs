@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 
-namespace RSBC.DMF.CaseManagement.Dynamics
+namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     internal static class Configuration
     {

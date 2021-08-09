@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.CaseManagement
+namespace Rsbc.Dmf.CaseManagement
 {
     public static class DistributedCacheEx
     {

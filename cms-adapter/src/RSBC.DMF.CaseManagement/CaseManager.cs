@@ -1,10 +1,10 @@
-﻿using RSBC.DMF.CaseManagement.Dynamics;
+﻿using Rsbc.Dmf.CaseManagement.Dynamics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.CaseManagement
+namespace Rsbc.Dmf.CaseManagement
 {
     public interface ICaseManager
     {
