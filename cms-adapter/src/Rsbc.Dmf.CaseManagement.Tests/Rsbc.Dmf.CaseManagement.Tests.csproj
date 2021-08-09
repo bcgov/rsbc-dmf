@@ -22,6 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RSBC.DMF.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj" />
+    <ProjectReference Include="..\Rsbc.Dmf.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj" />
   </ItemGroup>
 </Project>
