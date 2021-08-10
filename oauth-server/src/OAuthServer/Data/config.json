@@ -68,7 +68,7 @@
       "RedirectUris": [
         "http://localhost:3200/",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
-        "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal/",
+        "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal",
         "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal/",
         "https://dev.justice.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://dev.justice.gov.bc.ca/rsbc-dfp-icbc-portal/",
@@ -78,10 +78,10 @@
         "https://justice.gov.bc.ca/rsbc-dfp-driver-portal/",
         "https://justice.gov.bc.ca/rsbc-dfp-medical-portal/",
         "https://justice.gov.bc.ca/rsbc-dfp-icbc-portal/",
-        "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal/",
-        "https://dev.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal/",
-        "https://test.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal/",
-        "https://prod.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal/"
+        "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://dev.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://test.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://prod.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal"
       ],
       "AllowedScopes": [
         "openid",
