@@ -492,6 +492,25 @@ namespace bdd_tests
             { 
             
             }
+
+            if (option == "known medical conditions")
+            {
+                // select the Syncope option
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select cause remains unexplained
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][ekov1lh]"));
+                causeRemainsUnexplained.Click();
+
+                // select single syncopal event
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][evt9yi]"));
+                singleSyncopalEvent.Click();
+
+                // select 'No' for syncopal event in the past year
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e27tyuj]"));
+                noSyncopalEventPastYear.Click();
+            }
         }
 
 
