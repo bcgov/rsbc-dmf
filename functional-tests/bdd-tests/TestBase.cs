@@ -418,7 +418,7 @@ namespace bdd_tests
             if (element == "the Next button")
             {
                 // full class of the next button is "btn btn-primary btn-wizard-nav-next"
-                var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next", 10);
+                var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next", 20);
                 nextButton.Click();
             }
         }
@@ -489,8 +489,15 @@ namespace bdd_tests
             }
 
             if (option == "medical opinion and confirmations")
-            { 
-            
+            {
+                // select 'Yes' for 'It is my opinion that this patient is fit to drive without additional accommodation or specialist input'
+                // data[yornMISC_1_1]
+
+                // select 'No' for 'It is my opinion that an Enhanced Road Assessment or Road Test should be performed for this driver'
+                // data[yornMISC_2_1]
+
+                // select 'No' for 'Additional specialist reports supporting this review are, or will be, provided for assessment'
+                // data[yornMISC_3_1]
             }
 
             if (option == "known medical conditions")
