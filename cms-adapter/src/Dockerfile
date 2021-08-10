@@ -15,4 +15,4 @@ WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=https://*:8080
 COPY --from=build /app/publish .
-ENTRYPOINT ["dotnet", "Rsbc.Dmf..CaseManagement.Service.dll"]
+ENTRYPOINT ["dotnet", "Rsbc.Dmf.CaseManagement.Service.dll"]
