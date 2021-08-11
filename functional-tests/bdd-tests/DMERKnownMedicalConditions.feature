@@ -3,7 +3,7 @@ Feature: DMERKnownMedicalConditions.feature
     I want to confirm the known medical conditions business rules for a DMER
 
 @pipeline
-Scenario: Known Medical Conditions
+Scenario: Known Medical Conditions - Syncope
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
@@ -14,7 +14,7 @@ Scenario: Known Medical Conditions
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I enter the known medical conditions
+    And I enter the syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
