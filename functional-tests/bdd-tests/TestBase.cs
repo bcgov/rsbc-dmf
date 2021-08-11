@@ -465,7 +465,7 @@ namespace bdd_tests
         [And(@"the second page content is displayed")]
         public void SecondPageContent()
         {                
-            Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'Commercial DMER')]"))
+            Assert.True(ngDriver.FindElement(By.XPath("//body[contains(.,'DMER is being processed as Commercial')]"))
                         .Displayed);
         }
 
