@@ -3,7 +3,7 @@ Feature: DMERSyncope.feature
     I want to confirm the syncope business rules for a DMER
 
 @pipeline
-Scenario: Syncope - Single Instance
+Scenario: Syncope Unexplained Single No Repeat
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 111
@@ -14,7 +14,7 @@ Scenario: Syncope - Single Instance
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I enter the syncope details
+    And I enter the unexplained single no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
