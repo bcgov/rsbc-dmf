@@ -156,7 +156,7 @@ namespace Pssg.DocumentStorageAdapter
                     )
                     .CreateLogger();
 
-                Log.Logger.Information("Document Storage Adapter Container Started");
+                
             }
             else
             {
@@ -166,6 +166,7 @@ namespace Pssg.DocumentStorageAdapter
                     .WriteTo.Console()
                     .CreateLogger();
             }
+            Log.Logger.Information("Document Storage Adapter Container Started");
             SelfLog.Enable(Console.Error);
         }
     }
