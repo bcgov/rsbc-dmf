@@ -59,7 +59,7 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
                 IsCleanPass = cleanPass,
                 DataFileKey = request.DataFileKey,
                 PdfFileKey = request.PdfFileKey
-            })
+            });
 
             // foreach flag that is true, lookup the Flag Entity, and then add a reference between the case and the flag entity
 
