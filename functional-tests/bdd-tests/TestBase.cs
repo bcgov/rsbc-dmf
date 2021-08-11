@@ -500,23 +500,87 @@ namespace bdd_tests
                 // data[yornMISC_3_1]
             }
 
-            if (option == "known medical conditions")
+            if (option == "single unexplained no repeat syncope details")
             {
-                // select the Syncope option
+                // select 'Syncope'
                 var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
                 syncopeCheckbox.Click();
 
-                // select cause remains unexplained
-                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][ekov1lh]"));
+                // select 'Cause Remains Unexplained'
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 causeRemainsUnexplained.Click();
 
-                // select single syncopal event
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][evt9yi]"));
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][enf6pvq]"));
                 singleSyncopalEvent.Click();
 
                 // select 'No' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e27tyuj]"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e1waq6p]"));
                 noSyncopalEventPastYear.Click();
+            }
+
+
+            if (option == "recurrent unexplained past year syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Cause Remains Unexplained'
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                causeRemainsUnexplained.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][enf6pvq]"));
+                singleSyncopalEvent.Click();
+
+                // select 'Yes' for syncopal event in the past year
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_4_2][emtd13]"));
+                noSyncopalEventPastYear.Click();
+            }
+
+
+            if (option == "all areas of concern that apply to patient's syncope experience")
+            {
+                // select 'Cardiovascular Diseases (CCMTA Chapter 3)'
+                var cardiovascularDiseasesChapter3 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_3_1]"));
+                cardiovascularDiseasesChapter3.Click();
+
+                // select 'Cerebrovascular Diseases (CCMTA Chapter 4)'
+                var cardiovascularDiseasesChapter4 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_4_1]"));
+                cardiovascularDiseasesChapter4.Click();
+
+                // select 'Diabetes – Hypoglycemia (CCMTA Chapter 7)'
+                var diabetesHypoglycemiaChapter7 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues2]"));
+                diabetesHypoglycemiaChapter7.Click();
+
+                // select 'Intracranial Tumours (CCMTA Chapter 10)'
+                var intracranialTumoursChapter10 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues3]"));
+                intracranialTumoursChapter10.Click();
+
+                // select 'Abdominal Aortic Aneurysm (CCMTA Chapter 13)'
+                var abdominalAorticAneurysmChapter13 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues4]"));
+                abdominalAorticAneurysmChapter13.Click();
+
+                // select 'Drugs, Alcohol and Driving (CCMTA Chapter 15)'
+                var drugsAlcoholDrivingChapter15 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues5]"));
+                drugsAlcoholDrivingChapter15.Click();
+
+                // select 'Seizures and Epilepsy (CCMTA Chapter 17)'
+                var seizuresEpilepsyChapter17 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues7]"));
+                seizuresEpilepsyChapter17.Click();
+
+                // select 'Narcolepsy (CCMTA Chapter 18)'
+                var narcolepsyChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues8]"));
+                narcolepsyChapter18.Click();
+
+                // select 'Sleep Apnea (CCMTA Chapter 18)'
+                var sleepApneaChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues9]"));
+                sleepApneaChapter18.Click();
+
+                // select 'Traumatic Brain Injuries (CCMTA Chapter 20)'
+                var traumaticBrainInjuriesChapter20 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues10]"));
+                traumaticBrainInjuriesChapter20.Click();
             }
         }
 
