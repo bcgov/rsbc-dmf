@@ -79,8 +79,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHsts();
-            app.UseHttpsRedirection();
+            //app.UseHsts();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
@@ -149,6 +149,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
 
             SelfLog.Enable(Console.Error);
+
+            Log.Logger.Information("CMS Adapter Container Starting");
         }
     }
 }
