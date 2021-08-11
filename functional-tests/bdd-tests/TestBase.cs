@@ -500,7 +500,7 @@ namespace bdd_tests
                 // data[yornMISC_3_1]
             }
 
-            if (option == "known medical conditions")
+            if (option == "syncope details")
             {
                 // select the Syncope option
                 var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
