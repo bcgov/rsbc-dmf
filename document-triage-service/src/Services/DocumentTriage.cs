@@ -53,13 +53,15 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             // update data in Dynamics here.
 
-            _caseManagerClient.UpdateCase(new UpdateCaseRequest()
+            var caseResult = _caseManagerClient.UpdateCase(new UpdateCaseRequest()
             {
                 CaseId = request.Id,
                 IsCleanPass = cleanPass,
                 DataFileKey = request.DataFileKey,
                 PdfFileKey = request.PdfFileKey
             });
+
+            _logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
 
             // foreach flag that is true, lookup the Flag Entity, and then add a reference between the case and the flag entity
 
