@@ -535,7 +535,7 @@ namespace bdd_tests
                 singleSyncopalEvent.Click();
 
                 // select 'Yes' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_4_2][emtd13]"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e1waq6p]"));
                 noSyncopalEventPastYear.Click();
             }
 
