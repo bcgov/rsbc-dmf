@@ -110,6 +110,10 @@ namespace Rsbc.Dmf.DocumentTriage
 
                     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                 }
+                else
+                {
+                    Log.Logger.Information("Error getting token for Case Management Service");
+                }
             }
 
             // health checks. 
