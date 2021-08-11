@@ -14,7 +14,7 @@ Scenario: Syncope Unexplained Single No Repeat
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I enter the unexplained single no repeat syncope details
+    And I enter the single unexplained no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
@@ -32,7 +32,7 @@ Scenario: Syncope Unexplained Recurrent Past Year
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I enter the unexplained recurrent past year syncope details
+    And I enter the recurrent unexplained past year syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
