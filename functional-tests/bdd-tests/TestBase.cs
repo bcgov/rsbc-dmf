@@ -519,6 +519,27 @@ namespace bdd_tests
                 noSyncopalEventPastYear.Click();
             }
 
+
+            if (option == "unexplained recurrent past year syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Cause Remains Unexplained'
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                causeRemainsUnexplained.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][enf6pvq]"));
+                singleSyncopalEvent.Click();
+
+                // select 'Yes' for syncopal event in the past year
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_4_2][emtd13]"));
+                noSyncopalEventPastYear.Click();
+            }
+
+
             if (option == "all areas of concern that apply to patient's syncope experience")
             {
                 // select 'Cardiovascular Diseases (CCMTA Chapter 3)'
