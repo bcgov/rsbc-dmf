@@ -10,10 +10,14 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 
+
 namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class Startup
     {
+        /// <summary>
+        /// Global configuration
+        /// </summary>
         private readonly IConfiguration Configuration;
 
         public Startup(IConfiguration configuration)
