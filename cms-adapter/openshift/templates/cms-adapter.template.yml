@@ -91,10 +91,14 @@ objects:
         service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cms-adapter-ssl
     spec:
       ports:
-        - name: 4020-tcp
-          port: 4020
+        - name: 8080-tcp
+          port: 8080
           protocol: TCP
           targetPort: 8080
+        - name: 8088-tcp
+          port: 8088
+          protocol: TCP
+          targetPort: 8088
       selector:
         deploymentconfig: ${APP_NAME}-cms-adapter
       type: ClusterIP
