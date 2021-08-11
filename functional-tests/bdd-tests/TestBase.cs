@@ -500,7 +500,7 @@ namespace bdd_tests
                 // data[yornMISC_3_1]
             }
 
-            if (option == "unexplained single no repeat syncope details")
+            if (option == "single unexplained no repeat syncope details")
             {
                 // select 'Syncope'
                 var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
@@ -520,7 +520,7 @@ namespace bdd_tests
             }
 
 
-            if (option == "unexplained recurrent past year syncope details")
+            if (option == "recurrent unexplained past year syncope details")
             {
                 // select 'Syncope'
                 var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
