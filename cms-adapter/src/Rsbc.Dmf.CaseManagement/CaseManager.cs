@@ -3,12 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.OData.Client;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 
 namespace Rsbc.Dmf.CaseManagement
 {
     public interface ICaseManager
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
+
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<string> flags);
     }
 
     public class CaseSearchRequest
@@ -21,6 +25,11 @@ namespace Rsbc.Dmf.CaseManagement
         public IEnumerable<Case> Items { get; set; }
     }
 
+    public class SetCaseFlagsReply
+    {
+        public bool Success { get; set; }
+    }
+    
     public class Case
     {
         public string Id { get; set; }
@@ -51,5 +60,51 @@ namespace Rsbc.Dmf.CaseManagement
                 }).ToArray()
             };
         }
+
+        public async Task<SetCaseFlagsReply>SetCaseFlags(string dmerIdentifier, List<string> flags)
+        {
+            /* The structure for cases is
+             
+            Case (incident) is the parent item
+                - has a child which is a dmer entity
+                - has children which are flag entities
+             
+             */
+
+            // future state - the case name will contain three letters of the name and the driver licence number
+
+            dfp_dmer dmerEntity = dynamicsContext.dfp_dmers.Where(x => x.dfp_id == dmerIdentifier).First();
+
+            // clean pass is indicated by the precense of flags.  
+
+            dmerEntity.dfp_dmer_dfp_flag.Clear();
+
+            // Add the flags.
+
+            foreach (var flag in flags)
+            {
+                dfp_flag newFlag = new dfp_flag()
+                {
+                };
+                newFlag.dfp_question = flag;
+                dmerEntity.dfp_dmer_dfp_flag.Add(newFlag);
+            }
+
+            // update the case from the request.
+
+            dmerEntity.modifiedon = DateTimeOffset.Now;
+
+            dynamicsContext.UpdateObject(dmerEntity);
+            DataServiceResponse dsr = dynamicsContext.SaveChanges();
+
+            var result = new SetCaseFlagsReply()
+            {
+                Success = true
+            };
+
+            return result;
+            
+        }
+
     }
 }
