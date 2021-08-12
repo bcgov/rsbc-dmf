@@ -627,7 +627,7 @@ namespace bdd_tests
                 singleSyncopalEvent.Click();
 
                 // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
-                var syncopalEventPastMonthYes = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-y"));
+                var syncopalEventPastMonthYes = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-y"));
                 syncopalEventPastMonthYes.Click();
             }
 
