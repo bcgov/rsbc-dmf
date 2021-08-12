@@ -649,6 +649,36 @@ namespace bdd_tests
                 var syncopalEventPastMonthNo = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-n"));
                 syncopalEventPastMonthNo.Click();
             }
+
+            if (option == "reversible, treated successfully single syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Reversible, Treated Successfully'
+                var reversibleTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                reversibleTreatedSuccessfully.Click();
+
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                singleSyncopalEvent.Click();
+            }
+
+            if (option == "treated successfully recurrent syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Reversible, Treated Successfully'
+                var reversibleTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                reversibleTreatedSuccessfully.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                recurrentSyncopalEvent.Click();
+            }
         }
 
 
