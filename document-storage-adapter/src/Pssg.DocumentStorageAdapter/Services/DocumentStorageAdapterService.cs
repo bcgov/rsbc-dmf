@@ -145,6 +145,9 @@ namespace Pssg.DocumentStorageAdapter.Services
                 case "licence":
                     listTitle = S3.LicenceDocumentUrlTitle;
                     break;
+                default:
+                    listTitle = entityName;
+                    break;
             }
 
             return listTitle;
