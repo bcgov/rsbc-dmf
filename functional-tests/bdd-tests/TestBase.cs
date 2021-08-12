@@ -582,6 +582,36 @@ namespace bdd_tests
                 var traumaticBrainInjuriesChapter20 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues10]"));
                 traumaticBrainInjuriesChapter20.Click();
             }
+
+            if (option == "currently untreated no repeat syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Currently Untreated'
+                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                currentlyUntreated.Click();
+
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                singleSyncopalEvent.Click();
+            }
+
+            if (option == "untreated currently recurrent syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Currently Untreated'
+                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                currentlyUntreated.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                singleSyncopalEvent.Click();
+            }
         }
 
 
