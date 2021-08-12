@@ -31,8 +31,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(LogLevel.Debug);
-                    logging.AddDebug();
+                    //logging.SetMinimumLevel(LogLevel.Debug);
+                    //logging.AddDebug();
                     logging.AddEventSourceLogger();
                 })
                 .UseSerilog()
