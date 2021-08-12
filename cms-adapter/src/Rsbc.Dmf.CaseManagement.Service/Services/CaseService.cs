@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
@@ -47,6 +48,20 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new UpdateCaseReply();
 
             _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
+
+            // convert the flags to a list of strings.
+
+            List<String> flags = new List<string>();
+
+            foreach (var item in request.Flags)
+            {
+                flags.Add(item.Question);
+            }
+
+            // set the flags.
+
+            await _caseManager.SetCaseFlags(request.CaseId, flags);
+
             reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
