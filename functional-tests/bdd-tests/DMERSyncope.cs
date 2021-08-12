@@ -64,6 +64,78 @@ Scenario: Syncope All Areas of Concern
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
     Then I log out of the portal
+
+@pipeline
+Scenario: Syncope Currently Untreated Single
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the currently untreated no repeat syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
+
+@pipeline
+Scenario: Syncope Currently Untreated Recurrent
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the untreated currently recurrent syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
+
+@pipeline
+Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the diagnosed treated successfully single recent syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
+
+@pipeline
+Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 111
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the not recent diagnosed treated successfully recurrent syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
 */
 
 namespace bdd_tests

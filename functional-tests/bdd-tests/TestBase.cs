@@ -539,7 +539,6 @@ namespace bdd_tests
                 noSyncopalEventPastYear.Click();
             }
 
-
             if (option == "all areas of concern that apply to patient's syncope experience")
             {
                 // select 'Cardiovascular Diseases (CCMTA Chapter 3)'
@@ -609,8 +608,47 @@ namespace bdd_tests
                 currentlyUntreated.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                recurrentSyncopalEvent.Click();
+            }
+
+            if (option == "diagnosed treated successfully single recent syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Diagnosed, Treated Successfully'
+                var diagnosedTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                diagnosedTreatedSuccessfully.Click();
+
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
                 singleSyncopalEvent.Click();
+
+                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
+                var syncopalEventPastMonthYes = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-y"));
+                syncopalEventPastMonthYes.Click();
+
+            }
+
+            if (option == "not recent diagnosed treated successfully recurrent syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Diagnosed, Treated Successfully'
+                var diagnosedTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                diagnosedTreatedSuccessfully.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                recurrentSyncopalEvent.Click();
+
+                // select 'No' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
+                var syncopalEventPastMonthNo = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-n"));
+                syncopalEventPastMonthNo.Click();
             }
         }
 
