@@ -12,9 +12,11 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using Serilog.Core;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
+using Serilog.Filters;
 using Serilog.Sinks.Splunk;
 
 namespace Rsbc.Dmf.CaseManagement.Service
@@ -123,6 +125,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
+                    // ensure that logs do not have an entry for each health check
+                    .Filter.ByExcluding(Matching.FromSource("Microsoft.AspNetCore.Routing.EndpointMiddleware"))
                     .WriteTo.Console()
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
                         sourceType: "cmsadapter", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
