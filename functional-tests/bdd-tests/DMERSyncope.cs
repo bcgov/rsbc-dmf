@@ -58,7 +58,7 @@ Scenario: Syncope All Areas of Concern
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I enter the unexplained single no repeat syncope details
+    And I enter the single unexplained no repeat syncope details
     And I enter the all areas of concern that apply to patient's syncope experience
     And I click on the Next button
     And I enter the medical opinion and confirmations
