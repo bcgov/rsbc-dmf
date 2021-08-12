@@ -42,6 +42,7 @@ namespace Rsbc.Dmf.DocumentTriage
         public void ConfigureServices(IServiceCollection services)
         {
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -60,8 +61,12 @@ namespace Rsbc.Dmf.DocumentTriage
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
                 });
-
-
+            }
+            else
+            {
+                services.AddAuthentication();
+            }
+            
             services.AddAuthorization();
 
             services.AddGrpc(options =>
@@ -130,7 +135,6 @@ namespace Rsbc.Dmf.DocumentTriage
             }
 
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
