@@ -629,7 +629,6 @@ namespace bdd_tests
                 // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
                 var syncopalEventPastMonthYes = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-y"));
                 syncopalEventPastMonthYes.Click();
-
             }
 
             if (option == "not recent diagnosed treated successfully recurrent syncope details")
