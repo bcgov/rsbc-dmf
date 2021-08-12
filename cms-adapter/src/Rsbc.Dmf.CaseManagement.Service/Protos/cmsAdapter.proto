@@ -48,12 +48,20 @@ message TokenReply {
 message UpdateCaseRequest{
 	string caseId = 1;
 	bool isCleanPass = 2;
-	string pdfFileKey = 3;
-	string dataFileKey = 4;
+	repeated FlagItem flags = 3;
+	string pdfFileKey = 4;
+	string dataFileKey = 5;
+
 }
 
 message UpdateCaseReply{	
 	ResultStatus resultStatus = 1;
+}
+
+message FlagItem {
+	string identifier = 1;
+	string question = 2;
+	bool result = 3;
 }
 
 

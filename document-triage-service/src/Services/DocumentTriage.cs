@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf;
+using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -39,6 +40,8 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
                 _logger.LogInformation($"TRIAGE {request.Id}");
 
+
+
                 bool cleanPass = true;
                 foreach (var item in request.Flags)
                 {
@@ -53,13 +56,29 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             // update data in Dynamics here.
 
-            var caseResult = _caseManagerClient.UpdateCase(new UpdateCaseRequest()
+            UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
             {
                 CaseId = request.Id,
                 IsCleanPass = cleanPass,
                 DataFileKey = request.DataFileKey,
                 PdfFileKey = request.PdfFileKey
-            });
+            };
+
+            foreach(var item in request.Flags)
+            {
+                if (item.Result)
+                {
+                    updateCaseRequest.Flags.Add(new global::Rsbc.Dmf.CaseManagement.Service.FlagItem()
+                    {
+                        Question = item.Question,
+                        Identifier = item.Identifier,
+                        Result = item.Result
+                    });
+                }
+            }
+
+
+            var caseResult = _caseManagerClient.UpdateCase(updateCaseRequest);
 
             _logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
 
