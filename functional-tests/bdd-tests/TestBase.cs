@@ -679,6 +679,44 @@ namespace bdd_tests
                 var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
                 recurrentSyncopalEvent.Click();
             }
+
+            if (option == "situational single past 7 days yes syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Situational, Avoidable Trigger'
+                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
+                situationalAvoidableTrigger.Click();
+
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                singleSyncopalEvent.Click();
+
+                // select 'No' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
+                var SyncopalEventPastSevenDaysNo = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-n"));
+                SyncopalEventPastSevenDaysNo.Click();
+            }
+
+            if (option == "past 7 days no situational recurrent syncope details")
+            {
+                // select 'Syncope'
+                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+                syncopeCheckbox.Click();
+
+                // select 'Situational, Avoidable Trigger'
+                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
+                situationalAvoidableTrigger.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                recurrentSyncopalEvent.Click();
+
+                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
+                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-y"));
+                SyncopalEventPastSevenDaysYes.Click();
+            }
         }
 
 
