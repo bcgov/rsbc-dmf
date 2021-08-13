@@ -12,7 +12,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
     {
         private Case[] cases = new[]
         {
-            new Case{ Id = "111", DriverLicense = "111", Status="Pending", PatientName = "patient 1", CreatedOn = DateTime.Parse("01/10/2021"), ModifiedOn = DateTime.Parse("01/10/2021"), ModifiedBy = "user1" },
+            new Case{ Id = "123123-DFC0100", DriverLicense = "0200700", Status="Pending", PatientName = "patient 1", CreatedOn = DateTime.Parse("01/10/2021"), ModifiedOn = DateTime.Parse("01/10/2021"), ModifiedBy = "user1" },
             new Case{ Id = "222", DriverLicense = "222", Status="Completed", PatientName = "patient 2", CreatedOn = DateTime.Parse("01/20/2021"), ModifiedOn = DateTime.Parse("01/20/2021"), ModifiedBy = "user1" },
             new Case{ Id = "333", DriverLicense = "333", Status="Expired", PatientName = "patient 3", CreatedOn = DateTime.Parse("02/03/2021"), ModifiedOn = DateTime.Parse("02/03/2021"), ModifiedBy = "user2" },
             new Case{ Id = "444", DriverLicense = "444", Status="Pending", PatientName = "patient 4", CreatedOn = DateTime.Parse("02/28/2021"), ModifiedOn = DateTime.Parse("02/28/2021"), ModifiedBy = "user3" },
