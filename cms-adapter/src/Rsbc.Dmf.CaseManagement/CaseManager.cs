@@ -104,7 +104,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dmerEntity.modifiedon = DateTimeOffset.Now;
 
                 // indicate that the form has been filled out
-                // dmerEntity.statecode = ?
+                dmerEntity.statuscode = 100000003; // Completed
 
                 dynamicsContext.UpdateObject(dmerEntity);
                 DataServiceResponse dsr = dynamicsContext.SaveChanges();
