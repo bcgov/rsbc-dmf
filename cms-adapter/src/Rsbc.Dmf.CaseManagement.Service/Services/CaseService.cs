@@ -56,12 +56,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
             foreach (var item in request.Flags)
             {
                 flags.Add(item.Question);
+                _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
             }
 
             // set the flags.
 
-            await _caseManager.SetCaseFlags(request.CaseId, flags);
-
+            var x = await _caseManager.SetCaseFlags(request.CaseId, flags);
+            _logger.LogInformation($"Set Flags result is {x.Success}.");
             reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
