@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<string> flags);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<string> flags, ILogger logger = null);
     }
 
     public class CaseSearchRequest
