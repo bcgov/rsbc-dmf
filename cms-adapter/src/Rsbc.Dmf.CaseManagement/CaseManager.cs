@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.OData.Client;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using Serilog;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -71,36 +72,50 @@ namespace Rsbc.Dmf.CaseManagement
              
              */
 
+            var result = new SetCaseFlagsReply()
+            {
+                Success = false
+            };
+
             // future state - the case name will contain three letters of the name and the driver licence number
 
             dfp_dmer dmerEntity = dynamicsContext.dfp_dmers.Where(x => x.dfp_id == dmerIdentifier).First();
 
-            // clean pass is indicated by the precense of flags.  
-
-            dmerEntity.dfp_dmer_dfp_flag.Clear();
-
-            // Add the flags.
-
-            foreach (var flag in flags)
+            if (dmerEntity != null)
             {
-                dfp_flag newFlag = new dfp_flag()
+                // clean pass is indicated by the precense of flags.  
+                Log.Logger.Information($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
+                dmerEntity.dfp_dmer_dfp_flag.Clear();
+
+                // Add the flags.
+
+                foreach (var flag in flags)
                 {
-                };
-                newFlag.dfp_question = flag;
-                dmerEntity.dfp_dmer_dfp_flag.Add(newFlag);
+                    dfp_flag newFlag = new dfp_flag()
+                    {
+                    };
+                    newFlag.dfp_question = flag;
+                    dmerEntity.dfp_dmer_dfp_flag.Add(newFlag);
+                    Log.Logger.Information($"SetCaseFlags - Added Flag {flag}");
+                }
+
+                // update the case from the request.
+
+                dmerEntity.modifiedon = DateTimeOffset.Now;
+
+                // indicate that the form has been filled out
+                // dmerEntity.statecode = ?
+
+                dynamicsContext.UpdateObject(dmerEntity);
+                DataServiceResponse dsr = dynamicsContext.SaveChanges();
+                result.Success = true;
+            }
+            else
+            {
+                Log.Logger.Error($"SetCaseFlags - Unable to find DMER with identifier {dmerIdentifier}");
             }
 
-            // update the case from the request.
-
-            dmerEntity.modifiedon = DateTimeOffset.Now;
-
-            dynamicsContext.UpdateObject(dmerEntity);
-            DataServiceResponse dsr = dynamicsContext.SaveChanges();
-
-            var result = new SetCaseFlagsReply()
-            {
-                Success = true
-            };
+            
 
             return result;
             
