@@ -79,7 +79,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (logger != null)
             {
-                logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
+                logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier}");
             }
 
             // future state - the case name will contain three letters of the name and the driver licence number
