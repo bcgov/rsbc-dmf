@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.OData.Client;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -77,6 +77,11 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
+            if (logger != null)
+            {
+                logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
+            }
+
             // future state - the case name will contain three letters of the name and the driver licence number
 
             dfp_dmer dmerEntity = dynamicsContext.dfp_dmers.Where(x => x.dfp_id == dmerIdentifier).First();
@@ -86,7 +91,7 @@ namespace Rsbc.Dmf.CaseManagement
                 // clean pass is indicated by the precense of flags.  
                 if (logger != null)
                 {
-                    logger.Information($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
+                    logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
                 }
                 
                 dmerEntity.dfp_dmer_dfp_flag.Clear();
@@ -102,7 +107,7 @@ namespace Rsbc.Dmf.CaseManagement
                     dmerEntity.dfp_dmer_dfp_flag.Add(newFlag);
                     if (logger != null)
                     {
-                        logger.Information($"SetCaseFlags - Added Flag {flag}");
+                        logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
                     }
                 }
 
@@ -123,7 +128,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     if (logger != null)
                     {
-                        logger.Information(e, $"SetCaseFlags - Error updating");
+                        logger.LogInformation(e, $"SetCaseFlags - Error updating");
                     }
                 }
                 
@@ -132,7 +137,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 if (logger != null)
                 {
-                    logger.Information($"SetCaseFlags - Unable to find DMER with identifier {dmerIdentifier}");
+                    logger.LogInformation($"SetCaseFlags - Unable to find DMER with identifier {dmerIdentifier}");
                 }
             }
 
