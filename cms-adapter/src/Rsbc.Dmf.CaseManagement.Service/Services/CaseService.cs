@@ -66,6 +66,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
         {
