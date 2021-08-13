@@ -61,7 +61,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             // set the flags.
 
-            var x = await _caseManager.SetCaseFlags(request.CaseId, flags);
+            var x = await _caseManager.SetCaseFlags(request.CaseId, flags, _logger);
             _logger.LogInformation($"Set Flags result is {x.Success}.");
             reply.ResultStatus = ResultStatus.Success;
             return reply;
