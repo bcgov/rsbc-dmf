@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pssg.DocumentStorageAdapter\Document Storage Adapter.csproj" />
+    <ProjectReference Include="..\Pssg.DocumentStorageAdapter\Pssg.DocumentStorageAdapter.csproj" />
   </ItemGroup>
 
   <ItemGroup>
