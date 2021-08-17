@@ -84,17 +84,17 @@ namespace Rsbc.Dmf.CaseManagement
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
-            dfp_dmer dmerEntity = dynamicsContext.dfp_dmers.Where(x => x.dfp_id == dmerIdentifier).First();
+            var dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).First();
 
             if (dmerEntity != null)
             {
-                // clean pass is indicated by the precense of flags.  
+                // clean pass is indicated by the presence of flags.  
                 if (logger != null)
                 {
                     logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
                 }
                 
-                dmerEntity.dfp_dmer_dfp_flag.Clear();
+                dmerEntity.dfp_incident_dfp_flag.Clear();
 
                 // Add the flags.
 
@@ -102,9 +102,9 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dfp_flag newFlag = new dfp_flag()
                     {
+                        dfp_question = flag
                     };
-                    newFlag.dfp_question = flag;
-                    dmerEntity.dfp_dmer_dfp_flag.Add(newFlag);
+                    dmerEntity.dfp_incident_dfp_flag.Add(newFlag);
                     if (logger != null)
                     {
                         logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
