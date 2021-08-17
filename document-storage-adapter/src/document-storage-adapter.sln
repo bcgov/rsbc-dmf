@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Document Storage Adapter", "Pssg.DocumentStorageAdapter\Document Storage Adapter.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter", "Pssg.DocumentStorageAdapter\Pssg.DocumentStorageAdapter.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3", "Pssg.Interfaces.S3\S3.csproj", "{2F8B579B-7681-4CD4-B897-F0A69CF63F25}"
 EndProject

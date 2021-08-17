@@ -22,4 +22,4 @@ RUN apt-get update -yq \
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Document Storage Adapter.dll"]
+ENTRYPOINT ["dotnet", "Pssg.DocumentStorageAdapter.dll"]
