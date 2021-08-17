@@ -6,7 +6,9 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
-RUN apt update && apt-get install -y curl
+RUN apt-get update -yq \
+    && apt-get install curl gnupg -yq \
+	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2017u5 -l /vsdbg
 
 COPY . .
 RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
