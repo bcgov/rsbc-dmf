@@ -25,7 +25,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         /// <returns>A new JWT</returns>
         [HttpGet("token")]
         [AllowAnonymous]
-        public string GetToken(string secret)
+        public string GetToken([FromQuery] string secret)
         {
             string result = "Invalid secret.";
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
