@@ -79,7 +79,7 @@ namespace Pssg.DocumentStorageAdapter
                     configureListen.UseHttps(_certificateLoader.ServiceCertificate);
 
                     // enable Http2, for gRPC
-                    configureListen.Protocols = HttpProtocols.Http2;
+                    configureListen.Protocols = HttpProtocols.Http1AndHttp2;
 
                     configureListen.UseConnectionLogging();
                 });
