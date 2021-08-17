@@ -6,6 +6,8 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
+RUN apt update && apt-get install -y curl
+
 COPY . .
 RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
 
