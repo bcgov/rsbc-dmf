@@ -6,10 +6,6 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
-RUN apt-get update -yq \
-    && apt-get install curl -yq \
-	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2017u5 -l /app/vsdbg
-
 COPY . .
 RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
 
@@ -19,6 +15,11 @@ RUN dotnet publish ./document-storage-adapter/src/Pssg.DocumentStorageAdapter -c
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+RUN apt-get update -yq \
+    && apt-get install curl -yq \
+	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2017u5 -l /app/vsdbg
+
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
 ENTRYPOINT ["dotnet", "Document Storage Adapter.dll"]
