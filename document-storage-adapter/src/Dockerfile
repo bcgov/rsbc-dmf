@@ -18,7 +18,7 @@ COPY --from=publish /app/publish .
 
 RUN apt-get update -yq \
     && apt-get install curl -yq \
-	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2017u5 -l /app/vsdbg
+	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
