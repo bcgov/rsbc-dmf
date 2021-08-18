@@ -12,6 +12,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         {
             this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
+            
 
             Func<Uri, Uri> formatUri = requestUri => requestUri.IsAbsoluteUri
                     ? new Uri(url, (url.AbsolutePath == "/" ? string.Empty : url.AbsolutePath) + requestUri.AbsolutePath + requestUri.Query)
