@@ -101,6 +101,9 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     foreach (var item in dmerEntity.dfp_incident_dfp_flag)
                     {
+                        dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_flag", item);
+                        dynamicsContext.SaveChanges();
+
                         //dmerEntity.dfp_incident_dfp_flag.
                         logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_flagid}");
                     }
@@ -118,10 +121,11 @@ namespace Rsbc.Dmf.CaseManagement
                             dfp_question = flag
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
+                        dynamicsContext.SaveChanges();
                     }
 
-                    dynamicsContext.AttachLink(dmerEntity, "dfp_incident_dfp_flag", givenFlag);
-
+                    dynamicsContext.AddLink(dmerEntity, "dfp_incident_dfp_flag", givenFlag);
+                    dynamicsContext.SaveChanges();
                     if (logger != null)
                     {
                         logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
@@ -133,7 +137,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dmerEntity.modifiedon = DateTimeOffset.Now;
 
                 // indicate that the form has been filled out
-                dmerEntity.statuscode = 100000003; // Completed
+                dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
 
                 dynamicsContext.UpdateObject(dmerEntity);
                 try
