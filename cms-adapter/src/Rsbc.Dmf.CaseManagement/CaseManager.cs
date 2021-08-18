@@ -67,7 +67,6 @@ namespace Rsbc.Dmf.CaseManagement
             /* The structure for cases is
              
             Case (incident) is the parent item
-                - has a child which is a dmer entity
                 - has children which are flag entities
              
              */
