@@ -84,7 +84,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
-            var dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).First();
+            incident dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).FirstOrDefault();
 
             if (dmerEntity != null)
             {
@@ -93,18 +93,36 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
                 }
-                
-                dmerEntity.dfp_incident_dfp_flag.Clear();
+
+                // Explicitly load the flags 
+                dynamicsContext.LoadProperty(dmerEntity, "dfp_incident_dfp_flag");
+
+                // replace with unlink.  may need to replace with lazy loading
+                if (dmerEntity.dfp_incident_dfp_flag != null && dmerEntity.dfp_incident_dfp_flag.Count > 0)
+                {
+                    foreach (var item in dmerEntity.dfp_incident_dfp_flag)
+                    {
+                        //dmerEntity.dfp_incident_dfp_flag.
+                        logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_flagid}");
+                    }
+                }
 
                 // Add the flags.
 
                 foreach (var flag in flags)
                 {
-                    dfp_flag newFlag = new dfp_flag()
+                    dfp_flag givenFlag = dynamicsContext.dfp_flags.Where(x => x.dfp_question == flag).FirstOrDefault();
+                    if (givenFlag == null)
                     {
-                        dfp_question = flag
-                    };
-                    dmerEntity.dfp_incident_dfp_flag.Add(newFlag);
+                        givenFlag = new dfp_flag()
+                        {
+                            dfp_question = flag
+                        };
+                        dynamicsContext.AddTodfp_flags(givenFlag);
+                    }
+
+                    dynamicsContext.AttachLink(dmerEntity, "dfp_incident_dfp_flag", givenFlag);
+
                     if (logger != null)
                     {
                         logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
