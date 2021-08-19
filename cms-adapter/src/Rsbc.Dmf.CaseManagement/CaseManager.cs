@@ -107,8 +107,8 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
                     {
-                        dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_dmerflag", item);
-                        dynamicsContext.SaveChanges();
+                        //dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_dmerflag", item);
+                        //dynamicsContext.SaveChanges();
 
                         // remove the old bridge.
                         dynamicsContext.DeleteObject(item);
