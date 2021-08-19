@@ -51,11 +51,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             // convert the flags to a list of strings.
 
-            List<String> flags = new List<string>();
+            List<Flag> flags = new List<Flag>();
 
             foreach (var item in request.Flags)
             {
-                flags.Add(item.Question);
+                Flag newFlag = new Flag()
+                {
+                    Description = item.Question,
+                    Id = item.Identifier
+                };
+                flags.Add(newFlag);
                 _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
             }
 
