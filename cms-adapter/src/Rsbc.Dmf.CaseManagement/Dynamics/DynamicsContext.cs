@@ -10,7 +10,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
-            this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset; // SaveChangesOptions.None; // 
+            this.SaveChangesDefaultOptions = SaveChangesOptions.None; // SaveChangesOptions.BatchWithSingleChangeset;  
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
             
 
