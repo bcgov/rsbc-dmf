@@ -35,6 +35,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Extensions
                             // add a flag.
                             FlagItem fi = new FlagItem()
                             {
+                                Identifier = item.LinkId,
                                 Question = item.Text,
                                 Result = (bool)value.Value
                             };
