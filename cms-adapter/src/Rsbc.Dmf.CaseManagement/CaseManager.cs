@@ -139,10 +139,13 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dfp_dmerflag newFlag = new dfp_dmerflag()
                     {
-                        dfp_FlagId = givenFlag
+                        dfp_name = flag.Description
                     };
 
                     dynamicsContext.AddTodfp_dmerflags(newFlag);
+                    dynamicsContext.SaveChanges();
+
+                    dynamicsContext.UpdateRelatedObject(newFlag, "dfp_FlagId", givenFlag);
                     dynamicsContext.SaveChanges();
 
                     dynamicsContext.AddLink(dmerEntity, "dfp_incident_dfp_dmerflag", newFlag);
