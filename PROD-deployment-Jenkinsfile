@@ -1,0 +1,40 @@
+node('master') {
+
+	def sourcetag = 'test'
+    def desttag = 'prod'
+	def backuptag = 'prod-backup'
+
+	stage('Confirm') {
+		input ("Confirm promote TEST to PROD")
+	}
+	
+	stage("Backup") {
+		openshift.withCluster() {
+			openshift.withProject() {						
+				openshift.tag("cms-adapter:${desttag}", "cms-adapter:${backuptag}")
+				openshift.tag("doctors-portal-api:${desttag}", "doctors-portal-api:${backuptag}")
+				openshift.tag("doctors-portal-ui:${desttag}", "doctors-portal-ui:${backuptag}")
+				openshift.tag("document-storage-adapter:${desttag}", "document-triage-service:${backuptag}")
+				openshift.tag("jh-etk-icbcadapter-image:${desttag}", "jh-etk-icbcadapter-image:${backuptag}")
+				openshift.tag("landing-page:${desttag}", "landing-page:${backuptag}")
+				openshift.tag("oauth-server:${desttag}", "oauth-server:${backuptag}")
+				openshift.tag("phsa-adapter:${desttag}", "phsa-adapter:${backuptag}")	
+			}
+		}
+	}	
+    
+	stage("Deploy") {
+		openshift.withCluster() {
+			openshift.withProject() {						
+				openshift.tag("cms-adapter:${sourcetag}", "cms-adapter:${desttag}")
+				openshift.tag("doctors-portal-api:${sourcetag}", "doctors-portal-api:${desttag}")
+				openshift.tag("doctors-portal-ui:${sourcetag}", "doctors-portal-ui:${desttag}")
+				openshift.tag("document-storage-adapter:${sourcetag}", "document-triage-service:${desttag}")
+				openshift.tag("jh-etk-icbcadapter-image:${sourcetag}", "jh-etk-icbcadapter-image:${desttag}")
+				openshift.tag("landing-page:${sourcetag}", "landing-page:${desttag}")
+				openshift.tag("oauth-server:${sourcetag}", "oauth-server:${desttag}")
+				openshift.tag("phsa-adapter:${sourcetag}", "phsa-adapter:${desttag}")	
+			}
+		}
+	}		
+}
