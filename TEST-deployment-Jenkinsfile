@@ -1,0 +1,32 @@
+node('master') {
+	stage('Confirm') {
+		input ("Confirm promote TEST to PROD")
+	}
+	
+	stage("Backup") {
+		openshift.withCluster() {
+			openshift.withProject() {
+				openshift.tag("cllc-public-api:prod", "cllc-public-api:prod-backup")
+				openshift.tag("cllc-public-frontend:prod", "cllc-public-frontend:prod-backup") 			
+			}
+		}
+	}	
+
+    def sourcetag = 'latest'
+    def desttag = 'test'
+	stage("Deploy") {
+		openshift.withCluster() {
+			openshift.withProject() {						
+				openshift.tag("cllc-public-api:", "cllc-public-api:")
+				openshift.tag("cms-adapter:${sourcetag}", "cms-adapter:${desttag}")
+				openshift.tag("doctors-portal-api:${sourcetag}", "doctors-portal-api:${desttag}")
+				openshift.tag("doctors-portal-ui:${sourcetag}", "doctors-portal-ui:${desttag}")
+				openshift.tag("document-storage-adapter:${sourcetag}", "document-triage-service:${desttag}")
+				openshift.tag("jh-etk-icbcadapter-image:${sourcetag}", "jh-etk-icbcadapter-image:${desttag}")
+				openshift.tag("landing-page:${sourcetag}", "landing-page:${desttag}")
+				openshift.tag("oauth-server:${sourcetag}", "oauth-server:${desttag}")
+				openshift.tag("phsa-adapter:${sourcetag}", "phsa-adapter:${desttag}")	
+			}
+		}
+	}		
+}
