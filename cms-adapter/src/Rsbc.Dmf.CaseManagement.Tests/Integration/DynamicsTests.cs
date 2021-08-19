@@ -35,10 +35,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanSetFlags()
         {
-            List<string> flags = new List<string>()
+            List<Flag> flags = new List<Flag>()
             {
-                {"testFlag - 1"},
-                {"testFlag - 2"}
+                new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
+                new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
             };
             var caseManager = services.GetRequiredService<ICaseManager>();
             var result = await caseManager.SetCaseFlags("111", flags, testLogger);

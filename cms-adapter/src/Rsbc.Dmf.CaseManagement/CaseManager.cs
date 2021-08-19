@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<string> flags, ILogger logger = null);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<Flag> flags, ILogger logger = null);
     }
 
     public class CaseSearchRequest
@@ -36,6 +36,12 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
+    }
+
+    public class Flag
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
     }
 
     internal class CaseManager : ICaseManager
@@ -62,7 +68,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public async Task<SetCaseFlagsReply>SetCaseFlags(string dmerIdentifier, List<string> flags, ILogger logger = null)
+        public async Task<SetCaseFlagsReply>SetCaseFlags(string dmerIdentifier, List<Flag> flags, ILogger logger = null)
         {
             /* The structure for cases is
              
@@ -94,18 +100,22 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 // Explicitly load the flags 
-                dynamicsContext.LoadProperty(dmerEntity, "dfp_incident_dfp_flag");
+                dynamicsContext.LoadProperty(dmerEntity, "dfp_incident_dfp_dmerflag");
 
                 // replace with unlink.  may need to replace with lazy loading
-                if (dmerEntity.dfp_incident_dfp_flag != null && dmerEntity.dfp_incident_dfp_flag.Count > 0)
+                if (dmerEntity.dfp_incident_dfp_dmerflag != null && dmerEntity.dfp_incident_dfp_dmerflag.Count > 0)
                 {
-                    foreach (var item in dmerEntity.dfp_incident_dfp_flag)
+                    foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
                     {
-                        dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_flag", item);
+                        dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_dmerflag", item);
+                        dynamicsContext.SaveChanges();
+
+                        // remove the old bridge.
+                        dynamicsContext.DeleteObject(item);
                         dynamicsContext.SaveChanges();
 
                         //dmerEntity.dfp_incident_dfp_flag.
-                        logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_flagid}");
+                        logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_name}");
                     }
                 }
 
@@ -113,18 +123,29 @@ namespace Rsbc.Dmf.CaseManagement
 
                 foreach (var flag in flags)
                 {
-                    dfp_flag givenFlag = dynamicsContext.dfp_flags.Where(x => x.dfp_question == flag).FirstOrDefault();
+                    dfp_flag givenFlag = dynamicsContext.dfp_flags.Where(x => x.dfp_id == flag.Id).FirstOrDefault();
                     if (givenFlag == null)
                     {
                         givenFlag = new dfp_flag()
                         {
-                            dfp_question = flag
+                            dfp_id = flag.Id,
+                            dfp_description = flag.Description
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
                         dynamicsContext.SaveChanges();
                     }
 
-                    dynamicsContext.AddLink(dmerEntity, "dfp_incident_dfp_flag", givenFlag);
+                    // configure the bridge entity
+
+                    dfp_dmerflag newFlag = new dfp_dmerflag()
+                    {
+                        dfp_FlagId = givenFlag
+                    };
+
+                    dynamicsContext.AddTodfp_dmerflags(newFlag);
+                    dynamicsContext.SaveChanges();
+
+                    dynamicsContext.AddLink(dmerEntity, "dfp_incident_dfp_dmerflag", newFlag);
                     dynamicsContext.SaveChanges();
                     if (logger != null)
                     {
