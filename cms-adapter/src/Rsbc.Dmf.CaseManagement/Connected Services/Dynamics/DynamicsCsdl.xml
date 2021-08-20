@@ -5913,6 +5913,7 @@
         <Property Name="_dfp_flagid_value" Type="Edm.Guid" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_dmerflag_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />

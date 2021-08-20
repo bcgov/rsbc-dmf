@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, List<Flag> flags, ILogger logger = null);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass,  List<Flag> flags, ILogger logger = null);
     }
 
     public class CaseSearchRequest
@@ -68,7 +68,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public async Task<SetCaseFlagsReply>SetCaseFlags(string dmerIdentifier, List<Flag> flags, ILogger logger = null)
+        public async Task<SetCaseFlagsReply>SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
         {
             /* The structure for cases is
              
@@ -162,6 +162,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // indicate that the form has been filled out
                 dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
+
+                dmerEntity.dfp_iscleanpass = isCleanPass;
 
                 dynamicsContext.UpdateObject(dmerEntity);
                 try
