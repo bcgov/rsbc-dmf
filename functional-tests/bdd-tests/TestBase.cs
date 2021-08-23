@@ -502,128 +502,75 @@ namespace bdd_tests
 
             if (option == "single unexplained no repeat syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Cause Remains Unexplained'
-                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-causeRemainsUnexplained"));
                 causeRemainsUnexplained.Click();
 
                 // select 'Single' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][enf6pvq]"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
 
                 // select 'No' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e1waq6p]"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Id("e1waq6p-n"));
                 noSyncopalEventPastYear.Click();
             }
 
 
             if (option == "recurrent unexplained past year syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Cause Remains Unexplained'
-                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                var causeRemainsUnexplained = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-causeRemainsUnexplained"));
                 causeRemainsUnexplained.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_2_a][enf6pvq]"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
                 singleSyncopalEvent.Click();
 
                 // select 'Yes' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e1waq6p]"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-y"));
                 noSyncopalEventPastYear.Click();
-            }
-
-            if (option == "all areas of concern that apply to patient's syncope experience")
-            {
-                // select 'Cardiovascular Diseases (CCMTA Chapter 3)'
-                var cardiovascularDiseasesChapter3 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_3_1]"));
-                cardiovascularDiseasesChapter3.Click();
-
-                // select 'Cerebrovascular Diseases (CCMTA Chapter 4)'
-                var cardiovascularDiseasesChapter4 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_4_1]"));
-                cardiovascularDiseasesChapter4.Click();
-
-                // select 'Diabetes – Hypoglycemia (CCMTA Chapter 7)'
-                var diabetesHypoglycemiaChapter7 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues2]"));
-                diabetesHypoglycemiaChapter7.Click();
-
-                // select 'Intracranial Tumours (CCMTA Chapter 10)'
-                var intracranialTumoursChapter10 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues3]"));
-                intracranialTumoursChapter10.Click();
-
-                // select 'Abdominal Aortic Aneurysm (CCMTA Chapter 13)'
-                var abdominalAorticAneurysmChapter13 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues4]"));
-                abdominalAorticAneurysmChapter13.Click();
-
-                // select 'Drugs, Alcohol and Driving (CCMTA Chapter 15)'
-                var drugsAlcoholDrivingChapter15 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues5]"));
-                drugsAlcoholDrivingChapter15.Click();
-
-                // select 'Seizures and Epilepsy (CCMTA Chapter 17)'
-                var seizuresEpilepsyChapter17 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues7]"));
-                seizuresEpilepsyChapter17.Click();
-
-                // select 'Narcolepsy (CCMTA Chapter 18)'
-                var narcolepsyChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues8]"));
-                narcolepsyChapter18.Click();
-
-                // select 'Sleep Apnea (CCMTA Chapter 18)'
-                var sleepApneaChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues9]"));
-                sleepApneaChapter18.Click();
-
-                // select 'Traumatic Brain Injuries (CCMTA Chapter 20)'
-                var traumaticBrainInjuriesChapter20 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues10]"));
-                traumaticBrainInjuriesChapter20.Click();
             }
 
             if (option == "currently untreated no repeat syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Currently Untreated'
-                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-currentlyUntreated"));
                 currentlyUntreated.Click();
 
                 // select 'Single' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
             }
 
             if (option == "untreated currently recurrent syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Currently Untreated'
                 var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 currentlyUntreated.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
                 recurrentSyncopalEvent.Click();
             }
 
             if (option == "diagnosed treated successfully single recent syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Diagnosed, Treated Successfully'
                 var diagnosedTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 diagnosedTreatedSuccessfully.Click();
 
                 // select 'Single' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
 
                 // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
@@ -633,90 +580,91 @@ namespace bdd_tests
 
             if (option == "not recent diagnosed treated successfully recurrent syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Diagnosed, Treated Successfully'
                 var diagnosedTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 diagnosedTreatedSuccessfully.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
                 recurrentSyncopalEvent.Click();
 
                 // select 'No' for 'Has the patient experienced a Syncopal Event in the past 1 Month?'
-                var syncopalEventPastMonthNo = ngDriver.WrappedDriver.FindElement(By.Id("ev7hw28-n"));
+                var syncopalEventPastMonthNo = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
                 syncopalEventPastMonthNo.Click();
             }
 
             if (option == "reversible, treated successfully single syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Reversible, Treated Successfully'
                 var reversibleTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 reversibleTreatedSuccessfully.Click();
 
                 // select 'Single' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
             }
 
             if (option == "treated successfully recurrent syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Reversible, Treated Successfully'
                 var reversibleTreatedSuccessfully = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
                 reversibleTreatedSuccessfully.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
                 recurrentSyncopalEvent.Click();
             }
 
             if (option == "situational single past 7 days yes syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Situational, Avoidable Trigger'
                 var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
                 situationalAvoidableTrigger.Click();
 
                 // select 'Single' for 'Syncopal Event'
-                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-single"));
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
 
                 // select 'No' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysNo = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-n"));
+                var SyncopalEventPastSevenDaysNo = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
                 SyncopalEventPastSevenDaysNo.Click();
             }
 
             if (option == "past 7 days no situational recurrent syncope details")
             {
-                // select 'Syncope'
-                var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-                syncopeCheckbox.Click();
+                SyncopeSetup();
 
                 // select 'Situational, Avoidable Trigger'
                 var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
                 situationalAvoidableTrigger.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("enf6pvq-recurrent"));
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
                 recurrentSyncopalEvent.Click();
 
                 // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-y"));
+                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
                 SyncopalEventPastSevenDaysYes.Click();
             }
+        }
+
+        public void SyncopeSetup()
+        {
+            // select 'Syncope'
+            var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+            syncopeCheckbox.Click();
+
+            // select 'Has the patient experienced any Syncopal Episodes?'
+            var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
+            syncopalEpisodesCheckbox.Click();
         }
 
 
