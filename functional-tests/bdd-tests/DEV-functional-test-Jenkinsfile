@@ -21,7 +21,7 @@ podTemplate(label: 'jenkins-agent-dotnet', name: 'jenkins-agent-dotnet', service
 
 			timeout(time: 9000){
 				dir('functional-tests/bdd-tests') {               
-					withEnv(["baseUri=${baseUri}","CHROME_BINARY_LOCATION=${CHROME_BINARY_LOCATION}"])
+					withEnv(["baseUri=${baseUri}","CHROME_BINARY_LOCATION=${CHROME_BINARY_LOCATION}","DYNAMICS_BASE_URI=${DYNAMICS_BASE_URI}"])
 					{
 						try {                        
 							sh 'dotnet test --filter Category=${test_category} --logger "junit;LogFilePath=functionalResults.xml"'					
