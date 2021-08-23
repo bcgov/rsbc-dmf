@@ -6,7 +6,7 @@ Feature: DMERe2e.feature
 Scenario: E2E Test
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
