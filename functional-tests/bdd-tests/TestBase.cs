@@ -539,49 +539,6 @@ namespace bdd_tests
                 noSyncopalEventPastYear.Click();
             }
 
-            if (option == "all areas of concern that apply to patient's syncope experience")
-            {
-                // select 'Cardiovascular Diseases (CCMTA Chapter 3)'
-                var cardiovascularDiseasesChapter3 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_3_1]"));
-                cardiovascularDiseasesChapter3.Click();
-
-                // select 'Cerebrovascular Diseases (CCMTA Chapter 4)'
-                var cardiovascularDiseasesChapter4 = ngDriver.WrappedDriver.FindElement(By.Name("data[checkSYNCCH_4_1]"));
-                cardiovascularDiseasesChapter4.Click();
-
-                // select 'Diabetes – Hypoglycemia (CCMTA Chapter 7)'
-                var diabetesHypoglycemiaChapter7 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues2]"));
-                diabetesHypoglycemiaChapter7.Click();
-
-                // select 'Intracranial Tumours (CCMTA Chapter 10)'
-                var intracranialTumoursChapter10 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues3]"));
-                intracranialTumoursChapter10.Click();
-
-                // select 'Abdominal Aortic Aneurysm (CCMTA Chapter 13)'
-                var abdominalAorticAneurysmChapter13 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues4]"));
-                abdominalAorticAneurysmChapter13.Click();
-
-                // select 'Drugs, Alcohol and Driving (CCMTA Chapter 15)'
-                var drugsAlcoholDrivingChapter15 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues5]"));
-                drugsAlcoholDrivingChapter15.Click();
-
-                // select 'Seizures and Epilepsy (CCMTA Chapter 17)'
-                var seizuresEpilepsyChapter17 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues7]"));
-                seizuresEpilepsyChapter17.Click();
-
-                // select 'Narcolepsy (CCMTA Chapter 18)'
-                var narcolepsyChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues8]"));
-                narcolepsyChapter18.Click();
-
-                // select 'Sleep Apnea (CCMTA Chapter 18)'
-                var sleepApneaChapter18 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues9]"));
-                sleepApneaChapter18.Click();
-
-                // select 'Traumatic Brain Injuries (CCMTA Chapter 20)'
-                var traumaticBrainInjuriesChapter20 = ngDriver.WrappedDriver.FindElement(By.Name("data[cardiovascularIssues10]"));
-                traumaticBrainInjuriesChapter20.Click();
-            }
-
             if (option == "currently untreated no repeat syncope details")
             {
                 // select 'Syncope'
