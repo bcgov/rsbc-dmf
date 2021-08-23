@@ -5,7 +5,7 @@ Feature: DMERSyncope.feature
 Scenario: Syncope Unexplained Single No Repeat
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -22,7 +22,7 @@ Scenario: Syncope Unexplained Single No Repeat
 Scenario: Syncope Unexplained Recurrent Past Year
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -39,7 +39,7 @@ Scenario: Syncope Unexplained Recurrent Past Year
 Scenario: Syncope All Areas of Concern
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -57,7 +57,7 @@ Scenario: Syncope All Areas of Concern
 Scenario: Syncope Currently Untreated Single
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -74,7 +74,7 @@ Scenario: Syncope Currently Untreated Single
 Scenario: Syncope Currently Untreated Recurrent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -91,7 +91,7 @@ Scenario: Syncope Currently Untreated Recurrent
 Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -108,7 +108,7 @@ Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
 Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -125,7 +125,7 @@ Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
 Scenario: Syncope Reversible, Treated Successfully, Single
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -142,7 +142,7 @@ Scenario: Syncope Reversible, Treated Successfully, Single
 Scenario: Syncope Reversible, Treated Successfully, Recurrent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -159,7 +159,7 @@ Scenario: Syncope Reversible, Treated Successfully, Recurrent
     Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days No
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -176,7 +176,7 @@ Scenario: Syncope Reversible, Treated Successfully, Recurrent
 Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 111
+    And I click on the Case ID for 222
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
