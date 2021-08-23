@@ -513,7 +513,7 @@ namespace bdd_tests
                 singleSyncopalEvent.Click();
 
                 // select 'No' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Id("e1waq6p-n"));
                 noSyncopalEventPastYear.Click();
             }
 
@@ -531,7 +531,7 @@ namespace bdd_tests
                 singleSyncopalEvent.Click();
 
                 // select 'Yes' for syncopal event in the past year
-                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Name("data[yornSYNC_2_2][e1waq6p]"));
+                var noSyncopalEventPastYear = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-y"));
                 noSyncopalEventPastYear.Click();
             }
 
@@ -540,7 +540,7 @@ namespace bdd_tests
                 SyncopeSetup();
 
                 // select 'Currently Untreated'
-                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][e7vqgi]"));
+                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-currentlyUntreated"));
                 currentlyUntreated.Click();
 
                 // select 'Single' for 'Syncopal Event'
