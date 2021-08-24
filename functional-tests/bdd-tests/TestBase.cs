@@ -548,12 +548,13 @@ namespace bdd_tests
                 singleSyncopalEvent.Click();
             }
 
+            // DMERSyncope.feature :: Syncope Currently Untreated Recurrent
             if (option == "untreated currently recurrent syncope details")
             {
                 SyncopeSetup();
 
                 // select 'Currently Untreated'
-                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Name("data[pickSYNC_1_a][eca3rtm]"));
+                var currentlyUntreated = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-currentlyUntreated"));
                 currentlyUntreated.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
