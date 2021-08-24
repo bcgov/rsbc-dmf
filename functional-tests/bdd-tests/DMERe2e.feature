@@ -15,7 +15,7 @@ Scenario: E2E Test
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     And I log out of the portal
     And I log in to the Dynamics portal
     And I wait for the Dynamics homepage content to be displayed
