@@ -421,6 +421,13 @@ namespace bdd_tests
                 var nextButton = GetSeleniumElementByCss("button.btn-wizard-nav-next", 20);
                 nextButton.Click();
             }
+
+            if (element == "the form submit button")
+            {
+                // full class of the next button is "btn btn-primary btn-wizard-nav-submit"
+                var formSubmitButton = GetSeleniumElementByCss("button.btn-wizard-nav-submit", 20);
+                formSubmitButton.Click();
+            }
         }
 
 
