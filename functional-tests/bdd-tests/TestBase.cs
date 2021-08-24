@@ -662,6 +662,46 @@ namespace bdd_tests
                 var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-y"));
                 SyncopalEventPastSevenDaysYes.Click();
             }
+
+            // DMERSyncope.feature :: Syncope Vasovagal, Single, Typical
+            if (option == "")
+            {
+                SyncopeSetup();
+
+                // select 'Vasovagal Syncope'
+                var vasovagalSyncope = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-vasovagalSyncope"));
+                vasovagalSyncope.Click();
+
+                // select 'Single' for 'Syncopal Event'
+                var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
+                singleSyncopalEvent.Click();
+
+                // select 'Typical Vasovagal' for 'Syncopal Expression is:'
+                var typicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-typicalVasovagal"));
+                typicalVasovagal.Click();
+            }
+
+            // DMERSyncope.feature :: Syncope Vasovagal, Recurrent, Atypical
+            if (option == "")
+            {
+                SyncopeSetup();
+
+                // select 'Vasovagal Syncope'
+                var vasovagalSyncope = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-vasovagalSyncope"));
+                vasovagalSyncope.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
+                recurrentSyncopalEvent.Click();
+
+                // select 'Atypical Vasovagal' for 'Syncopal Expression is:'
+                var atypicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-atypicalVasovagal"));
+                atypicalVasovagal.Click();
+
+                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
+                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("ecvhp5f-y"));
+                SyncopalEventPastSevenDaysYes.Click();
+            }
         }
 
         public void SyncopeSetup()
