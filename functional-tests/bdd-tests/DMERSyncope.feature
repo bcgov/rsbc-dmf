@@ -16,7 +16,7 @@ Scenario: Syncope Unexplained Single No Repeat
     And I enter the single unexplained no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Unexplained Recurrent Past Year
@@ -33,7 +33,7 @@ Scenario: Syncope Unexplained Recurrent Past Year
     And I enter the recurrent unexplained past year syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Currently Untreated Single
@@ -50,7 +50,7 @@ Scenario: Syncope Currently Untreated Single
     And I enter the currently untreated no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Currently Untreated Recurrent
@@ -67,7 +67,7 @@ Scenario: Syncope Currently Untreated Recurrent
     And I enter the untreated currently recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
@@ -84,7 +84,7 @@ Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
     And I enter the diagnosed treated successfully single recent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
@@ -101,7 +101,7 @@ Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
     And I enter the not recent diagnosed treated successfully recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Reversible, Treated Successfully, Single
@@ -118,7 +118,7 @@ Scenario: Syncope Reversible, Treated Successfully, Single
     And I enter the reversible, treated successfully single syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Reversible, Treated Successfully, Recurrent
@@ -135,7 +135,7 @@ Scenario: Syncope Reversible, Treated Successfully, Recurrent
     And I enter the treated successfully recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
     Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days No
@@ -152,7 +152,7 @@ Scenario: Syncope Reversible, Treated Successfully, Recurrent
     And I enter the situational single past 7 days yes syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
@@ -169,5 +169,39 @@ Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
     And I enter the past 7 days no situational recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Syncope Vasovagal, Single, Typical
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 222
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the vasovagal single typical syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Syncope Vasovagal, Recurrent, Atypical
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 222
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the atypical vasovagal recurrent syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
     Then I log out of the portal

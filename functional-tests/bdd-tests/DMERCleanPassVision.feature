@@ -15,7 +15,7 @@ Scenario: Clean Pass Vision Assessment
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I enter the medical opinion and confirmations
-    And I click on the Submit Form button
+    And I click on the form submit button
     Then I log out of the portal
 
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path)

@@ -1,14 +1,6 @@
-﻿using OpenQA.Selenium;
-using Protractor;
-using System;
-using System.Threading;
-using Xunit;
-using Xunit.Gherkin.Quick;
-
-/*
-Feature: DoctorsPortalHealthCheck
+﻿Feature: DoctorsPortalDataCheck
     As a medical professional
-    I want to perform a health check on the doctors' portal
+    I want to perform a data and fields check on the doctors' portal
 
 @pipeline
 Scenario: Doctors' Portal Tombstone Check
@@ -29,12 +21,3 @@ Scenario: Doctors' Portal Provider Check
     And I refresh the page
     And the content is displayed for the provider
     Then I log out of the portal
-*/
-
-namespace bdd_tests
-{
-    [FeatureFile("./DoctorsPortalHealthCheck.feature")]
-    public sealed class DoctorsPortalHealthCheck : TestBase
-    {
-    }
-}
