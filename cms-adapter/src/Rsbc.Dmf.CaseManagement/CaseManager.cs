@@ -103,12 +103,9 @@ namespace Rsbc.Dmf.CaseManagement
 
                 dmerEntity.statecode = 0;
                 dmerEntity.statuscode = 1;
-
-                dynamicsContext.SaveChanges();
-
-
                 dynamicsContext.UpdateObject(dmerEntity);
-
+                dynamicsContext.SaveChanges();
+                
                 // clean pass is indicated by the presence of flags.  
                 if (logger != null)
                 {
