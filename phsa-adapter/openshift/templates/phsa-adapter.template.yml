@@ -35,6 +35,78 @@ parameters:
   - description: oauth server client secret
     name: OAUTH_CLIENTSECRET
     required: true
+  - description: OIDC_CLIENTID
+    name: OIDC_CLIENTID
+    required: true
+  - description: INTROSPECTION_CLIENTSECRET
+    name: INTROSPECTION_CLIENTSECRET
+    required: true
+  - description: INTROSPECTION_AUTHORITY
+    name: INTROSPECTION_AUTHORITY
+    required: true
+  - description: TOKEN_AUTHORITY
+    name: TOKEN_AUTHORITY 
+    required: true
+  - description: OIDC_SCOPE
+    name: OIDC_SCOPE
+    required: true
+  - description: INTROSPECTION_CLIENTID
+    name: INTROSPECTION_CLIENTID
+    required: true
+  - description: OIDC_ISSUER
+    name: OIDC_ISSUER
+    required: true 
+  - description: FHIR_OAUTH_CLIENT_ID
+    name: FHIR_OAUTH_CLIENT_ID
+    required: true 
+  - description: FHIR_OAUTH_CLIENT_SECRET
+    name: FHIR_OAUTH_CLIENT_SECRET
+    required: true
+  - description: FHIR_AUTHORIZATION_ENDPOINT
+    name: FHIR_AUTHORIZATION_ENDPOINT
+    required: true
+  - description: FHIR_TOKEN_ENDPOINT
+    name: FHIR_TOKEN_ENDPOINT
+    required: true
+    - description: FHIR_INTROSPECTION_ENDPOINT
+    name: FHIR_INTROSPECTION_ENDPOINT
+    required: true
+  - description: FHIR_SERVER_URL
+    name: FHIR_SERVER_URL
+    required: true
+  - description: TEST_PHN
+    name: TEST_PHN
+    required: true
+  - description: TEST_PHN_SYSTEM
+    name: TEST_PHN_SYSTEM
+    required: true
+  - description: TEST_DL
+    name: TEST_DL
+    required: true
+  - description: ICBC_ADAPTER_BASE_URI
+    name: ICBC_ADAPTER_BASE_URI
+    required: true
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_URI
+    name: DOCUMENT_STORAGE_ADAPTER_URI
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+    name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+    required: true
+  - description: DOCUMENT_TRIAGE_SERVICE_URI
+    name: DOCUMENT_TRIAGE_SERVICE_URI
+    required: true
+  - description: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
+    name: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
+    required: true
+  - description: SPLUNK_COLLECTOR_URL
+    name: SPLUNK_COLLECTOR_URL
+    required: true
+  - description: SPLUNK_TOKEN
+    name: SPLUNK_TOKEN
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -48,6 +120,7 @@ objects:
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
+      FHIR_OAUTH_CLIENT_ID: ${FHIR_OAUTH_CLIENT_ID}
 
   - kind: Secret
     apiVersion: v1
@@ -64,7 +137,14 @@ objects:
       AUTH__AUTHORITY: ${OAUTH_SERVER_URL}
       AUTH__CLIENTID: ${OAUTH_CLIENTID}
       AUTH__CLIENTSECRET: ${OAUTH_CLIENTSECRET}
-
+      AUTH__OIDC__CLIENTID: ${OIDC_CLIENTID}
+      AUTH__INTROSPECTION__CLIENTSECRET: ${INTROSPECTION_CLIENTSECRET}
+      AUTH__INTROSPECTION__AUTHORITY: ${INTROSPECTION_AUTHORITY}
+      AUTH__TOKEN__AUTHORITY: ${TOKEN_AUTHORITY}
+      AUTH__OIDC__SCOPE: ${OIDC_SCOPE}
+      AUTH__INTROSPECTION__CLIENTID: ${INTROSPECTION_CLIENTID}
+      AUTH__OIDC__ISSUER: ${OIDC_ISSUER}
+      FHIR_OAUTH_CLIENT_SECRET: ${FHIR_OAUTH_CLIENT_SECRET}
   - kind: Service
     apiVersion: v1
     metadata:
