@@ -48,13 +48,10 @@
     <None Update="DynamicsNavigation.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="DynamicsPortalHealthCheck.feature">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="PHSANavigation.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="DoctorsPortalHealthCheck.feature">
+    <None Update="DoctorsPortalDataCheck.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="DMERCleanPassVision.feature">
