@@ -599,6 +599,7 @@ namespace bdd_tests
                 syncopalEventPastMonthNo.Click();
             }
 
+            // DMERSyncope.feature :: Syncope Reversible, Treated Successfully, Single
             if (option == "reversible, treated successfully single syncope details")
             {
                 SyncopeSetup();
@@ -626,29 +627,31 @@ namespace bdd_tests
                 recurrentSyncopalEvent.Click();
             }
 
+            // DMERSyncope.feature :: Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
             if (option == "situational single past 7 days yes syncope details")
             {
                 SyncopeSetup();
 
                 // select 'Situational, Avoidable Trigger'
-                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
+                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-situationalAvoidableTrigger"));
                 situationalAvoidableTrigger.Click();
 
                 // select 'Single' for 'Syncopal Event'
                 var singleSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-single"));
                 singleSyncopalEvent.Click();
 
-                // select 'No' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysNo = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
+                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
+                var SyncopalEventPastSevenDaysNo = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-y"));
                 SyncopalEventPastSevenDaysNo.Click();
             }
 
+            // DMERSyncope.feature :: Syncope Situational, Avoidable Trigger, Single, Past 7 Days No
             if (option == "past 7 days no situational recurrent syncope details")
             {
                 SyncopeSetup();
 
                 // select 'Situational, Avoidable Trigger'
-                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("eca3rtm-situationalAvoidableTrigger"));
+                var situationalAvoidableTrigger = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-situationalAvoidableTrigger"));
                 situationalAvoidableTrigger.Click();
 
                 // select 'Recurrent' for 'Syncopal Event'
@@ -656,7 +659,7 @@ namespace bdd_tests
                 recurrentSyncopalEvent.Click();
 
                 // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("emtd13-n"));
+                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("eie7dlr-y"));
                 SyncopalEventPastSevenDaysYes.Click();
             }
         }
