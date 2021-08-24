@@ -179,6 +179,40 @@ Scenario: Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
     And I enter the medical opinion and confirmations
     And I click on the Submit Form button
     Then I log out of the portal
+
+Scenario: Syncope Vasovagal, Single, Typical
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 222
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the vasovagal single typical syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
+
+Scenario: Syncope Vasovagal, Recurrent, Atypical
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 222
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I enter the atypical vasovagal recurrent syncope details
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the Submit Form button
+    Then I log out of the portal
 */
 
 namespace bdd_tests
