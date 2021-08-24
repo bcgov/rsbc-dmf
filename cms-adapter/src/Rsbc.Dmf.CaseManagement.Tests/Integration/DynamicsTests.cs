@@ -41,7 +41,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
             };
             var caseManager = services.GetRequiredService<ICaseManager>();
-            var result = await caseManager.SetCaseFlags("111", false, flags, testLogger);
+            var result = await caseManager.SetCaseFlags("222", false, flags, testLogger);
             result.ShouldNotBeNull().Success.ShouldBe(true);
         }
     }

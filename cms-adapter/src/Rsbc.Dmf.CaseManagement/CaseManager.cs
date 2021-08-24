@@ -93,6 +93,22 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (dmerEntity != null)
             {
+
+                // close and re-open the case
+                dynamicsContext.CloseIncident(new incidentresolution()
+                {
+                    incidentid = dmerEntity
+                }, -1);
+                dynamicsContext.SaveChanges();
+
+                dmerEntity.statecode = 0;
+                dmerEntity.statuscode = 1;
+
+                dynamicsContext.SaveChanges();
+
+
+                dynamicsContext.UpdateObject(dmerEntity);
+
                 // clean pass is indicated by the presence of flags.  
                 if (logger != null)
                 {
