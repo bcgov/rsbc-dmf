@@ -161,7 +161,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dmerEntity.modifiedon = DateTimeOffset.Now;
 
                 // indicate that the form has been filled out
-                dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
+                //dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
 
                 dmerEntity.dfp_iscleanpass = isCleanPass;
 
