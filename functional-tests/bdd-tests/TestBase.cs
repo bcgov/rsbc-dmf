@@ -712,23 +712,77 @@ namespace bdd_tests
 
             if (option == "cardio steps")
             {
-                SyncopeSetup();
+                // select 'Cardiovascular Diseases'
+                var cardiovascularDiseases = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_3_1]"));
+                cardiovascularDiseases.Click();
 
-                // select 'Vasovagal Syncope'
-                var vasovagalSyncope = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-vasovagalSyncope"));
-                vasovagalSyncope.Click();
+                // select 'Does the patient have any Cardiovascular Conditions?'
+                var patientHasCardiovascularDiseases = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_x]"));
+                patientHasCardiovascularDiseases.Click();
 
-                // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
-                recurrentSyncopalEvent.Click();
+                // select 'No' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("er2n6wd-n"));
+                impairedConsciousnessNo.Click();
 
-                // select 'Atypical Vasovagal' for 'Syncopal Expression is:'
-                var atypicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-atypicalVasovagal"));
-                atypicalVasovagal.Click();
+                // select 'Yes' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("er2n6wd-y"));
+                impairedConsciousnessNo.Click();
 
-                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("ecvhp5f-y"));
-                SyncopalEventPastSevenDaysYes.Click();
+                // select 'No' for 'Does the patient experience Syncope symptoms which should be reported?'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("efw8jmi-n"));
+                impairedConsciousnessNo.Click();
+
+                // select 'Yes' for 'Does the patient experience Syncope symptoms which should be reported?'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("efw8jmi-y"));
+                impairedConsciousnessNo.Click();
+
+                // select 'Yes' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("ez8gd78-y"));
+                impairedConsciousnessNo.Click();
+
+                // select 'No' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("ez8gd78-n"));
+                impairedConsciousnessNo.Click();
+
+                // select 'Less Than 35%'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("elopoc8-less35"));
+                impairedConsciousnessNo.Click();
+
+                // select 'Greater than or = 35%'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("elopoc8-more35"));
+                impairedConsciousnessNo.Click();
+
+                // select 'Unavailable or not applicable'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("elopoc8-unavailable"));
+                impairedConsciousnessNo.Click();
+
+                // select '1' for 'NYHA (Only required for specific conditions.)'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("evtoz-1"));
+                impairedConsciousnessNo.Click();
+
+                // select '2' for 'NYHA (Only required for specific conditions.)'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("evtoz-2"));
+                impairedConsciousnessNo.Click();
+
+                // select '3' for 'NYHA (Only required for specific conditions.)'
+                //
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("evtoz-3"));
+                impairedConsciousnessNo.Click();
+
+                // select '4' for 'NYHA (Only required for specific conditions.)'
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Name("evtoz-4"));
+                impairedConsciousnessNo.Click();
             }
         }
 
