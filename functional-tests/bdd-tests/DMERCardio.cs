@@ -21,7 +21,7 @@ Scenario: Cardio All Fields
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And **
+    And I enter the cardio steps
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
