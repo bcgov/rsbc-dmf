@@ -686,6 +686,10 @@ namespace bdd_tests
                 // select 'Typical Vasovagal' for 'Syncopal Expression is:'
                 var typicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-typicalVasovagal"));
                 typicalVasovagal.Click();
+
+                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 1 Year?'
+                var pastSyncopalEventPastYearYes = ngDriver.WrappedDriver.FindElement(By.Id("e9pkjt-y"));
+                pastSyncopalEventPastYearYes.Click();
             }
 
             // DMERSyncope.feature :: Syncope Vasovagal, Recurrent, Atypical
