@@ -712,23 +712,78 @@ namespace bdd_tests
 
             if (option == "cardio steps")
             {
-                SyncopeSetup();
+                // select 'Cardiovascular Diseases'
+                var cardiovascularDiseases = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_3_1]"));
+                cardiovascularDiseases.Click();
 
-                // select 'Vasovagal Syncope'
-                var vasovagalSyncope = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-vasovagalSyncope"));
-                vasovagalSyncope.Click();
+                // select 'Does the patient have any Cardiovascular Conditions?'
+                var patientHasCardiovascularDiseases = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_x]"));
+                patientHasCardiovascularDiseases.Click();
 
-                // select 'Recurrent' for 'Syncopal Event'
-                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
-                recurrentSyncopalEvent.Click();
+                // select 'No' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-n"));
+                impairedConsciousnessNo.Click();
 
-                // select 'Atypical Vasovagal' for 'Syncopal Expression is:'
-                var atypicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-atypicalVasovagal"));
-                atypicalVasovagal.Click();
+                // select 'Yes' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
+                var impairedConsciousnessYes = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-y"));
+                impairedConsciousnessYes.Click();
 
-                // select 'Yes' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
-                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("ecvhp5f-y"));
-                SyncopalEventPastSevenDaysYes.Click();
+                // select 'No' for 'Does the patient experience Syncope symptoms which should be reported?'
+                var syncopeSymptomsNo = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-n"));
+                syncopeSymptomsNo.Click();
+
+                // select 'Yes' for 'Does the patient experience Syncope symptoms which should be reported?'
+                var syncopeSymptomsYes = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-y"));
+                syncopeSymptomsYes.Click();
+
+                // select 'Yes' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
+                var successfulTreatmentYes = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-y"));
+                successfulTreatmentYes.Click();
+
+                // select 'No' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
+                var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-n"));
+                successfulTreatmentNo.Click();
+
+                // select 'Less Than 35%'
+                var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-less35"));
+                lessThan35Percent.Click();
+
+                // select 'Greater than or = 35%'
+                var greaterThanOrEqual35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-more35"));
+                greaterThanOrEqual35Percent.Click();
+
+                // select 'Unavailable or not applicable'
+                var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-unavailable"));
+                unavailableOrNotApplicable.Click();
+
+                // select '1' for 'NYHA (Only required for specific conditions.)'
+                var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-1"));
+                NYHA1.Click();
+
+                // select '2' for 'NYHA (Only required for specific conditions.)'
+                var NYHA2 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-2"));
+                NYHA2.Click();
+
+                // select '3' for 'NYHA (Only required for specific conditions.)'
+                var NYHA3 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-3"));
+                NYHA3.Click();
+
+                // select '4' for 'NYHA (Only required for specific conditions.)'
+                var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-4"));
+                NYHA4.Click();
+
+                // select 'ICD Not Applicable' for 'Has the patient received an ICD?' 
+
+
+                // select ' Recommended, patient declined' for 'Has the patient received an ICD?' 
+
+
+                // select 'No, scheduled to occur' for 'Has the patient received an ICD?' 
+
+
+                // select 'Yes' for 'Has the patient received an ICD?' 
+
+
             }
         }
 
