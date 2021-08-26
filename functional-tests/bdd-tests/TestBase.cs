@@ -671,7 +671,7 @@ namespace bdd_tests
             }
 
             // DMERSyncope.feature :: Syncope Vasovagal, Single, Typical
-            if (option == "")
+            if (option == "vasovagal single typical syncope details")
             {
                 SyncopeSetup();
 
@@ -689,7 +689,28 @@ namespace bdd_tests
             }
 
             // DMERSyncope.feature :: Syncope Vasovagal, Recurrent, Atypical
-            if (option == "")
+            if (option == "atypical vasovagal recurrent syncope details")
+            {
+                SyncopeSetup();
+
+                // select 'Vasovagal Syncope'
+                var vasovagalSyncope = ngDriver.WrappedDriver.FindElement(By.Id("e7vqgi-vasovagalSyncope"));
+                vasovagalSyncope.Click();
+
+                // select 'Recurrent' for 'Syncopal Event'
+                var recurrentSyncopalEvent = ngDriver.WrappedDriver.FindElement(By.Id("ea4ioq5h-recurrent"));
+                recurrentSyncopalEvent.Click();
+
+                // select 'Atypical Vasovagal' for 'Syncopal Expression is:'
+                var atypicalVasovagal = ngDriver.WrappedDriver.FindElement(By.Id("ejhgp9v-atypicalVasovagal"));
+                atypicalVasovagal.Click();
+
+                // select 'No' for 'Has the patient experienced a Syncopal Event in the past 7 days?'
+                var SyncopalEventPastSevenDaysYes = ngDriver.WrappedDriver.FindElement(By.Id("e9pkjt-n"));
+                SyncopalEventPastSevenDaysYes.Click();
+            }
+
+            if (option == "cardio steps")
             {
                 SyncopeSetup();
 
