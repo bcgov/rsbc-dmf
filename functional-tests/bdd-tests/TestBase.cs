@@ -773,95 +773,181 @@ namespace bdd_tests
                 NYHA4.Click();
 
                 // select 'ICD Not Applicable' for 'Has the patient received an ICD?' 
+                //e3s93ra-icdNotApplicable
 
-
-                // select ' Recommended, patient declined' for 'Has the patient received an ICD?' 
-
+                // select 'Recommended, patient declined' for 'Has the patient received an ICD?' 
+                //e3s93ra-recommendedPatientDeclined
 
                 // select 'No, scheduled to occur' for 'Has the patient received an ICD?' 
-
+                //e3s93ra-noScheduledToOccur
 
                 // select 'Yes' for 'Has the patient received an ICD?' 
+                //e3s93ra-yes
+
+                // select 'Secondary' for 'ICD Prophylaxis Condition is:'
+                //elt8fv-secondary
+
+                // select 'Primary' for 'ICD Prophylaxis Condition is:'
+                //elt8fv-primary
+
+                // select 'Within the past 6 Months' for 'ICD therapy (ATP/Shock) delivered'
+                // ejbv4y-withinThePast6Months
+
+                // select for 'No' for 'ICD therapy (ATP/Shock) delivered'
+                //ejbv4y-no
+
+                // select 'Coronary Artery Disease'
+
+                // select 'No' for 'CAD has been treated with CABG?'
+
+                // select 'Yes' for 'CAD has been treated with CABG?'
+
+                // select 'Arrhythmias and Pacemaker'
+
+                // select 'Pacemaker Not Applicable' for 'Has the patient received a Pacemaker?'
+
+                // select 'Recommended, patient declined' for 'Has the patient received a Pacemaker?'
+
+                // select 'No, scheduled to occur' for 'Has the patient received a Pacemaker?'
+
+                // select 'Yes' for 'Has the patient received a Pacemaker?'
+
+                // select 'Scheduled to occur' for 'Cardiac Ablation'
+
+                // select 'Within the past 3 Months' for 'Cardiac Ablation'
+
+                // select 'No' for 'Cardiac Ablation'
+
+                // select 'Sustained VT'
+
+                // select 'VF with no reversible cause'
+
+                // select 'No' for 'Experienced within the past 6 months?'
+
+                // select 'Yes' for 'Experienced within the past 6 months?'
+
+                // select 'Hemodynamically Unstable VT'
+
+                // select 'No' for 'Experienced within the past 6 months?'
+
+                // select 'Yes' for 'Experienced within the past 6 months?'
+
+                // select 'AV Blocks'
+
+                // select 'None of the above' for 'AV Block Expression'
+
+                // select 'Acquired 3rd degree AV block' for 'AV Block Expression'
+
+                // select 'Alternating LBBB and RBBB' for 'AV Block Expression'
+
+                // select '2nd degree AV block /Mobitz II' for 'AV Block Expression'
+
+                // select 'PAC or PVC'
+
+                // select 'No' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
+
+                // select 'Yes' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
+
+                // select 'Sinus Node Dysfunction'
+
+                /**** Paroxysmal SVT, AF, or AFL
+                 ****/
+
+                // select 'Paroxysmal SVT, AF, or AFL'
+
+                // select 'No' for 'Treated with therapy, no recurrence within past 3 months'
+
+                // select 'Yes' for 'Treated with therapy, no recurrence within past 3 months'
+
+                // select 'No additional detail available' for 'Condition has been treated with:'
+                //e52bjgd-noAdditionalDetailAvailable
+
+                // select 'AFL, they have had a successful isthmus ablation with proven establishment of bidirectional isthmus block' for 'Condition has been treated with:'
+                //e52bjgd-aflTheyHaveHadASuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock
+
+                // select 'AF, they have had AV node ablation and pacemaker implantation and meet the standard for pacemaker treatment' for 'Condition has been treated with:'
+                //e52bjgd-afTheyHaveHadAvNodeAblationAndPacemakerImplantationAndMeetTheStandardForPacemakerTreatment
+
+                // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
+                //e52bjgd-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation
+}
+}
+
+public void SyncopeSetup()
+{
+// select 'Syncope'
+var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+syncopeCheckbox.Click();
+
+// select 'Has the patient experienced any Syncopal Episodes?'
+var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
+syncopalEpisodesCheckbox.Click();
+}
 
 
-            }
-        }
+[Then(@"I log out of the portal")]
+public void PortalLogOut()
+{
 
-        public void SyncopeSetup()
-        {
-            // select 'Syncope'
-            var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-            syncopeCheckbox.Click();
+}
 
-            // select 'Has the patient experienced any Syncopal Episodes?'
-            var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
-            syncopalEpisodesCheckbox.Click();
-        }
+[And(@"I log out of the portal")]
+public void PortalLogOut2()
+{
+PortalLogOut();
+}
 
 
-        [Then(@"I log out of the portal")]
-        public void PortalLogOut()
-        {
+protected IWebElement GetSeleniumValueField(string fieldName )
+{
+IWebElement result = null;
+for (var i = 0; i < 60; i++)
+{
+var names = ngDriver.WrappedDriver.FindElements(By.Name(fieldName));
+if (names.Count > 0 && !string.IsNullOrEmpty(names[0].GetAttribute("value")))
+{
+    result = names[0];
+    break;
+}
 
-        }
+Thread.Sleep(500);
+}
 
-        [And(@"I log out of the portal")]
-        public void PortalLogOut2()
-        {
-            PortalLogOut();
-        }
+return result;
+}
 
+/// <summary>
+/// Routine to get an element by CSS selector.  By default tries 3 times to get the element.
+/// </summary>
+/// <param name="css"></param>
+/// <param name="attempts"></param>
+/// <returns></returns>
+protected IWebElement GetSeleniumElementByCss(string css, int attempts = 3)
+{
+IWebElement result = null;
+for (var i = 0; i < attempts; i++) 
+{
+var names = ngDriver.WrappedDriver.FindElements(By.CssSelector(css));
+if (names.Count > 0)
+{
+    result = names[0];
+    break;
+}
 
-        protected IWebElement GetSeleniumValueField(string fieldName )
-        {
-            IWebElement result = null;
-            for (var i = 0; i < 60; i++)
-            {
-                var names = ngDriver.WrappedDriver.FindElements(By.Name(fieldName));
-                if (names.Count > 0 && !string.IsNullOrEmpty(names[0].GetAttribute("value")))
-                {
-                    result = names[0];
-                    break;
-                }
+Thread.Sleep(500);
+}
 
-                Thread.Sleep(500);
-            }
-            
-            return result;
-        }
-
-        /// <summary>
-        /// Routine to get an element by CSS selector.  By default tries 3 times to get the element.
-        /// </summary>
-        /// <param name="css"></param>
-        /// <param name="attempts"></param>
-        /// <returns></returns>
-        protected IWebElement GetSeleniumElementByCss(string css, int attempts = 3)
-        {
-            IWebElement result = null;
-            for (var i = 0; i < attempts; i++) 
-            {
-                var names = ngDriver.WrappedDriver.FindElements(By.CssSelector(css));
-                if (names.Count > 0)
-                {
-                    result = names[0];
-                    break;
-                }
-
-                Thread.Sleep(500);
-            }
-
-            return result;
-        }
+return result;
+}
 
 
-        // helper function for React.
-        protected void WaitForFrame()
-        {
-            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
+// helper function for React.
+protected void WaitForFrame()
+{
+var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
 
-            wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
-        }
+wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
+}
 
-    }
+}
 }
