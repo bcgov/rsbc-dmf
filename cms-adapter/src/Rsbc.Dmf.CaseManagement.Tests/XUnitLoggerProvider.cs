@@ -1,9 +1,31 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Logging;
 using System;
 using Xunit.Abstractions;
 
 namespace Rsbc.Dmf.CaseManagement.Tests
 {
+    public class XUnitWebAppFactory<TStartup> : WebApplicationFactory<TStartup>
+      where TStartup : class
+    {
+        private readonly ITestOutputHelper testOutputHelper;
+
+        public XUnitWebAppFactory(ITestOutputHelper testOutputHelper)
+        {
+            this.testOutputHelper = testOutputHelper;
+        }
+
+        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        {
+            // Register the xUnit logger
+            builder.ConfigureLogging(loggingBuilder =>
+            {
+                loggingBuilder.ClearProviders().AddProvider(new XUnitLoggerProvider(testOutputHelper));
+            });
+        }
+    }
+
     public sealed class XUnitLoggerProvider : ILoggerProvider
     {
         private readonly ITestOutputHelper output;

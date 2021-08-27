@@ -55,29 +55,36 @@ namespace Rsbc.Dmf.CaseManagement
     internal class CaseManager : ICaseManager
     {
         private readonly DynamicsContext dynamicsContext;
+        private readonly ILogger<CaseManager> logger;
 
-        public CaseManager(DynamicsContext dynamicsContext)
+        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger)
         {
             this.dynamicsContext = dynamicsContext;
+            this.logger = logger;
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
-            var caseQuery = dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
-                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+            if (string.IsNullOrEmpty(request.CaseId) && string.IsNullOrEmpty(request.DriverLicenseNumber))
+            {
+                throw new ArgumentException("Case search must have at least one criteria", nameof(request));
+            }
 
-            if (!string.IsNullOrEmpty(request.CaseId)) caseQuery = caseQuery.Where(i => i.title == request.CaseId);
-            if (!string.IsNullOrEmpty(request.DriverLicenseNumber)) caseQuery = caseQuery.Where(i => i.dfp_DriverId.dfp_licensenumber == request.DriverLicenseNumber);
-
-            var cases = (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
+            var cases = (await SearchCases(dynamicsContext, request)).Concat(await SearchDriverCases(dynamicsContext, request));
 
             //lazy load case related properties
             foreach (var @case in cases)
             {
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_dmerflag));
+                if (@case._dfp_driverid_value.HasValue) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
                 if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                foreach (var flag in @case.dfp_incident_dfp_dmerflag)
+                {
+                    await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
+                }
             }
+
+            dynamicsContext.DetachAll();
 
             return new CaseSearchReply
             {
@@ -89,13 +96,50 @@ namespace Rsbc.Dmf.CaseManagement
                     CreatedOn = c.createdon.Value.DateTime,
                     DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
                     DriverName = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
-                    Flags = c.dfp_incident_dfp_dmerflag.Select(f => new Flag { Id = f._dfp_flagid_value?.ToString(), Description = f.dfp_name }).ToArray()
+                    Flags = c.dfp_incident_dfp_dmerflag.Select(f => new Flag
+                    {
+                        Id = f.dfp_FlagId?.dfp_id,
+                        Description = f.dfp_FlagId?.dfp_description
+                    }).ToArray()
                 }).ToArray()
             };
         }
 
+        private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
+        {
+            var shouldSearchCases = !string.IsNullOrEmpty(criteria.CaseId);
+
+            if (!shouldSearchCases) return Array.Empty<incident>();
+
+            var caseQuery = ctx.incidents
+                .Expand(i => i.dfp_DriverId)
+                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+
+            if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.title == criteria.CaseId);
+
+            return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
+        }
+
+        private static async Task<IEnumerable<incident>> SearchDriverCases(DynamicsContext ctx, CaseSearchRequest criteria)
+        {
+            var shouldSearchDrivers = !string.IsNullOrEmpty(criteria.DriverLicenseNumber);
+
+            if (!shouldSearchDrivers) return Array.Empty<incident>();
+
+            var driverQuery = ctx.dfp_drivers.Expand(d => d.dfp_PersonId).Where(d => d.statecode == (int)EntityState.Active);
+            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) driverQuery = driverQuery.Where(i => i.dfp_licensenumber == criteria.DriverLicenseNumber);
+            var drivers = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+            foreach (var driver in drivers)
+            {
+                await ctx.LoadPropertyAsync(driver, nameof(dfp_driver.dfp_driver_incident_DriverId));
+            }
+
+            return drivers.SelectMany(d => d.dfp_driver_incident_DriverId).ToArray();
+        }
+
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
         {
+            if (logger == null) logger = this.logger;
             /* The structure for cases is
 
             Case (incident) is the parent item
@@ -103,15 +147,7 @@ namespace Rsbc.Dmf.CaseManagement
 
              */
 
-            var result = new SetCaseFlagsReply()
-            {
-                Success = false
-            };
-
-            if (logger != null)
-            {
-                logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier}");
-            }
+            logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier}");
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
@@ -124,37 +160,23 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     incidentid = dmerEntity
                 }, -1);
-                dynamicsContext.SaveChanges();
 
                 dmerEntity.statecode = 0;
                 dmerEntity.statuscode = 1;
-                dynamicsContext.UpdateObject(dmerEntity);
-                dynamicsContext.SaveChanges();
 
                 // clean pass is indicated by the presence of flags.
-                if (logger != null)
-                {
-                    logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
-                }
+                logger.LogInformation($"SetCaseFlags - found DMER with identifier {dmerIdentifier}");
 
                 // Explicitly load the flags
-                dynamicsContext.LoadProperty(dmerEntity, "dfp_incident_dfp_dmerflag");
+                dynamicsContext.LoadProperty(dmerEntity, nameof(incident.dfp_incident_dfp_dmerflag));
 
-                // replace with unlink.  may need to replace with lazy loading
-                if (dmerEntity.dfp_incident_dfp_dmerflag != null && dmerEntity.dfp_incident_dfp_dmerflag.Count > 0)
+                foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
                 {
-                    foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
-                    {
-                        //dynamicsContext.DeleteLink(dmerEntity, "dfp_incident_dfp_dmerflag", item);
-                        //dynamicsContext.SaveChanges();
+                    // remove the old bridge.
+                    dynamicsContext.DeleteObject(item);
 
-                        // remove the old bridge.
-                        dynamicsContext.DeleteObject(item);
-                        dynamicsContext.SaveChanges();
-
-                        //dmerEntity.dfp_incident_dfp_flag.
-                        logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_name}");
-                    }
+                    //dmerEntity.dfp_incident_dfp_flag.
+                    logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_name}");
                 }
 
                 // Add the flags.
@@ -170,7 +192,6 @@ namespace Rsbc.Dmf.CaseManagement
                             dfp_description = flag.Description
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
-                        dynamicsContext.SaveChanges();
                     }
 
                     // configure the bridge entity
@@ -181,22 +202,15 @@ namespace Rsbc.Dmf.CaseManagement
                     };
 
                     dynamicsContext.AddTodfp_dmerflags(newFlag);
-                    dynamicsContext.SaveChanges();
+                    dynamicsContext.AddLink(dmerEntity, nameof(incident.dfp_incident_dfp_dmerflag), newFlag);
+                    dynamicsContext.SetLink(newFlag, nameof(dfp_dmerflag.dfp_FlagId), givenFlag);
 
-                    dynamicsContext.UpdateRelatedObject(newFlag, "dfp_FlagId", givenFlag);
-                    dynamicsContext.SaveChanges();
-
-                    dynamicsContext.AddLink(dmerEntity, "dfp_incident_dfp_dmerflag", newFlag);
-                    dynamicsContext.SaveChanges();
-                    if (logger != null)
-                    {
-                        logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
-                    }
+                    logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
                 }
 
                 // update the case from the request.
 
-                dmerEntity.modifiedon = DateTimeOffset.Now;
+                //dmerEntity.modifiedon = DateTimeOffset.Now;
 
                 // indicate that the form has been filled out
                 //dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
@@ -204,28 +218,27 @@ namespace Rsbc.Dmf.CaseManagement
                 dmerEntity.dfp_iscleanpass = isCleanPass;
 
                 dynamicsContext.UpdateObject(dmerEntity);
+
                 try
                 {
-                    DataServiceResponse dsr = dynamicsContext.SaveChanges();
-                    result.Success = true;
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+
+                    return new SetCaseFlagsReply { Success = true };
                 }
                 catch (Exception e)
                 {
-                    if (logger != null)
-                    {
-                        logger.LogInformation(e, $"SetCaseFlags - Error updating");
-                    }
+                    logger.LogError(e, $"SetCaseFlags - Error updating");
                 }
             }
             else
             {
-                if (logger != null)
-                {
-                    logger.LogInformation($"SetCaseFlags - Unable to find DMER with identifier {dmerIdentifier}");
-                }
+                logger.LogError($"SetCaseFlags - Unable to find DMER with identifier {dmerIdentifier}");
             }
 
-            return result;
+            dynamicsContext.DetachAll();
+
+            return new SetCaseFlagsReply { Success = false };
         }
     }
 

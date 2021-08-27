@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Dynamics;
-using Rsbc.Dmf.CaseManagement.Service;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -11,7 +9,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
     public class DynamicsTests : WebAppTestBase
     {
-        public DynamicsTests(ITestOutputHelper output, WebApplicationFactory<Startup> webApplicationFactory) : base(output, webApplicationFactory)
+        public DynamicsTests(ITestOutputHelper output) : base(output)
         {
         }
 
