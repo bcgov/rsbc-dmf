@@ -870,84 +870,83 @@ namespace bdd_tests
 
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
                 //e52bjgd-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation
-}
-}
+            }
+        }
 
-public void SyncopeSetup()
-{
-// select 'Syncope'
-var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
-syncopeCheckbox.Click();
+        public void SyncopeSetup()
+        {
+            // select 'Syncope'
+            var syncopeCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkFilterCH_19_1]"));
+            syncopeCheckbox.Click();
 
-// select 'Has the patient experienced any Syncopal Episodes?'
-var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
-syncopalEpisodesCheckbox.Click();
-}
-
-
-[Then(@"I log out of the portal")]
-public void PortalLogOut()
-{
-
-}
-
-[And(@"I log out of the portal")]
-public void PortalLogOut2()
-{
-PortalLogOut();
-}
+            // select 'Has the patient experienced any Syncopal Episodes?'
+            var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
+            syncopalEpisodesCheckbox.Click();
+        }
 
 
-protected IWebElement GetSeleniumValueField(string fieldName )
-{
-IWebElement result = null;
-for (var i = 0; i < 60; i++)
-{
-var names = ngDriver.WrappedDriver.FindElements(By.Name(fieldName));
-if (names.Count > 0 && !string.IsNullOrEmpty(names[0].GetAttribute("value")))
-{
-    result = names[0];
-    break;
-}
+        [Then(@"I log out of the portal")]
+        public void PortalLogOut()
+        {
+        }
 
-Thread.Sleep(500);
-}
-
-return result;
-}
-
-/// <summary>
-/// Routine to get an element by CSS selector.  By default tries 3 times to get the element.
-/// </summary>
-/// <param name="css"></param>
-/// <param name="attempts"></param>
-/// <returns></returns>
-protected IWebElement GetSeleniumElementByCss(string css, int attempts = 3)
-{
-IWebElement result = null;
-for (var i = 0; i < attempts; i++) 
-{
-var names = ngDriver.WrappedDriver.FindElements(By.CssSelector(css));
-if (names.Count > 0)
-{
-    result = names[0];
-    break;
-}
-
-Thread.Sleep(500);
-}
-
-return result;
-}
+        [And(@"I log out of the portal")]
+        public void PortalLogOut2()
+        {
+            PortalLogOut();
+        }
 
 
-// helper function for React.
-protected void WaitForFrame()
-{
-var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
+        protected IWebElement GetSeleniumValueField(string fieldName )
+        {
+            IWebElement result = null;
+            for (var i = 0; i < 60; i++)
+            {
+                var names = ngDriver.WrappedDriver.FindElements(By.Name(fieldName));
+                if (names.Count > 0 && !string.IsNullOrEmpty(names[0].GetAttribute("value")))
+                {
+                    result = names[0];
+                    break;
+                }
 
-wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
-}
+            Thread.Sleep(500);
+            }
 
-}
+            return result;
+        }
+
+
+        /// <summary>
+        /// Routine to get an element by CSS selector.  By default tries 3 times to get the element.
+        /// </summary>
+        /// <param name="css"></param>
+        /// <param name="attempts"></param>
+        /// <returns></returns>
+        protected IWebElement GetSeleniumElementByCss(string css, int attempts = 3)
+        {
+            IWebElement result = null;
+            for (var i = 0; i < attempts; i++) 
+            {
+                var names = ngDriver.WrappedDriver.FindElements(By.CssSelector(css));
+                if (names.Count > 0)
+                {
+                    result = names[0];
+                    break;
+                }
+
+                Thread.Sleep(500);
+            }
+            return result;
+        }
+
+
+        // helper function for React.
+        protected void WaitForFrame()
+        {
+            var wait = new WebDriverWait(ngDriver.WrappedDriver, TimeSpan.FromSeconds(90));
+
+            wait.Until(iWebDriver => (bool)(((IJavaScriptExecutor)iWebDriver).ExecuteScript("return window.frames != undefined && window.frames[0] != undefined")) );
+        }
+
+    }
 }
