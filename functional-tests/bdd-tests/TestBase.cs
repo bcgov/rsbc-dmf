@@ -833,59 +833,52 @@ namespace bdd_tests
                  */
 
                 // select 'Coronary Artery Disease'
-                //name
-                //data[yornCORO_1_a]
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Name(""));
-                ICDTherapyDeliveredNo.Click();
+                var CoronaryArteryDisease = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_a]"));
+                CoronaryArteryDisease.Click();
 
                 // select 'No' for 'CAD has been treated with CABG?'
-                //epveh8e-n
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var CADTreatedWithCABGNo = ngDriver.WrappedDriver.FindElement(By.Id("epveh8e-n"));
+                CADTreatedWithCABGNo.Click();
 
                 // select 'Yes' for 'CAD has been treated with CABG?'
-                //epveh8e-y
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("epveh8e-y"));
+                CADTreatedWithCABGYes.Click();
 
                 /**************************** 
                     Arrhythmias and Pacemaker
                 *****************************/
 
                 // select 'Arrhythmias and Pacemaker'
-                //name
-                //data[yornCORO_1_d]
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Name(""));
-                ICDTherapyDeliveredNo.Click();
+                var arrhythmiasAndPacemaker = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_d]"));
+                arrhythmiasAndPacemaker.Click();
 
                 // select 'Pacemaker Not Applicable' for 'Has the patient received a Pacemaker?'
-                //eoi3ub-pacemakerNotApplicable
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var patientReceivedAPacemakerPacemakerNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("eoi3ub-pacemakerNotApplicable"));
+                patientReceivedAPacemakerPacemakerNotApplicable.Click();
 
                 // select 'Recommended, patient declined' for 'Has the patient received a Pacemaker?'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var patientReceivedAPacemakerRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                patientReceivedAPacemakerRecommendedPatientDeclined.Click();
 
                 // select 'No, scheduled to occur' for 'Has the patient received a Pacemaker?'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var patientReceivedAPacemakerNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                patientReceivedAPacemakerNoScheduledToOccur.Click();
 
                 // select 'Yes' for 'Has the patient received a Pacemaker?'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var patientReceivedAPacemakerYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                patientReceivedAPacemakerYes.Click();
 
                 // select 'Scheduled to occur' for 'Cardiac Ablation'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var cardiacAblationScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                cardiacAblationScheduledToOccur.Click();
 
                 // select 'Within the past 3 Months' for 'Cardiac Ablation'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var cardiacAblationWithinPast3Months = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                cardiacAblationWithinPast3Months.Click();
 
                 // select 'No' for 'Cardiac Ablation'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var cardiacAblationNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                cardiacAblationNo.Click();
 
                 /***************
                     Sustained VT
@@ -896,11 +889,13 @@ namespace bdd_tests
                 // select 'VF with no reversible cause'
 
                 // select 'No' for 'Experienced within the past 6 months?'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var sustainedVIExperiencedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                sustainedVIExperiencedWithinPast6MonthsNo.Click();
+
                 // select 'Yes' for 'Experienced within the past 6 months?'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                ICDTherapyDeliveredNo.Click();
+                var sustainedVIExperiencedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                sustainedVIExperiencedWithinPast6MonthsYes.Click();
+
                 /******************************
                     Hemodynamically Unstable VT
                 ******************************/
@@ -913,6 +908,7 @@ namespace bdd_tests
                 // select 'Yes' for 'Experienced within the past 6 months?'
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 /************ 
                     AV Blocks
                 ************/
@@ -960,26 +956,32 @@ namespace bdd_tests
                 //data[checkCORO_HF_a10]
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Name(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'No' for 'Treated with therapy, no recurrence within past 3 months'
                 //enn2tu-n
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'Yes' for 'Treated with therapy, no recurrence within past 3 months'
                 //enn2tu-y
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'No additional detail available' for 'Condition has been treated with:'
                 //e52bjgd-noAdditionalDetailAvailable
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'AFL, they have had a successful isthmus ablation with proven establishment of bidirectional isthmus block' for 'Condition has been treated with:'
                 //e52bjgd-aflTheyHaveHadASuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'AF, they have had AV node ablation and pacemaker implantation and meet the standard for pacemaker treatment' for 'Condition has been treated with:'
                 //e52bjgd-afTheyHaveHadAvNodeAblationAndPacemakerImplantationAndMeetTheStandardForPacemakerTreatment
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 ICDTherapyDeliveredNo.Click();
+
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
                 //e52bjgd-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation
                 var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
@@ -1066,7 +1068,6 @@ namespace bdd_tests
                 // select 'No' for 'Does the patient have active ischemia?'
 
                 // select 'Yes' for 'Does the patient have active ischemia?'
-                //
 
                 // select 'No' for 'Is the patient considered stable on immunotherapy?'
                 //e0r0v2s-n
