@@ -997,68 +997,68 @@ namespace bdd_tests
                 conditionTreatedWithSVTRadiofrequencyAblation.Click();
 
                 // select 'Heart Failure'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var heartFailure = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                heartFailure.Click();
 
                 // select 'Congestive Heart Failure'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var congestiveHeartFailure = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                congestiveHeartFailure.Click();
 
                 // select 'Left Ventricular Dysfunction / Cardiomyopathy'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var leftVentricularDysfunctionCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                leftVentricularDysfunctionCardiomyopathy.Click();
 
                 // select 'No' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var patientHasLVADNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                patientHasLVADNo.Click();
 
                 // select 'Yes' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var patientHasLVADYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                patientHasLVADYes.Click();
 
                 // select 'No' for 'Is the patient receiving Intermittent Inotropes?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var receivingIntermittentInotropesNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                receivingIntermittentInotropesNo.Click();
 
                 // select 'Yes' for 'Is the patient receiving Intermittent Inotropes?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var receivingIntermittentInotropesYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                receivingIntermittentInotropesYes.Click();
 
                 // select 'Hypertrophic Cardiomyopathy'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var hypertrophicCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                hypertrophicCardiomyopathy.Click();
 
                 // select 'Left ventricle wall thickness of < 30 mm'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var leftVentricleWallThicknessOfLessThan30mm = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                leftVentricleWallThicknessOfLessThan30mm.Click();
 
                 // select 'Family history of sudden death at a young age'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var familyHistorySuddenDeathYoungAge = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                familyHistorySuddenDeathYoungAge.Click();
 
                 // select 'Increase in blood pressure with exercise'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var increaseBloodPressureWithExercise = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                increaseBloodPressureWithExercise.Click();
 
                 // select 'Non-sustained VT'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var nonSustainedVT = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                nonSustainedVT.Click();
 
                 // select 'Structural Heart Disease'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var structuralHeartDisease = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                structuralHeartDisease.Click();
 
                 // select 'Surgically Treated Valvular Heart Disease'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var surgicallyTreatedValvularHeartDisease = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                surgicallyTreatedValvularHeartDisease.Click();
 
                 // select 'No' for 'Has it been at least 3 Months since discharge following treatment?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var atLeast3MonthsSinceDischargeNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                atLeast3MonthsSinceDischargeNo.Click();
 
                 // select 'Yes' for 'Has it been at least 3 Months since discharge following treatment?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var atLeast3MonthsSinceDischargeYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                atLeast3MonthsSinceDischargeYes.Click();
 
                 // select 'No' for 'Is the patient subject to one of the following prosthesis/therapies?'
                 var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
