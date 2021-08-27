@@ -797,10 +797,15 @@ namespace bdd_tests
                 //ejbv4y-no
 
                 // select 'Coronary Artery Disease'
+                //
 
                 // select 'No' for 'CAD has been treated with CABG?'
 
                 // select 'Yes' for 'CAD has been treated with CABG?'
+
+                /**************************** 
+                    Arrhythmias and Pacemaker
+                *****************************/
 
                 // select 'Arrhythmias and Pacemaker'
 
@@ -818,6 +823,10 @@ namespace bdd_tests
 
                 // select 'No' for 'Cardiac Ablation'
 
+                /***************
+                    Sustained VT
+                ****************/
+
                 // select 'Sustained VT'
 
                 // select 'VF with no reversible cause'
@@ -826,11 +835,19 @@ namespace bdd_tests
 
                 // select 'Yes' for 'Experienced within the past 6 months?'
 
+                /******************************
+                    Hemodynamically Unstable VT
+                ******************************/
+
                 // select 'Hemodynamically Unstable VT'
 
                 // select 'No' for 'Experienced within the past 6 months?'
 
                 // select 'Yes' for 'Experienced within the past 6 months?'
+
+                /************ 
+                    AV Blocks
+                ************/
 
                 // select 'AV Blocks'
 
@@ -842,22 +859,39 @@ namespace bdd_tests
 
                 // select '2nd degree AV block /Mobitz II' for 'AV Block Expression'
 
+                /************* 
+                    PAC or PVC
+                *************/
+
                 // select 'PAC or PVC'
+                //name
+                //data[checkCORO_HF_a15]
 
                 // select 'No' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
 
                 // select 'Yes' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
 
-                // select 'Sinus Node Dysfunction'
+                /************************************ 
+                    Paroxysmal Sinus Node Dysfunction
+                ************************************/
 
-                /**** Paroxysmal SVT, AF, or AFL
-                 ****/
+                // select 'Sinus Node Dysfunction'
+                //name
+                //data[checkCORO_HF_a17]
+
+                /***************************** 
+                    Paroxysmal SVT, AF, or AFL
+                 ****************************/
 
                 // select 'Paroxysmal SVT, AF, or AFL'
+                //name
+                //data[checkCORO_HF_a10]
 
                 // select 'No' for 'Treated with therapy, no recurrence within past 3 months'
+                //enn2tu-n
 
                 // select 'Yes' for 'Treated with therapy, no recurrence within past 3 months'
+                //enn2tu-y
 
                 // select 'No additional detail available' for 'Condition has been treated with:'
                 //e52bjgd-noAdditionalDetailAvailable
@@ -870,6 +904,89 @@ namespace bdd_tests
 
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
                 //e52bjgd-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation
+
+
+                // select 'Heart Failure'
+
+                // select 'Congestive Heart Failure'
+
+                // select 'Left Ventricular Dysfunction / Cardiomyopathy'
+
+                // select 'No' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
+
+                // select 'Yes' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
+
+                // select 'No' for 'Is the patient receiving Intermittent Inotropes?'
+
+                // select 'Yes' for 'Is the patient receiving Intermittent Inotropes?'
+
+                // select 'Hypertrophic Cardiomyopathy'
+
+                // select 'Left ventricle wall thickness of < 30 mm'
+
+                // select 'Family history of sudden death at a young age'
+
+                // select 'Increase in blood pressure with exercise'
+
+                // select 'Non-sustained VT'
+
+                // select 'Structural Heart Disease'
+
+                // select 'Surgically Treated Valvular Heart Disease'
+
+                // select 'No' for 'Has it been at least 3 Months since discharge following treatment?'
+
+                // select 'Yes' for 'Has it been at least 3 Months since discharge following treatment?'
+
+                // select 'No' for 'Is the patient subject to one of the following prosthesis/therapies?'
+
+                // select 'Yes' for 'Is the patient subject to one of the following prosthesis/therapies?'
+
+                // select 'No' for 'Is the patient on anti-coagulant therapy due to one of the above prosthesis/therapies?'
+
+                // select 'Yes' for 'Is the patient on anti-coagulant therapy due to one of the above prosthesis/therapies?'
+
+                // select 'Mitral Valve Prolapse'
+
+                // select 'Yes, but they have not been assessed for Arrhythmias or do not meet standards' for 'Is the patient symptomatic for this condition?'
+
+                // select 'Yes, but they have been assessed for Arrhythmias and meet applicable standards' for 'Is the patient symptomatic for this condition?'
+
+                // select 'No' for 'Is the patient symptomatic for this condition?'
+
+                // select 'Medically Treated Aortic Stenosis or Aortic Sclerosis'
+
+                // select 'Not Available' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
+
+                // select 'No' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
+
+                // select 'Yes' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
+
+                // select 'No' for 'Has a current Cardiologist Report confirmed these results, including risk of Syncope?'
+
+                // select 'Yes' for 'Has a current Cardiologist Report confirmed these results, including risk of Syncope?'
+
+                // select 'Medically Treated Aortic or Mitral Regurgitation or Mitral Stenosis'
+
+                // select 'Congenital'
+
+                // select 'No' for 'Has the congenital heart defect been repaired, with the patient condition being considered stable with no concerns?'
+
+                // select 'Yes' for 'Has the congenital heart defect been repaired, with the patient condition being considered stable with no concerns?'
+
+                // select 'Inherited'
+
+                // select 'No' for 'Has the patient condition has been investigated and treated by a cardiologist?'
+
+                // select 'Yes' for 'Has the patient condition has been investigated and treated by a cardiologist?'
+
+                // select 'No' for 'Has the patient received a Heart Transplant?'
+
+                // select 'Yes' for 'Has the patient received a Heart Transplant?'
+
+                // select 'No' for 
+
+
             }
         }
 
