@@ -984,9 +984,21 @@ namespace bdd_tests
 
                 // select 'Yes' for 'Has the patient received a Heart Transplant?'
 
-                // select 'No' for 
+                // select 'No' for 'Does the patient have active ischemia?'
 
+                // select 'Yes' for 'Does the patient have active ischemia?'
 
+                // select 'No' for 'Is the patient considered stable on immunotherapy?'
+                //e0r0v2s-n
+                
+                // select 'Yes' for 'Is the patient considered stable on immunotherapy?'
+                //e0r0v2s-y
+
+                // select 'No' for 'Transplanted within the past 6 months?'
+                //ecev5di-n
+
+                // select 'Yes' for 'Transplanted within the past 6 months?'
+                //ecev5di-y
             }
         }
 
