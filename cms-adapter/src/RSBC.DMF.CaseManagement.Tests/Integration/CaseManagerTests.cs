@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             }
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByCaseId()
         {
             var caseId = "222";
@@ -53,7 +53,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             dmerCase.Flags.ShouldNotBeEmpty();
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByDriverLicense()
         {
             var driverLicenseNumber = "1234567";
