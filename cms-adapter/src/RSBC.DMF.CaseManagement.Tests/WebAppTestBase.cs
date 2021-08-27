@@ -9,7 +9,7 @@ using System;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Rsbc.Dmf.CaseManagement.Tests.Integration
+namespace Rsbc.Dmf.CaseManagement.Tests
 {
     public class WebAppTestBase : IClassFixture<WebApplicationFactory<Startup>>
     {

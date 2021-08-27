@@ -1,16 +1,15 @@
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
-using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -30,7 +29,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
-            var searchResult = await _caseManager.CaseSearch(new CaseSearchRequest { ByCaseId = request.CaseId });
+            var searchResult = await _caseManager.CaseSearch(new CaseSearchRequest { CaseId = request.CaseId });
 
             var reply = new SearchReply();
             reply.Items.Add(searchResult.Items.Select(c => new Case
@@ -71,7 +70,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
-
 
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
