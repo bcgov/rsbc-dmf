@@ -995,6 +995,10 @@ namespace bdd_tests
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
                 var conditionTreatedWithSVTRadiofrequencyAblation = ngDriver.WrappedDriver.FindElement(By.Id("e52bjgd-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation"));
                 conditionTreatedWithSVTRadiofrequencyAblation.Click();
+                
+                /***************************** 
+                    Heart Failure
+                ****************************/
 
                 // select 'Heart Failure'
                 var heartFailure = ngDriver.WrappedDriver.FindElement(By.Id(""));
@@ -1023,6 +1027,10 @@ namespace bdd_tests
                 // select 'Yes' for 'Is the patient receiving Intermittent Inotropes?'
                 var receivingIntermittentInotropesYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
                 receivingIntermittentInotropesYes.Click();
+
+                /***************************** 
+                    Hypertrophic Cardiomyopathy
+                ****************************/
 
                 // select 'Hypertrophic Cardiomyopathy'
                 var hypertrophicCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Id(""));
@@ -1093,44 +1101,44 @@ namespace bdd_tests
                 symptomaticNo.Click();
 
                 // select 'Medically Treated Aortic Stenosis or Aortic Sclerosis'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var medicallyTreatedAorticStenosisOrAorticSclerosis = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                medicallyTreatedAorticStenosisOrAorticSclerosis.Click();
 
                 // select 'Not Available' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var aorticValveAreaGreaterThanNotAvailable = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                aorticValveAreaGreaterThanNotAvailable.Click();
 
                 // select 'No' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var aorticValveAreaGreaterThanNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                aorticValveAreaGreaterThanNo.Click();
 
                 // select 'Yes' for 'Patient has an aortic valve area (AVA) ) > 1.0 cm2'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var aorticValveAreaGreaterThanYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                aorticValveAreaGreaterThanYes.Click();
 
                 // select 'No' for 'Has a current Cardiologist Report confirmed these results, including risk of Syncope?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var cardiologistReportNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                cardiologistReportNo.Click();
 
                 // select 'Yes' for 'Has a current Cardiologist Report confirmed these results, including risk of Syncope?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var cardiologistReportYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                cardiologistReportYes.Click();
 
                 // select 'Medically Treated Aortic or Mitral Regurgitation or Mitral Stenosis'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var medicallyTreatedAorticMitralRegurgitationMitralStenosis = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                medicallyTreatedAorticMitralRegurgitationMitralStenosis.Click();
 
                 // select 'Congenital'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var congenital = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                congenital.Click();
 
                 // select 'No' for 'Has the congenital heart defect been repaired, with the patient condition being considered stable with no concerns?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var congenitalDefectRepairedNoConcernsNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                congenitalDefectRepairedNoConcernsNo.Click();
 
                 // select 'Yes' for 'Has the congenital heart defect been repaired, with the patient condition being considered stable with no concerns?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var congenitalDefectRepairedNoConcernsYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                congenitalDefectRepairedNoConcernsYes.Click();
 
                 // select 'Inherited'
                 var inherited = ngDriver.WrappedDriver.FindElement(By.Id(""));
