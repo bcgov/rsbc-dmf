@@ -3,9 +3,9 @@ using System;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
-    internal static class DynamicsContextEx
+    public static class DynamicsContextEx
     {
-        public static void DetachAll(this DynamicsContext context)
+        internal static void DetachAll(this DynamicsContext context)
         {
             foreach (var descriptor in context.EntityTracker.Entities)
             {
@@ -17,7 +17,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             }
         }
 
-        public static void Detach(this DynamicsContext context, params object[] entities)
+        internal static void Detach(this DynamicsContext context, params object[] entities)
         {
             foreach (var entity in entities)
             {
@@ -25,10 +25,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             }
         }
 
-        public static void ActivateObject(this DynamicsContext context, object entity, int activeStatusValue) =>
+        internal static void ActivateObject(this DynamicsContext context, object entity, int activeStatusValue) =>
             ModifyEntityStatus(context, entity, (int)EntityState.Active, activeStatusValue);
 
-        public static void DeactivateObject(this DynamicsContext context, object entity, int inactiveStatusValue) =>
+        internal static void DeactivateObject(this DynamicsContext context, object entity, int inactiveStatusValue) =>
             ModifyEntityStatus(context, entity, (int)EntityState.Inactive, inactiveStatusValue);
 
         private static void ModifyEntityStatus(this DynamicsContext context, object entity, int state, int status)
