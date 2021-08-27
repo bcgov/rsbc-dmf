@@ -1061,36 +1061,36 @@ namespace bdd_tests
                 atLeast3MonthsSinceDischargeYes.Click();
 
                 // select 'No' for 'Is the patient subject to one of the following prosthesis/therapies?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var prosthesisTherapiesNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                prosthesisTherapiesNo.Click();
 
                 // select 'Yes' for 'Is the patient subject to one of the following prosthesis/therapies?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var prosthesisTherapiesYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                prosthesisTherapiesYes.Click();
 
                 // select 'No' for 'Is the patient on anti-coagulant therapy due to one of the above prosthesis/therapies?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var anticoagulantTherapyNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                anticoagulantTherapyNo.Click();
 
                 // select 'Yes' for 'Is the patient on anti-coagulant therapy due to one of the above prosthesis/therapies?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var anticoagulantTherapyYes = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                anticoagulantTherapyYes.Click();
 
                 // select 'Mitral Valve Prolapse'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var mitralValveProlapse = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                mitralValveProlapse.Click();
 
                 // select 'Yes, but they have not been assessed for Arrhythmias or do not meet standards' for 'Is the patient symptomatic for this condition?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var symptomaticYesNotAssessed = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                symptomaticYesNotAssessed.Click();
 
                 // select 'Yes, but they have been assessed for Arrhythmias and meet applicable standards' for 'Is the patient symptomatic for this condition?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var symptomaticYesAssessed = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                symptomaticYesAssessed.Click();
 
                 // select 'No' for 'Is the patient symptomatic for this condition?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
-                hemodynamicallyUnstableVTNo.Click();
+                var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
+                symptomaticNo.Click();
 
                 // select 'Medically Treated Aortic Stenosis or Aortic Sclerosis'
                 var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id(""));
