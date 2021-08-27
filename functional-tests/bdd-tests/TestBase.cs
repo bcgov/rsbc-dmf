@@ -720,6 +720,10 @@ namespace bdd_tests
                 var patientHasCardiovascularDiseases = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_x]"));
                 patientHasCardiovascularDiseases.Click();
 
+                /*
+                 * Cardiovascular Condition Details
+                 */
+
                 // select 'No' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
                 var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-n"));
                 impairedConsciousnessNo.Click();
@@ -744,6 +748,10 @@ namespace bdd_tests
                 var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-n"));
                 successfulTreatmentNo.Click();
 
+                /********
+                    LVEF
+                ********/
+
                 // select 'Less Than 35%'
                 var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-less35"));
                 lessThan35Percent.Click();
@@ -755,6 +763,10 @@ namespace bdd_tests
                 // select 'Unavailable or not applicable'
                 var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-unavailable"));
                 unavailableOrNotApplicable.Click();
+
+                /********
+                    NYHA
+                ********/
 
                 // select '1' for 'NYHA (Only required for specific conditions.)'
                 var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-1"));
@@ -772,32 +784,47 @@ namespace bdd_tests
                 var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-4"));
                 NYHA4.Click();
 
+                /*
+                 * Simplified Cardio Survey
+                 */
+
+                /*
+                 * Implanted Cardioverter Defibrillator (ICD)
+                 */
+
                 // select 'ICD Not Applicable' for 'Has the patient received an ICD?' 
-                //e3s93ra-icdNotApplicable
+                var hasPatientReceivedICDNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("e3s93ra-icdNotApplicable"));
+                hasPatientReceivedICDNotApplicable.Click();
 
                 // select 'Recommended, patient declined' for 'Has the patient received an ICD?' 
-                //e3s93ra-recommendedPatientDeclined
+                var hasPatientReceivedICDRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id("e3s93ra-recommendedPatientDeclined"));
+                hasPatientReceivedICDRecommendedPatientDeclined.Click();
 
                 // select 'No, scheduled to occur' for 'Has the patient received an ICD?' 
-                //e3s93ra-noScheduledToOccur
+                var hasPatientReceivedICDNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("e3s93ra-noScheduledToOccur"));
+                hasPatientReceivedICDNoScheduledToOccur.Click();
 
                 // select 'Yes' for 'Has the patient received an ICD?' 
-                //e3s93ra-yes
+                var hasPatientReceivedICDYes = ngDriver.WrappedDriver.FindElement(By.Id("e3s93ra-yes"));
+                hasPatientReceivedICDYes.Click();
 
                 // select 'Secondary' for 'ICD Prophylaxis Condition is:'
-                //elt8fv-secondary
+                var ICDProphylaxisConditionIsSecondary = ngDriver.WrappedDriver.FindElement(By.Id("elt8fv-secondary"));
+                ICDProphylaxisConditionIsSecondary.Click();
 
                 // select 'Primary' for 'ICD Prophylaxis Condition is:'
-                //elt8fv-primary
+                var ICDProphylaxisConditionIsPrimary = ngDriver.WrappedDriver.FindElement(By.Id("elt8fv-primary"));
+                ICDProphylaxisConditionIsPrimary.Click();
 
                 // select 'Within the past 6 Months' for 'ICD therapy (ATP/Shock) delivered'
-                // ejbv4y-withinThePast6Months
+                var ICDTherapyDeliveredWithinPast6Months = ngDriver.WrappedDriver.FindElement(By.Id("ejbv4y-withinThePast6Months"));
+                ICDTherapyDeliveredWithinPast6Months.Click();
 
                 // select for 'No' for 'ICD therapy (ATP/Shock) delivered'
-                //ejbv4y-no
+                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id("ejbv4y-no"));
+                ICDTherapyDeliveredNo.Click();
 
                 // select 'Coronary Artery Disease'
-                //
 
                 // select 'No' for 'CAD has been treated with CABG?'
 
@@ -987,10 +1014,11 @@ namespace bdd_tests
                 // select 'No' for 'Does the patient have active ischemia?'
 
                 // select 'Yes' for 'Does the patient have active ischemia?'
+                //
 
                 // select 'No' for 'Is the patient considered stable on immunotherapy?'
                 //e0r0v2s-n
-                
+
                 // select 'Yes' for 'Is the patient considered stable on immunotherapy?'
                 //e0r0v2s-y
 
