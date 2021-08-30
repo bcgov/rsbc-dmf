@@ -3,7 +3,7 @@ WORKDIR /src
 COPY ["Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj", "Rsbc.Dmf.CaseManagement.Service/"]
 COPY ["Rsbc.Dmf.CaseManagement/Rsbc.Dmf.CaseManagement.csproj", "Rsbc.Dmf.CaseManagement/"]
 COPY ["Rsbc.Dmf.CaseManagement.Tests/Rsbc.Dmf.CaseManagement.Tests.csproj", "Rsbc.Dmf.CaseManagement.Tests/"]
-COPY ["Rsbc.Dmf.CaseManagement.sln", "./"]
+COPY ["cms-adapter.sln", "./"]
 
 RUN dotnet restore .
 COPY . .
@@ -17,8 +17,8 @@ WORKDIR /app
 
 RUN apt-get update -yq \
     && apt-get install curl -yq \
-	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
-		
+    && curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
+
 EXPOSE 8080
 ENV ASPNETCORE_URLS=https://*:8080
 COPY --from=build /app/publish .
