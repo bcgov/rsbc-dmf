@@ -2,7 +2,7 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj", "RSBC.DMF.DoctorsPortal.API/"]
 COPY ["RSBC.Tests.Unit.DMF.DoctorsPortal.API/RSBC.Tests.Unit.DMF.DoctorsPortal.API.csproj", "RSBC.Tests.Unit.DMF.DoctorsPortal.API/"]
-COPY ["RSBC.DMF.DoctorsPortal.sln", "./"]
+COPY ["doctors-portal.sln", "./"]
 
 RUN dotnet restore .
 COPY . .

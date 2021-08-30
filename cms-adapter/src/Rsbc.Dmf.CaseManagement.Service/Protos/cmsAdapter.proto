@@ -21,13 +21,16 @@ message SearchRequest {
 }
 
 message SearchReply {
-  repeated Case items = 1;
+  repeated DmerCase items = 1;
 }
 
-message Case{
+message DmerCase {
 	string caseId = 1;
 	string createdBy = 2;
 	google.protobuf.Timestamp createdOn = 3;
+	string driverName = 10;
+	string driverLicenceNumber = 11;
+	repeated FlagItem Flags = 12;
 }
 
 enum ResultStatus {
