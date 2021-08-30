@@ -233,6 +233,7 @@
         <NavigationProperty Name="dfp_account_dfp_participant" Type="Collection(mscrm.dfp_participant)" Partner="dfp_PersonId_account" />
         <NavigationProperty Name="dfp_account_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_OrganizationId" />
         <NavigationProperty Name="bcgov_account_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Customer_account" />
+        <NavigationProperty Name="bcgov_account_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_Customer_account" />
         <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_accounts">
           <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
         </NavigationProperty>
@@ -1711,6 +1712,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_report" Type="mscrm.report" Nullable="false" Partner="Report_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="reportid" />
         </NavigationProperty>
@@ -2093,6 +2106,113 @@
           <ReferentialConstraint Property="_dfp_driverid_value" ReferencedProperty="dfp_driverid" />
         </NavigationProperty>
       </EntityType>
+      <EntityType Name="bcgov_field" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="bcgov_fieldid" />
+        </Key>
+        <Property Name="bcgov_datatype" Type="Edm.Int32" />
+        <Property Name="bcgov_name" Type="Edm.String" Unicode="false" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="bcgov_fieldid" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="_bcgov_relationshipid_value" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_organizationid_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_bcgov_primaryentityid_value" Type="Edm.Guid" />
+        <Property Name="bcgov_schemaname" Type="Edm.String" Unicode="false" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_field_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_field_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_field_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_field_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="organizationid" Type="mscrm.organization" Nullable="false" Partner="organization_bcgov_field">
+          <ReferentialConstraint Property="_organizationid_value" ReferencedProperty="organizationid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_field_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_field_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_field_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_field_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_field_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_field_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_bcgov_field" />
+        <NavigationProperty Name="bcgov_PrimaryEntityId" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_primaryentity_bcgov_field">
+          <ReferentialConstraint Property="_bcgov_primaryentityid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_RelationshipId" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_bcgov_field">
+          <ReferentialConstraint Property="_bcgov_relationshipid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="bcgov_relationship" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="bcgov_relationshipid" />
+        </Key>
+        <Property Name="bcgov_type" Type="Edm.Int32" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_organizationid_value" Type="Edm.Guid" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="bcgov_relationshipid" Type="Edm.Guid" />
+        <Property Name="bcgov_entityname" Type="Edm.String" Unicode="false" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="bcgov_name" Type="Edm.String" Unicode="false" />
+        <Property Name="_bcgov_parentrelationshipid_value" Type="Edm.Guid" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_bcgov_primaryentityid_value" Type="Edm.Guid" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="bcgov_lookupfield" Type="Edm.String" Unicode="false" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_relationship_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_relationship_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_relationship_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_relationship_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="organizationid" Type="mscrm.organization" Nullable="false" Partner="organization_bcgov_relationship">
+          <ReferentialConstraint Property="_organizationid_value" ReferencedProperty="organizationid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_relationship_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_relationship_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_relationship_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_relationship_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_relationship_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_relationship_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_bcgov_relationship" />
+        <NavigationProperty Name="bcgov_ParentRelationshipId" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_parentrelationship_bcgov_childrelation">
+          <ReferentialConstraint Property="_bcgov_parentrelationshipid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_parentrelationship_bcgov_childrelation" Type="Collection(mscrm.bcgov_relationship)" Partner="bcgov_ParentRelationshipId" />
+        <NavigationProperty Name="bcgov_PrimaryEntityId" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_primaryentity_bcgov_relationship">
+          <ReferentialConstraint Property="_bcgov_primaryentityid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_relationship_bcgov_field" Type="Collection(mscrm.bcgov_field)" Partner="bcgov_RelationshipId" />
+      </EntityType>
       <EntityType Name="bcgov_tag" BaseType="mscrm.crmbaseentity">
         <Key>
           <PropertyRef Name="bcgov_tagid" />
@@ -2149,6 +2269,140 @@
         <NavigationProperty Name="bcgov_tag1_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Tag1Id" />
         <NavigationProperty Name="bcgov_tag2_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Tag2Id" />
         <NavigationProperty Name="bcgov_tag3_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Tag3Id" />
+      </EntityType>
+      <EntityType Name="bcgov_template" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="bcgov_templateid" />
+        </Key>
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="bcgov_templateid" Type="Edm.Guid" />
+        <Property Name="bcgov_interfaceurl" Type="Edm.String" Unicode="false" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="bcgov_depthlevel" Type="Edm.Int32" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="bcgov_documentformat" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="bcgov_name" Type="Edm.String" Unicode="false" />
+        <Property Name="bcgov_filerights" Type="Edm.String" Unicode="false" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="bcgov_aemappname" Type="Edm.String" Unicode="false" />
+        <Property Name="bcgov_xdpfilename" Type="Edm.String" Unicode="false" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="bcgov_sharepointentityname" Type="Edm.String" Unicode="false" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="bcgov_primaryentity" Type="Edm.String" Unicode="false" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_template_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_template_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_template_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_template_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_bcgov_template">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_bcgov_template">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_bcgov_template">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_bcgov_template">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_template_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_template_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_template_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_template_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_template_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_template_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_bcgov_template" />
+        <NavigationProperty Name="bcgov_primaryentity_bcgov_field" Type="Collection(mscrm.bcgov_field)" Partner="bcgov_PrimaryEntityId" />
+        <NavigationProperty Name="bcgov_primaryentity_bcgov_relationship" Type="Collection(mscrm.bcgov_relationship)" Partner="bcgov_PrimaryEntityId" />
+        <NavigationProperty Name="bcgov_template_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_TemplateId" />
+      </EntityType>
+      <EntityType Name="bcgov_templatesession" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="bcgov_templatesessionid" />
+        </Key>
+        <Property Name="_bcgov_caseid_value" Type="Edm.Guid" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="bcgov_templatesessionid" Type="Edm.Guid" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_bcgov_customer_value" Type="Edm.Guid" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="_bcgov_templateid_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="bcgov_name" Type="Edm.String" Unicode="false" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_templatesession_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_templatesession_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_templatesession_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_templatesession_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_bcgov_templatesession">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_bcgov_templatesession">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_bcgov_templatesession">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_bcgov_templatesession">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_templatesession_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_templatesession_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_templatesession_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_templatesession_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_templatesession_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_templatesession_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_bcgov_templatesession" />
+        <NavigationProperty Name="bcgov_Customer_account" Type="mscrm.account" Nullable="false" Partner="bcgov_account_bcgov_templatesession">
+          <ReferentialConstraint Property="_bcgov_customer_value" ReferencedProperty="accountid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_Customer_contact" Type="mscrm.contact" Nullable="false" Partner="bcgov_contact_bcgov_templatesession">
+          <ReferentialConstraint Property="_bcgov_customer_value" ReferencedProperty="contactid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_CaseId" Type="mscrm.incident" Nullable="false" Partner="bcgov_incident_bcgov_templatesession">
+          <ReferentialConstraint Property="_bcgov_caseid_value" ReferencedProperty="incidentid" />
+        </NavigationProperty>
+        <NavigationProperty Name="bcgov_TemplateId" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_bcgov_templatesession">
+          <ReferentialConstraint Property="_bcgov_templateid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="bookableresourcebookingheader" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -3105,6 +3359,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_customeraddress" Type="mscrm.customeraddress" Nullable="false" Partner="CustomerAddress_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="customeraddressid" />
         </NavigationProperty>
@@ -3575,6 +3841,8 @@
         <NavigationProperty Name="business_unit_bcgov_tag" Type="Collection(mscrm.bcgov_tag)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_dfp_outcomestatus" Type="Collection(mscrm.dfp_outcomestatus)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningbusinessunit" />
         <NavigationProperty Name="BusinessUnit_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_businessunit_syncerror" />
         <NavigationProperty Name="transactioncurrencyid" Type="mscrm.transactioncurrency" Nullable="false" Partner="TransactionCurrency_BusinessUnit">
           <ReferentialConstraint Property="_transactioncurrencyid_value" ReferencedProperty="transactioncurrencyid" />
@@ -5213,6 +5481,7 @@
         <NavigationProperty Name="dfp_contact_dfp_driver_PersonId" Type="Collection(mscrm.dfp_driver)" Partner="dfp_PersonId" />
         <NavigationProperty Name="dfp_contact_dfp_participant" Type="Collection(mscrm.dfp_participant)" Partner="dfp_PersonId_contact" />
         <NavigationProperty Name="bcgov_contact_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Customer_contact" />
+        <NavigationProperty Name="bcgov_contact_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_Customer_contact" />
         <NavigationProperty Name="contact_connections1" Type="Collection(mscrm.connection)" Partner="record1id_contact" />
         <NavigationProperty Name="Contact_Feedback" Type="Collection(mscrm.feedback)" Partner="ContactId" />
         <NavigationProperty Name="Contact_ProcessSessions" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_contact" />
@@ -5978,8 +6247,9 @@
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="_createdby_value" Type="Edm.Guid" />
-        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_preferredcontactmethod" Type="Edm.Int32" />
         <Property Name="dfp_licensenumber" Type="Edm.String" Unicode="false" />
+        <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
@@ -6304,14 +6574,15 @@
         <Property Name="_dfp_personid_value" Type="Edm.Guid" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="statecode" Type="Edm.Int32" />
-        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_preferredcontactmethod" Type="Edm.Int32" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="dfp_participantid" Type="Edm.Guid" />
         <Property Name="_dfp_roleid_value" Type="Edm.Guid" />
         <Property Name="_createdby_value" Type="Edm.Guid" />
         <Property Name="_organizationid_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_fullname" Type="Edm.String" Unicode="false" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_participant_createdby">
@@ -9236,6 +9507,7 @@
         <NavigationProperty Name="dfp_incident_dfp_decision" Type="Collection(mscrm.dfp_decision)" Partner="dfp_CaseId" />
         <NavigationProperty Name="bcgov_incident_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_CaseId" />
         <NavigationProperty Name="dfp_incident_dfp_dmerflag" Type="Collection(mscrm.dfp_dmerflag)" Partner="dfp_CaseId" />
+        <NavigationProperty Name="bcgov_incident_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_CaseId" />
       </EntityType>
       <EntityType Name="interactionforemail" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -11284,6 +11556,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_MailboxTrackingFolders">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
         <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_mailboxtrackingfolder_modifiedonbehalfby">
           <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -13239,6 +13523,8 @@
         <NavigationProperty Name="organization_bcgov_config" Type="Collection(mscrm.bcgov_config)" Partner="organizationid" />
         <NavigationProperty Name="organization_dfp_flag" Type="Collection(mscrm.dfp_flag)" Partner="organizationid" />
         <NavigationProperty Name="organization_dfp_dmerflag" Type="Collection(mscrm.dfp_dmerflag)" Partner="organizationid" />
+        <NavigationProperty Name="organization_bcgov_field" Type="Collection(mscrm.bcgov_field)" Partner="organizationid" />
+        <NavigationProperty Name="organization_bcgov_relationship" Type="Collection(mscrm.bcgov_relationship)" Partner="organizationid" />
         <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_organization_modifiedonbehalfby">
           <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -13428,6 +13714,8 @@
         <NavigationProperty Name="owner_bcgov_tag" Type="Collection(mscrm.bcgov_tag)" Partner="ownerid" />
         <NavigationProperty Name="owner_dfp_outcomestatus" Type="Collection(mscrm.dfp_outcomestatus)" Partner="ownerid" />
         <NavigationProperty Name="owner_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="ownerid" />
+        <NavigationProperty Name="owner_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="ownerid" />
+        <NavigationProperty Name="owner_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="ownerid" />
         <NavigationProperty Name="owner_personaldocumenttemplates" Type="Collection(mscrm.personaldocumenttemplate)" Partner="ownerid" />
         <NavigationProperty Name="owner_accounts" Type="Collection(mscrm.account)" Partner="ownerid" />
         <NavigationProperty Name="owner_goalrollupquery" Type="Collection(mscrm.goalrollupquery)" Partner="ownerid" />
@@ -14570,6 +14858,18 @@
         <NavigationProperty Name="objectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_PrincipalObjectAttributeAccesses">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="objectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
         <NavigationProperty Name="objectid_letter" Type="mscrm.letter" Nullable="false" Partner="letter_principalobjectattributeaccess" />
         <NavigationProperty Name="objectid_reportcategory" Type="mscrm.reportcategory" Nullable="false" Partner="reportcategory_principalobjectattributeaccess">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="reportcategoryid" />
@@ -14915,6 +15215,18 @@
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_ProcessSession">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_queue" Type="mscrm.queue" Nullable="false" Partner="Queue_ProcessSessions">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="queueid" />
@@ -19347,6 +19659,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_field" Type="mscrm.bcgov_field" Nullable="false" Partner="bcgov_field_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_fieldid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_relationship" Type="mscrm.bcgov_relationship" Nullable="false" Partner="bcgov_relationship_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_relationshipid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_template" Type="mscrm.bcgov_template" Nullable="false" Partner="bcgov_template_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templateid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_ExpiredProcess_syncerror" Type="mscrm.expiredprocess" Nullable="false" Partner="ExpiredProcess_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="businessprocessflowinstanceid" />
         </NavigationProperty>
@@ -20264,6 +20588,24 @@
         <NavigationProperty Name="lk_dfp_outcomesubstatus_modifiedby" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="modifiedby" />
         <NavigationProperty Name="lk_dfp_outcomesubstatus_modifiedonbehalfby" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="user_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="owninguser" />
+        <NavigationProperty Name="lk_bcgov_field_createdby" Type="Collection(mscrm.bcgov_field)" Partner="createdby" />
+        <NavigationProperty Name="lk_bcgov_field_createdonbehalfby" Type="Collection(mscrm.bcgov_field)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_field_modifiedby" Type="Collection(mscrm.bcgov_field)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_bcgov_field_modifiedonbehalfby" Type="Collection(mscrm.bcgov_field)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_relationship_createdby" Type="Collection(mscrm.bcgov_relationship)" Partner="createdby" />
+        <NavigationProperty Name="lk_bcgov_relationship_createdonbehalfby" Type="Collection(mscrm.bcgov_relationship)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_relationship_modifiedby" Type="Collection(mscrm.bcgov_relationship)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_bcgov_relationship_modifiedonbehalfby" Type="Collection(mscrm.bcgov_relationship)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_template_createdby" Type="Collection(mscrm.bcgov_template)" Partner="createdby" />
+        <NavigationProperty Name="lk_bcgov_template_createdonbehalfby" Type="Collection(mscrm.bcgov_template)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_template_modifiedby" Type="Collection(mscrm.bcgov_template)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_bcgov_template_modifiedonbehalfby" Type="Collection(mscrm.bcgov_template)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owninguser" />
+        <NavigationProperty Name="lk_bcgov_templatesession_createdby" Type="Collection(mscrm.bcgov_templatesession)" Partner="createdby" />
+        <NavigationProperty Name="lk_bcgov_templatesession_createdonbehalfby" Type="Collection(mscrm.bcgov_templatesession)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_bcgov_templatesession_modifiedby" Type="Collection(mscrm.bcgov_templatesession)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_bcgov_templatesession_modifiedonbehalfby" Type="Collection(mscrm.bcgov_templatesession)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owninguser" />
         <NavigationProperty Name="lk_slakpiinstancebase_createdonbehalfby" Type="Collection(mscrm.slakpiinstance)" Partner="createdonbehalfby" />
         <NavigationProperty Name="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Type="Collection(mscrm.mobileofflineprofileitemassociation)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="lk_userqueryvisualizationbase_modifiedonbehalfby" Type="Collection(mscrm.userqueryvisualization)" Partner="modifiedonbehalfby" />
@@ -21048,6 +21390,8 @@
         <NavigationProperty Name="team_bcgov_tag" Type="Collection(mscrm.bcgov_tag)" Partner="owningteam" />
         <NavigationProperty Name="team_dfp_outcomestatus" Type="Collection(mscrm.dfp_outcomestatus)" Partner="owningteam" />
         <NavigationProperty Name="team_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="owningteam" />
+        <NavigationProperty Name="team_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningteam" />
+        <NavigationProperty Name="team_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningteam" />
         <NavigationProperty Name="team_DuplicateRules" Type="Collection(mscrm.duplicaterule)" Partner="owningteam" />
         <NavigationProperty Name="team_Imports" Type="Collection(mscrm.import)" Partner="owningteam" />
         <NavigationProperty Name="OwningTeam_postfollows" Type="Collection(mscrm.postfollow)" Partner="owningteam" />
@@ -22734,7 +23078,7 @@
         <Property Name="SeriesCanBeExpanded" Type="Edm.Boolean" />
       </ComplexType>
       <Action Name="CreateInstance">
-        <Parameter Name="Target" Type="mscrm.recurringappointmentmaster" Nullable="false" />
+        <Parameter Name="Target" Type="mscrm.crmbaseentity" Nullable="false" />
         <Parameter Name="Count" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="mscrm.CreateInstanceResponse" Nullable="false" />
       </Action>
@@ -22800,7 +23144,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.email" />
+        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
         <Parameter Name="ValidateBeforeCreate" Type="Edm.Boolean" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
@@ -22817,7 +23161,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.email" />
+        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
       <Action Name="DeprovisionLanguage">
@@ -23761,7 +24105,7 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedqueryvisualization" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.savedqueryvisualization" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.systemform" Nullable="false" />
@@ -23769,43 +24113,43 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.customcontroldefaultconfig" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.customcontroldefaultconfig" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.webresource" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.webresource" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.sitemap" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.sitemap" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedquery" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.savedquery" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofileitem" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.mobileofflineprofileitem" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofile" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.mobileofflineprofile" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfig" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appconfig" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfiginstance" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appconfiginstance" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.navigationsetting" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.navigationsetting" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appmodule" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appmodule" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublishedMultiple" IsBound="true" IsComposable="true">
         <Parameter Name="entityset" Type="Collection(mscrm.savedqueryvisualization)" Nullable="false" />
@@ -24000,6 +24344,38 @@
       <Action Name="ApplyRoutingRule">
         <Parameter Name="Target" Type="mscrm.crmbaseentity" Nullable="false" />
       </Action>
+      <ComplexType Name="bcgov_AddRelationshipFieldsResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_AddRelationshipFields" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_relationship" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_AddRelationshipFieldsResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_AddRelationshipRelationshipsResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_AddRelationshipRelationships" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_relationship" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_AddRelationshipRelationshipsResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_AddTemplateFieldsResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_AddTemplateFields" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_template" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_AddTemplateFieldsResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_AddTemplateRelationshipsResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_AddTemplateRelationships" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_template" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_AddTemplateRelationshipsResponse" Nullable="false" />
+      </Action>
       <ComplexType Name="bcgov_CreateDraftEmailResponse">
         <Property Name="EmailId" Type="Edm.String" Unicode="false" />
         <Property Name="UserMessage" Type="Edm.String" Unicode="false" />
@@ -24023,6 +24399,41 @@
       <Action Name="bcgov_DownloadDocumentFromSharePoint" IsBound="true">
         <Parameter Name="entity" Type="mscrm.bcgov_documenturl" Nullable="false" />
         <ReturnType Type="mscrm.bcgov_DownloadDocumentFromSharePointResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_DownloadTemplateSchemaDefinitionResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+        <Property Name="Body" Type="Edm.String" Unicode="false" />
+        <Property Name="FileName" Type="Edm.String" Unicode="false" />
+        <Property Name="FileLength" Type="Edm.Decimal" Scale="Variable" />
+        <Property Name="MimeType" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_DownloadTemplateSchemaDefinition" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_template" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_DownloadTemplateSchemaDefinitionResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_GenerateDocumentWithAEMResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+        <Property Name="SharePointUrl" Type="Edm.String" Unicode="false" />
+        <Property Name="Body" Type="Edm.String" Unicode="false" />
+        <Property Name="FileName" Type="Edm.String" Unicode="false" />
+        <Property Name="FileLength" Type="Edm.Decimal" Scale="Variable" />
+        <Property Name="MimeType" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_GenerateDocumentWithAEM" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_template" Nullable="false" />
+        <Parameter Name="RegardingObjectId" Type="Edm.String" Nullable="false" Unicode="false" />
+        <ReturnType Type="mscrm.bcgov_GenerateDocumentWithAEMResponse" Nullable="false" />
+      </Action>
+      <ComplexType Name="bcgov_GetDocumentTemplateResponse">
+        <Property Name="IsSuccess" Type="Edm.Boolean" />
+        <NavigationProperty Name="TemplateId" Type="mscrm.documenttemplate" Nullable="false" />
+        <Property Name="Result" Type="Edm.String" Unicode="false" />
+      </ComplexType>
+      <Action Name="bcgov_GetDocumentTemplate" IsBound="true">
+        <Parameter Name="entity" Type="mscrm.bcgov_template" Nullable="false" />
+        <ReturnType Type="mscrm.bcgov_GetDocumentTemplateResponse" Nullable="false" />
       </Action>
       <ComplexType Name="bcgov_GetDocumentUrlFromSharePointResponse">
         <Property Name="FileUrl" Type="Edm.String" Unicode="false" />
@@ -27345,6 +27756,7 @@
           <NavigationPropertyBinding Path="dfp_account_dfp_participant" Target="dfp_participants" />
           <NavigationPropertyBinding Path="dfp_account_dfp_login" Target="dfp_logins" />
           <NavigationPropertyBinding Path="bcgov_account_bcgov_documenturl" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="bcgov_account_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="ownerid" Target="owners" />
           <NavigationPropertyBinding Path="Account_ActivityPointers" Target="activitypointers" />
           <NavigationPropertyBinding Path="Account_SyncErrors" Target="syncerrors" />
@@ -27839,6 +28251,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_report" Target="reports" />
           <NavigationPropertyBinding Path="AsyncOperation_Emails" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_recurringappointmentmaster" Target="recurringappointmentmasters" />
@@ -27967,6 +28383,38 @@
           <NavigationPropertyBinding Path="bcgov_TaskId" Target="tasks" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
         </EntitySet>
+        <EntitySet Name="bcgov_fields" EntityType="Microsoft.Dynamics.CRM.bcgov_field">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="organizationid" Target="organizations" />
+          <NavigationPropertyBinding Path="bcgov_field_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="bcgov_field_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="bcgov_field_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="bcgov_field_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="bcgov_field_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="bcgov_field_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="bcgov_PrimaryEntityId" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="bcgov_RelationshipId" Target="bcgov_relationships" />
+        </EntitySet>
+        <EntitySet Name="bcgov_relationships" EntityType="Microsoft.Dynamics.CRM.bcgov_relationship">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="organizationid" Target="organizations" />
+          <NavigationPropertyBinding Path="bcgov_relationship_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="bcgov_relationship_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="bcgov_relationship_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="bcgov_relationship_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="bcgov_relationship_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="bcgov_relationship_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="bcgov_ParentRelationshipId" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="bcgov_parentrelationship_bcgov_childrelation" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="bcgov_PrimaryEntityId" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="bcgov_relationship_bcgov_field" Target="bcgov_fields" />
+        </EntitySet>
         <EntitySet Name="bcgov_tags" EntityType="Microsoft.Dynamics.CRM.bcgov_tag">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -27985,6 +28433,45 @@
           <NavigationPropertyBinding Path="bcgov_tag1_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="bcgov_tag2_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="bcgov_tag3_bcgov_documenturl" Target="bcgov_documenturls" />
+        </EntitySet>
+        <EntitySet Name="bcgov_templates" EntityType="Microsoft.Dynamics.CRM.bcgov_template">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="bcgov_template_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="bcgov_template_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="bcgov_template_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="bcgov_template_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="bcgov_template_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="bcgov_template_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="bcgov_primaryentity_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="bcgov_primaryentity_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="bcgov_template_bcgov_templatesession" Target="bcgov_templatesessions" />
+        </EntitySet>
+        <EntitySet Name="bcgov_templatesessions" EntityType="Microsoft.Dynamics.CRM.bcgov_templatesession">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="bcgov_templatesession_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="bcgov_Customer_account" Target="accounts" />
+          <NavigationPropertyBinding Path="bcgov_Customer_contact" Target="contacts" />
+          <NavigationPropertyBinding Path="bcgov_CaseId" Target="incidents" />
+          <NavigationPropertyBinding Path="bcgov_TemplateId" Target="bcgov_templates" />
         </EntitySet>
         <EntitySet Name="bookableresourcebookingheaders" EntityType="Microsoft.Dynamics.CRM.bookableresourcebookingheader">
           <NavigationPropertyBinding Path="createdbyname" Target="systemusers" />
@@ -28314,6 +28801,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_customeraddress" Target="customeraddresses" />
           <NavigationPropertyBinding Path="regardingobjectid_annualfiscalcalendar" Target="annualfiscalcalendars" />
           <NavigationPropertyBinding Path="regardingobjectid_fax" Target="faxes" />
@@ -28503,6 +28994,8 @@
           <NavigationPropertyBinding Path="business_unit_bcgov_tag" Target="bcgov_tags" />
           <NavigationPropertyBinding Path="business_unit_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="business_unit_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="business_unit_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="business_unit_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="BusinessUnit_SyncErrors" Target="syncerrors" />
           <NavigationPropertyBinding Path="transactioncurrencyid" Target="transactioncurrencies" />
           <NavigationPropertyBinding Path="BulkDeleteOperation_BusinessUnit" Target="bulkdeleteoperations" />
@@ -29055,6 +29548,7 @@
           <NavigationPropertyBinding Path="dfp_contact_dfp_driver_PersonId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_contact_dfp_participant" Target="dfp_participants" />
           <NavigationPropertyBinding Path="bcgov_contact_bcgov_documenturl" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="bcgov_contact_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="contact_connections1" Target="connections" />
           <NavigationPropertyBinding Path="Contact_Feedback" Target="feedback" />
           <NavigationPropertyBinding Path="Contact_ProcessSessions" Target="processsessions" />
@@ -30293,6 +30787,7 @@
           <NavigationPropertyBinding Path="dfp_incident_dfp_decision" Target="dfp_decisions" />
           <NavigationPropertyBinding Path="bcgov_incident_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="dfp_incident_dfp_dmerflag" Target="dfp_dmerflags" />
+          <NavigationPropertyBinding Path="bcgov_incident_bcgov_templatesession" Target="bcgov_templatesessions" />
         </EntitySet>
         <EntitySet Name="interactionforemails" EntityType="Microsoft.Dynamics.CRM.interactionforemail">
           <NavigationPropertyBinding Path="createdbyname" Target="systemusers" />
@@ -30906,6 +31401,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="ownerid" Target="owners" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -31399,6 +31898,8 @@
           <NavigationPropertyBinding Path="organization_bcgov_config" Target="bcgov_configs" />
           <NavigationPropertyBinding Path="organization_dfp_flag" Target="dfp_flags" />
           <NavigationPropertyBinding Path="organization_dfp_dmerflag" Target="dfp_dmerflags" />
+          <NavigationPropertyBinding Path="organization_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="organization_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="organization_sdkmessagefilter" Target="sdkmessagefilters" />
           <NavigationPropertyBinding Path="webresource_organization" Target="webresourceset" />
@@ -31827,6 +32328,10 @@
           <NavigationPropertyBinding Path="objectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="objectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="objectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="objectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="objectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="objectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="objectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="objectid_letter" Target="letters" />
           <NavigationPropertyBinding Path="objectid_reportcategory" Target="reportcategories" />
           <NavigationPropertyBinding Path="objectid_sharepointdocumentlocation" Target="sharepointdocumentlocations" />
@@ -31936,6 +32441,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_queue" Target="queues" />
           <NavigationPropertyBinding Path="canceledby" Target="systemusers" />
           <NavigationPropertyBinding Path="regardingobjectid_contact" Target="contacts" />
@@ -33277,6 +33786,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_field" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_ExpiredProcess_syncerror" Target="expiredprocesses" />
           <NavigationPropertyBinding Path="regardingobjectid_email_syncerror" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_systemuser" Target="systemusers" />
@@ -33856,6 +34369,24 @@
           <NavigationPropertyBinding Path="lk_dfp_outcomesubstatus_modifiedby" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="lk_dfp_outcomesubstatus_modifiedonbehalfby" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="user_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="lk_bcgov_field_createdby" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="lk_bcgov_field_createdonbehalfby" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="lk_bcgov_field_modifiedby" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="lk_bcgov_field_modifiedonbehalfby" Target="bcgov_fields" />
+          <NavigationPropertyBinding Path="lk_bcgov_relationship_createdby" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="lk_bcgov_relationship_createdonbehalfby" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="lk_bcgov_relationship_modifiedby" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="lk_bcgov_relationship_modifiedonbehalfby" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="lk_bcgov_template_createdby" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="lk_bcgov_template_createdonbehalfby" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="lk_bcgov_template_modifiedby" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="lk_bcgov_template_modifiedonbehalfby" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="user_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="lk_bcgov_templatesession_createdby" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="lk_bcgov_templatesession_createdonbehalfby" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="lk_bcgov_templatesession_modifiedby" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="lk_bcgov_templatesession_modifiedonbehalfby" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="user_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="lk_slakpiinstancebase_createdonbehalfby" Target="slakpiinstances" />
           <NavigationPropertyBinding Path="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Target="mobileofflineprofileitemassociations" />
           <NavigationPropertyBinding Path="lk_userqueryvisualizationbase_modifiedonbehalfby" Target="userqueryvisualizations" />
@@ -34537,6 +35068,8 @@
           <NavigationPropertyBinding Path="team_bcgov_tag" Target="bcgov_tags" />
           <NavigationPropertyBinding Path="team_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="team_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="team_bcgov_template" Target="bcgov_templates" />
+          <NavigationPropertyBinding Path="team_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="team_DuplicateRules" Target="duplicaterules" />
           <NavigationPropertyBinding Path="team_Imports" Target="imports" />
           <NavigationPropertyBinding Path="OwningTeam_postfollows" Target="postfollows" />
