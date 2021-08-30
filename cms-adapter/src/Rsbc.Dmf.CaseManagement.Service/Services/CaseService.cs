@@ -1,16 +1,15 @@
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
-using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -30,14 +29,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
-            var searchResult = await _caseManager.CaseSearch(new CaseSearchRequest { ByCaseId = request.CaseId });
+            var cases = (await _caseManager.CaseSearch(new CaseSearchRequest { CaseId = request.CaseId })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
 
             var reply = new SearchReply();
-            reply.Items.Add(searchResult.Items.Select(c => new Case
+            reply.Items.Add(cases.Select(c =>
             {
-                CaseId = c.Id,
-                CreatedBy = c.CreatedBy,
-                CreatedOn = Timestamp.FromDateTime(c.CreatedOn)
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    CreatedBy = c.CreatedBy,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn),
+                    DriverLicenceNumber = c.DriverLicenseNumber,
+                    DriverName = c.DriverName,
+                };
+                newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description }));
+                return newCase;
             }));
 
             return reply;
@@ -66,12 +72,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             // set the flags.
 
-            var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags, _logger);
+            var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
             _logger.LogInformation($"Set Flags result is {x.Success}.");
             reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
-
 
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
