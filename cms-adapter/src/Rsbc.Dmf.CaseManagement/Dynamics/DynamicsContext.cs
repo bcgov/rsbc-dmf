@@ -67,4 +67,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             context.UpdateObject(entity);
         }
     }
+
+    internal enum EntityState
+    {
+        Active = 0,
+        Inactive = 1
+    }
 }
