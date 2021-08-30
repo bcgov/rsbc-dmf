@@ -39,6 +39,9 @@
     <None Remove="map-search.feature" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="DMERCardio.feature">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="DMERSyncope.feature">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
