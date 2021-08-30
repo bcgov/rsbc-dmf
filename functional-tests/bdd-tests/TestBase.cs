@@ -752,6 +752,8 @@ namespace bdd_tests
                     LVEF
                 ********/
 
+                Thread.Sleep(1000);
+
                 // select 'Less Than 35%'
                 var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-less35"));
                 lessThan35Percent.Click();
@@ -992,6 +994,8 @@ namespace bdd_tests
                 var treatedWithTherapyNoRecurrenceWithinPast3MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("enn2tu-y"));
                 treatedWithTherapyNoRecurrenceWithinPast3MonthsYes.Click();
 
+                Thread.Sleep(1000);
+
                 // select 'No additional detail available' for 'Condition has been treated with:'
                 var conditionTreatedWithNoAdditionalDetailAvailable = ngDriver.WrappedDriver.FindElement(By.Id("e52bjgd-noAdditionalDetailAvailable"));
                 conditionTreatedWithNoAdditionalDetailAvailable.Click();
@@ -999,6 +1003,8 @@ namespace bdd_tests
                 // select 'AFL, they have had a successful isthmus ablation with proven establishment of bidirectional isthmus block' for 'Condition has been treated with:'
                 var conditionTreatedWithSuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock = ngDriver.WrappedDriver.FindElement(By.Id("e52bjgd-aflTheyHaveHadASuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock"));
                 conditionTreatedWithSuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock.Click();
+                
+                Thread.Sleep(1000);
 
                 // select 'AF, they have had AV node ablation and pacemaker implantation and meet the standard for pacemaker treatment' for 'Condition has been treated with:'
                 var conditionTreatedWithAFAVNodeAblationAndPacemakerImplantation = ngDriver.WrappedDriver.FindElement(By.Id("e52bjgd-afTheyHaveHadAvNodeAblationAndPacemakerImplantationAndMeetTheStandardForPacemakerTreatment"));
@@ -1141,6 +1147,8 @@ namespace bdd_tests
                 medicallyTreatedAorticMitralRegurgitationMitralStenosis.Click();
 
                 // select 'Congenital'
+                Thread.Sleep(1000);
+
                 var congenital = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a7]"));
                 congenital.Click();
 
