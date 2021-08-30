@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +11,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
-            this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // SaveChangesOptions.None; // 
+            this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // SaveChangesOptions.None; //
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
-            
 
             Func<Uri, Uri> formatUri = requestUri => requestUri.IsAbsoluteUri
                     ? new Uri(url, (url.AbsolutePath == "/" ? string.Empty : url.AbsolutePath) + requestUri.AbsolutePath + requestUri.Query)
