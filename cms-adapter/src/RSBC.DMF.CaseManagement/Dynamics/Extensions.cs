@@ -3,35 +3,30 @@ using System;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
-    public static class DynamicsContextEx
+    /// <summary>
+    /// Extensions for OData context
+    /// </summary>
+    internal partial class DynamicsContext
     {
-        internal static void DetachAll(this DynamicsContext context)
+        public void DetachAll()
         {
-            foreach (var descriptor in context.EntityTracker.Entities)
+            foreach (var descriptor in this.EntityTracker.Entities)
             {
-                context.Detach(descriptor.Entity);
+                this.Detach(descriptor.Entity);
             }
-            foreach (var link in context.EntityTracker.Links)
+            foreach (var link in this.EntityTracker.Links)
             {
-                context.DetachLink(link.Source, link.SourceProperty, link.Target);
+                this.DetachLink(link.Source, link.SourceProperty, link.Target);
             }
         }
 
-        internal static void Detach(this DynamicsContext context, params object[] entities)
-        {
-            foreach (var entity in entities)
-            {
-                context.Detach(entity);
-            }
-        }
+        public void ActivateObject(object entity, int activeStatusValue) =>
+            ModifyEntityStatus(this, entity, (int)EntityState.Active, activeStatusValue);
 
-        internal static void ActivateObject(this DynamicsContext context, object entity, int activeStatusValue) =>
-            ModifyEntityStatus(context, entity, (int)EntityState.Active, activeStatusValue);
+        public void DeactivateObject(object entity, int inactiveStatusValue) =>
+            ModifyEntityStatus(this, entity, (int)EntityState.Inactive, inactiveStatusValue);
 
-        internal static void DeactivateObject(this DynamicsContext context, object entity, int inactiveStatusValue) =>
-            ModifyEntityStatus(context, entity, (int)EntityState.Inactive, inactiveStatusValue);
-
-        private static void ModifyEntityStatus(this DynamicsContext context, object entity, int state, int status)
+        private static void ModifyEntityStatus(DynamicsContext context, object entity, int state, int status)
         {
             var entityType = entity.GetType();
             if (!typeof(crmbaseentity).IsAssignableFrom(entityType)) throw new InvalidOperationException($"entity {entityType.FullName} is not a valid {typeof(crmbaseentity).FullName}");

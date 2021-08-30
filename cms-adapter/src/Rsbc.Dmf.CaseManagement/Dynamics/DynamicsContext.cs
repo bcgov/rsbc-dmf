@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
-    internal class DynamicsContext : Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM.System
+    internal partial class DynamicsContext : Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM.System
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
