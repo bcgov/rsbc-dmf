@@ -29,7 +29,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
-            var cases = (await _caseManager.CaseSearch(new CaseSearchRequest { CaseId = request.CaseId })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
+            var cases = (await _caseManager.CaseSearch(new CaseSearchRequest
+            {
+                CaseId = request.CaseId,
+                ClinicId = request.ClinicId,
+                DriverLicenseNumber = request.DriverLicenseNumber
+            })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
 
             var reply = new SearchReply();
             reply.Items.Add(cases.Select(c =>
@@ -39,7 +44,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     CaseId = c.Id,
                     CreatedBy = c.CreatedBy,
                     CreatedOn = Timestamp.FromDateTime(c.CreatedOn),
-                    DriverLicenceNumber = c.DriverLicenseNumber,
+                    DriverLicenseNumber = c.DriverLicenseNumber,
                     DriverName = c.DriverName,
                 };
                 newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description }));
