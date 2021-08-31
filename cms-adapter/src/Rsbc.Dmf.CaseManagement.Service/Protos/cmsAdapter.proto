@@ -18,6 +18,9 @@ service CaseManager {
 
 message SearchRequest {
   string caseId = 1;
+  string clinicId = 2;
+  string driverLicenseNumber = 3;
+  repeated string statuses = 4;
 }
 
 message SearchReply {
@@ -29,8 +32,11 @@ message DmerCase {
 	string createdBy = 2;
 	google.protobuf.Timestamp createdOn = 3;
 	string driverName = 10;
-	string driverLicenceNumber = 11;
-	repeated FlagItem Flags = 12;
+	string driverLicenseNumber = 11;
+	string clinicId = 12;
+	string clinicName = 13;
+
+	repeated FlagItem Flags = 30;
 }
 
 enum ResultStatus {

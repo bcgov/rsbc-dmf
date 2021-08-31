@@ -9,7 +9,10 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Rsbc.Dmf.CaseManagement.Service;
+using RSBC.DMF.DoctorsPortal.API.Services;
 using Serilog;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -30,7 +33,7 @@ namespace RSBC.DMF.DoctorsPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication("token")
+            services.AddAuthentication()
                 //JWT tokens handling
                 .AddJwtBearer("token", options =>
                 {
@@ -61,7 +64,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             {
                 options.AddPolicy("OAuth", policy =>
                 {
-                    policy.RequireAuthenticatedUser();
+                    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
                     policy.RequireClaim("scope", "doctors-portal-api");
                 });
             });
@@ -112,6 +115,14 @@ namespace RSBC.DMF.DoctorsPortal.API
                 options.KnownNetworks.Clear();
                 options.KnownProxies.Clear();
             });
+
+            services.AddHttpContextAccessor();
+            var httpClientBuilder = services.AddGrpcClient<CaseManager.CaseManagerClient>(opts =>
+            {
+                opts.Address = new Uri(configuration.GetSection("cms")["cmsServerUrl"]);
+            });
+            services.AddTransient<ICaseQueryService, CaseService>();
+            services.AddTransient<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -119,6 +130,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             app.UseForwardedHeaders();
             if (!env.IsProduction())
             {
+                app.UseDeveloperExceptionPage();
                 app.UseSwagger(c =>
                 {
                     c.RouteTemplate = "api/{documentName}/openapi.json";
@@ -155,7 +167,9 @@ namespace RSBC.DMF.DoctorsPortal.API
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers().RequireAuthorization("OAuth");
+                endpoints.MapControllers()
+                    //.RequireAuthorization("OAuth")
+                    ;
                 endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
                 {
                     Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)
