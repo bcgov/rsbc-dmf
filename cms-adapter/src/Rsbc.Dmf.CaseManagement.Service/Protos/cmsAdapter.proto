@@ -31,6 +31,8 @@ message DmerCase {
 	string caseId = 1;
 	string createdBy = 2;
 	google.protobuf.Timestamp createdOn = 3;
+	string modifiedBy = 4;
+	google.protobuf.Timestamp modifiedOn = 5;
 	string driverName = 10;
 	string driverLicenseNumber = 11;
 	string clinicId = 12;

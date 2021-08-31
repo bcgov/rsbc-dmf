@@ -42,10 +42,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var newCase = new DmerCase
                 {
                     CaseId = c.Id,
-                    CreatedBy = c.CreatedBy,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn),
-                    DriverLicenseNumber = c.DriverLicenseNumber,
-                    DriverName = c.DriverName,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
+                    DriverName = c.DriverName ?? string.Empty,
                 };
                 newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description }));
                 return newCase;
