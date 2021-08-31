@@ -38,6 +38,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
+        public string ModifiedBy { get; set; }
         public string DriverLicenseNumber { get; set; }
         public string DriverName { get; set; }
     }
@@ -76,7 +78,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 //load clinic details (assuming customer as clinic for now)
                 if (@case.customerid_contact == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
-                if (@case.customerid_account == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_account));
 
                 if (@case._dfp_driverid_value.HasValue)
                 {
@@ -103,15 +104,19 @@ namespace Rsbc.Dmf.CaseManagement
                     Id = c.title,
                     CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                     CreatedOn = c.createdon.Value.DateTime,
+                    ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                    ModifiedOn = c.modifiedon.Value.DateTime,
                     DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
                     DriverName = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                     ClinicId = c.customerid_contact.contactid.ToString(),
                     ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
-                    Flags = c.dfp_incident_dfp_dmerflag.Select(f => new Flag
-                    {
-                        Id = f.dfp_FlagId?.dfp_id,
-                        Description = f.dfp_FlagId?.dfp_description
-                    }).ToArray()
+                    Flags = c.dfp_incident_dfp_dmerflag
+                        .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
+                        .Select(f => new Flag
+                        {
+                            Id = f.dfp_FlagId?.dfp_id,
+                            Description = f.dfp_FlagId?.dfp_description
+                        }).ToArray()
                 }).ToArray()
             };
         }
@@ -126,7 +131,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             var caseQuery = ctx.incidents
                 .Expand(i => i.dfp_DriverId)
-                .Expand(i => i.customerid_account)
                 .Expand(i => i.customerid_contact)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 

@@ -59,6 +59,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
                 Id = c.CaseId,
                 CreatedBy = c.CreatedBy,
                 CreatedOn = c.CreatedOn.ToDateTime(),
+                ModifiedBy = c.ModifiedBy,
+                ModifiedOn = c.ModifiedOn.ToDateTime(),
                 PatientName = c.DriverName,
                 DriverLicense = c.DriverLicenseNumber,
             });

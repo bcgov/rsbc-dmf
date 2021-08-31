@@ -35,7 +35,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
                 FirstName = "test",
                 LastName = "test",
                 ClinitName = "test",
-                ClinicId = "a5a45383-8ff4-eb11-b82b-00505683fbf4"
+                ClinicId = "ffa45383-8ff4-eb11-b82b-00505683fbf4"
             };
             return await Task.FromResult(userCtx);
         }
