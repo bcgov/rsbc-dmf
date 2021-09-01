@@ -46,6 +46,15 @@ parameters:
   - description: oidc scopes
     name: OIDC_SCOPE
     value: "openid profile email phsa-adapter doctors-portal-api"
+  - description: CMS adapter client secret
+    name: CMSADAPTER_CLIENT_SECRET
+    required: true
+  - description: CMS adapter server url
+    name: CMSADAPTER_SERVER_URL
+    required: true
+  - description: CMS adapter server cert validation
+    name: CMSADAPTER_VALIDATE_SERVER_CERTIFICATE
+    value: "true"
 
 objects:
   - kind: ConfigMap
@@ -62,6 +71,8 @@ objects:
       EFORMS__FHIRSERVERURL: ${EFORMS_FHIR_SERVER_URL}
       EFORMS__FORMSERVERURL: ${EFORMS_FORM_SERVER_URL}
       EFORMS__FORMSMAP: ${EFORMS_FORMS_MAP}
+      CMS__SERVERURL: ${CMSADAPTER_SERVER_URL}
+      CMS__VALIDATESERVERCERTIFICATE: ${CMSADAPTER_VALIDATE_SERVER_CERTIFICATE}
 
   - kind: Secret
     apiVersion: v1
@@ -81,6 +92,7 @@ objects:
       AUTH__OIDC__ISSUER: ${OAUTH_SERVER_URL}
       AUTH__OIDC__SCOPE: ${OIDC_SCOPE}
       AUTH__OIDC__CLIENTID: ${OIDC_CLIENTID}
+      CMS__CLIENTSECRET: ${CMSADAPTER_CLIENT_SECRET}
 
   - kind: Service
     apiVersion: v1
