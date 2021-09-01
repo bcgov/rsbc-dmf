@@ -156,12 +156,10 @@ objects:
               image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
-                - mountPath: /dpkeys
-                  name: dp-keys
+                - name: dp-keys
+                  mountPath: /dpkeys
                 - name: service-cert
-                  secret:
-                    secretName: document-triage-service-cert
-                  defaultMode: 420
+                  mountPath: /var/run/secrets/service-cert
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
