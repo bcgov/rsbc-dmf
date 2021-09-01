@@ -16,13 +16,24 @@ parameters:
   - description: image tag for deployments
     name: TAG
     required: true
-  - description: Hostname
-    name: HOST
-    required: true
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging  
-
+  - description: Image name
+    name: IMAGENAME
+    required: true
+  - description: JWT_TOKEN_KEY
+    name: JWT_TOKEN_KEY
+    value: Changeme
+  - description: JWT_VALID_AUDIENCE
+    name: JWT_VALID_AUDIENCE
+    value: Changeme
+  - description: JWT_VALID_ISSUER
+    name: JWT_VALID_ISSUER
+    value: Changeme  
+  - description: CMS_ADAPTER_SECRET
+    name: CMS_ADAPTER_SECRET
+    value: Changeme     
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -36,7 +47,8 @@ objects:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
       DOTNET_SSL_DIRS: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
-      OPENSHIFT_BUILD_NAME": "1"
+      OPENSHIFT_BUILD_NAME: "1"
+      DOCUMENT_STORAGE_ADAPTER_URL: "https://document-storage-adapter:8080"
   - kind: Secret
     apiVersion: v1
     type: Opaque
@@ -46,8 +58,10 @@ objects:
       labels:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-    stringData:
-      DOCUMENT_STORAGE_ADAPTER_URL: "https://document-storage-adapter:8080"      
+    stringData: 
+      JWT_TOKEN_KEY: "${JWT_TOKEN_KEY}"
+      JWT_VALID_AUDIENCE: "${JWT_VALID_AUDIENCE}"
+      JWT_VALID_ISSUER: "${JWT_VALID_ISSUER}"     
   - kind: Service
     apiVersion: v1
     metadata:
@@ -118,20 +132,34 @@ objects:
         spec:
           containers:
             - name: ${APP_NAME}
+              env:
+                - name: SPLUNK_COLLECTOR_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: url
+                - name: SPLUNK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: token
+                - name: CMS_ADAPTER_JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${CMS_ADAPTER_SECRET}
+                      key: JWT_TOKEN_KEY
               envFrom:
                 - configMapRef:
                     name: ${APP_NAME}-config
                 - secretRef:
                     name: ${APP_NAME}-secrets
-              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${APP_NAME}:${TAG}
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
-                - mountPath: /dpkeys
-                  name: dp-keys
+                - name: dp-keys
+                  mountPath: /dpkeys
                 - name: service-cert
-                  secret:
-                    secretName: document-triage-service-cert
-                  defaultMode: 420
+                  mountPath: /var/run/secrets/service-cert
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -140,9 +168,11 @@ objects:
           volumes:
             - name: dp-keys
               persistentVolumeClaim:
-                claimName: ${APP_NAME}-key-ring
+              claimName: ${APP_NAME}-key-ring
             - name: service-cert
-              mountPath: /var/run/secrets/service-cert
+              secret:
+                secretName: ${APP_NAME}-cert
+              defaultMode: 420
       test: false
       triggers:
         - type: ConfigChange
@@ -153,7 +183,7 @@ objects:
               - ${APP_NAME}
             from:
               kind: ImageStreamTag
-              name: ${APP_NAME}:${TAG}
+              name: ${IMAGENAME}:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
 
   - kind: "PersistentVolumeClaim"
