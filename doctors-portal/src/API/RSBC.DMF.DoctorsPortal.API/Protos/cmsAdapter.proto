@@ -1,0 +1,79 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service";
+
+package CaseManagement;
+
+service CaseManager {
+  rpc Search (SearchRequest) returns (SearchReply);
+
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+
+  // Update a Case
+  rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
+}
+
+message SearchRequest {
+  string caseId = 1;
+  string clinicId = 2;
+  string driverLicenseNumber = 3;
+  repeated string statuses = 4;
+}
+
+message SearchReply {
+  repeated DmerCase items = 1;
+}
+
+message DmerCase {
+	string caseId = 1;
+	string createdBy = 2;
+	google.protobuf.Timestamp createdOn = 3;
+	string modifiedBy = 4;
+	google.protobuf.Timestamp modifiedOn = 5;
+	string driverName = 10;
+	string driverLicenseNumber = 11;
+	string clinicId = 12;
+	string clinicName = 13;
+
+	repeated FlagItem Flags = 30;
+}
+
+enum ResultStatus {
+	Fail = 0;
+	Success = 1;
+}
+
+message TokenRequest {
+	string secret = 1;
+}
+
+message TokenReply {
+	ResultStatus resultStatus = 1;
+	string token = 2;
+	string errorDetail = 3;
+}
+
+message UpdateCaseRequest{
+	string caseId = 1;
+	bool isCleanPass = 2;
+	repeated FlagItem flags = 3;
+	string pdfFileKey = 4;
+	string dataFileKey = 5;
+
+}
+
+message UpdateCaseReply{	
+	ResultStatus resultStatus = 1;
+}
+
+message FlagItem {
+	string identifier = 1;
+	string question = 2;
+	bool result = 3;
+}
+
+
+

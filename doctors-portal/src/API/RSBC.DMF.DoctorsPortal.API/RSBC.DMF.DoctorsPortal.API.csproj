@@ -27,12 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Protos\cmsAdapter.proto" GrpcServices="Client">
-      <Link>Protos\cmsAdapter.proto</Link>
+    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Client">
+      <SourceUri>https://raw.githubusercontent.com/ytqsl/rsbc-dmf/S3DMFT-927/cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto</SourceUri>
     </Protobuf>
   </ItemGroup>
 </Project>
