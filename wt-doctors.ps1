@@ -1,1 +1,1 @@
-wt -M -d .\ --title doctors-portal `; sp -d .\doctors-portal\src\UI\doctors-portal\ `; sp -d .\doctors-portal\src\API\
+wt -M -d .\ --title doctors-portal `; sp -d .\doctors-portal\src\UI\doctors-portal\ `; sp -d .\doctors-portal\src\API\ `; mf left `; sp -d .\cms-adapter\src\

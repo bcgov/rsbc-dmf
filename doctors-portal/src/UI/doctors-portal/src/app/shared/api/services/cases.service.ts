@@ -9,7 +9,7 @@ import { RequestBuilder } from '../request-builder';
 import { Observable } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 
-import { Case } from '../models/case';
+import { DmerCaseListItem } from '../models/dmer-case-list-item';
 
 @Injectable({
   providedIn: 'root',
@@ -35,15 +35,13 @@ export class CasesService extends BaseService {
    */
   apiCasesGet$Plain$Response(params?: {
     ByCaseId?: string;
-    ByPatientName?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
-  }): Observable<StrictHttpResponse<Array<Case>>> {
+  }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
     if (params) {
       rb.query('ByCaseId', params.ByCaseId, {});
-      rb.query('ByPatientName', params.ByPatientName, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
@@ -54,7 +52,7 @@ export class CasesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<Case>>;
+        return r as StrictHttpResponse<Array<DmerCaseListItem>>;
       })
     );
   }
@@ -67,13 +65,12 @@ export class CasesService extends BaseService {
    */
   apiCasesGet$Plain(params?: {
     ByCaseId?: string;
-    ByPatientName?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
-  }): Observable<Array<Case>> {
+  }): Observable<Array<DmerCaseListItem>> {
 
     return this.apiCasesGet$Plain$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<Case>>) => r.body as Array<Case>)
+      map((r: StrictHttpResponse<Array<DmerCaseListItem>>) => r.body as Array<DmerCaseListItem>)
     );
   }
 
@@ -85,15 +82,13 @@ export class CasesService extends BaseService {
    */
   apiCasesGet$Json$Response(params?: {
     ByCaseId?: string;
-    ByPatientName?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
-  }): Observable<StrictHttpResponse<Array<Case>>> {
+  }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
     if (params) {
       rb.query('ByCaseId', params.ByCaseId, {});
-      rb.query('ByPatientName', params.ByPatientName, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
@@ -104,7 +99,7 @@ export class CasesService extends BaseService {
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Array<Case>>;
+        return r as StrictHttpResponse<Array<DmerCaseListItem>>;
       })
     );
   }
@@ -117,13 +112,12 @@ export class CasesService extends BaseService {
    */
   apiCasesGet$Json(params?: {
     ByCaseId?: string;
-    ByPatientName?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
-  }): Observable<Array<Case>> {
+  }): Observable<Array<DmerCaseListItem>> {
 
     return this.apiCasesGet$Json$Response(params).pipe(
-      map((r: StrictHttpResponse<Array<Case>>) => r.body as Array<Case>)
+      map((r: StrictHttpResponse<Array<DmerCaseListItem>>) => r.body as Array<DmerCaseListItem>)
     );
   }
 

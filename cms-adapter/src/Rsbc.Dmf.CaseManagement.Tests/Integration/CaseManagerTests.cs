@@ -47,7 +47,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
             dmerCase.Id.ShouldBe(caseId);
-            //TODO: dmerCase.CreatedBy.ShouldNotBeNullOrEmpty();
+
+            dmerCase.CreatedBy.ShouldNotBeNullOrEmpty();
             dmerCase.DriverLicenseNumber.ShouldNotBeNullOrEmpty();
             dmerCase.DriverName.ShouldNotBeNullOrEmpty();
             dmerCase.Flags.ShouldNotBeEmpty();
@@ -64,6 +65,22 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             foreach (var dmerCase in queryResults)
             {
                 dmerCase.ShouldBeAssignableTo<DmerCase>().DriverLicenseNumber.ShouldBe(driverLicenseNumber);
+            }
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanQueryCasesByClinicId()
+        {
+            var expectedClinicId = "a5a45383-8ff4-eb11-b82b-00505683fbf4";
+            var expectedClinicName = "Adam Hancock";
+
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { ClinicId = expectedClinicId })).Items;
+
+            queryResults.ShouldNotBeEmpty();
+            foreach (var dmerCase in queryResults)
+            {
+                dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicId.ShouldBe(expectedClinicId);
+                dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicName.ShouldBe(expectedClinicName);
             }
         }
     }

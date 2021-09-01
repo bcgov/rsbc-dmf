@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.*" />
     <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
@@ -22,6 +23,12 @@
     <PackageReference Include="Serilog.Exceptions" Version="7.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Splunk" Version="3.6.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Client">
+      <SourceUri>https://raw.githubusercontent.com/ytqsl/rsbc-dmf/S3DMFT-927/cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto</SourceUri>
+    </Protobuf>
   </ItemGroup>
 </Project>
