@@ -20,6 +20,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
         public string DriverLicenseNumber { get; set; }
+        public string ClinicId { get; set; }
     }
 
     public class CaseSearchReply
@@ -37,6 +38,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
+        public DateTime ModifiedOn { get; set; }
+        public string ModifiedBy { get; set; }
         public string DriverLicenseNumber { get; set; }
         public string DriverName { get; set; }
     }
@@ -44,6 +47,8 @@ namespace Rsbc.Dmf.CaseManagement
     public class DmerCase : Case
     {
         public IEnumerable<Flag> Flags { get; set; }
+        public string ClinicId { get; set; }
+        public string ClinicName { get; set; }
     }
 
     public class Flag
@@ -65,19 +70,24 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
-            if (string.IsNullOrEmpty(request.CaseId) && string.IsNullOrEmpty(request.DriverLicenseNumber))
-            {
-                throw new ArgumentException("Case search must have at least one criteria", nameof(request));
-            }
-
+            //search matching cases
             var cases = (await SearchCases(dynamicsContext, request)).Concat(await SearchDriverCases(dynamicsContext, request));
 
             //lazy load case related properties
             foreach (var @case in cases)
             {
+                //load clinic details (assuming customer as clinic for now)
+                if (@case.customerid_contact == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
+
+                if (@case._dfp_driverid_value.HasValue)
+                {
+                    //load driver info
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+                    if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                }
+
+                //load case's flags
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_dmerflag));
-                if (@case._dfp_driverid_value.HasValue) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                 foreach (var flag in @case.dfp_incident_dfp_dmerflag)
                 {
                     await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
@@ -86,36 +96,46 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
+            //map cases from query results (TODO: consider replacing with AutoMapper)
             return new CaseSearchReply
             {
-                //map cases from query results (TODO: consider replacing with AutoMapper)
                 Items = cases.Select(c => new DmerCase
                 {
                     Id = c.title,
-                    //TODO: CreatedBy =
+                    CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                     CreatedOn = c.createdon.Value.DateTime,
+                    ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                    ModifiedOn = c.modifiedon.Value.DateTime,
                     DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
                     DriverName = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
-                    Flags = c.dfp_incident_dfp_dmerflag.Select(f => new Flag
-                    {
-                        Id = f.dfp_FlagId?.dfp_id,
-                        Description = f.dfp_FlagId?.dfp_description
-                    }).ToArray()
+                    ClinicId = c.customerid_contact.contactid.ToString(),
+                    ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
+                    Flags = c.dfp_incident_dfp_dmerflag
+                        .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
+                        .Select(f => new Flag
+                        {
+                            Id = f.dfp_FlagId?.dfp_id,
+                            Description = f.dfp_FlagId?.dfp_description
+                        }).ToArray()
                 }).ToArray()
             };
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
-            var shouldSearchCases = !string.IsNullOrEmpty(criteria.CaseId);
+            var shouldSearchCases =
+                !string.IsNullOrEmpty(criteria.CaseId) ||
+                !string.IsNullOrEmpty(criteria.ClinicId);
 
             if (!shouldSearchCases) return Array.Empty<incident>();
 
             var caseQuery = ctx.incidents
                 .Expand(i => i.dfp_DriverId)
+                .Expand(i => i.customerid_contact)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.title == criteria.CaseId);
+            if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._customerid_value == Guid.Parse(criteria.ClinicId));
 
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
         }
