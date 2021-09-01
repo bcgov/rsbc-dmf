@@ -1,5 +1,4 @@
 node('master') {
-
 	def sourcetag = 'test'
     def desttag = 'prod'
 	def backuptag = 'prod-backup'
