@@ -47,6 +47,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
             dmerCase.Id.ShouldBe(caseId);
+
             dmerCase.CreatedBy.ShouldNotBeNullOrEmpty();
             dmerCase.DriverLicenseNumber.ShouldNotBeNullOrEmpty();
             dmerCase.DriverName.ShouldNotBeNullOrEmpty();

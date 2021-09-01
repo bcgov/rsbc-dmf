@@ -15,9 +15,13 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS final
 
 WORKDIR /app
 
-RUN apt-get update -yq \
-    && apt-get install curl -yq \
-    && curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
+#
+# enable to install Visual Studio Debugger.
+#
+#RUN apt-get update -yq \
+#    && apt-get install curl -yq \
+#    && curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
+#
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=https://*:8080
