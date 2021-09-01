@@ -13,6 +13,9 @@ parameters:
   - description: app name
     name: APP_NAME
     required: true
+  - description: Image name
+    name: IMAGENAME
+    required: true
   - description: image tag for deployments
     name: TAG
     required: true
@@ -45,15 +48,24 @@ parameters:
   - description: Dynamics service account password
     name: DYNAMICS_SERVICE_ACCOUNT_PASSWORD
     required: true
+  - description: JWT_TOKEN_KEY
+    name: JWT_TOKEN_KEY
+    value: Changeme
+  - description: JWT_VALID_AUDIENCE
+    name: JWT_VALID_AUDIENCE
+    value: Changeme
+  - description: JWT_VALID_ISSUER
+    name: JWT_VALID_ISSUER
+    value: Changeme  
 
 objects:
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-cms-adapter-config
+      name: ${APP_NAME}-config
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
@@ -66,10 +78,10 @@ objects:
     apiVersion: v1
     type: Opaque
     metadata:
-      name: ${APP_NAME}-cms-adapter-secrets
+      name: ${APP_NAME}-secrets
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
       Dynamics__ADFS__ClientId: ${DYNAMICS_OAUTH_CLIENT_ID}
@@ -78,17 +90,22 @@ objects:
       Dynamics__ADFS__serviceAccountDomain: ${DYNAMICS_SERVICE_ACCOUNT_DOMAIN}
       Dynamics__ADFS__serviceAccountName: ${DYNAMICS_SERVICE_ACCOUNT_NAME}
       Dynamics__ADFS__serviceAccountPassword: ${DYNAMICS_SERVICE_ACCOUNT_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/ssl/tls.crt"
+      ASPNETCORE_Kestrel__Certificates__Default__KeyPath: "/ssl/tls.key"
+      JWT_TOKEN_KEY: "${JWT_TOKEN_KEY}"
+      JWT_VALID_AUDIENCE: "${JWT_VALID_AUDIENCE}"
+      JWT_VALID_ISSUER: "${JWT_VALID_ISSUER}"   
 
   - kind: Service
     apiVersion: v1
     metadata:
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-cms-adapter
+      name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       annotations:
-        service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cms-adapter-ssl
+        service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cert
     spec:
       ports:
         - name: 8080-tcp
@@ -100,21 +117,21 @@ objects:
           protocol: TCP
           targetPort: 8088
       selector:
-        deploymentconfig: ${APP_NAME}-cms-adapter
+        deploymentconfig: ${APP_NAME}
       type: ClusterIP
 
   - kind: NetworkPolicy
     apiVersion: networking.k8s.io/v1
     metadata:
-      name: ${APP_NAME}-cms-adapter
+      name: ${APP_NAME}
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       podSelector:
         matchLabels:
-          app: ${APP_NAME}-cms-adapter
+          app: ${APP_NAME}
       policyTypes:
         - Ingress
       ingress:
@@ -131,14 +148,14 @@ objects:
     apiVersion: apps.openshift.io/v1
     metadata:
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-cms-adapter
+      name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       replicas: 2
       selector:
-        deploymentconfig: ${APP_NAME}-cms-adapter
+        deploymentconfig: ${APP_NAME}
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -152,22 +169,28 @@ objects:
       template:
         metadata:
           labels:
-            app: ${APP_NAME}-cms-adapter
+            app: ${APP_NAME}
             app.kubernetes.io/part-of: ${APP_NAME}
-            deploymentconfig: ${APP_NAME}-cms-adapter
+            deploymentconfig: ${APP_NAME}
         spec:
           containers:
             - name: cms-adapter
               env:
-                - name: "ASPNETCORE_Kestrel__Certificates__Default__Path"
-                  value: "/ssl/tls.crt"
-                - name: "ASPNETCORE_Kestrel__Certificates__Default__KeyPath"
-                  value: "/ssl/tls.key"
+                - name: SPLUNK_COLLECTOR_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: url
+                - name: SPLUNK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: token
               envFrom:
                 - configMapRef:
-                    name: ${APP_NAME}-cms-adapter-config
+                    name: ${APP_NAME}-config
                 - secretRef:
-                    name: ${APP_NAME}-cms-adapter-secrets
+                    name: ${APP_NAME}-secrets
               image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/cms-adapter:${TAG}
               imagePullPolicy: Always
               volumeMounts:
@@ -194,10 +217,10 @@ objects:
           volumes:
             - name: dp-keys
               persistentVolumeClaim:
-                claimName: ${APP_NAME}-cms-adapter-key-ring
+                claimName: ${APP_NAME}-key-ring
             - name: ssl
               secret:
-                secretName: ${APP_NAME}-cms-adapter-ssl
+                secretName: ${APP_NAME}-ssl
       test: false
       triggers:
         - type: ConfigChange
@@ -214,10 +237,10 @@ objects:
   - kind: "PersistentVolumeClaim"
     apiVersion: "v1"
     metadata:
-      name: ${APP_NAME}-cms-adapter-key-ring
+      name: ${APP_NAME}-key-ring
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-cms-adapter
+        app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     spec:
       accessModes:

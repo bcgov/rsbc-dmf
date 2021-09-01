@@ -13,6 +13,9 @@ parameters:
   - description: app name
     name: APP_NAME
     required: true
+  - description: image name
+    name: IMAGENAME
+    required: true
   - description: image tag for deployments
     name: TAG
     required: true
@@ -68,7 +71,7 @@ parameters:
   - description: FHIR_TOKEN_ENDPOINT
     name: FHIR_TOKEN_ENDPOINT
     required: true
-    - description: FHIR_INTROSPECTION_ENDPOINT
+  - description: FHIR_INTROSPECTION_ENDPOINT
     name: FHIR_INTROSPECTION_ENDPOINT
     required: true
   - description: FHIR_SERVER_URL
@@ -100,12 +103,6 @@ parameters:
     required: true
   - description: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
     name: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
-    required: true
-  - description: SPLUNK_COLLECTOR_URL
-    name: SPLUNK_COLLECTOR_URL
-    required: true
-  - description: SPLUNK_TOKEN
-    name: SPLUNK_TOKEN
     required: true
 
 objects:
@@ -240,7 +237,7 @@ objects:
                     name: ${APP_NAME}-config
                 - secretRef:
                     name: ${APP_NAME}-secrets
-              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${APP_NAME}:${TAG}
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
                 - mountPath: /dpkeys
@@ -264,7 +261,7 @@ objects:
               - phsa-adapter
             from:
               kind: ImageStreamTag
-              name: ${APP_NAME}:${TAG}
+              name: ${IMAGENAME}:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
 
   - kind: "PersistentVolumeClaim"
