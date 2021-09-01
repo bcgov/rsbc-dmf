@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Case } from '../../api/models';
+import { DmerCaseListItem } from '../../api/models';
 import { CasesService } from '../../api/services';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class CaseManagementService {
   }
 }
 
-export interface DMERCase extends Case { }
+export interface DMERCase extends DmerCaseListItem { }
 
 export interface DMERSearchCases {
   byCaseId?: string,

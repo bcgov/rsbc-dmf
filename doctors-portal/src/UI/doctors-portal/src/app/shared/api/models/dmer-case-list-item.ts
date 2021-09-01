@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface Case {
+export interface DmerCaseListItem {
   createdBy?: null | string;
   createdOn?: string;
   driverLicense?: null | string;
