@@ -9,10 +9,8 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.DoctorsPortal.API.Services;
 using Serilog;
-using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,13 +21,15 @@ namespace RSBC.DMF.DoctorsPortal.API
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             this.configuration = configuration;
+            this.environment = environment;
         }
 
         private IConfiguration configuration { get; }
         private const string HealthCheckReadyTag = "ready";
+        private readonly IHostEnvironment environment;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -117,10 +117,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             });
 
             services.AddHttpContextAccessor();
-            var httpClientBuilder = services.AddGrpcClient<CaseManager.CaseManagerClient>(opts =>
-            {
-                opts.Address = new Uri(configuration.GetSection("cms")["cmsServerUrl"]);
-            });
+            services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
         }
@@ -168,7 +165,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    //.RequireAuthorization("OAuth")
+                    .RequireAuthorization("OAuth")
                     ;
                 endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
                 {

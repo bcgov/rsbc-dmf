@@ -8,8 +8,9 @@
       "applicationUrl": "http://localhost:3020",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "cms__cmsServerUrl": "https://localhost:4020"
+        "cms__serverUrl": "https://localhost:4020",
+        "cms__validateServerCertificate": "false"
       }
     }
   }
-} }
+}
