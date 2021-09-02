@@ -110,9 +110,6 @@ objects:
       host: ${HOST}
       port:
         targetPort: 8080-tcp
-      # tls:
-      #   insecureEdgeTerminationPolicy: Redirect
-      #   termination: edge
       to:
         kind: Service
         name: ${APP_NAME}
@@ -185,7 +182,7 @@ objects:
                     name: ${APP_NAME}-config
                 - secretRef:
                     name: ${APP_NAME}-secrets
-              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${APP_NAME}:${TAG}
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
                 - name: dp-keys

@@ -14,6 +14,9 @@ service CaseManager {
 
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
+
+  // Get all the flags
+  rpc GetAllFlags(GetAllFlagsRequest) returns (GetAllFlagsReply);
 }
 
 message SearchRequest {
@@ -25,6 +28,13 @@ message SearchRequest {
 
 message SearchReply {
   repeated DmerCase items = 1;
+}
+
+message GetAllFlagsRequest {	
+}
+
+message GetAllFlagsReply {
+	repeated FlagItem Flags = 1;
 }
 
 message DmerCase {
@@ -73,6 +83,14 @@ message FlagItem {
 	string identifier = 1;
 	string question = 2;
 	bool result = 3;
+	enum FlagTypeOptions {
+		Unknown = 0;
+		Submittal = 1;
+		Review = 2;
+		FollowUp = 3;
+		Message = 4;
+	}
+	FlagTypeOptions flagType = 4;
 }
 
 
