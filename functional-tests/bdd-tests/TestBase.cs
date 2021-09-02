@@ -389,9 +389,9 @@ namespace bdd_tests
                 DMERFormsTab.Click();
             }
 
-            if (element == "the Case ID for 222")
+            if (element == "the Case ID for 333")
             {
-                var caseID = ngDriver.FindElement(By.LinkText("222"));
+                var caseID = ngDriver.FindElement(By.LinkText("333"));
                 caseID.Click();
             }
 

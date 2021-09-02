@@ -5,7 +5,7 @@ Feature: DMERFieldLengths.feature
 Scenario: DMER Maximum Length Met
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter maximum length data into the fields
     And I submit the DMER form
@@ -14,7 +14,7 @@ Scenario: DMER Maximum Length Met
 Scenario: DMER Maximum Lengths Exceeded
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter data exceeding the maximum lengths into the fields
     And I submit the DMER form
@@ -23,7 +23,7 @@ Scenario: DMER Maximum Lengths Exceeded
 Scenario: DMER Minimum Length Met
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter minimum length data into the fields
     And I submit the DMER form
@@ -32,7 +32,7 @@ Scenario: DMER Minimum Length Met
 Scenario: DMER Minimum Lengths Not Met
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter data not equal to the minimum lengths into the fields
     And I submit the DMER form
@@ -41,7 +41,7 @@ Scenario: DMER Minimum Lengths Not Met
 Scenario: DMER DL Length Not Met
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter DL number not equal to seven digits
     And I submit the DMER form
@@ -50,7 +50,7 @@ Scenario: DMER DL Length Not Met
 Scenario: DMER Required Fields Completed
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter data that only includes the required fields
     And I submit the DMER form
@@ -59,7 +59,7 @@ Scenario: DMER Required Fields Completed
 Scenario: DMER Required Fields Not Filled
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I enter data that does not include the required fields
     And I submit the DMER form
