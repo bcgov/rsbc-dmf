@@ -58,7 +58,7 @@ Scenario: Syncope Currently Untreated Recurrent
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
     And I refresh the page
-    And I wait for the drivers licence field to have a value
+    # And I wait for the drivers licence field to have a value
     And I click on the Next button
     And the second page content is displayed
     And I click on the Next button
