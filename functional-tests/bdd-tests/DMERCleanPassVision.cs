@@ -14,7 +14,7 @@ Feature: DMERCleanPass.feature
 Scenario: Clean Pass Vision Assessment
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -29,7 +29,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -48,7 +48,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
@@ -67,7 +67,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/50)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -86,7 +86,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/45)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -105,7 +105,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/40)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -124,7 +124,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/35)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -143,7 +143,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -162,7 +162,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -181,7 +181,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -200,7 +200,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -219,7 +219,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Non-Commercial DMER Vision Only Clean Pass (Happy Path - 20/10)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is not to be processed for commercial purposes
@@ -238,7 +238,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/30)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
@@ -257,7 +257,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/25)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
@@ -276,7 +276,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/20)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
@@ -295,7 +295,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/15)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
@@ -314,7 +314,7 @@ Scenario: Clean Pass Vision Assessment
 #Scenario: Commercial DMER Vision Only Clean Pass (Happy Path - 20/10)
 #    When I log in to the doctors' portal
 #    And I click on the DMER Forms tab
-#    And I click on the Case ID for 222
+#    And I click on the Case ID for 333
 #    And I refresh the page
 #    And I click on the Preliminary Visual Assessment tab
 #    And the DMER is to be processed for commercial purposes
