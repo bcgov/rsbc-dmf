@@ -30,7 +30,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Extensions
 
                         var value = item.Answer[0].Value.ToTypedElement();
 
-                        if (item.LinkId.ToLower().StartsWith("flag"))
+                        // only add flags that have text associated with them - avoids blank flags being added.
+                        if (item.LinkId.ToLower().StartsWith("flag") && !string.IsNullOrEmpty(item.Text))
                         {
                             // add a flag.
                             FlagItem fi = new FlagItem()
