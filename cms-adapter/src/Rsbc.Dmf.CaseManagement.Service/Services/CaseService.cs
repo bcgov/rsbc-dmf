@@ -117,7 +117,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 FlagItem newFlag = new FlagItem()
                 {
                     Identifier = flag.Id,
-                    Question = flag.Description,
+                    Question = flag.Description ?? "",
                     FlagType = ConvertFlagType (flag.FlagType)
                 };
                 reply.Flags.Add(newFlag);
