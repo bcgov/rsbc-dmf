@@ -87,6 +87,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
 
-        
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetFlags()
+        {
+
+            var queryResults = await caseManager.GetAllFlags();
+
+            queryResults.ShouldNotBeEmpty();
+            
+        }
+
+
     }
 }
