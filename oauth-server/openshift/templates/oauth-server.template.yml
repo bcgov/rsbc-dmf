@@ -97,7 +97,7 @@ objects:
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       host: ${HOST}
-      path: /
+      path: /rsbc-dfp-oidc
       port:
         targetPort: 8080-tcp
       tls:

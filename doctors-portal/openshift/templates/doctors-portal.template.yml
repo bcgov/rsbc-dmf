@@ -16,6 +16,9 @@ parameters:
   - description: image tag for deployments
     name: TAG
     required: true
+  - description: host for routes
+    name: HOST
+    required: true
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
@@ -129,29 +132,7 @@ objects:
       selector:
         deploymentconfig: ${APP_NAME}-doctors-portal-ui
       type: ClusterIP
-
-  - kind: Route
-    apiVersion: route.openshift.io/v1
-    metadata:
-      labels:
-        app: ${APP_NAME}-doctors-portal
-        app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-doctors-portal-api
-      namespace: ${NAMESPACE_PREFIX}-${ENV}
-    spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
-      path: /api
-      port:
-        targetPort: 8080-tcp
-      tls:
-        insecureEdgeTerminationPolicy: Redirect
-        termination: edge
-      to:
-        kind: Service
-        name: ${APP_NAME}-doctors-portal-api
-        weight: 100
-      wildcardPolicy: None
-
+  
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
@@ -161,8 +142,8 @@ objects:
       name: ${APP_NAME}-doctors-portal-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      host: rsbc-dfp-medical-portal-${APP_NAME}.silver.devops.bcgov
-      path: /
+      host: ${HOST}
+      path: /rsbc-dfp-medical-portal
       port:
         targetPort: 2015-tcp
       tls:

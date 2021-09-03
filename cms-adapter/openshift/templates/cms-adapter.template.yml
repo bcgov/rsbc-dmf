@@ -220,7 +220,7 @@ objects:
                 claimName: ${APP_NAME}-key-ring
             - name: ssl
               secret:
-                secretName: ${APP_NAME}-ssl
+                secretName: ${APP_NAME}-cert
       test: false
       triggers:
         - type: ConfigChange
