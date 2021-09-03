@@ -1724,6 +1724,9 @@
         <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_report" Type="mscrm.report" Nullable="false" Partner="Report_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="reportid" />
         </NavigationProperty>
@@ -3371,6 +3374,9 @@
         <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_customeraddress" Type="mscrm.customeraddress" Nullable="false" Partner="CustomerAddress_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="customeraddressid" />
         </NavigationProperty>
@@ -3843,6 +3849,7 @@
         <NavigationProperty Name="business_unit_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owningbusinessunit" />
         <NavigationProperty Name="BusinessUnit_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_businessunit_syncerror" />
         <NavigationProperty Name="transactioncurrencyid" Type="mscrm.transactioncurrency" Nullable="false" Partner="TransactionCurrency_BusinessUnit">
           <ReferentialConstraint Property="_transactioncurrencyid_value" ReferencedProperty="transactioncurrencyid" />
@@ -5482,6 +5489,7 @@
         <NavigationProperty Name="dfp_contact_dfp_participant" Type="Collection(mscrm.dfp_participant)" Partner="dfp_PersonId_contact" />
         <NavigationProperty Name="bcgov_contact_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Customer_contact" />
         <NavigationProperty Name="bcgov_contact_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_Customer_contact" />
+        <NavigationProperty Name="dfp_contact_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="dfp_PersonId" />
         <NavigationProperty Name="contact_connections1" Type="Collection(mscrm.connection)" Partner="record1id_contact" />
         <NavigationProperty Name="Contact_Feedback" Type="Collection(mscrm.feedback)" Partner="ContactId" />
         <NavigationProperty Name="Contact_ProcessSessions" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_contact" />
@@ -6397,6 +6405,67 @@
           <ReferentialConstraint Property="_dfp_organizationid_value" ReferencedProperty="accountid" />
         </NavigationProperty>
       </EntityType>
+      <EntityType Name="dfp_medicalpractitioner" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_medicalpractitionerid" />
+        </Key>
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_medicalpractitionerid" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_dfp_personid_value" Type="Edm.Guid" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="dfp_fullname" Type="Edm.String" Unicode="false" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="dfp_preferredcontactmethod" Type="Edm.Int32" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalpractitioner_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalpractitioner_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalpractitioner_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalpractitioner_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_medicalpractitioner_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_medicalpractitioner_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_medicalpractitioner" />
+        <NavigationProperty Name="dfp_PersonId" Type="mscrm.contact" Nullable="false" Partner="dfp_contact_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_dfp_personid_value" ReferencedProperty="contactid" />
+        </NavigationProperty>
+      </EntityType>
       <EntityType Name="dfp_outcomestatus" BaseType="mscrm.crmbaseentity">
         <Key>
           <PropertyRef Name="dfp_outcomestatusid" />
@@ -7044,6 +7113,12 @@
         </NavigationProperty>
         <NavigationProperty Name="baserecordid_dfp_outcomesubstatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_DuplicateBaseRecord">
           <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_outcomesubstatusid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
         <NavigationProperty Name="baserecordid_goalrollupquery" Type="mscrm.goalrollupquery" Nullable="false" Partner="GoalRollupQuery_DuplicateBaseRecord">
           <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="goalrollupqueryid" />
@@ -11568,6 +11643,9 @@
         <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_MailboxTrackingFolders">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
         <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_mailboxtrackingfolder_modifiedonbehalfby">
           <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -13716,6 +13794,7 @@
         <NavigationProperty Name="owner_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="ownerid" />
         <NavigationProperty Name="owner_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="ownerid" />
         <NavigationProperty Name="owner_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="ownerid" />
+        <NavigationProperty Name="owner_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="ownerid" />
         <NavigationProperty Name="owner_personaldocumenttemplates" Type="Collection(mscrm.personaldocumenttemplate)" Partner="ownerid" />
         <NavigationProperty Name="owner_accounts" Type="Collection(mscrm.account)" Partner="ownerid" />
         <NavigationProperty Name="owner_goalrollupquery" Type="Collection(mscrm.goalrollupquery)" Partner="ownerid" />
@@ -14870,6 +14949,9 @@
         <NavigationProperty Name="objectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_PrincipalObjectAttributeAccesses">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
         <NavigationProperty Name="objectid_letter" Type="mscrm.letter" Nullable="false" Partner="letter_principalobjectattributeaccess" />
         <NavigationProperty Name="objectid_reportcategory" Type="mscrm.reportcategory" Nullable="false" Partner="reportcategory_principalobjectattributeaccess">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="reportcategoryid" />
@@ -15227,6 +15309,9 @@
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_ProcessSession">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_queue" Type="mscrm.queue" Nullable="false" Partner="Queue_ProcessSessions">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="queueid" />
@@ -19671,6 +19756,9 @@
         <NavigationProperty Name="regardingobjectid_bcgov_templatesession" Type="mscrm.bcgov_templatesession" Nullable="false" Partner="bcgov_templatesession_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="bcgov_templatesessionid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_ExpiredProcess_syncerror" Type="mscrm.expiredprocess" Nullable="false" Partner="ExpiredProcess_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="businessprocessflowinstanceid" />
         </NavigationProperty>
@@ -20606,6 +20694,11 @@
         <NavigationProperty Name="lk_bcgov_templatesession_modifiedby" Type="Collection(mscrm.bcgov_templatesession)" Partner="modifiedby" />
         <NavigationProperty Name="lk_bcgov_templatesession_modifiedonbehalfby" Type="Collection(mscrm.bcgov_templatesession)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="user_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owninguser" />
+        <NavigationProperty Name="lk_dfp_medicalpractitioner_createdby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_medicalpractitioner_createdonbehalfby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_medicalpractitioner_modifiedby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_medicalpractitioner_modifiedonbehalfby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owninguser" />
         <NavigationProperty Name="lk_slakpiinstancebase_createdonbehalfby" Type="Collection(mscrm.slakpiinstance)" Partner="createdonbehalfby" />
         <NavigationProperty Name="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Type="Collection(mscrm.mobileofflineprofileitemassociation)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="lk_userqueryvisualizationbase_modifiedonbehalfby" Type="Collection(mscrm.userqueryvisualization)" Partner="modifiedonbehalfby" />
@@ -21392,6 +21485,7 @@
         <NavigationProperty Name="team_dfp_outcomesubstatus" Type="Collection(mscrm.dfp_outcomesubstatus)" Partner="owningteam" />
         <NavigationProperty Name="team_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningteam" />
         <NavigationProperty Name="team_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningteam" />
+        <NavigationProperty Name="team_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owningteam" />
         <NavigationProperty Name="team_DuplicateRules" Type="Collection(mscrm.duplicaterule)" Partner="owningteam" />
         <NavigationProperty Name="team_Imports" Type="Collection(mscrm.import)" Partner="owningteam" />
         <NavigationProperty Name="OwningTeam_postfollows" Type="Collection(mscrm.postfollow)" Partner="owningteam" />
@@ -28255,6 +28349,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="regardingobjectid_report" Target="reports" />
           <NavigationPropertyBinding Path="AsyncOperation_Emails" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_recurringappointmentmaster" Target="recurringappointmentmasters" />
@@ -28805,6 +28900,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="regardingobjectid_customeraddress" Target="customeraddresses" />
           <NavigationPropertyBinding Path="regardingobjectid_annualfiscalcalendar" Target="annualfiscalcalendars" />
           <NavigationPropertyBinding Path="regardingobjectid_fax" Target="faxes" />
@@ -28996,6 +29092,7 @@
           <NavigationPropertyBinding Path="business_unit_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="business_unit_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="business_unit_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="business_unit_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="BusinessUnit_SyncErrors" Target="syncerrors" />
           <NavigationPropertyBinding Path="transactioncurrencyid" Target="transactioncurrencies" />
           <NavigationPropertyBinding Path="BulkDeleteOperation_BusinessUnit" Target="bulkdeleteoperations" />
@@ -29549,6 +29646,7 @@
           <NavigationPropertyBinding Path="dfp_contact_dfp_participant" Target="dfp_participants" />
           <NavigationPropertyBinding Path="bcgov_contact_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="bcgov_contact_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="dfp_contact_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="contact_connections1" Target="connections" />
           <NavigationPropertyBinding Path="Contact_Feedback" Target="feedback" />
           <NavigationPropertyBinding Path="Contact_ProcessSessions" Target="processsessions" />
@@ -29817,6 +29915,25 @@
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_OrganizationId" Target="accounts" />
         </EntitySet>
+        <EntitySet Name="dfp_medicalpractitioners" EntityType="Microsoft.Dynamics.CRM.dfp_medicalpractitioner">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_PersonId" Target="contacts" />
+        </EntitySet>
         <EntitySet Name="dfp_outcomestatuses" EntityType="Microsoft.Dynamics.CRM.dfp_outcomestatus">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -30017,6 +30134,8 @@
           <NavigationPropertyBinding Path="baserecordid_dfp_outcomestatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="baserecordid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="baserecordid_goalrollupquery" Target="goalrollupqueries" />
           <NavigationPropertyBinding Path="duplicaterecordid_publisher" Target="publishers" />
           <NavigationPropertyBinding Path="baserecordid_transactioncurrency" Target="transactioncurrencies" />
@@ -31405,6 +31524,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="ownerid" Target="owners" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -32332,6 +32452,7 @@
           <NavigationPropertyBinding Path="objectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="objectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="objectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="objectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="objectid_letter" Target="letters" />
           <NavigationPropertyBinding Path="objectid_reportcategory" Target="reportcategories" />
           <NavigationPropertyBinding Path="objectid_sharepointdocumentlocation" Target="sharepointdocumentlocations" />
@@ -32445,6 +32566,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="regardingobjectid_queue" Target="queues" />
           <NavigationPropertyBinding Path="canceledby" Target="systemusers" />
           <NavigationPropertyBinding Path="regardingobjectid_contact" Target="contacts" />
@@ -33790,6 +33912,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_relationship" Target="bcgov_relationships" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="regardingobjectid_ExpiredProcess_syncerror" Target="expiredprocesses" />
           <NavigationPropertyBinding Path="regardingobjectid_email_syncerror" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_systemuser" Target="systemusers" />
@@ -34387,6 +34510,11 @@
           <NavigationPropertyBinding Path="lk_bcgov_templatesession_modifiedby" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="lk_bcgov_templatesession_modifiedonbehalfby" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="user_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_createdby" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_createdonbehalfby" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_modifiedby" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_modifiedonbehalfby" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="user_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="lk_slakpiinstancebase_createdonbehalfby" Target="slakpiinstances" />
           <NavigationPropertyBinding Path="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Target="mobileofflineprofileitemassociations" />
           <NavigationPropertyBinding Path="lk_userqueryvisualizationbase_modifiedonbehalfby" Target="userqueryvisualizations" />
@@ -35070,6 +35198,7 @@
           <NavigationPropertyBinding Path="team_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="team_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="team_bcgov_templatesession" Target="bcgov_templatesessions" />
+          <NavigationPropertyBinding Path="team_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="team_DuplicateRules" Target="duplicaterules" />
           <NavigationPropertyBinding Path="team_Imports" Target="imports" />
           <NavigationPropertyBinding Path="OwningTeam_postfollows" Target="postfollows" />

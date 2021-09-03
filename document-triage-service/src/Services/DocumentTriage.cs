@@ -40,14 +40,29 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
                 _logger.LogInformation($"TRIAGE {request.Id}");
 
+                // start by requesting the available flags.
 
+                var availableFlags = _caseManagerClient.GetAllFlags(new GetAllFlagsRequest());
 
                 bool cleanPass = true;
+
+                List<FlagItem> followUpFlags = new List<FlagItem>();
+
                 foreach (var item in request.Flags)
                 {
                     if (item.Result)
                     {
-                        cleanPass = false;
+                        var matchFlag = availableFlags.Flags.Where(x => x.Identifier == item.Identifier).FirstOrDefault();
+
+                        if (matchFlag != null)
+                        {
+                          // S3DMFT-926 - set clean pass based on follow up or review flags.
+                            if (matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types
+                                .FlagTypeOptions.FollowUp || matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types.FlagTypeOptions.Review)
+                            {
+                                cleanPass = false;
+                            }
+                        }
                     }
                     _logger.LogInformation($"{item.Identifier} - {item.Question} - {item.Result}");
                 }

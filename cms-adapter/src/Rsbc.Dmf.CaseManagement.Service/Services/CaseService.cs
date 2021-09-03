@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -82,6 +83,46 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
             _logger.LogInformation($"Set Flags result is {x.Success}.");
             reply.ResultStatus = ResultStatus.Success;
+            return reply;
+        }
+
+        FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
+        {
+            FlagTypeOptions result = FlagTypeOptions.Unknown;
+            switch (value)
+            {
+                case FlagTypeOptionSet.FollowUp:
+                    result = FlagTypeOptions.FollowUp;
+                    break;
+                case FlagTypeOptionSet.Message:
+                    result = FlagTypeOptions.Message;
+                    break;
+                case FlagTypeOptionSet.Review:
+                    result = FlagTypeOptions.Review;
+                    break;
+                case FlagTypeOptionSet.Submittal:
+                    result = FlagTypeOptions.Submittal;
+                    break;
+            }
+
+            return result;
+        }
+
+        public async override Task<GetAllFlagsReply> GetAllFlags(GetAllFlagsRequest request, ServerCallContext context)
+        {
+            var reply = new GetAllFlagsReply();
+            var flags = await _caseManager.GetAllFlags();
+            foreach (var flag in flags)
+            {
+                FlagItem newFlag = new FlagItem()
+                {
+                    Identifier = flag.Id,
+                    Question = flag.Description,
+                    FlagType = ConvertFlagType (flag.FlagType)
+                };
+                reply.Flags.Add(newFlag);
+            }
+
             return reply;
         }
 
