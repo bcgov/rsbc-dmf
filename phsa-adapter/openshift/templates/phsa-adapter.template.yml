@@ -258,7 +258,7 @@ objects:
           imageChangeParams:
             automatic: true
             containerNames:
-              - phsa-adapter
+              - ${APP_NAME}
             from:
               kind: ImageStreamTag
               name: ${IMAGENAME}:${TAG}

@@ -14,6 +14,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
+
+        Task<List<Flag>> GetAllFlags();
     }
 
     public class CaseSearchRequest
@@ -55,6 +57,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Id { get; set; }
         public string Description { get; set; }
+        public FlagTypeOptionSet? FlagType { get; set; }
     }
 
     internal class CaseManager : ICaseManager
@@ -155,6 +158,24 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return drivers.SelectMany(d => d.dfp_driver_incident_DriverId).ToArray();
+        }
+
+        public async Task<List<Flag>> GetAllFlags()
+        {
+            List<Flag> result = new List<Flag>();
+
+            var flags = dynamicsContext.dfp_flags.Execute();
+            foreach (var flag in flags)
+            {
+                result.Add(new Flag()
+                {
+                    Id = flag.dfp_id,
+                    Description = flag.dfp_description,
+                    FlagType = (FlagTypeOptionSet)flag.dfp_type
+                });
+            }
+
+            return result;
         }
 
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
@@ -265,5 +286,13 @@ namespace Rsbc.Dmf.CaseManagement
     internal enum CaseTypeOptionSet
     {
         DMER = 2
+    }
+
+    public enum FlagTypeOptionSet
+    {
+        Submittal = 100000000,
+        Review = 100000001,
+        FollowUp = 100000002,
+        Message = 100000003
     }
 }
