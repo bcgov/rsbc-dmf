@@ -82,6 +82,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
             _logger.LogInformation($"Set Flags result is {x.Success}.");
+
+            // update files.
+
+            await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
+            await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+
             reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
