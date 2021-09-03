@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
+using Grpc.Net.Client;
 using Xunit.Abstractions;
 
 namespace Rsbc.Dmf.CaseManagement.Tests
@@ -30,6 +31,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests
         {
             this.webApplicationFactory = new XUnitWebAppFactory<Startup>(output);
             this.output = output;
+
+            var client = webApplicationFactory.CreateDefaultClient();
+            _grpcChannel = GrpcChannel.ForAddress(client.BaseAddress, new GrpcChannelOptions
+            {
+                HttpClient = client
+            });
         }
+
+        public GrpcChannel _grpcChannel { get; }
     }
 }
