@@ -50,7 +50,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
                     DriverName = c.DriverName ?? string.Empty,
                 };
-                newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description }));
+                newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description ?? "Unknown", FlagType = ConvertFlagType(f.FlagType)}));
                 return newCase;
             }));
 

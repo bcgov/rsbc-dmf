@@ -3,6 +3,7 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -37,6 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 var expectedFlag = flags.Where(f => f.Id == actualFlag.Id && f.Description == actualFlag.Description).ShouldHaveSingleItem();
             }
         }
+
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByCaseId()
@@ -83,5 +85,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicName.ShouldBe(expectedClinicName);
             }
         }
+
+
+        
     }
 }
