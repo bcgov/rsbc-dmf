@@ -41,5 +41,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             queryResults.ShouldNotBeEmpty();
             
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetFlags()
+        {
+            var request = new GetAllFlagsRequest();
+
+            var queryResults = (await caseService.GetAllFlags(request, null)).Flags;
+
+            queryResults.ShouldNotBeEmpty();
+
+        }
     }
 }

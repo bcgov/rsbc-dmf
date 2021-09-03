@@ -167,12 +167,17 @@ namespace Rsbc.Dmf.CaseManagement
             var flags = dynamicsContext.dfp_flags.Execute();
             foreach (var flag in flags)
             {
-                result.Add(new Flag()
+                var newFlag = new Flag()
                 {
                     Id = flag.dfp_id,
-                    Description = flag.dfp_description,
-                    FlagType = (FlagTypeOptionSet)flag.dfp_type
-                });
+                    Description = flag.dfp_description
+                };
+                if (flag.dfp_type != null)
+                {
+                    newFlag.FlagType = (FlagTypeOptionSet)flag.dfp_type;
+                }
+                
+                result.Add(newFlag);
             }
 
             return result;
