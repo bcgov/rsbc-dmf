@@ -11,3 +11,6 @@ OAUTH_SERVER_URL=<oauth server url>
 OAUTH_CLIENTID=<doctors portal oauth client id>
 OAUTH_CLIENTSECRET=<doctors portal oauth client secret>
 OIDC_CLIENTID=<oauth server oidc client name>
+CMSADAPTER_CLIENT_SECRET=<secret used to obtain token for CMS adapter>
+CMSADAPTER_SERVER_URL=<the url for CMS adapter>
+CMSADAPTER_VALIDATE_SERVER_CERTIFICATE=<optional flag to turn cert verification on or off>
