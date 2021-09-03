@@ -7,7 +7,7 @@ Scenario: Doctors' Portal Tombstone Check
     When I log in to the doctors' portal
     And the content is displayed for the DMER dashboard
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And the content is displayed for the ICBC tombstone data
     Then I log out of the portal
@@ -17,7 +17,7 @@ Scenario: Doctors' Portal Provider Check
     When I log in to the doctors' portal
     And the content is displayed for the DMER dashboard
     And I click on the DMER Forms tab
-    And I click on the Case ID for 222
+    And I click on the Case ID for 333
     And I refresh the page
     And the content is displayed for the provider
     Then I log out of the portal
