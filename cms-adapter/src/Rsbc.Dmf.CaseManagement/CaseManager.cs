@@ -16,6 +16,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
         Task<List<Flag>> GetAllFlags();
+
+        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey);
     }
 
     public class CaseSearchRequest
@@ -183,6 +185,40 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey)
+        {
+            // add links to documents.
+            incident dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).FirstOrDefault();
+
+            if (dmerEntity != null)
+            {
+                if (dmerEntity.bcgov_incident_bcgov_documenturl.Count(x => x.bcgov_url == fileKey) == 0)
+                {
+                    // add the document url.
+                    bcgov_documenturl givenUrl = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_url == fileKey).FirstOrDefault();
+                    string filename = fileKey.Substring(fileKey.LastIndexOf("/"));
+                    string extension = fileKey.Substring(fileKey.LastIndexOf("."));
+                    if (givenUrl == null)
+                    {
+                        givenUrl = new bcgov_documenturl()
+                        {
+                            bcgov_url = fileKey,
+                            bcgov_receiveddate = DateTimeOffset.Now,
+                            bcgov_filename = filename,
+                            bcgov_fileextension = extension,
+                            bcgov_origincode = 931490000,
+                            bcgov_filesize = "200 KB"
+
+                        };
+                        dynamicsContext.AddTobcgov_documenturls(givenUrl);
+                    }
+                    dynamicsContext.AddLink(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl), givenUrl);
+                }
+
+                dynamicsContext.SaveChanges();
+            }
+        }
+
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
@@ -254,10 +290,7 @@ namespace Rsbc.Dmf.CaseManagement
                     logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
                 }
 
-                // update the case from the request.
-
-                //dmerEntity.modifiedon = DateTimeOffset.Now;
-
+                
                 // indicate that the form has been filled out
                 //dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
 
