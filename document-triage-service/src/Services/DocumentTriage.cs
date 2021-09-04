@@ -100,9 +100,8 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             _logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
 
-            // foreach flag that is true, lookup the Flag Entity, and then add a reference between the case and the flag entity
-
             result.ResultStatus = ResultStatus.Success;
+            result.ErrorDetail = "";
 
             return Task.FromResult(result);
             }
