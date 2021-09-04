@@ -72,11 +72,11 @@ message UpdateCaseRequest{
 	repeated FlagItem flags = 3;
 	string pdfFileKey = 4;
 	string dataFileKey = 5;
-
 }
 
 message UpdateCaseReply{	
 	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
 }
 
 message FlagItem {
