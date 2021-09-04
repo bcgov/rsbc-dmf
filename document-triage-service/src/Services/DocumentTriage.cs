@@ -46,22 +46,34 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
                 bool cleanPass = true;
 
-                List<FlagItem> followUpFlags = new List<FlagItem>();
+                List< global::Rsbc.Dmf.CaseManagement.Service.FlagItem > followUpFlags = new List<global::Rsbc.Dmf.CaseManagement.Service.FlagItem > ();
 
                 foreach (var item in request.Flags)
                 {
                     if (item.Result)
                     {
+                        var followUpFlag = new global::Rsbc.Dmf.CaseManagement.Service.FlagItem()
+                        {
+                            Question = item.Question,
+                            Identifier = item.Identifier,
+                            Result = item.Result
+                        };
                         var matchFlag = availableFlags.Flags.Where(x => x.Identifier == item.Identifier).FirstOrDefault();
-
+                        
                         if (matchFlag != null)
                         {
+                            followUpFlag.FlagType = matchFlag.FlagType;
                           // S3DMFT-926 - set clean pass based on follow up or review flags.
                             if (matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types
                                 .FlagTypeOptions.FollowUp || matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types.FlagTypeOptions.Review)
                             {
                                 cleanPass = false;
                             }
+                        }
+                        else
+                        {
+                            followUpFlag.FlagType = global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types
+                                .FlagTypeOptions.Unknown;
                         }
                     }
                     _logger.LogInformation($"{item.Identifier} - {item.Question} - {item.Result}");
@@ -79,19 +91,10 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
                 PdfFileKey = request.PdfFileKey
             };
 
-            foreach(var item in request.Flags)
+            foreach(var item in followUpFlags)
             {
-                if (item.Result)
-                {
-                    updateCaseRequest.Flags.Add(new global::Rsbc.Dmf.CaseManagement.Service.FlagItem()
-                    {
-                        Question = item.Question,
-                        Identifier = item.Identifier,
-                        Result = item.Result
-                    });
-                }
+                updateCaseRequest.Flags.Add(item);
             }
-
 
             var caseResult = _caseManagerClient.UpdateCase(updateCaseRequest);
 
