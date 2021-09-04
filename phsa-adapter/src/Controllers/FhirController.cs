@@ -532,7 +532,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             ContentType = "application/pdf",
                             Data = ByteString.CopyFrom(b.Data),
                             EntityName = "phsa-pdf",
-                            FileName = filename,
+                            FileName = $"{filename}.pdf",
                             FolderName = "pdf"
                         };
 
@@ -549,7 +549,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             ContentType = "application/json",
                             Data = ByteString.CopyFrom(b.Data),
                             EntityName = "phsa-eforms",
-                            FileName = filename,
+                            FileName = $"{filename}.json",
                             FolderName = "data"
                         };
 
@@ -588,7 +588,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 ContentType = "application/json",
                                 Data = ByteString.CopyFromUtf8(jsonString),
                                 EntityName = "dfp",
-                                FileName = filename,
+                                FileName = $"{filename}.json",
                                 FolderName = "triage-request"
                             };
 
