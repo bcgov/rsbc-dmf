@@ -60,44 +60,54 @@ namespace Rsbc.Dmf.CaseManagement.Service
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
             var reply = new UpdateCaseReply();
-
-            _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
-
-            // convert the flags to a list of strings.
-
-            List<Flag> flags = new List<Flag>();
-
-            foreach (var item in request.Flags)
+            try
             {
-                Flag newFlag = new Flag()
+                _logger.LogInformation(
+                    $"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
+
+                // convert the flags to a list of strings.
+
+                List<Flag> flags = new List<Flag>();
+
+                foreach (var item in request.Flags)
                 {
-                    Description = item.Question,
-                    Id = item.Identifier
-                };
-                flags.Add(newFlag);
-                _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
+                    Flag newFlag = new Flag()
+                    {
+                        Description = item.Question,
+                        Id = item.Identifier
+                    };
+                    flags.Add(newFlag);
+                    _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
+                }
+
+                // set the flags.
+
+                var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
+                _logger.LogInformation($"Set Flags result is {x.Success}.");
+
+                // update files.
+
+                _logger.LogInformation(
+                    $"Add file - {request.CaseId}, files - {request.DataFileKey} {request.PdfFileKey}");
+
+                if (!string.IsNullOrEmpty(request.PdfFileKey))
+                {
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
+                }
+
+                if (!string.IsNullOrEmpty(request.DataFileKey))
+                {
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+                }
+                reply.ResultStatus = ResultStatus.Success;
             }
-
-            // set the flags.
-
-            var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
-            _logger.LogInformation($"Set Flags result is {x.Success}.");
-
-            // update files.
-
-            _logger.LogInformation($"Add file - {request.CaseId}, file is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
-
-            if (!string.IsNullOrEmpty(request.PdfFileKey))
+            catch (Exception e)
             {
-                await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
-            }
-            if (!string.IsNullOrEmpty(request.DataFileKey))
-            {
-                await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+                _logger.LogError(e, "Error occurred while updating case.");
+                reply.ErrorDetail = e.Message;
+                reply.ResultStatus = ResultStatus.Fail;
             }
             
-
-            reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
 
