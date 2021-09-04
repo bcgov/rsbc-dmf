@@ -197,7 +197,16 @@ namespace Rsbc.Dmf.CaseManagement
                     // add the document url.
                     bcgov_documenturl givenUrl = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_url == fileKey).FirstOrDefault();
                     string filename = fileKey.Substring(fileKey.LastIndexOf("/"));
-                    string extension = fileKey.Substring(fileKey.LastIndexOf("."));
+                    string extension;
+                    if (fileKey.LastIndexOf(".") != -1)
+                    {
+                        extension = fileKey.Substring(fileKey.LastIndexOf("."));
+                    }
+                    else
+                    {
+                        extension = "";
+                    }
+                     
                     if (givenUrl == null)
                     {
                         givenUrl = new bcgov_documenturl()
