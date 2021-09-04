@@ -85,8 +85,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             // update files.
 
-            await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
-            await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+            _logger.LogInformation($"Add file - {request.CaseId}, file is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
+
+            if (!string.IsNullOrEmpty(request.PdfFileKey))
+            {
+                await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
+            }
+            if (!string.IsNullOrEmpty(request.DataFileKey))
+            {
+                await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+            }
+            
 
             reply.ResultStatus = ResultStatus.Success;
             return reply;
