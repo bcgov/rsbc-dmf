@@ -519,12 +519,14 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                 _logger.LogInformation(bundle.ToJson());
 
+                // first pass to get the files.
                 foreach (var entry in bundle.Entry)
                 {
                     // find the PDF entry
-                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/pdf")  
+                    if (entry.Resource.ResourceType == ResourceType.Binary &&
+                        ((Binary)entry.Resource).ContentType == "application/pdf")
                     {
-                        var b = (Binary) entry.Resource;
+                        var b = (Binary)entry.Resource;
                         UploadFileRequest pdfData = new UploadFileRequest()
                         {
                             ContentType = "application/pdf",
@@ -538,7 +540,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         pdfFileKey = reply.FileName;
                     }
 
-                    if (entry.Resource.ResourceType == ResourceType.Binary && ((Binary)entry.Resource).ContentType == "application/eforms") 
+                    if (entry.Resource.ResourceType == ResourceType.Binary &&
+                        ((Binary)entry.Resource).ContentType == "application/eforms")
                     {
                         var b = (Binary)entry.Resource;
                         UploadFileRequest jsonData = new UploadFileRequest()
@@ -553,7 +556,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         var reply = _documentStorageAdapterClient.UploadFile(jsonData);
                         dataFileKey = reply.FileName;
                     }
+                }
 
+                // second pass to handle the questionnaire response
+                foreach (var entry in bundle.Entry)
+                {
+                    
                     if (entry.Resource.ResourceType == ResourceType.QuestionnaireResponse)
                     {
                         var questionnaireResponse = (QuestionnaireResponse) entry.Resource;
