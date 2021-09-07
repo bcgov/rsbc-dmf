@@ -283,6 +283,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 foreach (var flag in flags)
                 {
+                    logger.LogInformation($"SetCaseFlags - starting update of flag {flag.Id} - {flag.Description}");
                     dfp_flag givenFlag = dynamicsContext.dfp_flags.Where(x => x.dfp_id == flag.Id).FirstOrDefault();
                     if (givenFlag == null)
                     {
