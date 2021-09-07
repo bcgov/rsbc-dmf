@@ -289,16 +289,33 @@ namespace Rsbc.Dmf.CaseManagement
                         givenFlag = new dfp_flag()
                         {
                             dfp_id = flag.Id,
-                            dfp_description = flag.Description
+                            dfp_description = flag.Description,
+                            dfp_label = flag.Description,
+                            dfp_type = (int?) FlagTypeOptionSet.Review
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
+                    }
+                    else // may need to update
+                    {
+                        if (givenFlag.dfp_description != flag.Description)
+                        {
+                            givenFlag.dfp_description = flag.Description;
+                            dynamicsContext.UpdateObject(givenFlag);
+                        }
+
+                        if (givenFlag.dfp_label != flag.Description)
+                        {
+                            givenFlag.dfp_label = flag.Description;
+                            dynamicsContext.UpdateObject(givenFlag);
+                        }
                     }
 
                     // configure the bridge entity
 
                     dfp_dmerflag newFlag = new dfp_dmerflag()
                     {
-                        dfp_name = flag.Description
+                        dfp_name = flag.Description,
+                        dfp_description = flag.Description
                     };
 
                     dynamicsContext.AddTodfp_dmerflags(newFlag);
