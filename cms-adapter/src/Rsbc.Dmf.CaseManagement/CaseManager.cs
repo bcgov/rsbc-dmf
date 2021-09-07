@@ -247,7 +247,9 @@ namespace Rsbc.Dmf.CaseManagement
 
              */
 
-            logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier}");
+            int flagCount = flags == null ? 0 : flags.Count;
+            
+            logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier} {flagCount}");
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
@@ -269,14 +271,16 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // Explicitly load the flags
                 dynamicsContext.LoadProperty(dmerEntity, nameof(incident.dfp_incident_dfp_dmerflag));
-
-                foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
+                if (dmerEntity.dfp_incident_dfp_dmerflag != null && dmerEntity.dfp_incident_dfp_dmerflag.Count > 0)
                 {
-                    // remove the old bridge.
-                    dynamicsContext.DeleteObject(item);
+                    foreach (var item in dmerEntity.dfp_incident_dfp_dmerflag)
+                    {
+                        // remove the old bridge.
+                        dynamicsContext.DeleteObject(item);
 
-                    //dmerEntity.dfp_incident_dfp_flag.
-                    logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_name}");
+                        //dmerEntity.dfp_incident_dfp_flag.
+                        logger.LogInformation($"SetCaseFlags - removing flag {item.dfp_name}");
+                    }
                 }
 
                 // Add the flags.
