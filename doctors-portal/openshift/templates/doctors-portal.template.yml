@@ -58,6 +58,9 @@ parameters:
   - description: CMS adapter server cert validation
     name: CMSADAPTER_VALIDATE_SERVER_CERTIFICATE
     value: "true"
+  - description: CLINIC_ID
+    name: CLINIC_ID
+    value: "true"
 
 objects:
   - kind: ConfigMap
@@ -96,6 +99,7 @@ objects:
       AUTH__OIDC__SCOPE: ${OIDC_SCOPE}
       AUTH__OIDC__CLIENTID: ${OIDC_CLIENTID}
       CMS__CLIENTSECRET: ${CMSADAPTER_CLIENT_SECRET}
+      CLINIC_ID: ${CLINIC_ID}
 
   - kind: Service
     apiVersion: v1
