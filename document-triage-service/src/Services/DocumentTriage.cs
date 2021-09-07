@@ -75,7 +75,10 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
                             followUpFlag.FlagType = global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types
                                 .FlagTypeOptions.Unknown;
                         }
+                        followUpFlags.Add(followUpFlag);
                     }
+
+
                     _logger.LogInformation($"{item.Identifier} - {item.Question} - {item.Result}");
                 }
 
