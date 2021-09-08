@@ -1122,6 +1122,8 @@ namespace bdd_tests
                 anticoagulantTherapyYes.Click();
                 */
 
+                Thread.Sleep(1000);
+
                 // select 'Mitral Valve Prolapse'
                 var mitralValveProlapse = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a22]"));
                 mitralValveProlapse.Click();
@@ -1138,6 +1140,11 @@ namespace bdd_tests
                 var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-no"));
                 symptomaticNo.Click();
 
+                // select 'Medically Treated Valvular Heart Disease'
+                var medicallyTreatedValvularHeartDisease = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a4]"));
+                medicallyTreatedValvularHeartDisease.Click();
+
+                /*
                 // select 'Medically Treated Aortic Stenosis or Aortic Sclerosis'
                 var medicallyTreatedAorticStenosisOrAorticSclerosis = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a21]"));
                 medicallyTreatedAorticStenosisOrAorticSclerosis.Click();
@@ -1191,15 +1198,17 @@ namespace bdd_tests
                 // select 'Yes' for 'Has the patient condition has been investigated and treated by a cardiologist?'
                 var investigatedTreatedByCardiologistYes = ngDriver.WrappedDriver.FindElement(By.Id("e2ofetf-y"));
                 investigatedTreatedByCardiologistYes.Click();
+                */
 
                 // select 'No' for 'Has the patient received a Heart Transplant?'
-                var heartTransplantNo = ngDriver.WrappedDriver.FindElement(By.Id("ewf3wpq-no"));
+                var heartTransplantNo = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-no"));
                 heartTransplantNo.Click();
 
                 // select 'Yes' for 'Has the patient received a Heart Transplant?'
-                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("ewf3wpq-yes"));
+                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-no"));
                 heartTransplantYes.Click();
 
+                /*
                 // select 'No' for 'Does the patient have active ischemia?'
                 var activeIschemiaNo = ngDriver.WrappedDriver.FindElement(By.Id("ei8hfzh-n"));
                 activeIschemiaNo.Click();
@@ -1215,7 +1224,7 @@ namespace bdd_tests
                 // select 'Yes' for 'Is the patient considered stable on immunotherapy?'
                 var patientStableOnImmunotherapyYes = ngDriver.WrappedDriver.FindElement(By.Id("e0r0v2s-y"));
                 patientStableOnImmunotherapyYes.Click();
-
+                
                 // select 'No' for 'Transplanted within the past 6 months?'
                 var transplantedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("ecev5di-n"));
                 transplantedWithinPast6MonthsNo.Click();
@@ -1223,6 +1232,7 @@ namespace bdd_tests
                 // select 'Yes' for 'Transplanted within the past 6 months?'
                 var transplantedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("ecev5di-y"));
                 transplantedWithinPast6MonthsYes.Click();
+                */
             }
         }
 
