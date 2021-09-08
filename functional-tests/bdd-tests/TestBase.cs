@@ -1111,15 +1111,15 @@ namespace bdd_tests
                 mitralValveProlapse.Click();
 
                 // select 'Yes, but they have not been assessed for Arrhythmias or do not meet standards' for 'Is the patient symptomatic for this condition?'
-                var symptomaticYesNotAssessed = ngDriver.WrappedDriver.FindElement(By.Id("eex3rvc-yesButTheyHaveNotBeenAssessedForArrhythmiasOrDoNotMeetStandards"));
+                var symptomaticYesNotAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-yesButTheyHaveNotBeenAssessedForArrhythmiasOrDoNotMeetStandards"));
                 symptomaticYesNotAssessed.Click();
 
                 // select 'Yes, but they have been assessed for Arrhythmias and meet applicable standards' for 'Is the patient symptomatic for this condition?'
-                var symptomaticYesAssessed = ngDriver.WrappedDriver.FindElement(By.Id("eex3rvc-yesButTheyHaveBeenAssessedForArrhythmiasAndMeetApplicableStandards"));
+                var symptomaticYesAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-yesButTheyHaveBeenAssessedForArrhythmiasAndMeetApplicableStandards"));
                 symptomaticYesAssessed.Click();
 
                 // select 'No' for 'Is the patient symptomatic for this condition?'
-                var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id("eex3rvc-no"));
+                var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-no"));
                 symptomaticNo.Click();
 
                 // select 'Medically Treated Aortic Stenosis or Aortic Sclerosis'
