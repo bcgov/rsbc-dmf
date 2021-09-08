@@ -176,12 +176,14 @@ objects:
                   name: dp-keys
               livenessProbe:
                 httpGet:
-                  scheme: HTTP
                   path: /hc/live
                   port: 8080
               startupProbe:
                 httpGet:
-                  scheme: HTTP
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
                   path: /hc/ready
                   port: 8080
           dnsPolicy: ClusterFirst

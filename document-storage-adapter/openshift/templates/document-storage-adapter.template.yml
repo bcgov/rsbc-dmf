@@ -25,27 +25,27 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
-  - description:   JWT_TOKEN_KEY
-    name:   JWT_TOKEN_KEY
+  - description: JWT_TOKEN_KEY
+    name: JWT_TOKEN_KEY
     value: Changeme
   - description: JWT_VALID_AUDIENCE
     name: JWT_VALID_AUDIENCE
     value: Changeme
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
-    value: Changeme  
+    value: Changeme
   - description: SERVICE_URL
     name: SERVICE_URL
-    value: Changeme 
+    value: Changeme
   - description: BUCKET
     name: BUCKET
-    value: Changeme 
+    value: Changeme
   - description: ACCESS_KEY
     name: ACCESS_KEY
-    value: Changeme 
+    value: Changeme
   - description: SECRET_KEY
     name: SECRET_KEY
-    value: Changeme       
+    value: Changeme
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -189,6 +189,19 @@ objects:
                   mountPath: /dpkeys
                 - name: service-cert
                   mountPath: /var/run/secrets/service-cert
+              livenessProbe:
+                httpGet:
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
