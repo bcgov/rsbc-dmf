@@ -1058,6 +1058,7 @@ namespace bdd_tests
                 var hypertrophicCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a6]"));
                 hypertrophicCardiomyopathy.Click();
 
+                /*
                 // select 'Left ventricle wall thickness of < 30 mm'
                 var leftVentricleWallThicknessOfLessThan30mm = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a19]"));
                 leftVentricleWallThicknessOfLessThan30mm.Click();
@@ -1073,6 +1074,7 @@ namespace bdd_tests
                 // select 'Non-sustained VT'
                 var nonSustainedVT = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a13]"));
                 nonSustainedVT.Click();
+                */
 
                 // select 'Structural Heart Disease'
                 var structuralHeartDisease = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_c]"));
@@ -1236,6 +1238,8 @@ namespace bdd_tests
 
         protected IWebElement GetSeleniumValueField(string fieldName )
         {
+            Thread.Sleep(500);
+
             IWebElement result = null;
             for (var i = 0; i < 60; i++)
             {
