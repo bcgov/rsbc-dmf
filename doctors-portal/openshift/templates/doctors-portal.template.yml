@@ -136,7 +136,7 @@ objects:
       selector:
         deploymentconfig: ${APP_NAME}-doctors-portal-ui
       type: ClusterIP
-  
+
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
@@ -226,6 +226,10 @@ objects:
                 httpGet:
                   path: /hc/ready
                   port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/startup
+                  port: 8080
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -290,6 +294,18 @@ objects:
               resources: {}
               terminationMessagePath: /dev/termination-log
               terminationMessagePolicy: File
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              startupProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
