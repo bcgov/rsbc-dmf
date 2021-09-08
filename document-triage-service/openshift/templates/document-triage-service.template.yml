@@ -18,7 +18,7 @@ parameters:
     required: true
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
-    value: Staging  
+    value: Staging
   - description: Image name
     name: IMAGENAME
     required: true
@@ -30,13 +30,13 @@ parameters:
     value: Changeme
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
-    value: Changeme  
+    value: Changeme
   - description: CMS_ADAPTER_SECRET
     name: CMS_ADAPTER_SECRET
     value: Changeme
   - description: CMS_ADAPTER_URI
     name: CMS_ADAPTER_URI
-    value: Changeme     
+    value: Changeme
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -61,11 +61,11 @@ objects:
       labels:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-    stringData: 
+    stringData:
       JWT_TOKEN_KEY: "${JWT_TOKEN_KEY}"
       JWT_VALID_AUDIENCE: "${JWT_VALID_AUDIENCE}"
       JWT_VALID_ISSUER: "${JWT_VALID_ISSUER}"
-      CMS_ADAPTER_URI: "${CMS_ADAPTER_URI}"     
+      CMS_ADAPTER_URI: "${CMS_ADAPTER_URI}"
   - kind: Service
     apiVersion: v1
     metadata:
@@ -166,6 +166,18 @@ objects:
                   mountPath: /dpkeys
                 - name: service-cert
                   mountPath: /var/run/secrets/service-cert
+              livenessProbe:
+                httpGet:
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
