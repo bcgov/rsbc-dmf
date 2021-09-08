@@ -1205,7 +1205,7 @@ namespace bdd_tests
                 heartTransplantNo.Click();
 
                 // select 'Yes' for 'Has the patient received a Heart Transplant?'
-                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-no"));
+                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-yes"));
                 heartTransplantYes.Click();
 
                 /*
