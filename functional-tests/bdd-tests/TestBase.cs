@@ -906,6 +906,8 @@ namespace bdd_tests
                 var sustainedVTNo = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a12]"));
                 sustainedVTNo.Click();
 
+                Thread.Sleep(2000);
+
                 // select 'VF with no reversible cause'
                 var VFNoReversibleCause = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a16]"));
                 VFNoReversibleCause.Click();
@@ -1042,6 +1044,14 @@ namespace bdd_tests
                 var patientHasLVADYes = ngDriver.WrappedDriver.FindElement(By.Id("ep6jv4-yes"));
                 patientHasLVADYes.Click();
 
+                // select 'No' for 'LVAD has been stable for 2 or more months post implantation?'
+                var stableTwoOrMonthsPostImplantationNo = ngDriver.WrappedDriver.FindElement(By.Id("ech6lx-n"));
+                stableTwoOrMonthsPostImplantationNo.Click();
+
+                // select 'Yes' for 'LVAD has been stable for 2 or more months post implantation?'
+                var stableTwoOrMonthsPostImplantationYes = ngDriver.WrappedDriver.FindElement(By.Id("ech6lx-y"));
+                stableTwoOrMonthsPostImplantationYes.Click();
+
                 // select 'No' for 'Is the patient receiving Intermittent Inotropes?'
                 var receivingIntermittentInotropesNo = ngDriver.WrappedDriver.FindElement(By.Id("ehuwdrn-n"));
                 receivingIntermittentInotropesNo.Click();
@@ -1080,6 +1090,8 @@ namespace bdd_tests
                 var structuralHeartDisease = ngDriver.WrappedDriver.FindElement(By.Name("data[yornCORO_1_c]"));
                 structuralHeartDisease.Click();
 
+                Thread.Sleep(1000);
+
                 // select 'Surgically Treated Valvular Heart Disease'
                 var surgicallyTreatedValvularHeartDisease = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a9]"));
                 surgicallyTreatedValvularHeartDisease.Click();
@@ -1092,6 +1104,7 @@ namespace bdd_tests
                 var atLeast3MonthsSinceDischargeYes = ngDriver.WrappedDriver.FindElement(By.Id("efznjle-y"));
                 atLeast3MonthsSinceDischargeYes.Click();
 
+                /*
                 // select 'No' for 'Is the patient subject to one of the following prosthesis/therapies?'
                 var prosthesisTherapiesNo = ngDriver.WrappedDriver.FindElement(By.Id("e465rgk-no"));
                 prosthesisTherapiesNo.Click();
@@ -1107,6 +1120,7 @@ namespace bdd_tests
                 // select 'Yes' for 'Is the patient on anti-coagulant therapy due to one of the above prosthesis/therapies?'
                 var anticoagulantTherapyYes = ngDriver.WrappedDriver.FindElement(By.Id("eecbl7s-yes"));
                 anticoagulantTherapyYes.Click();
+                */
 
                 // select 'Mitral Valve Prolapse'
                 var mitralValveProlapse = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a22]"));
@@ -1238,7 +1252,7 @@ namespace bdd_tests
 
         protected IWebElement GetSeleniumValueField(string fieldName )
         {
-            Thread.Sleep(500);
+            Thread.Sleep(10000);
 
             IWebElement result = null;
             for (var i = 0; i < 60; i++)
