@@ -228,7 +228,7 @@ objects:
                   port: 8080
               readinessProbe:
                 httpGet:
-                  path: /hc/startup
+                  path: /hc/ready
                   port: 8080
           dnsPolicy: ClusterFirst
           restartPolicy: Always

@@ -17,3 +17,11 @@ oc process -f ..\document-triage-service\openshift\templates\document-triage-ser
 REM PHSA Adapter
 
 oc process -f ..\phsa-adapter\openshift\templates\phsa-adapter.template.yml --param-file ..\..\..\params\phsa-adapter.test.params | oc apply -f -
+
+REM LANDING PAGE
+
+oc process -f ..\landing-page\openshift\templates\landing-page.template.yml --param-file ..\..\..\params\landing-page.test.params | oc apply -f -
+
+REM MEDICAL PORTAL
+
+oc process -f ..\doctors-portal\openshift\templates\doctors-portal.template.yml --param-file ..\..\..\params\doctors-portal.test.params | oc apply -f -
