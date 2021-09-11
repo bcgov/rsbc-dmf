@@ -313,6 +313,7 @@ namespace Rsbc.Dmf.PhsaAdapter
 
             Log.Logger.Information("PHSA Adapter Container Starting");
 
+            app.UsePathBase(Configuration["BASE_PATH"] ?? "");
             app.UseRouting();
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
