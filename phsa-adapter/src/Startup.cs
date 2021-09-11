@@ -315,10 +315,16 @@ namespace Rsbc.Dmf.PhsaAdapter
 
             app.UseRouting();
 
-            app.UseHealthChecks("/hc", new HealthCheckOptions
+            app.UseHealthChecks("/hc/ready", new HealthCheckOptions
             {
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecks("/hc/live", new HealthCheckOptions
+            {
+                // Exclude all checks and return a 200-Ok.
+                Predicate = _ => false
             });
 
             app.UseAuthentication();
