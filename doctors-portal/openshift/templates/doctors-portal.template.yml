@@ -61,6 +61,9 @@ parameters:
   - description: CLINIC_ID
     name: CLINIC_ID
     value: "true"
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    value: "true"
 
 objects:
   - kind: ConfigMap
@@ -79,7 +82,7 @@ objects:
       EFORMS__FORMSMAP: ${EFORMS_FORMS_MAP}
       CMS__SERVERURL: ${CMSADAPTER_SERVER_URL}
       CMS__VALIDATESERVERCERTIFICATE: ${CMSADAPTER_VALIDATE_SERVER_CERTIFICATE}
-
+      app__cors__origins: ${CORS_ORIGINS}
   - kind: Secret
     apiVersion: v1
     type: Opaque
