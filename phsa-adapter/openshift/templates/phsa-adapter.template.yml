@@ -104,6 +104,9 @@ parameters:
   - description: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
     name: DOCUMENT_TRIAGE_SERVICE_JWT_SECRET
     required: true
+  - description: BASE_PATH
+    name: BASE_PATH
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -118,6 +121,13 @@ objects:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
       KEY_RING_PATH: "/dpkeys"
       FHIR_OAUTH_CLIENT_ID: ${FHIR_OAUTH_CLIENT_ID}
+      BASE_PATH: ${BASE_PATH}
+      FHIR_AUTHORIZATION_ENDPOINT: ${FHIR_AUTHORIZATION_ENDPOINT}
+      FHIR_TOKEN_ENDPOINT: ${FHIR_TOKEN_ENDPOINT}
+      FHIR_INTROSPECTION_ENDPOINT: ${FHIR_INTROSPECTION_ENDPOINT}
+      TEST_PHN: "${TEST_PHN}"
+      TEST_PHN_SYSTEM: ${TEST_PHN_SYSTEM}
+      TEST_DL: "${TEST_DL}"
 
   - kind: Secret
     apiVersion: v1
@@ -176,6 +186,7 @@ objects:
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       host: ${HOST}
+      path: /rsbc-dfp-fhir
       port:
         targetPort: 8080-tcp
       # tls:
@@ -238,7 +249,23 @@ objects:
         spec:
           containers:
             - name: ${APP_NAME}
-              envFrom:
+              env:
+                - name: SPLUNK_COLLECTOR_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: url
+                - name: SPLUNK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: token
+                - name: SPLUNK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: token
+              envFrom:                
                 - configMapRef:
                     name: ${APP_NAME}-config
                 - secretRef:
