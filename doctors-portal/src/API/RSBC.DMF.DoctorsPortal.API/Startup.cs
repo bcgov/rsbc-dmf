@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using HealthChecks.UI.Client;
 
 namespace RSBC.DMF.DoctorsPortal.API
 {
@@ -153,29 +154,31 @@ namespace RSBC.DMF.DoctorsPortal.API
                 };
             });
 
+            app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecks("/hc/live", new HealthCheckOptions
+            {
+                // Exclude all checks and return a 200-Ok.
+                Predicate = _ => false
+            });
+
             app.UseAuthentication();
-            app.UseAuthorization();
+            
             app.UseCors();
 
             app.UseRouting();
             app.UseResponseCompression();
 
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
                     .RequireAuthorization("OAuth")
                     ;
-                endpoints.MapHealthChecks("/hc/ready", new HealthCheckOptions()
-                {
-                    Predicate = (check) => check.Tags.Contains(HealthCheckReadyTag)
-                });
-
-                endpoints.MapHealthChecks("/hc/live", new HealthCheckOptions()
-                {
-                    Predicate = (_) => false
-                });
             });
         }
     }
