@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
 using System.Text.Json;
-using IdentityServer4.Configuration;
 
 namespace OAuthServer
 {
@@ -34,7 +33,6 @@ namespace OAuthServer
 
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"));
-
             var builder = services
                 .AddIdentityServer(options =>
                 {
@@ -42,8 +40,9 @@ namespace OAuthServer
                     options.Events.RaiseInformationEvents = true;
                     options.Events.RaiseFailureEvents = true;
                     options.Events.RaiseSuccessEvents = true;
-                    
+
                     options.UserInteraction.LoginUrl = "~/login";
+                    options.UserInteraction.LogoutUrl = "~/logout";
 
                     if (!string.IsNullOrEmpty(Configuration["ISSUER_URI"])) options.IssuerUri = Configuration["ISSUER_URI"];
                 })
@@ -75,7 +74,7 @@ namespace OAuthServer
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.SignOutScheme = IdentityServerConstants.SignoutScheme;
+                    options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",
