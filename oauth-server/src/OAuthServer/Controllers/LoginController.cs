@@ -44,7 +44,7 @@ namespace OAuthServer.Controllers
         public async Task<IActionResult> Login(string returnUrl)
         {
             var scheme = await GetAuthenticationSchemeForClient(returnUrl);
-            if (string.IsNullOrEmpty(scheme)) return BadRequest($"No is client defined for {returnUrl}");
+            if (string.IsNullOrEmpty(scheme)) return BadRequest($"No client defined for {returnUrl}");
 
             return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
         }
@@ -55,7 +55,7 @@ namespace OAuthServer.Controllers
         [HttpGet("challenge")]
         public IActionResult Challenge(string scheme, string returnUrl)
         {
-            if (!Url.IsLocalUrl(returnUrl) && !interaction.IsValidReturnUrl(returnUrl)) return BadRequest($"No client is defined for {returnUrl}");
+            if (!Url.IsLocalUrl(returnUrl) && !interaction.IsValidReturnUrl(returnUrl)) return BadRequest($"No client defined for {returnUrl}");
 
             var props = new AuthenticationProperties
             {
@@ -118,6 +118,38 @@ namespace OAuthServer.Controllers
 
             // return back to protocol processing
             return Redirect(returnUrl);
+        }
+
+        /// <summary>
+        /// Entry point into the logout workflow
+        /// </summary>
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            if (HttpContext.User?.Identity.IsAuthenticated != true) return Ok();
+
+            await HttpContext.SignOutAsync();
+
+            var logoutContext = await interaction.GetLogoutContextAsync(logoutId);
+
+            //var idp = User.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+            //if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
+            //{
+            //    //signout from an external provider if it supports logout
+            //    var providerSupportsSignout = await HttpContext.GetSchemeSupportsSignOutAsync(idp);
+            //    if (providerSupportsSignout)
+            //    {
+            //        // build a return URL so the upstream provider will redirect back
+            //        // to us after the user has logged out. this allows us to then
+            //        // complete our single sign-out processing.
+            //        string url = Url.Action("Logout", new { logoutId = logoutId });
+
+            //        // this triggers a redirect to the external provider for sign-out
+            //        return SignOut(new AuthenticationProperties { RedirectUri = url }, idp);
+            //    }
+            //}
+
+            return Redirect(logoutContext.PostLogoutRedirectUri);
         }
 
         private async Task<string> GetAuthenticationSchemeForClient(string returnUrl)
