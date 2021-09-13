@@ -24,4 +24,7 @@ export class HeaderComponent {
     }
   }
 
+  public logOut(): void {
+    this.loginService.logout();
+  }
 }
