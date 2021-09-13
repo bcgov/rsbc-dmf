@@ -1,4 +1,5 @@
 ﻿using IdentityServer4;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -60,6 +61,10 @@ namespace OAuthServer
                 ;
 
             builder.AddDeveloperSigningCredential(filename: "./Data/tempkey.jwk");
+            var encryptionKey = Microsoft.IdentityModel.Tokens.JsonWebKey.Create(File.ReadAllText("./Data/tempkey.jwk"));
+            encryptionKey.Use = "enc";
+            builder.AddValidationKey(new SecurityKeyInfo { Key = encryptionKey });
+
             services.AddOidcStateDataFormatterCache();
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
