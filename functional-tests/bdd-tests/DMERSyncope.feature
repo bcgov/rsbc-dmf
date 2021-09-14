@@ -2,7 +2,9 @@ Feature: DMERSyncope.feature
     As a Driver Medical Fitness SME
     I want to confirm the syncope business rules for a DMER
 
-Scenario: Syncope Unexplained Single No Repeat
+# Check whether commercial or non-commercial
+
+Scenario: Syncope Unexplained Single No Repeat (2)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -13,13 +15,16 @@ Scenario: Syncope Unexplained Single No Repeat
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial
+    # not within 7 days > clean pass
+    # within 7 days > fail
     And I enter the single unexplained no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Syncope Unexplained Recurrent Past Year
+Scenario: Syncope Unexplained Recurrent Past Year (2)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -30,13 +35,16 @@ Scenario: Syncope Unexplained Recurrent Past Year
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial 
+    # not within past 3 months > clean pass
+    # within 3 months > fail
     And I enter the recurrent unexplained past year syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Syncope Currently Untreated Single
+Scenario: Syncope Currently Untreated Single (2)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -47,13 +55,15 @@ Scenario: Syncope Currently Untreated Single
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial
+    # fail
     And I enter the currently untreated no repeat syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Syncope Currently Untreated Recurrent
+Scenario: Syncope Currently Untreated Recurrent (2)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -64,6 +74,8 @@ Scenario: Syncope Currently Untreated Recurrent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial
+    # fail
     And I enter the untreated currently recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -81,6 +93,10 @@ Scenario: Syncope Diagnosed, Treated Successfully, Single, Recent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial
+    # within 7 days > fail
+    # commercial
+    # within 30 days > fail
     And I enter the diagnosed treated successfully single recent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -98,6 +114,10 @@ Scenario: Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial
+    # not within 7 days > clean pass
+    # commercial
+    # not within 30 days > clean pass
     And I enter the not recent diagnosed treated successfully recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -115,6 +135,8 @@ Scenario: Syncope Reversible, Treated Successfully, Single
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial > pass
+    # commercial > pass
     And I enter the reversible, treated successfully single syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -132,6 +154,8 @@ Scenario: Syncope Reversible, Treated Successfully, Recurrent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
+    # non commercial > pass
+    # commercial > pass
     And I enter the treated successfully recurrent syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
