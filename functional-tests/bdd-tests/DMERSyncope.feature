@@ -381,7 +381,7 @@ Scenario: Commercial Syncope Unexplained Single No Repeat (2)
     # non commercial
     # not within 7 days > clean pass
     # within 7 days > fail
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -402,7 +402,7 @@ Scenario: Commercial Syncope Unexplained Recurrent Past Year (2)
     # non commercial 
     # not within past 3 months > clean pass
     # within 3 months > fail
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -422,7 +422,7 @@ Scenario: Commercial Syncope Currently Untreated Single (2)
     And I click on the Next button
     # non commercial
     # fail
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -442,7 +442,7 @@ Scenario: Commercial Syncope Currently Untreated Recurrent (2)
     And I click on the Next button
     # non commercial
     # fail
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -464,7 +464,7 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     # within 7 days > fail
     # commercial
     # within 30 days > fail
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -486,7 +486,7 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Rec
     # not within 7 days > clean pass
     # commercial
     # not within 30 days > clean pass
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -506,7 +506,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Single
     And I click on the Next button
     # non commercial > pass
     # commercial > pass
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -526,7 +526,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the Next button
     # non commercial > pass
     # commercial > pass
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -544,7 +544,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -562,7 +562,7 @@ Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -580,7 +580,7 @@ Scenario: Commercial Syncope Vasovagal, Single, Typical
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -598,7 +598,7 @@ Scenario: Commercial Syncope Vasovagal, Recurrent, Atypical
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    And I select the Commercial DMER option
+    And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
