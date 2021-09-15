@@ -430,6 +430,36 @@ namespace bdd_tests
                 var formSubmitButton = GetSeleniumElementByCss("button.btn-wizard-nav-submit", 20);
                 formSubmitButton.Click();
             }
+
+            if (element == "the Syncope checkbox")
+            {
+                // to be completed
+            }
+
+            if (element == "the Cause Remains Unexplained radio button")
+            {
+                // to be completed
+            }
+
+            if (element == "the Single Syncopal Event radio button")
+            {
+                // to be completed
+            }
+
+            if (element == "No for Syncopal Event in the past 7 days")
+            {
+                // to be completed
+            }
+
+            if (element == "Yes for Syncopal Event in the past 7 days")
+            {
+                // to be completed
+            }
+
+            if (element == "the Commercial DMER option")
+            {
+                // to be completed
+            }
         }
 
 
@@ -1245,6 +1275,13 @@ namespace bdd_tests
             // select 'Has the patient experienced any Syncopal Episodes?'
             var syncopalEpisodesCheckbox = ngDriver.WrappedDriver.FindElement(By.Name("data[checkPreQ_SYNC_1_x]"));
             syncopalEpisodesCheckbox.Click();
+        }
+
+
+        //temporary method - to be removed
+        [And(@"I do not select the Commercial DMER option")]
+        public void DoNotSelectCommercialDMER()
+        {
         }
 
 
