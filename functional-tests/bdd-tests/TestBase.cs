@@ -455,6 +455,11 @@ namespace bdd_tests
             {
                 // to be completed
             }
+
+            if (element == "the Commercial DMER option")
+            {
+                // to be completed
+            }
         }
 
 
