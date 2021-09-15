@@ -2,8 +2,6 @@ Feature: DMERSyncope.feature
     As a Driver Medical Fitness SME
     I want to confirm the syncope business rules for a DMER
 
-# Check whether commercial or non-commercial
-
 Scenario: Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -52,7 +50,7 @@ Scenario: Non-Commercial Syncope Unexplained Single Less than 7 Days > Fail
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Unexplained Recurrent Past Year (2)
+Scenario: Non-Commercial Syncope Unexplained Recurrent Not Within 3 Months
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -65,8 +63,36 @@ Scenario: Non-Commercial Syncope Unexplained Recurrent Past Year (2)
     And I click on the Next button
     # non commercial 
     # not within past 3 months > clean pass
+    And I do not select the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Cause Remains Unexplained radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on No for Syncopal Event in the past 3 months 
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Non-Commercial Syncope Unexplained Recurrent Within 3 Months
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    # non commercial 
     # within 3 months > fail
     And I do not select the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Cause Remains Unexplained radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on Yes for Syncopal Event in the past 3 months 
     And I enter the recurrent unexplained past year syncope details
     And I click on the Next button
     And I enter the medical opinion and confirmations
