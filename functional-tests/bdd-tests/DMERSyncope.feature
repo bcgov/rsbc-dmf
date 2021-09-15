@@ -163,7 +163,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     And I do not select the Commercial DMER option
     And I click on the Syncope checkbox
     And I expand the Syncope area
-    And I click on the Currently Untreated radio button
+    And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
@@ -189,7 +189,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Re
     And I do not select the Commercial DMER option
     And I click on the Syncope checkbox
     And I expand the Syncope area
-    And I click on the Currently Untreated radio button
+    And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days    
     And I click on the Next button
@@ -215,7 +215,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not
     And I do not select the Commercial DMER option
     And I click on the Syncope checkbox
     And I expand the Syncope area
-    And I click on the Currently Untreated radio button
+    And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days    
     And I click on the Next button
@@ -241,7 +241,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Rec
     And I do not select the Commercial DMER option
     And I click on the Syncope checkbox
     And I expand the Syncope area
-    And I click on the Currently Untreated radio button
+    And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
@@ -249,6 +249,8 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Rec
     And I click on the form submit button
     Then I log out of the portal
 
+# non commercial > pass
+# commercial > pass
 Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -260,15 +262,18 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial > pass
-    # commercial > pass
     And I do not select the Commercial DMER option
-    And I enter the reversible, treated successfully single syncope details
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Reversible, Treated Successfully radio button
+    And I click on the Single Syncopal Event radio button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
+# non commercial > pass
+# commercial > pass
 Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -280,10 +285,11 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial > pass
-    # commercial > pass
     And I do not select the Commercial DMER option
-    And I enter the treated successfully recurrent syncope details
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Reversible, Treated Successfully radio button
+    And I click on the Recurrent Syncopal Event radio button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -301,7 +307,7 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    And I enter the situational single past 7 days yes syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -319,7 +325,7 @@ Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    And I enter the past 7 days no situational recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -337,7 +343,7 @@ Scenario: Non-Commercial Syncope Vasovagal, Single, Typical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    And I enter the vasovagal single typical syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -355,7 +361,7 @@ Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    And I enter the atypical vasovagal recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
