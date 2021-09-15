@@ -382,7 +382,7 @@ Scenario: Commercial Syncope Unexplained Single No Repeat (2)
     # not within 7 days > clean pass
     # within 7 days > fail
     And I select the Commercial DMER option
-    And I enter the single unexplained no repeat syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -403,7 +403,7 @@ Scenario: Commercial Syncope Unexplained Recurrent Past Year (2)
     # not within past 3 months > clean pass
     # within 3 months > fail
     And I select the Commercial DMER option
-    And I enter the recurrent unexplained past year syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -423,7 +423,7 @@ Scenario: Commercial Syncope Currently Untreated Single (2)
     # non commercial
     # fail
     And I select the Commercial DMER option
-    And I enter the currently untreated no repeat syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -443,7 +443,7 @@ Scenario: Commercial Syncope Currently Untreated Recurrent (2)
     # non commercial
     # fail
     And I select the Commercial DMER option
-    And I enter the untreated currently recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -465,7 +465,7 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     # commercial
     # within 30 days > fail
     And I select the Commercial DMER option
-    And I enter the diagnosed treated successfully single recent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -487,7 +487,7 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Rec
     # commercial
     # not within 30 days > clean pass
     And I select the Commercial DMER option
-    And I enter the not recent diagnosed treated successfully recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -507,7 +507,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Single
     # non commercial > pass
     # commercial > pass
     And I select the Commercial DMER option
-    And I enter the reversible, treated successfully single syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -527,7 +527,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     # non commercial > pass
     # commercial > pass
     And I select the Commercial DMER option
-    And I enter the treated successfully recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -545,7 +545,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I select the Commercial DMER option
-    And I enter the situational single past 7 days yes syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -563,7 +563,7 @@ Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I select the Commercial DMER option
-    And I enter the past 7 days no situational recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -581,7 +581,7 @@ Scenario: Commercial Syncope Vasovagal, Single, Typical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I select the Commercial DMER option
-    And I enter the vasovagal single typical syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -599,7 +599,7 @@ Scenario: Commercial Syncope Vasovagal, Recurrent, Atypical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I select the Commercial DMER option
-    And I enter the atypical vasovagal recurrent syncope details
+    # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
