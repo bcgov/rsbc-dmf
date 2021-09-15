@@ -4,7 +4,7 @@ Feature: DMERSyncope.feature
 
 # Check whether commercial or non-commercial
 
-Scenario: Non-Commercial Syncope Unexplained Single No Repeat Within 7 Days > Clean Pass
+Scenario: Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -18,13 +18,17 @@ Scenario: Non-Commercial Syncope Unexplained Single No Repeat Within 7 Days > Cl
     # non commercial
     # not within 7 days > clean pass
     And I do not select the Commercial DMER option
-    And I enter the single unexplained no repeat syncope details
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Cause Remains Unexplained radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Unexplained Single No Repeat Less than 7 Days > Fail
+Scenario: Non-Commercial Syncope Unexplained Single Less than 7 Days > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -38,7 +42,11 @@ Scenario: Non-Commercial Syncope Unexplained Single No Repeat Less than 7 Days >
     # non commercial
     # within 7 days > fail
     And I do not select the Commercial DMER option
-    And I enter the single unexplained no repeat syncope details
+    And I click on the Syncope checkbox
+    And I expand the Syncope area
+    And I click on the Cause Remains Unexplained radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
