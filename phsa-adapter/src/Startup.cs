@@ -38,6 +38,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -175,6 +176,47 @@ namespace Rsbc.Dmf.PhsaAdapter
             // Add ICBC adapter
 
             services.AddHttpClient<IIcbcClient, IcbcClient>();
+
+            // Add Case Management System (CMS) Adapter 
+
+            string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(cmsAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new CaseManagement.Service.TokenRequest
+                {
+                    Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                }
+            }
 
             // Add Document Storage Adapter
 

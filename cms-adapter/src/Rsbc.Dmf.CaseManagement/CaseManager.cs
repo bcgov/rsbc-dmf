@@ -15,6 +15,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
+        Task<DmerCase> GetCase(string id);
+
         Task<List<Flag>> GetAllFlags();
 
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey);
@@ -46,6 +48,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ModifiedBy { get; set; }
         public string DriverLicenseNumber { get; set; }
         public string DriverName { get; set; }
+        public bool IsCommercial { get; set; }
     }
 
     public class DmerCase : Case
@@ -124,6 +127,59 @@ namespace Rsbc.Dmf.CaseManagement
                         }).ToArray()
                 }).ToArray()
             };
+        }
+
+        public async Task<DmerCase> GetCase(string id)
+        {
+            // get the case by id.
+            incident c = dynamicsContext.incidents.ByKey(Guid.Parse(id)).GetValue();
+
+            //lazy load case related properties
+
+            if (c.customerid_contact == null)
+            {
+                await dynamicsContext.LoadPropertyAsync(c, nameof(incident.customerid_contact));
+            }
+
+            if (c._dfp_driverid_value.HasValue)
+            {
+                //load driver info
+                await dynamicsContext.LoadPropertyAsync(c, nameof(incident.dfp_DriverId));
+                if (c.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(c.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+            }
+
+            //load case's flags
+            await dynamicsContext.LoadPropertyAsync(c, nameof(incident.dfp_incident_dfp_dmerflag));
+            foreach (var flag in c.dfp_incident_dfp_dmerflag)
+            {
+                await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
+            }
+            
+
+            dynamicsContext.DetachAll();
+
+            var result = new DmerCase()
+            {
+                Id = c.title,
+                CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                CreatedOn = c.createdon.Value.DateTime,
+                ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                ModifiedOn = c.modifiedon.Value.DateTime,
+                DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
+                DriverName =
+                    $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
+                ClinicId = c.customerid_contact.contactid.ToString(),
+                ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
+                //IsCommercial = c.co
+                Flags = c.dfp_incident_dfp_dmerflag
+                    .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
+                    .Select(f => new Flag
+                    {
+                        Id = f.dfp_FlagId?.dfp_id,
+                        Description = f.dfp_FlagId?.dfp_description
+                    }).ToArray()
+            };
+            return result;
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
