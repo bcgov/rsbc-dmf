@@ -155,8 +155,6 @@ Scenario: Non-Commercial Syncope Currently Untreated Recurrent
 
 # non commercial
 # within 7 days > fail
-# commercial
-# within 30 days > fail
 Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -181,8 +179,6 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
 
 # non commercial
 # within 7 days > fail
-# commercial
-# within 30 days > fail
 Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -207,8 +203,6 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Re
 
 # non commercial
 # not within 7 days > clean pass
-# commercial
-# not within 30 days > clean pass
 Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -233,8 +227,6 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not
 
 # non commercial
 # not within 7 days > clean pass
-# commercial
-# not within 30 days > clean pass
 Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Recent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -303,7 +295,7 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-    Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days No
+Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -321,7 +313,7 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
+Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -375,7 +367,7 @@ Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Unexplained Single No Repeat (2)
+Scenario: Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (Confirm?)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -386,9 +378,6 @@ Scenario: Commercial Syncope Unexplained Single No Repeat (2)
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial
-    # not within 7 days > clean pass
-    # within 7 days > fail
     And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
@@ -396,7 +385,7 @@ Scenario: Commercial Syncope Unexplained Single No Repeat (2)
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Unexplained Recurrent Past Year (2)
+Scenario: Commercial Syncope Unexplained Single No Repeat Not Within 7 Days > Clean Pass (Confirm?)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -407,9 +396,6 @@ Scenario: Commercial Syncope Unexplained Recurrent Past Year (2)
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial 
-    # not within past 3 months > clean pass
-    # within 3 months > fail
     And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
@@ -417,7 +403,7 @@ Scenario: Commercial Syncope Unexplained Recurrent Past Year (2)
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Currently Untreated Single (2)
+Scenario: Commercial Syncope Unexplained Recurrent Within 3 Months > Fail (Confirm?)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -428,8 +414,6 @@ Scenario: Commercial Syncope Currently Untreated Single (2)
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial
-    # fail
     And I click on the Commercial DMER option
     # to be completed
     And I click on the Next button
@@ -437,27 +421,7 @@ Scenario: Commercial Syncope Currently Untreated Single (2)
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Currently Untreated Recurrent (2)
-    When I log in to the doctors' portal
-    And I click on the DMER Forms tab
-    And I click on the Case ID for 333
-    And I refresh the page
-    # And I wait for the drivers licence field to have a value
-    And I click on the Next button
-    And the second page content is displayed
-    And I click on the Next button
-    And I enter the Uncorrected Binocular Vision as 20
-    And I click on the Next button
-    # non commercial
-    # fail
-    And I click on the Commercial DMER option
-    # to be completed
-    And I click on the Next button
-    And I enter the medical opinion and confirmations
-    And I click on the form submit button
-    Then I log out of the portal
-
-Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
+Scenario: Commercial Syncope Unexplained Recurrent Not Within 3 Months > Clean Pass (Confirm?)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -468,8 +432,60 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial
-    # within 7 days > fail
+    And I click on the Commercial DMER option
+    # to be completed
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Commercial Syncope Currently Untreated Single
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    # to be completed
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Commercial Syncope Currently Untreated Recurrent
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    # to be completed
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Within 30 Days > Fail
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
     # commercial
     # within 30 days > fail
     And I click on the Commercial DMER option
@@ -479,7 +495,7 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
+Scenario: Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 30 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -490,8 +506,46 @@ Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Rec
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial
-    # not within 7 days > clean pass
+    # commercial
+    # within 30 days > fail
+    And I click on the Commercial DMER option
+    # to be completed
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 30 Days > Clean Pass
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    # commercial
+    # not within 30 days > clean pass
+    And I click on the Commercial DMER option
+    # to be completed
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 30 Days > Fail
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
     # commercial
     # not within 30 days > clean pass
     And I click on the Commercial DMER option
@@ -512,7 +566,6 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Single
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial > pass
     # commercial > pass
     And I click on the Commercial DMER option
     # to be completed
@@ -532,7 +585,6 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the Next button
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
-    # non commercial > pass
     # commercial > pass
     And I click on the Commercial DMER option
     # to be completed
@@ -541,7 +593,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-    Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days No
+    Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -559,7 +611,7 @@ Scenario: Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Past 7 Days Yes
+Scenario: Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
