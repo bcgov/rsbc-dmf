@@ -242,7 +242,6 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Rec
     Then I log out of the portal
 
 # non commercial > pass
-# commercial > pass
 Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -265,7 +264,6 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
     Then I log out of the portal
 
 # non commercial > pass
-# commercial > pass
 Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
