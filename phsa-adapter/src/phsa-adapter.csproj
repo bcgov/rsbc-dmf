@@ -48,6 +48,10 @@
       <Link>gRPC Prototypes\documentTriage.proto</Link>
     </Protobuf>
 
+    <Protobuf Include="../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+      <Link>gRPC Prototypes\cmsAdapter.proto</Link>
+    </Protobuf>
+
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\interfaces\icbc-adapter\icbc-adapter-client.csproj" />
