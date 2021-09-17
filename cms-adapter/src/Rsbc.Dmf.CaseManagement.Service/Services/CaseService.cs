@@ -33,6 +33,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var cases = (await _caseManager.CaseSearch(new CaseSearchRequest
             {
                 CaseId = request.CaseId,
+                Title = request.Title,
                 ClinicId = request.ClinicId,
                 DriverLicenseNumber = request.DriverLicenseNumber
             })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
