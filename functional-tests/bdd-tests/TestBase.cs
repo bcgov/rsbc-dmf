@@ -1051,7 +1051,9 @@ namespace bdd_tests
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
                 var conditionTreatedWithSVTRadiofrequencyAblation = ngDriver.WrappedDriver.FindElement(By.Id("edzke8e-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation"));
                 conditionTreatedWithSVTRadiofrequencyAblation.Click();
-                
+
+                Thread.Sleep(1000);
+
                 /***************************** 
                     Heart Failure
                 ****************************/
@@ -1092,9 +1094,9 @@ namespace bdd_tests
                 var receivingIntermittentInotropesYes = ngDriver.WrappedDriver.FindElement(By.Id("eca20bv-y"));
                 receivingIntermittentInotropesYes.Click();
 
-                /***************************** 
+                /******************************* 
                     Hypertrophic Cardiomyopathy
-                ****************************/
+                ********************************/
 
                 // select 'Hypertrophic Cardiomyopathy'
                 var hypertrophicCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a6]"));
