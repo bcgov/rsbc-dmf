@@ -43,6 +43,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var newCase = new DmerCase
                 {
                     CaseId = c.Id,
+                    Title = c.Title,
                     CreatedBy = c.CreatedBy ?? string.Empty,
                     CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                     ModifiedBy = c.CreatedBy ?? string.Empty,
