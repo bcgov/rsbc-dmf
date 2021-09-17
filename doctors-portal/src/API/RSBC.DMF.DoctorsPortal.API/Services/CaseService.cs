@@ -13,7 +13,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
 
     public class CaseSearchQuery
     {
-        public string ByCaseId { get; set; }
+        public string ByTitle { get; set; }
         public string ByDriverLicense { get; set; }
         public IEnumerable<string> ByStatus { get; set; } = Array.Empty<string>();
     }
@@ -47,7 +47,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             var userContext = await userService.GetCurrentUserContext();
             var searchRequest = new SearchRequest
             {
-                CaseId = query.ByCaseId ?? string.Empty,
+                Title = query.ByTitle ?? string.Empty,
                 DriverLicenseNumber = query.ByDriverLicense ?? string.Empty,
                 ClinicId = userContext.ClinicId
             };
@@ -58,7 +58,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             return results.Select(c => new DmerCaseListItem
             {
                 Id = c.CaseId,
-                Title = c.CaseId,
+                Title = c.Title,
                 CreatedBy = c.CreatedBy,
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,
