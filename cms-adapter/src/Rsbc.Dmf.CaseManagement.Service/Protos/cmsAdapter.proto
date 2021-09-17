@@ -90,7 +90,7 @@ message UpdateCaseRequest{
 	string dataFileKey = 5;
 }
 
-message UpdateCaseReply{	
+message UpdateCaseReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 }
@@ -110,4 +110,31 @@ message FlagItem {
 }
 
 
+service UserManager {
+  rpc Search (UsersSearchRequest) returns (UsersSearchReply);
+  rpc Login (UserLoginRequest) returns (UserLoginReply);
+}
 
+message User {
+	string userId = 1;
+	string firstName = 2;
+	string lastName = 3;
+}
+
+message UsersSearchRequest {
+	string externalSystem = 1;
+	string externalSystemUserId = 2;
+}
+
+message UsersSearchReply {
+	repeated User user = 1;
+}
+
+message UserLoginRequest {
+	User user = 1;
+}
+
+message UserLoginReply {
+	bool success = 1;
+	User user = 2;
+}
