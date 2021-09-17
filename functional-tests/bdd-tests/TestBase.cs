@@ -759,27 +759,27 @@ namespace bdd_tests
                  */
 
                 // select 'No' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
-                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("ee979t-n"));
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-n"));
                 impairedConsciousnessNo.Click();
 
                 // select 'Yes' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
-                var impairedConsciousnessYes = ngDriver.WrappedDriver.FindElement(By.Id("ee979t-y"));
+                var impairedConsciousnessYes = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-y"));
                 impairedConsciousnessYes.Click();
 
                 // select 'No' for 'Does the patient experience Syncope symptoms which should be reported?'
-                var syncopeSymptomsNo = ngDriver.WrappedDriver.FindElement(By.Id("egi6pze-n"));
+                var syncopeSymptomsNo = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-n"));
                 syncopeSymptomsNo.Click();
 
                 // select 'Yes' for 'Does the patient experience Syncope symptoms which should be reported?'
-                var syncopeSymptomsYes = ngDriver.WrappedDriver.FindElement(By.Id("egi6pze-y"));
+                var syncopeSymptomsYes = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-y"));
                 syncopeSymptomsYes.Click();
 
                 // select 'Yes' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
-                var successfulTreatmentYes = ngDriver.WrappedDriver.FindElement(By.Id("egq566t-y"));
+                var successfulTreatmentYes = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-y"));
                 successfulTreatmentYes.Click();
 
                 // select 'No' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
-                var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("egq566t-n"));
+                var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-n"));
                 successfulTreatmentNo.Click();
 
                 /********
@@ -789,15 +789,15 @@ namespace bdd_tests
                 Thread.Sleep(1000);
 
                 // select 'Less Than 35%'
-                var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-less35"));
+                var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-less35"));
                 lessThan35Percent.Click();
 
                 // select 'Greater than or = 35%'
-                var greaterThanOrEqual35Percent = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-more35"));
+                var greaterThanOrEqual35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-more35"));
                 greaterThanOrEqual35Percent.Click();
 
                 // select 'Unavailable or not applicable'
-                var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-unavailable"));
+                var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-unavailable"));
                 unavailableOrNotApplicable.Click();
 
                 /********
@@ -805,19 +805,19 @@ namespace bdd_tests
                 ********/
 
                 // select '1' for 'NYHA (Only required for specific conditions.)'
-                var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-1"));
+                var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-1"));
                 NYHA1.Click();
 
                 // select '2' for 'NYHA (Only required for specific conditions.)'
-                var NYHA2 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-2"));
+                var NYHA2 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-2"));
                 NYHA2.Click();
 
                 // select '3' for 'NYHA (Only required for specific conditions.)'
-                var NYHA3 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-3"));
+                var NYHA3 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-3"));
                 NYHA3.Click();
 
                 // select '4' for 'NYHA (Only required for specific conditions.)'
-                var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-4"));
+                var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-4"));
                 NYHA4.Click();
 
                 /*
@@ -829,35 +829,35 @@ namespace bdd_tests
                  */
 
                 // select 'ICD Not Applicable' for 'Has the patient received an ICD?' 
-                var hasPatientReceivedICDNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("eml82go-icdNotApplicable"));
+                var hasPatientReceivedICDNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("ewzoei-icdNotApplicable"));
                 hasPatientReceivedICDNotApplicable.Click();
 
                 // select 'Recommended, patient declined' for 'Has the patient received an ICD?' 
-                var hasPatientReceivedICDRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id("eml82go-recommendedPatientDeclined"));
+                var hasPatientReceivedICDRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id("ewzoei-recommendedPatientDeclined"));
                 hasPatientReceivedICDRecommendedPatientDeclined.Click();
 
                 // select 'No, scheduled to occur' for 'Has the patient received an ICD?' 
-                var hasPatientReceivedICDNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("eml82go-noScheduledToOccur"));
+                var hasPatientReceivedICDNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("ewzoei-noScheduledToOccur"));
                 hasPatientReceivedICDNoScheduledToOccur.Click();
 
                 // select 'Yes' for 'Has the patient received an ICD?' 
-                var hasPatientReceivedICDYes = ngDriver.WrappedDriver.FindElement(By.Id("eml82go-yes"));
+                var hasPatientReceivedICDYes = ngDriver.WrappedDriver.FindElement(By.Id("ewzoei-yes"));
                 hasPatientReceivedICDYes.Click();
 
                 // select 'Secondary' for 'ICD Prophylaxis Condition is:'
-                var ICDProphylaxisConditionIsSecondary = ngDriver.WrappedDriver.FindElement(By.Id("epkdbd9-secondary"));
+                var ICDProphylaxisConditionIsSecondary = ngDriver.WrappedDriver.FindElement(By.Id("emogb8e-secondary"));
                 ICDProphylaxisConditionIsSecondary.Click();
 
                 // select 'Primary' for 'ICD Prophylaxis Condition is:'
-                var ICDProphylaxisConditionIsPrimary = ngDriver.WrappedDriver.FindElement(By.Id("epkdbd9-primary"));
+                var ICDProphylaxisConditionIsPrimary = ngDriver.WrappedDriver.FindElement(By.Id("emogb8e-primary"));
                 ICDProphylaxisConditionIsPrimary.Click();
 
                 // select 'Within the past 6 Months' for 'ICD therapy (ATP/Shock) delivered'
-                var ICDTherapyDeliveredWithinPast6Months = ngDriver.WrappedDriver.FindElement(By.Id("e9vj8vm-withinThePast6Months"));
+                var ICDTherapyDeliveredWithinPast6Months = ngDriver.WrappedDriver.FindElement(By.Id("epqos1q-withinThePast6Months"));
                 ICDTherapyDeliveredWithinPast6Months.Click();
 
                 // select for 'No' for 'ICD therapy (ATP/Shock) delivered'
-                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id("e9vj8vm-no"));
+                var ICDTherapyDeliveredNo = ngDriver.WrappedDriver.FindElement(By.Id("epqos1q-no"));
                 ICDTherapyDeliveredNo.Click();
 
                 /*
@@ -873,12 +873,14 @@ namespace bdd_tests
                 CoronaryArteryDisease.Click();
 
                 // select 'No' for 'CAD has been treated with CABG?'
-                var CADTreatedWithCABGNo = ngDriver.WrappedDriver.FindElement(By.Id("eopkdqk-n"));
+                var CADTreatedWithCABGNo = ngDriver.WrappedDriver.FindElement(By.Id("etjjl3h-no"));
                 CADTreatedWithCABGNo.Click();
 
                 // select 'Yes' for 'CAD has been treated with CABG?'
-                var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("eopkdqk-y"));
+                var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("etjjl3h-yes"));
                 CADTreatedWithCABGYes.Click();
+
+                Thread.Sleep(1000);
 
                 /**************************** 
                     Arrhythmias and Pacemaker
@@ -889,47 +891,47 @@ namespace bdd_tests
                 arrhythmiasAndPacemaker.Click();
 
                 // select 'Pacemaker Not Applicable' for 'Has the patient received a Pacemaker?'
-                var patientReceivedAPacemakerPacemakerNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("ezrkpvr-pacemakerNotApplicable"));
+                var patientReceivedAPacemakerPacemakerNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("ezlh3pi-pacemakerNotApplicable"));
                 patientReceivedAPacemakerPacemakerNotApplicable.Click();
 
                 // select 'Recommended, patient declined' for 'Has the patient received a Pacemaker?'
-                var patientReceivedAPacemakerRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id("ezrkpvr-recommendedPatientDeclined"));
+                var patientReceivedAPacemakerRecommendedPatientDeclined = ngDriver.WrappedDriver.FindElement(By.Id("ezlh3pi-recommendedPatientDeclined"));
                 patientReceivedAPacemakerRecommendedPatientDeclined.Click();
 
                 // select 'No, scheduled to occur' for 'Has the patient received a Pacemaker?'
-                var patientReceivedAPacemakerNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("ezrkpvr-noScheduledToOccur"));
+                var patientReceivedAPacemakerNoScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("ezlh3pi-noScheduledToOccur"));
                 patientReceivedAPacemakerNoScheduledToOccur.Click();
 
                 // select 'Yes' for 'Has the patient received a Pacemaker?'
-                var patientReceivedAPacemakerYes = ngDriver.WrappedDriver.FindElement(By.Id("ezrkpvr-yes"));
+                var patientReceivedAPacemakerYes = ngDriver.WrappedDriver.FindElement(By.Id("ezlh3pi-yes"));
                 patientReceivedAPacemakerYes.Click();
 
                 // select 'No' for 'Was the pacemaker installed within the past 7 days'
-                var pacemakerInstalledPast30DaysNo = ngDriver.WrappedDriver.FindElement(By.Id("eqbumjq-no"));
+                var pacemakerInstalledPast30DaysNo = ngDriver.WrappedDriver.FindElement(By.Id("e0fvxwc-no"));
                 pacemakerInstalledPast30DaysNo.Click();
 
                 // select 'Yes' for 'Was the pacemaker installed within the past 7 days'
-                var pacemakerInstalledPast30DaysYes = ngDriver.WrappedDriver.FindElement(By.Id("eqbumjq-yes"));
+                var pacemakerInstalledPast30DaysYes = ngDriver.WrappedDriver.FindElement(By.Id("e0fvxwc-yes"));
                 pacemakerInstalledPast30DaysYes.Click();
 
                 // select 'No' for 'Does the pacemaker show normal sensing and capture on a post-implant ECG? '
-                var pacemakerShowsNormalSensingOnPostImplantECGNo = ngDriver.WrappedDriver.FindElement(By.Id("ellf2i7-no"));
+                var pacemakerShowsNormalSensingOnPostImplantECGNo = ngDriver.WrappedDriver.FindElement(By.Id("eeaqy9b-no"));
                 pacemakerShowsNormalSensingOnPostImplantECGNo.Click();
 
                 // select 'Yes' for 'Does the pacemaker show normal sensing and capture on a post-implant ECG? '
-                var pacemakerShowsNormalSensingOnPostImplantECGYes = ngDriver.WrappedDriver.FindElement(By.Id("ellf2i7-yes"));
+                var pacemakerShowsNormalSensingOnPostImplantECGYes = ngDriver.WrappedDriver.FindElement(By.Id("eeaqy9b-yes"));
                 pacemakerShowsNormalSensingOnPostImplantECGYes.Click();
 
                 // select 'Scheduled to occur' for 'Cardiac Ablation'
-                var cardiacAblationScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("eimygd-scheduledToOccur"));
+                var cardiacAblationScheduledToOccur = ngDriver.WrappedDriver.FindElement(By.Id("ea57m2b-scheduledToOccur"));
                 cardiacAblationScheduledToOccur.Click();
 
                 // select 'Within the past 3 Months' for 'Cardiac Ablation'
-                var cardiacAblationWithinPast3Months = ngDriver.WrappedDriver.FindElement(By.Id("eimygd-withinThePast3Months"));
+                var cardiacAblationWithinPast3Months = ngDriver.WrappedDriver.FindElement(By.Id("ea57m2b-withinThePast3Months"));
                 cardiacAblationWithinPast3Months.Click();
 
                 // select 'No' for 'Cardiac Ablation'
-                var cardiacAblationNo = ngDriver.WrappedDriver.FindElement(By.Id("eimygd-no"));
+                var cardiacAblationNo = ngDriver.WrappedDriver.FindElement(By.Id("ea57m2b-no"));
                 cardiacAblationNo.Click();
 
                 // select 'Sustained VT'
@@ -943,11 +945,11 @@ namespace bdd_tests
                 VFNoReversibleCause.Click();
 
                 // select 'No' for 'Experienced within the past 6 months?'
-                var sustainedVIExperiencedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("ee36df-no"));
+                var sustainedVIExperiencedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("e1r8j2-no"));
                 sustainedVIExperiencedWithinPast6MonthsNo.Click();
 
                 // select 'Yes' for 'Experienced within the past 6 months?'
-                var sustainedVIExperiencedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("ee36df-yes"));
+                var sustainedVIExperiencedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("e1r8j2-yes"));
                 sustainedVIExperiencedWithinPast6MonthsYes.Click();
 
                 /******************************
@@ -959,11 +961,11 @@ namespace bdd_tests
                 hemodynamicallyUnstableVT.Click();
 
                 // select 'No' for 'Experienced within the past 6 months?'
-                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id("emc3l7u-n"));
+                var hemodynamicallyUnstableVTNo = ngDriver.WrappedDriver.FindElement(By.Id("eo36dpm-n"));
                 hemodynamicallyUnstableVTNo.Click();
 
                 // select 'Yes' for 'Experienced within the past 6 months?'
-                var hemodynamicallyUnstableVTYes = ngDriver.WrappedDriver.FindElement(By.Id("emc3l7u-y"));
+                var hemodynamicallyUnstableVTYes = ngDriver.WrappedDriver.FindElement(By.Id("eo36dpm-y"));
                 hemodynamicallyUnstableVTYes.Click();
 
                 /************ 
@@ -975,19 +977,19 @@ namespace bdd_tests
                 AVBlocks.Click();
 
                 // select 'None of the above' for 'AV Block Expression'
-                var noneOfTheAboveAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("ec7awc9l-noneOfTheAbove"));
+                var noneOfTheAboveAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("emo22xd-noneOfTheAbove"));
                 noneOfTheAboveAVBlockExpression.Click();
 
                 // select 'Acquired 3rd degree AV block' for 'AV Block Expression'
-                var acquired3rdDegreeAVBlockAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("ec7awc9l-acquired3rdDegreeAvBlock"));
+                var acquired3rdDegreeAVBlockAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("emo22xd-acquired3rdDegreeAvBlock"));
                 acquired3rdDegreeAVBlockAVBlockExpression.Click();
 
                 // select 'Alternating LBBB and RBBB' for 'AV Block Expression'
-                var alternatingLBBBAndRBBBAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("ec7awc9l-alternatingLbbbAndRbbb"));
+                var alternatingLBBBAndRBBBAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("emo22xd-alternatingLbbbAndRbbb"));
                 alternatingLBBBAndRBBBAVBlockExpression.Click();
 
                 // select '2nd degree AV block /Mobitz II' for 'AV Block Expression'
-                var secondDegreeAVBlockMobitzIIAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("ec7awc9l-2ndDegreeAvBlockMobitzIi"));
+                var secondDegreeAVBlockMobitzIIAVBlockExpression = ngDriver.WrappedDriver.FindElement(By.Id("emo22xd-2ndDegreeAvBlockMobitzIi"));
                 secondDegreeAVBlockMobitzIIAVBlockExpression.Click();
 
                 /************* 
@@ -999,15 +1001,15 @@ namespace bdd_tests
                 PACorPVC.Click();
 
                 // select 'No' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
-                var impairedLevelOfConsciousnessCausedByCerebralIschemiaNo = ngDriver.WrappedDriver.FindElement(By.Id("e8i2lun-no"));
+                var impairedLevelOfConsciousnessCausedByCerebralIschemiaNo = ngDriver.WrappedDriver.FindElement(By.Id("edpjl4x-no"));
                 impairedLevelOfConsciousnessCausedByCerebralIschemiaNo.Click();
 
                 // select 'Yes' for 'With impaired Level of Consciousness caused by cerebral ischemia?'
-                var impairedLevelOfConsciousnessCausedByCerebralIschemiaYes = ngDriver.WrappedDriver.FindElement(By.Id("e8i2lun-yes"));
+                var impairedLevelOfConsciousnessCausedByCerebralIschemiaYes = ngDriver.WrappedDriver.FindElement(By.Id("edpjl4x-yes"));
                 impairedLevelOfConsciousnessCausedByCerebralIschemiaYes.Click();
 
                 /************************************ 
-                    Paroxysmal Sinus Node Dysfunction
+                    Sinus Node Dysfunction
                 ************************************/
 
                 // select 'Sinus Node Dysfunction'
@@ -1023,33 +1025,35 @@ namespace bdd_tests
                 ParoxysmalSVT_AF_Or_AFL.Click();
 
                 // select 'No' for 'Treated with therapy, no recurrence within past 3 months'
-                var treatedWithTherapyNoRecurrenceWithinPast3MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("egc8n9-n"));
+                var treatedWithTherapyNoRecurrenceWithinPast3MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("egr4ltw-n"));
                 treatedWithTherapyNoRecurrenceWithinPast3MonthsNo.Click();
 
                 // select 'Yes' for 'Treated with therapy, no recurrence within past 3 months'
-                var treatedWithTherapyNoRecurrenceWithinPast3MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("egc8n9-y"));
+                var treatedWithTherapyNoRecurrenceWithinPast3MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("egr4ltw-y"));
                 treatedWithTherapyNoRecurrenceWithinPast3MonthsYes.Click();
 
                 Thread.Sleep(1000);
 
                 // select 'No additional detail available' for 'Condition has been treated with:'
-                var conditionTreatedWithNoAdditionalDetailAvailable = ngDriver.WrappedDriver.FindElement(By.Id("e6gdkp-noAdditionalDetailAvailable"));
+                var conditionTreatedWithNoAdditionalDetailAvailable = ngDriver.WrappedDriver.FindElement(By.Id("edzke8e-noAdditionalDetailAvailable"));
                 conditionTreatedWithNoAdditionalDetailAvailable.Click();
 
                 // select 'AFL, they have had a successful isthmus ablation with proven establishment of bidirectional isthmus block' for 'Condition has been treated with:'
-                var conditionTreatedWithSuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock = ngDriver.WrappedDriver.FindElement(By.Id("e6gdkp-aflTheyHaveHadASuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock"));
+                var conditionTreatedWithSuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock = ngDriver.WrappedDriver.FindElement(By.Id("edzke8e-aflTheyHaveHadASuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock"));
                 conditionTreatedWithSuccessfulIsthmusAblationWithProvenEstablishmentOfBidirectionalIsthmusBlock.Click();
                 
                 Thread.Sleep(1000);
 
                 // select 'AF, they have had AV node ablation and pacemaker implantation and meet the standard for pacemaker treatment' for 'Condition has been treated with:'
-                var conditionTreatedWithAFAVNodeAblationAndPacemakerImplantation = ngDriver.WrappedDriver.FindElement(By.Id("e6gdkp-afTheyHaveHadAvNodeAblationAndPacemakerImplantationAndMeetTheStandardForPacemakerTreatment"));
+                var conditionTreatedWithAFAVNodeAblationAndPacemakerImplantation = ngDriver.WrappedDriver.FindElement(By.Id("edzke8e-afTheyHaveHadAvNodeAblationAndPacemakerImplantationAndMeetTheStandardForPacemakerTreatment"));
                 conditionTreatedWithAFAVNodeAblationAndPacemakerImplantation.Click();
 
                 // select 'SVT, it has been successfully treated with radiofrequency ablation' for 'Condition has been treated with:'
-                var conditionTreatedWithSVTRadiofrequencyAblation = ngDriver.WrappedDriver.FindElement(By.Id("e6gdkp-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation"));
+                var conditionTreatedWithSVTRadiofrequencyAblation = ngDriver.WrappedDriver.FindElement(By.Id("edzke8e-svtItHasBeenSuccessfullyTreatedWithRadiofrequencyAblation"));
                 conditionTreatedWithSVTRadiofrequencyAblation.Click();
-                
+
+                Thread.Sleep(1000);
+
                 /***************************** 
                     Heart Failure
                 ****************************/
@@ -1067,32 +1071,32 @@ namespace bdd_tests
                 leftVentricularDysfunctionCardiomyopathy.Click();
 
                 // select 'No' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
-                var patientHasLVADNo = ngDriver.WrappedDriver.FindElement(By.Id("ep6jv4-no"));
+                var patientHasLVADNo = ngDriver.WrappedDriver.FindElement(By.Id("evtl3tx-no"));
                 patientHasLVADNo.Click();
 
                 // select 'Yes' for 'Patient has Continuous Flow Left Ventricular Assist Device (LVAD)'
-                var patientHasLVADYes = ngDriver.WrappedDriver.FindElement(By.Id("ep6jv4-yes"));
+                var patientHasLVADYes = ngDriver.WrappedDriver.FindElement(By.Id("evtl3tx-yes"));
                 patientHasLVADYes.Click();
 
                 // select 'No' for 'LVAD has been stable for 2 or more months post implantation?'
-                var stableTwoOrMonthsPostImplantationNo = ngDriver.WrappedDriver.FindElement(By.Id("ech6lx-n"));
+                var stableTwoOrMonthsPostImplantationNo = ngDriver.WrappedDriver.FindElement(By.Id("eyd1qf6-n"));
                 stableTwoOrMonthsPostImplantationNo.Click();
 
                 // select 'Yes' for 'LVAD has been stable for 2 or more months post implantation?'
-                var stableTwoOrMonthsPostImplantationYes = ngDriver.WrappedDriver.FindElement(By.Id("ech6lx-y"));
+                var stableTwoOrMonthsPostImplantationYes = ngDriver.WrappedDriver.FindElement(By.Id("eyd1qf6-y"));
                 stableTwoOrMonthsPostImplantationYes.Click();
 
                 // select 'No' for 'Is the patient receiving Intermittent Inotropes?'
-                var receivingIntermittentInotropesNo = ngDriver.WrappedDriver.FindElement(By.Id("ehuwdrn-n"));
+                var receivingIntermittentInotropesNo = ngDriver.WrappedDriver.FindElement(By.Id("eca20bv-n"));
                 receivingIntermittentInotropesNo.Click();
 
                 // select 'Yes' for 'Is the patient receiving Intermittent Inotropes?'
-                var receivingIntermittentInotropesYes = ngDriver.WrappedDriver.FindElement(By.Id("ehuwdrn-y"));
+                var receivingIntermittentInotropesYes = ngDriver.WrappedDriver.FindElement(By.Id("eca20bv-y"));
                 receivingIntermittentInotropesYes.Click();
 
-                /***************************** 
+                /******************************* 
                     Hypertrophic Cardiomyopathy
-                ****************************/
+                ********************************/
 
                 // select 'Hypertrophic Cardiomyopathy'
                 var hypertrophicCardiomyopathy = ngDriver.WrappedDriver.FindElement(By.Name("data[checkCORO_HF_a6]"));
@@ -1127,11 +1131,11 @@ namespace bdd_tests
                 surgicallyTreatedValvularHeartDisease.Click();
 
                 // select 'No' for 'Has it been at least 6 weeks since discharge following treatment?'
-                var atLeast3MonthsSinceDischargeNo = ngDriver.WrappedDriver.FindElement(By.Id("efznjle-n"));
+                var atLeast3MonthsSinceDischargeNo = ngDriver.WrappedDriver.FindElement(By.Id("e7kuha-n"));
                 atLeast3MonthsSinceDischargeNo.Click();
 
                 // select 'Yes' for 'Has it been at least 6 weeks since discharge following treatment?'
-                var atLeast3MonthsSinceDischargeYes = ngDriver.WrappedDriver.FindElement(By.Id("efznjle-y"));
+                var atLeast3MonthsSinceDischargeYes = ngDriver.WrappedDriver.FindElement(By.Id("e7kuha-y"));
                 atLeast3MonthsSinceDischargeYes.Click();
 
                 /*
@@ -1159,15 +1163,15 @@ namespace bdd_tests
                 mitralValveProlapse.Click();
 
                 // select 'Yes, but they have not been assessed for Arrhythmias or do not meet standards' for 'Is the patient symptomatic for this condition?'
-                var symptomaticYesNotAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-yesButTheyHaveNotBeenAssessedForArrhythmiasOrDoNotMeetStandards"));
+                var symptomaticYesNotAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ei8sz1-yesButTheyHaveNotBeenAssessedForArrhythmiasOrDoNotMeetStandards"));
                 symptomaticYesNotAssessed.Click();
 
                 // select 'Yes, but they have been assessed for Arrhythmias and meet applicable standards' for 'Is the patient symptomatic for this condition?'
-                var symptomaticYesAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-yesButTheyHaveBeenAssessedForArrhythmiasAndMeetApplicableStandards"));
+                var symptomaticYesAssessed = ngDriver.WrappedDriver.FindElement(By.Id("ei8sz1-yesButTheyHaveBeenAssessedForArrhythmiasAndMeetApplicableStandards"));
                 symptomaticYesAssessed.Click();
 
                 // select 'No' for 'Is the patient symptomatic for this condition?'
-                var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id("ezwipoi-no"));
+                var symptomaticNo = ngDriver.WrappedDriver.FindElement(By.Id("ei8sz1-no"));
                 symptomaticNo.Click();
 
                 // select 'Medically Treated Valvular Heart Disease'
@@ -1231,38 +1235,36 @@ namespace bdd_tests
                 */
 
                 // select 'No' for 'Has the patient received a Heart Transplant?'
-                var heartTransplantNo = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-no"));
+                var heartTransplantNo = ngDriver.WrappedDriver.FindElement(By.Id("ech9bcn-no"));
                 heartTransplantNo.Click();
 
                 // select 'Yes' for 'Has the patient received a Heart Transplant?'
-                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("egjnxmj-yes"));
+                var heartTransplantYes = ngDriver.WrappedDriver.FindElement(By.Id("ech9bcn-yes"));
                 heartTransplantYes.Click();
 
-                /*
                 // select 'No' for 'Does the patient have active ischemia?'
-                var activeIschemiaNo = ngDriver.WrappedDriver.FindElement(By.Id("ei8hfzh-n"));
+                var activeIschemiaNo = ngDriver.WrappedDriver.FindElement(By.Id("eup7vds-n"));
                 activeIschemiaNo.Click();
 
                 // select 'Yes' for 'Does the patient have active ischemia?'
-                var activeIschemiaYes = ngDriver.WrappedDriver.FindElement(By.Id("ei8hfzh-y"));
+                var activeIschemiaYes = ngDriver.WrappedDriver.FindElement(By.Id("eup7vds-y"));
                 activeIschemiaYes.Click();
 
                 // select 'No' for 'Is the patient considered stable on immunotherapy?'
-                var patientStableOnImmunotherapyNo = ngDriver.WrappedDriver.FindElement(By.Id("e0r0v2s-n"));
+                var patientStableOnImmunotherapyNo = ngDriver.WrappedDriver.FindElement(By.Id("ebxm2x-n"));
                 patientStableOnImmunotherapyNo.Click();
 
                 // select 'Yes' for 'Is the patient considered stable on immunotherapy?'
-                var patientStableOnImmunotherapyYes = ngDriver.WrappedDriver.FindElement(By.Id("e0r0v2s-y"));
+                var patientStableOnImmunotherapyYes = ngDriver.WrappedDriver.FindElement(By.Id("ebxm2x-y"));
                 patientStableOnImmunotherapyYes.Click();
                 
-                // select 'No' for 'Transplanted within the past 6 months?'
-                var transplantedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("ecev5di-n"));
-                transplantedWithinPast6MonthsNo.Click();
+                // select 'No' for 'Transplanted within the past 6 weeks?'
+                var transplantedWithinPast6WeeksNo = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-n"));
+                transplantedWithinPast6WeeksNo.Click();
 
-                // select 'Yes' for 'Transplanted within the past 6 months?'
-                var transplantedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("ecev5di-y"));
-                transplantedWithinPast6MonthsYes.Click();
-                */
+                // select 'Yes' for 'Transplanted within the past 6 weeks?'
+                var transplantedWithinPast6WeeksYes = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-y"));
+                transplantedWithinPast6WeeksYes.Click();
             }
         }
 
