@@ -122,6 +122,7 @@ namespace Rsbc.Dmf.CaseManagement
                     DriverName = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                     ClinicId = c.customerid_contact.contactid.ToString(),
                     ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
+                    IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
                     Flags = c.dfp_incident_dfp_dmerflag
                         .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
                         .Select(f => new Flag
@@ -175,7 +176,7 @@ namespace Rsbc.Dmf.CaseManagement
                     $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                 ClinicId = c.customerid_contact.contactid.ToString(),
                 ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
-                //IsCommercial = c.co
+                IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
                 Flags = c.dfp_incident_dfp_dmerflag
                     .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
                     .Select(f => new Flag
