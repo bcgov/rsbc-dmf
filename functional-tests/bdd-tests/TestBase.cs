@@ -877,7 +877,7 @@ namespace bdd_tests
                 CADTreatedWithCABGNo.Click();
 
                 // select 'Yes' for 'CAD has been treated with CABG?'
-                var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("etjjl3h-y"));
+                var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("etjjl3h-yes"));
                 CADTreatedWithCABGYes.Click();
 
                 Thread.Sleep(1000);
