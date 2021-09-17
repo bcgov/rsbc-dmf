@@ -1256,13 +1256,13 @@ namespace bdd_tests
                 var patientStableOnImmunotherapyYes = ngDriver.WrappedDriver.FindElement(By.Id("ebxm2x-y"));
                 patientStableOnImmunotherapyYes.Click();
                 
-                // select 'No' for 'Transplanted within the past 6 months?'
-                var transplantedWithinPast6MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-n"));
-                transplantedWithinPast6MonthsNo.Click();
+                // select 'No' for 'Transplanted within the past 6 weeks?'
+                var transplantedWithinPast6WeeksNo = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-n"));
+                transplantedWithinPast6WeeksNo.Click();
 
-                // select 'Yes' for 'Transplanted within the past 6 months?'
-                var transplantedWithinPast6MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-y"));
-                transplantedWithinPast6MonthsYes.Click();
+                // select 'Yes' for 'Transplanted within the past 6 weeks?'
+                var transplantedWithinPast6WeeksYes = ngDriver.WrappedDriver.FindElement(By.Id("em2e8pq-y"));
+                transplantedWithinPast6WeeksYes.Click();
             }
         }
 
