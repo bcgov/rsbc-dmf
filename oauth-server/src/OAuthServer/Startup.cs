@@ -33,7 +33,7 @@ namespace OAuthServer
         public void ConfigureServices(IServiceCollection services)
         {
             var dpBuilder = services.AddDataProtection();
-            var keyRingPath = configuration.GetValue<string>("DATAPROTECTION_PATH");
+            var keyRingPath = configuration.GetValue<string>("KEY_RING_PATH");
             if (!string.IsNullOrWhiteSpace(keyRingPath))
             {
                 //configure data protection folder for key sharing
