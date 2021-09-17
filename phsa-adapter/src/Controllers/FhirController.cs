@@ -19,6 +19,7 @@ using Google.Protobuf.WellKnownTypes;
 using Hl7.Fhir.ElementModel;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
+using Rsbc.Dmf.CaseManagement.Service;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Rsbc.Dmf.PhsaAdapter.Extensions;
 
@@ -33,10 +34,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private readonly IConfiguration Configuration;
         private readonly IStructureDefinitionSummaryProvider _provider = new PocoStructureDefinitionSummaryProvider();
         private readonly IIcbcClient _icbcClient;
+        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly DocumentTriage.DocumentTriageClient _documentTriageClient;
 
         public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration,
+            CaseManager.CaseManagerClient cmsAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
             DocumentTriage.DocumentTriageClient documentTriageClient
             )
@@ -44,6 +47,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             _logger = logger;
             Configuration = configuration;
             _icbcClient = icbcClient;
+            _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _documentTriageClient = documentTriageClient;
         }
@@ -244,7 +248,13 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         {
             Response.ContentType = "application/json";
 
-            // in future the id would be looked up in the case management system and then dl number, phn number retrieved.
+            var getCaseRequest = new GetCaseRequest()
+            {
+                CaseId = id
+            };
+            var getCaseReply = _cmsAdapterClient.GetCase(getCaseRequest);
+
+            // in future the dl number, phn number would be retrieved.
 
             string icbcDl = Configuration["TEST_DL"];
 
@@ -261,13 +271,13 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             {
                 driverGender = ConvertGenderToString(icbcData.CLNT?.SEX);
             }
-
+            
             Payload payload = new Payload
             {
                 data = new Dictionary<string, object>
                 {
-                    {"checkIsCommercialDMER", true},
-                    {"dropCommercialDMER", "yes"},
+                    {"checkIsCommercialDMER", getCaseReply.Case.IsCommercial}, 
+                    {"dropCommercialDMER", getCaseReply.Case.IsCommercial ? "yes" : "no"},
                     {"providerNameGiven", "providerNameGiven"},
                     {"providerNameFamily", "providerNameFamily"},
                     {"providerId", "1234"},

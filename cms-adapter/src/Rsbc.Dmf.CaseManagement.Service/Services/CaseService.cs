@@ -43,16 +43,48 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var newCase = new DmerCase
                 {
                     CaseId = c.Id,
+                    Title = c.Title,
                     CreatedBy = c.CreatedBy ?? string.Empty,
                     CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                     ModifiedBy = c.CreatedBy ?? string.Empty,
                     ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                     DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
                     DriverName = c.DriverName ?? string.Empty,
+                    IsCommercial = c.IsCommercial
                 };
                 newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description ?? "Unknown", FlagType = ConvertFlagType(f.FlagType)}));
                 return newCase;
             }));
+
+            return reply;
+        }
+
+        public async override Task<GetCaseReply> GetCase(GetCaseRequest request, ServerCallContext context)
+        {
+            var reply = new GetCaseReply();
+            try
+            {
+                var c = await _caseManager.GetCase(request.CaseId);
+
+                reply.Case = new DmerCase
+                {
+                    CaseId = c.Id,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
+                    DriverName = c.DriverName ?? string.Empty,
+                    IsCommercial = c.IsCommercial
+                };
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Error getting case {request.CaseId}.");
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
 
             return reply;
         }
