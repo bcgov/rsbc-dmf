@@ -759,27 +759,27 @@ namespace bdd_tests
                  */
 
                 // select 'No' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
-                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("ee979t-n"));
+                var impairedConsciousnessNo = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-n"));
                 impairedConsciousnessNo.Click();
 
                 // select 'Yes' for 'Has this patient experienced a related impaired level of consciousness in the last 6 months?'
-                var impairedConsciousnessYes = ngDriver.WrappedDriver.FindElement(By.Id("ee979t-y"));
+                var impairedConsciousnessYes = ngDriver.WrappedDriver.FindElement(By.Id("er2n6wd-y"));
                 impairedConsciousnessYes.Click();
 
                 // select 'No' for 'Does the patient experience Syncope symptoms which should be reported?'
-                var syncopeSymptomsNo = ngDriver.WrappedDriver.FindElement(By.Id("egi6pze-n"));
+                var syncopeSymptomsNo = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-n"));
                 syncopeSymptomsNo.Click();
 
                 // select 'Yes' for 'Does the patient experience Syncope symptoms which should be reported?'
-                var syncopeSymptomsYes = ngDriver.WrappedDriver.FindElement(By.Id("egi6pze-y"));
+                var syncopeSymptomsYes = ngDriver.WrappedDriver.FindElement(By.Id("efw8jmi-y"));
                 syncopeSymptomsYes.Click();
 
                 // select 'Yes' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
-                var successfulTreatmentYes = ngDriver.WrappedDriver.FindElement(By.Id("egq566t-y"));
+                var successfulTreatmentYes = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-y"));
                 successfulTreatmentYes.Click();
 
                 // select 'No' for 'Have all of the patient's cardiovascular conditions been treated successfully?' 
-                var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("egq566t-n"));
+                var successfulTreatmentNo = ngDriver.WrappedDriver.FindElement(By.Id("ez8gd78-n"));
                 successfulTreatmentNo.Click();
 
                 /********
@@ -789,15 +789,15 @@ namespace bdd_tests
                 Thread.Sleep(1000);
 
                 // select 'Less Than 35%'
-                var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-less35"));
+                var lessThan35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-less35"));
                 lessThan35Percent.Click();
 
                 // select 'Greater than or = 35%'
-                var greaterThanOrEqual35Percent = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-more35"));
+                var greaterThanOrEqual35Percent = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-more35"));
                 greaterThanOrEqual35Percent.Click();
 
                 // select 'Unavailable or not applicable'
-                var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("e0juj2-unavailable"));
+                var unavailableOrNotApplicable = ngDriver.WrappedDriver.FindElement(By.Id("elopoc8-unavailable"));
                 unavailableOrNotApplicable.Click();
 
                 /********
@@ -805,19 +805,19 @@ namespace bdd_tests
                 ********/
 
                 // select '1' for 'NYHA (Only required for specific conditions.)'
-                var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-1"));
+                var NYHA1 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-1"));
                 NYHA1.Click();
 
                 // select '2' for 'NYHA (Only required for specific conditions.)'
-                var NYHA2 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-2"));
+                var NYHA2 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-2"));
                 NYHA2.Click();
 
                 // select '3' for 'NYHA (Only required for specific conditions.)'
-                var NYHA3 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-3"));
+                var NYHA3 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-3"));
                 NYHA3.Click();
 
                 // select '4' for 'NYHA (Only required for specific conditions.)'
-                var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("e3nwm4-4"));
+                var NYHA4 = ngDriver.WrappedDriver.FindElement(By.Id("evtoz-4"));
                 NYHA4.Click();
 
                 /*
