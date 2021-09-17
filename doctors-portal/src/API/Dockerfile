@@ -1,8 +1,8 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj", "RSBC.DMF.DoctorsPortal.API/"]
-COPY ["RSBC.Tests.Unit.DMF.DoctorsPortal.API/RSBC.Tests.Unit.DMF.DoctorsPortal.API.csproj", "RSBC.Tests.Unit.DMF.DoctorsPortal.API/"]
-COPY ["doctors-portal.sln", "./"]
+COPY ["./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj", "RSBC.DMF.DoctorsPortal.API/"]
+COPY ["./doctors-portal/src/API/RSBC.Tests.Unit.DMF.DoctorsPortal.API/RSBC.Tests.Unit.DMF.DoctorsPortal.API.csproj", "RSBC.Tests.Unit.DMF.DoctorsPortal.API/"]
+COPY ["./doctors-portal/src/API/doctors-portal.sln", "./"]
 
 RUN dotnet restore .
 COPY . .
