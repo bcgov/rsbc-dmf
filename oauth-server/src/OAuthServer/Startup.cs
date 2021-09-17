@@ -71,7 +71,7 @@ namespace OAuthServer
                 ;
 
             //store the oidc key in the key ring persistent volume
-            var keyPath = keyRingPath ?? "./Data/" + "oidc_key.jwk";
+            var keyPath = keyRingPath ?? "./Data" + "/oidc_key.jwk";
 
             //add key as signing key
             builder.AddDeveloperSigningCredential(filename: keyPath);
@@ -91,7 +91,7 @@ namespace OAuthServer
                 {
                     configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = false;
+                    options.GetClaimsFromUserInfoEndpoint = true;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
