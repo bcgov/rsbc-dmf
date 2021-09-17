@@ -21,6 +21,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
     public class DmerCaseListItem
     {
         public string Id { get; set; }
+        public string Title {get; set;}
         public string PatientName { get; set; }
         public string DriverLicense { get; set; }
         public string CreatedBy { get; set; }
@@ -57,6 +58,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             return results.Select(c => new DmerCaseListItem
             {
                 Id = c.CaseId,
+                Title = c.CaseId,
                 CreatedBy = c.CreatedBy,
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,

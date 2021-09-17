@@ -12,6 +12,9 @@ service CaseManager {
   // Get a token given a secret.
   rpc GetToken (TokenRequest) returns (TokenReply);
 
+  // Fetch a specific case
+  rpc GetCase (GetCaseRequest) returns (GetCaseReply);
+
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
@@ -37,12 +40,24 @@ message GetAllFlagsReply {
 	repeated FlagItem Flags = 1;
 }
 
+message GetCaseRequest {
+	string caseId = 1;
+}
+
+message GetCaseReply {
+	ResultStatus resultStatus = 1;
+	DmerCase case = 2;
+	string errorDetail = 3;
+}
+
 message DmerCase {
 	string caseId = 1;
 	string createdBy = 2;
 	google.protobuf.Timestamp createdOn = 3;
 	string modifiedBy = 4;
 	google.protobuf.Timestamp modifiedOn = 5;
+	bool isCommercial = 6;
+	string title = 7;
 	string driverName = 10;
 	string driverLicenseNumber = 11;
 	string clinicId = 12;

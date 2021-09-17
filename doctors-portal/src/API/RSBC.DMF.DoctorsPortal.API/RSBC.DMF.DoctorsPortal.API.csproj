@@ -12,7 +12,14 @@
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Folder Include="Protos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="../../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+      <Link>Protos\cmsAdapter.proto</Link>
+    </Protobuf>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.39.0" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="5.1.0" />
@@ -28,8 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Client">
-      <SourceUri>https://raw.githubusercontent.com/bcgov/rsbc-dmf/main/cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto</SourceUri>
-    </Protobuf>
+    <Folder Include="Protos\" />
   </ItemGroup>
 </Project>

@@ -107,6 +107,12 @@ parameters:
   - description: BASE_PATH
     name: BASE_PATH
     required: true
+  - description: CMS_ADAPTER_URI
+    name: CMS_ADAPTER_URI
+    required: true
+  - description: CMS_ADAPTER_JWT_SECRET
+    name: CMS_ADAPTER_JWT_SECRET
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -128,6 +134,7 @@ objects:
       TEST_PHN: "${TEST_PHN}"
       TEST_PHN_SYSTEM: ${TEST_PHN_SYSTEM}
       TEST_DL: "${TEST_DL}"
+      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}
 
   - kind: Secret
     apiVersion: v1
@@ -157,7 +164,8 @@ objects:
       DOCUMENT_STORAGE_ADAPTER_URI: ${DOCUMENT_STORAGE_ADAPTER_URI}
       DOCUMENT_STORAGE_ADAPTER_JWT_SECRET: ${DOCUMENT_STORAGE_ADAPTER_JWT_SECRET}
       DOCUMENT_TRIAGE_SERVICE_URI: ${DOCUMENT_TRIAGE_SERVICE_URI}
-      DOCUMENT_TRIAGE_SERVICE_JWT_SECRET: ${DOCUMENT_TRIAGE_SERVICE_JWT_SECRET}
+      DOCUMENT_TRIAGE_SERVICE_JWT_SECRET: ${DOCUMENT_TRIAGE_SERVICE_JWT_SECRET}      
+      CMS_ADAPTER_JWT_SECRET: ${CMS_ADAPTER_JWT_SECRET}
   - kind: Service
     apiVersion: v1
     metadata:

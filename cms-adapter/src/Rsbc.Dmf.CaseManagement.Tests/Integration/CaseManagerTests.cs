@@ -19,9 +19,15 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
         [Fact(Skip = RequiresDynamics)]
-        public async Task CanSetFlags()
+        public async Task CanSetFlagsAndSearchById()
         {
-            var caseId = "222";
+            var title = "222";
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+
+            var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
             List<Flag> flags = new List<Flag>()
             {
                 new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
@@ -41,19 +47,17 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
 
         [Fact(Skip = RequiresDynamics)]
-        public async Task CanQueryCasesByCaseId()
+        public async Task CanQueryCasesByTitle()
         {
-            var caseId = "222";
-
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items;
+            var title = "222";
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
 
             var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
-            dmerCase.Id.ShouldBe(caseId);
+            dmerCase.Title.ShouldBe(title);
 
             dmerCase.CreatedBy.ShouldNotBeNullOrEmpty();
             dmerCase.DriverLicenseNumber.ShouldNotBeNullOrEmpty();
             dmerCase.DriverName.ShouldNotBeNullOrEmpty();
-            dmerCase.Flags.ShouldNotBeEmpty();
         }
 
         [Fact(Skip = RequiresDynamics)]
