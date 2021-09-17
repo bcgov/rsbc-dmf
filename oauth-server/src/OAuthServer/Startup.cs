@@ -21,19 +21,19 @@ namespace OAuthServer
     public class Startup
     {
         private const string HealthCheckReadyTag = "ready";
-        public IWebHostEnvironment Environment { get; }
-        public IConfiguration configuration { get; }
+        private readonly IWebHostEnvironment environment;
+        private readonly IConfiguration configuration;
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Environment = environment;
+            this.environment = environment;
             this.configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             var dpBuilder = services.AddDataProtection();
-            var keyRingPath = configuration.GetValue<string>("DATAPROTECTION_PATH");
+            var keyRingPath = configuration.GetValue<string>("KEY_RING_PATH");
             if (!string.IsNullOrWhiteSpace(keyRingPath))
             {
                 //configure data protection folder for key sharing
@@ -150,7 +150,7 @@ namespace OAuthServer
         public void Configure(IApplicationBuilder app)
         {
             app.UseForwardedHeaders();
-            if (Environment.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 IdentityModelEventSource.ShowPII = true;

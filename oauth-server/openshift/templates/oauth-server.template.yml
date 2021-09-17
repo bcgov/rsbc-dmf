@@ -40,10 +40,6 @@ parameters:
   - description: image name
     name: IMAGENAME
     required: true
-  - description: data protection keys location
-    name: DATAPROTECTION_PATH
-    required: true
-    value: /dpkeys
 
 objects:
   - kind: ConfigMap
@@ -59,7 +55,6 @@ objects:
       KEY_RING_PATH: "/dpkeys"
       ISSUER_URI: ${ISSUER_URI}
       BASE_PATH: ${BASE_PATH}
-      DATAPROTECTION_PATH: ${DATAPROTECTION_PATH}
 
   - kind: Secret
     apiVersion: v1
@@ -178,7 +173,7 @@ objects:
               image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
               imagePullPolicy: Always
               volumeMounts:
-                - mountPath: ${DATAPROTECTION_PATH}
+                - mountPath: /dpkeys
                   name: dp-keys
               livenessProbe:
                 httpGet:
