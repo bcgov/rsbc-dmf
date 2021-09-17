@@ -276,7 +276,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             {
                 data = new Dictionary<string, object>
                 {
-                    {"checkIsCommercialDMER", getCaseReply.Case.IsCommercial}, 
+                    //{"checkIsCommercialDMER", getCaseReply.Case.IsCommercial}, 
                     {"dropCommercialDMER", getCaseReply.Case.IsCommercial ? "yes" : "no"},
                     {"providerNameGiven", "providerNameGiven"},
                     {"providerNameFamily", "providerNameFamily"},
@@ -325,10 +325,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"textTargetDriverAddr2", ""},
                     {"textTargetDriverPostal", $"{icbcData?.CLNT?.ADDR?.POST}"},
                     {"textTargetKnownNotice", "textTargetKnownNotice"},
-                    {"selectMISC_0_0", "selectMISC_0_0y"},
-                    {"yornMISC_1_1", "yornMISC_1_1"},
-                    {"yornMISC_2_1", "yornMISC_2_1"},
-                    {"yornMISC_3_1", "yornMISC_3_1"},
                     {"patientProvince", "BC"},
                     {"patientBCcity", "patientBCcity"}
                 }
@@ -402,7 +398,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 {
                                     new QuestionnaireResponse.AnswerComponent()
                                     {
-                                        Value = new FhirString("yes")
+                                        Value = new FhirString(getCaseReply.Case.IsCommercial ? "yes" : "no")
                                     }
                                 }
                             }
