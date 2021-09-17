@@ -17,5 +17,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        working-directory: ./doctors-portal/src/API
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME

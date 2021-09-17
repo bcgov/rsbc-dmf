@@ -7,7 +7,7 @@ COPY ["doctors-portal.sln", "./"]
 RUN dotnet restore .
 COPY . .
 RUN dotnet test -c Release
-RUN dotnet publish "RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore
+RUN dotnet publish "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS final
 WORKDIR /app
