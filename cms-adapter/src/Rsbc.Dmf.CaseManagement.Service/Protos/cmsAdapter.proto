@@ -57,6 +57,7 @@ message DmerCase {
 	string modifiedBy = 4;
 	google.protobuf.Timestamp modifiedOn = 5;
 	bool isCommercial = 6;
+	string title = 7;
 	string driverName = 10;
 	string driverLicenseNumber = 11;
 	string clinicId = 12;

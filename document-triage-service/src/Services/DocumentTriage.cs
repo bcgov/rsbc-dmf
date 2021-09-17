@@ -109,6 +109,12 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
             return Task.FromResult(result);
             }
 
+            /// <summary>
+            /// Token service
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="context"></param>
+            /// <returns></returns>
             [AllowAnonymous]
             public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
             {

@@ -5,6 +5,7 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -25,6 +26,7 @@ namespace Rsbc.Dmf.CaseManagement
     public class CaseSearchRequest
     {
         public string CaseId { get; set; }
+        public string Title { get; set; }
         public string DriverLicenseNumber { get; set; }
         public string ClinicId { get; set; }
     }
@@ -42,6 +44,7 @@ namespace Rsbc.Dmf.CaseManagement
     public abstract class Case
     {
         public string Id { get; set; }
+        public string Title { get; set; }
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
@@ -109,7 +112,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Items = cases.Select(c => new DmerCase
                 {
-                    Id = c.title,
+                    Id = c.incidentid.ToString(),
+                    Title = c.title,
                     CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                     CreatedOn = c.createdon.Value.DateTime,
                     ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
@@ -160,7 +164,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var result = new DmerCase()
             {
-                Id = c.title,
+                Id = c.incidentid.ToString(),
+                Title = c.title,
                 CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                 CreatedOn = c.createdon.Value.DateTime,
                 ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
@@ -186,6 +191,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var shouldSearchCases =
                 !string.IsNullOrEmpty(criteria.CaseId) ||
+                !string.IsNullOrEmpty(criteria.Title) ||
                 !string.IsNullOrEmpty(criteria.ClinicId);
 
             if (!shouldSearchCases) return Array.Empty<incident>();
@@ -195,7 +201,8 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
-            if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.title == criteria.CaseId);
+            if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
+            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.title == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._customerid_value == Guid.Parse(criteria.ClinicId));
 
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
@@ -244,7 +251,7 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey)
         {
             // add links to documents.
-            incident dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).FirstOrDefault();
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.bcgov_incident_bcgov_documenturl).GetValue();
 
             if (dmerEntity != null)
             {
@@ -309,7 +316,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
-            incident dmerEntity = dynamicsContext.incidents.Where(x => x.title == dmerIdentifier).FirstOrDefault();
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.dfp_incident_dfp_dmerflag).GetValue();
 
             if (dmerEntity != null)
             {
