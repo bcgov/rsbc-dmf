@@ -24,9 +24,10 @@ service CaseManager {
 
 message SearchRequest {
   string caseId = 1;
-  string clinicId = 2;
-  string driverLicenseNumber = 3;
-  repeated string statuses = 4;
+  string title = 2;
+  string clinicId = 3;
+  string driverLicenseNumber = 4;
+  repeated string statuses = 5;
 }
 
 message SearchReply {
