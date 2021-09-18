@@ -71,7 +71,7 @@ namespace OAuthServer
                 ;
 
             //store the oidc key in the key ring persistent volume
-            var keyPath = keyRingPath ?? "./Data" + "/oidc_key.jwk";
+            var keyPath = Path.Combine(new DirectoryInfo(keyRingPath ?? "./Data").FullName, "oidc_key.jwk");
 
             //add key as signing key
             builder.AddDeveloperSigningCredential(filename: keyPath);
