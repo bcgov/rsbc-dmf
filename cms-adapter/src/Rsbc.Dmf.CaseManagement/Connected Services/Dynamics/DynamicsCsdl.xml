@@ -6364,6 +6364,7 @@
         <Property Name="dfp_type" Type="Edm.Int32" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
@@ -6379,7 +6380,7 @@
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="_createdby_value" Type="Edm.Guid" />
         <Property Name="dfp_loginid" Type="Edm.Guid" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="dfp_userid" Type="Edm.String" Unicode="false" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_login_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
@@ -6417,7 +6418,6 @@
           <PropertyRef Name="dfp_medicalpractitionerid" />
         </Key>
         <Property Name="_owninguser_value" Type="Edm.Guid" />
-        <Property Name="dfp_iscommercial" Type="Edm.Int32" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
         <Property Name="versionnumber" Type="Edm.Int64" />
@@ -9433,6 +9433,7 @@
         <Property Name="_dfp_medicalpractitionerid_value" Type="Edm.Guid" />
         <Property Name="_customerid_value" Type="Edm.Guid" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_iscommercial" Type="Edm.Int32" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="contractservicelevelcode" Type="Edm.Int32" />
         <Property Name="lastonholdtime" Type="Edm.DateTimeOffset" />

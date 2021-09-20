@@ -1,6 +1,7 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
 using System.IO;
@@ -19,20 +21,28 @@ namespace OAuthServer
     public class Startup
     {
         private const string HealthCheckReadyTag = "ready";
-        public IWebHostEnvironment Environment { get; }
-        public IConfiguration Configuration { get; }
+        private readonly IWebHostEnvironment environment;
+        private readonly IConfiguration configuration;
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Environment = environment;
-            Configuration = configuration;
+            this.environment = environment;
+            this.configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var dpBuilder = services.AddDataProtection();
+            var keyRingPath = configuration.GetValue<string>("KEY_RING_PATH");
+            if (!string.IsNullOrWhiteSpace(keyRingPath))
+            {
+                //configure data protection folder for key sharing
+                dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
+            }
+
             services.AddControllersWithViews();
 
-            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"));
             var builder = services
                 .AddIdentityServer(options =>
@@ -45,7 +55,7 @@ namespace OAuthServer
                     options.UserInteraction.LoginUrl = "~/login";
                     options.UserInteraction.LogoutUrl = "~/logout";
 
-                    if (!string.IsNullOrEmpty(Configuration["ISSUER_URI"])) options.IssuerUri = Configuration["ISSUER_URI"];
+                    if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
                 })
 
                 .AddOperationalStore(options =>
@@ -60,8 +70,14 @@ namespace OAuthServer
                 .AddInMemoryCaching()
                 ;
 
-            builder.AddDeveloperSigningCredential(filename: "./Data/tempkey.jwk");
-            var encryptionKey = Microsoft.IdentityModel.Tokens.JsonWebKey.Create(File.ReadAllText("./Data/tempkey.jwk"));
+            //store the oidc key in the key ring persistent volume
+            var keyPath = Path.Combine(new DirectoryInfo(keyRingPath ?? "./Data").FullName, "oidc_key.jwk");
+
+            //add key as signing key
+            builder.AddDeveloperSigningCredential(filename: keyPath);
+
+            //add key as encryption key to oidc jwks endpoint that is used by BCSC to encrypt tokens
+            var encryptionKey = Microsoft.IdentityModel.Tokens.JsonWebKey.Create(File.ReadAllText(keyPath));
             encryptionKey.Use = "enc";
             builder.AddValidationKey(new SecurityKeyInfo { Key = encryptionKey });
 
@@ -73,9 +89,9 @@ namespace OAuthServer
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
                 {
-                    Configuration.GetSection("identityproviders:bcsc").Bind(options);
+                    configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
-                    options.GetClaimsFromUserInfoEndpoint = true;
+                    options.GetClaimsFromUserInfoEndpoint = false;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -89,6 +105,37 @@ namespace OAuthServer
                     //add required scopes
                     options.Scope.Add("address");
                     options.Scope.Add("email");
+
+                    //set the tokens decrypting key
+                    options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
+
+                    //options.Events = new OpenIdConnectEvents
+                    //{
+                    //    OnTokenResponseReceived = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    },
+                    //    OnTokenValidated = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    },
+                    //    OnRemoteFailure = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    },
+                    //    OnAuthenticationFailed = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    },
+                    //    OnUserInformationReceived = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    },
+                    //    OnTicketReceived = async ctx =>
+                    //    {
+                    //        await Task.CompletedTask;
+                    //    }
+                    //};
                 });
 
             services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
@@ -103,9 +150,10 @@ namespace OAuthServer
         public void Configure(IApplicationBuilder app)
         {
             app.UseForwardedHeaders();
-            if (Environment.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseXContentTypeOptions();
@@ -122,7 +170,7 @@ namespace OAuthServer
             app.UseResponseCompression();
             app.UseCookiePolicy();
 
-            app.UsePathBase(Configuration["BASE_PATH"] ?? "");
+            app.UsePathBase(configuration["BASE_PATH"] ?? "");
             app.UseRouting();
             app.UseIdentityServer();
             app.UseAuthentication();
