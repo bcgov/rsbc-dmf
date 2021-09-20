@@ -21,12 +21,12 @@ namespace OAuthServer
     public class Startup
     {
         private const string HealthCheckReadyTag = "ready";
-        public IWebHostEnvironment Environment { get; }
-        public IConfiguration configuration { get; }
+        private readonly IWebHostEnvironment environment;
+        private readonly IConfiguration configuration;
 
         public Startup(IWebHostEnvironment environment, IConfiguration configuration)
         {
-            Environment = environment;
+            this.environment = environment;
             this.configuration = configuration;
         }
 
@@ -71,7 +71,7 @@ namespace OAuthServer
                 ;
 
             //store the oidc key in the key ring persistent volume
-            var keyPath = keyRingPath ?? "./Data/" + "oidc_key.jwk";
+            var keyPath = Path.Combine(new DirectoryInfo(keyRingPath ?? "./Data").FullName, "oidc_key.jwk");
 
             //add key as signing key
             builder.AddDeveloperSigningCredential(filename: keyPath);
@@ -150,7 +150,7 @@ namespace OAuthServer
         public void Configure(IApplicationBuilder app)
         {
             app.UseForwardedHeaders();
-            if (Environment.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 IdentityModelEventSource.ShowPII = true;
