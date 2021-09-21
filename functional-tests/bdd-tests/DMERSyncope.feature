@@ -381,7 +381,11 @@ Scenario: Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on the Next button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
