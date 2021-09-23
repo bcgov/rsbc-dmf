@@ -297,7 +297,10 @@ Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Wit
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Situational, Avoidable Trigger radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -315,7 +318,10 @@ Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Situational, Avoidable Trigger radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on Yes for Syncopal Event in the past 7 days
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -333,7 +339,10 @@ Scenario: Non-Commercial Syncope Vasovagal, Single, Typical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on the Typical Vasovagal radio button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -351,7 +360,10 @@ Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I do not select the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
@@ -369,7 +381,11 @@ Scenario: Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
-    # to be completed
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on the Next button
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
