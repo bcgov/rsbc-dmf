@@ -880,6 +880,14 @@ namespace bdd_tests
                 var CADTreatedWithCABGYes = ngDriver.WrappedDriver.FindElement(By.Id("etjjl3h-yes"));
                 CADTreatedWithCABGYes.Click();
 
+                // select 'No' for 'CABG treatment within the past 3 months??'
+                var CABGTreatmentWithinPast3MonthsNo = ngDriver.WrappedDriver.FindElement(By.Id("epp6zyr-n"));
+                CABGTreatmentWithinPast3MonthsNo.Click();
+
+                // select 'Yes' for 'CABG treatment within the past 3 months??'
+                var CABGTreatmentWithinPast3MonthsYes = ngDriver.WrappedDriver.FindElement(By.Id("epp6zyr-y"));
+                CABGTreatmentWithinPast3MonthsYes.Click();
+
                 Thread.Sleep(1000);
 
                 /**************************** 
