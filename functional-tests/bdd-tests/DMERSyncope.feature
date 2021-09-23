@@ -4,7 +4,7 @@ Feature: DMERSyncope.feature
 
 # non commercial
 # not within 7 days > clean pass
-Scenario: Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -28,7 +28,7 @@ Scenario: Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pa
 
 # non commercial
 # within 7 days > fail
-Scenario: Non-Commercial Syncope Unexplained Single Less than 7 Days > Fail
+Scenario: S3DMFT-1156 - Non-Commercial Syncope Unexplained Single Less than 7 Days > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -52,7 +52,7 @@ Scenario: Non-Commercial Syncope Unexplained Single Less than 7 Days > Fail
 
 # non commercial 
 # not within past 3 months > clean pass
-Scenario: Non-Commercial Syncope Unexplained Recurrent Not Within 3 Months
+Scenario: S3DMFT-1157 - Non-Commercial Syncope Unexplained Recurrent Not Within 3 Months > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -76,7 +76,7 @@ Scenario: Non-Commercial Syncope Unexplained Recurrent Not Within 3 Months
 
 # non commercial 
 # within 3 months > fail
-Scenario: Non-Commercial Syncope Unexplained Recurrent Within 3 Months
+Scenario: S3DMFT-1158 - Non-Commercial Syncope Unexplained Recurrent Within 3 Months > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -101,7 +101,7 @@ Scenario: Non-Commercial Syncope Unexplained Recurrent Within 3 Months
 
 # non commercial
 # fail
-Scenario: Non-Commercial Syncope Currently Untreated Single
+Scenario: S3DMFT-1159 - Non-Commercial Syncope Currently Untreated Single > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -124,7 +124,7 @@ Scenario: Non-Commercial Syncope Currently Untreated Single
 
 # non commercial
 # fail
-Scenario: Non-Commercial Syncope Currently Untreated Recurrent
+Scenario: S3DMFT-1160 - Non-Commercial Syncope Currently Untreated Recurrent > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -147,7 +147,7 @@ Scenario: Non-Commercial Syncope Currently Untreated Recurrent
 
 # non commercial
 # within 7 days > fail
-Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
+Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Within 7 Days > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -171,7 +171,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Recent
 
 # non commercial
 # within 7 days > fail
-Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Recent
+Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -195,7 +195,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Re
 
 # non commercial
 # not within 7 days > clean pass
-Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Recent
+Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -219,7 +219,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not
 
 # non commercial
 # not within 7 days > clean pass
-Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Recent
+Scenario: S3DMFT-1164 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 7 Days > Fail
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -242,7 +242,7 @@ Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Rec
     Then I log out of the portal
 
 # non commercial > pass
-Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
+Scenario: S3DMFT-1165 - Non-Commercial Syncope Reversible, Treated Successfully, Single > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -264,7 +264,7 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Single
     Then I log out of the portal
 
 # non commercial > pass
-Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
+Scenario: S3DMFT-1166 - Non-Commercial Syncope Reversible, Treated Successfully, Recurrent > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -285,7 +285,7 @@ Scenario: Non-Commercial Syncope Reversible, Treated Successfully, Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
+Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -306,7 +306,7 @@ Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Wit
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
+Scenario: S3DMFT-1168 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -327,7 +327,7 @@ Scenario: Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Vasovagal, Single, Typical
+Scenario: S3DMFT-1169 - Non-Commercial Syncope Vasovagal, Single, Typical
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -348,7 +348,8 @@ Scenario: Non-Commercial Syncope Vasovagal, Single, Typical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical
+#Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical (incomplete)
+Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -369,7 +370,7 @@ Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (Confirm?)
+Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (Confirm?)
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
