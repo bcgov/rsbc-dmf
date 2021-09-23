@@ -348,7 +348,6 @@ Scenario: S3DMFT-1169 - Non-Commercial Syncope Vasovagal, Single, Typical
     And I click on the form submit button
     Then I log out of the portal
 
-#Scenario: Non-Commercial Syncope Vasovagal, Recurrent, Atypical (incomplete)
 Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
@@ -404,6 +403,8 @@ Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not With
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -422,6 +423,8 @@ Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 3 Months
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -440,6 +443,8 @@ Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 3 Mo
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -458,6 +463,8 @@ Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -476,6 +483,8 @@ Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -496,6 +505,8 @@ Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     # commercial
     # within 30 days > fail
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -516,6 +527,8 @@ Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     # commercial
     # within 30 days > fail
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -536,6 +549,8 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     # commercial
     # not within 30 days > clean pass
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -556,6 +571,8 @@ Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     # commercial
     # not within 30 days > clean pass
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -575,6 +592,8 @@ Scenario: S3DMFT-1181 - Commercial Syncope Reversible, Treated Successfully, Sin
     And I click on the Next button
     # commercial > pass
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -594,6 +613,8 @@ Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Rec
     And I click on the Next button
     # commercial > pass
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -612,6 +633,8 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -630,6 +653,8 @@ Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -648,6 +673,8 @@ Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
@@ -666,6 +693,8 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Recurrent, Atypical
     And I enter the Uncorrected Binocular Vision as 20
     And I click on the Next button
     And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+
     # to be completed
     And I click on the Next button
     And I enter the medical opinion and confirmations
