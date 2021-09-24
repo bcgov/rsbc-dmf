@@ -87,7 +87,9 @@ message UpdateCaseRequest{
 	bool isCleanPass = 2;
 	repeated FlagItem flags = 3;
 	string pdfFileKey = 4;
-	string dataFileKey = 5;
+	int64 pdfFileSize = 5;
+	string dataFileKey = 6;
+	int64 dataFileSize = 7;
 }
 
 message UpdateCaseReply{	
