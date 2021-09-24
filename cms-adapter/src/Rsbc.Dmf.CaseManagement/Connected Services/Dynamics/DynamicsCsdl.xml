@@ -231,7 +231,6 @@
           <ReferentialConstraint Property="_territoryid_value" ReferencedProperty="territoryid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_account_dfp_participant" Type="Collection(mscrm.dfp_participant)" Partner="dfp_PersonId_account" />
-        <NavigationProperty Name="dfp_account_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_OrganizationId" />
         <NavigationProperty Name="bcgov_account_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_Customer_account" />
         <NavigationProperty Name="bcgov_account_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_Customer_account" />
         <NavigationProperty Name="dfp_clinic_incident" Type="Collection(mscrm.incident)" Partner="dfp_ClinicId" />
@@ -6307,9 +6306,9 @@
           <ReferentialConstraint Property="_dfp_personid_value" ReferencedProperty="contactid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_driver_incident_DriverId" Type="Collection(mscrm.incident)" Partner="dfp_DriverId" />
-        <NavigationProperty Name="dfp_driver_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_driver_dfp_decision" Type="Collection(mscrm.dfp_decision)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_driver_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_DriverId" />
+        <NavigationProperty Name="dfp_driver_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_DriverId" />
       </EntityType>
       <EntityType Name="dfp_flag" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6361,27 +6360,25 @@
         <Key>
           <PropertyRef Name="dfp_loginid" />
         </Key>
-        <Property Name="dfp_type" Type="Edm.Int32" />
-        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
-        <Property Name="statecode" Type="Edm.Int32" />
-        <Property Name="_organizationid_value" Type="Edm.Guid" />
-        <Property Name="_dfp_organizationid_value" Type="Edm.Guid" />
-        <Property Name="_dfp_medicalpractitionerid_value" Type="Edm.Guid" />
-        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="statuscode" Type="Edm.Int32" />
-        <Property Name="createdon" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
-        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
-        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="dfp_loginid" Type="Edm.Guid" />
+        <Property Name="dfp_type" Type="Edm.Int32" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_organizationid_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="dfp_userid" Type="Edm.String" Unicode="false" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_login_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -6403,14 +6400,9 @@
         <NavigationProperty Name="dfp_login_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_login" />
         <NavigationProperty Name="dfp_login_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_login" />
         <NavigationProperty Name="dfp_login_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_login" />
+        <NavigationProperty Name="dfp_login_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="dfp_LoginId" />
         <NavigationProperty Name="dfp_DriverId" Type="mscrm.dfp_driver" Nullable="false" Partner="dfp_driver_dfp_login">
           <ReferentialConstraint Property="_dfp_driverid_value" ReferencedProperty="dfp_driverid" />
-        </NavigationProperty>
-        <NavigationProperty Name="dfp_OrganizationId" Type="mscrm.account" Nullable="false" Partner="dfp_account_dfp_login">
-          <ReferentialConstraint Property="_dfp_organizationid_value" ReferencedProperty="accountid" />
-        </NavigationProperty>
-        <NavigationProperty Name="dfp_MedicalPractitionerId" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_dfp_medicalpractitioner_dfp_login">
-          <ReferentialConstraint Property="_dfp_medicalpractitionerid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
       </EntityType>
       <EntityType Name="dfp_medicalpractitioner" BaseType="mscrm.crmbaseentity">
@@ -6430,6 +6422,7 @@
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="dfp_providerid" Type="Edm.String" Unicode="false" />
         <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_providertype" Type="Edm.Int32" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="_owningteam_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
@@ -6441,7 +6434,7 @@
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="dfp_providerrole" Type="Edm.Int32" />
-        <Property Name="dfp_providertype" Type="Edm.Int32" />
+        <Property Name="_dfp_loginid_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalpractitioner_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -6477,10 +6470,12 @@
         <NavigationProperty Name="dfp_PersonId" Type="mscrm.contact" Nullable="false" Partner="dfp_contact_dfp_medicalpractitioner">
           <ReferentialConstraint Property="_dfp_personid_value" ReferencedProperty="contactid" />
         </NavigationProperty>
-        <NavigationProperty Name="dfp_dfp_medicalpractitioner_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_MedicalPractitionerId" />
         <NavigationProperty Name="dfp_dfp_medicalpractitioner_incident" Type="Collection(mscrm.incident)" Partner="dfp_MedicalPractitionerId" />
         <NavigationProperty Name="dfp_ClinicId" Type="mscrm.account" Nullable="false" Partner="dfp_account_dfp_medicalpractitioner">
           <ReferentialConstraint Property="_dfp_clinicid_value" ReferencedProperty="accountid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_LoginId" Type="mscrm.dfp_login" Nullable="false" Partner="dfp_login_dfp_medicalpractitioner">
+          <ReferentialConstraint Property="_dfp_loginid_value" ReferencedProperty="dfp_loginid" />
         </NavigationProperty>
       </EntityType>
       <EntityType Name="dfp_outcomestatus" BaseType="mscrm.crmbaseentity">
@@ -27875,7 +27870,6 @@
           <NavigationPropertyBinding Path="opportunity_parent_account" Target="opportunities" />
           <NavigationPropertyBinding Path="territoryid" Target="territories" />
           <NavigationPropertyBinding Path="dfp_account_dfp_participant" Target="dfp_participants" />
-          <NavigationPropertyBinding Path="dfp_account_dfp_login" Target="dfp_logins" />
           <NavigationPropertyBinding Path="bcgov_account_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="bcgov_account_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="dfp_clinic_incident" Target="incidents" />
@@ -29911,9 +29905,9 @@
           <NavigationPropertyBinding Path="dfp_driver_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_PersonId" Target="contacts" />
           <NavigationPropertyBinding Path="dfp_driver_incident_DriverId" Target="incidents" />
-          <NavigationPropertyBinding Path="dfp_driver_dfp_login" Target="dfp_logins" />
           <NavigationPropertyBinding Path="dfp_driver_dfp_decision" Target="dfp_decisions" />
           <NavigationPropertyBinding Path="dfp_driver_bcgov_documenturl" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="dfp_driver_dfp_login" Target="dfp_logins" />
         </EntitySet>
         <EntitySet Name="dfp_flags" EntityType="Microsoft.Dynamics.CRM.dfp_flag">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -29941,9 +29935,8 @@
           <NavigationPropertyBinding Path="dfp_login_ProcessSession" Target="processsessions" />
           <NavigationPropertyBinding Path="dfp_login_BulkDeleteFailures" Target="bulkdeletefailures" />
           <NavigationPropertyBinding Path="dfp_login_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_login_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
-          <NavigationPropertyBinding Path="dfp_OrganizationId" Target="accounts" />
-          <NavigationPropertyBinding Path="dfp_MedicalPractitionerId" Target="dfp_medicalpractitioners" />
         </EntitySet>
         <EntitySet Name="dfp_medicalpractitioners" EntityType="Microsoft.Dynamics.CRM.dfp_medicalpractitioner">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -29963,9 +29956,9 @@
           <NavigationPropertyBinding Path="dfp_medicalpractitioner_BulkDeleteFailures" Target="bulkdeletefailures" />
           <NavigationPropertyBinding Path="dfp_medicalpractitioner_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_PersonId" Target="contacts" />
-          <NavigationPropertyBinding Path="dfp_dfp_medicalpractitioner_dfp_login" Target="dfp_logins" />
           <NavigationPropertyBinding Path="dfp_dfp_medicalpractitioner_incident" Target="incidents" />
           <NavigationPropertyBinding Path="dfp_ClinicId" Target="accounts" />
+          <NavigationPropertyBinding Path="dfp_LoginId" Target="dfp_logins" />
         </EntitySet>
         <EntitySet Name="dfp_outcomestatuses" EntityType="Microsoft.Dynamics.CRM.dfp_outcomestatus">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />

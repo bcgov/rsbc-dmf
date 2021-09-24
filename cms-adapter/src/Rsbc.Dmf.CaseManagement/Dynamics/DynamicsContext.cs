@@ -2,6 +2,7 @@
 using Microsoft.OData.Client;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,6 +48,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 this.DetachLink(link.Source, link.SourceProperty, link.Target);
             }
         }
+
+        public async Task<IEnumerable<TEntity>> GetAllPagesAsync<TEntity>(IQueryable<TEntity> query) => (await ((DataServiceQuery<TEntity>)query).GetAllPagesAsync());
 
         public void ActivateObject(object entity, int activeStatusValue) =>
             ModifyEntityStatus(this, entity, (int)EntityState.Active, activeStatusValue);
