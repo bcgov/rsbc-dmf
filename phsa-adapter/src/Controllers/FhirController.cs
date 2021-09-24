@@ -522,6 +522,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                 string dataFileKey = "";
                 string pdfFileKey = "";
+                Int64 dataFileSize = 0;
+                Int64 pdfFileSize = 0;
 
                 _logger.LogInformation(bundle.ToJson());
 
@@ -544,6 +546,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                         var reply = _documentStorageAdapterClient.UploadFile(pdfData);
                         pdfFileKey = reply.FileName;
+                        pdfFileSize = pdfData.Data.Length;
                     }
 
                     if (entry.Resource.ResourceType == ResourceType.Binary &&
@@ -561,6 +564,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                         var reply = _documentStorageAdapterClient.UploadFile(jsonData);
                         dataFileKey = reply.FileName;
+                        dataFileSize = jsonData.Data.Length;
                     }
                 }
 
@@ -583,7 +587,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
                                 Id = filename,
                                 PdfFileKey = pdfFileKey,
-                                DataFileKey = dataFileKey
+                                PdfFileSize = pdfFileSize,
+                                DataFileKey = dataFileKey,
+                                DataFileSize = dataFileSize
                             };
 
                             triageRequest.AddItems(questionnaireResponse.Item);
@@ -597,6 +603,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 FileName = $"{filename}.json",
                                 FolderName = "triage-request"
                             };
+
+
 
                             // save a copy in the S3.
                             _documentStorageAdapterClient.UploadFile(jsonData);
