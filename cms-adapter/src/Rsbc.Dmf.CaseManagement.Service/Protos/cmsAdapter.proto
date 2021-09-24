@@ -115,26 +115,68 @@ service UserManager {
   rpc Login (UserLoginRequest) returns (UserLoginReply);
 }
 
-message User {
-	string userId = 1;
-	string firstName = 2;
-	string lastName = 3;
-}
 
 message UsersSearchRequest {
-	string externalSystem = 1;
-	string externalSystemUserId = 2;
+	string userId = 1;
+	string externalSystem = 2;
+	string externalSystemUserId = 3;
+	UserType userType = 4;
 }
 
 message UsersSearchReply {
-	repeated User user = 1;
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	repeated User user = 10;
 }
 
 message UserLoginRequest {
-	User user = 1;
+	string externalSystemUserId = 1;
+	string externalSystem = 2;
+	string firstName = 10;
+	string lastName = 11;
+	repeated UserProfile userProfiles = 20;
 }
 
 message UserLoginReply {
-	bool success = 1;
-	User user = 2;
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	string userId = 10;
 }
+
+message User {
+	string id = 1;
+	string externalSystemUserId = 2;
+	string externalSystem = 3;
+	string firstName = 10;
+	string lastName = 11;
+	repeated UserProfile linkedProfiles = 20;
+}
+
+message UserProfile {
+	oneof profile {
+		MedicalPractitionerProfile medicalPractitioner = 1;
+		DriverProfile driver = 2;
+	}
+}
+
+message MedicalPractitionerProfile {
+	string id = 1;
+	string role = 2;
+	Clinic clinic = 3;
+}
+
+message Clinic {
+	string id = 1;
+	string name = 2;
+}
+
+message DriverProfile {
+	string id = 1;
+
+}
+
+enum UserType {
+	MedicalPractitioner = 0;
+	Driver = 1;
+}
+
