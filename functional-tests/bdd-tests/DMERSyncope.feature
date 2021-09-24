@@ -702,3 +702,113 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
+
+Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within Past 7 Days
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Single Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on No for Syncopal Event in the past 7 days
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within Past Year
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Typical Vasovagal radio button
+    And I click on Yes for Syncopal Event in the past year
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within Past Year
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Typical Vasovagal radio button
+    And I click on No for Syncopal Event in the past year
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within Past Year
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on Yes for Syncopal Event in the past year
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within Past Year
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I click on the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on No for Syncopal Event in the past year
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
