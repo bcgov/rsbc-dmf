@@ -125,12 +125,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 if (!string.IsNullOrEmpty(request.PdfFileKey))
                 {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey);
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize);
                 }
 
                 if (!string.IsNullOrEmpty(request.DataFileKey))
                 {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey);
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize);
                 }
                 reply.ResultStatus = ResultStatus.Success;
             }
