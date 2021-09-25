@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Rsbc.Dmf.CaseManagement.Service.Services
+namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class UserService : UserManager.UserManagerBase
     {
@@ -21,7 +21,7 @@ namespace Rsbc.Dmf.CaseManagement.Service.Services
             {
                 var users = (await userManager.SearchUsers(new SearchUsersRequest
                 {
-                    ByExternalUserId = request.ExternalSystemUserId == null ? null : (request.ExternalSystemUserId, request.ExternalSystem),
+                    ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
                     ByType = request.UserType == UserType.Driver ? CaseManagement.UserType.Driver : CaseManagement.UserType.MedicalPractitioner,
                     ByUserId = request.UserId
                 })).Items.Select(u => new User
@@ -35,7 +35,7 @@ namespace Rsbc.Dmf.CaseManagement.Service.Services
             }
             catch (Exception e)
             {
-                return new UsersSearchReply { ResultStatus = ResultStatus.Success, ErrorDetail = e.ToString() };
+                return new UsersSearchReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
 
@@ -58,13 +58,11 @@ namespace Rsbc.Dmf.CaseManagement.Service.Services
         {
             try
             {
-                var driver = request.UserProfiles.SingleOrDefault(p => p.Driver != null);
-                var medicalPractitionerProfiles = request.UserProfiles.Where(p => p.MedicalPractitioner != null).ToArray();
-
                 var loginRequest = new LoginUserRequest();
 
-                if (driver != null)
+                if (request.UserType == UserType.Driver)
                 {
+                    var driver = request.UserProfiles.SingleOrDefault(p => p.Driver != null);
                     loginRequest.User = new DriverUser
                     {
                         ExternalSystem = request.ExternalSystem,
@@ -73,8 +71,10 @@ namespace Rsbc.Dmf.CaseManagement.Service.Services
                         LastName = request.LastName
                     };
                 }
-                else if (medicalPractitionerProfiles.Any())
+                else if (request.UserType == UserType.MedicalPractitioner)
                 {
+                    var medicalPractitionerProfiles = request.UserProfiles.Where(p => p.MedicalPractitioner != null).ToArray();
+
                     loginRequest.User = new MedicalPractitionerUser
                     {
                         ExternalSystem = request.ExternalSystem,
@@ -99,7 +99,7 @@ namespace Rsbc.Dmf.CaseManagement.Service.Services
             }
             catch (Exception e)
             {
-                return new UserLoginReply { ResultStatus = ResultStatus.Success, ErrorDetail = e.ToString() };
+                return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
         }
     }

@@ -21,7 +21,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
     public class DmerCaseListItem
     {
         public string Id { get; set; }
-        public string Title {get; set;}
+        public string Title { get; set; }
         public string PatientName { get; set; }
         public string DriverLicense { get; set; }
         public string CreatedBy { get; set; }
@@ -45,11 +45,16 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
         public async Task<IEnumerable<DmerCaseListItem>> SearchCases(CaseSearchQuery query)
         {
             var userContext = await userService.GetCurrentUserContext();
+            var currentClinic = userContext.CurrentClinicAssignment;
+
+            //must search within a specific clinic
+            if (currentClinic == null) return Array.Empty<DmerCaseListItem>();
+
             var searchRequest = new SearchRequest
             {
                 Title = query.ByTitle ?? string.Empty,
                 DriverLicenseNumber = query.ByDriverLicense ?? string.Empty,
-                ClinicId = userContext.ClinicId
+                ClinicId = currentClinic.ClinicId
             };
             searchRequest.Statuses.Add(query.ByStatus);
 
