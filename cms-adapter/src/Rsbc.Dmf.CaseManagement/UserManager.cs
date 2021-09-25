@@ -88,7 +88,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(l => l.statecode == (int)EntityState.Active);
 
             if (!string.IsNullOrEmpty(request.ByUserId)) query = query.Where(l => l.dfp_loginid == Guid.Parse(request.ByUserId));
-            if (request.ByExternalUserId != null) query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
+            if (request.ByExternalUserId.HasValue) query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
                 l.dfp_type == (int)ParseExternalSystem(request.ByExternalUserId.Value.externalSystem));
 
             var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
@@ -123,8 +123,8 @@ namespace Rsbc.Dmf.CaseManagement
                 UserType.MedicalPractitioner => users.Select(u => new MedicalPractitionerUser
                 {
                     Id = u.dfp_loginid.ToString(),
-                    FirstName = u.dfp_login_dfp_medicalpractitioner[0].dfp_PersonId.firstname,
-                    LastName = u.dfp_login_dfp_medicalpractitioner[0].dfp_PersonId.lastname,
+                    FirstName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.firstname,
+                    LastName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.lastname,
                     ExternalSystem = ((LoginType)u.dfp_type).ToString(),
                     ExternalSystemUserId = u.dfp_userid,
                     ClinicAssignments = u.dfp_login_dfp_medicalpractitioner.Select(mp => new ClinicAssignment
@@ -260,7 +260,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var clinicEntity = dynamicsContext.accounts.Where(a => a.statecode == (int)EntityState.Active && a.accountid == Guid.Parse(clinicAssignment.Clinic.Id)).FirstOrDefault();
 
-            if (clinicEntity == null) throw new Exception($"Clinit id {clinicAssignment.Clinic.Id} not found");
+            if (clinicEntity == null) throw new Exception($"Clinic id {clinicAssignment.Clinic.Id} not found");
 
             dynamicsContext.SetLink(medicalPractitioner, nameof(dfp_medicalpractitioner.dfp_ClinicId), clinicEntity);
 

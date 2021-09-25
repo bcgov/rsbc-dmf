@@ -109,7 +109,6 @@ message FlagItem {
 	FlagTypeOptions flagType = 4;
 }
 
-
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
@@ -132,6 +131,7 @@ message UsersSearchReply {
 message UserLoginRequest {
 	string externalSystemUserId = 1;
 	string externalSystem = 2;
+	UserType userType = 3; 
 	string firstName = 10;
 	string lastName = 11;
 	repeated UserProfile userProfiles = 20;
