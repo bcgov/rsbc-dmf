@@ -19,7 +19,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<List<Flag>> GetAllFlags();
 
-        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey);
+        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
     }
 
     public class CaseSearchRequest
@@ -248,7 +248,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey)
+        public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
         {
             // add links to documents.
             incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.bcgov_incident_bcgov_documenturl).GetValue();
@@ -288,7 +288,7 @@ namespace Rsbc.Dmf.CaseManagement
                             bcgov_filename = filename,
                             bcgov_fileextension = extension,
                             bcgov_origincode = 931490000,
-                            bcgov_filesize = "200 KB"
+                            bcgov_filesize = HumanReadableFileLength(fileSize)
                         };
                         dynamicsContext.AddTobcgov_documenturls(givenUrl);
                     }
@@ -297,6 +297,22 @@ namespace Rsbc.Dmf.CaseManagement
 
                 dynamicsContext.SaveChanges();
             }
+        }
+
+        /// <summary>
+        /// Convert a file length to a string for display in Dynamics.
+        /// </summary>
+        /// <param name="byteCount"></param>
+        /// <returns></returns>
+        private static string HumanReadableFileLength(Int64 byteCount)
+        {
+            string[] suffix = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //suffix for file size
+            if (byteCount == 0)
+                return "0" + " " + suffix[0];
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return Math.Sign(byteCount) * num + " " + suffix[place];
         }
 
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)

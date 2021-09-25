@@ -63,7 +63,7 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
                         if (matchFlag != null)
                         {
                             followUpFlag.FlagType = matchFlag.FlagType;
-                          // S3DMFT-926 - set clean pass based on follow up or review flags.
+                            // S3DMFT-926 - set clean pass based on follow up or review flags.
                             if (matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types
                                 .FlagTypeOptions.FollowUp || matchFlag.FlagType == global::Rsbc.Dmf.CaseManagement.Service.FlagItem.Types.FlagTypeOptions.Review)
                             {
@@ -91,7 +91,10 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
                 CaseId = request.Id,
                 IsCleanPass = cleanPass,
                 DataFileKey = request.DataFileKey,
-                PdfFileKey = request.PdfFileKey
+                DataFileSize = request.DataFileSize,
+                PdfFileKey = request.PdfFileKey,
+                PdfFileSize = request.PdfFileSize
+
             };
 
             foreach(var item in followUpFlags)
@@ -143,6 +146,6 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
                 return Task.FromResult(result);
             }
-
-        }
+        
+    }
     }
