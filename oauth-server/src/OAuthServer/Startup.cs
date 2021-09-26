@@ -1,20 +1,7 @@
-﻿using IdentityServer4;
-using IdentityServer4.Models;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
+﻿using System;
 using System.IO;
-using System.Text.Json;
+using System.Security.Claims;
+using System.Threading;
 
 namespace OAuthServer
 {
@@ -91,6 +78,7 @@ namespace OAuthServer
                 {
                     configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
+                    //TODO: investigate why options.GetClaimsFromUserInfoEndpoint = true fails
                     options.GetClaimsFromUserInfoEndpoint = false;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
@@ -109,33 +97,46 @@ namespace OAuthServer
                     //set the tokens decrypting key
                     options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
 
-                    //options.Events = new OpenIdConnectEvents
-                    //{
-                    //    OnTokenResponseReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnTokenValidated = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnRemoteFailure = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnAuthenticationFailed = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnUserInformationReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnTicketReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    }
-                    //};
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        //OnTokenResponseReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        OnTokenValidated = async ctx =>
+                        {
+                            //manually fetch claims from userinfo endpoint because the handler throws null reference error
+                            var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+                            using var client = new HttpClient();
+
+                            var response = await client.GetUserInfoAsync(new UserInfoRequest
+                            {
+                                Address = oidcConfig.UserInfoEndpoint,
+                                Token = ctx.TokenEndpointResponse.AccessToken
+                            });
+                            if (response.IsError)
+                            {
+                                ctx.Fail(new Exception(response.Error));
+                            }
+                            ctx.Principal.AddIdentity(new ClaimsIdentity(response.Claims));
+                        },
+                        //OnRemoteFailure = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnAuthenticationFailed = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnUserInformationReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnTicketReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //}
+                    };
                 });
 
             services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
