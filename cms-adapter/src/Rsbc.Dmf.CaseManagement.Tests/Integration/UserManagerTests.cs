@@ -17,7 +17,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             userManager = services.GetRequiredService<IUserManager>();
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanSearchUsersByBcscExternalId()
         {
             var userId = "d5068e96-3a04-ec11-b82d-00505683fbf4";
@@ -27,7 +27,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             result.Items.ShouldNotBeEmpty();
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanSearchUsersByBceidExternalId()
         {
             var userId = "b59ea4a2-3a04-ec11-b82d-00505683fbf4";
@@ -37,7 +37,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             result.Items.ShouldNotBeEmpty();
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanLoginNewDriver()
         {
             var userId = Guid.NewGuid().ToString();
@@ -64,7 +64,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             actualDriver.FirstName.ShouldBe(newDriver.FirstName);
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanLoginNewMedicalPractitioner()
         {
             var userId = Guid.NewGuid().ToString();
