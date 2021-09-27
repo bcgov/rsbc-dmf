@@ -326,7 +326,7 @@ Scenario: S3DMFT-1169 - Non-Commercial Syncope Vasovagal, Single, Typical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical
+Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Within 7 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -342,12 +342,35 @@ Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
+    And I click on Yes for Syncopal Event in the past 7 days
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7 Days > Fail (Confirm?)
+Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within 7 Days > Clean Pass
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on the Case ID for 333
+    And I refresh the page
+    And I wait for the drivers licence field to have a value
+    And I click on the Next button
+    And the second page content is displayed
+    And I click on the Next button
+    And I enter the Uncorrected Binocular Vision as 20
+    And I click on the Next button
+    And I do not select the Commercial DMER option
+    And I click on the Syncope checkbox
+    And I click on the Vasovagal Syncope radio button
+    And I click on the Recurrent Syncopal Event radio button
+    And I click on the Atypical Vasovagal radio button
+    And I click on No for Syncopal Event in the past 7 days
+    And I click on the Next button
+    And I enter the medical opinion and confirmations
+    And I click on the form submit button
+    Then I log out of the portal
+
+Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -369,7 +392,7 @@ Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not Within 1 Year > Clean Pass (Confirm?)
+Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -390,7 +413,7 @@ Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not With
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year > Fail (Confirm?)
+Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -411,7 +434,7 @@ Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year >
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Year > Clean Pass (Confirm?)
+Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -432,7 +455,7 @@ Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Ye
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single
+Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -452,7 +475,7 @@ Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent
+Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -472,7 +495,7 @@ Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Single, Within Past Month > Fail
+Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Single, Within Past Month > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -535,7 +558,7 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 30 Days > Fail
+Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 30 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -596,7 +619,7 @@ Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Rec
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
+Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -617,7 +640,7 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
+Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -638,7 +661,7 @@ Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical
+Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -659,7 +682,7 @@ Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within Past 7 Days
+Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -675,13 +698,13 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
     And I click on the Vasovagal Syncope radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on Yes for Syncopal Event in the past 7 days
+    And I click on Yes for Syncopal Event in the past year
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within Past 7 Days
+Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -697,13 +720,13 @@ Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not With
     And I click on the Vasovagal Syncope radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on No for Syncopal Event in the past 7 days
+    And I click on No for Syncopal Event in the past year
     And I click on the Next button
     And I enter the medical opinion and confirmations
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within Past Year
+Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -725,7 +748,7 @@ Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within Past Year
+Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -747,7 +770,7 @@ Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Wi
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within Past Year
+Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -769,7 +792,7 @@ Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Withi
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within Past Year
+Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
