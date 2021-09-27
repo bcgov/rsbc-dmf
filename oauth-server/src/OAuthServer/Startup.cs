@@ -1,6 +1,27 @@
-﻿using System;
+﻿using IdentityModel.Client;
+using IdentityServer4;
+using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 
 namespace OAuthServer
@@ -26,11 +47,10 @@ namespace OAuthServer
                 //configure data protection folder for key sharing
                 dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
             }
-
             services.AddControllersWithViews();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"));
+            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"), new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             var builder = services
                 .AddIdentityServer(options =>
                 {
@@ -87,10 +107,11 @@ namespace OAuthServer
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",
-                        RoleClaimType = "role"
+                        RoleClaimType = "role",
                     };
 
                     //add required scopes
+                    options.Scope.Add("profile");
                     options.Scope.Add("address");
                     options.Scope.Add("email");
 
@@ -118,7 +139,8 @@ namespace OAuthServer
                             {
                                 ctx.Fail(new Exception(response.Error));
                             }
-                            ctx.Principal.AddIdentity(new ClaimsIdentity(response.Claims));
+                            //ctx.Principal.AddIdentity(new ClaimsIdentity(response.Claims));
+                            ctx.Principal = new ClaimsPrincipal(new ClaimsIdentity(ctx.Principal.Identity, ctx.Principal.Claims.Concat(response.Claims)));
                         },
                         //OnRemoteFailure = async ctx =>
                         //{

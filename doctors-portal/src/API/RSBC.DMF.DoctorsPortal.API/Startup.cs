@@ -14,12 +14,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RSBC.DMF.DoctorsPortal.API.Services;
 using Serilog;
-using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace RSBC.DMF.DoctorsPortal.API
 {
@@ -73,8 +73,8 @@ namespace RSBC.DMF.DoctorsPortal.API
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(1);
+                    //options.EnableCaching = true;
+                    //options.CacheDuration = TimeSpan.FromMinutes(1);
                     configuration.GetSection("auth:introspection").Bind(options);
                     options.Events = new OAuth2IntrospectionEvents
                     {
@@ -83,6 +83,11 @@ namespace RSBC.DMF.DoctorsPortal.API
                             var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
                             ctx.Principal = await userService.Login(ctx.Principal);
                             ctx.Success();
+                        },
+                        OnUpdateClientAssertion =
+                        async ctx =>
+                        {
+                            await Task.CompletedTask;
                         }
                     };
                 });
