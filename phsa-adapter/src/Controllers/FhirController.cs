@@ -518,7 +518,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 var parser = new FhirJsonParser();
                 var bundle = parser.Parse<Bundle>(body);
 
-                string filename = bundle.Id;
+                string folderName = bundle.Id;
 
                 string dataFileKey = "";
                 string pdfFileKey = "";
@@ -540,8 +540,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             ContentType = "application/pdf",
                             Data = ByteString.CopyFrom(b.Data),
                             EntityName = "phsa-pdf",
-                            FileName = $"{filename}.pdf",
-                            FolderName = "pdf"
+                            FileName = $"DMER.pdf",
+                            FolderName = folderName,
                         };
 
                         var reply = _documentStorageAdapterClient.UploadFile(pdfData);
@@ -558,8 +558,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             ContentType = "application/json",
                             Data = ByteString.CopyFrom(b.Data),
                             EntityName = "phsa-eforms",
-                            FileName = $"{filename}.json",
-                            FolderName = "data"
+                            FileName = "data.json",
+                            FolderName = folderName
                         };
 
                         var reply = _documentStorageAdapterClient.UploadFile(jsonData);
@@ -585,7 +585,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             {
                                 Processed = false,
                                 TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
-                                Id = filename,
+                                Id = folderName,
                                 PdfFileKey = pdfFileKey,
                                 PdfFileSize = pdfFileSize,
                                 DataFileKey = dataFileKey,
@@ -594,13 +594,15 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                             triageRequest.AddItems(questionnaireResponse.Item);
 
+                            // unlike the others this file is saved into a "folder" that can be used for queueing.
+                            // S3 does not use folders like a file system, it is simple a convention for the key.
                             string jsonString = JsonConvert.SerializeObject(triageRequest);
                             UploadFileRequest jsonData = new UploadFileRequest()
                             {
                                 ContentType = "application/json",
                                 Data = ByteString.CopyFromUtf8(jsonString),
                                 EntityName = "dfp",
-                                FileName = $"{filename}.json",
+                                FileName = $"{bundle.Id}.json",
                                 FolderName = "triage-request"
                             };
 
