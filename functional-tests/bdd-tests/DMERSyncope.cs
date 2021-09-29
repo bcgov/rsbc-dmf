@@ -28,7 +28,9 @@ Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 7 D
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -50,7 +52,9 @@ Scenario: S3DMFT-1156 - Non-Commercial Syncope Unexplained Single Less than 7 Da
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -72,7 +76,9 @@ Scenario: S3DMFT-1157 - Non-Commercial Syncope Unexplained Recurrent Not Within 
     And I click on the Recurrent Syncopal Event radio button
     And I click on No for Syncopal Event in the past 3 months 
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -95,7 +101,9 @@ Scenario: S3DMFT-1158 - Non-Commercial Syncope Unexplained Recurrent Within 3 Mo
     And I click on Yes for Syncopal Event in the past 3 months 
     And I enter the recurrent unexplained past year syncope details
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -116,7 +124,9 @@ Scenario: S3DMFT-1159 - Non-Commercial Syncope Currently Untreated Single > Need
     And I click on the Currently Untreated radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -137,7 +147,9 @@ Scenario: S3DMFT-1160 - Non-Commercial Syncope Currently Untreated Recurrent > N
     And I click on the Currently Untreated radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -159,7 +171,9 @@ Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -181,7 +195,9 @@ Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Succ
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days    
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -203,7 +219,9 @@ Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I click on the Recurrent Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days    
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -225,7 +243,9 @@ Scenario: S3DMFT-1164 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I click on the Recurrent Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days    
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -246,7 +266,9 @@ Scenario: S3DMFT-1165 - Non-Commercial Syncope Reversible, Treated Successfully,
     And I click on the Reversible, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -267,7 +289,9 @@ Scenario: S3DMFT-1166 - Non-Commercial Syncope Reversible, Treated Successfully,
     And I click on the Reversible, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -288,7 +312,9 @@ Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, S
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -309,7 +335,9 @@ Scenario: S3DMFT-1168 - Non-Commercial Syncope Situational, Avoidable Trigger, S
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -330,7 +358,9 @@ Scenario: S3DMFT-1169 - Non-Commercial Syncope Vasovagal, Single, Typical
     And I click on the Single Syncopal Event radio button
     And I click on the Typical Vasovagal radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -352,7 +382,9 @@ Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, W
     And I click on the Atypical Vasovagal radio button
     And I click on Yes for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -374,7 +406,9 @@ Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, N
     And I click on the Atypical Vasovagal radio button
     And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -396,7 +430,9 @@ Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7
     And I click on the Atypical Vasovagal radio button
     And I click on the Next button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -417,7 +453,9 @@ Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not With
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -438,7 +476,9 @@ Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year >
     And I click on the Recurrent Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -459,7 +499,9 @@ Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Ye
     And I click on the Recurrent Syncopal Event radio button
     And I click on No for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -479,7 +521,9 @@ Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single > Needs Re
     And I click on the Currently Untreated radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -499,7 +543,9 @@ Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent > Needs
     And I click on the Currently Untreated radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -520,7 +566,9 @@ Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past month  
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -541,7 +589,9 @@ Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past month 
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -562,7 +612,9 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the Recurrent Syncopal Event radio button
     And I click on No for Syncopal Event in the past month
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -583,7 +635,9 @@ Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the Recurrent Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past month
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -603,7 +657,9 @@ Scenario: S3DMFT-1181 - Commercial Syncope Reversible, Treated Successfully, Sin
     And I click on the Reversible, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -623,7 +679,9 @@ Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Rec
     And I click on the Reversible, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -644,7 +702,9 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the Single Syncopal Event radio button
     And I click on No for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -665,7 +725,9 @@ Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the Single Syncopal Event radio button
     And I click on Yes for Syncopal Event in the past 7 days
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -686,7 +748,9 @@ Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical > Clean Pa
     And I click on the Single Syncopal Event radio button
     And I click on the Typical Vasovagal radio button
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -708,7 +772,9 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
     And I click on the Atypical Vasovagal radio button
     And I click on Yes for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -730,7 +796,9 @@ Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not With
     And I click on the Atypical Vasovagal radio button
     And I click on No for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -752,7 +820,9 @@ Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within
     And I click on the Typical Vasovagal radio button
     And I click on Yes for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -774,7 +844,9 @@ Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Wi
     And I click on the Typical Vasovagal radio button
     And I click on No for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -796,7 +868,9 @@ Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Withi
     And I click on the Atypical Vasovagal radio button
     And I click on Yes for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 
@@ -818,7 +892,9 @@ Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not W
     And I click on the Atypical Vasovagal radio button
     And I click on No for Syncopal Event in the past year
     And I click on the Next button
-    And I enter the medical opinion and confirmations
+    And I select Yes for patient is fit to drive without additional accommodation or specialist input
+    And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
+    And I select No for additional specialist reports supporting this review provided for assessment     And I click on the form submit button
     And I click on the form submit button
     Then I log out of the portal
 */
