@@ -46,6 +46,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
                     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                    services.AddTransient(_ => new UserManager.UserManagerClient(channel));
                 }
                 else
                 {

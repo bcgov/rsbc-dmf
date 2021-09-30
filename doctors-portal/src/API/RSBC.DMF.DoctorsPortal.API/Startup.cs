@@ -1,3 +1,6 @@
+using HealthChecks.UI.Client;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -16,7 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
-using HealthChecks.UI.Client;
+using System.Threading.Tasks;
 
 namespace RSBC.DMF.DoctorsPortal.API
 {
@@ -38,7 +41,10 @@ namespace RSBC.DMF.DoctorsPortal.API
                 //JWT tokens handling
                 .AddJwtBearer("token", options =>
                 {
-                    options.BackchannelHttpHandler = new HttpClientHandler { ServerCertificateCustomValidationCallback = delegate { return true; } };
+                    options.BackchannelHttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
 
                     configuration.GetSection("auth:token").Bind(options);
                     options.TokenValidationParameters = new TokenValidationParameters
@@ -54,11 +60,36 @@ namespace RSBC.DMF.DoctorsPortal.API
                         if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
                         return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        }
+                    };
                 })
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
+                    //options.EnableCaching = true;
+                    //options.CacheDuration = TimeSpan.FromMinutes(1);
                     configuration.GetSection("auth:introspection").Bind(options);
+                    options.Events = new OAuth2IntrospectionEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        },
+                        OnUpdateClientAssertion =
+                        async ctx =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                    };
                 });
 
             services.AddAuthorization(options =>
@@ -108,6 +139,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                     policy.SetIsOriginAllowedToAllowWildcardSubdomains().WithOrigins(corsOrigins);
                 }
             }));
+            services.AddDistributedMemoryCache();
             services.AddResponseCompression();
             services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
@@ -167,7 +199,7 @@ namespace RSBC.DMF.DoctorsPortal.API
             });
 
             app.UseAuthentication();
-            
+
             app.UseCors();
 
             app.UseRouting();
