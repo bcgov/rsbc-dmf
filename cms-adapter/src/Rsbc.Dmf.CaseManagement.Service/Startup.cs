@@ -98,6 +98,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Predicate = (_) => false
                 });
                 endpoints.MapGrpcService<CaseService>();
+                endpoints.MapGrpcService<UserService>();
 
                 endpoints.MapGet("/", async context =>
                 {
