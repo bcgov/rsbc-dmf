@@ -47,6 +47,7 @@ export class ConfigurationService {
   public getOAuthConfig(): Observable<AuthConfig> {
     return this.load().pipe(map(c => {
       return {
+        requestAccessToken: true,
         issuer: c.oidcConfiguration?.issuer || undefined,
         clientId: c.oidcConfiguration?.clientId || undefined,
         redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
