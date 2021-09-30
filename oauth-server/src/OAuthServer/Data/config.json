@@ -15,7 +15,13 @@
   ],
   "ApiScopes": [
     {
-      "Name": "doctors-portal-api"
+      "Name": "doctors-portal-api",
+      "UserClaims": [
+        "name",
+        "family_name",
+        "given_name",
+        "profile"
+      ]
     },
     {
       "Name": "phsa-adapter"
@@ -31,12 +37,6 @@
       ],
       "Scopes": [
         "doctors-portal-api"
-      ],
-      "UserClaims": [
-        "name",
-        "family_name",
-        "given_name",
-        "profile"
       ]
     },
     {
@@ -48,18 +48,13 @@
       ],
       "Scopes": [
         "phsa-adapter"
-      ],
-      "UserClaims": [
-        "name",
-        "family_name",
-        "given_name",
-        "profile"
       ]
     }
   ],
   "Clients": [
     {
       "ClientId": "doctors-portal-ui",
+      "AccessTokenType": "Reference",
       "RequireClientSecret": false,
       "AllowedGrantTypes": [
         "authorization_code"
