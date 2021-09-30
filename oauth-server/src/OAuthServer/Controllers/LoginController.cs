@@ -103,15 +103,18 @@ namespace OAuthServer.Controllers
 
             var additionalClaims = new List<Claim>();
             if (sessionId != null) additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sessionId));
+            additionalClaims.AddRange(externalUser.Claims);
 
             // issue authentication cookie for user
-            await HttpContext.SignInAsync(new IdentityServerUser(userId)
+            var user = new IdentityServerUser(userId)
             {
                 DisplayName = externalUser.FindFirstValue("given_name") + " " + externalUser.FindFirstValue("last_name"),
                 IdentityProvider = scheme,
                 AuthenticationTime = DateTime.Now,
                 AdditionalClaims = additionalClaims
-            }.CreatePrincipal());
+            }.CreatePrincipal();
+
+            await HttpContext.SignInAsync(user);
 
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
