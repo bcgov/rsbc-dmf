@@ -1,5 +1,7 @@
-﻿using IdentityServer4;
+﻿using IdentityModel.Client;
+using IdentityServer4;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -13,8 +15,14 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace OAuthServer
 {
@@ -39,11 +47,10 @@ namespace OAuthServer
                 //configure data protection folder for key sharing
                 dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
             }
-
             services.AddControllersWithViews();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"));
+            var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"), new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
             var builder = services
                 .AddIdentityServer(options =>
                 {
@@ -91,6 +98,7 @@ namespace OAuthServer
                 {
                     configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
+                    //TODO: investigate why options.GetClaimsFromUserInfoEndpoint = true fails
                     options.GetClaimsFromUserInfoEndpoint = false;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
@@ -99,43 +107,58 @@ namespace OAuthServer
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         NameClaimType = "name",
-                        RoleClaimType = "role"
+                        RoleClaimType = "role",
                     };
 
                     //add required scopes
+                    options.Scope.Add("profile");
                     options.Scope.Add("address");
                     options.Scope.Add("email");
 
                     //set the tokens decrypting key
                     options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
 
-                    //options.Events = new OpenIdConnectEvents
-                    //{
-                    //    OnTokenResponseReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnTokenValidated = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnRemoteFailure = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnAuthenticationFailed = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnUserInformationReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    },
-                    //    OnTicketReceived = async ctx =>
-                    //    {
-                    //        await Task.CompletedTask;
-                    //    }
-                    //};
+                    options.Events = new OpenIdConnectEvents
+                    {
+                        //OnTokenResponseReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        OnTokenValidated = async ctx =>
+                        {
+                            //manually fetch claims from userinfo endpoint because the handler throws null reference error
+                            var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+                            using var client = new HttpClient();
+
+                            var response = await client.GetUserInfoAsync(new UserInfoRequest
+                            {
+                                Address = oidcConfig.UserInfoEndpoint,
+                                Token = ctx.TokenEndpointResponse.AccessToken
+                            });
+                            if (response.IsError)
+                            {
+                                ctx.Fail(new Exception(response.Error));
+                            }
+                            //ctx.Principal.AddIdentity(new ClaimsIdentity(response.Claims));
+                            ctx.Principal = new ClaimsPrincipal(new ClaimsIdentity(ctx.Principal.Identity, ctx.Principal.Claims.Concat(response.Claims)));
+                        },
+                        //OnRemoteFailure = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnAuthenticationFailed = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnUserInformationReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //},
+                        //OnTicketReceived = async ctx =>
+                        //{
+                        //    await Task.CompletedTask;
+                        //}
+                    };
                 });
 
             services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });

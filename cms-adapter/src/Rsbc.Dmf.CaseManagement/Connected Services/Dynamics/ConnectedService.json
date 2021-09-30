@@ -1,6 +1,6 @@
 ﻿{
   "ProviderId": "Microsoft.OData.ConnectedService",
-  "Version": "0.12.1.0",
+  "Version": "0.13.0.0",
   "GettingStartedDocument": {
     "Uri": "http://odata.github.io/odata.net/"
   },
@@ -172,10 +172,12 @@
     "IncludeWebProxy": false,
     "WebProxyHost": null,
     "IncludeWebProxyNetworkCredentials": false,
+    "StoreWebProxyNetworkCredentials": false,
     "WebProxyNetworkCredentialsUsername": null,
     "WebProxyNetworkCredentialsPassword": null,
     "WebProxyNetworkCredentialsDomain": null,
     "IncludeCustomHeaders": true,
+    "StoreCustomHttpHeaders": false,
     "ExcludedSchemaTypes": []
   }
 }

@@ -5,7 +5,6 @@ using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -159,7 +158,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
             }
-            
 
             dynamicsContext.DetachAll();
 
@@ -200,11 +198,12 @@ namespace Rsbc.Dmf.CaseManagement
             var caseQuery = ctx.incidents
                 .Expand(i => i.dfp_DriverId)
                 .Expand(i => i.customerid_contact)
+                .Expand(i => i.dfp_ClinicId)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
             if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.title == criteria.Title);
-            if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._customerid_value == Guid.Parse(criteria.ClinicId));
+            if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
 
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
         }
@@ -242,7 +241,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     newFlag.FlagType = (FlagTypeOptionSet)flag.dfp_type;
                 }
-                
+
                 result.Add(newFlag);
             }
 
@@ -263,7 +262,7 @@ namespace Rsbc.Dmf.CaseManagement
                     string filename;
                     if (fileKey.LastIndexOf("/") != -1)
                     {
-                        filename = fileKey.Substring(fileKey.LastIndexOf("/")+1);
+                        filename = fileKey.Substring(fileKey.LastIndexOf("/") + 1);
                     }
                     else
                     {
@@ -279,7 +278,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         extension = "";
                     }
-                     
+
                     if (givenUrl == null)
                     {
                         givenUrl = new bcgov_documenturl()
@@ -290,7 +289,6 @@ namespace Rsbc.Dmf.CaseManagement
                             bcgov_fileextension = extension,
                             bcgov_origincode = 931490000,
                             bcgov_filesize = HumanReadableFileLength(fileSize)
-
                         };
                         dynamicsContext.AddTobcgov_documenturls(givenUrl);
                     }
@@ -328,7 +326,7 @@ namespace Rsbc.Dmf.CaseManagement
              */
 
             int flagCount = flags == null ? 0 : flags.Count;
-            
+
             logger.LogInformation($"SetCaseFlags - looking for DMER with identifier {dmerIdentifier} {flagCount}");
 
             // future state - the case name will contain three letters of the name and the driver licence number
@@ -376,7 +374,7 @@ namespace Rsbc.Dmf.CaseManagement
                             dfp_id = flag.Id,
                             dfp_description = flag.Description,
                             dfp_label = flag.Description,
-                            dfp_type = (int?) FlagTypeOptionSet.Review
+                            dfp_type = (int?)FlagTypeOptionSet.Review
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
                     }
@@ -410,7 +408,6 @@ namespace Rsbc.Dmf.CaseManagement
                     logger.LogInformation($"SetCaseFlags - Added Flag {flag}");
                 }
 
-                
                 // indicate that the form has been filled out
                 //dmerEntity.statuscode = 4; // Researching - was // 100000003; // Completed
 
