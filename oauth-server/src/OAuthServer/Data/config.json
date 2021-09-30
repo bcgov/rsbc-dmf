@@ -16,11 +16,9 @@
   "ApiScopes": [
     {
       "Name": "doctors-portal-api",
-      "UserClaims": [
-        "name",
-        "family_name",
+      "userClaims": [
         "given_name",
-        "profile"
+        "family_name"
       ]
     },
     {
@@ -35,8 +33,9 @@
           "Value": "Ljl/xDyew9tA7HvWRQW47Z/Npt91qqipvSjKXTkxk0s="
         }
       ],
-      "Scopes": [
-        "doctors-portal-api"
+      "userClaims": [
+        "given_name",
+        "family_name"
       ]
     },
     {
