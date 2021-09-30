@@ -407,7 +407,7 @@ Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, N
 Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -431,7 +431,7 @@ Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7
 Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -454,7 +454,7 @@ Scenario: S3DMFT-1172 - Commercial Syncope Unexplained Single No Repeat Not With
 Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -477,7 +477,7 @@ Scenario: S3DMFT-1173 - Commercial Syncope Unexplained Recurrent Within 1 Year >
 Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -500,7 +500,7 @@ Scenario: S3DMFT-1174 - Commercial Syncope Unexplained Recurrent Not Within 1 Ye
 Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -522,7 +522,7 @@ Scenario: S3DMFT-1175 - Commercial Syncope Currently Untreated Single > Needs Re
 Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -544,7 +544,7 @@ Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent > Needs
 Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Single, Within Past Month > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -567,7 +567,7 @@ Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Sing
 Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 30 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -590,7 +590,7 @@ Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Sing
 Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 30 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -613,7 +613,7 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
 Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 30 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -636,7 +636,7 @@ Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recu
 Scenario: S3DMFT-1181 - Commercial Syncope Reversible, Treated Successfully, Single > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -658,7 +658,7 @@ Scenario: S3DMFT-1181 - Commercial Syncope Reversible, Treated Successfully, Sin
 Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Recurrent > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -680,7 +680,7 @@ Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Rec
 Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -703,7 +703,7 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
 Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -726,7 +726,7 @@ Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Singl
 Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -749,7 +749,7 @@ Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical > Clean Pa
 Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -773,7 +773,7 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
 Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -797,7 +797,7 @@ Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not With
 Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -821,7 +821,7 @@ Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within
 Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -845,7 +845,7 @@ Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Wi
 Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within Past Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
@@ -869,7 +869,7 @@ Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Withi
 Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within Past Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
-    And I click on the Case ID for 333
+    And I click on the Case ID for 444
     And I refresh the page
     And I wait for the drivers licence field to have a value
     And I click on the Next button
