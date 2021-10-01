@@ -180,7 +180,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                 opts.GetLevel = ExcludeHealthChecks;
                 opts.EnrichDiagnosticContext = (diagCtx, httpCtx) =>
                 {
-                    diagCtx.Set("User", httpCtx.User.FindFirst(ClaimTypes.Upn)?.Value);
+                    diagCtx.Set("User", httpCtx.User.FindFirstValue(ClaimTypes.Upn));
                     diagCtx.Set("Host", httpCtx.Request.Host);
                     diagCtx.Set("UserAgent", httpCtx.Request.Headers["User-Agent"].ToString());
                     diagCtx.Set("RemoteIP", httpCtx.Connection.RemoteIpAddress.ToString());
