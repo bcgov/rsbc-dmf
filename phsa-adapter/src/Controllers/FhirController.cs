@@ -518,8 +518,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 var parser = new FhirJsonParser();
                 var bundle = parser.Parse<Bundle>(body);
 
-                string folderName = bundle.Id;
-
                 string dataFileKey = "";
                 string pdfFileKey = "";
                 Int64 dataFileSize = 0;
@@ -539,9 +537,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         {
                             ContentType = "application/pdf",
                             Data = ByteString.CopyFrom(b.Data),
-                            EntityName = "phsa-pdf",
+                            EntityName = "incident",
                             FileName = $"DMER.pdf",
-                            FolderName = folderName,
+                            FolderName = bundle.Id,
                         };
 
                         var reply = _documentStorageAdapterClient.UploadFile(pdfData);
@@ -557,9 +555,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         {
                             ContentType = "application/json",
                             Data = ByteString.CopyFrom(b.Data),
-                            EntityName = "phsa-eforms",
+                            EntityName = "incident",
                             FileName = "data.json",
-                            FolderName = folderName
+                            FolderName = bundle.Id
                         };
 
                         var reply = _documentStorageAdapterClient.UploadFile(jsonData);
@@ -585,7 +583,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             {
                                 Processed = false,
                                 TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
-                                Id = folderName,
+                                Id = bundle.Id,
                                 PdfFileKey = pdfFileKey,
                                 PdfFileSize = pdfFileSize,
                                 DataFileKey = dataFileKey,
