@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
@@ -40,12 +41,14 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
         private readonly UserManager.UserManagerClient userManager;
         private readonly IHttpContextAccessor httpContext;
         private readonly IConfiguration configuration;
+        private readonly ILogger<UserService> logger;
 
-        public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration)
+        public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration, ILogger<UserService> logger)
         {
             this.userManager = userManager;
             this.httpContext = httpContext;
             this.configuration = configuration;
+            this.logger = logger;
         }
 
         public async Task<UserContext> GetCurrentUserContext() => await GetUserContext(httpContext.HttpContext.User);
@@ -65,6 +68,9 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
         {
+            logger.LogDebug("Processing login {0}", user.Identity.Name);
+            logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
+
             var clinicId = configuration["CLINIC_ID"] != null
                 ? configuration["CLINIC_ID"]
                 : "3bec7901-541d-ec11-b82d-00505683fbf4";
@@ -73,7 +79,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             {
                 UserType = UserType.MedicalPractitioner,
                 ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
-                ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier),
+                ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
                 UserProfiles = { new UserProfile
@@ -97,6 +103,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+            claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
             {
                 Role = p.MedicalPractitioner.Role,
@@ -105,6 +112,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             }))));
 
             user.AddIdentity(new ClaimsIdentity(claims));
+
+            logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
             return user;
         }

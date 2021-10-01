@@ -26,6 +26,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     ByUserId = request.UserId
                 })).Items.Select(u => new User
                 {
+                    Id = u.Id,
+                    FirstName = u.FirstName ?? string.Empty,
+                    LastName = u.LastName ?? string.Empty,
                     ExternalSystem = u.ExternalSystem,
                     ExternalSystemUserId = u.ExternalSystemUserId,
                     LinkedProfiles = { MapUserProfiles(u) }
