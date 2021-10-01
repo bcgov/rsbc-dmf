@@ -33,6 +33,9 @@
           "Value": "Ljl/xDyew9tA7HvWRQW47Z/Npt91qqipvSjKXTkxk0s="
         }
       ],
+      "Scopes": [
+        "doctors-portal-api"
+      ],
       "userClaims": [
         "given_name",
         "family_name"
