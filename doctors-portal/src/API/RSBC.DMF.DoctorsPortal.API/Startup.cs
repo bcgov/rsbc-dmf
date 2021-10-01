@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RSBC.DMF.DoctorsPortal.API.Services;
 using Serilog;
+using Serilog.Events;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -174,6 +177,7 @@ namespace RSBC.DMF.DoctorsPortal.API
 
             app.UseSerilogRequestLogging(opts =>
             {
+                opts.GetLevel = ExcludeHealthChecks;
                 opts.EnrichDiagnosticContext = (diagCtx, httpCtx) =>
                 {
                     diagCtx.Set("User", httpCtx.User.FindFirst(ClaimTypes.Upn)?.Value);
@@ -213,5 +217,14 @@ namespace RSBC.DMF.DoctorsPortal.API
                     ;
             });
         }
+
+        private static LogEventLevel ExcludeHealthChecks(HttpContext ctx, double _, Exception ex) =>
+            ex != null
+                ? LogEventLevel.Error
+                : ctx.Response.StatusCode >= (int)HttpStatusCode.InternalServerError
+                    ? LogEventLevel.Error
+                    : ctx.Request.Path.StartsWithSegments("/hc", StringComparison.InvariantCultureIgnoreCase)
+                        ? LogEventLevel.Verbose
+                        : LogEventLevel.Information;
     }
 }
