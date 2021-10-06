@@ -40,7 +40,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                     expires: DateTime.UtcNow.AddYears(5),
                     signingCredentials: creds
                     );
-                result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken) + " Expires:" + jwtSecurityToken.ValidTo.ToShortTimeString();
+                result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken); 
             }
 
             return result;
