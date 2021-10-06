@@ -57,7 +57,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             Surname = c.Driver.Surname,
                             GivenName = c.Driver.GivenName,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
-                            DriverLicenceNumber = c.DriverLicenseNumber ?? string.Empty,
+                            DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
                             Address = new Address()
                             {
                                 City = c.Driver.Address.City ?? string.Empty,
@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                                 Line2 = c.Driver.Address.Line2 ?? string.Empty,
                             },
                             Sex = c.Driver.Sex ?? string.Empty,
-                            Name = c.DriverName ?? string.Empty
+                            Name = c.Driver.Name ?? string.Empty
                         },
                         IsCommercial = c.IsCommercial
                     };
