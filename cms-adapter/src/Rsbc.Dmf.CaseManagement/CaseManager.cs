@@ -59,6 +59,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class Driver
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
@@ -70,12 +71,29 @@ namespace Rsbc.Dmf.CaseManagement
         public string DriverLicenceNumber { get; set; }
     }
 
+    public class Provider
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string GivenName { get; set; }
+        public string Surname { get; set; }
+        public string ProviderDisplayId { get; set; }
+        public string ProviderDisplayIdType { get; set; }
+        public string ProviderRole { get; set; }
+        public string ProviderSpecialty { get; set; }
+        public string PhoneUseType { get; set; }
+        public string PhoneNumber { get; set; }
+        public string PhoneExtension { get; set; }
+        public string FaxUseType { get; set; }
+        public string FaxNumber { get; set; }
+        public Address Address { get; set; }
+    }
+
     public class DmerCase : Case
     {
         public Driver Driver { get; set; }
+        public Provider Provider { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
-        public string ClinicId { get; set; }
-        public string ClinicName { get; set; }
     }
 
     public class Flag
@@ -137,6 +155,7 @@ namespace Rsbc.Dmf.CaseManagement
                     ModifiedOn = c.modifiedon.Value.DateTime,
                     Driver = new CaseManagement.Driver()
                     {
+                        Id = c.dfp_DriverId.dfp_driverid.ToString(),
                         Address = new Address()
                         {
                             City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
@@ -151,8 +170,29 @@ namespace Rsbc.Dmf.CaseManagement
                         Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
                         Name = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                     },
-                    ClinicId = c.customerid_contact?.contactid.ToString(),
-                    ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
+                    Provider = new CaseManagement.Provider()
+                    {
+                        Id = c.customerid_contact?.contactid.ToString(),
+                        Address = new Address()
+                        {
+                            City = c.customerid_contact?.address1_city,
+                            Postal = c.customerid_contact?.address1_postalcode,
+                            Line1 = c.customerid_contact?.address1_line1,
+                            Line2 = c.customerid_contact?.address1_line2,
+                        },
+                        FaxNumber = c.customerid_contact?.fax,
+                        GivenName = $"{c.customerid_contact?.firstname}",
+                        Name = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
+                        Surname = $"{c.customerid_contact?.lastname}",
+                        FaxUseType = "work",
+                        PhoneNumber = $"{c.customerid_contact?.telephone1}",
+                        PhoneExtension = $"{c.customerid_contact?.telephone2}",
+                        PhoneUseType = "work",
+                        ProviderDisplayId = "123456",
+                        ProviderDisplayIdType = "optid",
+                        ProviderRole = "physician",
+                        ProviderSpecialty = "cardiology"
+                    },
                     IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
                     Flags = c.dfp_incident_dfp_dmerflag
                         .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags

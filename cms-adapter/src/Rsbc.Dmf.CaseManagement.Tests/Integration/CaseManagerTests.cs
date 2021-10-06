@@ -85,8 +85,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             queryResults.ShouldNotBeEmpty();
             foreach (var dmerCase in queryResults)
             {
-                dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicId.ShouldBe(expectedClinicId);
-                dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicName.ShouldBe(expectedClinicName);
+                dmerCase.ShouldBeAssignableTo<DmerCase>().Provider.Id.ShouldBe(expectedClinicId);
+                dmerCase.ShouldBeAssignableTo<DmerCase>().Provider.Name.ShouldBe(expectedClinicName);
             }
         }
 

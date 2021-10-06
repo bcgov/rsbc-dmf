@@ -50,22 +50,39 @@ message DmerCase {
 	bool isCommercial = 6;
 	string title = 7;
 	Driver driver = 10;
-	string clinicId = 12;
-	string clinicName = 13;
+	Provider provider = 11;	
 	repeated FlagItem Flags = 30;
 }
 
 message Driver {
-    string name = 1;
-	string givenName = 2;
-	string surname = 3;
-	double weight = 4;
-	string sex = 5;
-	google.protobuf.Timestamp birthDate = 6;
-	double height = 7;
-	string seck = 8;
-    Address address = 9;
-	string driverLicenceNumber = 10;
+	string id = 1;
+    string name = 2;
+	string givenName = 3;
+	string surname = 4;
+	double weight = 5;
+	string sex = 6;
+	google.protobuf.Timestamp birthDate = 7;
+	double height = 8;
+	string seck = 9;
+    Address address = 10;
+	string driverLicenceNumber = 11;
+}
+
+message Provider {
+	string id = 1;	
+	string name = 2;
+	string givenName = 3;
+	string surname = 4;
+	string providerDisplayId = 5;
+	string providerDisplayIdType = 6;
+	string providerRole = 7;
+	string providerSpecialty = 8;
+	string phoneUseType = 9;
+	string phoneNumber = 10;
+	string phoneExtension = 11;
+	string faxUseType = 12;
+	string faxNumber = 13;
+	Address address = 14;	
 }
 
 message Address {
