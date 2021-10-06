@@ -68,8 +68,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,
                 ModifiedOn = c.ModifiedOn.ToDateTime(),
-                PatientName = c.DriverName,
-                DriverLicense = c.DriverLicenseNumber,
+                PatientName = c.Driver.Name,
+                DriverLicense = c.Driver.DriverLicenceNumber,
             });
         }
     }
