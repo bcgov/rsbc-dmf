@@ -65,7 +65,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                                 Line1 = c.Driver.Address.Line1 ?? string.Empty,
                                 Line2 = c.Driver.Address.Line2 ?? string.Empty,
                             },
-                            Sex = c.Driver.Sex,
+                            Sex = c.Driver.Sex ?? string.Empty,
                             Name = c.DriverName ?? string.Empty
                         },
                         IsCommercial = c.IsCommercial
