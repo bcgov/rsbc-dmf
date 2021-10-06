@@ -305,6 +305,11 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         Line2 = getCaseReply.Driver.Address.Line2
                     }
                 };
+
+                if (!string.IsNullOrEmpty(getCaseReply.Driver.Sex))
+                {
+                    driver.Sex = getCaseReply.Driver.Sex.ToLower();
+                }
                 
             }
             
@@ -332,7 +337,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientNameFamily", $"{driver.Surname}"},
                     {"patientNameGiven", $"{driver.GivenName}"},
                     {"patientBirthDate", $"{driver.BirthDate}"},
-                    {"gender", $"{driver.Sex}"},
+                    {"gender", $"{driver.Sex}"}, // PHSA form expects lower case
                     {"patientCountry", "Canada"},
                     {"patientProvinceState", "British Columbia"},
                     {"patientCityTown", "Victoria"},
@@ -352,7 +357,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"textTargetDriverName", $"{driver.Surname}"},
                     {"textTargetDriverFirstname", $"{driver.GivenName}"},
                     {"textTargetDriverLicense", $"{driver.DriverLicenceNumber}"},
-                    {"radioTargetDriverGender",$"{driver.Sex}"},
+                    {"radioTargetDriverGender",$"{driver.Sex}"}, 
                     {"tDateTargetDriverBirthdate", $"{driver.BirthDate}"},
                     {"selTargetDriverCountry", "Canada"},
                     {"textTargetDriverProvince", "British Columbia"},
