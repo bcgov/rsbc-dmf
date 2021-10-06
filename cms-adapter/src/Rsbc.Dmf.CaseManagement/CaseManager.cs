@@ -15,8 +15,6 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
-        Task<DmerCase> GetCase(string id);
-
         Task<List<Flag>> GetAllFlags();
 
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
@@ -40,6 +38,14 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
+    public class Address
+    {
+        public string Line1 { get; set; }
+        public string Line2 { get; set; }
+        public string City { get; set; }
+        public string Postal { get; set; }
+    }
+
     public abstract class Case
     {
         public string Id { get; set; }
@@ -53,8 +59,22 @@ namespace Rsbc.Dmf.CaseManagement
         public bool IsCommercial { get; set; }
     }
 
+    public class Driver
+    {
+        public string Name { get; set; }
+        public string GivenName { get; set; }
+        public string Surname { get; set; }
+        public double Weight { get; set; }
+        public string Sex { get; set; }
+        public DateTime BirthDate { get; set; }
+        public double Height { get; set; }
+        public Address Address { get; set; }
+        public string DriverLicenceNumber { get; set; }
+    }
+
     public class DmerCase : Case
     {
+        public Driver Driver { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
         public string ClinicId { get; set; }
         public string ClinicName { get; set; }
@@ -117,9 +137,22 @@ namespace Rsbc.Dmf.CaseManagement
                     CreatedOn = c.createdon.Value.DateTime,
                     ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                     ModifiedOn = c.modifiedon.Value.DateTime,
-                    DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
-                    DriverName = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
-                    ClinicId = c.customerid_contact.contactid.ToString(),
+                    Driver = new CaseManagement.Driver()
+                    {
+                        Address = new Address()
+                        {
+                            City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
+                            Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode,
+                            Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1,
+                            Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2,
+                        },
+                        BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
+                        DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
+                        GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
+                        Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
+                        Name = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
+                    },
+                    ClinicId = c.customerid_contact?.contactid.ToString(),
                     ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
                     IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
                     Flags = c.dfp_incident_dfp_dmerflag
@@ -131,59 +164,6 @@ namespace Rsbc.Dmf.CaseManagement
                         }).ToArray()
                 }).ToArray()
             };
-        }
-
-        public async Task<DmerCase> GetCase(string id)
-        {
-            // get the case by id.
-            incident c = dynamicsContext.incidents.ByKey(Guid.Parse(id)).GetValue();
-
-            //lazy load case related properties
-
-            if (c.customerid_contact == null)
-            {
-                await dynamicsContext.LoadPropertyAsync(c, nameof(incident.customerid_contact));
-            }
-
-            if (c._dfp_driverid_value.HasValue)
-            {
-                //load driver info
-                await dynamicsContext.LoadPropertyAsync(c, nameof(incident.dfp_DriverId));
-                if (c.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(c.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
-            }
-
-            //load case's flags
-            await dynamicsContext.LoadPropertyAsync(c, nameof(incident.dfp_incident_dfp_dmerflag));
-            foreach (var flag in c.dfp_incident_dfp_dmerflag)
-            {
-                await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
-            }
-
-            dynamicsContext.DetachAll();
-
-            var result = new DmerCase()
-            {
-                Id = c.incidentid.ToString(),
-                Title = c.title,
-                CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                CreatedOn = c.createdon.Value.DateTime,
-                ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                ModifiedOn = c.modifiedon.Value.DateTime,
-                DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
-                DriverName =
-                    $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
-                ClinicId = c.customerid_contact.contactid.ToString(),
-                ClinicName = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
-                IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
-                Flags = c.dfp_incident_dfp_dmerflag
-                    .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
-                    .Select(f => new Flag
-                    {
-                        Id = f.dfp_FlagId?.dfp_id,
-                        Description = f.dfp_FlagId?.dfp_description
-                    }).ToArray()
-            };
-            return result;
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)

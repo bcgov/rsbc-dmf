@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var users = (await userManager.SearchUsers(new SearchUsersRequest
                 {
                     ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
-                    ByType = request.UserType == UserType.Driver ? CaseManagement.UserType.Driver : CaseManagement.UserType.MedicalPractitioner,
+                    ByType = request.UserType == UserType.DriverUserType ? CaseManagement.UserType.Driver : CaseManagement.UserType.MedicalPractitioner,
                     ByUserId = request.UserId
                 })).Items.Select(u => new User
                 {
@@ -63,7 +63,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var loginRequest = new LoginUserRequest();
 
-                if (request.UserType == UserType.Driver)
+                if (request.UserType == UserType.DriverUserType)
                 {
                     var driver = request.UserProfiles.SingleOrDefault(p => p.Driver != null);
                     loginRequest.User = new DriverUser
@@ -74,7 +74,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         LastName = request.LastName
                     };
                 }
-                else if (request.UserType == UserType.MedicalPractitioner)
+                else if (request.UserType == UserType.MedicalPractitionerUserType)
                 {
                     var medicalPractitionerProfiles = request.UserProfiles.Where(p => p.MedicalPractitioner != null).ToArray();
 

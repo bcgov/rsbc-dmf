@@ -30,55 +30,52 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
-            var cases = (await _caseManager.CaseSearch(new CaseSearchRequest
-            {
-                CaseId = request.CaseId,
-                Title = request.Title,
-                ClinicId = request.ClinicId,
-                DriverLicenseNumber = request.DriverLicenseNumber
-            })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
-
             var reply = new SearchReply();
-            reply.Items.Add(cases.Select(c =>
-            {
-                var newCase = new DmerCase
-                {
-                    CaseId = c.Id,
-                    Title = c.Title,
-                    CreatedBy = c.CreatedBy ?? string.Empty,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    ModifiedBy = c.CreatedBy ?? string.Empty,
-                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
-                    DriverName = c.DriverName ?? string.Empty,
-                    IsCommercial = c.IsCommercial
-                };
-                newCase.Flags.Add(c.Flags.Select(f => new FlagItem { Identifier = f.Id, Question = f.Description ?? "Unknown", FlagType = ConvertFlagType(f.FlagType)}));
-                return newCase;
-            }));
 
-            return reply;
-        }
-
-        public async override Task<GetCaseReply> GetCase(GetCaseRequest request, ServerCallContext context)
-        {
-            var reply = new GetCaseReply();
             try
             {
-                var c = await _caseManager.GetCase(request.CaseId);
-
-                reply.Case = new DmerCase
+                var cases = (await _caseManager.CaseSearch(new CaseSearchRequest
                 {
-                    CaseId = c.Id,
-                    CreatedBy = c.CreatedBy ?? string.Empty,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    ModifiedBy = c.CreatedBy ?? string.Empty,
-                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty,
-                    DriverName = c.DriverName ?? string.Empty,
-                    IsCommercial = c.IsCommercial
-                };
-                reply.ResultStatus = ResultStatus.Success;
+                    CaseId = request.CaseId,
+                    Title = request.Title,
+                    ClinicId = request.ClinicId,
+                    DriverLicenseNumber = request.DriverLicenseNumber
+                })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
+
+                reply.Items.Add(cases.Select(c =>
+                {
+                    var newCase = new DmerCase
+                    {
+                        CaseId = c.Id,
+                        Title = c.Title,
+                        CreatedBy = c.CreatedBy ?? string.Empty,
+                        CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        ModifiedBy = c.CreatedBy ?? string.Empty,
+                        ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        Driver = new Driver()
+                        {
+                            Surname = c.Driver.Surname,
+                            GivenName = c.Driver.GivenName,
+                            BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
+                            DriverLicenceNumber = c.DriverLicenseNumber ?? string.Empty,
+                            Address = new Address()
+                            {
+                                City = c.Driver.Address.City ?? string.Empty,
+                                Postal = c.Driver.Address.Postal ?? string.Empty,
+                                Line1 = c.Driver.Address.Line1 ?? string.Empty,
+                                Line2 = c.Driver.Address.Line2 ?? string.Empty,
+                            },
+                            Sex = c.Driver.Sex,
+                            Name = c.DriverName ?? string.Empty
+                        },
+                        IsCommercial = c.IsCommercial
+                    };
+                    newCase.Flags.Add(c.Flags.Select(f => new FlagItem
+                    {
+                        Identifier = f.Id, Question = f.Description ?? "Unknown", FlagType = ConvertFlagType(f.FlagType)
+                    }));
+                    return newCase;
+                }));
             }
             catch (Exception e)
             {
@@ -89,6 +86,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
+
 
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
@@ -191,7 +189,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             result.ResultStatus = ResultStatus.Fail;
 
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
-            if (configuredSecret.Equals(request.Secret))
+            if (!string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

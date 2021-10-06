@@ -77,7 +77,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
 
             var loginRequest = new UserLoginRequest
             {
-                UserType = UserType.MedicalPractitioner,
+                UserType = UserType.MedicalPractitionerUserType,
                 ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
                 ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
