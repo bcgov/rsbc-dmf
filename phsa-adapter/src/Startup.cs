@@ -196,26 +196,28 @@ namespace Rsbc.Dmf.PhsaAdapter
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
-                var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                var initialClient = new CaseManager.CaseManagerClient(initialChannel);
-                // call the token service to get a token.
-                var tokenRequest = new CaseManagement.Service.TokenRequest
+                if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
-                };
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
 
-                var tokenReply = initialClient.GetToken(tokenRequest);
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    {
+                        Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
+                    };
 
-                if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                {
-                    // Add the bearer token to the client.
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    var tokenReply = initialClient.GetToken(tokenRequest);
 
-                    var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                    services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
                 }
+
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
             }
 
             // Add Document Storage Adapter

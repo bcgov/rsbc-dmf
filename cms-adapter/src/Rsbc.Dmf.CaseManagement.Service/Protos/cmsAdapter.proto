@@ -7,13 +7,11 @@ option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service";
 package CaseManagement;
 
 service CaseManager {
+  // Seach cases. Can also return a specific case.
   rpc Search (SearchRequest) returns (SearchReply);
 
   // Get a token given a secret.
   rpc GetToken (TokenRequest) returns (TokenReply);
-
-  // Fetch a specific case
-  rpc GetCase (GetCaseRequest) returns (GetCaseReply);
 
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
@@ -32,6 +30,8 @@ message SearchRequest {
 
 message SearchReply {
   repeated DmerCase items = 1;
+  ResultStatus resultStatus = 2;
+  string errorDetail = 3;
 }
 
 message GetAllFlagsRequest {	
@@ -39,16 +39,6 @@ message GetAllFlagsRequest {
 
 message GetAllFlagsReply {
 	repeated FlagItem Flags = 1;
-}
-
-message GetCaseRequest {
-	string caseId = 1;
-}
-
-message GetCaseReply {
-	ResultStatus resultStatus = 1;
-	DmerCase case = 2;
-	string errorDetail = 3;
 }
 
 message DmerCase {
@@ -59,12 +49,30 @@ message DmerCase {
 	google.protobuf.Timestamp modifiedOn = 5;
 	bool isCommercial = 6;
 	string title = 7;
-	string driverName = 10;
-	string driverLicenseNumber = 11;
+	Driver driver = 10;
 	string clinicId = 12;
 	string clinicName = 13;
-
 	repeated FlagItem Flags = 30;
+}
+
+message Driver {
+    string name = 1;
+	string givenName = 2;
+	string surname = 3;
+	double weight = 4;
+	string sex = 5;
+	google.protobuf.Timestamp birthDate = 6;
+	double height = 7;
+	string seck = 8;
+    Address address = 9;
+	string driverLicenceNumber = 10;
+}
+
+message Address {
+	string line1 = 1;
+	string line2 = 2;
+	string city = 3;
+	string postal = 4;
 }
 
 enum ResultStatus {
@@ -178,7 +186,7 @@ message DriverProfile {
 }
 
 enum UserType {
-	MedicalPractitioner = 0;
-	Driver = 1;
+	MedicalPractitionerUserType = 0;
+	DriverUserType = 1;
 }
 

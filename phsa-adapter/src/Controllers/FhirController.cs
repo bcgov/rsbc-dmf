@@ -20,8 +20,10 @@ using Hl7.Fhir.ElementModel;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.Interfaces.IcbcAdapter.Models;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Rsbc.Dmf.PhsaAdapter.Extensions;
+using Rsbc.Dmf.PhsaAdapter.Models;
 
 namespace Rsbc.Dmf.PhsaAdapter.Controllers
 {
@@ -144,9 +146,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             Patient result = new Patient()
             {
                 Id = id,
-                Address = new List<Address>()
+                Address = new List<Hl7.Fhir.Model.Address>()
                 {
-                    new Address()
+                    new Hl7.Fhir.Model.Address()
                     {
                         Line = new List<string>(){"123 Main Street"},
                         State = "BC1"
@@ -247,29 +249,63 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
-
-            var getCaseRequest = new GetCaseRequest()
+            
+            var getCaseRequest = new SearchRequest()
             {
                 CaseId = id
             };
-            var getCaseReply = _cmsAdapterClient.GetCase(getCaseRequest);
+            var searchReply = _cmsAdapterClient.Search(getCaseRequest);
 
-            // in future the dl number, phn number would be retrieved.
+            var getCaseReply = searchReply.Items[0];
 
-            string icbcDl = Configuration["TEST_DL"];
+            Models.Driver driver;
 
-            var icbcData = _icbcClient.GetDriver(icbcDl);
-
-            string driverBirthDate = "";
-            if (icbcData?.CLNT?.BIDT != null)
+            if (!String.IsNullOrEmpty(Configuration["ENABLE_ICBC"]))
             {
-                driverBirthDate = icbcData.CLNT.BIDT.Value.ToString("yyyy-MM-dd");
+                // for test purposes the drivers licence number is stored in a configuration setting.
+
+                string icbcDl = Configuration["TEST_DL"];
+                CLNTRESPONSE icbcData = _icbcClient.GetDriver(icbcDl);
+                driver = new Models.Driver()
+                {
+                    Surname = icbcData?.CLNT?.INAM?.SURN,
+                    GivenName = icbcData?.CLNT?.INAM?.GIV1,
+                    DriverLicenceNumber = icbcDl,
+                    Address = new Models.Address()
+                    {
+                        City = icbcData?.CLNT?.ADDR?.CITY,
+                        Postal = icbcData?.CLNT?.ADDR?.POST,
+                        Line1 = $"{icbcData?.CLNT?.ADDR?.STNO} {icbcData?.CLNT?.ADDR?.STNM}",
+                        Line2 = ""
+                    }
+                };
+                if (icbcData?.CLNT?.BIDT != null)
+                {
+                    driver.BirthDate = icbcData.CLNT.BIDT.Value.ToString("yyyy-MM-dd");
+                }
+                if (icbcData?.CLNT?.SEX != null)
+                {
+                    driver.Sex = ConvertGenderToString(icbcData.CLNT?.SEX);
+                }
             }
-
-            string driverGender = "";
-            if (icbcData.CLNT?.SEX != null)
+            else
             {
-                driverGender = ConvertGenderToString(icbcData.CLNT?.SEX);
+                // create from the Dynamics data
+                driver = new Models.Driver()
+                {
+                    Surname = getCaseReply.Driver.Surname,
+                    GivenName = getCaseReply.Driver.GivenName,
+                    BirthDate = getCaseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd"),
+                    DriverLicenceNumber = getCaseReply.Driver.DriverLicenceNumber,
+                    Address = new Models.Address()
+                    {
+                        City = getCaseReply.Driver.Address.City,
+                        Postal = getCaseReply.Driver.Address.Postal,
+                        Line1 = getCaseReply.Driver.Address.Line1,
+                        Line2 = getCaseReply.Driver.Address.Line2
+                    }
+                };
+                
             }
             
             Payload payload = new Payload
@@ -277,7 +313,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 data = new Dictionary<string, object>
                 {
                     //{"checkIsCommercialDMER", getCaseReply.Case.IsCommercial}, 
-                    {"dropCommercialDMER", getCaseReply.Case.IsCommercial ? "yes" : "no"},
+                    {"dropCommercialDMER", getCaseReply.IsCommercial ? "yes" : "no"},
                     {"providerNameGiven", "providerNameGiven"},
                     {"providerNameFamily", "providerNameFamily"},
                     {"providerId", "1234"},
@@ -293,10 +329,10 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"providerStreetAddressLine2", "providerStreetAddressLine2"},
                     {"providerCityTown", "providerCityTown"},
                     {"patientIdentifier", Configuration["TEST_PHN"]},
-                    {"patientNameFamily", "Family"},
-                    {"patientNameGiven", "Given"},
-                    {"patientBirthDate", "1970-01-01"},
-                    {"gender", "male"},
+                    {"patientNameFamily", $"{driver.Surname}"},
+                    {"patientNameGiven", $"{driver.GivenName}"},
+                    {"patientBirthDate", $"{driver.BirthDate}"},
+                    {"gender", $"{driver.Sex}"},
                     {"patientCountry", "Canada"},
                     {"patientProvinceState", "British Columbia"},
                     {"patientCityTown", "Victoria"},
@@ -313,20 +349,20 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientPrimaryEmailUse", "home"},
                     {"patientAlternateEmail", "patientAlternateEmail"},
                     {"patientAlternateEmailUse", "work"},
-                    {"textTargetDriverName", $"{icbcData?.CLNT?.INAM?.SURN}"},
-                    {"textTargetDriverFirstname", $"{icbcData?.CLNT?.INAM?.GIV1}"},
-                    {"textTargetDriverLicense",$"{icbcDl}"},
-                    {"radioTargetDriverGender",$"{driverGender}"},
-                    {"tDateTargetDriverBirthdate", $"{driverBirthDate}"},
+                    {"textTargetDriverName", $"{driver.Surname}"},
+                    {"textTargetDriverFirstname", $"{driver.GivenName}"},
+                    {"textTargetDriverLicense", $"{driver.DriverLicenceNumber}"},
+                    {"radioTargetDriverGender",$"{driver.Sex}"},
+                    {"tDateTargetDriverBirthdate", $"{driver.BirthDate}"},
                     {"selTargetDriverCountry", "Canada"},
                     {"textTargetDriverProvince", "British Columbia"},
-                    {"textTargetDriverCity", icbcData?.CLNT?.ADDR?.CITY},
-                    {"textTargetDriverAddr1", $"{icbcData?.CLNT?.ADDR?.STNO} {icbcData?.CLNT?.ADDR?.STNM} {icbcData?.CLNT?.ADDR?.STTY}"}, //  {icbcData?.ADDR.STDI}
-                    {"textTargetDriverAddr2", ""},
-                    {"textTargetDriverPostal", $"{icbcData?.CLNT?.ADDR?.POST}"},
-                    {"textTargetKnownNotice", "textTargetKnownNotice"},
+                    {"textTargetDriverCity", driver.Address.City},
+                    {"textTargetDriverAddr1", $"{driver.Address.Line1}"}, 
+                    {"textTargetDriverAddr2", $"{driver.Address.Line2}"},
+                    {"textTargetDriverPostal", $"{driver.Address.Postal}"},
+                    {"textTargetKnownNotice", ""},
                     {"patientProvince", "BC"},
-                    {"patientBCcity", "patientBCcity"}
+                    {"patientBCcity", $"{driver.Address.City}"}
                 }
             };
 
@@ -398,7 +434,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 {
                                     new QuestionnaireResponse.AnswerComponent()
                                     {
-                                        Value = new FhirString(getCaseReply.Case.IsCommercial ? "yes" : "no")
+                                        Value = new FhirString(getCaseReply.IsCommercial ? "yes" : "no")
                                     }
                                 }
                             }
@@ -428,20 +464,20 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             new HumanName()
                             {
                                 Use = HumanName.NameUse.Official,
-                                FamilyElement = new FhirString("Surname"),
+                                FamilyElement = new FhirString(driver.Surname),
                                 GivenElement = new List<FhirString>()
-                                    {new FhirString("Given"), new FhirString("Middle")}
+                                    {new FhirString(driver.GivenName)}
                             }
                         },
-                        Address = new List<Address>()
+                        Address = new List<Hl7.Fhir.Model.Address>()
                         {
-                            new Address()
+                            new Hl7.Fhir.Model.Address()
                             {
-                                Use = Address.AddressUse.Home,
-                                Line = new List<string>() {"123 Main St."},
+                                Use = Hl7.Fhir.Model.Address.AddressUse.Home,
+                                Line = new List<string>() {$"{driver.Address.Line1} {driver.Address.Line2}"},
                                 State = "British Columbia",
                                 Country = "Canada",
-                                PostalCode = "V1V1V1"
+                                PostalCode = driver.Address.Postal
                             }
                         }
                     }
@@ -474,11 +510,11 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                     {new FhirString("DrGiven"), new FhirString("DrMiddle")}
                             }
                         },
-                        Address = new List<Address>()
+                        Address = new List<Hl7.Fhir.Model.Address>()
                         {
-                            new Address()
+                            new Hl7.Fhir.Model.Address()
                             {
-                                Use = Address.AddressUse.Home,
+                                Use = Hl7.Fhir.Model.Address.AddressUse.Home,
                                 Line = new List<string>() {"123 Main St."},
                                 State = "British Columbia",
                                 Country = "Canada",
