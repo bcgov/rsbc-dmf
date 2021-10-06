@@ -256,7 +256,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             };
             var searchReply = _cmsAdapterClient.Search(getCaseRequest);
 
-            var getCaseReply = searchReply.Items[0];
+            var caseReply = searchReply.Items[0];
 
             Models.Driver driver;
 
@@ -293,22 +293,22 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 // create from the Dynamics data
                 driver = new Models.Driver()
                 {
-                    Surname = getCaseReply.Driver.Surname,
-                    GivenName = getCaseReply.Driver.GivenName,
-                    BirthDate = getCaseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd"),
-                    DriverLicenceNumber = getCaseReply.Driver.DriverLicenceNumber,
+                    Surname = caseReply.Driver.Surname,
+                    GivenName = caseReply.Driver.GivenName,
+                    BirthDate = caseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd"),
+                    DriverLicenceNumber = caseReply.Driver.DriverLicenceNumber,
                     Address = new Models.Address()
                     {
-                        City = getCaseReply.Driver.Address.City,
-                        Postal = getCaseReply.Driver.Address.Postal,
-                        Line1 = getCaseReply.Driver.Address.Line1,
-                        Line2 = getCaseReply.Driver.Address.Line2
+                        City = caseReply.Driver.Address.City,
+                        Postal = caseReply.Driver.Address.Postal,
+                        Line1 = caseReply.Driver.Address.Line1,
+                        Line2 = caseReply.Driver.Address.Line2
                     }
                 };
 
-                if (!string.IsNullOrEmpty(getCaseReply.Driver.Sex))
+                if (!string.IsNullOrEmpty(caseReply.Driver.Sex))
                 {
-                    driver.Sex = getCaseReply.Driver.Sex.ToLower();
+                    driver.Sex = caseReply.Driver.Sex.ToLower();
                 }
                 
             }
@@ -318,32 +318,32 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 data = new Dictionary<string, object>
                 {
                     //{"checkIsCommercialDMER", getCaseReply.Case.IsCommercial}, 
-                    {"dropCommercialDMER", getCaseReply.IsCommercial ? "yes" : "no"},
-                    {"providerNameGiven", "providerNameGiven"},
-                    {"providerNameFamily", "providerNameFamily"},
-                    {"providerId", "1234"},
-                    {"providerIdType", "OPTID"},
-                    {"providerRole", "Physician"},
-                    {"providerSpecialty", "Cardiology"},
-                    {"phoneUse", "work"},
-                    {"providerPhoneNumber", "123-123-1234"}, // dashes are important here
-                    {"providerPhoneNumberExt","123"},
-                    {"faxUse", "work"},
-                    {"providerFaxNumber", "123-123-1233"},
-                    {"providerStreetAddressLine1", "providerStreetAddressLine1"},
-                    {"providerStreetAddressLine2", "providerStreetAddressLine2"},
-                    {"providerCityTown", "providerCityTown"},
+                    {"dropCommercialDMER", caseReply.IsCommercial ? "yes" : "no"},
+                    {"providerNameGiven", $"{caseReply.Provider.GivenName}"},
+                    {"providerNameFamily", $"{caseReply.Provider.Surname}"},
+                    {"providerId", $"{caseReply.Provider.ProviderDisplayId}"},
+                    {"providerIdType", $"{caseReply.Provider.ProviderDisplayIdType}"},
+                    {"providerRole", $"{caseReply.Provider.ProviderRole}"},
+                    {"providerSpecialty", $"{caseReply.Provider.ProviderSpecialty}"},
+                    {"phoneUse", $"{caseReply.Provider.PhoneUseType}"},
+                    {"providerPhoneNumber", $"{caseReply.Provider.PhoneNumber}"}, // dashes are important here
+                    {"providerPhoneNumberExt", $"{caseReply.Provider.PhoneExtension}"},
+                    {"faxUse", $"{caseReply.Provider.FaxUseType}"},
+                    {"providerFaxNumber", $"{caseReply.Provider.FaxNumber}"},
+                    {"providerStreetAddressLine1", $"{caseReply.Provider.Address.Line1}"},
+                    {"providerStreetAddressLine2",  $"{caseReply.Provider.Address.Line2}"},
+                    {"providerCityTown",  $"{caseReply.Provider.Address.City}"},
                     {"patientIdentifier", Configuration["TEST_PHN"]},
                     {"patientNameFamily", $"{driver.Surname}"},
                     {"patientNameGiven", $"{driver.GivenName}"},
                     {"patientBirthDate", $"{driver.BirthDate}"},
-                    {"gender", $"{driver.Sex}"}, // PHSA form expects lower case
+                    {"gender", $"{driver.Sex}"}, 
                     {"patientCountry", "Canada"},
                     {"patientProvinceState", "British Columbia"},
                     {"patientCityTown", "Victoria"},
-                    {"patientStreetAddressLine1", "patientStreetAddressLine1"},
-                    {"patientStreetAddressLine2", "patientStreetAddressLine2"},
-                    {"patientAddressPostalCode", "V1V 2V2"},
+                    {"patientStreetAddressLine1", $"{driver.Address.Line1}"},
+                    {"patientStreetAddressLine2", $"{driver.Address.Line2}"},
+                    {"patientAddressPostalCode", $"{driver.Address.Postal}"},
                     {"patientAddressUse", "patientAddressUse"},
                     {"patientNameGivenMiddle", "patientNameGivenMiddle"},
                     {"patientPrimaryPhoneNumber", "123-123-1234"},
@@ -439,7 +439,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 {
                                     new QuestionnaireResponse.AnswerComponent()
                                     {
-                                        Value = new FhirString(getCaseReply.IsCommercial ? "yes" : "no")
+                                        Value = new FhirString(caseReply.IsCommercial ? "yes" : "no")
                                     }
                                 }
                             }
