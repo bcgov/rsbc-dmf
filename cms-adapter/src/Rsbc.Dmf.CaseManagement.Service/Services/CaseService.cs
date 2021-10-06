@@ -79,7 +79,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             catch (Exception e)
             {
-                _logger.LogError($"Error getting case {request.CaseId}.");
+                _logger.LogError(e, $"Error getting case {request.CaseId}.");
                 reply.ResultStatus = ResultStatus.Fail;
                 reply.ErrorDetail = e.Message;
             }
