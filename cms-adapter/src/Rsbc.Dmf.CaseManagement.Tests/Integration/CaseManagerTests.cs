@@ -56,8 +56,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             dmerCase.Title.ShouldBe(title);
 
             dmerCase.CreatedBy.ShouldNotBeNullOrEmpty();
-            dmerCase.DriverLicenseNumber.ShouldNotBeNullOrEmpty();
-            dmerCase.DriverName.ShouldNotBeNullOrEmpty();
+            dmerCase.Driver.DriverLicenceNumber.ShouldNotBeNullOrEmpty();
+            dmerCase.Driver.Name.ShouldNotBeNullOrEmpty();
         }
 
         [Fact(Skip = RequiresDynamics)]
@@ -70,7 +70,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             queryResults.ShouldNotBeEmpty();
             foreach (var dmerCase in queryResults)
             {
-                dmerCase.ShouldBeAssignableTo<DmerCase>().DriverLicenseNumber.ShouldBe(driverLicenseNumber);
+                dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenceNumber.ShouldBe(driverLicenseNumber);
             }
         }
 

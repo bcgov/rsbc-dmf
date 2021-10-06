@@ -54,8 +54,6 @@ namespace Rsbc.Dmf.CaseManagement
         public string CreatedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
-        public string DriverLicenseNumber { get; set; }
-        public string DriverName { get; set; }
         public bool IsCommercial { get; set; }
     }
 
