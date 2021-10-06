@@ -2,7 +2,7 @@ Feature: DMERSyncope.feature
     As a Driver Medical Fitness SME
     I want to confirm the syncope business rules for a DMER
 
-Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 1 Week > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -18,7 +18,7 @@ Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 7 D
     And I expand the Syncope area
     And I click on the Cause Remains Unexplained radio button
     And I click on the Single Syncopal Event radio button
-    And I click on No for Syncopal Event in the past 7 days
+    And I click on No for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -26,7 +26,7 @@ Scenario: S3DMFT-1155 - Non-Commercial Syncope Unexplained Single Not Within 7 D
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1156 - Non-Commercial Syncope Unexplained Single Less than 7 Days > Needs Review
+Scenario: S3DMFT-1156 - Non-Commercial Syncope Unexplained Single Less than 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -42,7 +42,7 @@ Scenario: S3DMFT-1156 - Non-Commercial Syncope Unexplained Single Less than 7 Da
     And I expand the Syncope area
     And I click on the Cause Remains Unexplained radio button
     And I click on the Single Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past 7 days    
+    And I click on Yes for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -145,7 +145,7 @@ Scenario: S3DMFT-1160 - Non-Commercial Syncope Currently Untreated Recurrent > N
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Within 7 Days > Needs Review
+Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Within 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -161,7 +161,7 @@ Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I expand the Syncope area
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past 7 days    
+    And I click on Yes for Syncopal Event within one week   
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -169,7 +169,7 @@ Scenario: S3DMFT-1161 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 1 Week > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -185,7 +185,7 @@ Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Succ
     And I expand the Syncope area
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
-    And I click on No for Syncopal Event in the past 7 days    
+    And I click on No for Syncopal Event within one week   
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -193,7 +193,7 @@ Scenario: S3DMFT-1162 - Scenario: Non-Commercial Syncope Diagnosed, Treated Succ
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 1 Week > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -209,7 +209,7 @@ Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I expand the Syncope area
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
-    And I click on No for Syncopal Event in the past 7 days    
+    And I click on No for Syncopal Event within one week    
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -217,7 +217,7 @@ Scenario: S3DMFT-1163 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1164 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 7 Days > Needs Review
+Scenario: S3DMFT-1164 - Non-Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -233,7 +233,7 @@ Scenario: S3DMFT-1164 - Non-Commercial Syncope Diagnosed, Treated Successfully, 
     And I expand the Syncope area
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past 7 days    
+    And I click on Yes for Syncopal Event within one week   
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -287,7 +287,7 @@ Scenario: S3DMFT-1166 - Non-Commercial Syncope Reversible, Treated Successfully,
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days
+Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 1 Week
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -302,7 +302,7 @@ Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, S
     And I click on the Syncope checkbox
     And I click on the Situational, Avoidable Trigger radio button
     And I click on the Single Syncopal Event radio button
-    And I click on No for Syncopal Event in the past 7 days
+    And I click on No for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -310,7 +310,7 @@ Scenario: S3DMFT-1167 - Non-Commercial Syncope Situational, Avoidable Trigger, S
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1168 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days
+Scenario: S3DMFT-1168 - Non-Commercial Syncope Situational, Avoidable Trigger, Single, Within 1 Week
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -325,7 +325,7 @@ Scenario: S3DMFT-1168 - Non-Commercial Syncope Situational, Avoidable Trigger, S
     And I click on the Syncope checkbox
     And I click on the Situational, Avoidable Trigger radio button
     And I click on the Single Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past 7 days
+    And I click on Yes for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -356,7 +356,7 @@ Scenario: S3DMFT-1169 - Non-Commercial Syncope Vasovagal, Single, Typical
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Within 7 Days > Needs Review
+Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Within 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -372,7 +372,7 @@ Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, W
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on Yes for Syncopal Event in the past 7 days
+    And I click on Yes for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -380,7 +380,7 @@ Scenario: S3DMFT-1170 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, W
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within 1 Week > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 333
@@ -396,7 +396,7 @@ Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, N
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on No for Syncopal Event in the past 7 days
+    And I click on No for Syncopal Event within one week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -404,7 +404,7 @@ Scenario: S3DMFT-1200 - Non-Commercial Syncope Vasovagal, Recurrent, Atypical, N
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 7 Days > Needs Review
+Scenario: S3DMFT-1171 - Commercial Syncope Unexplained Single No Repeat Within 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -541,7 +541,7 @@ Scenario: S3DMFT-1176 - Commercial Syncope Currently Untreated Recurrent > Needs
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Single, Within Past Month > Needs Review
+Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Single, Within 1 Month > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -556,7 +556,7 @@ Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the Syncope checkbox
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past month  
+    And I click on Yes for Syncopal Event within 1 month  
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -564,7 +564,7 @@ Scenario: S3DMFT-1177 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 30 Days > Clean Pass
+Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Single, Not Within 1 Month > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -579,7 +579,7 @@ Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the Syncope checkbox
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Single Syncopal Event radio button
-    And I click on No for Syncopal Event in the past month 
+    And I click on No for Syncopal Event within 1 month
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -587,7 +587,7 @@ Scenario: S3DMFT-1178 - Commercial Syncope Diagnosed, Treated Successfully, Sing
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 30 Days > Clean Pass
+Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Not Within 1 Month > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -602,7 +602,7 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the Syncope checkbox
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
-    And I click on No for Syncopal Event in the past month
+    And I click on No for Syncopal Event within 1 month
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -610,7 +610,7 @@ Scenario: S3DMFT-1179 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 30 Days > Needs Review
+Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recurrent, Within 1 Month > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -625,7 +625,7 @@ Scenario: S3DMFT-1180 - Commercial Syncope Diagnosed, Treated Successfully, Recu
     And I click on the Syncope checkbox
     And I click on the Diagnosed, Treated Successfully radio button
     And I click on the Recurrent Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past month
+    And I click on Yes for Syncopal Event within 1 month
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -677,7 +677,7 @@ Scenario: S3DMFT-1182 - Commercial Syncope Reversible, Treated Successfully, Rec
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 7 Days > Clean Pass
+Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Single, Not Within 1 Week > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -692,7 +692,7 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the Syncope checkbox
     And I click on the Situational, Avoidable Trigger radio button
     And I click on the Single Syncopal Event radio button
-    And I click on No for Syncopal Event in the past 7 days
+    And I click on No for Syncopal Event within 1 week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -700,7 +700,7 @@ Scenario: S3DMFT-1183 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Single, Within 7 Days > Needs Review
+Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Single, Within 1 Week > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -715,7 +715,7 @@ Scenario: S3DMFT-1184 - Commercial Syncope Situational, Avoidable Trigger, Singl
     And I click on the Syncope checkbox
     And I click on the Situational, Avoidable Trigger radio button
     And I click on the Single Syncopal Event radio button
-    And I click on Yes for Syncopal Event in the past 7 days
+    And I click on Yes for Syncopal Event within 1 week
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -746,7 +746,7 @@ Scenario: S3DMFT-1185 - Commercial Syncope Vasovagal, Single, Typical > Clean Pa
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within Past Year > Needs Review
+Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within 1 Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -762,7 +762,7 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
     And I click on the Vasovagal Syncope radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on Yes for Syncopal Event in the past year
+    And I click on Yes for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -770,7 +770,7 @@ Scenario: S3DMFT-1186 - Commercial Syncope Vasovagal, Single, Atypical, Within P
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within Past Year > Clean Pass
+Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -786,7 +786,7 @@ Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not With
     And I click on the Vasovagal Syncope radio button
     And I click on the Single Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on No for Syncopal Event in the past year
+    And I click on No for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -794,7 +794,7 @@ Scenario: S3DMFT-1194 - Commercial Syncope Vasovagal, Single, Atypical, Not With
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within Past Year > Needs Review
+Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within 1 Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -810,7 +810,7 @@ Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Typical Vasovagal radio button
-    And I click on Yes for Syncopal Event in the past year
+    And I click on Yes for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -818,7 +818,7 @@ Scenario: S3DMFT-1195 - Commercial Syncope Vasovagal, Recurrent, Typical, Within
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within Past Year > Clean Pass
+Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -834,7 +834,7 @@ Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Wi
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Typical Vasovagal radio button
-    And I click on No for Syncopal Event in the past year
+    And I click on No for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -842,7 +842,7 @@ Scenario: S3DMFT-1196 - Commercial Syncope Vasovagal, Recurrent, Typical, Not Wi
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within Past Year > Needs Review
+Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Within 1 Year > Needs Review
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -858,7 +858,7 @@ Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Withi
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on Yes for Syncopal Event in the past year
+    And I click on Yes for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
@@ -866,7 +866,7 @@ Scenario: S3DMFT-1197 - Commercial Syncope Vasovagal, Recurrent, Atypical, Withi
     And I click on the form submit button
     Then I log out of the portal
 
-Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within Past Year > Clean Pass
+Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not Within 1 Year > Clean Pass
     When I log in to the doctors' portal
     And I click on the DMER Forms tab
     And I click on the Case ID for 444
@@ -882,7 +882,7 @@ Scenario: S3DMFT-1198 - Commercial Syncope Vasovagal, Recurrent, Atypical, Not W
     And I click on the Vasovagal Syncope radio button
     And I click on the Recurrent Syncopal Event radio button
     And I click on the Atypical Vasovagal radio button
-    And I click on No for Syncopal Event in the past year
+    And I click on No for Syncopal Event within 1 year
     And I click on the Next button
     And I select Yes for patient is fit to drive without additional accommodation or specialist input
     And I select No for an Enhanced Road Assessment or Road Test should be performed for this driver
