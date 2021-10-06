@@ -147,6 +147,7 @@ namespace Rsbc.Dmf.CaseManagement
                         BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
                         DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
                         GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
+                        Sex = TranslateGenderCode (c.dfp_DriverId?.dfp_PersonId?.gendercode) ,
                         Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
                         Name = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                     },
@@ -413,6 +414,25 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             return new SetCaseFlagsReply { Success = false };
+        }
+
+        ///
+        /// translate a gendercode into a common string.
+        private string TranslateGenderCode(int? gendercode)
+        {
+            string result = string.Empty;
+
+            switch (gendercode)
+            {
+                case 1:
+                    result = "Male";
+                    break;
+                case 2:
+                    result = "Female";
+                    break;
+            }
+
+            return result;
         }
     }
 
