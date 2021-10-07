@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input } from '@angular/core';
+import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/shared/services/login.service';
 
 @Component({
@@ -16,13 +17,17 @@ export class HeaderComponent {
   public profileInitials?: string;
 
   constructor(private loginService: LoginService) {
-    if (this.loginService.isLoggedIn()) {
-      const profile = loginService.getUserProfile();
-      this.profileName = profile.firstName + ' ' + profile.lastName;
-      this.profileRole = 'role';
-      this.profileInitials = profile.firstName.substring(0, 1) + profile.lastName.substring(0, 1);
+    const profile = this.loginService.userProfile;
+
+    if (profile) {
+      const firstName = (profile.firstName || 'Not');
+      const lastName = (profile.lastName || 'Available');
+      this.profileName = firstName + ' ' + lastName;
+      this.profileRole = profile.clinics?.map(c => `${c.role}@${c.clinicName}`).join(',');
+      this.profileInitials = firstName.substring(0, 1) + lastName.substring(0, 1);
     }
   }
+
 
   public logOut(): void {
     this.loginService.logout();

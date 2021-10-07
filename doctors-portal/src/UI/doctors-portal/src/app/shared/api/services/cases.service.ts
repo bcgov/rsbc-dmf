@@ -28,20 +28,24 @@ export class CasesService extends BaseService {
   static readonly ApiCasesGetPath = '/api/Cases';
 
   /**
+   * Get Cases.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiCasesGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
   apiCasesGet$Plain$Response(params?: {
-    ByCaseId?: string;
+    ByTitle?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
     if (params) {
-      rb.query('ByCaseId', params.ByCaseId, {});
+      rb.query('ByTitle', params.ByTitle, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
@@ -58,13 +62,17 @@ export class CasesService extends BaseService {
   }
 
   /**
+   * Get Cases.
+   *
+   *
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `apiCasesGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
   apiCasesGet$Plain(params?: {
-    ByCaseId?: string;
+    ByTitle?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
   }): Observable<Array<DmerCaseListItem>> {
@@ -75,20 +83,24 @@ export class CasesService extends BaseService {
   }
 
   /**
+   * Get Cases.
+   *
+   *
+   *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
    * To access only the response body, use `apiCasesGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
   apiCasesGet$Json$Response(params?: {
-    ByCaseId?: string;
+    ByTitle?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
     const rb = new RequestBuilder(this.rootUrl, CasesService.ApiCasesGetPath, 'get');
     if (params) {
-      rb.query('ByCaseId', params.ByCaseId, {});
+      rb.query('ByTitle', params.ByTitle, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
@@ -105,13 +117,17 @@ export class CasesService extends BaseService {
   }
 
   /**
+   * Get Cases.
+   *
+   *
+   *
    * This method provides access to only to the response body.
    * To access the full response (for headers, for example), `apiCasesGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
   apiCasesGet$Json(params?: {
-    ByCaseId?: string;
+    ByTitle?: string;
     ByDriverLicense?: string;
     ByStatus?: Array<string>;
   }): Observable<Array<DmerCaseListItem>> {
