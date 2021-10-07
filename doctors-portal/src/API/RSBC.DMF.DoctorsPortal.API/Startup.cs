@@ -76,8 +76,8 @@ namespace RSBC.DMF.DoctorsPortal.API
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
-                    //options.EnableCaching = true;
-                    //options.CacheDuration = TimeSpan.FromMinutes(1);
+                    options.EnableCaching = true;
+                    options.CacheDuration = TimeSpan.FromMinutes(1);
                     configuration.GetSection("auth:introspection").Bind(options);
                     options.Events = new OAuth2IntrospectionEvents
                     {
