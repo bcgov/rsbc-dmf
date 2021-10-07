@@ -16,6 +16,11 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
             this.caseQueryService = caseQueryService;
         }
 
+        /// <summary>
+        /// Get Cases
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)
         {
