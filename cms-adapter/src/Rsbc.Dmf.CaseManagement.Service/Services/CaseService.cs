@@ -54,8 +54,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                         Driver = new Driver()
                         {
-                            Surname = c.Driver.Surname,
-                            GivenName = c.Driver.GivenName,
+                            Id = c.Driver.Id,
+                            Surname = c.Driver.Surname ?? string.Empty,
+                            GivenName = c.Driver.GivenName ?? string.Empty,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
                             DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
                             Address = new Address()
@@ -67,6 +68,29 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             },
                             Sex = c.Driver.Sex ?? string.Empty,
                             Name = c.Driver.Name ?? string.Empty
+                        },
+                        Provider = new Provider()
+                        {
+                            Id = c.Provider.Id,
+                            Address = new Address()
+                            {
+                                City = c.Provider.Address.City ?? string.Empty,
+                                Postal = c.Provider.Address.Postal ?? string.Empty,
+                                Line1 = c.Provider.Address.Line1 ?? string.Empty,
+                                Line2 = c.Provider.Address.Line2 ?? string.Empty,
+                            },
+                            FaxNumber = c.Provider.FaxNumber ?? string.Empty,
+                            FaxUseType = c.Provider.FaxUseType ?? string.Empty,
+                            GivenName = c.Provider.GivenName ?? string.Empty,
+                            Surname = c.Provider.Surname ?? string.Empty,
+                            Name = c.Provider.Name ?? string.Empty,
+                            PhoneExtension = c.Provider.PhoneExtension ?? string.Empty,
+                            PhoneNumber = c.Provider.PhoneNumber ?? string.Empty,
+                            PhoneUseType = c.Provider.PhoneUseType ?? string.Empty,
+                            ProviderDisplayId = c.Provider.ProviderDisplayId ?? string.Empty,
+                            ProviderDisplayIdType = c.Provider.ProviderDisplayIdType ?? string.Empty,
+                            ProviderRole = c.Provider.ProviderRole ?? string.Empty,
+                            ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                         },
                         IsCommercial = c.IsCommercial
                     };
