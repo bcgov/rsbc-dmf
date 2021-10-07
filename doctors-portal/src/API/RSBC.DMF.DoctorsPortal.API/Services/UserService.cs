@@ -104,6 +104,8 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
+            claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
+            claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
             claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
             {
                 Role = p.MedicalPractitioner.Role,

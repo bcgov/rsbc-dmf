@@ -21,31 +21,29 @@ export class AppComponent implements OnInit {
     private router: Router
   ) { }
 
-  public ngOnInit(): void {
-    this.configService.load().subscribe(
-      (result) => {
-        this.loginService.login(location.pathname.substring(1) || 'dashboard')
-          .subscribe(nextRoute => {            
-            console.debug('logged in', nextRoute);
-            //if (nextRoute) {
-            nextRoute = '/' + decodeURIComponent(nextRoute);
+  public async ngOnInit(): Promise<void> {
+    try {
+      //load the configuration from the server
+      await this.configService.load().toPromise();
+      //attempt to log in
+      let nextRoute = await this.loginService.login(location.pathname.substring(1) || 'dashboard').toPromise();
 
-            // remove base path.
-            if (this.baseHref && nextRoute.substring(0, this.baseHref.length) === this.baseHref)
-            {
-                nextRoute = nextRoute.substring(this.baseHref.length);
-            }
-            
-            console.debug('navigate to', nextRoute);
-            this.router.navigate([nextRoute]).then(() => this.isLoading = false)
-            //}
-          }, error => console.error(error));
-      },
-      (error) => {
-        //TODO: navigate to service unavailable page
-        console.error('failed to load configuration from the server');
+      //get the user's profile
+      await this.loginService.getUserProfile().toPromise();
+
+      //determine the next route
+      nextRoute = '/' + decodeURIComponent(nextRoute);
+
+      // remove base path.
+      if (this.baseHref && nextRoute.substring(0, this.baseHref.length) === this.baseHref) {
+        nextRoute = nextRoute.substring(this.baseHref.length);
       }
-    );
+
+      this.router.navigate([nextRoute]).then(() => this.isLoading = false)
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   public showNavigation(): boolean {
