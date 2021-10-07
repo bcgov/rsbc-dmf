@@ -6,6 +6,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
+import { ProfileService } from './services/profile.service';
 
 /**
  * Module that provides all services and configuration.
@@ -17,6 +18,7 @@ import { ConfigService } from './services/config.service';
   providers: [
     CasesService,
     ConfigService,
+    ProfileService,
     ApiConfiguration
   ],
 })

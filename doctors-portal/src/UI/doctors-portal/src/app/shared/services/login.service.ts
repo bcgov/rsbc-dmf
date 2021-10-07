@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, Observable, of } from 'rxjs';
 import { concatMap, map, tap } from 'rxjs/operators';
+import { UserProfile } from '../api/models';
+import { ProfileService } from '../api/services';
 import { ConfigurationService } from './configuration.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+
+  public userProfile?: Profile = undefined;
+
   constructor(
     private oauthService: OAuthService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
+    private profileService: ProfileService
   ) { }
 
   public login(returnUrl: string = '/'): Observable<string> {
@@ -30,8 +35,7 @@ export class LoginService {
       }));
   }
   public logout(): Observable<boolean> {
-    console.log('logout');
-
+    console.debug('logout');
     return from(this.oauthService.revokeTokenAndLogout());
   }
 
@@ -43,17 +47,11 @@ export class LoginService {
     return btoa(this.oauthService.getAccessToken());
   }
 
-  public getUserProfile(): IUserProfile {
-    return {
-      firstName: 'First',
-      lastName: 'Last',
-      role: 'Role'
-    };
+  public getUserProfile(): Observable<Profile> {
+    return this.profileService.apiProfileCurrentGet$Json().pipe(tap(profile => {
+      this.userProfile = profile;
+    }));
   }
 }
 
-export interface IUserProfile {
-  firstName: string,
-  lastName: string,
-  role: string
-}
+export interface Profile extends UserProfile { }
