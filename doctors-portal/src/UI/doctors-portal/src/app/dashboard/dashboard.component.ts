@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
 
   public search(): void {
     console.debug('search', this.searchBox);
-    this.router.navigate(['/cases/list', { 'id': this.searchBox }])
+    this.router.navigate(['/cases/list', { 'title': this.searchBox }])
   }
 
 }

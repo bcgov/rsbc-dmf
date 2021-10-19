@@ -13,7 +13,7 @@ export class CaseManagementService {
 
   public getCases(params: DMERSearchCases): Observable<DMERCase[]> {
     let searchParams = {
-      ByCaseId: params.byCaseId,
+      ByTitle: params.byTitle,
       ByDriverLicense: params.byDriverLicense,
       ByPatientName: params.byPatientName,
       ByStatus: params.byStatus
@@ -26,7 +26,7 @@ export class CaseManagementService {
 export interface DMERCase extends DmerCaseListItem { }
 
 export interface DMERSearchCases {
-  byCaseId?: string,
+  byTitle?: string,
   byDriverLicense?: string,
   byPatientName?: string,
   byStatus?: string[]
