@@ -18,7 +18,7 @@ export class ListComponent implements OnInit {
   public ngOnInit(): void {
     this.route.params.subscribe(params => {
       let searchParams = {
-        byCaseId: params['id'],
+        byTitle: params['title'],
         byDriverLicense: params['dl'],
         byPatientName: params['name'],
         byStatus: params['status']
