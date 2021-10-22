@@ -491,11 +491,10 @@ namespace Pssg.Interfaces
         /// <summary>
         ///     Upload a file
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="listTitle"></param>
-        /// <param name="folderName"></param>
-        /// <param name="fileData"></param>
+        /// <param name="key"></param>/// 
+        /// <param name="data"></param>
         /// <param name="contentType"></param>
+        /// <param name="metadata"></param>
         /// <returns>Uploaded Filename, or Null if not successful.</returns>
         public async Task<string> UploadFile(string key, byte[] data, string contentType, Dictionary< string, string> metadata = null )
         {

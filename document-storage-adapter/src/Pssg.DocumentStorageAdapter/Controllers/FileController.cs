@@ -78,19 +78,44 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 }
                 //return new FileContentResult(fileContents, "application/octet-stream");
 
+                string fileName = download.FileUrl;
+                string contentType = "application/octet-stream";
+                string body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty;
+                string entityName =
+                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) &&
+                    metaData[S3.METADATA_KEY_ENTITY] != null
+                        ? metaData[S3.METADATA_KEY_ENTITY]
+                        : String.Empty;
+                Guid entityId = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
+                                  metaData[S3.METADATA_KEY_ENTITY_ID] != null
+                    ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
+                    : new Guid();
+                string tag1 =
+                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) &&
+                    metaData[S3.METADATA_KEY_TAG1] != null
+                        ? metaData[S3.METADATA_KEY_TAG1]
+                        : String.Empty;
+                string tag2 =
+                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) &&
+                    metaData[S3.METADATA_KEY_TAG2] != null
+                        ? metaData[S3.METADATA_KEY_TAG2]
+                        : String.Empty;
+                string tag3 =
+                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) &&
+                    metaData[S3.METADATA_KEY_TAG3] != null
+                        ? metaData[S3.METADATA_KEY_TAG3]
+                        : String.Empty;
+
                 var result = new Upload()
                 {
-                    FileName = download.FileUrl,
-                    ContentType = "application/octet-stream",
-                    Body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty,
-                    EntityName = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) && metaData[S3.METADATA_KEY_ENTITY] != null ? metaData[S3.METADATA_KEY_ENTITY] : String.Empty,
-                    EntityId = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
-                               metaData[S3.METADATA_KEY_ENTITY_ID] != null
-                        ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
-                        : new Guid(),
-                    Tag1 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) && metaData[S3.METADATA_KEY_TAG1] != null ? metaData[S3.METADATA_KEY_TAG1] : String.Empty,
-                    Tag2 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) && metaData[S3.METADATA_KEY_TAG2] != null ? metaData[S3.METADATA_KEY_TAG2] : String.Empty,
-                    Tag3 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) && metaData[S3.METADATA_KEY_TAG3] != null ? metaData[S3.METADATA_KEY_TAG3] : String.Empty,
+                    FileName = fileName,
+                    ContentType = contentType,
+                    Body = body,
+                    EntityName = entityName,
+                    EntityId = entityId,
+                    Tag1 = tag1,
+                    Tag2 = tag2,
+                    Tag3 = tag3,
                 };
 
                 return new JsonResult(result);
