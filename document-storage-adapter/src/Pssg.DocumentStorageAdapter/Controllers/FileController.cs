@@ -80,22 +80,23 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 var result = new Upload()
                 {
                     FileName = download.FileUrl,
+                    ContentType = "application/octet-stream",
                     Body = Convert.ToBase64String(fileContents),
-                    EntityName = metaData[S3.METADATA_KEY_ENTITY] ?? String.Empty,
+                    EntityName = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) && metaData[S3.METADATA_KEY_ENTITY] != null ? metaData[S3.METADATA_KEY_ENTITY] : String.Empty,
                     EntityId = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
                                metaData[S3.METADATA_KEY_ENTITY_ID] != null
                         ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
                         : new Guid(),
-                    Tag1 = metaData[S3.METADATA_KEY_TAG1] ?? String.Empty,
-                    Tag2 = metaData[S3.METADATA_KEY_TAG2] ?? String.Empty,
-                    Tag3 = metaData[S3.METADATA_KEY_TAG3] ?? String.Empty
+                    Tag1 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) && metaData[S3.METADATA_KEY_TAG1] != null ? metaData[S3.METADATA_KEY_TAG1] : String.Empty,
+                    Tag2 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) && metaData[S3.METADATA_KEY_TAG2] != null ? metaData[S3.METADATA_KEY_TAG2] : String.Empty,
+                    Tag3 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) && metaData[S3.METADATA_KEY_TAG3] != null ? metaData[S3.METADATA_KEY_TAG3] : String.Empty,
                 };
 
                 return new JsonResult(result);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error during file download.");
+                _logger.LogError(e, $"Error during file download for file {download.FileUrl}.");
                 throw e;
             }
             
