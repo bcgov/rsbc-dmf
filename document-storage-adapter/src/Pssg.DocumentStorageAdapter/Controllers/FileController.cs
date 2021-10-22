@@ -82,26 +82,26 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 string contentType = "application/octet-stream";
                 string body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty;
                 string entityName =
-                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) &&
+                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_ENTITY) &&
                     metaData[S3.METADATA_KEY_ENTITY] != null
                         ? metaData[S3.METADATA_KEY_ENTITY]
                         : String.Empty;
-                Guid entityId = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
+                Guid entityId = metaData != null && metaData.ContainsKey(S3.METADATA_KEY_ENTITY_ID) &&
                                   metaData[S3.METADATA_KEY_ENTITY_ID] != null
                     ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
                     : new Guid();
                 string tag1 =
-                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) &&
+                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG1) &&
                     metaData[S3.METADATA_KEY_TAG1] != null
                         ? metaData[S3.METADATA_KEY_TAG1]
                         : String.Empty;
                 string tag2 =
-                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) &&
+                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG2) &&
                     metaData[S3.METADATA_KEY_TAG2] != null
                         ? metaData[S3.METADATA_KEY_TAG2]
                         : String.Empty;
                 string tag3 =
-                    metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) &&
+                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG3) &&
                     metaData[S3.METADATA_KEY_TAG3] != null
                         ? metaData[S3.METADATA_KEY_TAG3]
                         : String.Empty;
