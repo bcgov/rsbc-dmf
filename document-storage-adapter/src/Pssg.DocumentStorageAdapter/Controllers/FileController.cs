@@ -81,14 +81,14 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 {
                     FileName = download.FileUrl,
                     Body = Convert.ToBase64String(fileContents),
-                    EntityName = metaData[S3.METADATA_KEY_ENTITY],
+                    EntityName = metaData[S3.METADATA_KEY_ENTITY] ?? String.Empty,
                     EntityId = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
                                metaData[S3.METADATA_KEY_ENTITY_ID] != null
                         ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
                         : new Guid(),
-                    Tag1 = metaData[S3.METADATA_KEY_TAG1],
-                    Tag2 = metaData[S3.METADATA_KEY_TAG2],
-                    Tag3 = metaData[S3.METADATA_KEY_TAG3]
+                    Tag1 = metaData[S3.METADATA_KEY_TAG1] ?? String.Empty,
+                    Tag2 = metaData[S3.METADATA_KEY_TAG2] ?? String.Empty,
+                    Tag3 = metaData[S3.METADATA_KEY_TAG3] ?? String.Empty
                 };
 
                 return new JsonResult(result);
