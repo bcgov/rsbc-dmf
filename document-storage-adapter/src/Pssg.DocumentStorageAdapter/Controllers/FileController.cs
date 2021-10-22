@@ -73,6 +73,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 var fileContents = _S3.DownloadFile(download.FileUrl, ref metaData);
                 if (fileContents == null)
                 {
+                    _logger.LogError($"Error during file download for file {download.FileUrl} - no file data.");
                     return new BadRequestResult();
                 }
                 //return new FileContentResult(fileContents, "application/octet-stream");
@@ -81,15 +82,15 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 {
                     FileName = download.FileUrl,
                     ContentType = "application/octet-stream",
-                    Body = Convert.ToBase64String(fileContents),
-                    EntityName = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) && metaData[S3.METADATA_KEY_ENTITY] != null ? metaData[S3.METADATA_KEY_ENTITY] : String.Empty,
-                    EntityId = metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
+                    Body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty,
+                    EntityName = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY]) && metaData[S3.METADATA_KEY_ENTITY] != null ? metaData[S3.METADATA_KEY_ENTITY] : String.Empty,
+                    EntityId = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_ENTITY_ID]) &&
                                metaData[S3.METADATA_KEY_ENTITY_ID] != null
                         ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
                         : new Guid(),
-                    Tag1 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) && metaData[S3.METADATA_KEY_TAG1] != null ? metaData[S3.METADATA_KEY_TAG1] : String.Empty,
-                    Tag2 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) && metaData[S3.METADATA_KEY_TAG2] != null ? metaData[S3.METADATA_KEY_TAG2] : String.Empty,
-                    Tag3 = metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) && metaData[S3.METADATA_KEY_TAG3] != null ? metaData[S3.METADATA_KEY_TAG3] : String.Empty,
+                    Tag1 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG1]) && metaData[S3.METADATA_KEY_TAG1] != null ? metaData[S3.METADATA_KEY_TAG1] : String.Empty,
+                    Tag2 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG2]) && metaData[S3.METADATA_KEY_TAG2] != null ? metaData[S3.METADATA_KEY_TAG2] : String.Empty,
+                    Tag3 = metaData != null && metaData.ContainsKey(metaData[S3.METADATA_KEY_TAG3]) && metaData[S3.METADATA_KEY_TAG3] != null ? metaData[S3.METADATA_KEY_TAG3] : String.Empty,
                 };
 
                 return new JsonResult(result);
