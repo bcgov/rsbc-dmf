@@ -142,65 +142,77 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
+            
+
+            
+
             //map cases from query results (TODO: consider replacing with AutoMapper)
             return new CaseSearchReply
             {
-                Items = cases.Select(c => new DmerCase
+                Items = cases.Select(c =>
                 {
-                    Id = c.incidentid.ToString(),
-                    Title = c.title,
-                    CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                    CreatedOn = c.createdon.Value.DateTime,
-                    ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                    ModifiedOn = c.modifiedon.Value.DateTime,
-                    Driver = new CaseManagement.Driver()
+                    
+
+                    return new DmerCase
                     {
-                        Id = c.dfp_DriverId.dfp_driverid.ToString(),
-                        Address = new Address()
+                        Id = c.incidentid.ToString(),
+                        Title = c.title,
+                        CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                        CreatedOn = c.createdon.Value.DateTime,
+                        ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
+                        ModifiedOn = c.modifiedon.Value.DateTime,
+                        Driver = new CaseManagement.Driver()
                         {
-                            City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
-                            Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode,
-                            Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1,
-                            Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2,
+                            Id = c.dfp_DriverId.dfp_driverid.ToString(),
+                            Address = new Address()
+                            {
+                                City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
+                                Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode,
+                                Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1,
+                                Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2,
+                            },
+                            BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
+                            DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
+                            GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
+                            Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
+                            Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
+                            Name =
+                                $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                         },
-                        BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
-                        DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
-                        GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
-                        Sex = TranslateGenderCode (c.dfp_DriverId?.dfp_PersonId?.gendercode) ,
-                        Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
-                        Name = $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
-                    },
-                    Provider = new CaseManagement.Provider()
-                    {
-                        Id = c.customerid_contact?.contactid.ToString(),
-                        Address = new Address()
+                        Provider = new CaseManagement.Provider()
                         {
-                            City = c.customerid_contact?.address1_city,
-                            Postal = c.customerid_contact?.address1_postalcode,
-                            Line1 = c.customerid_contact?.address1_line1,
-                            Line2 = c.customerid_contact?.address1_line2,
+                            Id = c.dfp_MedicalPractitionerId?.dfp_PersonId?.contactid.ToString(),
+                            Address = new Address()
+                            {
+                                City = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_city,
+                                Postal = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_postalcode,
+                                Line1 = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_line1,
+                                Line2 = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_line2,
+                            },
+                            FaxNumber = c.dfp_MedicalPractitionerId?.dfp_PersonId?.fax,
+                            GivenName = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.firstname}",
+                            Name = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.firstname} {c.dfp_MedicalPractitionerId?.dfp_PersonId?.lastname}",
+                            Surname = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.lastname}",
+                            FaxUseType = "work",
+                            PhoneNumber = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.telephone1}",
+                            PhoneExtension = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.telephone2}",
+                            PhoneUseType = "work",
+                            ProviderDisplayId = c.dfp_MedicalPractitionerId?.dfp_providerid,
+                            ProviderDisplayIdType = "PHID",
+                            ProviderRole = "physician",
+                            ProviderSpecialty = "cardiology"
                         },
-                        FaxNumber = c.customerid_contact?.fax,
-                        GivenName = $"{c.customerid_contact?.firstname}",
-                        Name = $"{c.customerid_contact?.firstname} {c.customerid_contact?.lastname}",
-                        Surname = $"{c.customerid_contact?.lastname}",
-                        FaxUseType = "work",
-                        PhoneNumber = $"{c.customerid_contact?.telephone1}",
-                        PhoneExtension = $"{c.customerid_contact?.telephone2}",
-                        PhoneUseType = "work",
-                        ProviderDisplayId = "123456",
-                        ProviderDisplayIdType = "optid",
-                        ProviderRole = "physician",
-                        ProviderSpecialty = "cardiology"
-                    },
-                    IsCommercial = c.dfp_iscommercial != null && c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
-                    Flags = c.dfp_incident_dfp_dmerflag
-                        .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
-                        .Select(f => new Flag
-                        {
-                            Id = f.dfp_FlagId?.dfp_id,
-                            Description = f.dfp_FlagId?.dfp_description
-                        }).ToArray()
+                        IsCommercial =
+                            c.dfp_iscommercial != null &&
+                            c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
+                        Flags = c.dfp_incident_dfp_dmerflag
+                            .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
+                            .Select(f => new Flag
+                            {
+                                Id = f.dfp_FlagId?.dfp_id,
+                                Description = f.dfp_FlagId?.dfp_description
+                            }).ToArray()
+                    };
                 }).ToArray()
             };
         }
@@ -218,6 +230,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_DriverId)
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
+                .Expand(i => i.dfp_MedicalPractitionerId)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
