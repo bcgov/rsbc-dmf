@@ -132,6 +132,13 @@ namespace Rsbc.Dmf.CaseManagement
                     if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                 }
 
+                if (@case._dfp_medicalpractitionerid_value.HasValue)
+                {
+                    //load driver info
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_MedicalPractitionerId));
+                    if (@case.dfp_MedicalPractitionerId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_MedicalPractitionerId, nameof(incident.dfp_MedicalPractitionerId.dfp_PersonId));
+                }
+
                 //load case's flags
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_dmerflag));
                 foreach (var flag in @case.dfp_incident_dfp_dmerflag)
@@ -141,9 +148,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             dynamicsContext.DetachAll();
-
-            
-
             
 
             //map cases from query results (TODO: consider replacing with AutoMapper)
@@ -151,7 +155,38 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Items = cases.Select(c =>
                 {
-                    
+                    Provider provider;
+                    if (c.dfp_MedicalPractitionerId != null)
+                    {
+                        provider = new CaseManagement.Provider()
+                        {
+                            Id = c.dfp_MedicalPractitionerId.dfp_medicalpractitionerid.ToString(),
+                            Address = new Address()
+                            {
+                                City = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_city,
+                                Postal = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_postalcode,
+                                Line1 = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_line1,
+                                Line2 = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_line2,
+                            },
+                            FaxNumber = c.dfp_MedicalPractitionerId.dfp_PersonId?.fax,
+                            GivenName = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname}",
+                            Name =
+                                $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname} {c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
+                            Surname = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
+                            FaxUseType = "work",
+                            PhoneNumber = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.telephone1}",
+                            PhoneExtension = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.telephone2}",
+                            PhoneUseType = "work",
+                            ProviderDisplayId = c.dfp_MedicalPractitionerId.dfp_providerid ?? "000000000",
+                            ProviderDisplayIdType = "PHID",
+                            ProviderRole = "physician",
+                            ProviderSpecialty = "cardiology"
+                        };
+                    }
+                    else
+                    {
+                        provider = null;
+                    }
 
                     return new DmerCase
                     {
@@ -179,29 +214,7 @@ namespace Rsbc.Dmf.CaseManagement
                             Name =
                                 $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
                         },
-                        Provider = new CaseManagement.Provider()
-                        {
-                            Id = c.dfp_MedicalPractitionerId?.dfp_PersonId?.contactid.ToString(),
-                            Address = new Address()
-                            {
-                                City = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_city,
-                                Postal = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_postalcode,
-                                Line1 = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_line1,
-                                Line2 = c.dfp_MedicalPractitionerId?.dfp_PersonId?.address1_line2,
-                            },
-                            FaxNumber = c.dfp_MedicalPractitionerId?.dfp_PersonId?.fax,
-                            GivenName = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.firstname}",
-                            Name = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.firstname} {c.dfp_MedicalPractitionerId?.dfp_PersonId?.lastname}",
-                            Surname = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.lastname}",
-                            FaxUseType = "work",
-                            PhoneNumber = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.telephone1}",
-                            PhoneExtension = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.telephone2}",
-                            PhoneUseType = "work",
-                            ProviderDisplayId = c.dfp_MedicalPractitionerId?.dfp_providerid,
-                            ProviderDisplayIdType = "PHID",
-                            ProviderRole = "physician",
-                            ProviderSpecialty = "cardiology"
-                        },
+                        Provider = provider,
                         IsCommercial =
                             c.dfp_iscommercial != null &&
                             c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
