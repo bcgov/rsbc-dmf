@@ -79,6 +79,7 @@
         "https://justice.gov.bc.ca/rsbc-dfp-icbc-portal/",
         "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://dev.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://test.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://prod.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal"
@@ -101,6 +102,7 @@
         "https://justice.gov.bc.ca",
         "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca",
         "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca",
+        "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca",
         "https://dev.roadsafetybcportal.justice.gov.bc.ca",
         "https://test.roadsafetybcportal.justice.gov.bc.ca",
         "https://roadsafetybcportal.justice.gov.bc.ca"
@@ -122,6 +124,7 @@
         "https://justice.gov.bc.ca/rsbc-dfp-icbc-portal/",
         "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
+        "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://dev.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://test.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal",
         "https://prod.roadsafetybcportal.justice.gov.bc.ca/rsbc-dfp-medical-portal"
