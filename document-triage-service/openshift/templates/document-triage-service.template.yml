@@ -169,15 +169,15 @@ objects:
               livenessProbe:
                 httpGet:
                   path: /hc/live
-                  port: 8080
+                  port: 8088
               startupProbe:
                 httpGet:
                   path: /hc/ready
-                  port: 8080
+                  port: 8088
               readinessProbe:
                 httpGet:
                   path: /hc/ready
-                  port: 8080
+                  port: 8088
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
