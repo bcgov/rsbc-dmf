@@ -20,6 +20,10 @@ Technology Stack
 | Logging | Splunk, Console, and Kibana |
 | CI/CD Pipeline | Jenkins |
 
+System Architecture
+--------------
+![alt text](openshift/Medical-Portal-Architecture.png)
+
 Repository Map
 --------------
 
