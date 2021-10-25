@@ -198,7 +198,7 @@ namespace Rsbc.Dmf.CaseManagement
                             PhoneExtension = $"{c.dfp_MedicalPractitionerId?.dfp_PersonId?.telephone2}",
                             PhoneUseType = "work",
                             ProviderDisplayId = c.dfp_MedicalPractitionerId?.dfp_providerid,
-                            ProviderDisplayIdType = "optid",
+                            ProviderDisplayIdType = "PHID",
                             ProviderRole = "physician",
                             ProviderSpecialty = "cardiology"
                         },
