@@ -10,3 +10,10 @@ Scenario: * name of scenario *
     And I click on the ...
     Then I log out of the portal
     And I click on the next button ...
+
+Scenario: Drivers licence numbers leading with zero display in Doctors' Portal
+    When I log in to the doctors' portal
+    And I click on the DMER Forms tab
+    And I click on a DMER with a leading zero DL
+    And I wait for the drivers licence field to have a value
+    Then the correct DL number is displayed
