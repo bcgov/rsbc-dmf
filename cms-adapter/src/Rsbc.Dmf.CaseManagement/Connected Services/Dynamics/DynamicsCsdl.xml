@@ -5274,11 +5274,12 @@
         <Property Name="pager" Type="Edm.String" Unicode="false" />
         <Property Name="employeeid" Type="Edm.String" Unicode="false" />
         <Property Name="address1_latitude" Type="Edm.Double" />
-        <Property Name="_parentcustomerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_phoneuse" Type="Edm.Int32" />
         <Property Name="managername" Type="Edm.String" Unicode="false" />
         <Property Name="birthdate" Type="Edm.Date" />
         <Property Name="address1_name" Type="Edm.String" Unicode="false" />
         <Property Name="department" Type="Edm.String" Unicode="false" />
+        <Property Name="_parentcustomerid_value" Type="Edm.Guid" />
         <Property Name="address3_country" Type="Edm.String" Unicode="false" />
         <Property Name="address2_telephone1" Type="Edm.String" Unicode="false" />
         <Property Name="address2_primarycontactname" Type="Edm.String" Unicode="false" />
@@ -6412,6 +6413,7 @@
         <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_providerspeciality" Type="Edm.String" Unicode="false" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
