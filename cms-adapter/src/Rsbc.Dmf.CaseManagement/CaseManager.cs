@@ -94,6 +94,7 @@ namespace Rsbc.Dmf.CaseManagement
         public Driver Driver { get; set; }
         public Provider Provider { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
+        public string ClinicId { get; set; }
     }
 
     public class Flag
@@ -196,6 +197,7 @@ namespace Rsbc.Dmf.CaseManagement
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         ModifiedOn = c.modifiedon.Value.DateTime,
+                        ClinicId = c.dfp_ClinicId?.accountid.ToString(),
                         Driver = new CaseManagement.Driver()
                         {
                             Id = c.dfp_DriverId.dfp_driverid.ToString(),
@@ -235,7 +237,20 @@ namespace Rsbc.Dmf.CaseManagement
             var shouldSearchCases =
                 !string.IsNullOrEmpty(criteria.CaseId) ||
                 !string.IsNullOrEmpty(criteria.Title) ||
+                !string.IsNullOrEmpty(criteria.DriverLicenseNumber) ||
                 !string.IsNullOrEmpty(criteria.ClinicId);
+
+            Guid? driverId = Guid.Empty;
+            // pre-search if the driver licence number is a parameter.
+            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber))
+            {
+                var driverQuery = ctx.dfp_drivers.Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber);
+                var driverResults = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+                if (driverResults.Length > 0)
+                {
+                    driverId = driverResults[0].dfp_driverid;
+                }
+            }
 
             if (!shouldSearchCases) return Array.Empty<incident>();
 
@@ -249,6 +264,19 @@ namespace Rsbc.Dmf.CaseManagement
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
             if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.title == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
+            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
+            {
+                // abort the search if there is not an exact match for driver's licence number
+                // as we do not want the results to include all records...
+                if (driverId != null && driverId != Guid.Empty)
+                {
+                    return Array.Empty<incident>(); 
+                }
+                else
+                {
+                    caseQuery = caseQuery.Where(i => i._dfp_driverid_value == driverId);
+                }                
+            }
 
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
         }

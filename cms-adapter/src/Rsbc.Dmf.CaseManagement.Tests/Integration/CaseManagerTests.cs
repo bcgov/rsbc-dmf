@@ -77,16 +77,19 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByClinicId()
         {
-            var expectedClinicId = "a5a45383-8ff4-eb11-b82b-00505683fbf4";
-            var expectedClinicName = "Adam Hancock";
+            var title = "222";
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
 
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { ClinicId = expectedClinicId })).Items;
+            var testItem = queryResults.First().ShouldBeAssignableTo<DmerCase>();
+
+            var expectedClinicId = testItem.ClinicId;
+
+            queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { ClinicId = expectedClinicId })).Items;
 
             queryResults.ShouldNotBeEmpty();
             foreach (var dmerCase in queryResults)
             {
-                dmerCase.ShouldBeAssignableTo<DmerCase>().Provider.Id.ShouldBe(expectedClinicId);
-                dmerCase.ShouldBeAssignableTo<DmerCase>().Provider.Name.ShouldBe(expectedClinicName);
+                dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicId.ShouldBe(expectedClinicId);
             }
         }
 
