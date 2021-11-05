@@ -56,10 +56,11 @@ namespace OAuthServer
                 options.AddPolicy(name: MyPolicy,
                     builder =>
                     {
-                        builder.WithOrigins("https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/",
-                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/",
-                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/",
-                                            "https://localhost:3020")
+                        builder.WithOrigins("https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca",
+                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca",
+                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca",
+                                            "https://localhost:3020",
+                                            "http://localhost:3020")
                                .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
                     });
             });
@@ -212,9 +213,11 @@ namespace OAuthServer
 
             app.UsePathBase(configuration["BASE_PATH"] ?? "");
             app.UseRouting();
-            app.UseIdentityServer();
 
             app.UseCors(MyPolicy);
+
+            app.UseIdentityServer();
+                       
 
             app.UseAuthentication();
             app.UseAuthorization();
