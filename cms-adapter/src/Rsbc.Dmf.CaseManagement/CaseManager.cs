@@ -470,7 +470,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dfp_dmerflag newFlag = new dfp_dmerflag()
                     {
-                        dfp_name = flag.Description,
+                        dfp_name = flag.Description.Substring(0,200), // max 200 characters.,
                         dfp_description = flag.Description
                     };
 
