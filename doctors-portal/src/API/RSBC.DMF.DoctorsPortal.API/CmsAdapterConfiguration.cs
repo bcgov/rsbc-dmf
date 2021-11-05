@@ -29,20 +29,9 @@ namespace RSBC.DMF.DoctorsPortal.API
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
-                var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
-
-                var initialClient = new CaseManager.CaseManagerClient(initialChannel);
-                // call the token service to get a token.
-                var tokenRequest = new TokenRequest { Secret = clientSecret };
-
-                var tokenReply = initialClient.GetToken(tokenRequest);
-
-                if (tokenReply != null && tokenReply.ResultStatus == ResultStatus.Success)
+                if (string.IsNullOrEmpty (clientSecret))
                 {
-                    // Add the bearer token to the client.
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-
+                    // add the service without authentication.
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
                     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
@@ -50,8 +39,30 @@ namespace RSBC.DMF.DoctorsPortal.API
                 }
                 else
                 {
-                    Log.Logger.Information("Error getting token for Case Management Service");
+                    var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new TokenRequest { Secret = clientSecret };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                        var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+
+                        services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                        services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+                    }
+                    else
+                    {
+                        Log.Logger.Information("Error getting token for Case Management Service");
+                    }
                 }
+                
             }
             return services;
         }

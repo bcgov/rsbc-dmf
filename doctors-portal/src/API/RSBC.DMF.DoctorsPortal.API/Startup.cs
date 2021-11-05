@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -216,6 +217,24 @@ namespace RSBC.DMF.DoctorsPortal.API
                     .RequireAuthorization("OAuth")
                     ;
             });
+
+            if (!string.IsNullOrEmpty(configuration["USE_SPA"]))
+            {
+                app.UseSpa(spa =>
+                {
+                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                    // see https://go.microsoft.com/fwlink/?linkid=864501
+                    if (string.IsNullOrEmpty(configuration["ANGULAR_DEV_SERVER"]))
+                    {
+                        spa.Options.SourcePath = "../UI/doctors-portal";
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }
+                    else
+                    {
+                        spa.UseProxyToSpaDevelopmentServer(configuration["ANGULAR_DEV_SERVER"]);
+                    }
+                });
+            }
         }
 
         private static LogEventLevel ExcludeHealthChecks(HttpContext ctx, double _, Exception ex) =>
