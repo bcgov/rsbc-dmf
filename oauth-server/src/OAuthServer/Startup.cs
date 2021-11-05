@@ -50,6 +50,20 @@ namespace OAuthServer
                 //configure data protection folder for key sharing
                 dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
             }
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/",
+                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/",
+                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/",
+                                            "https://localhost:3020")
+                               .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
+                    });
+            });
+
             services.AddControllersWithViews();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -95,20 +109,6 @@ namespace OAuthServer
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy(name: MyPolicy,
-                    builder =>
-                    {
-                        builder.WithOrigins("https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/",
-                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/",
-                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/",
-                                            "https://localhost:3020")
-                               .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
-                    });
-            });
-
 
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
@@ -214,7 +214,7 @@ namespace OAuthServer
             app.UseRouting();
             app.UseIdentityServer();
 
-            app.UseCors();
+            app.UseCors(MyPolicy);
 
             app.UseAuthentication();
             app.UseAuthorization();
