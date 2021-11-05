@@ -446,7 +446,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dfp_id = flag.Id,
                             dfp_description = flag.Description,
-                            dfp_label = flag.Description,
+                            dfp_label = flag.Description.Substring(0,200), // max 200 characters.
                             dfp_type = (int?)FlagTypeOptionSet.Review
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
@@ -461,7 +461,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (givenFlag.dfp_label != flag.Description)
                         {
-                            givenFlag.dfp_label = flag.Description;
+                            givenFlag.dfp_label = flag.Description.Substring(0,200), // max 200 characters.
                             dynamicsContext.UpdateObject(givenFlag);
                         }
                     }
