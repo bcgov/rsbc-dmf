@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.IO;
 using System.Linq;
@@ -37,6 +38,8 @@ namespace OAuthServer
             this.environment = environment;
             this.configuration = configuration;
         }
+
+        readonly string MyPolicy = "_myPolicy";
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -92,6 +95,20 @@ namespace OAuthServer
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyPolicy,
+                    builder =>
+                    {
+                        builder.WithOrigins("https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/",
+                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/",
+                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca/",
+                                            "https://localhost:3020")
+                               .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
+                    });
+            });
+
 
             services.AddAuthentication()
                 .AddOpenIdConnect("bcsc", options =>
@@ -196,6 +213,9 @@ namespace OAuthServer
             app.UsePathBase(configuration["BASE_PATH"] ?? "");
             app.UseRouting();
             app.UseIdentityServer();
+
+            app.UseCors();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
