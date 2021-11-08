@@ -64,6 +64,9 @@
       "RequirePkce": true,
       "RedirectUris": [
         "http://localhost:3200",
+        "https://localhost:3200",
+        "https://localhost:3020",
+        "http://localhost:3020",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal",
         "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal/",
@@ -95,6 +98,9 @@
       "AllowOfflineAccess": true,
       "AllowedCorsOrigins": [
         "http://localhost:3200",
+        "https://localhost:3200",
+        "https://localhost:3020",
+        "http://localhost:3020",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
         "https://rsbc-dfp-medical-portal-test.silver.devops.bcgov",
         "https://dev.justice.gov.bc.ca",
@@ -109,6 +115,9 @@
       ],
       "PostLogoutRedirectUris": [
         "http://localhost:3200",
+        "https://localhost:3200",
+        "https://localhost:3020",
+        "http://localhost:3020",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
         "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/rsbc-dfp-medical-portal",
         "https://dev.justice.gov.bc.ca/rsbc-dfp-driver-portal/",
