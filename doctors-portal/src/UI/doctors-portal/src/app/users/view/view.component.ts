@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ConfigurationService } from 'src/app/shared/services/configuration.service';
+import { LoginService } from 'src/app/shared/services/login.service';
 
 @Component({
   selector: 'app-view',
@@ -7,9 +10,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private configService: ConfigurationService,
+    private route: ActivatedRoute,
+    private loginService: LoginService
+  ) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
+    return;
   }
 
 }
