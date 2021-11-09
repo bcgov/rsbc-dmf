@@ -388,6 +388,16 @@ namespace Rsbc.Dmf.CaseManagement
             return Math.Sign(byteCount) * num + " " + suffix[place];
         }
 
+        private string SanitizeLabel(string label)
+        {
+            string result = null;
+            if (label != null)
+            {
+                result = label.Substring(0,200); // Max 200 chars
+            }
+            return result;
+        }
+
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
@@ -446,7 +456,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dfp_id = flag.Id,
                             dfp_description = flag.Description,
-                            dfp_label = flag.Description.Substring(0,200), // max 200 characters.
+                            dfp_label = SanitizeLabel(flag.Description), // max 200 characters.
                             dfp_type = (int?)FlagTypeOptionSet.Review
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
@@ -461,7 +471,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (givenFlag.dfp_label != flag.Description)
                         {
-                            givenFlag.dfp_label = flag.Description.Substring(0,200); // max 200 characters.
+                            givenFlag.dfp_label = SanitizeLabel(flag.Description); // max 200 characters.
                             dynamicsContext.UpdateObject(givenFlag);
                         }
                     }
@@ -470,7 +480,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dfp_dmerflag newFlag = new dfp_dmerflag()
                     {
-                        dfp_name = flag.Description.Substring(0,200), // max 200 characters.,
+                        dfp_name = SanitizeLabel(flag.Description), // max 200 characters.,
                         dfp_description = flag.Description
                     };
 
