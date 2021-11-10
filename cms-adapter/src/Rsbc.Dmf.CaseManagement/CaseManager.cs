@@ -390,10 +390,20 @@ namespace Rsbc.Dmf.CaseManagement
 
         private string SanitizeLabel(string label)
         {
+            const int maxFieldLength = 200;
             string result = null;
             if (label != null)
             {
-                result = label.Substring(0,200); // Max 200 chars
+                if (label.Length > maxFieldLength)
+                {
+                    result = label.Substring(0,maxFieldLength); // Max 200 chars
+                }
+                else
+                {
+                    result = label;
+                }
+                
+                
             }
             return result;
         }
@@ -469,7 +479,7 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.UpdateObject(givenFlag);
                         }
 
-                        if (givenFlag.dfp_label != flag.Description)
+                        if (givenFlag.dfp_label == null || givenFlag.dfp_label != SanitizeLabel(flag.Description))
                         {
                             givenFlag.dfp_label = SanitizeLabel(flag.Description); // max 200 characters.
                             dynamicsContext.UpdateObject(givenFlag);
