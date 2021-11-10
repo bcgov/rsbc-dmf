@@ -1,16 +1,13 @@
-﻿{
+{
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "RSBC.DMF.DoctorsPortal.API": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
-      "launchBrowser": false,
-      "applicationUrl": "http://localhost:3020",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "cms__serverUrl": "https://localhost:4020",
-        "cms__validateServerCertificate": "false"
-      }
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": "true",
+      "applicationUrl": "http://localhost:3020"
     }
   }
 }

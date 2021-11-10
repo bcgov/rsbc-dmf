@@ -12,12 +12,16 @@ import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import { ListComponent } from './users/list/list.component';
+import { ViewComponent } from './users/view/view.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    ListComponent,
+    ViewComponent
   ],
   imports: [
     BrowserModule,
