@@ -5,7 +5,7 @@ import { ViewComponent } from './view/view.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'list' },
-  { path: 'case/:id', component: ViewComponent },
+  { path: 'user/:id', component: ViewComponent },
   { path: 'list', component: ListComponent }
 ];
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CasesRoutingModule { }
+export class UsersRoutingModule { }
