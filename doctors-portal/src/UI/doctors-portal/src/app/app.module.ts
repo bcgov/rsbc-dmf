@@ -12,16 +12,12 @@ import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { ListComponent } from './users/list/list.component';
-import { ViewComponent } from './users/view/view.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    ListComponent,
-    ViewComponent
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +39,7 @@ import { ViewComponent } from './users/view/view.component';
     { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => {
       var result = s.getBaseHrefFromDOM()
       let hasTrailingSlash = result[result.length-1] === '/';
-      if(hasTrailingSlash) {    
+      if(hasTrailingSlash) {
         result = result.substr(0, result.length - 1);
       }
       return result;
