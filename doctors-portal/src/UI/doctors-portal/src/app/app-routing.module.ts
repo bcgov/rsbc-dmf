@@ -6,6 +6,7 @@ const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'cases', loadChildren: () => import('./cases/cases.module').then(m => m.CasesModule) },
+  { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
 ];
 
 @NgModule({
