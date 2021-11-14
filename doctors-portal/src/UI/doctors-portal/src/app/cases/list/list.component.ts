@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CaseManagementService, DMERCase } from 'src/app/shared/services/case-management/case-management.service';
 
 @Component({
+  selector: 'app-cases-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
