@@ -5,12 +5,14 @@ import { CasesRoutingModule } from './cases-routing.module';
 import { ViewComponent } from './view/view.component';
 import { ListComponent } from './list/list.component';
 import { SharedModule } from '../shared/shared.module';
+import { ClinicsComponent } from './clinics/clinics.component';
 
 
 @NgModule({
   declarations: [
     ViewComponent,
-    ListComponent
+    ListComponent,
+    ClinicsComponent
   ],
   imports: [
     CommonModule,
