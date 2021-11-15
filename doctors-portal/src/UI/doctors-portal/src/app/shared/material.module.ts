@@ -25,6 +25,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatChipsModule,
     ReactiveFormsModule,
     FormsModule
   ],
@@ -90,6 +92,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatChipsModule,
     ReactiveFormsModule,
     FormsModule
   ]
