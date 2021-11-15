@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CaseManagementService, DMERCase } from 'src/app/shared/services/case-management/case-management.service';
 
@@ -9,8 +10,14 @@ import { CaseManagementService, DMERCase } from 'src/app/shared/services/case-ma
 })
 export class ListComponent implements OnInit {
 
+  @Input() clinicId?: string | null = null;
+  @Input() clinicName?: string | null = null;
+
   public dataSource: DMERCase[] = [];
 
+  statusFilter  = new FormControl('' );
+  lastModifiedByFilter  = new FormControl('' );
+  
   constructor(
     private caseManagementService: CaseManagementService,
     private route: ActivatedRoute
