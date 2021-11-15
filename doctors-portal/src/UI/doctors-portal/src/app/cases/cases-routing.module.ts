@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ListComponent } from './list/list.component';
+import { ClinicsComponent } from './clinics/clinics.component';
 import { ViewComponent } from './view/view.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'list' },
+  { path: '', redirectTo: 'clinics' },
   { path: 'case/:id', component: ViewComponent },
-  { path: 'list', component: ListComponent }
+  { path: 'clinics', component: ClinicsComponent}
 ];
 
 @NgModule({

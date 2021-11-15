@@ -1,0 +1,24 @@
+<mat-card>
+    <mat-card-header class="primary">
+      <mat-card-title>All Clinic DMERs</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <p>Find below a list of all the Clinic DMERs that have been worked on.  
+
+            Use the filter option to better define what you’re looking for. </p>
+        <div class="clinic-list">
+            <ul>
+                <li *ngFor="let clinic of myClinics">
+                    <a href="#clinic-{{clinic.clinicId}}">{{clinic.clinicName}}</a>
+                </li>
+            </ul>
+        </div>            
+    </mat-card-content>
+  </mat-card>
+
+<div *ngFor="let clinic of myClinics">
+    <app-cases-list id="clinic-{{clinic.clinicId}}" [clinicId]="clinic.clinicId" [clinicName]="clinic.clinicName">                
+    </app-cases-list>
+</div>
+
+
