@@ -7,7 +7,7 @@ import { LoginService } from 'src/app/shared/services/login.service';
   templateUrl: './clinics.component.html',
   styleUrls: ['./clinics.component.scss']
 })
-export class ClinicsComponent implements OnInit {
+export class ClinicsComponent {
 
   myClinics?: null | Array<ClinicUserProfile> = [];
 
@@ -19,9 +19,6 @@ export class ClinicsComponent implements OnInit {
       this.myClinics = profile.clinics;      
     }
       
-  }
-
-  ngOnInit(): void {
-  }
+  }  
 
 }
