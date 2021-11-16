@@ -31,8 +31,9 @@ namespace RSBC.DMF.DoctorsPortal.API.Controllers
             Assembly assembly = GetType().GetTypeInfo().Assembly;
             DateTime creationTime = System.IO.File.GetLastWriteTimeUtc(assembly.Location);
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string fileVersion = fvi.FileVersion;
+            string fileVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             
+
             /*
             SourceCommit = _configuration["OPENSHIFT_BUILD_COMMIT"],
             SourceRepository = _configuration["OPENSHIFT_BUILD_SOURCE"],
