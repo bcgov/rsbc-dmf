@@ -1,0 +1,31 @@
+<div class="page-desc">
+  <h1>Notifications</h1>
+  <p>
+    The notifications area allows you to see what activity has been happening on DMERs. Please be sure to check in here
+    frequently to keep up to date on in progress DMERs.
+  </p>
+  <p>
+    Notifications can include: DMER assignment, request for further information from RoadSafetyBC, document uploads.
+  </p>
+</div>
+
+<div class="container card-list">
+  <mat-card class="new-card" *ngFor="let notification of notifications">
+    <mat-card-content>
+      <div>
+        <p class="notification-date">{{ notification.date }}</p>
+        <p class="notification-level" [ngSwitch]="notification.level">
+          <mat-basic-chip class="notification urgent" *ngSwitchCase="'Urgent'" color="warn" selected>{{ notification.level }} </mat-basic-chip>
+          <mat-basic-chip class="notification information" *ngSwitchCase="'Information'" color="primary" selected>{{ notification.level }}</mat-basic-chip>
+          <mat-basic-chip *ngSwitchDefault> {{ notification.level }} </mat-basic-chip>
+        </p>
+      </div>
+      <p>Subject: {{ notification.subject }}</p>
+      <p>From: {{ notification.from }}</p>
+      <p>DMER: {{ notification.caseId }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-stroked-button color="accent">View case</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
