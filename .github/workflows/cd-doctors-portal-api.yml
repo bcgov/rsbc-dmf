@@ -36,7 +36,7 @@ jobs:
           echo "BUILDID=${{ env.GITHUB_SERVER_URL }}${{ env.GITHUB_REPOSITORY}};${{ env.GITHUB_REF_NAME }};${{ env.GITHUB_SHA }};${{ env.GITHUB_RUN_NUMBER }}" >> $GITHUB_ENV
 
       - name: Build image
-        run: docker build . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build . --file ./doctors-portal/src/API/Dockerfile --build-arg BUILDID=${{ env.GITHUB_SERVER_URL }}${{ env.GITHUB_REPOSITORY}};${{ env.GITHUB_REF_NAME }};${{ env.GITHUB_SHA }};${{ env.GITHUB_RUN_NUMBER }} --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
