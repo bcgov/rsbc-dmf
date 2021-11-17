@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
-ARG build_id
+ARG BUILD_ID
 
 WORKDIR /app
 
@@ -11,9 +11,9 @@ RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" -c Releas
 
 FROM build AS publish
 
-RUN dotnet publish /p:InformationalVersion="$build_id" "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
+RUN dotnet publish /p:InformationalVersion=$BUILD_ID "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
 
-RUN echo "$build_id" > /app/publish/buildid
+RUN echo $BUILD_ID > /app/publish/build_id
 
 FROM base AS final
 WORKDIR /app
