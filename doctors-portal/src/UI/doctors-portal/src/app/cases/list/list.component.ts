@@ -23,17 +23,15 @@ export class ListComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  public ngOnInit(): void {
-    this.route.params.subscribe(params => {
+  public ngOnInit(): void { 
+    if (this.clinicId)   
+    {
       let searchParams = {
-        byTitle: params['title'],
-        byDriverLicense: params['dl'],
-        byPatientName: params['name'],
-        byStatus: params['status']
+        byClinicId: this.clinicId
       };
       console.debug('list', searchParams);
       this.caseManagementService.getCases(searchParams).subscribe(cases => this.dataSource = cases);
-    });
+    }
   }
 
 }
