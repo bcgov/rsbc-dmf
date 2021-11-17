@@ -20,4 +20,4 @@ jobs:
       - name: Build image
         run: |
           echo BUILD_ID=$BUILD_ID
-          docker build --build-arg BUILD_ID . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME
+          docker build --build-arg BUILD_ID="6$BUILD_ID" . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME
