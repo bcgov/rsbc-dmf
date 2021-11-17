@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: doctors-portal-api
-  BUILD_ID: ${{ github.server_url }};${{ github.repository }};${{ github.ref }};${{ github.sha }};${{ github.run_number }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
 
 jobs:
   build:
@@ -20,4 +20,4 @@ jobs:
       - name: Build image
         run: |
           echo BUILD_ID=$BUILD_ID
-          docker build --build-arg BUILD_ID="6$BUILD_ID" . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME
+          docker build --build-arg BUILD_ID="$BUILD_ID" . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME
