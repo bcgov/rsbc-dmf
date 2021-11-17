@@ -1,8 +1,38 @@
-<mat-card class="list">
+<div class="container">
+  <mat-card class="list">
   <mat-card-header class="primary">
-    <mat-card-title>Submitted DMER Forms</mat-card-title>
+    <mat-card-title>{{clinicName}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <ng-container>
+      Filter By:
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select [formControl]="statusFilter"
+                    multiple>
+          <mat-option>
+            In Progress
+          </mat-option>
+
+          <mat-option>
+            Submitted
+          </mat-option>
+
+        </mat-select>
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Last Modified By</mat-label>
+        <mat-select [formControl]="lastModifiedByFilter"
+                    multiple>
+          <mat-option>
+            Sample User
+          </mat-option>
+        </mat-select>
+
+      </mat-form-field>
+    </ng-container>
     <table mat-table #formsList [dataSource]="dataSource">
 
       <ng-container matColumnDef="title">
@@ -38,3 +68,4 @@
     </div>
   </mat-card-content>
 </mat-card>
+</div>

@@ -1,1 +1,1 @@
-dotnet watch -p .\RSBC.DMF.DoctorsPortal.API\ run
+dotnet watch --project .\RSBC.DMF.DoctorsPortal.API\ run
