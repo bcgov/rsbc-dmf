@@ -7,13 +7,13 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 COPY . .
 RUN dotnet restore "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/"
-RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" -c Release
+RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" /p:InformationalVersion=$BUILD_ID -c Release
 
 FROM build AS publish
 
 RUN dotnet publish /p:InformationalVersion=$BUILD_ID "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
 
-RUN echo $BUILD_ID > /app/publish/build_id
+RUN echo "123 $BUILD_ID" > /app/publish/build_id
 
 FROM base AS final
 WORKDIR /app
