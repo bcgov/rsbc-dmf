@@ -1,23 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CasesRoutingModule } from './cases-routing.module';
+import { UsersRoutingModule } from './users-routing.module';
 import { ViewComponent } from './view/view.component';
 import { ListComponent } from './list/list.component';
 import { SharedModule } from '../shared/shared.module';
-import { ClinicsComponent } from './clinics/clinics.component';
 
 
 @NgModule({
   declarations: [
     ViewComponent,
-    ListComponent,
-    ClinicsComponent
+    ListComponent
   ],
   imports: [
     CommonModule,
-    CasesRoutingModule,
+    UsersRoutingModule,
     SharedModule
   ]
 })
-export class CasesModule { }
+export class UsersModule { }

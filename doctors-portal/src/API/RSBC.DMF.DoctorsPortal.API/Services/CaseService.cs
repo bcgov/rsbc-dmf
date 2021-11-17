@@ -15,6 +15,7 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
     {
         public string ByTitle { get; set; }
         public string ByDriverLicense { get; set; }
+        public string ByClinicId { get; set; }
         public IEnumerable<string> ByStatus { get; set; } = Array.Empty<string>();
     }
 
@@ -45,17 +46,31 @@ namespace RSBC.DMF.DoctorsPortal.API.Services
         public async Task<IEnumerable<DmerCaseListItem>> SearchCases(CaseSearchQuery query)
         {
             var userContext = await userService.GetCurrentUserContext();
-            var currentClinic = userContext.CurrentClinicAssignment;
-
-            //must search within a specific clinic
-            if (currentClinic == null) return Array.Empty<DmerCaseListItem>();
 
             var searchRequest = new SearchRequest
             {
                 Title = query.ByTitle ?? string.Empty,
                 DriverLicenseNumber = query.ByDriverLicense ?? string.Empty,
-                ClinicId = currentClinic.ClinicId
             };
+
+            if (!string.IsNullOrEmpty(query.ByClinicId))
+            {
+                // check that the user is a member of the clinic.
+                var canAccess = userContext.ClinicAssignments.Where(x => x.ClinicId == query.ByClinicId).Any();
+                if (! canAccess)
+                {
+                    return Array.Empty<DmerCaseListItem>();
+                }
+                else
+                {
+                    searchRequest.ClinicId = query.ByClinicId;
+                }
+            }
+            else
+            {
+                searchRequest.ClinicId = userContext.CurrentClinicAssignment.ClinicId;
+            }
+            
             searchRequest.Statuses.Add(query.ByStatus);
 
             var results = (await caseManager.SearchAsync(searchRequest)).Items;

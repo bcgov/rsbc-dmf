@@ -16,7 +16,8 @@ export class CaseManagementService {
       ByTitle: params.byTitle,
       ByDriverLicense: params.byDriverLicense,
       ByPatientName: params.byPatientName,
-      ByStatus: params.byStatus
+      ByStatus: params.byStatus,
+      ByClinicId: params.byClinicId
     };
     console.debug(searchParams);
     return this.casesService.apiCasesGet$Json(searchParams).pipe(map(cases => cases.map(c => c)));
@@ -29,5 +30,6 @@ export interface DMERSearchCases {
   byTitle?: string,
   byDriverLicense?: string,
   byPatientName?: string,
+  byClinicId?: string,
   byStatus?: string[]
 }
