@@ -1,5 +1,6 @@
 ARG BUILD_ID
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
+ARG BUILD_ID
 
 WORKDIR /app
 
@@ -10,6 +11,7 @@ RUN dotnet restore "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/"
 RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" /p:InformationalVersion=$BUILD_ID -c Release
 
 FROM build AS publish
+ARG BUILD_ID
 
 RUN dotnet publish /p:InformationalVersion=$BUILD_ID "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
 
