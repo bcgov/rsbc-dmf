@@ -1,5 +1,5 @@
-FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 ARG BUILD_ID
+FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 
 WORKDIR /app
 
