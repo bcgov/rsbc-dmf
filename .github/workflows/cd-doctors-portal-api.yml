@@ -35,7 +35,7 @@ jobs:
       - name: Build image
         run: |
           echo "BUILD ID=$BUILD_ID"          
-          docker build . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --build-arg BUILD_ID=$BUILD_ID --cache-from=$IMAGE_ID
+          docker build . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --build-arg=BUILD_ID=$BUILD_ID --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
