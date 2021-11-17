@@ -16,6 +16,7 @@ on:
 env:
   IMAGE_NAME: doctors-portal-api
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/doctors-portal-api
+  BUILD_ID: ${{ github.server_url }};${{ github.repository }};${{ github.ref }};${{ github.sha }};${{ github.run_number }}
 
 jobs:
   build:
@@ -32,7 +33,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build --build-arg build_id="$GITHUB_SERVER_URL;$GITHUB_REPOSITORY;$GITHUB_REF_NAME;$GITHUB_SHA;$GITHUB_RUN_NUMBER" . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build --build-arg build_id=$BUILD_ID . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
