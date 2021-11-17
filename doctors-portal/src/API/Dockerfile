@@ -10,8 +10,10 @@ RUN dotnet restore "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/"
 RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" -c Release
 
 FROM build AS publish
-RUN echo $BUILDID
-RUN dotnet publish /p:InformationalVersion=$BUILDID "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
+
+RUN dotnet publish /p:InformationalVersion="$BUILDID" "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
+
+RUN echo $BUILDID > /app/publish/buildid
 
 FROM base AS final
 WORKDIR /app
