@@ -32,7 +32,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./doctors-portal/src/API/Dockerfile --build-arg BUILDID="$GITHUB_SERVER_URL;$GITHUB_REPOSITORY;$GITHUB_REF_NAME;$GITHUB_SHA;$GITHUB_RUN_NUMBER" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build --build-arg build_id="$GITHUB_SERVER_URL;$GITHUB_REPOSITORY;$GITHUB_REF_NAME;$GITHUB_SHA;$GITHUB_RUN_NUMBER" . --file ./doctors-portal/src/API/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
