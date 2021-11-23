@@ -15,11 +15,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using System;
 using System.IO;
-using System.Linq;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -39,7 +36,7 @@ namespace OAuthServer
             this.configuration = configuration;
         }
 
-        readonly string MyPolicy = "_myPolicy";
+        private readonly string MyPolicy = "_myPolicy";
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -116,7 +113,7 @@ namespace OAuthServer
                 {
                     configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
-                    //TODO: investigate why options.GetClaimsFromUserInfoEndpoint = true fails
+                    //currently, oidc handler doesn't support JWE, so we must get the user info manually
                     options.GetClaimsFromUserInfoEndpoint = false;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
@@ -138,17 +135,12 @@ namespace OAuthServer
 
                     options.Events = new OpenIdConnectEvents
                     {
-                        //OnTokenResponseReceived = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //},
                         OnTokenValidated = async ctx =>
                         {
-                            //manually fetch claims from userinfo endpoint because the handler throws null reference error
                             var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
-                            using var client = new HttpClient();
 
-                            var response = await client.GetUserInfoAsync(new UserInfoRequest
+                            //get the user info claims through the back channel
+                            var response = await ctx.Options.Backchannel.GetUserInfoAsync(new UserInfoRequest
                             {
                                 Address = oidcConfig.UserInfoEndpoint,
                                 Token = ctx.TokenEndpointResponse.AccessToken
@@ -157,25 +149,11 @@ namespace OAuthServer
                             {
                                 ctx.Fail(new Exception(response.Error));
                             }
-                            //ctx.Principal.AddIdentity(new ClaimsIdentity(response.Claims));
-                            ctx.Principal = new ClaimsPrincipal(new ClaimsIdentity(ctx.Principal.Identity, ctx.Principal.Claims.Concat(response.Claims)));
-                        },
-                        //OnRemoteFailure = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //},
-                        //OnAuthenticationFailed = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //},
-                        //OnUserInformationReceived = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //},
-                        //OnTicketReceived = async ctx =>
-                        //{
-                        //    await Task.CompletedTask;
-                        //}
+                            else
+                            {
+                                ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Raw) }));
+                            }
+                        }
                     };
                 });
 
@@ -217,7 +195,6 @@ namespace OAuthServer
             app.UseCors(MyPolicy);
 
             app.UseIdentityServer();
-                       
 
             app.UseAuthentication();
             app.UseAuthorization();

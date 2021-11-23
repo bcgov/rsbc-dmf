@@ -15,11 +15,7 @@
   ],
   "ApiScopes": [
     {
-      "Name": "doctors-portal-api",
-      "userClaims": [
-        "given_name",
-        "family_name"
-      ]
+      "Name": "doctors-portal-api"
     },
     {
       "Name": "phsa-adapter"
@@ -37,8 +33,7 @@
         "doctors-portal-api"
       ],
       "userClaims": [
-        "given_name",
-        "family_name"
+        "userInfo"
       ]
     },
     {
