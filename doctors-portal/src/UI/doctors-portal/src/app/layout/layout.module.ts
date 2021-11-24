@@ -20,7 +20,8 @@ import { MaterialModule } from '../shared/material.module';
   exports: [
     FooterComponent,
     HeaderComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    MaterialModule
   ],
   providers: [],
 })
