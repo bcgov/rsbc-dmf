@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {ChangeDetectorRef} from '@angular/core';
 import { VersionInfo } from 'src/app/shared/api/models/version-info';
@@ -17,17 +17,20 @@ export class FooterComponent implements OnInit {
 
   constructor(
     private cd: ChangeDetectorRef,
-    public dialog: MatDialog,
-    private versionInfoDataService: ApplicationVersionInfoService) { 
+    @Optional() private dialog: MatDialog,
+    @Optional() private versionInfoDataService: ApplicationVersionInfoService) { 
             
   }
 
   ngOnInit(): void {
-    this.versionInfoDataService.getVersionInfo()      
-    .subscribe((versionInfo: VersionInfo) => {
-      this.versionInfo = versionInfo;
-      this.cd.detectChanges();
-    }); 
+    if (this.versionInfoDataService !== null)
+    {
+      this.versionInfoDataService.getVersionInfo()      
+      .subscribe((versionInfo: VersionInfo) => {
+        this.versionInfo = versionInfo;
+        this.cd.detectChanges();
+      }); 
+    }
   }
 
   openVersionInfoDialog() {
