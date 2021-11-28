@@ -74,7 +74,7 @@ namespace bdd_tests
             ngDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
             //ngDriver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(timeout * 2);
 
-            baseUri = configuration["BASE_URI"] ?? "https://dev.justice.gov.bc.ca/lcrb";
+            baseUri = configuration["BASE_URI"] ?? "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal";
         }
 
         protected bool IsIdPresent(string id)
