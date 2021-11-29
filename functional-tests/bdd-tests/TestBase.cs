@@ -387,7 +387,8 @@ namespace bdd_tests
 
             if (element == "the DMER Forms tab")
             {
-                var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+                //var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+                var DMERFormsTab = ngDriver.FindElement(By.XPath("/html/body/app-root/nav/app-nav-menu/mat-toolbar/div/a[2]/span[1]"));
                 DMERFormsTab.Click();
             }
 
