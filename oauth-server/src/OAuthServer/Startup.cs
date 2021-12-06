@@ -1,5 +1,4 @@
-﻿using IdentityModel.Client;
-using IdentityServer4;
+﻿using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
@@ -15,12 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using System.IO;
-using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading;
 
 namespace OAuthServer
 {
@@ -114,7 +110,7 @@ namespace OAuthServer
                     configuration.GetSection("identityproviders:bcsc").Bind(options);
                     options.SaveTokens = true;
                     //currently, oidc handler doesn't support JWE, so we must get the user info manually
-                    options.GetClaimsFromUserInfoEndpoint = false;
+                    options.GetClaimsFromUserInfoEndpoint = true;
                     options.UseTokenLifetime = true;
                     options.ResponseType = OpenIdConnectResponseType.Code;
                     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -135,25 +131,25 @@ namespace OAuthServer
 
                     options.Events = new OpenIdConnectEvents
                     {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+                        //OnTokenValidated = async ctx =>
+                        //{
+                        //    var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
 
-                            //get the user info claims through the back channel
-                            var response = await ctx.Options.Backchannel.GetUserInfoAsync(new UserInfoRequest
-                            {
-                                Address = oidcConfig.UserInfoEndpoint,
-                                Token = ctx.TokenEndpointResponse.AccessToken
-                            });
-                            if (response.IsError)
-                            {
-                                ctx.Fail(new Exception(response.Error));
-                            }
-                            else
-                            {
-                                ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Raw) }));
-                            }
-                        }
+                        //    //get the user info claims through the back channel
+                        //    var response = await ctx.Options.Backchannel.GetUserInfoAsync(new UserInfoRequest
+                        //    {
+                        //        Address = oidcConfig.UserInfoEndpoint,
+                        //        Token = ctx.TokenEndpointResponse.AccessToken
+                        //    });
+                        //    if (response.IsError)
+                        //    {
+                        //        ctx.Fail(new Exception(response.Error));
+                        //    }
+                        //    else
+                        //    {
+                        //        ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Raw) }));
+                        //    }
+                        //}
                     };
                 });
 
