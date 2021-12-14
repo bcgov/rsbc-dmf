@@ -16,6 +16,47 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: rlespinasse/git-commit-data-action@v1.x
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Setup .NET 
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}    
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: ${{env.working-directory}}/doctors-portal/src/API/
+
+      - name: Install coverlet for code coverage
+        run: dotnet tool install -g coverlet.console --version 1.7.2
+        working-directory: ${{env.working-directory}}/doctors-portal/src/API/
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ${{env.working-directory}}/doctors-portal/src/API/
+
+      - name: Test
+        run: |          
+          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings           
+        working-directory: ${{env.working-directory}}/doctors-portal/src/API/
+      - name: Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          # User defined upload name. Visible in Codecov UI
+          name: DMF-MEDICAL-PORTAL-API
+          # Repository upload token - get it from codecov.io. Required only for private repositories
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ${{env.working-directory}}/doctors-portal/src/API/
+          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+          flags: unittests
+          # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
+          # env_vars: C#
+          # Specify whether or not CI build should fail if Codecov runs into an error during upload
+          fail_ci_if_error: true
 
       - name: Build image
         run: |
