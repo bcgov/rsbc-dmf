@@ -25,11 +25,19 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/doctors-portal'),
+      dir: require('path').join(__dirname, './'),
       reports: ['html', 'lcovonly', 'text-summary'],
-      fixWebpackSourcePaths: true
+      // Combines coverage information from multiple browsers into one report rather than outputting a report
+      // for each browser.
+      combineBrowserReports: true,
+ 
+      // if using webpack and pre-loaders, work around webpack breaking the source path
+      fixWebpackSourcePaths: true,
+ 
+      // Omit files with no statements, no functions and no branches covered from the report
+      skipFilesWithNoCoverage: true
     },    
-    reporters: ['progress', 'kjhtml'],
+    reporters: ['coverage-istanbul','progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
