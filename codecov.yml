@@ -1,2 +1,5 @@
+codecov:
+  require_ci_to_pass: false
+  max_report_age: off
 fixes:
   - "/home/runner/work/rsbc-dmf/rsbc-dmf/::/"  # move path   e.g., "before/path" =&gt; "after/path"
