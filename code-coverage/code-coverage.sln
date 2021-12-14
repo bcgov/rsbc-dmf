@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.DoctorsPortal.API", "..\doctors-portal\src\API\RSBC.Tests.Unit.DMF.DoctorsPortal.API\RSBC.Tests.Unit.DMF.DoctorsPortal.API.csproj", "{7D2164DC-76FA-4F7C-A1D2-AE58622EE1BA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A9BA031E-3DC4-4EAA-8F8E-6EFF82825DAE}"
+	ProjectSection(SolutionItems) = preProject
+		coverlet.runsettings = coverlet.runsettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
