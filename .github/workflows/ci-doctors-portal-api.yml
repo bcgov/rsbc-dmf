@@ -11,13 +11,13 @@ env:
   working-directory: ./  
   IMAGE_NAME: doctors-portal-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
-strategy:
-      matrix:
-        dotnet: [ '5.0.x' ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dotnet: [ '5.0.x' ]
     steps:
       - uses: actions/checkout@v2
         with:
