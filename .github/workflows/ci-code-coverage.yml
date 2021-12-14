@@ -40,21 +40,18 @@ jobs:
         working-directory: ${{env.working-directory}}/code-coverage
 
       - name: Test
-        run: |
-          mkdir -p TestResults
-          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings 
-          mv TestResults/*/* ../TestResults/
+        run: |          
+          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings           
         working-directory: ${{env.working-directory}}/code-coverage
 
       - name: Codecov
-        uses: codecov/codecov-action@v1.5.0
+        uses: codecov/codecov-action@v2
         with:
           # User defined upload name. Visible in Codecov UI
           name: DMF
           # Repository upload token - get it from codecov.io. Required only for private repositories
           token: ${{ secrets.CODECOV_TOKEN }}
-          # Path to coverage file to upload
-          file: ${{env.working-directory}}/code-coverage/TestResults/coverage.opencover.xml
+          directory: ${{env.working-directory}}
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
