@@ -40,9 +40,9 @@ jobs:
         working-directory: ${{env.working-directory}}/code-coverage
 
       - name: Test
-        run: dotnet test -c Release --no-restore --verbosity normal
+        run: dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings 
         working-directory: ${{env.working-directory}}/code-coverage
-        
+
       - name: Codecov
         uses: codecov/codecov-action@v1.5.0
         with:
