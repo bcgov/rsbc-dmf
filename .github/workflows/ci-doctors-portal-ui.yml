@@ -10,7 +10,7 @@ on:
 env:
   IMAGE_NAME: evdoctors-portal-ui
   working-directory: ./
-  solution-folder: /doctors-portal/src/UI/doctors-portal
+  solution-folder: doctors-portal/src/UI/doctors-portal
 
 jobs:
   build:
@@ -27,13 +27,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-      - name: Install coverlet for code coverage
-        run: dotnet tool install -g coverlet.console --version 1.7.2
-        working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - name: Test
         run: |          
           npm install
-          npm test --browsers=ChromeHeadlessNoSandbox --codeCoverage=true --watch=false
+          npm test --codeCoverage=true --watch=false
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - name: Codecov
         uses: codecov/codecov-action@v2
