@@ -1,2 +1,2 @@
 fixes:
-  - "/home/runner/work/rsbc-dmf/::/"  # move path   e.g., "before/path" =&gt; "after/path"
+  - "/home/runner/work/rsbc-dmf/rsbc-dmf/::/"  # move path   e.g., "before/path" =&gt; "after/path"
