@@ -74,7 +74,7 @@ namespace bdd_tests
             ngDriver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
             //ngDriver.Manage().Timeouts().AsynchronousJavaScript = TimeSpan.FromSeconds(timeout * 2);
 
-            baseUri = configuration["BASE_URI"] ?? "https://dev.justice.gov.bc.ca/lcrb";
+            baseUri = configuration["BASE_URI"] ?? "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal";
         }
 
         protected bool IsIdPresent(string id)
@@ -387,7 +387,8 @@ namespace bdd_tests
 
             if (element == "the DMER Forms tab")
             {
-                var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+                //var DMERFormsTab = ngDriver.FindElement(By.LinkText("DMER Forms"));
+                var DMERFormsTab = ngDriver.FindElement(By.XPath("/html/body/app-root/nav/app-nav-menu/mat-toolbar/div/a[2]/span[1]"));
                 DMERFormsTab.Click();
             }
 
