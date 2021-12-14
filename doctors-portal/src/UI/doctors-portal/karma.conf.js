@@ -1,15 +1,19 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
+const path = require('path');
 
 module.exports = function (config) {
   config.set({
+    files: [
+      'src/**/*.js',
+      'test/**/*.js'
+    ],
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
-    plugins: [
+    plugins: ['karma-coverage',
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-jasmine-html-reporter'),      
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
@@ -24,20 +28,18 @@ module.exports = function (config) {
     jasmineHtmlReporter: {
       suppressAll: true // removes the duplicated traces
     },
-    coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './'),
-      reports: ['html', 'lcovonly', 'text-summary'],
-      // Combines coverage information from multiple browsers into one report rather than outputting a report
-      // for each browser.
-      combineBrowserReports: true,
- 
-      // if using webpack and pre-loaders, work around webpack breaking the source path
-      fixWebpackSourcePaths: true,
- 
-      // Omit files with no statements, no functions and no branches covered from the report
-      skipFilesWithNoCoverage: true
-    },    
-    reporters: ['coverage-istanbul','progress', 'kjhtml'],
+    // optionally, configure the reporter
+    coverageReporter: {
+      type : 'json',
+      dir : 'coverage/'
+    },
+    preprocessors: {
+      // source files, that you wanna generate coverage for
+      // do not include tests or libraries
+      // (these files will be instrumented by Istanbul)
+      'src/**/*.js': ['coverage']
+    },
+    reporters: ['coverage','progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
