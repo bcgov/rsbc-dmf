@@ -40,7 +40,10 @@ jobs:
         working-directory: ${{env.working-directory}}/code-coverage
 
       - name: Test
-        run: dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings 
+        run: |
+          mkdir -p TestResults
+          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings 
+          mv TestResults/*/* ../TestResults/
         working-directory: ${{env.working-directory}}/code-coverage
 
       - name: Codecov
