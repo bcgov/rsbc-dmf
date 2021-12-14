@@ -11,6 +11,7 @@ env:
   IMAGE_NAME: evdoctors-portal-ui
   working-directory: ./
   solution-folder: doctors-portal/src/UI/doctors-portal
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
   build:
