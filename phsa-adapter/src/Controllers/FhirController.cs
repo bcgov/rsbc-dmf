@@ -254,10 +254,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             {
                 CaseId = id
             };
-            var searchReply = _cmsAdapterClient.Search(getCaseRequest);
+            //var searchReply = _cmsAdapterClient.Search(getCaseRequest);
 
-            var caseReply = searchReply.Items[0];
+            //var caseReply = searchReply.Items[0];
 
+
+            DmerCase caseReply = new DmerCase();
             Models.Driver driver;
 
             if (!String.IsNullOrEmpty(Configuration["ENABLE_ICBC"]))
@@ -345,12 +347,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     {"patientStreetAddressLine2", $"{driver.Address.Line2}"},
                     {"patientAddressPostalCode", $"{driver.Address.Postal}"},
                     {"patientAddressUse", "patientAddressUse"},
-                    {"patientNameGivenMiddle", "patientNameGivenMiddle"},
-                    {"patientPrimaryPhoneNumber", "123-123-1234"},
+                    {"patientNameGivenMiddle", $"patientNameGivenMiddle"},  // get from contact
+                    {"patientPrimaryPhoneNumber", "123-123-1234"}, // get from contact - telephone 1
                     {"patientPrimaryPhoneUse", "patientPrimaryPhoneUse"},
-                    {"patientAlternatePhoneNumber", "patientAlternatePhoneNumber"},
+                    {"patientAlternatePhoneNumber", "patientAlternatePhoneNumber"}, // get from contact - telephone 2
                     {"patientAlternatePhoneUse", "patientAlternatePhoneUse"},
-                    {"patientPrimaryEmail", "patientPrimaryEmail"},
+                    {"patientPrimaryEmail", "patientPrimaryEmail"}, // get from contact - email address 1
                     {"patientPrimaryEmailUse", "home"},
                     {"patientAlternateEmail", "patientAlternateEmail"},
                     {"patientAlternateEmailUse", "work"},
