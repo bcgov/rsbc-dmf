@@ -120,9 +120,9 @@ objects:
         - name: PHSAUri
           value: 'https://apps.form.io/phsa/#/auth'
         - name: BC_SERVICE_CARD_VIRTUAL_TOKEN
-          value: DMFW00001
+          value: CHANGEME
         - name: BC_SERVICE_CARD_PASSWORD
-          value: '98901'        
+          value: 'CHANGEME'        
       - name: run-tests
         image: '0137d5-tools/agent-dotnet:latest'
         resources: {}
