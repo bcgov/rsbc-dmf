@@ -14,13 +14,15 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using Microsoft.IdentityModel.Tokens;
-using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OAuthServer
 {
@@ -109,53 +111,91 @@ namespace OAuthServer
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAuthentication()
-                .AddOpenIdConnect("bcsc", options =>
-                {
-                    configuration.GetSection("identityproviders:bcsc").Bind(options);
-                    options.SaveTokens = true;
-                    //currently, oidc handler doesn't support JWE, so we must get the user info manually
-                    options.GetClaimsFromUserInfoEndpoint = false;
-                    options.UseTokenLifetime = true;
-                    options.ResponseType = OpenIdConnectResponseType.Code;
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        NameClaimType = "name",
-                        RoleClaimType = "role",
-                    };
+           .AddOpenIdConnect("bcsc", options =>
+           {
+               // Note: Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler  doesn't handle JWE correctly
+               // See https://github.com/dotnet/aspnetcore/issues/4650 for more information
+               // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
+               // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
+               options.GetClaimsFromUserInfoEndpoint = false;
 
-                    //add required scopes
-                    options.Scope.Add("profile");
-                    options.Scope.Add("address");
-                    options.Scope.Add("email");
+               configuration.GetSection("identityproviders:bcsc").Bind(options);
 
-                    //set the tokens decrypting key
-                    options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
+               options.ResponseType = OpenIdConnectResponseType.Code;
+               options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+               options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    options.Events = new OpenIdConnectEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+               //add required scopes
+               options.Scope.Add("profile");
+               options.Scope.Add("address");
+               options.Scope.Add("email");
 
-                            //get the user info claims through the back channel
-                            var response = await ctx.Options.Backchannel.GetUserInfoAsync(new UserInfoRequest
-                            {
-                                Address = oidcConfig.UserInfoEndpoint,
-                                Token = ctx.TokenEndpointResponse.AccessToken
-                            });
-                            if (response.IsError)
-                            {
-                                ctx.Fail(new Exception(response.Error));
-                            }
-                            else
-                            {
-                                ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Raw) }));
-                            }
-                        }
-                    };
-                });
+               //set the tokens decrypting key
+               options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
+
+               options.Events = new OpenIdConnectEvents
+               {
+                   OnTokenValidated = async ctx =>
+                   {
+                       var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
+
+                       //set token validation parameters
+                       var validationParameters = ctx.Options.TokenValidationParameters.Clone();
+                       validationParameters.IssuerSigningKeys = oidcConfig.JsonWebKeySet.GetSigningKeys();
+                       validationParameters.ValidateLifetime = false;
+                       validationParameters.ValidateIssuer = false;
+                       var userInfoRequest = new UserInfoRequest
+                       {
+                           Address = oidcConfig.UserInfoEndpoint,
+                           Token = ctx.TokenEndpointResponse.AccessToken
+                       };
+                       //set the userinfo response to be JWT
+                       userInfoRequest.Headers.Accept.Clear();
+                       userInfoRequest.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/jwt"));
+
+                       //request userinfo claims through the backchannel
+                       var response = await ctx.Options.Backchannel.GetUserInfoAsync(userInfoRequest, CancellationToken.None);
+                       if (response.IsError && response.HttpStatusCode == HttpStatusCode.OK)
+                       {
+                           //handle encrypted userinfo response...
+                           if (response.HttpResponse.Content?.Headers?.ContentType?.MediaType == "application/jwt")
+                           {
+                               var handler = new JwtSecurityTokenHandler();
+                               if (handler.CanReadToken(response.Raw))
+                               {
+                                   handler.ValidateToken(response.Raw, validationParameters, out var token);
+                                   var jwe = token as JwtSecurityToken;
+                                   ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
+                               }
+                           }
+                           else
+                           {
+                               //...or fail
+                               ctx.Fail(response.Error);
+                           }
+                       }
+                       else if (response.IsError)
+                       {
+                           //handle for all other failures
+                           ctx.Fail(response.Error);
+                       }
+                       else
+                       {
+                           //handle non encrypted userinfo response
+                           ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
+                       }
+                   },
+                   OnUserInformationReceived = async ctx =>
+                   {
+                       //handle userinfo claim mapping when options.GetClaimsFromUserInfoEndpoint = true
+                       await Task.CompletedTask;
+                       ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
+                       {
+                              new Claim("userInfo", ctx.User.RootElement.GetRawText())
+                       }));
+                   }
+               };
+           });
 
             services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
