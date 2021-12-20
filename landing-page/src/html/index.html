@@ -6,458 +6,21 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Driver Fitness Program</title>
-	<style>
-		* {
-			-webkit-box-sizing: border-box;
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0;
+	<link href="css/style.css" type="text/css" rel="stylesheet">
+	<style type="text/css">
+		@font-face {
+			font-family: 'BCSans';
+			font-style: normal;
+			src: url('assets/fonts/BC-Sans/BCSans-Regular.woff2') format('woff2'),
+			url('assets/fonts/BC-Sans/BCSans-Regular.woff') format('woff');
 		}
-
-		body {
-			margin: 0;
-			padding: 0;
-			font-family: 'Myriad Pro', Calibri, Arial, sans-serif;
-			color: #494949;
-			background: #bdd3e8;
-			background: -webkit-gradient(linear, left top, left bottom, from(#bdd3e8), to(#ffffff));
-			background: -o-linear-gradient(top, #bdd3e8 0%, #ffffff 100%);
-			background: linear-gradient(to bottom, #bdd3e8 0%, #ffffff 100%);
-		}
-
-		img {
-			width: 100%;
-		}
-
-		p {
-			font-size: 15px;
-			line-height: 22px;
-			margin-bottom: 20px;
-		}
-
-		@media (min-width: 1024px) {
-			.lead {
-				font-size: 19px;
-				line-height: 29px;
-				max-width: 640px;
-				margin-bottom: 20px;
-				font-weight: medium;
-			}
-		}
-
-		h1 {
-			font-size: 28px;
-			font-weight: bold;
-			max-width: 540px;
-			margin-bottom: 10px;
-		}
-
-		h2 {
-			font-size: 24px;
-			font-weight: normal;
-		}
-
-		h3 {
-			font-size: 20px;
-			font-weight: 400;
-			margin-bottom: 10px;
-		}
-
-		@media (min-width: 1024px) {
-			h1 {
-				font-size: 45px;
-				line-height: 49px;
-				margin-bottom: 10px;
-			}
-
-			h2 {
-				font-size: 45px;
-			}
-
-			h3 {
-				font-size: 28px;
-				margin-bottom: 16px;
-			}
-		}
-
-		.container {
-			max-width: 1262px;
-			margin: 0 auto;
-			padding: 0 20px;
-		}
-
-		.center {
-			text-align: center;
-		}
-
-		.site-header {
-			background-color: #003366;
-			width: 100%;
-			height: 64px;
-			border-bottom: 2px solid #FCBA19;
-		}
-
-		.site-header-content {
-			display: -webkit-box;
-			display: -ms-flexbox;
-			display: flex;
-			-webkit-box-align: center;
-			-ms-flex-align: center;
-			align-items: center;
-			height: 64px;
-		}
-
-		.site-logo {
-			max-width: 154px;
-			width: 100%;
-		}
-
-		.hero-content {
-			padding: 30px 0 10px 0;
-		}
-
-		@media (min-width: 1024px) {
-			.hero-content {
-				padding: 54px 0;
-				height: 320px;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-webkit-box-align: start;
-				-ms-flex-align: start;
-				align-items: flex-start;
-				margin-right: -60px;
-			}
-		}
-
-		.emergency-support-logo {
-			max-width: 100px;
-		}
-
-		@media (min-width: 720px) {
-			.emergency-support-logo {
-				max-width: 144px;
-			}
-		}
-
-		.drivers-cta p {
-			font-size: 17px;
-			line-height: 22px;
-			max-width: 800px;
-			text-align: center;
-			margin: 15px auto;
-		}
-
-		.drivers-cta-content {
-			max-width: 1222px;
-			width: 100%;
-			margin-bottom: 30px;
-			padding: 30px;
-			color: #fff;
-			/* FF3.6-15 */
-			/* Chrome10-25,Safari5.1-6 */
-			background: -webkit-gradient(linear, left top, right top, from(#245079), to(#4b96ae));
-			background: -o-linear-gradient(left, #245079 0%, #4b96ae 100%);
-			background: linear-gradient(to right, #245079 0%, #4b96ae 100%);
-			/* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-			-webkit-box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-			box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-		}
-
-		.drivers-cta-content {
-			font-size: 17px;
-		}
-
-		.cards {
-			margin-bottom: 72px;
-			-webkit-box-align: start;
-			-ms-flex-align: start;
-			align-items: flex-start;
-		}
-
-		.cards .cards-content {
-			max-width: 1122px;
-			margin: 0 auto;
-		}
-
-		.cards-content {
-			-webkit-box-pack: justify;
-			-ms-flex-pack: justify;
-			justify-content: space-between;
-			-webkit-box-align: start;
-			-ms-flex-align: start;
-			align-items: flex-start;
-		}
-
-		.card {
-			background: #fff;
-			border: 1px solid #D7D7D7;
-			-webkit-box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-			box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-			padding: 20px;
-			width: 100%;
-			margin-bottom: 20px;
-		}
-
-		@media (min-width: 720px) {
-			.card {
-				padding-top: 40px;
-			}
-		}
-
-
-		.card__image {
-			margin-bottom: 20px;
-			max-height: 113px;
-		}
-
-		@media (min-width: 720px) {
-			.card__image {
-				margin-bottom: 40px;
-			}
-		}
-
-		.card--isdark {
-			background-color: #245079;
-			color: #fff;
-		}
-
-		.card--isblue {
-			background-color: #56AECA;
-			color: #fff;
-		}
-
-		.era {
-			max-width: 108px;
-		}
-
-		.evacuee {
-			max-width: 113px;
-		}
-
-		.user {
-			max-width: 157px;
-		}
-
-		@media (min-width: 1024px) {
-			.card {
-				max-width: 32%;
-				min-height: 480px;
-			}
-
-			.cards-content {
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-			}
-		}
-
-
-		.site-footer {
-			background-color: #003366;
-			width: 100%;
-			min-height: 60px;
-			padding: 20px 0;
-			border-top: 2px solid #FCBA19;
-		}
-
-		.site-footer-links {
-			list-style: none;
-			margin-bottom: 0;
-		}
-
-		.site-footer-links li {
-			margin-bottom: 16px;
-		}
-
-		.site-footer-links a {
-			font-size: 14px;
-			color: #fff;
-			text-decoration: none;
-			font-weight: 200;
-		}
-
-		.site-footer-links a:hover {
-			text-decoration: underline;
-		}
-
-
-
-		.site-footer .container {
-			max-width: 760px;
-		}
-
-		.divider {
-			color: #fff;
-			display: none;
-		}
-
-		@media (min-width: 720px) {
-			.divider {
-				display: inline-block;
-			}
-		}
-
-
-		@media (min-width: 720px) {
-			.site-footer-links {
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				list-style: none;
-				-webkit-box-pack: justify;
-				-ms-flex-pack: justify;
-				justify-content: space-between;
-			}
-
-			.site-footer-links li {
-				margin-bottom: 0;
-			}
-		}
-
-		.btn {
-			display: inline-block;
-			background-color: #FCBA19;
-			text-decoration: none;
-			font-weight: bold;
-			color: #fff;
-		}
-
-		.btn--strong {
-			font-size: 22px;
-			height: 49px;
-			display: inline-block;
-			font-weight: 600;
-			line-height: 49px;
-			max-width: 581px;
-			width: 100%;
-			position: relative;
-		}
-
-		.btn--strong:before {
-			content: "";
-			position: absolute;
-			z-index: 400;
-			right: 10px;
-			background: url(./img/right-arrow.svg) no-repeat;
-			display: inline-block;
-			width: 20px;
-			height: 20px;
-			top: 15px;
-		}
-
-		@media (min-width: 1024px) {
-			.btn--strong {
-				font-size: 33px;
-				height: 69px;
-				display: inline-block;
-				line-height: 69px;
-				max-width: 581px;
-				width: 100%;
-				position: relative;
-			}
-
-			.btn--strong:before {
-				content: "";
-				vertical-align: center;
-				position: absolute;
-				z-index: 400;
-				right: 15px;
-				background: url(./img/right-arrow.svg) no-repeat;
-				display: inline-block;
-				width: 33px;
-				height: 33px;
-				top: 20px;
-			}
-		}
-
-		.btn--strong:hover {
-			background-color: #003366;
-		}
-
-		.btn--white {
-			color: #38598A;
-			background-color: #fff;
-			-webkit-box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-			box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-		}
-
-		.btn--white:hover {
-			color: #fff;
-			background-color: #FCBA19;
-		}
-
-		.btn--orange {
-			color: #fff;
-			background-color: #FF6625;
-			-webkit-box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-			box-shadow: 0px 5px 8px 2px rgba(0, 0, 0, 0.09);
-		}
-
-		.btn--orange:hover {
-			background-color: #FCBA19;
-		}
-
-		.alert--orange {
-			color: #D90000;
-			padding: 8px;
-			font-weight: bold;
-		}
-
-		.btn--user {
-			width: 100%;
-			max-width: 217px;
-			padding: 8px;
-			margin-bottom: 12px;
-		}
-
-		.link--strong {
-			color: #38598A;
-			font-weight: bold;
-		}
-
-		.link--strong:hover {
-			color: #FCBA19;
-		}
-
-		.link--strongwhite {
-			color: #ffffff;
-			font-weight: bold;
-		}
-
-		.link--strongwhite:hover {
-			color: #FCBA19;
-		}
-
-		.contact-cta__content {
-			max-width: 1120px;
-			border: 4px solid #FCBA19;
-			margin: 0 auto;
-			padding: 20px;
-			position: relative;
-		}
-
-		.contact-cta__content p {
-			margin: 0 auto;
-			max-width: 350px;
-		}
-
-		.contact-cta__icon {
-			max-width: 120px;
-		}
-
-		@media (min-width: 1024px) {
-
-			.contact-cta__icon {
-				max-width: 160px;
-				position: absolute;
-				left: 8%;
-				top: 8%;
-			}
-
-			.contact-cta__content {
-				padding: 40px;
-			}
+	</style>
+	<style type="text/css">
+		@font-face {
+			font-family: 'BCSans';
+			font-style: italic;
+			src: url('assets/fonts/BC-Sans/BCSans-Italic.woff2') format('woff2'),
+			url('assets/fonts/BC-Sans/BCSans-Italic.woff') format('woff');
 		}
 	</style>
 </head>
@@ -468,6 +31,11 @@
 		<div class="container">
 			<div class="site-header-content">
 				<a href="" class="site-logo"><img src="./img/gov_bc_logo.svg" alt="Government of B.C."></a>
+
+				<a class="btn btn-secondary header-nav-buttons" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card"
+				   target="_blank"><span class="button_text">Register</span></a>
+				<a class="btn header-nav-buttons" href="rsbc-dfp-medical-portal/"
+				   target="_blank"><span class="button_text">Login</span></a>
 			</div>
 		</div>
 	</header>
@@ -475,19 +43,42 @@
 	<main>
 		<section class="hero">
 			<div class="container">
+			<div style="background-image: url('../img/u23.svg');background-repeat: no-repeat;background-size: auto;			height: 455px;">
 				<div class="hero-content">
-					(Some description of RSBC's Drivers Fitness Program)
+					<span class="section_title">Welcome to RoadSafetyBC's</span>
+					<span class="section_heading">Driver Medical Fitness Portal</span>
+					<span style="width: 426px; margin-bottom: 30px;">RoadSafetyBC is part of the Ministry of Public Safety and Solicitor General and is responsible for road safety in the province. We govern drivers, implement road safety policies, and work with our partners to help reach our goal of zero traffic fatalities.</span>
+					<div>
+						<a class="btn btn-secondary" href="https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/"
+						   target="_blank"><span class="button_text">Learn More</span></a>
+					</div>
 				</div>
+			</div>
+			</div>
+		</section>
+
+		<section>
+			<div class="container">
+				<p class="hero-footnote" color="#313132" > To help fulfill our responsibility for assessing and determining driver medical fitness, RoadSafetyBC may request an individual to complete a Driver’s Medical Examination Report (DMER), which is the principal assessment tool used to help determine if a driver’s medical condition affects their ability to drive safely. </p>
 			</div>
 		</section>
 
 		<section class="drivers-cta">
 			<div class="container">
+
 				<div class="drivers-cta-content center">
-					<h2>Access to Doctor's portal</h2>
-					<p>If you are a medical practitioner and need to access your patients DMERs, </p>
-					<a class="btn btn--strong" href="https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/"
-						target="_blank">Access Now</a>
+					<span class="section_title">For Drivers</span>
+					<div><img id="u41_img" class="content-divider" src="img/u41.svg"></div>
+
+					<span class="section_title">Are you required to have a DMER completed?</span>
+					<p>Have you or someone you know been notified  to complete a DMER? Click below to access information on what to do and what to expect once you have received a notification to complete a DMER.</p>
+					<div class="driver-buttons">
+						<a class="btn wide-button header-nav-buttons" href="rsbc-dfp-driver-portal"
+						   target="_blank">Log In to the Drivers Portal</a>
+						<a class="btn btn-secondary header-nav-buttons" href="https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/"
+						   target="_blank">Learn more about DMER process</a>
+					</div>
+
 				</div>
 			</div>
 		</section>
@@ -543,5 +134,3 @@
 	</footer>
 
 </body>
-
-</html>
