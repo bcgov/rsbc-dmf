@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.DoctorsPortal.API.ViewModels
+namespace RSBC.DMF.MedicalPortal.API.ViewModels
 {
     public class ApplicationVersionInfo
     {

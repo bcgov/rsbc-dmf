@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using RSBC.DMF.DoctorsPortal.API.ViewModels;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace RSBC.DMF.DoctorsPortal.API.Controllers
+namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

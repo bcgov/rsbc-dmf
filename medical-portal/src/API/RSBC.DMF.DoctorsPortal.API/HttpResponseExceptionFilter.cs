@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
 
-namespace RSBC.DMF.DoctorsPortal.API
+namespace RSBC.DMF.MedicalPortal.API
 {
     public class HttpResponseExceptionFilter : IActionFilter, IOrderedFilter
     {

@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using RSBC.DMF.DoctorsPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.Services;
 using Serilog;
 using Serilog.Events;
 using System;
@@ -25,7 +25,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.DoctorsPortal.API
+namespace RSBC.DMF.MedicalPortal.API
 {
     public class Startup
     {
@@ -110,8 +110,8 @@ namespace RSBC.DMF.DoctorsPortal.API
             });
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "RSBC.DMF.DoctorsPortal.API.xml"), true);
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.DoctorsPortal.API", Version = "v1" });
+                c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "RSBC.DMF.MedicalPortal.API.xml"), true);
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });
             var dpBuilder = services.AddDataProtection();
             var keyRingPath = configuration.GetValue("DATAPROTECTION__PATH", string.Empty);
@@ -171,7 +171,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                 });
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("v1/openapi.json", "RSBC.DMF.DoctorsPortal.API v1");
+                    c.SwaggerEndpoint("v1/openapi.json", "RSBC.DMF.MedicalPortal.API v1");
                     c.RoutePrefix = "api";
                 });
             }

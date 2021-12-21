@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Json;
 
-namespace RSBC.DMF.DoctorsPortal.API.Controllers
+namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
     /// <summary>
     /// Configuration endpoint

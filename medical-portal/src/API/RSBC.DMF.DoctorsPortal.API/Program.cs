@@ -7,7 +7,7 @@ using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
 using System.Net.Http;
 
-namespace RSBC.DMF.DoctorsPortal.API
+namespace RSBC.DMF.MedicalPortal.API
 {
     public class Program
     {

@@ -6,7 +6,7 @@ using Serilog;
 using System.Net;
 using System.Net.Http;
 
-namespace RSBC.DMF.DoctorsPortal.API
+namespace RSBC.DMF.MedicalPortal.API
 {
     public static class CmsAdapterConfiguration
     {

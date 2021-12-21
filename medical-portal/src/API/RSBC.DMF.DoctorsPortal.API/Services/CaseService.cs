@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.DoctorsPortal.API.Services
+namespace RSBC.DMF.MedicalPortal.API.Services
 {
     public interface ICaseQueryService
     {
