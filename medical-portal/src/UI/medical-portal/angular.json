@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "doctors-portal": {
+    "medical-portal": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -20,7 +20,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/doctors-portal",
+            "outputPath": "dist/medical-portal",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "doctors-portal:build:production"
+              "browserTarget": "medical-portal:build:production"
             },
             "development": {
-              "browserTarget": "doctors-portal:build:development"
+              "browserTarget": "medical-portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "doctors-portal:build"
+            "browserTarget": "medical-portal:build"
           }
         },
         "test": {
@@ -117,7 +117,7 @@
       }
     }
   },
-  "defaultProject": "doctors-portal",
+  "defaultProject": "medical-portal",
   "cli": {
     "defaultCollection": "@angular-eslint/schematics"
   }

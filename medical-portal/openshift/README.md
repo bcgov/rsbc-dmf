@@ -2,7 +2,7 @@
 
 ## Templates
 
-### doctors-portal.template.yml
+### medical-portal.template.yml
 
 Template for doctors portal deployment. Contains 2 deployment configs and attached resources.
 
@@ -22,13 +22,13 @@ UI
 
 To create an environment:
 
-1. create a new file named `doctors-portal.yml.<app name>.params` in the templates directory
-1. copy the content from `doctors-portal.yml.params.template` into the file and fill in the values, these are the parameters supplied later to the template
+1. create a new file named `medical-portal.yml.<app name>.params` in the templates directory
+1. copy the content from `medical-portal.yml.params.template` into the file and fill in the values, these are the parameters supplied later to the template
 1. login to openshift cli `oc login ... --token=...`
 1. run the following command from cmd/powershell console (modify the Openshift project to the one you want to deploy to):
 
 ```cmd
-oc process -f .\doctors-portal.template.yml --param-file .\doctors-portal.yml.<app name>.params | oc apply -f -
+oc process -f .\medical-portal.template.yml --param-file .\medical-portal.yml.<app name>.params | oc apply -f -
 ```
 
 4. to update an existing environment, modify the templates and params, then execute the same command.
