@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RSBC.DMF.DoctorsPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.Services;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.DoctorsPortal.API.Controllers
+namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

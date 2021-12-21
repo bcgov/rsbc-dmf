@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace RSBC.Tests.Unit.DMF.DoctorsPortal.API
+namespace RSBC.Tests.Unit.DMF.MedicalPortal.API
 {
     public class UnitTest1
     {

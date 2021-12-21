@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace RSBC.DMF.DoctorsPortal.API.Services
+namespace RSBC.DMF.MedicalPortal.API.Services
 {
     public interface IUserService
     {
