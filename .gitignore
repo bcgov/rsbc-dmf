@@ -6,3 +6,5 @@
 **/openshift/templates/*.params
 # Angular local environment files
 **/environment.local.ts
+/landing-page/src/html/.idea
+/.idea
