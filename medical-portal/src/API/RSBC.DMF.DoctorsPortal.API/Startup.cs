@@ -101,7 +101,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                 options.AddPolicy("OAuth", policy =>
                 {
                     policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
-                    policy.RequireClaim("scope", "doctors-portal-api");
+                    policy.RequireClaim("scope", "medical-portal-api");
                 });
             });
             services.AddControllers(options =>
@@ -226,7 +226,7 @@ namespace RSBC.DMF.DoctorsPortal.API
                     // see https://go.microsoft.com/fwlink/?linkid=864501
                     if (string.IsNullOrEmpty(configuration["ANGULAR_DEV_SERVER"]))
                     {
-                        spa.Options.SourcePath = "../UI/doctors-portal";
+                        spa.Options.SourcePath = "../UI/medical-portal";
                         spa.UseAngularCliServer(npmScript: "start");
                     }
                     else
