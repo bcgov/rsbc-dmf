@@ -1,20 +1,79 @@
-.header {
-  margin-bottom: 0;
-  height: 75px;
-  width: 100%;
-  display: flex;
-  flex-flow: row;
-  justify-content: stretch;
-  align-items: center;
+.grey-box {
+  background-color: rgb(215,215,215);
+  border-bottom-color: rgb(49,49,50);
+  border-left-color: rgb(49,49,50);
+  border-right-color: rgb(49,49,50);
+  height: 44px;
+}
 
-  .bc-logo img {
-    margin: 0 10px;
-    width: 193px;
-    height: 75px;
+.grey-box-text {
+  display: flex;
+  align-items: center;
+  justify-content: right;
+  height: 44px;
+  font-family: "BCSans-Regular", "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  letter-spacing: normal;
+  color: #313132;
+}
+
+
+.site-header {
+  background-color: #003366;
+  width: 100%;
+  background-color:rgba(0, 51, 102, 1);
+  background-image:none;
+  border-style:solid;
+  border-color:rgba(252, 186, 25, 1);
+  border-left:0px;
+  border-top:0px;
+  border-right:0px;
+  border-radius:0px;
+  border-bottom:3px;
+  color: #fff;
+}
+
+.site-header-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  height: 100px;
+}
+
+
+.site-logo {
+  max-width: 154px;
+  width: 100%;
+  margin-right: auto
+}
+
+.user-name {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+
+header {
+
+.bc-logo img {
+    margin-right: auto;
+    width: 100%;
+    max-width: 154px;
   }
 
   .title {
     width: 70%;
+    font-size: 31px;
+    font-family: "BCSans-Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #FFFFFF;
   }
 
   .profile {
