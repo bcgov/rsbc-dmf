@@ -1,0 +1,44 @@
+.top-nav {
+  width: 100%;
+  padding: 0 !important;
+  height:50px;
+  background:inherit;
+  background-color:rgba(56, 89, 138, 1);
+  border:none;
+  color: #FFFFFF;
+
+  div {
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    justify-content: stretch;
+    align-items: center;
+
+    a {
+      font-family: 'BC Sans', sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 16px;
+      text-align: center;
+      margin-left: 10px;
+      margin-right: 20px;
+    }
+
+    a:link {
+      color: #FFFFFF;
+    }
+
+    a:visited {
+      color: #FFFFFF;
+    }
+
+
+    a.active {
+      font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+      text-decoration-color: rgba(255,255,255,0);
+      font-weight: 700;
+      text-decoration-style: solid;
+      text-decoration: underline;
+    }
+  }
+}

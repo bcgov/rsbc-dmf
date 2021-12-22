@@ -1,0 +1,16 @@
+<header *ngIf="!isLoading">
+  <app-header [showProfile]="showProfile()"></app-header>
+  <div class="page-divider"></div>
+</header>
+<nav *ngIf="!isLoading">
+  <app-nav-menu></app-nav-menu>
+</nav>
+<main *ngIf="!isLoading">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+<footer *ngIf="!isLoading">
+  <div class="page-divider"></div>
+  <app-footer></app-footer>
+</footer>

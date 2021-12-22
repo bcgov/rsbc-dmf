@@ -1,0 +1,120 @@
+@use "@angular/material" as mat;
+@import "./_theme.scss";
+
+.link-underline-reverse {
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+//app specific styles
+
+
+.container {
+  max-width: 1262px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+
+.navbar-brand {
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+  }
+}
+
+.navbar-nav {
+  > li {
+    > a {
+      text-decoration: none;
+      &:hover,
+      &:focus {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+body {
+  margin: 0;
+}
+.page-divider {
+  background-color: rgba(231, 184, 85, 1);
+  height: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.primary {
+  background-color: mat.get-color-from-palette($theme-primary, default);
+  color: mat.get-color-from-palette($theme-primary, default-contrast);
+}
+
+.secondary {
+  background-color: mat.get-color-from-palette($theme-accent, default);
+  color: mat.get-color-from-palette($theme-accent, default-contrast);
+}
+
+.mat-card {
+  background-color: #f7f7f7;
+  box-shadow: none !important;
+  margin: 30px 0 30px 0;
+  padding: 0 !important;
+
+  .mat-card-header {
+    padding-top: 12px;
+
+    .mat-card-header-text {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
+
+  .mat-card-content {
+    padding: 5px 10px;
+  }
+  .mat-card-actions {
+    padding: 8px !important;
+    margin: 8px !important;
+    display: flex;
+    flex-flow: row-reverse nowrap;
+  }
+}
+
+.mat-table {
+  width: 100%;
+  .mat-header-row {
+    background-color: #3f598a;
+
+    .mat-header-cell {
+      color: #ffffff;
+      font-size: larger;
+    }
+  }
+
+  .mat-row:nth-child(odd) {
+    background-color: #ffffff;
+  }
+
+  .mat-row:nth-child(even) {
+    background-color: #e0e0e0;
+  }
+}
+
+.page-desc {
+  background-color: #ecf5ff;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 60px;;
+
+  h1 {
+    color: #003366;
+    font-weight: bold;
+    font-size: 37px;
+  }
+}
