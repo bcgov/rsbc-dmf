@@ -7,13 +7,13 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 COPY . .
-RUN dotnet restore "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/"
-RUN dotnet test "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/" /p:InformationalVersion="$BUILD_ID" -c Release
+RUN dotnet restore "./medical-portal/src/API/RSBC.DMF.DoctorsPortal.API/"
+RUN dotnet test "./medical-portal/src/API/RSBC.DMF.DoctorsPortal.API/" /p:InformationalVersion="$BUILD_ID" -c Release
 
 FROM build AS publish
 ARG BUILD_ID
 
-RUN dotnet publish /p:InformationalVersion="$BUILD_ID" "./doctors-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
+RUN dotnet publish /p:InformationalVersion="$BUILD_ID" "./medical-portal/src/API/RSBC.DMF.DoctorsPortal.API/RSBC.DMF.DoctorsPortal.API.csproj" -c Release -o /app/publish --no-restore 
 
 FROM base AS final
 WORKDIR /app
