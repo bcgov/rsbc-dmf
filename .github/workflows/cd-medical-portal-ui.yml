@@ -1,4 +1,4 @@
-name: cd-doctors-portal-api
+name: cd-medical-portal-ui
 
 on:
   push:
@@ -10,13 +10,11 @@ on:
     tags:
       - v*
     paths:
-      - "doctors-portal/src/API/**"
-      - ".github/workflows/cd-doctors-portal-api.yml"
-
+      - "medical-portal/src/UI/**"
+      - ".github/workflows/cd-medical-portal-ui.yml"
 env:
-  IMAGE_NAME: doctors-portal-api
-  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/doctors-portal-api
-  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  IMAGE_NAME: medical-portal-ui
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/medical-portal-ui
 
 jobs:
   build:
@@ -27,15 +25,14 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Log into registry
-        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
+        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME }} --password-stdin
 
       - name: Pull image
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: |
-          echo "BUILD ID=$BUILD_ID"          
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" . --file ./doctors-portal/src/API/Dockerfile --cache-from=$IMAGE_ID
+        working-directory: ./medical-portal/src/UI
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
