@@ -1,60 +1,20 @@
-<footer class="app-footer">
-  <nav class="navbar navbar-default navbar-expand navbar-footer navbar-static-bottom">
-    <div class="container c1"> 
-      <ul class="navbar-nav">
-        <li class="c2">
-          <a href="/" target="_blank" rel="noopener noreferrer"
-            title="Goes to Home Page">
-            Home
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/about-gov-bc-ca" target="_blank" rel="noopener noreferrer"
-            title="About gov.bc.ca">
-            About gov.bc.ca
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" target="_blank" rel="noopener noreferrer"
-            title="Goes to BC Gov Disclaimer Page">
-            Disclaimer
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/home/privacy" target="_blank" rel="noopener noreferrer"
-            title="Goes to BC Gov Privacy Page">
-            Privacy
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility" target="_blank" rel="noopener noreferrer"
-            title="Goes to BC Gov Accessibility Page">
-            Accessibility
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/home/copyright" target="_blank" rel="noopener noreferrer"
-            title="Goes to BC Gov Copyright Page">
-            Copyright
-          </a>
-        </li>
-        <li class="c2">|</li>
-        <li class="c2">
-          <a href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services" target="_blank" rel="noopener noreferrer"
-            title="Goes to BC Gov Contact Us">
-            Contact Us
-          </a>
-        </li>
-      </ul>
-    </div>     
-  </nav>
-  <p style="text-align:center">Copyright © 2021 Province of British Columbia. All rights reserved.  <a *ngIf="versionInfo !== undefined && versionInfo.fileVersion" (click)="openVersionInfoDialog()"
-    >Version {{versionInfo.fileVersion}}
-  </a></p>
-  
+<footer class="site-footer">
+  <div class="container">
+    <ul class="site-footer-links">
+      <li><a href="/">Home</a> <span class="footer-divider">|</span> </li>
+
+      <li><a href="https://www2.gov.bc.ca/gov/content/about-gov-bc-ca">About gov.bc.ca</a> <span class="footer-divider">|</span> </li>
+      <li><a href="https://www2.gov.bc.ca/gov/content/home/disclaimer">Disclaimer</a> <span class="footer-divider">|</span></li>
+      <li><a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a><span class="footer-divider">|</span></li>
+
+      <li><a href="https://www2.gov.bc.ca/gov/content/home/accessibility">Accessibility</a><span class="footer-divider">|</span></li>
+      <li><a href="https://www2.gov.bc.ca/gov/content/home/copyright">Copyright</a><span class="footer-divider">|</span></li>
+      <li><a href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services">Contact Us</a></li>
+    </ul>
+  </div>
 </footer>
+<div class="footer-clear-box">
+      Copyright © 2021 Province of British Columbia. All rights reserved.
+</div>
+
+

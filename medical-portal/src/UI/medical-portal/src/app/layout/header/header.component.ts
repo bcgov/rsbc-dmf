@@ -23,7 +23,7 @@ export class HeaderComponent {
       const firstName = (profile.firstName || 'Not');
       const lastName = (profile.lastName || 'Available');
       this.profileName = firstName + ' ' + lastName;
-      this.profileRole = profile.clinics?.map(c => `${c.role}@${c.clinicName}`).join(',');
+      this.profileRole = profile.clinics?.map(c => `${c.role}`).join(',');
       this.profileInitials = firstName.substring(0, 1) + lastName.substring(0, 1);
     }
   }

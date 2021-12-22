@@ -1,7 +1,11 @@
 .top-nav {
   width: 100%;
-  height: 50px;
   padding: 0 !important;
+  height:50px;
+  background:inherit;
+  background-color:rgba(56, 89, 138, 1);
+  border:none;
+  color: #FFFFFF;
 
   div {
     height: 100%;
@@ -10,20 +14,31 @@
     justify-content: stretch;
     align-items: center;
 
-    a.mat-flat-button {
-      min-width: 250px;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      font-size: 1em;
-      border-radius: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    a {
+      font-family: 'BC Sans', sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      font-size: 16px;
+      text-align: center;
+      margin-left: 10px;
+      margin-right: 20px;
     }
 
+    a:link {
+      color: #FFFFFF;
+    }
+
+    a:visited {
+      color: #FFFFFF;
+    }
+
+
     a.active {
-      background-color: #0000007f;
+      font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+      text-decoration-color: rgba(255,255,255,0);
+      font-weight: 700;
+      text-decoration-style: solid;
+      text-decoration: underline;
     }
   }
 }

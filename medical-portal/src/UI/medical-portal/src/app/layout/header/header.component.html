@@ -1,21 +1,30 @@
-<div class="primary header">
-  <div class="bc-logo">
-    <img src="assets/images/bc-logo-text-en.svg" alt="B.C. Government Logo" />
-  </div>
-  <div class="title">
-    <h1>Medical Practitioner Portal</h1>
-  </div>
-  <div class="profile" *ngIf="showProfile">
-    <h1 class="avatar">{{ profileInitials }}</h1>
-    <div>
-      <h3>{{ profileName }}</h3>
-      <span>{{ profileRole }}</span>
+<div class="grey-box">
+  <div class="container">
+    <div class="grey-box-text">
+      <span style="font-family:&quot;BCSans-Regular&quot;, &quot;BC Sans Regular&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:400;">Get help&nbsp; &nbsp; &nbsp; |&nbsp;&nbsp; Increase font size&nbsp;&nbsp; </span><span style="font-family:&quot;BCSans-Bold&quot;, &quot;BC Sans Bold&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:700;">A&nbsp; </span><span style="font-family:&quot;BCSans-Bold&quot;, &quot;BC Sans Bold&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:700;font-size:18px;">A</span><span style="font-family:&quot;BCSans-Bold&quot;, &quot;BC Sans Bold&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:700;">&nbsp; </span><span style="font-family:&quot;BCSans-Bold&quot;, &quot;BC Sans Bold&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:700;font-size:20px;">A</span><span style="font-family:&quot;BCSans-Regular&quot;, &quot;BC Sans Regular&quot;, &quot;BC Sans&quot;, sans-serif;font-weight:400;">&nbsp;&nbsp; </span>
     </div>
-    <button mat-button [matMenuTriggerFor]="menu">
-      <mat-icon>arrow_drop_down</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="logOut()">Sign out</button>
-    </mat-menu>
   </div>
 </div>
+<header class="site-header">
+  <div class="container">
+    <div class="site-header-content">
+      <a href="" class="site-logo">
+        <img src="assets/images/bc-logo-text-en.svg" alt="B.C. Government Logo">
+        </a>
+      <div class="title">Medical Practitioner Portal</div>
+      <div class="profile" *ngIf="showProfile">
+        <h1 class="avatar">{{ profileInitials }}</h1>
+        <div>
+          <span class="user-name">{{ profileName }}</span><br/>
+          <span>{{ profileRole }}</span>
+        </div>
+        <button mat-button [matMenuTriggerFor]="menu">
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="logOut()">Sign out</button>
+        </mat-menu>
+      </div>
+    </div>
+  </div>
+</header>
