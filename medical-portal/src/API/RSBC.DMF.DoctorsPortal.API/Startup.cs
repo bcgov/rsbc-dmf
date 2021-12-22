@@ -101,7 +101,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 options.AddPolicy("OAuth", policy =>
                 {
                     policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
-                    policy.RequireClaim("scope", "medical-portal-api");
+                    policy.RequireClaim("scope", "doctors-portal-api");
                 });
             });
             services.AddControllers(options =>
