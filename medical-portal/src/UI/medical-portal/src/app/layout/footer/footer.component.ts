@@ -13,23 +13,31 @@ import { VersionInfoComponent } from 'src/app/shared/components/version-info/ver
 })
 export class FooterComponent implements OnInit {
 
-  versionInfo: VersionInfo | undefined;
+  versionInfo: VersionInfo = {
+    baseUri: "",
+    basePath: "",
+    environment: "",
+    sourceCommit: "",
+    sourceRepository: "",
+    sourceReference: "",
+    fileCreationTime: "",
+    fileVersion : "Loading..." };
 
   constructor(
     private cd: ChangeDetectorRef,
     @Optional() private dialog: MatDialog,
-    @Optional() private versionInfoDataService: ApplicationVersionInfoService) { 
-            
+    @Optional() private versionInfoDataService: ApplicationVersionInfoService) {
+
   }
 
   ngOnInit(): void {
     if (this.versionInfoDataService !== null)
     {
-      this.versionInfoDataService.getVersionInfo()      
+      this.versionInfoDataService.getVersionInfo()
       .subscribe((versionInfo: VersionInfo) => {
         this.versionInfo = versionInfo;
         this.cd.detectChanges();
-      }); 
+      });
     }
   }
 
