@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.DMF.MedicalPortal.API", "RSBC.DMF.DoctorsPortal.API\RSBC.DMF.MedicalPortal.API.csproj", "{C71F554B-EB5B-43DF-AAD5-DC7B121E2293}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.DoctorsPortal.API", "RSBC.Tests.Unit.DMF.DoctorsPortal.API\RSBC.Tests.Unit.DMF.DoctorsPortal.API.csproj", "{696AD72D-D097-432F-900B-2DB5330868E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.MedicalPortal.API", "RSBC.Tests.Unit.DMF.MedicalPortal.API\RSBC.Tests.Unit.DMF.MedicalPortal.API.csproj", "{696AD72D-D097-432F-900B-2DB5330868E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
