@@ -1,6 +1,7 @@
 <div class="page-desc">
+  <div class="container">
 <h1>All Clinic DMERs</h1>
-<p>Find below a list of all the Clinic DMERs that have been worked on.  
+<p>Find below a list of all the Clinic DMERs that have been worked on.
 
     Use the filter option to better define what you’re looking for. </p>
     <div class="clinic-list">
@@ -9,12 +10,13 @@
                 <a href="#clinic-{{clinic.clinicId}}">{{clinic.clinicName}}</a>
             </li>
         </ul>
-    </div> 
+    </div>
+    </div>
 </div>
-
-<div *ngFor="let clinic of myClinics">
-    <app-cases-list id="clinic-{{clinic.clinicId}}" [clinicId]="clinic.clinicId" [clinicName]="clinic.clinicName">                
-    </app-cases-list>
+<div class="container">
+  <div *ngFor="let clinic of myClinics">
+      <app-cases-list id="clinic-{{clinic.clinicId}}" [clinicId]="clinic.clinicId" [clinicName]="clinic.clinicName">
+      </app-cases-list>
+  </div>
 </div>
-
 
