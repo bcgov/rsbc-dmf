@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Pssg.IcbcAdapter";
+
+package dmf;
+
+// The files service definition.
+service IcbcAdapter {
+
+  // Create Folder.  Note that this will only send the create folder command if the folder does not exist.
+  rpc GetDriverInfo (DriverInfoRequest) returns (DriverInfoReply);
+
+    // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+
+}
+
+message DriverInfoRequest {
+    string driverLicence = 1;
+}
+
+// basic driver info
+message DriverInfoReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string surname = 3;
+    string givenName = 4;
+    string city = 5;
+    string postal = 6;
+    string addressLine1 = 7;
+    string birthDate = 8;
+    string sex = 9;
+}
+
+enum ResultStatus {
+    Fail = 0;
+    Success = 1;
+}
+
+
+message TokenRequest {
+    string secret = 1;
+}
+
+message TokenReply {
+    ResultStatus resultStatus = 1;
+    string token = 2;
+    string errorDetail = 3;
+}
