@@ -15,6 +15,13 @@
   .mat-card-content {
     width: 100%;
 
+    .form-label {
+      font-family:"BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+      font-weight:700;
+      font-style:normal;
+      font-size: 16px;
+    }
+
     form {
       width: 100%;
       padding: 30px;
@@ -24,12 +31,16 @@
       align-items: center;
     }
     .search-input {
-      width: 70%;
+      width: 845px;
     }
 
     .search-button {
       margin-left: 50px;
       width: 20%;
+      font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 700;
     }
   }
 }
