@@ -1,0 +1,20 @@
+name: ci-icbc-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "icbc-adapter/src/**"
+      - ".github/workflows/ci-icbc-adapter.yml"
+
+env:
+  IMAGE_NAME: icbc-adapter
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file ./icbc-adapter/src/Dockerfile --tag $IMAGE_NAME
