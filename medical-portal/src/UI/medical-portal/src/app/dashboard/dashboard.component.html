@@ -1,7 +1,7 @@
 <div class="page-desc">
   <div class="container">
-  <img src="assets/images/dashboard-icon.svg" alt="Dashboard-icon" class="dashboard-icon">
-  <h1>Welcome to the new Medical Practitioner Portal</h1>
+  <img src="assets/images/u541.svg" alt="Dashboard-icon" class="dashboard-icon">
+  <h1>Welcome to the new<br>Medical Practitioner Portal</h1>
   <p>The portal will allow you to easily find, fill out and submit a driver medical examination report (DMER) to
     RoadSafetyBC.
   </p>
@@ -21,11 +21,17 @@
     </mat-card-header>
     <mat-card-content>
       <form>
-        <mat-form-field class="search-input">
-          <mat-label>DMER case ID</mat-label>
-          <input matInput placeholder=" " [(ngModel)]="searchBox" [ngModelOptions]="{standalone: true}" />
-        </mat-form-field>
-        <button mat-flat-button color="primary" class="search-button" (click)="search()">Search</button>
+        <div>
+          <label class="form-label">DMER Case ID</label><br>
+
+          <mat-form-field class="search-input">
+            <mat-label>Enter DMER case ID</mat-label>
+            <input matInput placeholder=" " [(ngModel)]="searchBox" [ngModelOptions]="{standalone: true}" />
+          </mat-form-field>
+        </div>
+
+
+        <button mat-flat-button color="primary" class="search-button" (click)="search()">Search DMER Case</button>
       </form>
     </mat-card-content>
 
