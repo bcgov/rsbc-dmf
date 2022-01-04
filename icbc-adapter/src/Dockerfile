@@ -7,19 +7,19 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 COPY . .
-RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
+RUN dotnet restore ./icbc-adapter/src/Pssg.IcbcAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./document-storage-adapter/src/Pssg.DocumentStorageAdapter -c Release -o /app/publish
+RUN dotnet publish ./icbc-adapter/src/Pssg.IcbcAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-RUN apt-get update -yq \
-    && apt-get install curl -yq \
-	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
+# RUN apt-get update -yq \
+#    && apt-get install curl -yq \
+#	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Pssg.DocumentStorageAdapter.dll"]
+ENTRYPOINT ["dotnet", "Pssg.IcbcAdapter.dll"]
