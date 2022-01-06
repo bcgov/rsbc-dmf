@@ -46,6 +46,15 @@ parameters:
   - description: SECRET_KEY
     name: SECRET_KEY
     value: Changeme
+  - description: ICBC_LOOKUPSERVICE_ENDPOINT_URI
+    name: ICBC_LOOKUPSERVICE_ENDPOINT_URI
+    value: https://wsgw.dev.jag.gov.bc.ca/icbc/dfp/
+  - description: ICBC_LOOKUPSERVICE_USERNAME
+    name: ICBC_LOOKUPSERVICE_USERNAME
+    value: SVCLX9Y
+  - description: ICBC_LOOKUPSERVICE_PASSWORD
+    name: ICBC_LOOKUPSERVICE_PASSWORD
+    value: 5awraTHu
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -70,10 +79,9 @@ objects:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
-      SERVICE_URL: "${SERVICE_URL}"
-      BUCKET: "${BUCKET}"
-      ACCESS_KEY: "${ACCESS_KEY}"
-      SECRET_KEY: "${SECRET_KEY}"
+      ICBC_LOOKUP_SERVICE_URI: "${ICBC_LOOKUP_SERVICE_URI}"
+      ICBC_LOOKUP_SERVICE_USERNAME: "${ICBC_LOOKUP_SERVICE_USERNAME}"
+      ICBC_LOOKUP_SERVICE_PASSWORD: "${ICBC_LOOKUP_SERVICE_PASSWORD}"
       JWT_TOKEN_KEY: "${JWT_TOKEN_KEY}"
       JWT_VALID_AUDIENCE: "${JWT_VALID_AUDIENCE}"
       JWT_VALID_ISSUER: "${JWT_VALID_ISSUER}"
@@ -232,17 +240,4 @@ objects:
               name: ${IMAGENAME}:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
 
-  - kind: "PersistentVolumeClaim"
-    apiVersion: "v1"
-    metadata:
-      name: ${APP_NAME}-key-ring
-      namespace: ${NAMESPACE_PREFIX}-${ENV}
-      labels:
-        app: ${APP_NAME}
-        app.kubernetes.io/part-of: ${APP_NAME}
-    spec:
-      accessModes:
-        - "ReadWriteMany"
-      resources:
-        requests:
-          storage: "100Mi"
+  
