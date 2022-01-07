@@ -1728,6 +1728,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_AsyncOperations">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_report" Type="mscrm.report" Nullable="false" Partner="Report_AsyncOperations">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="reportid" />
         </NavigationProperty>
@@ -3378,6 +3390,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_BulkDeleteFailures">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_customeraddress" Type="mscrm.customeraddress" Nullable="false" Partner="CustomerAddress_BulkDeleteFailures">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="customeraddressid" />
         </NavigationProperty>
@@ -3851,6 +3875,9 @@
         <NavigationProperty Name="business_unit_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningbusinessunit" />
         <NavigationProperty Name="business_unit_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="owningbusinessunit" />
+        <NavigationProperty Name="business_unit_dfp_submittaltype" Type="Collection(mscrm.dfp_submittaltype)" Partner="owningbusinessunit" />
         <NavigationProperty Name="BusinessUnit_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_businessunit_syncerror" />
         <NavigationProperty Name="transactioncurrencyid" Type="mscrm.transactioncurrency" Nullable="false" Partner="TransactionCurrency_BusinessUnit">
           <ReferentialConstraint Property="_transactioncurrencyid_value" ReferencedProperty="transactioncurrencyid" />
@@ -5315,6 +5342,7 @@
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="address2_freighttermscode" Type="Edm.Int32" />
         <Property Name="address2_addresstypecode" Type="Edm.Int32" />
+        <Property Name="dfp_address1_telephone1ext" Type="Edm.String" Unicode="false" />
         <Property Name="address1_composite" Type="Edm.String" Unicode="false" />
         <Property Name="telephone2" Type="Edm.String" Unicode="false" />
         <Property Name="yomimiddlename" Type="Edm.String" Unicode="false" />
@@ -6193,6 +6221,7 @@
         <NavigationProperty Name="dfp_OutcomeSubStatus" Type="mscrm.dfp_outcomesubstatus" Nullable="false" Partner="dfp_outcomesubstatus_dfp_decision">
           <ReferentialConstraint Property="_dfp_outcomesubstatus_value" ReferencedProperty="dfp_outcomesubstatusid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_decision_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="dfp_DecisionId" />
       </EntityType>
       <EntityType Name="dfp_dmerflag" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6310,6 +6339,8 @@
         <NavigationProperty Name="dfp_driver_dfp_decision" Type="Collection(mscrm.dfp_decision)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_driver_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_DriverId" />
         <NavigationProperty Name="dfp_driver_dfp_login" Type="Collection(mscrm.dfp_login)" Partner="dfp_DriverId" />
+        <NavigationProperty Name="dfp_driver_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="dfp_DriverId" />
+        <NavigationProperty Name="dfp_driver_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="dfp_Driver" />
       </EntityType>
       <EntityType Name="dfp_flag" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6356,6 +6387,75 @@
         <NavigationProperty Name="dfp_flag_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_flag" />
         <NavigationProperty Name="dfp_flag_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_flag" />
         <NavigationProperty Name="dfp_flag_dfp_dmerflag" Type="Collection(mscrm.dfp_dmerflag)" Partner="dfp_FlagId" />
+      </EntityType>
+      <EntityType Name="dfp_knownmedicalcondition" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_knownmedicalconditionid" />
+        </Key>
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_dfp_medicalconditionid_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="dfp_id" Type="Edm.String" Unicode="false" />
+        <Property Name="_dfp_decisionid_value" Type="Edm.Guid" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="dfp_knownmedicalconditionid" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_note" Type="Edm.String" Unicode="false" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_knownmedicalcondition_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_knownmedicalcondition_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_knownmedicalcondition_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_knownmedicalcondition_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_knownmedicalcondition_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_knownmedicalcondition_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_knownmedicalcondition" />
+        <NavigationProperty Name="dfp_MedicalConditionId" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_dfp_medicalconditionid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_DriverId" Type="mscrm.dfp_driver" Nullable="false" Partner="dfp_driver_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_dfp_driverid_value" ReferencedProperty="dfp_driverid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_DecisionId" Type="mscrm.dfp_decision" Nullable="false" Partner="dfp_decision_dfp_knownmedicalcondition">
+          <ReferentialConstraint Property="_dfp_decisionid_value" ReferencedProperty="dfp_decisionid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="dfp_login" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6405,6 +6505,53 @@
         <NavigationProperty Name="dfp_DriverId" Type="mscrm.dfp_driver" Nullable="false" Partner="dfp_driver_dfp_login">
           <ReferentialConstraint Property="_dfp_driverid_value" ReferencedProperty="dfp_driverid" />
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="dfp_medicalcondition" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_medicalconditionid" />
+        </Key>
+        <Property Name="dfp_note" Type="Edm.String" Unicode="false" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_id" Type="Edm.String" Unicode="false" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_medicalconditionid" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_organizationid_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalcondition_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalcondition_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalcondition_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalcondition_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="organizationid" Type="mscrm.organization" Nullable="false" Partner="organization_dfp_medicalcondition">
+          <ReferentialConstraint Property="_organizationid_value" ReferencedProperty="organizationid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_medicalcondition_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_medicalcondition" />
+        <NavigationProperty Name="dfp_medicalcondition_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="dfp_MedicalConditionId" />
       </EntityType>
       <EntityType Name="dfp_medicalpractitioner" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6703,6 +6850,152 @@
         <NavigationProperty Name="dfp_CaseId" Type="mscrm.incident" Nullable="false" Partner="dfp_incident_dfp_participant">
           <ReferentialConstraint Property="_dfp_caseid_value" ReferencedProperty="incidentid" />
         </NavigationProperty>
+      </EntityType>
+      <EntityType Name="dfp_submittal" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_submittalid" />
+        </Key>
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_solicited" Type="Edm.Boolean" />
+        <Property Name="dfp_submittalorigin" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_issuancesource" Type="Edm.Int32" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_priority" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_extensiondays" Type="Edm.Int32" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="dfp_submittalurl" Type="Edm.String" Unicode="false" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
+        <Property Name="dfp_extensionrequestedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="dfp_submittalstatus" Type="Edm.Int32" />
+        <Property Name="_dfp_case_value" Type="Edm.Guid" />
+        <Property Name="dfp_dayspassduedate" Type="Edm.Int32" />
+        <Property Name="dfp_submittalsource" Type="Edm.Int32" />
+        <Property Name="dfp_submittalreceiveddate" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_submittalissuedate" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_dmertype" Type="Edm.Int32" />
+        <Property Name="_dfp_driver_value" Type="Edm.Guid" />
+        <Property Name="dfp_submittalduedate" Type="Edm.DateTimeOffset" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_dfp_submittaltype_value" Type="Edm.Guid" />
+        <Property Name="dfp_submittalid" Type="Edm.Guid" />
+        <Property Name="dfp_reasonforextension" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_privacy" Type="Edm.Int32" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="dfp_dpsprocessingdate" Type="Edm.DateTimeOffset" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittal_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittal_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittal_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittal_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_dfp_submittal">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_dfp_submittal">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_dfp_submittal">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_dfp_submittal">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_submittal_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_submittal_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_submittal" />
+        <NavigationProperty Name="dfp_Driver" Type="mscrm.dfp_driver" Nullable="false" Partner="dfp_driver_dfp_submittal">
+          <ReferentialConstraint Property="_dfp_driver_value" ReferencedProperty="dfp_driverid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_Case" Type="mscrm.incident" Nullable="false" Partner="dfp_incident_dfp_submittal">
+          <ReferentialConstraint Property="_dfp_case_value" ReferencedProperty="incidentid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_SubmittalType" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_dfp_submittal">
+          <ReferentialConstraint Property="_dfp_submittaltype_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
+      </EntityType>
+      <EntityType Name="dfp_submittaltype" BaseType="mscrm.crmbaseentity">
+        <Key>
+          <PropertyRef Name="dfp_submittaltypeid" />
+        </Key>
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_submittaltypeid" Type="Edm.Guid" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
+        <Property Name="dfp_code" Type="Edm.String" Unicode="false" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="dfp_documentcategory" Type="Edm.Int32" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_createdby">
+          <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="createdonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_createdonbehalfby">
+          <ReferentialConstraint Property="_createdonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_modifiedby">
+          <ReferentialConstraint Property="_modifiedby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_modifiedonbehalfby">
+          <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owninguser" Type="mscrm.systemuser" Nullable="false" Partner="user_dfp_submittaltype">
+          <ReferentialConstraint Property="_owninguser_value" ReferencedProperty="systemuserid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningteam" Type="mscrm.team" Nullable="false" Partner="team_dfp_submittaltype">
+          <ReferentialConstraint Property="_owningteam_value" ReferencedProperty="teamid" />
+        </NavigationProperty>
+        <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_dfp_submittaltype">
+          <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="owningbusinessunit" Type="mscrm.businessunit" Nullable="false" Partner="business_unit_dfp_submittaltype">
+          <ReferentialConstraint Property="_owningbusinessunit_value" ReferencedProperty="businessunitid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_submittaltype_SyncErrors" Type="Collection(mscrm.syncerror)" Partner="regardingobjectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_DuplicateMatchingRecord" Type="Collection(mscrm.duplicaterecord)" Partner="duplicaterecordid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_AsyncOperations" Type="Collection(mscrm.asyncoperation)" Partner="regardingobjectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_MailboxTrackingFolders" Type="Collection(mscrm.mailboxtrackingfolder)" Partner="regardingobjectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_ProcessSession" Type="Collection(mscrm.processsession)" Partner="regardingobjectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_BulkDeleteFailures" Type="Collection(mscrm.bulkdeletefailure)" Partner="regardingobjectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_PrincipalObjectAttributeAccesses" Type="Collection(mscrm.principalobjectattributeaccess)" Partner="objectid_dfp_submittaltype" />
+        <NavigationProperty Name="dfp_submittaltype_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="dfp_SubmittalType" />
       </EntityType>
       <EntityType Name="discount" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -7133,6 +7426,30 @@
         </NavigationProperty>
         <NavigationProperty Name="baserecordid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_DuplicateBaseRecord">
           <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="duplicaterecordid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_DuplicateMatchingRecord">
+          <ReferentialConstraint Property="_duplicaterecordid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
+        <NavigationProperty Name="baserecordid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_DuplicateBaseRecord">
+          <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="dfp_submittaltypeid" />
         </NavigationProperty>
         <NavigationProperty Name="baserecordid_goalrollupquery" Type="mscrm.goalrollupquery" Nullable="false" Partner="GoalRollupQuery_DuplicateBaseRecord">
           <ReferentialConstraint Property="_baserecordid_value" ReferencedProperty="goalrollupqueryid" />
@@ -9607,6 +9924,7 @@
         <NavigationProperty Name="dfp_ClinicId" Type="mscrm.account" Nullable="false" Partner="dfp_clinic_incident">
           <ReferentialConstraint Property="_dfp_clinicid_value" ReferencedProperty="accountid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_incident_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="dfp_Case" />
       </EntityType>
       <EntityType Name="interactionforemail" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -11670,6 +11988,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_MailboxTrackingFolders">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_MailboxTrackingFolders">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
         <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_mailboxtrackingfolder_modifiedonbehalfby">
           <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -13627,6 +13957,7 @@
         <NavigationProperty Name="organization_dfp_dmerflag" Type="Collection(mscrm.dfp_dmerflag)" Partner="organizationid" />
         <NavigationProperty Name="organization_bcgov_field" Type="Collection(mscrm.bcgov_field)" Partner="organizationid" />
         <NavigationProperty Name="organization_bcgov_relationship" Type="Collection(mscrm.bcgov_relationship)" Partner="organizationid" />
+        <NavigationProperty Name="organization_dfp_medicalcondition" Type="Collection(mscrm.dfp_medicalcondition)" Partner="organizationid" />
         <NavigationProperty Name="modifiedonbehalfby" Type="mscrm.systemuser" Nullable="false" Partner="lk_organization_modifiedonbehalfby">
           <ReferentialConstraint Property="_modifiedonbehalfby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -13819,6 +14150,9 @@
         <NavigationProperty Name="owner_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="ownerid" />
         <NavigationProperty Name="owner_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="ownerid" />
         <NavigationProperty Name="owner_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="ownerid" />
+        <NavigationProperty Name="owner_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="ownerid" />
+        <NavigationProperty Name="owner_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="ownerid" />
+        <NavigationProperty Name="owner_dfp_submittaltype" Type="Collection(mscrm.dfp_submittaltype)" Partner="ownerid" />
         <NavigationProperty Name="owner_personaldocumenttemplates" Type="Collection(mscrm.personaldocumenttemplate)" Partner="ownerid" />
         <NavigationProperty Name="owner_accounts" Type="Collection(mscrm.account)" Partner="ownerid" />
         <NavigationProperty Name="owner_goalrollupquery" Type="Collection(mscrm.goalrollupquery)" Partner="ownerid" />
@@ -14976,6 +15310,18 @@
         <NavigationProperty Name="objectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_PrincipalObjectAttributeAccesses">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="objectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_PrincipalObjectAttributeAccesses">
+          <ReferentialConstraint Property="_objectid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
         <NavigationProperty Name="objectid_letter" Type="mscrm.letter" Nullable="false" Partner="letter_principalobjectattributeaccess" />
         <NavigationProperty Name="objectid_reportcategory" Type="mscrm.reportcategory" Nullable="false" Partner="reportcategory_principalobjectattributeaccess">
           <ReferentialConstraint Property="_objectid_value" ReferencedProperty="reportcategoryid" />
@@ -15336,6 +15682,18 @@
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_ProcessSession">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_ProcessSession">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittaltypeid" />
         </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_queue" Type="mscrm.queue" Nullable="false" Partner="Queue_ProcessSessions">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="queueid" />
@@ -19783,6 +20141,18 @@
         <NavigationProperty Name="regardingobjectid_dfp_medicalpractitioner" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalpractitionerid" />
         </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_medicalcondition" Type="mscrm.dfp_medicalcondition" Nullable="false" Partner="dfp_medicalcondition_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_medicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_knownmedicalcondition" Type="mscrm.dfp_knownmedicalcondition" Nullable="false" Partner="dfp_knownmedicalcondition_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_knownmedicalconditionid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittal" Type="mscrm.dfp_submittal" Nullable="false" Partner="dfp_submittal_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittalid" />
+        </NavigationProperty>
+        <NavigationProperty Name="regardingobjectid_dfp_submittaltype" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_SyncErrors">
+          <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
         <NavigationProperty Name="regardingobjectid_ExpiredProcess_syncerror" Type="mscrm.expiredprocess" Nullable="false" Partner="ExpiredProcess_SyncErrors">
           <ReferentialConstraint Property="_regardingobjectid_value" ReferencedProperty="businessprocessflowinstanceid" />
         </NavigationProperty>
@@ -20723,6 +21093,25 @@
         <NavigationProperty Name="lk_dfp_medicalpractitioner_modifiedby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="modifiedby" />
         <NavigationProperty Name="lk_dfp_medicalpractitioner_modifiedonbehalfby" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="user_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owninguser" />
+        <NavigationProperty Name="lk_dfp_medicalcondition_createdby" Type="Collection(mscrm.dfp_medicalcondition)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_medicalcondition_createdonbehalfby" Type="Collection(mscrm.dfp_medicalcondition)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_medicalcondition_modifiedby" Type="Collection(mscrm.dfp_medicalcondition)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_medicalcondition_modifiedonbehalfby" Type="Collection(mscrm.dfp_medicalcondition)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="lk_dfp_knownmedicalcondition_createdby" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_knownmedicalcondition_createdonbehalfby" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_knownmedicalcondition_modifiedby" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_knownmedicalcondition_modifiedonbehalfby" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="owninguser" />
+        <NavigationProperty Name="lk_dfp_submittal_createdby" Type="Collection(mscrm.dfp_submittal)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_submittal_createdonbehalfby" Type="Collection(mscrm.dfp_submittal)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_submittal_modifiedby" Type="Collection(mscrm.dfp_submittal)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_submittal_modifiedonbehalfby" Type="Collection(mscrm.dfp_submittal)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="owninguser" />
+        <NavigationProperty Name="lk_dfp_submittaltype_createdby" Type="Collection(mscrm.dfp_submittaltype)" Partner="createdby" />
+        <NavigationProperty Name="lk_dfp_submittaltype_createdonbehalfby" Type="Collection(mscrm.dfp_submittaltype)" Partner="createdonbehalfby" />
+        <NavigationProperty Name="lk_dfp_submittaltype_modifiedby" Type="Collection(mscrm.dfp_submittaltype)" Partner="modifiedby" />
+        <NavigationProperty Name="lk_dfp_submittaltype_modifiedonbehalfby" Type="Collection(mscrm.dfp_submittaltype)" Partner="modifiedonbehalfby" />
+        <NavigationProperty Name="user_dfp_submittaltype" Type="Collection(mscrm.dfp_submittaltype)" Partner="owninguser" />
         <NavigationProperty Name="lk_slakpiinstancebase_createdonbehalfby" Type="Collection(mscrm.slakpiinstance)" Partner="createdonbehalfby" />
         <NavigationProperty Name="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Type="Collection(mscrm.mobileofflineprofileitemassociation)" Partner="modifiedonbehalfby" />
         <NavigationProperty Name="lk_userqueryvisualizationbase_modifiedonbehalfby" Type="Collection(mscrm.userqueryvisualization)" Partner="modifiedonbehalfby" />
@@ -21510,6 +21899,9 @@
         <NavigationProperty Name="team_bcgov_template" Type="Collection(mscrm.bcgov_template)" Partner="owningteam" />
         <NavigationProperty Name="team_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="owningteam" />
         <NavigationProperty Name="team_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="owningteam" />
+        <NavigationProperty Name="team_dfp_knownmedicalcondition" Type="Collection(mscrm.dfp_knownmedicalcondition)" Partner="owningteam" />
+        <NavigationProperty Name="team_dfp_submittal" Type="Collection(mscrm.dfp_submittal)" Partner="owningteam" />
+        <NavigationProperty Name="team_dfp_submittaltype" Type="Collection(mscrm.dfp_submittaltype)" Partner="owningteam" />
         <NavigationProperty Name="team_DuplicateRules" Type="Collection(mscrm.duplicaterule)" Partner="owningteam" />
         <NavigationProperty Name="team_Imports" Type="Collection(mscrm.import)" Partner="owningteam" />
         <NavigationProperty Name="OwningTeam_postfollows" Type="Collection(mscrm.postfollow)" Partner="owningteam" />
@@ -28375,6 +28767,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="regardingobjectid_report" Target="reports" />
           <NavigationPropertyBinding Path="AsyncOperation_Emails" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_recurringappointmentmaster" Target="recurringappointmentmasters" />
@@ -28926,6 +29322,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="regardingobjectid_customeraddress" Target="customeraddresses" />
           <NavigationPropertyBinding Path="regardingobjectid_annualfiscalcalendar" Target="annualfiscalcalendars" />
           <NavigationPropertyBinding Path="regardingobjectid_fax" Target="faxes" />
@@ -29118,6 +29518,9 @@
           <NavigationPropertyBinding Path="business_unit_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="business_unit_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="business_unit_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="business_unit_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="business_unit_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="business_unit_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="BusinessUnit_SyncErrors" Target="syncerrors" />
           <NavigationPropertyBinding Path="transactioncurrencyid" Target="transactioncurrencies" />
           <NavigationPropertyBinding Path="BulkDeleteOperation_BusinessUnit" Target="bulkdeleteoperations" />
@@ -29872,6 +30275,7 @@
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_OutcomeStatus" Target="dfp_outcomestatuses" />
           <NavigationPropertyBinding Path="dfp_OutcomeSubStatus" Target="dfp_outcomesubstatuses" />
+          <NavigationPropertyBinding Path="dfp_decision_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
         </EntitySet>
         <EntitySet Name="dfp_dmerflags" EntityType="Microsoft.Dynamics.CRM.dfp_dmerflag">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -29910,6 +30314,8 @@
           <NavigationPropertyBinding Path="dfp_driver_dfp_decision" Target="dfp_decisions" />
           <NavigationPropertyBinding Path="dfp_driver_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="dfp_driver_dfp_login" Target="dfp_logins" />
+          <NavigationPropertyBinding Path="dfp_driver_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="dfp_driver_dfp_submittal" Target="dfp_submittals" />
         </EntitySet>
         <EntitySet Name="dfp_flags" EntityType="Microsoft.Dynamics.CRM.dfp_flag">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -29925,6 +30331,27 @@
           <NavigationPropertyBinding Path="dfp_flag_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_flag_dfp_dmerflag" Target="dfp_dmerflags" />
         </EntitySet>
+        <EntitySet Name="dfp_knownmedicalconditions" EntityType="Microsoft.Dynamics.CRM.dfp_knownmedicalcondition">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_knownmedicalcondition_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_MedicalConditionId" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
+          <NavigationPropertyBinding Path="dfp_DecisionId" Target="dfp_decisions" />
+        </EntitySet>
         <EntitySet Name="dfp_logins" EntityType="Microsoft.Dynamics.CRM.dfp_login">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -29939,6 +30366,22 @@
           <NavigationPropertyBinding Path="dfp_login_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_login_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
+        </EntitySet>
+        <EntitySet Name="dfp_medicalconditions" EntityType="Microsoft.Dynamics.CRM.dfp_medicalcondition">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="organizationid" Target="organizations" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_medicalcondition_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
         </EntitySet>
         <EntitySet Name="dfp_medicalpractitioners" EntityType="Microsoft.Dynamics.CRM.dfp_medicalpractitioner">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -30036,6 +30479,46 @@
           <NavigationPropertyBinding Path="dfp_PersonId_account" Target="accounts" />
           <NavigationPropertyBinding Path="dfp_PersonId_contact" Target="contacts" />
           <NavigationPropertyBinding Path="dfp_CaseId" Target="incidents" />
+        </EntitySet>
+        <EntitySet Name="dfp_submittals" EntityType="Microsoft.Dynamics.CRM.dfp_submittal">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="dfp_submittal_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_submittal_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_submittal_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_submittal_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_submittal_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_submittal_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_submittal_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_submittal_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_Driver" Target="dfp_drivers" />
+          <NavigationPropertyBinding Path="dfp_Case" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_SubmittalType" Target="dfp_submittaltypes" />
+        </EntitySet>
+        <EntitySet Name="dfp_submittaltypes" EntityType="Microsoft.Dynamics.CRM.dfp_submittaltype">
+          <NavigationPropertyBinding Path="createdby" Target="systemusers" />
+          <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedby" Target="systemusers" />
+          <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
+          <NavigationPropertyBinding Path="owninguser" Target="systemusers" />
+          <NavigationPropertyBinding Path="owningteam" Target="teams" />
+          <NavigationPropertyBinding Path="ownerid" Target="owners" />
+          <NavigationPropertyBinding Path="owningbusinessunit" Target="businessunits" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_SyncErrors" Target="syncerrors" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_DuplicateMatchingRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_DuplicateBaseRecord" Target="duplicaterecords" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_AsyncOperations" Target="asyncoperations" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_MailboxTrackingFolders" Target="mailboxtrackingfolders" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_ProcessSession" Target="processsessions" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_BulkDeleteFailures" Target="bulkdeletefailures" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_dfp_submittal" Target="dfp_submittals" />
         </EntitySet>
         <EntitySet Name="discounts" EntityType="Microsoft.Dynamics.CRM.discount">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -30164,6 +30647,14 @@
           <NavigationPropertyBinding Path="baserecordid_dfp_outcomesubstatus" Target="dfp_outcomesubstatuses" />
           <NavigationPropertyBinding Path="duplicaterecordid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="baserecordid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="duplicaterecordid_dfp_submittaltype" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="baserecordid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="baserecordid_goalrollupquery" Target="goalrollupqueries" />
           <NavigationPropertyBinding Path="duplicaterecordid_publisher" Target="publishers" />
           <NavigationPropertyBinding Path="baserecordid_transactioncurrency" Target="transactioncurrencies" />
@@ -30937,6 +31428,7 @@
           <NavigationPropertyBinding Path="bcgov_incident_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="dfp_MedicalPractitionerId" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="dfp_ClinicId" Target="accounts" />
+          <NavigationPropertyBinding Path="dfp_incident_dfp_submittal" Target="dfp_submittals" />
         </EntitySet>
         <EntitySet Name="interactionforemails" EntityType="Microsoft.Dynamics.CRM.interactionforemail">
           <NavigationPropertyBinding Path="createdbyname" Target="systemusers" />
@@ -31555,6 +32047,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="ownerid" Target="owners" />
           <NavigationPropertyBinding Path="createdonbehalfby" Target="systemusers" />
@@ -32050,6 +32546,7 @@
           <NavigationPropertyBinding Path="organization_dfp_dmerflag" Target="dfp_dmerflags" />
           <NavigationPropertyBinding Path="organization_bcgov_field" Target="bcgov_fields" />
           <NavigationPropertyBinding Path="organization_bcgov_relationship" Target="bcgov_relationships" />
+          <NavigationPropertyBinding Path="organization_dfp_medicalcondition" Target="dfp_medicalconditions" />
           <NavigationPropertyBinding Path="modifiedonbehalfby" Target="systemusers" />
           <NavigationPropertyBinding Path="organization_sdkmessagefilter" Target="sdkmessagefilters" />
           <NavigationPropertyBinding Path="webresource_organization" Target="webresourceset" />
@@ -32483,6 +32980,10 @@
           <NavigationPropertyBinding Path="objectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="objectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="objectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="objectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="objectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="objectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="objectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="objectid_letter" Target="letters" />
           <NavigationPropertyBinding Path="objectid_reportcategory" Target="reportcategories" />
           <NavigationPropertyBinding Path="objectid_sharepointdocumentlocation" Target="sharepointdocumentlocations" />
@@ -32597,6 +33098,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="regardingobjectid_queue" Target="queues" />
           <NavigationPropertyBinding Path="canceledby" Target="systemusers" />
           <NavigationPropertyBinding Path="regardingobjectid_contact" Target="contacts" />
@@ -33943,6 +34448,10 @@
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="regardingobjectid_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_medicalcondition" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="regardingobjectid_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="regardingobjectid_ExpiredProcess_syncerror" Target="expiredprocesses" />
           <NavigationPropertyBinding Path="regardingobjectid_email_syncerror" Target="emails" />
           <NavigationPropertyBinding Path="regardingobjectid_systemuser" Target="systemusers" />
@@ -34545,6 +35054,25 @@
           <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_modifiedby" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="lk_dfp_medicalpractitioner_modifiedonbehalfby" Target="dfp_medicalpractitioners" />
           <NavigationPropertyBinding Path="user_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalcondition_createdby" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalcondition_createdonbehalfby" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalcondition_modifiedby" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_medicalcondition_modifiedonbehalfby" Target="dfp_medicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_knownmedicalcondition_createdby" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_knownmedicalcondition_createdonbehalfby" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_knownmedicalcondition_modifiedby" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_knownmedicalcondition_modifiedonbehalfby" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="user_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="lk_dfp_submittal_createdby" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="lk_dfp_submittal_createdonbehalfby" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="lk_dfp_submittal_modifiedby" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="lk_dfp_submittal_modifiedonbehalfby" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="user_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="lk_dfp_submittaltype_createdby" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="lk_dfp_submittaltype_createdonbehalfby" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="lk_dfp_submittaltype_modifiedby" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="lk_dfp_submittaltype_modifiedonbehalfby" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="user_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="lk_slakpiinstancebase_createdonbehalfby" Target="slakpiinstances" />
           <NavigationPropertyBinding Path="lk_mobileofflineprofileitemassocaition_modifiedonbehalfby" Target="mobileofflineprofileitemassociations" />
           <NavigationPropertyBinding Path="lk_userqueryvisualizationbase_modifiedonbehalfby" Target="userqueryvisualizations" />
@@ -35229,6 +35757,9 @@
           <NavigationPropertyBinding Path="team_bcgov_template" Target="bcgov_templates" />
           <NavigationPropertyBinding Path="team_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="team_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="team_dfp_knownmedicalcondition" Target="dfp_knownmedicalconditions" />
+          <NavigationPropertyBinding Path="team_dfp_submittal" Target="dfp_submittals" />
+          <NavigationPropertyBinding Path="team_dfp_submittaltype" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="team_DuplicateRules" Target="duplicaterules" />
           <NavigationPropertyBinding Path="team_Imports" Target="imports" />
           <NavigationPropertyBinding Path="OwningTeam_postfollows" Target="postfollows" />
