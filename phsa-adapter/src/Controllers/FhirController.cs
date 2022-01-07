@@ -295,20 +295,20 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 // create from the Dynamics data
                 driver = new Models.Driver()
                 {
-                    Surname = caseReply.Driver?.Surname,
-                    GivenName = caseReply.Driver?.GivenName,
-                    BirthDate = caseReply.Driver?.BirthDate != null ? caseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd") : "",
-                    DriverLicenceNumber = caseReply.Driver.DriverLicenceNumber,
+                    Surname = caseReply?.Driver?.Surname,
+                    GivenName = caseReply?.Driver?.GivenName,
+                    BirthDate = caseReply?.Driver?.BirthDate != null ? caseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd") : "",
+                    DriverLicenceNumber = caseReply?.Driver?.DriverLicenceNumber,
                     Address = new Models.Address()
                     {
-                        City = caseReply.Driver?.Address?.City ?? "",
-                        Postal = caseReply.Driver?.Address?.Postal ?? "",
-                        Line1 = caseReply.Driver?.Address?.Line1 ?? "",
-                        Line2 = caseReply.Driver?.Address?.Line2 ?? ""
+                        City = caseReply?.Driver?.Address?.City ?? "",
+                        Postal = caseReply?.Driver?.Address?.Postal ?? "",
+                        Line1 = caseReply?.Driver?.Address?.Line1 ?? "",
+                        Line2 = caseReply?.Driver?.Address?.Line2 ?? ""
                     }
                 };
 
-                if (!string.IsNullOrEmpty(caseReply.Driver.Sex))
+                if (!string.IsNullOrEmpty(caseReply?.Driver?.Sex))
                 {
                     driver.Sex = caseReply.Driver.Sex.ToLower();
                 }
