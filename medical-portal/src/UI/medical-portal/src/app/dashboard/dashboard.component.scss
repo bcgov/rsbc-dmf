@@ -1,5 +1,6 @@
 .dashboard-icon {
   float: left;
+  width: 70px;
   margin-right: 30px;
 }
 
@@ -45,6 +46,28 @@
   }
 }
 
+
+.dmer-table {
+  width: 100%;
+  .dmer-table-header {
+    background-color: #3f598a;
+
+    td {
+      color: #ffffff;
+      font-size: larger;
+    }
+  }
+
+  tr:nth-child(odd) {
+    background-color: #ffffff;
+  }
+
+  tr:nth-child(even) {
+    background-color: #e0e0e0;
+  }
+}
+
+
 .list {
   h2 {
     font-weight: bold;
@@ -58,7 +81,8 @@
 
   p {
     padding-left: 13px;
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.6;
   }
 
   .table-actions {

@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface DmerCaseListItem {
+  clinicName?: null | string;
   createdBy?: null | string;
   createdOn?: string;
   driverLicense?: null | string;
