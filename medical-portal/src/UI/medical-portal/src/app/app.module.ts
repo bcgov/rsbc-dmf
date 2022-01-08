@@ -12,6 +12,14 @@ import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
 import { OAuthModule } from 'angular-oauth2-oidc';
+import {
+  FontAwesomeModule,
+  FaIconLibrary,
+} from '@fortawesome/angular-fontawesome';
+
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
+
 
 
 @NgModule({
@@ -48,4 +56,12 @@ import { OAuthModule } from 'angular-oauth2-oidc';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(library: FaIconLibrary) {
+    library.addIcons(
+      faSearch
+    );
+  }
+
+
+}

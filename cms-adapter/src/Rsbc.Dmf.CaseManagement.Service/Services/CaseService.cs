@@ -97,7 +97,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             Name = c.Driver.Name ?? string.Empty
                         },
                         Provider = provider,
-                        IsCommercial = c.IsCommercial
+                        IsCommercial = c.IsCommercial,
+                        Status = c.Status
                     };
                     newCase.Flags.Add(c.Flags.Select(f => new FlagItem
                     {
