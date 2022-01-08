@@ -21,15 +21,17 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
     public class DmerCaseListItem
     {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string PatientName { get; set; }
-        public string DriverLicense { get; set; }
+        public string ClinicName { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
+        public string DriverLicense { get; set; }
+        public string Id { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
+        public string PatientName { get; set; }
         public string Status { get; set; }
+        public string Title { get; set; }
+
     }
 
     public class CaseService : ICaseQueryService
@@ -79,12 +81,14 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 Id = c.CaseId,
                 Title = c.Title,
+                ClinicName = c.Provider?.Name,
                 CreatedBy = c.CreatedBy,
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,
                 ModifiedOn = c.ModifiedOn.ToDateTime(),
                 PatientName = c.Driver.Name,
                 DriverLicense = c.Driver.DriverLicenceNumber,
+                Status = c.Status
             });
         }
     }

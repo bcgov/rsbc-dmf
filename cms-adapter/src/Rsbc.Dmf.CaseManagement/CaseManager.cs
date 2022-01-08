@@ -55,6 +55,7 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime ModifiedOn { get; set; }
         public string ModifiedBy { get; set; }
         public bool IsCommercial { get; set; }
+        public string Status { get; set; }
     }
 
     public class Driver
@@ -226,10 +227,20 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 Id = f.dfp_FlagId?.dfp_id,
                                 Description = f.dfp_FlagId?.dfp_description
-                            }).ToArray()
+                            }).ToArray(),
+                        Status = TranslateStatus (c.statuscode)
                     };
                 }).ToArray()
             };
+        }
+
+        private string TranslateStatus (int? statuscode)
+        {
+            string result = "In Progress";
+            
+            // add extra logic here.
+
+            return result;
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
