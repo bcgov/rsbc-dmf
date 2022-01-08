@@ -51,6 +51,7 @@ message DmerCase {
 	string title = 7;
 	Driver driver = 10;
 	Provider provider = 11;	
+	string status = 12;
 	repeated FlagItem Flags = 30;
 }
 
