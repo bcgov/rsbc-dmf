@@ -4,10 +4,10 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
+import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
 import { ProfileService } from './services/profile.service';
-import { ApplicationVersionInfoService } from './services/application-version-info.service';
 
 /**
  * Module that provides all services and configuration.
@@ -17,11 +17,11 @@ import { ApplicationVersionInfoService } from './services/application-version-in
   exports: [],
   declarations: [],
   providers: [
+    ApplicationVersionInfoService,
     CasesService,
     ConfigService,
     ProfileService,
-    ApiConfiguration,
-    ApplicationVersionInfoService
+    ApiConfiguration
   ],
 })
 export class ApiModule {
