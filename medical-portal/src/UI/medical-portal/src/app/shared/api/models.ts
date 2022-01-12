@@ -1,3 +1,4 @@
+export { ApplicationVersionInfo } from './models/application-version-info';
 export { ClinicUserProfile } from './models/clinic-user-profile';
 export { Configuration } from './models/configuration';
 export { DmerCaseListItem } from './models/dmer-case-list-item';

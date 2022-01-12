@@ -10,7 +10,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // public API
     public class ApplicationVersionInfoController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -26,14 +25,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// <returns>The version of the running application</returns>
         [HttpGet]
         [AllowAnonymous]
-        public ActionResult GetApplicationVersionInfo()
+        public ActionResult<ApplicationVersionInfo> GetApplicationVersionInfo()
         {
             Assembly assembly = GetType().GetTypeInfo().Assembly;
             DateTime creationTime = System.IO.File.GetLastWriteTimeUtc(assembly.Location);
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             string productVersion = fvi.ProductVersion;
             string fileVersion = fvi.FileVersion;
-                       
+
             // The OPENSHIFT_ environment variables are only set during an OpenShift build.
 
             string sourceCommit = _configuration["OPENSHIFT_BUILD_COMMIT"];
@@ -42,7 +41,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             // Allow version info to be obtained from a Github action build
             var strings = productVersion.Split("!");
-            if (strings.Length == 5 )
+            if (strings.Length == 5)
             {
                 sourceRepository = strings[0] + "/" + strings[1];
                 sourceReference = strings[2];
@@ -64,7 +63,5 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             return new JsonResult(avi);
         }
-
     }
-
 }
