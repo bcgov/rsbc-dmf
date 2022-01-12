@@ -1,0 +1,1 @@
+wt -M -d .\ --title medical-portal `; sp -d .\medical-portal\src\UI\medical-portal\ `; sp -d .\medical-portal\src\API\ `; mf left `; sp -d .\cms-adapter\src\
