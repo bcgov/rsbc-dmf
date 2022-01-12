@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Optional } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {ChangeDetectorRef} from '@angular/core';
-import { VersionInfo } from 'src/app/shared/api/models/version-info';
 import { ApplicationVersionInfoService } from 'src/app/shared/api/services/application-version-info.service';
 import { VersionInfoComponent } from 'src/app/shared/components/version-info/version-info.component';
+import { ApplicationVersionInfo } from 'src/app/shared/api/models';
 
 @Component({
   selector: 'app-footer',
@@ -13,7 +13,7 @@ import { VersionInfoComponent } from 'src/app/shared/components/version-info/ver
 })
 export class FooterComponent implements OnInit {
 
-  versionInfo: VersionInfo = {
+  versionInfo: ApplicationVersionInfo = {
     baseUri: "",
     basePath: "",
     environment: "",
@@ -33,11 +33,11 @@ export class FooterComponent implements OnInit {
   ngOnInit(): void {
     if (this.versionInfoDataService !== null)
     {
-      this.versionInfoDataService.getVersionInfo()
-      .subscribe((versionInfo: VersionInfo) => {
-        this.versionInfo = versionInfo;
-        this.cd.detectChanges();
-      });
+      this.versionInfoDataService.apiApplicationVersionInfoGet$Json()
+        .subscribe((versionInfo: ApplicationVersionInfo) => {
+          this.versionInfo = versionInfo;
+          this.cd.detectChanges();
+        });
     }
   }
 
