@@ -40,6 +40,7 @@ export class CasesService extends BaseService {
   apiCasesGet$Plain$Response(params?: {
     ByTitle?: string;
     ByDriverLicense?: string;
+    ByClinicId?: string;
     ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
@@ -47,6 +48,7 @@ export class CasesService extends BaseService {
     if (params) {
       rb.query('ByTitle', params.ByTitle, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
+      rb.query('ByClinicId', params.ByClinicId, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
 
@@ -74,6 +76,7 @@ export class CasesService extends BaseService {
   apiCasesGet$Plain(params?: {
     ByTitle?: string;
     ByDriverLicense?: string;
+    ByClinicId?: string;
     ByStatus?: Array<string>;
   }): Observable<Array<DmerCaseListItem>> {
 
@@ -95,6 +98,7 @@ export class CasesService extends BaseService {
   apiCasesGet$Json$Response(params?: {
     ByTitle?: string;
     ByDriverLicense?: string;
+    ByClinicId?: string;
     ByStatus?: Array<string>;
   }): Observable<StrictHttpResponse<Array<DmerCaseListItem>>> {
 
@@ -102,6 +106,7 @@ export class CasesService extends BaseService {
     if (params) {
       rb.query('ByTitle', params.ByTitle, {});
       rb.query('ByDriverLicense', params.ByDriverLicense, {});
+      rb.query('ByClinicId', params.ByClinicId, {});
       rb.query('ByStatus', params.ByStatus, {});
     }
 
@@ -129,6 +134,7 @@ export class CasesService extends BaseService {
   apiCasesGet$Json(params?: {
     ByTitle?: string;
     ByDriverLicense?: string;
+    ByClinicId?: string;
     ByStatus?: Array<string>;
   }): Observable<Array<DmerCaseListItem>> {
 
