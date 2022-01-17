@@ -109,7 +109,7 @@
   text-decoration: none;
   &:hover,
   &:focus {
-    text-decoration: underline;
+    //text-decoration: underline;
   }
 }
 
@@ -119,11 +119,48 @@
       text-decoration: none;
       &:hover,
       &:focus {
-        text-decoration: underline;
+        //text-decoration: underline;
       }
     }
   }
 }
+
+
+.table-actions {
+  margin-top: 10px;
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+
+  letter-spacing: normal;
+  line-height: normal;
+  font-kerning: normal;
+  font-feature-settings: "kern";
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+
+  p {
+    font-family: 'BC Sans Regular', 'BC Sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #003366;
+  }
+  a {
+    font-weight: 700;
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    color: #003366;
+    display: inline;
+    vertical-align: middle;
+    .mat-icon {
+      margin-left: 5px;
+      vertical-align: top;
+    }
+  }
+}
+
+
 
 body {
   margin: 0;
