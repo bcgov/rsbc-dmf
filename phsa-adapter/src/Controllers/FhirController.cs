@@ -254,12 +254,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             {
                 CaseId = id
             };
-            //var searchReply = _cmsAdapterClient.Search(getCaseRequest);
+            var searchReply = _cmsAdapterClient.Search(getCaseRequest);
 
-            //var caseReply = searchReply.Items[0];
+            var caseReply = searchReply.Items[0];
 
 
-            DmerCase caseReply = new DmerCase();
+            //DmerCase caseReply = new DmerCase();
             Models.Driver driver;
 
             if (!String.IsNullOrEmpty(Configuration["ENABLE_ICBC"]))
