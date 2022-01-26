@@ -96,6 +96,8 @@ namespace Rsbc.Dmf.CaseManagement
         public Provider Provider { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
         public string ClinicId { get; set; }
+
+        public string ClinicName { get; set;}
     }
 
     public class Flag
@@ -199,6 +201,7 @@ namespace Rsbc.Dmf.CaseManagement
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         ModifiedOn = c.modifiedon.Value.DateTime,
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
+                        ClinicName = c.dfp_ClinicId?.name,
                         Driver = new CaseManagement.Driver()
                         {
                             Id = c.dfp_DriverId.dfp_driverid.ToString(),
