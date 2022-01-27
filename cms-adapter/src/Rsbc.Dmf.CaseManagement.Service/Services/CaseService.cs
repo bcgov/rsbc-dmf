@@ -98,6 +98,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         },
                         Provider = provider,
                         IsCommercial = c.IsCommercial,
+                        ClinicName = c.ClinicName ?? string.Empty,
                         Status = c.Status
                     };
                     newCase.Flags.Add(c.Flags.Select(f => new FlagItem
