@@ -81,7 +81,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 Id = c.CaseId,
                 Title = c.Title,
-                ClinicName = c.Provider?.Name,
+                ClinicName = c.ClinicName,
                 CreatedBy = c.CreatedBy,
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,
