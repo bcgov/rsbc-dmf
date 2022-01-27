@@ -52,6 +52,7 @@ message DmerCase {
 	Driver driver = 10;
 	Provider provider = 11;	
 	string status = 12;
+	string clinicName = 13;
 	repeated FlagItem Flags = 30;
 }
 
