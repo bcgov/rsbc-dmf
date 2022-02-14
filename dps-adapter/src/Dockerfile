@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 
 COPY . .
-RUN dotnet restore ./icbc-adapter/src/Pssg.IcbcAdapter 
+RUN dotnet restore ./dps-adapter/src/Pssg.DpsAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./icbc-adapter/src/Pssg.IcbcAdapter -c Release -o /app/publish
+RUN dotnet publish ./dps-adapter/src/Pssg.DpsAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
@@ -22,4 +22,4 @@ COPY --from=publish /app/publish .
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Pssg.IcbcAdapter.dll"]
+ENTRYPOINT ["dotnet", "Pssg.DpsAdapter.dll"]
