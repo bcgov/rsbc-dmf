@@ -1,0 +1,20 @@
+name: ci-dps-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "dps-adapter/src/**"
+      - ".github/workflows/ci-dps-adapter.yml"
+
+env:
+  IMAGE_NAME: dps-adapter
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file ./dps-adapter/src/Dockerfile --tag $IMAGE_NAME
