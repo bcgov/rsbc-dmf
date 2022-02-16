@@ -30,7 +30,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "angular-oauth2-oidc": "^12.1.0",
-    "karma": "^6.3.9",
+    "karma": "^6.3.14",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.1",
     "zone.js": "~0.11.4"
