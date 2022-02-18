@@ -15,6 +15,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.Icbc.ViewModels;
 
 namespace Pssg.IcbcAdapter.Tests
 {
@@ -99,6 +100,24 @@ namespace Pssg.IcbcAdapter.Tests
 
         }
 
+        private async void TestDl(string testDl)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, "/DriverHistory?driversLicence=" + testDl);
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
+
+            // parse as JSON.
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            Driver clientResult = JsonConvert.DeserializeObject<Driver>(jsonString);
+
+
+            // content should match
+
+            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber.Value, int.Parse(testDl));
+        }
+
         /// <summary>
         /// Test the MS Dynamics interface
         /// </summary>
@@ -109,20 +128,11 @@ namespace Pssg.IcbcAdapter.Tests
 
             Login();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/DriverHistory?driversLicence=" + testDl);
+            TestDl(testDl);
 
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
+            testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];            
 
-            // parse as JSON.
-            var jsonString = await response.Content.ReadAsStringAsync();
-            
-            CLNT clientResult = JsonConvert.DeserializeObject<CLNT> (jsonString);
-
-            
-            // content should match
-            
-            Assert.Equal(clientResult.DR1MST.LNUM.Value, int.Parse(testDl));
+            TestDl(testDl);
 
         }
     }

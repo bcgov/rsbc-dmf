@@ -21,7 +21,12 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         public Driver(string surname = default(string),
             string givenName = default(string),
             string middleName = default(string),
-            double? wGHT = default(double?), string sEX = default(string), System.DateTime? bIDT = default(System.DateTime?), double? hGHT = default(double?), string sECK = default(string), DriverMasterStatus dR1MST = default(DriverMasterStatus))
+            double? wGHT = default(double?), string sEX = default(string), System.DateTime? bIDT = default(System.DateTime?), double? hGHT = default(double?), string sECK = default(string), 
+            string addressLine1 = default(string),
+            string city = default(string),
+            string postalCode = default(string),
+            
+            DriverMasterStatus dR1MST = default(DriverMasterStatus))
         {
             Surname = surname;
             GivenName = givenName;
@@ -31,6 +36,9 @@ namespace Pssg.Interfaces.Icbc.ViewModels
             BirthDate = bIDT;
             Height = hGHT;
             SecurityKeyword = sECK;
+            AddressLine1 = addressLine1;
+            City = city;
+            PostalCode = postalCode;
             
             DriverMasterStatus = dR1MST;
             CustomInit();
@@ -74,6 +82,10 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         public string AddressLine1 { get; set;}
         public string City { get; set;}
         public string PostalCode { get; set;}
+
+        public string Province { get; set; }
+
+        public string Country { get; set; }
 
 
         /// <summary>

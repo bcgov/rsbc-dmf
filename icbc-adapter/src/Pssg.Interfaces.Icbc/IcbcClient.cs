@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Xml;
 using Microsoft.Extensions.Configuration;
@@ -53,8 +55,86 @@ namespace Pssg.Interfaces
             string jsonText = JsonConvert.SerializeXmlNode(xmlDoc.GetElementsByTagName("CLNT")[0]);
 
             // and to the model.
+            ClientResult result;
+            try
+            {
+                result = JsonConvert.DeserializeObject<ClientResult>(jsonText);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    var tempResult = JsonConvert.DeserializeObject<ClientResult2>(jsonText);
+                    result = new ClientResult()
+                    {
+                        // transfer items over
+                        CLNT = new CLNT()
+                        {
+                            ADDR = tempResult.CLNT.ADDR,
+                            BIDT = tempResult.CLNT.BIDT,
+                            DR1MST = new DR1MST()
+                            {
+                                DR1MEDN = tempResult.CLNT.DR1MST?.DR1MEDN,
+                                DR1STAT = tempResult.CLNT.DR1MST?.DR1STAT,
+                                LCLS = tempResult.CLNT.DR1MST?.LCLS,
+                                LNUM = tempResult.CLNT.DR1MST?.LNUM,
+                                MSCD = tempResult.CLNT.DR1MST?.MSCD,
+                                RRDT = tempResult.CLNT.DR1MST?.RRDT,
+                            },
+                            HGHT = tempResult.CLNT.HGHT,
+                            INAM = tempResult.CLNT.INAM,
+                            SECK = tempResult.CLNT.SECK,
+                            SEX = tempResult.CLNT.SEX,
+                            WGHT = tempResult.CLNT.WGHT
+                        }
+                    };
 
-            var result = JsonConvert.DeserializeObject<ClientResult>(jsonText);
+                    // convert RSCD to list.
+                    if (tempResult.CLNT.DR1MST?.RSCD != null)
+                    {
+                        result.CLNT.DR1MST.RSCD = new System.Collections.Generic.List<int>();
+                        result.CLNT.DR1MST.RSCD.Add((tempResult.CLNT.DR1MST.RSCD).Value);
+                    }
+
+                }
+                catch (Exception)
+                {
+                    var tempResult = JsonConvert.DeserializeObject<ClientResult3>(jsonText);
+                    result = new ClientResult()
+                    {
+                        // transfer items over
+                        CLNT = new CLNT()
+                        {
+                            ADDR = tempResult.CLNT.ADDR,
+                            BIDT = tempResult.CLNT.BIDT,
+                            DR1MST = new DR1MST()
+                            {
+                                DR1MEDN = tempResult.CLNT.DR1MST?.DR1MEDN,
+                                RSCD = tempResult.CLNT.DR1MST?.RSCD,                                
+                                LCLS = tempResult.CLNT.DR1MST?.LCLS,
+                                LNUM = tempResult.CLNT.DR1MST?.LNUM,
+                                MSCD = tempResult.CLNT.DR1MST?.MSCD,
+                                RRDT = tempResult.CLNT.DR1MST?.RRDT,
+                            },
+                            HGHT = tempResult.CLNT.HGHT,
+                            INAM = tempResult.CLNT.INAM,
+                            SECK = tempResult.CLNT.SECK,
+                            SEX = tempResult.CLNT.SEX,
+                            WGHT = tempResult.CLNT.WGHT
+                        }
+                    };
+
+                    // convert DR1STAT to list.
+                    if (tempResult.CLNT.DR1MST?.DR1STAT != null)
+                    {
+                        result.CLNT.DR1MST.DR1STAT = new List<DR1STAT>();
+                        result.CLNT.DR1MST.DR1STAT.Add(tempResult.CLNT.DR1MST.DR1STAT);
+                    }
+                }
+
+                
+                
+            }
 
             return result.CLNT;
         }
@@ -62,6 +142,16 @@ namespace Pssg.Interfaces
         private class ClientResult
         {
             public CLNT CLNT { get; set;}
+        }
+
+        private class ClientResult2
+        {
+            public CLNT2 CLNT { get; set; }
+        }
+
+        private class ClientResult3
+        {
+            public CLNT3 CLNT { get; set; }
         }
     }
 
