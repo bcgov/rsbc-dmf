@@ -43,45 +43,37 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         partial void CustomInit();
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "MDSP")]
+        /// </summary>        
         public string MedicalDisposition { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "MDSP-DESC")]
+        /// </summary>        
         public string MedicalDispositionDescription { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "ISOF")]
+        /// </summary>        
         public int? IssuingOffice { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "ISOF-DESC")]
+        /// </summary>        
         public string IssuingOfficeDescription { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonConverter(typeof(DateJsonConverter))]
-        [JsonProperty(PropertyName = "MIDT")]
+        [JsonConverter(typeof(DateJsonConverter))]        
         public System.DateTime? MedicalIssueDate { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonConverter(typeof(DateJsonConverter))]
-        [JsonProperty(PropertyName = "MEDT")]
+        [JsonConverter(typeof(DateJsonConverter))]        
         public System.DateTime? MedicalExamDate { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "PGN2")]
+        /// </summary>        
         public string PGN2 { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "PGN1")]
+        /// </summary>        
         public string PGN1 { get; set; }
 
     }
