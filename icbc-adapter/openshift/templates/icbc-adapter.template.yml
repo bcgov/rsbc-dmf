@@ -48,13 +48,13 @@ parameters:
     value: Changeme
   - description: ICBC_LOOKUPSERVICE_ENDPOINT_URI
     name: ICBC_LOOKUPSERVICE_ENDPOINT_URI
-    value: https://wsgw.dev.jag.gov.bc.ca/icbc/dfp/
+    value: Changeme
   - description: ICBC_LOOKUPSERVICE_USERNAME
     name: ICBC_LOOKUPSERVICE_USERNAME
-    value: SVCLX9Y
+    value: Changeme
   - description: ICBC_LOOKUPSERVICE_PASSWORD
     name: ICBC_LOOKUPSERVICE_PASSWORD
-    value: 5awraTHu
+    value: Changeme
 objects:
   - kind: ConfigMap
     apiVersion: v1
