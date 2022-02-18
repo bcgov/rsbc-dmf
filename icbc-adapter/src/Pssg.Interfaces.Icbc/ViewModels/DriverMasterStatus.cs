@@ -20,9 +20,12 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public DriverMasterStatus(int? mSCD = default(int?), object? rSCD = default(object?), System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), int? lCLS = default(int?), IList<DriverMedical> dR1MEDN = default(IList<DriverMedical>))
+        public DriverMasterStatus(int? mSCD = default(int?),
+            List<int> restrictionCodes = default(List<int>),
+            System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), int? lCLS = default(int?), List<DriverMedical> dR1MEDN = default(List<DriverMedical>))
         {
-            MasterStatusCode = mSCD;            
+            MasterStatusCode = mSCD; 
+            RestrictionCodes = restrictionCodes;
             LicenceExpiryDate = rRDT;
             LicenceNumber = lNUM;            
             LicenceClass = lCLS;
@@ -36,38 +39,33 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         partial void CustomInit();
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "MSCD")]
+        /// </summary>        
         public int? MasterStatusCode { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "RSCD")]
+        /// </summary>        
         public List<int> RestrictionCodes { get; set; }
 
         /// <summary>
         /// </summary>
-        [JsonConverter(typeof(DateJsonConverter))]
-        [JsonProperty(PropertyName = "RRDT")]
+        [JsonConverter(typeof(DateJsonConverter))]        
         public System.DateTime? LicenceExpiryDate { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "LNUM")]
+        /// </summary>        
         public int? LicenceNumber { get; set; }
 
         /// <summary>
         /// </summary>        
-        public DriverStatus DriverStatus { get; set; }
+        public List<DriverStatus> DriverStatus { get; set; }
 
         /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "LCLS")]
+        /// </summary>        
         public int? LicenceClass { get; set; }
 
         /// <summary>
         /// </summary>        
-        public IList<DriverMedical> DriverMedicals { get; set; }
+        public List<DriverMedical> DriverMedicals { get; set; }
 
     }
 }

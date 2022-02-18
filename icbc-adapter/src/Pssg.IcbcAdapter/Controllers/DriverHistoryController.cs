@@ -10,6 +10,7 @@ using Pssg.IcbcAdapter.ViewModels;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
+using Pssg.Interfaces.ViewModelExtensions;
 
 namespace Pssg.IcbcAdapter.Controllers
 {
@@ -29,7 +30,6 @@ namespace Pssg.IcbcAdapter.Controllers
             icbcClient = new IcbcClient(configuration);
         }
 
-
         // GET: /DriverHistory
         [HttpGet()]
         public ActionResult GetHistory(string driversLicence)
@@ -45,8 +45,80 @@ namespace Pssg.IcbcAdapter.Controllers
                 Sex = data.SEX,
                 BirthDate = data.BIDT,
                 Height = data.HGHT,
-                SecurityKeyword = data.SECK
+                SecurityKeyword = data.SECK,
+                City = data.ADDR?.CITY,
+                PostalCode = data.ADDR?.POST,
+                Province = data.ADDR?.PROV,
+                Country = data.ADDR?.CNTY
             };
+
+            // handle address
+            if (data.ADDR != null)
+            {
+                List<string> addressComponents = new List<string>();
+
+                if (!string.IsNullOrEmpty(data.ADDR.APR1))
+                {
+                    addressComponents.Add($"{data.ADDR.APR1}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.APR2))
+                {
+                    addressComponents.Add($"{data.ADDR.APR2}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.APR3))
+                {
+                    addressComponents.Add($"{data.ADDR.APR3}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.PSTN))
+                {
+                    addressComponents.Add($"STN {data.ADDR.PSTN}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.SITE))
+                {
+                    addressComponents.Add($"SITE {data.ADDR.SITE}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.COMP))
+                {
+                    addressComponents.Add($"COMP {data.ADDR.COMP}");
+                }
+
+                if (! string.IsNullOrEmpty(data.ADDR.RURR))
+                {
+                    addressComponents.Add ( $"RR# {data.ADDR.RURR}" );
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.POBX))
+                {
+                    addressComponents.Add($"PO BOX {data.ADDR.POBX}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.STNO))
+                {
+                    addressComponents.Add($"{data.ADDR.STNO}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.STNM))
+                {
+                    addressComponents.Add($"{data.ADDR.STNM}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.STTY))
+                {
+                    addressComponents.Add($"{data.ADDR.STTY}");
+                }
+
+                if (!string.IsNullOrEmpty(data.ADDR.STDI))
+                {
+                    addressComponents.Add($"{data.ADDR.STDI}");
+                }                
+
+                result.AddressLine1 = string.Join(" ",addressComponents.ToArray());
+            }
 
             // handle two middle names, or just one.
             if (data.INAM?.GIV2 != null && data.INAM?.GIV3 != null)
@@ -62,16 +134,7 @@ namespace Pssg.IcbcAdapter.Controllers
                 result.MiddleName = $"{data.INAM.GIV3}";
             }           
 
-            result.DriverMasterStatus = new DriverMasterStatus()
-            {
-                MasterStatusCode = data.DR1MST?.MSCD,
-                RestrictionCodes = new List<int>(), // TODO
-                LicenceExpiryDate = data.DR1MST?.RRDT,
-                LicenceNumber = data.DR1MST?.LNUM,
-                DriverStatus = new DriverStatus(), // TODO
-                LicenceClass = data.DR1MST?.LCLS,
-                DriverMedicals = new List<DriverMedical>() //data.DR1MST?.DR1MEDN,
-            };
+            result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
             return Json (result);
         }
