@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5A</UserSecretsId>
     <RootNamespace>Pssg.IcbcAdapter</RootNamespace>
   </PropertyGroup>

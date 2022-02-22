@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Pssg.Rsbc.Dmf.DocumentTriage</RootNamespace>
     <UserSecretsId>1530cec8-d780-4e54-8770-989fefe6e356</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
