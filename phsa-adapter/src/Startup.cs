@@ -122,7 +122,7 @@ namespace Rsbc.Dmf.PhsaAdapter
 
                     // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                     opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+                });
 
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();

@@ -76,30 +76,24 @@ DevOps Process
 
 ## Jenkins
 
-If any pipeline steps do not start, a common root cause is problems with Jenkins.  Restart the Jenkins service by scaling it down to 0 pods, then back up to 1 pod.
+This project does not use Jenkins.  It does use GitHub Actions and Tekton (Kubernetes) pipelines.
 
 ## DEV builds
-Dev builds are triggered by source code being committed to the repository.  This process triggers a webhook which initiates the DEV build pipeline.
+Dev builds are triggered by source code being committed to the repository.  This process triggers a github action.
 
-Login to the OpenShift Web Console and navigate to the Tools project for the system, and view the status of the DEV portal pipeline build config to see the status of the build.
+Login to Github and view the "Actions" tab of this repository to see status of recent runs.
 
-## TEST Builds
-Merge code to the "master" branch from the "develop" branch to trigger a TEST build.
+## Promotion to TEST
+To promote code to TEST, login to OpenShift and start the Kubernetes Pipeline for Promote to Test.
 
-TEST builds are triggered by source code being committed to the master branch of the repository.  This process triggers a webhook which initiates the TEST build pipeline.
-
-Login to the OpenShift Web Console and navigate to the Tools project for the system, and view the status of the TEST portal pipeline build config to see the status of the build. 
+## Promotion to TRAIN
+To promote code to TRAIN, login to OpenShift and start the Kubernetes Pipeline for Promote to Train.
 
 ## Promotion to PROD
-Login to the OpenShift Web Console and navigate to the Tools project for the system.  Go to the Build Config for the PROD Pipeline.  Click  Start Build. 
+To promote code to PROD, login to OpenShift and start the Kubernetes Pipeline for Promote to Prod. Not that this pipeline will also make a backup of the current PROD deployment.
 
-Navigate to the Logs for the build and click the link to go to the Jenkins logs.
-
-View the Console Logs.
-
-You will then have to CONFIRM the build by clicking on the related log item for the build that has been started.
-
-
+## Restore PROD from backup
+If you wish to revert to the previous PROD deployment, login to OpenShift and start the Kubernetes Pipeline for Restore PROD from Backup.
 
 Contribution
 ------------
