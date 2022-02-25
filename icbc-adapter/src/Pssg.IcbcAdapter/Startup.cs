@@ -20,6 +20,9 @@ using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
+using Hangfire;
+using Hangfire.MemoryStorage;
+using System.Reflection;
 
 namespace Pssg.IcbcAdapter
 {
@@ -78,6 +81,10 @@ namespace Pssg.IcbcAdapter
                 options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
             });
 
+            // Hangfire is used for scheduled jobs
+            services.AddHangfire(x => x.UseMemoryStorage());
+            services.AddHangfireServer();
+
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
@@ -91,6 +98,37 @@ namespace Pssg.IcbcAdapter
             app.UseForwardedHeaders();
 
             app.UseRouting();
+
+            bool startHangfire = true;
+#if DEBUG
+            // do not start Hangfire if we are running tests.        
+            foreach (var assem in Assembly.GetEntryAssembly().GetReferencedAssemblies())
+            {
+                if (assem.FullName.ToLowerInvariant().StartsWith("xunit"))
+                {
+                    startHangfire = false;
+                    break;
+                }
+            }
+#endif
+
+            if (startHangfire)
+            {
+                // enable Hangfire, using the default authentication model (local connections only)
+                app.UseHangfireServer();
+
+                DashboardOptions dashboardOptions = new DashboardOptions
+                {
+                    AppPath = null
+                };
+
+                app.UseHangfireDashboard("/hangfire", dashboardOptions);
+            }
+
+            if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
+            {
+                SetupHangfireJobs(app);
+            }
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -106,7 +144,7 @@ namespace Pssg.IcbcAdapter
                 // Exclude all checks and return a 200-Ok.
                 Predicate = _ => false
             });
-
+            
 
             app.UseEndpoints(endpoints =>
             {
@@ -116,7 +154,7 @@ namespace Pssg.IcbcAdapter
                     async context =>
                     {
                         await context.Response.WriteAsync(
-                            "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+                            "RSBC ICBC Adapter");
                     });
 
                 endpoints.MapControllers();
@@ -169,5 +207,42 @@ namespace Pssg.IcbcAdapter
             Log.Logger.Information("Document Storage Adapter Container Started");
             SelfLog.Enable(Console.Error);
         }
+
+        // <summary>
+        /// Setup the Hangfire jobs.
+        /// </summary>
+        /// <param name="app"></param>    
+        private void SetupHangfireJobs(IApplicationBuilder app)
+        {
+
+            Log.Logger.Information("Starting setup of Hangfire job ...");
+
+            try
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    Log.Logger.Information("Creating Hangfire jobs for License issuance check ...");
+
+                    string interval = Cron.Hourly();
+                    if (!string.IsNullOrEmpty(Configuration["QUEUE_CHECK_INTERVAL"]))
+                    {
+                        interval = (Configuration["QUEUE_CHECK_INTERVAL"]);
+                    }
+
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration).CheckForWork(null), interval);
+
+                    Log.Logger.Information("Hangfire jobs setup.");
+                }
+            }
+            catch (Exception e)
+            {
+                StringBuilder msg = new StringBuilder();
+                msg.AppendLine("Failed to setup Hangfire job.");
+
+                Log.Logger.Error(e, "Hangfire setup failed.");
+            }
+        }
     }
+
+    
 }
