@@ -1,7 +1,7 @@
 
 
 using Microsoft.Extensions.Configuration;
-using Pssg.IcbcAdapter;
+using Rsbc.Dmf.IcbcAdapter;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using System;
@@ -10,7 +10,7 @@ using System.IO;
 using Xunit;
 
 
-namespace Pssg.IcbcAdapter.Tests
+namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
     public class IcbcClientTest
     {

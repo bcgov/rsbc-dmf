@@ -15,12 +15,12 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
 using RedHat.OpenShift.Utils;
-using Pssg.IcbcAdapter;
+using Rsbc.Dmf.IcbcAdapter;
 
 
 // from https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore-ex/dotnetcore-2.1-https/app/OpenShift.cs
 
-namespace Pssg.IcbcAdapter
+namespace Rsbc.Dmf.IcbcAdapter
 {
     public static class PlatformEnvironment
     {
@@ -270,11 +270,11 @@ namespace Microsoft.AspNetCore.Hosting
     public static class OpenShiftWebHostBuilderExtensions
     {
         public static IWebHostBuilder UseOpenShiftIntegration(this IWebHostBuilder builder,
-            Action<Pssg.IcbcAdapter.OpenShiftIntegrationOptions> configureOptions)
+            Action<Rsbc.Dmf.IcbcAdapter.OpenShiftIntegrationOptions> configureOptions)
         {
             if (configureOptions == null) throw new ArgumentNullException(nameof(configureOptions));
 
-            if (Pssg.IcbcAdapter.PlatformEnvironment.IsOpenShift)
+            if (Rsbc.Dmf.IcbcAdapter.PlatformEnvironment.IsOpenShift)
             {
                 // Clear the urls. We'll explicitly configure Kestrel depending on the options.
                 builder.UseUrls();
@@ -282,9 +282,9 @@ namespace Microsoft.AspNetCore.Hosting
                 builder.ConfigureServices(services =>
                 {
                     services.Configure(configureOptions);
-                    services.AddSingleton<Pssg.IcbcAdapter.OpenShiftCertificateLoader>();
+                    services.AddSingleton<Rsbc.Dmf.IcbcAdapter.OpenShiftCertificateLoader>();
                     services.AddSingleton<IConfigureOptions<KestrelServerOptions>, KestrelOptionsSetup>();
-                    services.AddSingleton<IHostedService, Pssg.IcbcAdapter.OpenShiftCertificateExpiration>();
+                    services.AddSingleton<IHostedService, Rsbc.Dmf.IcbcAdapter.OpenShiftCertificateExpiration>();
                 });
             }
 

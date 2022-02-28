@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Pssg.IcbcAdapter.ViewModels
+namespace Rsbc.Dmf.IcbcAdapter.ViewModels
 {
     public class Upload
     {

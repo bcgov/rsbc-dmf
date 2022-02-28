@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 
-namespace Pssg.IcbcAdapter.Services
+namespace Rsbc.Dmf.IcbcAdapter.Services
 {
     // Default to require authorization
     [Authorize]
