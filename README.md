@@ -10,8 +10,8 @@ Technology Stack
 | Layer   | Technology | 
 | ------- | ------------ |
 | Presentation | Angular 11 |
-| Business Logic | C Sharp - Dotnet Core 5.0 |
-| Microservices | C Sharp - Dotnet Core 5.0 |
+| Business Logic | C Sharp - Dotnet Core 6.0 |
+| Microservices | C Sharp - Dotnet Core 6.0 |
 | Front End Web Server | Caddy |
 | Application Server | Kestrel |
 | Data Storage | MS Dynamics On Premise V9 |
@@ -40,7 +40,7 @@ Developer Prerequisites
 -----------------------
 
 **Public Application**
-- .Net Core SDK (5.0)
+- .Net Core SDK (6.0)
 - Node.js 
 - .NET Core IDE such as Visual Studio or VS Code
 - JAG VPN with access to MS Dynamics
