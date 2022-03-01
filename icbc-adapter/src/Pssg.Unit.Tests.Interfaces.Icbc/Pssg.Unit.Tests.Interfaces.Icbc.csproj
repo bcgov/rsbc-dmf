@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pssg.IcbcAdapter\Pssg.IcbcAdapter.csproj" />
+    <ProjectReference Include="..\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
   </ItemGroup>
 

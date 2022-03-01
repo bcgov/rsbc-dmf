@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace Pssg.IcbcAdapter
+namespace Rsbc.Dmf.IcbcAdapter
 {
     public class Program
     {
