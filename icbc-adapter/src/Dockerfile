@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY . .
-RUN dotnet restore ./icbc-adapter/src/Pssg.IcbcAdapter 
+RUN dotnet restore ./icbc-adapter/src/Pssg.Dmf.IcbcAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./icbc-adapter/src/Pssg.IcbcAdapter -c Release -o /app/publish
+RUN dotnet publish ./icbc-adapter/src/Pssg.Dmf.IcbcAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

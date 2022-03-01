@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Pssg.IcbcAdapter
+namespace Rsbc.Dmf.IcbcAdapter
 {
     /// <summary>
     ///     Helper methods for working with <see cref="Guid" />.

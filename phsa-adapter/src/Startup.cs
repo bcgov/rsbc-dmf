@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +19,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Rsbc.Dmf.DocumentTriage;
+using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using Rsbc.Dmf.PhsaAdapter.Formatters;
 using Rsbc.Dmf.PhsaAdapter.Handlers;
@@ -36,9 +38,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Pssg.DocumentStorageAdapter;
-using Pssg.Rsbc.Dmf.DocumentTriage;
-using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {

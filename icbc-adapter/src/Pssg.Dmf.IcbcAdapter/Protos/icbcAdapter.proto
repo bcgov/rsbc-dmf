@@ -2,7 +2,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
-option csharp_namespace = "Pssg.IcbcAdapter";
+option csharp_namespace = "Rsbc.Dmf.IcbcAdapter";
 
 package dmf;
 

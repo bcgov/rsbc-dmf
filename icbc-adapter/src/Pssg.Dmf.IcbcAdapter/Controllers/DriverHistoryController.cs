@@ -6,13 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Pssg.IcbcAdapter.ViewModels;
+using Rsbc.Dmf.IcbcAdapter.ViewModels;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 
-namespace Pssg.IcbcAdapter.Controllers
+namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
 
     [ApiController]

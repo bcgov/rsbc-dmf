@@ -1,8 +1,11 @@
 
 
+using FileHelpers;
 using Microsoft.Extensions.Configuration;
-using Pssg.IcbcAdapter;
+using Rsbc.Dmf.IcbcAdapter;
 using Pssg.Interfaces;
+using Pssg.Interfaces.FlatFileModels;
+using Pssg.Interfaces.Icbc.FlatFileModels;
 using Pssg.Interfaces.Icbc.Models;
 using System;
 using System.Collections.Generic;
@@ -10,7 +13,7 @@ using System.IO;
 using Xunit;
 
 
-namespace Pssg.IcbcAdapter.Tests
+namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
     public class FlatFileTest
     {
@@ -37,6 +40,36 @@ namespace Pssg.IcbcAdapter.Tests
         public async void BasicConnectionTest()
         {
             flatFileUtils.CheckForWork(null);
+        }
+
+        [Fact]
+        public async void TestGetUpdates()
+        {
+            flatFileUtils.CheckForWork(null);
+        }
+
+        [Fact]
+        public async void TestSendUpdates()
+        {
+            flatFileUtils.SendMedicalUpdates(null);
+        }
+
+        [Fact]
+        public async void CheckDriverNewFileFormat()
+        {
+            var engine = new FileHelperEngine<NewDriver>();
+            string sampleData = "2222222022222224EXPERIMENTAL_______________________2012-01-011M2002-02-012004-01-011998-01-012002-04-040100";
+            var records = engine.ReadString(sampleData);
+            Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0,7));
+        }
+
+        [Fact]
+        public async void CheckMedicalUpdateFormat()
+        {
+            var engine = new FileHelperEngine<MedicalUpdate>();
+            string sampleData = "2222222EXPERIMENTAL_______________________P2012-01-01";
+            var records = engine.ReadString(sampleData);
+            Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0, 7));
         }
     }
 }

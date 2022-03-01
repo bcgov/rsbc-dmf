@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5A</UserSecretsId>
-    <RootNamespace>Pssg.IcbcAdapter</RootNamespace>
+    <RootNamespace>Rsbc.Dmf.IcbcAdapter</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,7 +26,24 @@
     <PackageReference Include="SSH.NET" Version="2020.0.1" />
   </ItemGroup>
 
+	<ItemGroup>
+		<Folder Include="gRPC Prototypes\" />
+	</ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
+		</Protobuf>
+
+		<Protobuf Include="../../../document-triage-service/src/Protos/documentTriage.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\documentTriage.proto</Link>
+		</Protobuf>
+
+		<Protobuf Include="../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
+		</Protobuf>
+    </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
   </ItemGroup>
 
