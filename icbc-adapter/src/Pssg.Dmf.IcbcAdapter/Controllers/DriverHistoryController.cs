@@ -11,10 +11,12 @@ using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
 
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DriverHistoryController : Controller
