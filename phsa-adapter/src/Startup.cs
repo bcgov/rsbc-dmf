@@ -126,6 +126,9 @@ namespace Rsbc.Dmf.PhsaAdapter
             services.RemoveAll<OutputFormatterSelector>();
             services.TryAddSingleton<OutputFormatterSelector, FhirOutputFormatterSelector>();
 
+            // Add an authorization handler that will be used to determine if FHIR OAUTH is enabled.
+            services.AddSingleton<IAuthorizationHandler, FhirOauthRequirementHandler>();
+
             services.AddAuthentication()
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication",
                     options => { })
@@ -158,9 +161,10 @@ namespace Rsbc.Dmf.PhsaAdapter
                 options.AddPolicy("OAuth", policy =>
                 {
                     policy.AddAuthenticationSchemes("introspection");
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireClaim("scope", "phsa-adapter");
-                });
+                    //policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new FhirOauthRequirement());                    
+                });                
+                
             });
 
             services.AddSwaggerGen(c =>
