@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddEnvironmentVariables()
                 .Build();
 
-            IcbcClient = new IcbcClient(Configuration);
+            IcbcClient = new IcbcClient(Configuration);          
         }
 
 
