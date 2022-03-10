@@ -52,9 +52,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
-
+            
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
+            
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
                 // Configure JWT authentication
@@ -62,6 +63,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                    
                 }).AddJwtBearer(o =>
                 {
                     o.SaveToken = true;
@@ -75,6 +79,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
                 });
+            
 
             services.AddAuthorization();
 

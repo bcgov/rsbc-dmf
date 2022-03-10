@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
+using System.Web;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -94,9 +95,25 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         { }
 
 
-        private void Login()
-        {
-            // TODO - do a JWT login
+        private async void Login()
+        {            
+            // determine if authentication is enabled.
+
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                string encodedSecret = HttpUtility.UrlEncode(Configuration["JWT_TOKEN_KEY"]);
+                var request = new HttpRequestMessage(HttpMethod.Get, "/Authentication/Token?secret=" + encodedSecret);
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                response.EnsureSuccessStatusCode();
+
+                var token = await response.Content.ReadAsStringAsync();
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    // Add the bearer token to the client.
+                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                }
+            }
 
         }
 
