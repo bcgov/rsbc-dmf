@@ -54,8 +54,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             _documentTriageClient = documentTriageClient;
         }
 
-        [HttpGet("metadata")]
-        [AllowAnonymous]
+        [HttpGet("metadata")]        
         public FhirResponse GetMetaData()
         {
             CapabilityStatement capabilityStatement = new CapabilityStatement()
@@ -139,8 +138,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet("Patient/{id}")]
-        [AllowAnonymous]
+        [HttpGet("Patient/{id}")]        
         public IActionResult GetPatient([FromRoute] string id)
         {
             Patient result = new Patient()
@@ -167,8 +165,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return new JsonResult(result);
         }
 
-        [HttpGet("Practitioner/{id}")]
-        [AllowAnonymous]
+        [HttpGet("Practitioner/{id}")]        
         public IActionResult GetPractitioner([FromRoute] string id)
         {
             Practitioner result = new Practitioner()
@@ -244,8 +241,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Bundle/{id}")]
-        [AllowAnonymous]
+        [HttpGet("Bundle/{id}")]        
         public async Task<FhirResponse> GetBundle([FromRoute] string id)
         {
             Response.ContentType = "application/json";
@@ -536,8 +532,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return Respond.WithResource(result);
         }
 
-        [HttpPut("Bundle/{id}")]
-        [AllowAnonymous]
+        [HttpPut("Bundle/{id}")]        
         public void PutBundle([FromBody] Bundle bundle, [FromRoute] string id)
         {
             FhirJsonSerializer serializer = new FhirJsonSerializer();
@@ -545,9 +540,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             _logger.LogInformation(Newtonsoft.Json.JsonConvert.SerializeObject(bundle.Children));
         }
 
-        // save draft functionality
-        [HttpPost("Bundle")]
-        [AllowAnonymous]
+        // save draft / form submit functionality
+        [HttpPost("Bundle")]        
         public async Task<IActionResult> PostBundle()
         {
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -664,8 +658,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return Ok();
         }
 
-        [HttpGet("QuestionnaireResponse/{id}")]
-        [AllowAnonymous]
+        [HttpGet("QuestionnaireResponse/{id}")]        
         public Questionnaire GetQuestionnaire([FromRoute] string id)
         {
             Questionnaire result = new Questionnaire();
