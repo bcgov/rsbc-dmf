@@ -100,21 +100,29 @@ namespace Pssg.IcbcAdapter.Tests
         /// Test the MS Dynamics interface
         /// </summary>
         [Fact]
-        public async void TestGetCase()
+        public async void TestCaseExist()
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
             Login();
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/Cases?driversLicence=" + testDl);
+            var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?driversLicence=" + testDl);
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
+        }
 
-            
+        [Fact]
+        public async void TestCaseDocuments()
+        {
+            string testDl = Configuration["ICBC_TEST_DL"];
 
-            
+            Login();
 
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Cases/Documents");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
         }
     }
 }
