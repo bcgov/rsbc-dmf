@@ -27,17 +27,25 @@ namespace Pssg.IcbcAdapter.Controllers
         }
 
 
-        // GET: /DriverHistory
-        [HttpGet()]
-        public ActionResult GetCase(string driversLicence)
+        // GET: /Cases/Exist
+        [HttpGet("Exist")]
+        public ActionResult DoesCaseExist(string driversLicense, string surcode)
         {
+            bool result = false;
             // get the case
             
-            string result = "test";
-
-                        
+                                    
             return Json (result);
         }
+
+        [HttpPost("Documents")]
+        // allow large uploads
+        [DisableRequestSizeLimit]
+        public async Task<IActionResult> UpdateCaseDocuments([FromForm] string driversLicense, [FromForm] string surcodee,
+            [FromForm] IFormFile file)
+        {
+            return Ok();
+        }        
 
     }
 }
