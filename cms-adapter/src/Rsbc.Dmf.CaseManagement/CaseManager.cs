@@ -21,6 +21,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<List<Flag>> GetAllFlags();
 
+        Task<CaseSearchReply> GetUnsentMedicalUpdates();
+
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
     }
 
@@ -314,8 +316,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             string result = "In Progress";
             
-            // add extra logic here.
-
+            // add extra logic here.            
             return result;
         }
 
@@ -436,6 +437,26 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+        public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
+        {
+            var caseQuery = dynamicsContext.incidents
+                .Expand(i => i.dfp_DriverId)
+                .Expand(i => i.customerid_contact)
+                .Expand(i => i.dfp_ClinicId)
+                .Expand(i => i.dfp_MedicalPractitionerId)
+                .Where(i => i.dfp_datesenttoicbc == null);
+            var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
+
+            foreach (var @case in cases)
+            {
+                await LazyLoadProperties(@case);
+            }
+
+            dynamicsContext.DetachAll();
+
+            return MapCases(cases);            
         }
 
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)

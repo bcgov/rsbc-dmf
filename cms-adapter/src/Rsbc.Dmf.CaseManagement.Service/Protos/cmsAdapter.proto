@@ -21,7 +21,9 @@ service CaseManager {
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
   // Get all the flags
-  rpc GetAllFlags(GetAllFlagsRequest) returns (GetAllFlagsReply);
+  rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
+
+  rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
 }
 
 message SearchRequest {
@@ -38,7 +40,7 @@ message SearchReply {
   string errorDetail = 3;
 }
 
-message GetAllFlagsRequest {	
+message EmptyRequest {	
 }
 
 message GetAllFlagsReply {

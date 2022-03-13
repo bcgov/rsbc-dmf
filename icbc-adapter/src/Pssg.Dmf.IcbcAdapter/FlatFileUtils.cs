@@ -248,6 +248,27 @@ namespace Rsbc.Dmf.IcbcAdapter
         private List<MedicalUpdate> GetMedicalUpdateData ()
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
+
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            foreach (DmerCase item in unsentItems.Items)
+            {
+                var newUpdate = new MedicalUpdate()
+                {
+                     LicenseNumber = item.Driver.DriverLicenceNumber,
+                     Surname = item.Driver.Surname,                     
+                };
+
+                // TODO - logic for the P / J
+
+                newUpdate.MedicalDisposition = "P";
+
+                DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
+
+                newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
+
+                data.Add(newUpdate);
+            }
+
             return data;
         }
 
