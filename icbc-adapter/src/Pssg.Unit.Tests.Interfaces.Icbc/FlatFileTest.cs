@@ -39,13 +39,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async void BasicConnectionTest()
         {
-            flatFileUtils.CheckForWork(null);
+            flatFileUtils.CheckForCandidates(null);
         }
 
         [Fact]
         public async void TestGetUpdates()
         {
-            flatFileUtils.CheckForWork(null);
+            flatFileUtils.CheckForCandidates(null);
         }
 
         [Fact]

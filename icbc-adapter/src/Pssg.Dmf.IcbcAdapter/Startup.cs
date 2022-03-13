@@ -316,7 +316,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    Log.Logger.Information("Creating Hangfire jobs for License issuance check ...");
+                    Log.Logger.Information("Creating Hangfire jobs for check candidates ...");
 
                     string interval = Cron.Hourly();
                     if (!string.IsNullOrEmpty(Configuration["QUEUE_CHECK_INTERVAL"]))
@@ -324,7 +324,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                         interval = (Configuration["QUEUE_CHECK_INTERVAL"]);
                     }
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration).CheckForWork(null), interval);
+                    var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
+
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), interval);
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }

@@ -7,6 +7,10 @@ option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service";
 package CaseManagement;
 
 service CaseManager {
+
+  // process a line item from the legacy candidate list
+  rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
+
   // Seach cases. Can also return a specific case.
   rpc Search (SearchRequest) returns (SearchReply);
 
@@ -123,6 +127,20 @@ message UpdateCaseReply {
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 }
+
+
+message LegacyCandidateRequest{
+	string licenseNumber = 1;
+    string clientNumber = 2;
+	string surname = 3;
+}
+
+message LegacyCandidateReply{
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+}
+
+
 
 message FlagItem {
 	string identifier = 1;
