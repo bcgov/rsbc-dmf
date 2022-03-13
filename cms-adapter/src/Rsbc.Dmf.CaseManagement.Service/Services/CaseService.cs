@@ -28,6 +28,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _caseManager = caseManager;
         }
 
+
+        public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
+        {
+            var reply = new LegacyCandidateReply();
+
+            // start by checking to see if there is an existing case.
+
+            try
+            {
+                var searchRequest = new LegacyCandidateSearchRequest()
+                {
+                    DriverLicenseNumber = request.LicenseNumber,
+                    Surname = request.Surname
+                };
+                var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
+
+                if (searchResult != null && searchResult.Items.Count() > 0)
+                {
+                    // case exists.
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    // create the case.
+                    await _caseManager.LegacyCandidateCreate(searchRequest);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+                      
+            return reply;
+        }
+
+
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
             var reply = new SearchReply();
