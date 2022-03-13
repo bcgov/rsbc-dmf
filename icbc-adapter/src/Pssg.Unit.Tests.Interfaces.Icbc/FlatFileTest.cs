@@ -11,7 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
-
+using System.Net.Http;
+using System.Net;
+using Grpc.Net.Client;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -20,6 +23,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
         IConfiguration Configuration;
         FlatFileUtils flatFileUtils;
+        CaseManagement.Service.CaseManager.CaseManagerClient caseManagerClient;
 
         /// <summary>
         /// Setup the test
@@ -32,7 +36,46 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
                 .Build();
-            flatFileUtils = new FlatFileUtils(Configuration);
+            // create a new case manager client.
+
+            string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(cmsAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    {
+                        Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+                }
+
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                caseManagerClient = new CaseManager.CaseManagerClient(channel);
+            }
+             
+            flatFileUtils = new FlatFileUtils(Configuration,caseManagerClient);
         }
 
 
