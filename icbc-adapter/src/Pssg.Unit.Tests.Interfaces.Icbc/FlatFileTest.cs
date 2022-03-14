@@ -114,5 +114,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var records = engine.ReadString(sampleData);
             Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0, 7));
         }
+        
+        [Fact]
+        public async void CandidateListTest()
+        {
+            LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+            {
+                LicenseNumber = Configuration["ICBC_TEST_DL"],
+                Surname = Configuration["ICBC_TEST_SURNAME"],
+                ClientNumber = String.Empty,
+            };
+            var result = caseManagerClient.ProcessLegacyCandidate(lcr);
+            Assert.NotNull(result);            
+        }
     }
 }
