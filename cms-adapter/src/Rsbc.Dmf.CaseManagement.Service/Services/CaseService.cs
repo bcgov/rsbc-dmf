@@ -28,6 +28,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _caseManager = caseManager;
         }
 
+
+        public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
+        {
+            var reply = new LegacyCandidateReply();
+
+            // start by checking to see if there is an existing case.
+
+            try
+            {
+                var searchRequest = new LegacyCandidateSearchRequest()
+                {
+                    DriverLicenseNumber = request.LicenseNumber,
+                    Surname = request.Surname
+                };
+                var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
+
+                if (searchResult != null && searchResult.Items.Count() > 0)
+                {
+                    // case exists.
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    // create the case.
+                    await _caseManager.LegacyCandidateCreate(searchRequest);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+                      
+            return reply;
+        }
+
+
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
             var reply = new SearchReply();
@@ -195,7 +233,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<GetAllFlagsReply> GetAllFlags(GetAllFlagsRequest request, ServerCallContext context)
+        public async override Task<GetAllFlagsReply> GetAllFlags(EmptyRequest request, ServerCallContext context)
         {
             var reply = new GetAllFlagsReply();
             var flags = await _caseManager.GetAllFlags();
@@ -209,6 +247,86 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 };
                 reply.Flags.Add(newFlag);
             }
+
+            return reply;
+        }
+
+
+        public async override Task<SearchReply> GetUnsentMedicalUpdates(EmptyRequest request, ServerCallContext context)
+        {
+            var data = await _caseManager.GetUnsentMedicalUpdates();
+                
+            var cases = data.Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
+
+            SearchReply reply = new SearchReply(); 
+
+            reply.Items.Add(cases.Select(c =>
+            {
+                Provider provider = null;
+                if (c.Provider != null)
+                {
+                    provider = new Provider()
+                    {
+                        Id = c.Provider.Id,
+                        Address = new Address()
+                        {
+                            City = c.Provider.Address.City ?? string.Empty,
+                            Postal = c.Provider.Address.Postal ?? string.Empty,
+                            Line1 = c.Provider.Address.Line1 ?? string.Empty,
+                            Line2 = c.Provider.Address.Line2 ?? string.Empty,
+                        },
+                        FaxNumber = c.Provider.FaxNumber ?? string.Empty,
+                        FaxUseType = c.Provider.FaxUseType ?? string.Empty,
+                        GivenName = c.Provider.GivenName ?? string.Empty,
+                        Surname = c.Provider.Surname ?? string.Empty,
+                        Name = c.Provider.Name ?? string.Empty,
+                        PhoneExtension = c.Provider.PhoneExtension ?? string.Empty,
+                        PhoneNumber = c.Provider.PhoneNumber ?? string.Empty,
+                        PhoneUseType = c.Provider.PhoneUseType ?? string.Empty,
+                        ProviderDisplayId = c.Provider.ProviderDisplayId ?? string.Empty,
+                        ProviderDisplayIdType = c.Provider.ProviderDisplayIdType ?? string.Empty,
+                        ProviderRole = c.Provider.ProviderRole ?? string.Empty,
+                        ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
+                    };
+                }
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    Title = c.Title,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    Driver = new Driver()
+                    {
+                        Id = c.Driver.Id,
+                        Surname = c.Driver.Surname ?? string.Empty,
+                        GivenName = c.Driver.GivenName ?? string.Empty,
+                        BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
+                        DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
+                        Address = new Address()
+                        {
+                            City = c.Driver.Address.City ?? string.Empty,
+                            Postal = c.Driver.Address.Postal ?? string.Empty,
+                            Line1 = c.Driver.Address.Line1 ?? string.Empty,
+                            Line2 = c.Driver.Address.Line2 ?? string.Empty,
+                        },
+                        Sex = c.Driver.Sex ?? string.Empty,
+                        Name = c.Driver.Name ?? string.Empty
+                    },
+                    Provider = provider,
+                    IsCommercial = c.IsCommercial,
+                    ClinicName = c.ClinicName ?? string.Empty,
+                    Status = c.Status
+                };
+                newCase.Flags.Add(c.Flags.Select(f => new FlagItem
+                {
+                    Identifier = f.Id,
+                    Question = f.Description ?? "Unknown",
+                    FlagType = ConvertFlagType(f.FlagType)
+                }));
+                return newCase;
+            }));
 
             return reply;
         }

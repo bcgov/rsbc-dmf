@@ -18,6 +18,7 @@ using SharedUtils;
 using FileHelpers;
 using Pssg.Interfaces.FlatFileModels;
 using Pssg.Interfaces.Icbc.FlatFileModels;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -32,11 +33,13 @@ namespace Rsbc.Dmf.IcbcAdapter
         
 
         private IConfiguration _configuration { get; }
+        private readonly CaseManager.CaseManagerClient _caseManagerClient;
 
-        public FlatFileUtils(IConfiguration configuration)
+
+        public FlatFileUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
         {
             _configuration = configuration;
-            
+            _caseManagerClient = caseManagerClient;
         }
 
         /// <summary>
@@ -105,9 +108,9 @@ namespace Rsbc.Dmf.IcbcAdapter
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
         [AutomaticRetry(Attempts = 0)]
-        public async Task CheckForWork(PerformContext hangfireContext)
+        public async Task CheckForCandidates(PerformContext hangfireContext)
         {            
-            LogStatement(hangfireContext, "Starting check for work.");
+            LogStatement(hangfireContext, "Starting check for Candidates.");
 
             // Attempt to connect to a SCP server.
 
@@ -162,13 +165,21 @@ namespace Rsbc.Dmf.IcbcAdapter
                         foreach (var record in records)
                         {
                             LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                            // Add / Update cases
+                            LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+                            {
+                                 LicenseNumber = record.LicenseNumber,
+                                 Surname = record.Surname,
+                                 ClientNumber = record.ClientNumber,
+                            };
+                            _caseManagerClient.ProcessLegacyCandidate(lcr);
                         }
 
                     }
                 }
             }
            
-            LogStatement(hangfireContext, "End of check for work.");            
+            LogStatement(hangfireContext, "End of check for Candidates.");            
         }
 
 
@@ -237,6 +248,27 @@ namespace Rsbc.Dmf.IcbcAdapter
         private List<MedicalUpdate> GetMedicalUpdateData ()
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
+
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            foreach (DmerCase item in unsentItems.Items)
+            {
+                var newUpdate = new MedicalUpdate()
+                {
+                     LicenseNumber = item.Driver.DriverLicenceNumber,
+                     Surname = item.Driver.Surname,                     
+                };
+
+                // TODO - logic for the P / J
+
+                newUpdate.MedicalDisposition = "P";
+
+                DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
+
+                newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
+
+                data.Add(newUpdate);
+            }
+
             return data;
         }
 
