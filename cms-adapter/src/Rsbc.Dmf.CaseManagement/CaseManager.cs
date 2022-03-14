@@ -13,19 +13,32 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
+        Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
+
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request);
+
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
         Task<List<Flag>> GetAllFlags();
 
+        Task<CaseSearchReply> GetUnsentMedicalUpdates();
+
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
     }
+
 
     public class CaseSearchRequest
     {
         public string CaseId { get; set; }
         public string Title { get; set; }
         public string DriverLicenseNumber { get; set; }
-        public string ClinicId { get; set; }
+        public string ClinicId { get; set; }        
+    }
+
+    public class LegacyCandidateSearchRequest
+    {
+        public string DriverLicenseNumber {  get; set;}
+        public string Surname { get; set; }
     }
 
     public class CaseSearchReply
@@ -118,6 +131,35 @@ namespace Rsbc.Dmf.CaseManagement
             this.logger = logger;
         }
 
+
+        private async Task LazyLoadProperties(incident @case)
+        {
+            //load clinic details (assuming customer as clinic for now)
+            if (@case.customerid_contact == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
+
+            if (@case._dfp_driverid_value.HasValue)
+            {
+                //load driver info
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+                if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+            }
+
+            if (@case._dfp_medicalpractitionerid_value.HasValue)
+            {
+                //load driver info
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_MedicalPractitionerId));
+                if (@case.dfp_MedicalPractitionerId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_MedicalPractitionerId, nameof(incident.dfp_MedicalPractitionerId.dfp_PersonId));
+            }
+
+            //load case's flags
+            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_dmerflag));
+            foreach (var flag in @case.dfp_incident_dfp_dmerflag)
+            {
+                await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
+            }
+        }
+
+
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
             //search matching cases
@@ -126,35 +168,18 @@ namespace Rsbc.Dmf.CaseManagement
             //lazy load case related properties
             foreach (var @case in cases)
             {
-                //load clinic details (assuming customer as clinic for now)
-                if (@case.customerid_contact == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
-
-                if (@case._dfp_driverid_value.HasValue)
-                {
-                    //load driver info
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                    if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
-                }
-
-                if (@case._dfp_medicalpractitionerid_value.HasValue)
-                {
-                    //load driver info
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_MedicalPractitionerId));
-                    if (@case.dfp_MedicalPractitionerId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_MedicalPractitionerId, nameof(incident.dfp_MedicalPractitionerId.dfp_PersonId));
-                }
-
-                //load case's flags
-                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_dmerflag));
-                foreach (var flag in @case.dfp_incident_dfp_dmerflag)
-                {
-                    await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
-                }
+                await LazyLoadProperties(@case);
             }
 
             dynamicsContext.DetachAll();
             
-
             //map cases from query results (TODO: consider replacing with AutoMapper)
+            return MapCases(cases);            
+        }
+
+        //map cases from query results (TODO: consider replacing with AutoMapper)
+        private CaseSearchReply MapCases(IEnumerable<incident> cases)
+        {            
             return new CaseSearchReply
             {
                 Items = cases.Select(c =>
@@ -190,8 +215,7 @@ namespace Rsbc.Dmf.CaseManagement
                     else
                     {
                         provider = null;
-                    }
-
+                    }                
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
@@ -231,18 +255,68 @@ namespace Rsbc.Dmf.CaseManagement
                                 Id = f.dfp_FlagId?.dfp_id,
                                 Description = f.dfp_FlagId?.dfp_description
                             }).ToArray(),
-                        Status = TranslateStatus (c.statuscode)
+                        Status = TranslateStatus(c.statuscode)
                     };
                 }).ToArray()
             };
+
+       }
+
+
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request)
+        {
+            Guid? driverId = Guid.Empty;
+            var driverQuery = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.dfp_PersonId.lastname == request.Surname);
+            var driverResults = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+            if (driverResults.Length > 0)
+            {
+                driverId = driverResults[0].dfp_driverid;
+            }
+            else // create the driver.
+            {
+                var newDriver = new dfp_driver()
+                {
+                    dfp_licensenumber = request.DriverLicenseNumber,
+                    dfp_PersonId = new contact()
+                    {
+                         lastname = request.Surname
+                    }
+                };
+                dynamicsContext.AddTodfp_drivers(newDriver);
+                driverId = newDriver.dfp_driverid;
+            }
+            // create the case.
+            incident @case = new incident()
+            {                  
+                  dfp_DriverId = new dfp_driver { dfp_driverid = driverId },
+            };
+            dynamicsContext.AddToincidents(@case);
         }
+
+
+            public async Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request)
+            {
+            //search matching cases
+            var cases = await SearchLegacyCandidate(dynamicsContext, request);
+
+            //lazy load case related properties
+            foreach (var @case in cases)
+            {
+                await LazyLoadProperties(@case);
+            }
+
+            dynamicsContext.DetachAll();
+
+            return MapCases(cases);
+        }
+
+
 
         private string TranslateStatus (int? statuscode)
         {
             string result = "In Progress";
             
-            // add extra logic here.
-
+            // add extra logic here.            
             return result;
         }
 
@@ -295,6 +369,36 @@ namespace Rsbc.Dmf.CaseManagement
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
         }
 
+
+        private static async Task<IEnumerable<incident>> SearchLegacyCandidate(DynamicsContext ctx, LegacyCandidateSearchRequest criteria)
+        {
+            var shouldSearchCases =
+                !string.IsNullOrEmpty(criteria.DriverLicenseNumber) ||
+                !string.IsNullOrEmpty(criteria.Surname);
+
+            if (!shouldSearchCases) return Array.Empty<incident>();
+
+            Guid? driverId = Guid.Empty;            
+            var driverQuery = ctx.dfp_drivers.Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber && d.dfp_PersonId.lastname == criteria.Surname);
+            var driverResults = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+            if (driverResults.Length > 0)
+            {
+                driverId = driverResults[0].dfp_driverid;
+                var caseQuery = ctx.incidents
+                .Expand(i => i.dfp_DriverId)
+                .Expand(i => i.customerid_contact)
+                .Expand(i => i.dfp_ClinicId)
+                .Expand(i => i.dfp_MedicalPractitionerId)
+                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER && i._dfp_driverid_value == driverId);
+
+                return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
+            }
+            else
+            {
+                return Array.Empty<incident>();
+            }
+        }
+
         private static async Task<IEnumerable<incident>> SearchDriverCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
             var shouldSearchDrivers = !string.IsNullOrEmpty(criteria.DriverLicenseNumber);
@@ -333,6 +437,26 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+        public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
+        {
+            var caseQuery = dynamicsContext.incidents
+                .Expand(i => i.dfp_DriverId)
+                .Expand(i => i.customerid_contact)
+                .Expand(i => i.dfp_ClinicId)
+                .Expand(i => i.dfp_MedicalPractitionerId)
+                .Where(i => i.dfp_datesenttoicbc == null);
+            var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
+
+            foreach (var @case in cases)
+            {
+                await LazyLoadProperties(@case);
+            }
+
+            dynamicsContext.DetachAll();
+
+            return MapCases(cases);            
         }
 
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)

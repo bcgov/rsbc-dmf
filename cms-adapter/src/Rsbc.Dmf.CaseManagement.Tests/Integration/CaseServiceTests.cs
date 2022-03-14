@@ -45,7 +45,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetFlags()
         {
-            var request = new GetAllFlagsRequest();
+            var request = new EmptyRequest();
 
             var queryResults = (await caseService.GetAllFlags(request, null)).Flags;
 
