@@ -51,13 +51,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                 string.IsNullOrEmpty(key));
         }
 
-        private ConnectionInfo GetConnectionInfo (string host, string username, string password, string key)
+        private ConnectionInfo GetConnectionInfo (string host, string username, string password, string keyUser, string key)
         {
             // note - key must be in RSA format.  If your key is in OpenSSH format, use this to convert it:
             // ssh-keygen -p -P "" -N "" -m pem -f \path\to\key\file
             // (above command will overwrite your key file)
 
-            byte[] keyData = Encoding.ASCII.GetBytes(key);
+            byte[] keyData = Encoding.UTF8.GetBytes(key);
 
             PrivateKeyFile pkf = null;
 
@@ -67,8 +67,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 
             var connectionInfo = new ConnectionInfo(host,
-                                    username,                                    
-                                    new PrivateKeyAuthenticationMethod(username, pkf));
+                                    username,                                     
+                                    new PrivateKeyAuthenticationMethod(keyUser, pkf));
 
             return connectionInfo;
         }
@@ -86,7 +86,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string username = _configuration["SCP_USER"];
             string password = _configuration["SCP_PASS"];
             string host = _configuration["SCP_HOST"];
-            //string keyUser = _configuration["SCP_KEY_USER"];
+            string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
             if (!CheckScpSettings(host, username, password, key))
@@ -95,7 +95,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {                
-                var connectionInfo = GetConnectionInfo (host, username, password, key);
+                var connectionInfo = GetConnectionInfo (host, username, password, keyUser, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                var connectionInfo = GetConnectionInfo(host, username, password, key);
+                var connectionInfo = GetConnectionInfo(host, username, password, keyUser, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
@@ -201,7 +201,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                var connectionInfo = GetConnectionInfo(host, username, password, key);
+                var connectionInfo = GetConnectionInfo(host, username, password, keyUser, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
