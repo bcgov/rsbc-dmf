@@ -51,7 +51,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 string.IsNullOrEmpty(key));
         }
 
-        private ConnectionInfo GetConnectionInfo (string host, string username, string password, string key, string keyUser)
+        private ConnectionInfo GetConnectionInfo (string host, string username, string password, string key)
         {
             // note - key must be in RSA format.  If your key is in OpenSSH format, use this to convert it:
             // ssh-keygen -p -P "" -N "" -m pem -f \path\to\key\file
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                var connectionInfo = GetConnectionInfo(host, username, password, key, keyUser);
+                var connectionInfo = GetConnectionInfo(host, username, password, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
@@ -201,7 +201,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                var connectionInfo = GetConnectionInfo(host, username, password, key, keyUser);
+                var connectionInfo = GetConnectionInfo(host, username, password, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
