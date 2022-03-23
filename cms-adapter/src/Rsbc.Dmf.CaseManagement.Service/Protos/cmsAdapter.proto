@@ -24,6 +24,8 @@ service CaseManager {
   rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
 
   rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
+
+  rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 }
 
 message SearchRequest {
@@ -60,6 +62,7 @@ message DmerCase {
 	string status = 12;
 	string clinicName = 13;
 	repeated FlagItem Flags = 30;
+	repeated DecisionItem Decisions = 35;
 }
 
 message Driver {
@@ -158,6 +161,18 @@ message FlagItem {
 	FlagTypeOptions flagType = 4;
 }
 
+message DecisionItem {
+	string identifier = 1;
+	google.protobuf.Timestamp createdOn = 2;
+	enum DecisionOutcomeOptions {
+		Unknown = 0;
+		FitToDrive = 1;
+        NonComply = 2;
+        UnfitToDrive = 3;
+	}
+	DecisionOutcomeOptions outcome = 3;
+}
+
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
@@ -227,5 +242,14 @@ message DriverProfile {
 enum UserType {
 	MedicalPractitionerUserType = 0;
 	DriverUserType = 1;
+}
+
+message IdListRequest {
+	repeated string idList = 1;
+}
+
+message ResultStatusReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
 }
 
