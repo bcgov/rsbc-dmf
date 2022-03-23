@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
@@ -233,6 +234,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+
+        DecisionOutcomeOptions ConvertDecisionOutcome(DecisionOutcome? value)
+        {
+            DecisionOutcomeOptions result = DecisionOutcomeOptions.Unknown;
+            switch (value)
+            {
+                case DecisionOutcome.NonComply:
+                    result = DecisionOutcomeOptions.NonComply;
+                    break;
+                case DecisionOutcome.FitToDrive:
+                    result = DecisionOutcomeOptions.FitToDrive;
+                    break;
+                case DecisionOutcome.UnfitToDrive:
+                    result = DecisionOutcomeOptions.UnfitToDrive;
+                    break;                
+            }
+
+            return result;
+        }
+
+
         public async override Task<GetAllFlagsReply> GetAllFlags(EmptyRequest request, ServerCallContext context)
         {
             var reply = new GetAllFlagsReply();
@@ -325,11 +347,39 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Question = f.Description ?? "Unknown",
                     FlagType = ConvertFlagType(f.FlagType)
                 }));
+
+                newCase.Decisions.Add(c.Decisions.Select(d => new DecisionItem
+                {
+                    Identifier = d.Id,
+                    Outcome = ConvertDecisionOutcome(d.Outcome),
+                    CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
+                }));
+
                 return newCase;
             }));
 
             return reply;
         }
+
+        public async override Task<ResultStatusReply> MarkMedicalUpdatesSent(IdListRequest request, ServerCallContext context)
+        {
+            ResultStatusReply result = new ResultStatusReply();
+            try
+            {
+                await _caseManager.MarkMedicalUpdatesSent(request.IdList.ToList());
+                
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+            
+            return result;
+        }
+
+        
 
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
