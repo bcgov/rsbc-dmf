@@ -19,6 +19,7 @@ using FileHelpers;
 using Pssg.Interfaces.FlatFileModels;
 using Pssg.Interfaces.Icbc.FlatFileModels;
 using Rsbc.Dmf.CaseManagement.Service;
+using System.Linq;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -42,6 +43,36 @@ namespace Rsbc.Dmf.IcbcAdapter
             _caseManagerClient = caseManagerClient;
         }
 
+        private bool CheckScpSettings(string host, string username, string password, string key)
+        {
+            return string.IsNullOrEmpty(host) ||
+                string.IsNullOrEmpty(username) ||
+                !(string.IsNullOrEmpty(password) &&
+                string.IsNullOrEmpty(key));
+        }
+
+        private ConnectionInfo GetConnectionInfo (string host, string username, string password, string key)
+        {
+            // note - key must be in RSA format.  If your key is in OpenSSH format, use this to convert it:
+            // ssh-keygen -p -P "" -N "" -m pem -f \path\to\key\file
+            // (above command will overwrite your key file)
+
+            byte[] keyData = Encoding.ASCII.GetBytes(key);
+
+            PrivateKeyFile pkf = null;
+
+            using (var privateKeyStream = new MemoryStream(keyData))
+            {
+                pkf = new PrivateKeyFile(privateKeyStream);
+            }
+
+            var connectionInfo = new ConnectionInfo(host,
+                                    username,                                    
+                                    new PrivateKeyAuthenticationMethod(username, pkf));
+
+            return connectionInfo;
+        }
+
         /// <summary>
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
@@ -55,33 +86,16 @@ namespace Rsbc.Dmf.IcbcAdapter
             string username = _configuration["SCP_USER"];
             string password = _configuration["SCP_PASS"];
             string host = _configuration["SCP_HOST"];
-            string keyUser = _configuration["SCP_KEY_USER"];
+            //string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (string.IsNullOrEmpty(host) ||
-                string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(password) ||
-                string.IsNullOrEmpty(key)
-                )
-
+            if (!CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
             else
-            {
-                MemoryStream keyStream = new MemoryStream();
-                StreamWriter writer = new StreamWriter(keyStream);
-                writer.Write(key);
-                writer.Flush();
-                keyStream.Position = 0;
-
-                PrivateKeyFile pkf = new PrivateKeyFile(keyStream);
-
-                var connectionInfo = new ConnectionInfo(host,
-                                        username,
-                                        new PasswordAuthenticationMethod(username, password),
-                                        new PrivateKeyAuthenticationMethod(keyUser, pkf));
-
+            {                
+                var connectionInfo = GetConnectionInfo (host, username, password, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
@@ -120,32 +134,15 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (string.IsNullOrEmpty(host) || 
-                string.IsNullOrEmpty(username) || 
-                string.IsNullOrEmpty(password) ||
-                string.IsNullOrEmpty(key)
-                )
-
+            if (!CheckScpSettings(host, username, password, key))
             {
                 LogStatement (hangfireContext, "No SCP configuration, skipping check for work.");
             }
             else
             {
-                MemoryStream keyStream = new MemoryStream();
-                StreamWriter writer = new StreamWriter(keyStream);
-                writer.Write(key);
-                writer.Flush();
-                keyStream.Position = 0;
+                var connectionInfo = GetConnectionInfo(host, username, password, key);
 
-                PrivateKeyFile pkf = new PrivateKeyFile(keyStream);
-
-                var connectionInfo = new ConnectionInfo(host,
-                                        username,
-                                        new PasswordAuthenticationMethod(username, password),
-                                        new PrivateKeyAuthenticationMethod(keyUser,  pkf));
-                
-
-            using (var client = new SftpClient(connectionInfo))
+                using (var client = new SftpClient(connectionInfo))
                 {
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
@@ -182,10 +179,6 @@ namespace Rsbc.Dmf.IcbcAdapter
             LogStatement(hangfireContext, "End of check for Candidates.");            
         }
 
-
-        
-
-
         /// <summary>
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
@@ -202,26 +195,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (string.IsNullOrEmpty(host) ||
-                string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(password) ||
-                string.IsNullOrEmpty(key)
-                )
-
+            if (!CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
             else
             {
-                MemoryStream keyStream = StringUtility.StringToStream(key);
-
-                PrivateKeyFile pkf = new PrivateKeyFile(keyStream);
-
-                var connectionInfo = new ConnectionInfo(host,
-                                        username,
-                                        new PasswordAuthenticationMethod(username, password),
-                                        new PrivateKeyAuthenticationMethod(keyUser, pkf));
-
+                var connectionInfo = GetConnectionInfo(host, username, password, key);
 
                 using (var client = new SftpClient(connectionInfo))
                 {
@@ -231,7 +211,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                     // construct the medical update file
                     string fileName = GetMedicalUpdateFilename();
 
-                    List<MedicalUpdate> updateList = GetMedicalUpdateData();
+                    var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+
+                    var updateList = GetMedicalUpdateData(unsentItems);
 
                     string rawData = GetMedicalUpdateString(updateList);
 
@@ -239,17 +221,30 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     // transfer it.
                     client.UploadFile(data, fileName);
+
+                    // mark as sent.
+                    MarkMedicalUpdatesSent(unsentItems);
                 }
             }
 
             LogStatement(hangfireContext, "End of SendMedicalUpdates.");
         }
 
-        private List<MedicalUpdate> GetMedicalUpdateData ()
+        private void MarkMedicalUpdatesSent (SearchReply unsentItems)
+        {
+            List<string> idList = new List<string>();
+            foreach (var item in unsentItems.Items)
+            {
+                idList.Add(item.CaseId);
+            }
+            //_caseManagerClient
+        }
+
+        private List<MedicalUpdate> GetMedicalUpdateData (SearchReply unsentItems)
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
 
-            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            
             foreach (DmerCase item in unsentItems.Items)
             {
                 var newUpdate = new MedicalUpdate()
@@ -258,9 +253,23 @@ namespace Rsbc.Dmf.IcbcAdapter
                      Surname = item.Driver.Surname,                     
                 };
 
-                // TODO - logic for the P / J
-
-                newUpdate.MedicalDisposition = "P";
+                var firstDecision = item.Decisions.OrderBy(x => x.CreatedOn).FirstOrDefault();
+                
+                if (firstDecision != null)
+                {
+                    if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                    {
+                        newUpdate.MedicalDisposition = "P";
+                    }
+                    else
+                    {
+                        newUpdate.MedicalDisposition = "J";
+                    }
+                }
+                else
+                {
+                    newUpdate.MedicalDisposition = "J";
+                }
 
                 DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
 

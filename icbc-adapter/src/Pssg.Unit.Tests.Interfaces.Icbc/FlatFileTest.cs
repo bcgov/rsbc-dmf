@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         public FlatFileTest()
         {
             Configuration = new ConfigurationBuilder()
-                // The following line is the only reason we have a project reference for the document storage adapter.
+                // The following line is the only reason we have a project reference for the icbc adapter in this test project
                 // If you were to use this code on a different project simply add user secrets as appropriate to match the environment / secret variables below.
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
@@ -82,7 +82,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async void BasicConnectionTest()
         {
-            flatFileUtils.CheckForCandidates(null);
+            flatFileUtils.CheckConnection(null);
         }
 
         [Fact]

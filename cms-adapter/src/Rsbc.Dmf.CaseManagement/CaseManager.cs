@@ -17,6 +17,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task LegacyCandidateCreate(LegacyCandidateSearchRequest request);
 
+        Task MarkMedicalUpdatesSent(List<string> ids);
+
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
         Task<List<Flag>> GetAllFlags();
@@ -108,6 +110,9 @@ namespace Rsbc.Dmf.CaseManagement
         public Driver Driver { get; set; }
         public Provider Provider { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
+
+        public IEnumerable<Decision> Decisions { get; set; }
+
         public string ClinicId { get; set; }
 
         public string ClinicName { get; set;}
@@ -118,6 +123,21 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public string Description { get; set; }
         public FlagTypeOptionSet? FlagType { get; set; }
+    }
+
+    public enum DecisionOutcome
+    {        
+        FitToDrive = 1,
+        NonComply = 2,
+        UnfitToDrive = 3
+    }
+
+    public class Decision
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public DateTimeOffset CreatedOn {  get; set;}
+        public DecisionOutcome? Outcome { get; set; }
     }
 
     internal class CaseManager : ICaseManager
@@ -157,8 +177,15 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
             }
-        }
 
+            //load decisions
+            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
+            foreach (var decision in @case.dfp_incident_dfp_decision)
+            {
+                await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
+                if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+            }
+        }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
@@ -177,9 +204,37 @@ namespace Rsbc.Dmf.CaseManagement
             return MapCases(cases);            
         }
 
+        private DecisionOutcome? TranslateDecisionOutcome(Guid? decisionId)
+        {
+            DecisionOutcome? result = null;
+            if (decisionId != null)
+            {
+                // get the decision record.
+                var d = dynamicsContext.dfp_decisions.Expand(x => x.dfp_OutcomeStatus)
+                    .First(x => x.dfp_decisionid == decisionId);
+                if (d != null && d.dfp_OutcomeStatus != null )
+                {
+                    switch (d.dfp_OutcomeStatus.dfp_name)
+                    {
+                        case "Fit to Drive":
+                            result = DecisionOutcome.FitToDrive;
+                            break;
+                        case "Non - Comply":
+                            result = DecisionOutcome.NonComply;
+                            break;
+                        case "Unfit to Drive":
+                            result = DecisionOutcome.UnfitToDrive;
+                            break;
+                    }
+                }
+            }
+            return result;
+        }
+
         //map cases from query results (TODO: consider replacing with AutoMapper)
         private CaseSearchReply MapCases(IEnumerable<incident> cases)
-        {            
+        {   
+            
             return new CaseSearchReply
             {
                 Items = cases.Select(c =>
@@ -255,6 +310,13 @@ namespace Rsbc.Dmf.CaseManagement
                                 Id = f.dfp_FlagId?.dfp_id,
                                 Description = f.dfp_FlagId?.dfp_description
                             }).ToArray(),
+                        Decisions = c.dfp_incident_dfp_decision
+                            .Select(d => new Decision
+                            {
+                                Id = d.dfp_decisionid.ToString(),
+                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus.dfp_outcomestatusid),
+                                CreatedOn = d.createdon ?? default
+                            }),                        
                         Status = TranslateStatus(c.statuscode)
                     };
                 }).ToArray()
@@ -292,6 +354,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
             dynamicsContext.AddToincidents(@case);
         }
+
 
 
             public async Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request)
@@ -389,6 +452,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER && i._dfp_driverid_value == driverId);
 
                 return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
@@ -446,6 +510,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.dfp_datesenttoicbc == null);
             var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
 
@@ -457,6 +522,20 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             return MapCases(cases);            
+        }
+
+        public async Task MarkMedicalUpdatesSent(List<string> ids)
+        {
+            DateTimeOffset dateSent = DateTimeOffset.UtcNow;
+            foreach (var id in ids)
+            {
+                var dmerEntity = dynamicsContext.incidents.First(x => x.incidentid == Guid.Parse(id));
+                dmerEntity.dfp_datesenttoicbc = dateSent;
+                dynamicsContext.UpdateObject(dmerEntity);
+            }
+            
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
         }
 
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
