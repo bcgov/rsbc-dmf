@@ -318,7 +318,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     Log.Logger.Information("Creating Hangfire jobs for check candidates ...");
 
-                    string interval = Cron.Hourly();
+                    string interval = Cron.Daily();
                     if (!string.IsNullOrEmpty(Configuration["QUEUE_CHECK_INTERVAL"]))
                     {
                         interval = (Configuration["QUEUE_CHECK_INTERVAL"]);
@@ -327,6 +327,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                     var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), interval);
+
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), interval);
+
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), interval);
+
+
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
