@@ -312,6 +312,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 hangfireContext.WriteLine(message);
             }
+            // emit to Serilog.
+            Log.Logger.Information(message);
         }
 
     }
