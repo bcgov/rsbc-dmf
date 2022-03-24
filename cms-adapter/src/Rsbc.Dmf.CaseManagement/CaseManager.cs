@@ -327,32 +327,59 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request)
         {
-            Guid? driverId = Guid.Empty;
-            var driverQuery = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.dfp_PersonId.lastname == request.Surname);
-            var driverResults = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+            //Guid? driverId = Guid.Empty;
+            //Guid? contactId = Guid.Empty;
+
+            dfp_driver driver;
+            contact driverContact;
+            Guid? driverContactId;
+
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber);
+            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+
+            var driverResults = data.Where(x => x?.dfp_PersonId?.lastname == request?.Surname).ToArray();
+
             if (driverResults.Length > 0)
             {
-                driverId = driverResults[0].dfp_driverid;
+                driver = driverResults[0];
+                driverContactId = driver.dfp_PersonId.contactid;
+                driverContact = driver.dfp_PersonId;
             }
             else // create the driver.
             {
-                var newDriver = new dfp_driver()
+                driverContact = new contact()
+                {
+                    lastname = request.Surname
+                };
+                dynamicsContext.AddTocontacts(driverContact);
+
+                driver = new dfp_driver()
                 {
                     dfp_licensenumber = request.DriverLicenseNumber,
-                    dfp_PersonId = new contact()
-                    {
-                         lastname = request.Surname
-                    }
+                    dfp_PersonId = driverContact
                 };
-                dynamicsContext.AddTodfp_drivers(newDriver);
-                driverId = newDriver.dfp_driverid;
+                dynamicsContext.AddTodfp_drivers(driver);
+                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
             }
+            //await dynamicsContext.SaveChangesAsync();
+
+            //var driverContact = dynamicsContext.contacts.Where(x => x.contactid == driverContactId).FirstOrDefault();
+
+
+
             // create the case.
             incident @case = new incident()
-            {                  
-                  dfp_DriverId = new dfp_driver { dfp_driverid = driverId },
+            {
+                customerid_contact = driverContact,
+                
+                dfp_DriverId = driver
             };
             dynamicsContext.AddToincidents(@case);
+            dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+            dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+            
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
         }
 
 
@@ -442,8 +469,11 @@ namespace Rsbc.Dmf.CaseManagement
             if (!shouldSearchCases) return Array.Empty<incident>();
 
             Guid? driverId = Guid.Empty;            
-            var driverQuery = ctx.dfp_drivers.Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber && d.dfp_PersonId.lastname == criteria.Surname);
-            var driverResults = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
+            var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber );
+            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+
+            var driverResults = data.Where (x => x?.dfp_PersonId?.lastname == criteria?.Surname).ToArray();
+
             if (driverResults.Length > 0)
             {
                 driverId = driverResults[0].dfp_driverid;

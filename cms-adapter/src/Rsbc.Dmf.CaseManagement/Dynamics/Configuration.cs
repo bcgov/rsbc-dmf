@@ -14,7 +14,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             services.AddHttpClient("adfs_token", (sp, c) =>
             {
                 var options = sp.GetRequiredService<IOptions<DynamicsOptions>>().Value;
-                c.BaseAddress = new Uri(options.Adfs.OAuth2TokenEndpoint);
+                c.BaseAddress = new Uri(options.Adfs.OAuth2TokenEndpoint);                
             });
             services.AddTransient<ISecurityTokenProvider, CachedADFSSecurityTokenProvider>();
             services.AddScoped(sp =>
