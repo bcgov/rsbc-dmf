@@ -86,9 +86,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void TestGetUpdates()
+        public async void TestCheckForCandidates()
         {
             flatFileUtils.CheckForCandidates(null);
+        }
+
+        [Fact]
+        public async void TestAddCandidate()
+        {
+            var IcbcClient = new IcbcClient(Configuration);
+            CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+
+            LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+            {
+                LicenseNumber = Configuration["ICBC_TEST_DL"],
+                Surname = client.INAM.SURN
+            };
+            caseManagerClient.ProcessLegacyCandidate(lcr);
         }
 
         [Fact]
