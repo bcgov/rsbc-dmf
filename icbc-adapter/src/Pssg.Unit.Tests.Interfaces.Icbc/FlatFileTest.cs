@@ -141,5 +141,59 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var result = caseManagerClient.ProcessLegacyCandidate(lcr);
             Assert.NotNull(result);            
         }
+
+        [Fact]
+        public async void MedicalStatusPass()
+        {
+            // create a FlatFilesUtil class.
+            var f = new FlatFileUtils(Configuration, caseManagerClient);
+
+            SearchReply searchReply = new SearchReply();
+            var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
+            testCase.Decisions.Add(
+                new DecisionItem () { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive  });
+            searchReply.Items.Add(testCase);
+            var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
+            // should be P for Pass
+            Assert.Equal("P", medicalUpdateData[0].MedicalDisposition);
+        }
+
+        [Fact]
+        public async void MedicalStatusFail()
+        {
+            // create a FlatFilesUtil class.
+            var f = new FlatFileUtils(Configuration, caseManagerClient);
+
+            SearchReply searchReply = new SearchReply();
+            var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
+            testCase.Decisions.Add(
+                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
+            searchReply.Items.Add(testCase);
+            var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
+            // should be J for Adjudication
+            Assert.Equal("J", medicalUpdateData[0].MedicalDisposition);
+        }
+
+        [Fact]
+        public async void MedicalStatusFailPass()
+        {
+            // create a FlatFilesUtil class.
+            var f = new FlatFileUtils(Configuration, caseManagerClient);
+
+            SearchReply searchReply = new SearchReply();
+
+            var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
+
+            testCase.Decisions.Add(
+                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow.AddDays(-1)), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.UnfitToDrive });
+
+            testCase.Decisions.Add(
+                new DecisionItem() { CreatedOn = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow), Identifier = Guid.NewGuid().ToString(), Outcome = DecisionItem.Types.DecisionOutcomeOptions.FitToDrive });
+            searchReply.Items.Add(testCase);
+            var medicalUpdateData = f.GetMedicalUpdateData(searchReply);
+            // should be P for Pass, as the Pass Decision is after the Fail.
+            Assert.Equal("P", medicalUpdateData[0].MedicalDisposition);
+        }
+
     }
 }

@@ -240,7 +240,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             //_caseManagerClient
         }
 
-        private List<MedicalUpdate> GetMedicalUpdateData (SearchReply unsentItems)
+        public List<MedicalUpdate> GetMedicalUpdateData (SearchReply unsentItems)
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
 
@@ -253,7 +253,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                      Surname = item.Driver.Surname,                     
                 };
 
-                var firstDecision = item.Decisions.OrderBy(x => x.CreatedOn).FirstOrDefault();
+                var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
                 
                 if (firstDecision != null)
                 {
