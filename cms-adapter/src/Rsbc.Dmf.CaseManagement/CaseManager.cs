@@ -371,9 +371,9 @@ namespace Rsbc.Dmf.CaseManagement
             incident @case = new incident()
             {
                 customerid_contact = driverContact,
-                // set status to in progress
-                statuscode = 1,
-
+                // set status to Open Pending for Submission
+                statuscode = 100000000,
+                casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
 
