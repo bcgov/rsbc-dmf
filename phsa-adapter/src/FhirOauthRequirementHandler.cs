@@ -10,11 +10,13 @@ namespace Rsbc.Dmf.PhsaAdapter
     {
         private readonly IConfiguration Configuration;
         private readonly bool isPhsaOauthDisabled;
+        private readonly bool enableDebug;
 
         public FhirOauthRequirementHandler(IConfiguration configuration)
         {
             Configuration = configuration;
             isPhsaOauthDisabled = string.IsNullOrEmpty(Configuration["ENABLE_PHSA_OAUTH"]);
+            enableDebug = !string.IsNullOrEmpty(Configuration["ASPNETCORE_ENVIRONMENT"]) && Configuration["ASPNETCORE_ENVIRONMENT"] == "development";
         }
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, FhirOauthRequirement requirement)
@@ -23,7 +25,8 @@ namespace Rsbc.Dmf.PhsaAdapter
             if (isPhsaOauthDisabled ||
                 (
                  context.User.Identities.Any(x => x.IsAuthenticated)
-                 && context.User.Claims.Contains(new System.Security.Claims.Claim("scope", "phsa-adapter"))
+                 && (context.User.Claims.Contains(new System.Security.Claims.Claim("scope", "phsa-adapter"))
+                 || context.User.Claims.Contains(new System.Security.Claims.Claim("scope", "doctors-portal-api")))
                 )
                )
             {
@@ -31,7 +34,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                 context.Succeed(requirement);
             }
 
-            if (!success)
+            if (!success && enableDebug)
             {
                 bool isAuthenticated = context.User.Identities.Any(x => x.IsAuthenticated);
                 Log.Information($"ERROR IN OAUTH - Authenticated is {isAuthenticated.ToString()}");
