@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Serilog;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -19,14 +21,28 @@ namespace Rsbc.Dmf.PhsaAdapter
             enableDebug = !string.IsNullOrEmpty(Configuration["ASPNETCORE_ENVIRONMENT"]) && Configuration["ASPNETCORE_ENVIRONMENT"] == "development";
         }
 
+        private bool CheckClaims(IEnumerable<Claim> claims)
+        {
+            bool result = false;
+            foreach (var claim in claims)
+            {
+                if (claim != null && 
+                    claim.Type != null && claim.Type == "scope" && claim.Value != null && 
+                    (claim.Value == "doctors-portal-api" || claim.Value == "phsa-adapter"))
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
+
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, FhirOauthRequirement requirement)
         {
             bool success = isPhsaOauthDisabled;
             if (isPhsaOauthDisabled ||
                 (
                  context.User.Identities.Any(x => x.IsAuthenticated)
-                 && (context.User.Claims.Contains(new System.Security.Claims.Claim("scope", "phsa-adapter"))
-                 || context.User.Claims.Contains(new System.Security.Claims.Claim("scope", "doctors-portal-api")))
+                 && CheckClaims(context.User.Claims) 
                 )
                )
             {
