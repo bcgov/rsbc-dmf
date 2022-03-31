@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace Rsbc.Dmf.PhsaAdapter
 {
@@ -18,6 +19,7 @@ namespace Rsbc.Dmf.PhsaAdapter
 
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, FhirOauthRequirement requirement)
         {
+            bool success = isPhsaOauthDisabled;
             if (isPhsaOauthDisabled ||
                 (
                  context.User.Identities.Any(x => x.IsAuthenticated)
@@ -25,7 +27,18 @@ namespace Rsbc.Dmf.PhsaAdapter
                 )
                )
             {
+                success = true;
                 context.Succeed(requirement);
+            }
+
+            if (!success)
+            {
+                bool isAuthenticated = context.User.Identities.Any(x => x.IsAuthenticated);
+                Log.Information($"ERROR IN OAUTH - Authenticated is {isAuthenticated.ToString()}");
+                foreach (var claim in context.User.Claims)
+                {
+                    Log.Information($"CLAIM {claim.Type} is {claim.Value}");
+                }
             }
 
             return Task.CompletedTask;
