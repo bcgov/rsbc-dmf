@@ -27,10 +27,24 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
-
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using System.Linq;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
+    public class AllowAnonymous : IAuthorizationHandler
+    {
+        public Task HandleAsync(AuthorizationHandlerContext context)
+        {
+            foreach (IAuthorizationRequirement requirement in context.PendingRequirements.ToList())
+                context.Succeed(requirement); //Simply pass all requirements
+
+            return Task.CompletedTask;
+        }
+    }
+
     public class Startup
     {
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
@@ -53,11 +67,24 @@ namespace Rsbc.Dmf.IcbcAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
             
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddDefaultTokenProviders();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "default",
+                                  builder =>
+                                  {
+                                      builder.AllowAnyOrigin()
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                                  });
+            });
             
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+
+                services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddDefaultTokenProviders();
+
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -65,7 +92,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                     o.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     o.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-                    
+
                 }).AddJwtBearer(o =>
                 {
                     o.SaveToken = true;
@@ -79,13 +106,27 @@ namespace Rsbc.Dmf.IcbcAdapter
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
                 });
-            
 
+                
+            }
+            else
+            {
+                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
+            }
+            
             services.AddAuthorization();
 
             // basic REST controller for Dynamics.
 
-            services.AddControllers(options => options.EnableEndpointRouting = false);
+            services.AddControllers(options => {
+                if (_env.IsDevelopment())
+                {
+                    options.Filters.Add(new AllowAnonymousFilter());
+                }
+                options.EnableEndpointRouting = false;
+
+
+                });
 
             services.AddGrpc(options =>
             {
@@ -191,6 +232,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             app.UseForwardedHeaders();
+
+            app.UseCors("default");
 
             app.UseRouting();
 
