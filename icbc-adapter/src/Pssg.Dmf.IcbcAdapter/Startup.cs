@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.IcbcAdapter.Services;
 using Pssg.Rsbc.Dmf.DocumentTriage;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -139,6 +140,12 @@ namespace Rsbc.Dmf.IcbcAdapter
             services.AddHangfire(x => x.UseMemoryStorage());
             services.AddHangfireServer();
 
+            // Swagger is used for API documentation
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ICBC Adapter", Version = "v1" });
+            });
+
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
@@ -229,7 +236,14 @@ namespace Rsbc.Dmf.IcbcAdapter
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment()) {
+                
+                app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICBC Adapter v1"));
+
+            }
 
             app.UseForwardedHeaders();
 
