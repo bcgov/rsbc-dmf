@@ -27,13 +27,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// <summary>
         /// Date that the requirement for a Medical Exam was issued
         /// </summary>
-        DateTimeOffset? EffectiveDate { get; set; }
+        public DateTimeOffset? EffectiveDate { get; set; }
 
         /// <summary>
         /// Birthdate for the Driver
         /// </summary>
 
-        DateTimeOffset? BirthDate { get; set; }
+        public DateTimeOffset? BirthDate { get; set; }
 
     }
 
