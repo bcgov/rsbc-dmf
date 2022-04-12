@@ -32,6 +32,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Serilog.Context;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -144,6 +147,35 @@ namespace Rsbc.Dmf.IcbcAdapter
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ICBC Adapter", Version = "v1" });
+
+                string baseUri = Configuration["BASE_URI"];
+                if (baseUri != null)
+                {
+                    // ensure baseUri is in the right format.
+                    baseUri = baseUri.TrimEnd('/') + @"/";
+
+                    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
+                    {
+                        Type = SecuritySchemeType.OAuth2,
+                        Flows = new OpenApiOAuthFlows
+                        {
+                            Implicit = new OpenApiOAuthFlow
+                            {
+                                AuthorizationUrl = new Uri(baseUri + "authentication/redirect/" + Configuration["JWT_TOKEN_KEY"]),
+                                Scopes = new Dictionary<string, string>
+                                {
+                                    {"openid", "oidc standard"}
+                                }
+                            }
+                        }
+                    });
+
+                    c.OperationFilter<AuthenticationRequirementsOperationFilter>();
+
+                }
+                
+
+                
             });
 
             // health checks. 
@@ -246,6 +278,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 
             app.UseForwardedHeaders();
+
+            app.Use(async (ctx, next) => {
+                using (LogContext.PushProperty("IPAddress", ctx.Connection.RemoteIpAddress))
+                {
+                    await next(ctx);
+                }
+            });
 
             app.UseCors("default");
 
@@ -404,5 +443,24 @@ namespace Rsbc.Dmf.IcbcAdapter
         }
     }
 
-    
+    /// <summary>
+    /// Helper filter for Swagger authentication
+    /// </summary>
+    public class AuthenticationRequirementsOperationFilter : IOperationFilter
+    {
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        {
+            if (operation.Security == null)
+                operation.Security = new List<OpenApiSecurityRequirement>();
+
+
+            var scheme = new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" } };
+            operation.Security.Add(new OpenApiSecurityRequirement
+            {
+                [scheme] = new List<string>()
+            });
+        }
+    }
+
+
 }
