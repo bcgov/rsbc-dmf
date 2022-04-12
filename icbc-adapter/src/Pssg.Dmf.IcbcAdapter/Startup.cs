@@ -279,12 +279,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             app.UseForwardedHeaders();
 
-            app.Use(async (ctx, next) => {
-                using (LogContext.PushProperty("IPAddress", ctx.Connection.RemoteIpAddress))
-                {
-                    await next(ctx);
-                }
-            });
+            
 
             app.UseCors("default");
 
@@ -351,6 +346,21 @@ namespace Rsbc.Dmf.IcbcAdapter
                 endpoints.MapControllers();
 
                 
+            });
+
+            app.UseSerilogRequestLogging(
+            options =>
+            {
+                options.MessageTemplate =
+                    "{RemoteIpAddress} {RequestScheme} {RequestHost} {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
+                options.EnrichDiagnosticContext = (
+                    diagnosticContext,
+                    httpContext) =>
+                {
+                    diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
+                    diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
+                    diagnosticContext.Set("RemoteIpAddress", httpContext.Connection.RemoteIpAddress);
+                };
             });
 
             // enable Splunk logger using Serilog
