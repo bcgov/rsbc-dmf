@@ -9,7 +9,7 @@ Technology Stack
 
 | Layer   | Technology | 
 | ------- | ------------ |
-| Presentation | Angular 11 |
+| Presentation | Angular 13 |
 | Business Logic | C Sharp - Dotnet Core 6.0 |
 | Microservices | C Sharp - Dotnet Core 6.0 |
 | Front End Web Server | Caddy |
@@ -20,7 +20,7 @@ Technology Stack
 | Container Platform | OpenShift 4 |
 | Zero Trust Security Policy Type | Kubernetes |
 | Logging | Splunk, Console, and Kibana |
-| CI/CD Pipeline | Jenkins |
+| CI/CD Pipeline | GitHub Actions, Kubernetes Pipelines (Tekton) |
 
 System Architecture
 --------------
@@ -48,51 +48,41 @@ Developer Prerequisites
 **DevOps**
 - RedHat OpenShift tools
 - Docker
-- A familiarity with Jenkins
+- A familiarity with GitHub Actions and Tekton Pipelines
 
 
 
-Microsoft Dynamics, SharePoint
+Microsoft Dynamics, S3
 ---------------------------
-A MS Dynamics instance containing the necessary solution files is required.  A SharePoint connection is optional.  If no SharePoint connection is available then file operations will not be executed.
-
-Define the following secrets in your development environment (secrets or environment variables):
-1. DYNAMICS_NATIVE_ODATA_URI: The URI to the Dynamics Web API endpoint.  Example:  `https://<hostname>/<tenant name>/api/data/v9.0/`.  This URI can be a proxy.
-2. DYNAMICS_NATIVE_ODATA_URI: The native URI to the Dynamics Web API endpoint, in other words as the server identifies itself in responses to WebAPI requests.  Do not put a proxy URI here.
-3. SSG_USERNAME: API gateway username, if using an API gateway
-4. SSG_PASSWORD: API gateway password, if using an API gateway
-5. DYNAMICS_AAD_TENANT_ID: ADFS Tenant ID, if using ADFS authentication.  Leave blank if using an API gateway
-6. DYNAMICS_SERVER_APP_ID_URI: ADFS Server App ID URI. Leave blank if using an API gateway
-7. DYNAMICS_CLIENT_ID: Public Key for the ADFS Enterprise Application app registration. Leave blank if using an API gateway
-8. SHAREPOINT_ODATA_URI: Endpoint to be used for SharePoint, exclusive of _api.  Can be a proxy.  Leave blank if not using SharePoint.
-9. SHAREPOINT_NATIVE_BASE_URI:  The SharePoint URI as configured in SharePoint.  Do not set to a proxy.
-10. SHAREPOINT_SSG_USERNAME, SHAREPOINT_SSG_PASSWORD - optional API Gateway credentials for SharePoint
-11. SharePoint may also use the same ADFS credentials as Dynamics.  If that is to be used, leave all SSG parameters empty or undefined.
-
+A MS Dynamics instance containing the necessary solution files is required.  A S3 compatible object store is required for persistent files.
 
 
 DevOps Process
 -------------
 
-## Jenkins
+## Github Actions
 
-This project does not use Jenkins.  It does use GitHub Actions and Tekton (Kubernetes) pipelines.
+There are two main categories of Github Actions used in this project:
 
-## DEV builds
-Dev builds are triggered by source code being committed to the repository.  This process triggers a github action.
+1. Continuous Integration - these pipelines are used to integrate code from a Fork into the main "develop" line
+2. Continuous Delivery - these pipelines are used to assist in building code for delivery (deployment) in OpenShift.
 
-Login to Github and view the "Actions" tab of this repository to see status of recent runs.
+An example of other Github Actions also used in the project is the stats action Code Cov uses.
 
-## Promotion to TEST
+## Tekton Pipelines
+
+There is also a series of Tekton (Kubernetes) pipelines:
+
+### Promotion to TEST
 To promote code to TEST, login to OpenShift and start the Kubernetes Pipeline for Promote to Test.
 
-## Promotion to TRAIN
+### Promotion to TRAIN
 To promote code to TRAIN, login to OpenShift and start the Kubernetes Pipeline for Promote to Train.
 
-## Promotion to PROD
+### Promotion to PROD
 To promote code to PROD, login to OpenShift and start the Kubernetes Pipeline for Promote to Prod. Not that this pipeline will also make a backup of the current PROD deployment.
 
-## Restore PROD from backup
+### Restore PROD from backup
 If you wish to revert to the previous PROD deployment, login to OpenShift and start the Kubernetes Pipeline for Restore PROD from Backup.
 
 Contribution
@@ -109,7 +99,7 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 License
 -------
 
-    Copyright 2021 Province of British Columbia
+    Copyright 2022 Province of British Columbia
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
