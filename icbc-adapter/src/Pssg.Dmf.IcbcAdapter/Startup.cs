@@ -99,11 +99,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 }).AddJwtBearer(o =>
                 {
-                    o.SaveToken = true;
+                    o.SaveToken = true;                   
                     o.RequireHttpsMetadata = false;
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
-                        RequireExpirationTime = false,
+                        RequireExpirationTime = true,
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
                         IssuerSigningKey =
@@ -173,8 +173,6 @@ namespace Rsbc.Dmf.IcbcAdapter
                     c.OperationFilter<AuthenticationRequirementsOperationFilter>();
 
                 }
-                
-
                 
             });
 
@@ -278,8 +276,6 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 
             app.UseForwardedHeaders();
-
-            
 
             app.UseCors("default");
 
