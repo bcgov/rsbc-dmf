@@ -23,8 +23,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// Return the version of the running application
         /// </summary>
         /// <returns>The version of the running application</returns>
-        [HttpGet]
-        [AllowAnonymous]
+        [HttpGet]        
         public ActionResult<ApplicationVersionInfo> GetApplicationVersionInfo()
         {
             Assembly assembly = GetType().GetTypeInfo().Assembly;
