@@ -39,7 +39,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 var jwtSecurityToken = new JwtSecurityToken(
                     Configuration["JWT_VALID_ISSUER"],
                     Configuration["JWT_VALID_ISSUER"],
-                    expires: DateTime.UtcNow.AddYears(5),
+                    expires: DateTime.UtcNow.AddMinutes(15),
                     signingCredentials: creds
                     );
                 result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken); 
