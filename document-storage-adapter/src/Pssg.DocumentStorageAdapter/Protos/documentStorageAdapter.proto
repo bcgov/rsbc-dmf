@@ -33,6 +33,7 @@ service DocumentStorageAdapter {
   // Get the truncated filename (due to SharePoint limitations).
   rpc GetTruncatedFilename (TruncatedFilenameRequest) returns (TruncatedFilenameReply);
 
+  rpc GetServerUrl (TruncatedFilenameRequest) returns (TruncatedFilenameReply);
 }
 
 message CreateFolderRequest {

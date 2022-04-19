@@ -40,6 +40,10 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly DocumentTriage.DocumentTriageClient _documentTriageClient;
 
+        private const string DATA_ENTITY_NAME = "incident";
+        private const string DATA_FILENAME = "data.json";
+
+
         public FhirController(ILogger<ReceiveController> logger, IIcbcClient icbcClient, IConfiguration configuration,
             CaseManager.CaseManagerClient cmsAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
@@ -369,6 +373,12 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                 }
             };
 
+            // layer on the saved data, if it exists, and the feature is enabled.
+            if (!String.IsNullOrEmpty(Configuration["ENABLE_LOAD_DRAFT"]))
+            {
+                AddSavedData(payload, id);
+            }
+
             // convert the data to json.
             string jsonPayload = JsonConvert.SerializeObject(payload);
             var jsonAsBytes = System.Text.Encoding.UTF8.GetBytes(jsonPayload);
@@ -532,6 +542,54 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             return Respond.WithResource(result);
         }
 
+        /// <summary>
+        /// Add Saved Data to a payload
+        /// </summary>
+        /// <param name="payload">The payload </param>
+        /// <param name="id"></param>
+        private void AddSavedData(Payload payload, string id)
+        {
+            // use the document storage service to get the filename.
+            var filenameRespone = _documentStorageAdapterClient.GetTruncatedFilename(
+                new TruncatedFilenameRequest()
+                {
+                    EntityName = DATA_ENTITY_NAME,
+                    FileName = DATA_FILENAME,
+                    FolderName = id
+                });
+
+            if (filenameRespone.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                DownloadFileRequest downloadFileRequest = new DownloadFileRequest()
+                {
+                    ServerRelativeUrl = filenameRespone.FileName
+                };
+
+                // get the json data.
+
+                var downloadFileResponse = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
+
+                // merge it in.
+                if (downloadFileResponse.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+
+                    // deserialize the json blob.
+
+                    string jsonStr = Encoding.UTF8.GetString(downloadFileResponse.Data.ToByteArray());
+                    var jsonObj = JsonConvert.DeserializeObject<Dictionary<String, Object>>(jsonStr);
+
+                    foreach (var item in jsonObj)
+                    {
+                        // merge in the data, if it does not exist in the current payload or has no value.
+                        if (!payload.data.ContainsKey(item.Key) || payload.data[item.Key] == null)
+                        {
+                            payload.data[item.Key] = item.Value;
+                        } 
+                    }                    
+                }
+            }            
+        }
+
         [HttpPut("Bundle/{id}")]        
         public void PutBundle([FromBody] Bundle bundle, [FromRoute] string id)
         {
@@ -592,8 +650,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                         {
                             ContentType = "application/json",
                             Data = ByteString.CopyFrom(b.Data),
-                            EntityName = "incident",
-                            FileName = "data.json",
+                            EntityName = DATA_ENTITY_NAME,
+                            FileName = DATA_FILENAME,
                             FolderName = bundle.Id
                         };
 
@@ -641,13 +699,15 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 FolderName = "triage-request"
                             };
 
-
-
                             // save a copy in the S3.
                             _documentStorageAdapterClient.UploadFile(jsonData);
 
                             // and send to the triage service.
                             _documentTriageClient.Triage(triageRequest);
+                        }
+                        else // it is a save as draft.
+                        {
+                            // No additional logic required for save as draft at this time.
                         }
                     }
                 }
