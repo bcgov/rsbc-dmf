@@ -360,5 +360,31 @@ namespace Pssg.DocumentStorageAdapter.Services
 
             return Task.FromResult(result);
         }
+
+
+        public override Task<TruncatedFilenameReply> GetServerUrl(TruncatedFilenameRequest request,
+            ServerCallContext context)
+        {
+            var result = new TruncatedFilenameReply();
+            var logFileName = WordSanitizer.Sanitize(request.FileName);
+            var logFolderName = WordSanitizer.Sanitize(request.FolderName);
+            try
+            {
+                var _S3 = new S3(_configuration);
+                var listTitle = _S3.GetDocumentListTitle(request.EntityName);
+                // get the relative URL from the interface library                
+                result.FileName = _S3.GetServerRelativeUrl(listTitle, request.FolderName, request.FileName);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception e)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = $"ERROR in getting ServerUrl {logFileName} for folder {logFolderName}";
+                Log.Error(e, result.ErrorDetail);
+            }
+
+
+            return Task.FromResult(result);
+        }
     }
 }
