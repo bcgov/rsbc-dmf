@@ -550,7 +550,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         private void AddSavedData(Payload payload, string id)
         {
             // use the document storage service to get the filename.
-            var filenameRespone = _documentStorageAdapterClient.GetTruncatedFilename(
+            var filenameRespone = _documentStorageAdapterClient.GetServerUrl(
                 new TruncatedFilenameRequest()
                 {
                     EntityName = DATA_ENTITY_NAME,
@@ -577,8 +577,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                     string jsonStr = Encoding.UTF8.GetString(downloadFileResponse.Data.ToByteArray());
                     var jsonObj = JsonConvert.DeserializeObject<Dictionary<String, Object>>(jsonStr);
-
-                    foreach (var item in jsonObj)
+                    Newtonsoft.Json.Linq.JObject data = (Newtonsoft.Json.Linq.JObject)jsonObj["data"];
+                    foreach (var item in data)
                     {
                         // merge in the data, if it does not exist in the current payload or has no value.
                         if (!payload.data.ContainsKey(item.Key) || payload.data[item.Key] == null)
