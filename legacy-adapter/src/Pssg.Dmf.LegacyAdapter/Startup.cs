@@ -65,13 +65,10 @@ namespace Pssg.Dmf.LegacyAdapter
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
                 });
-
             services.AddAuthorization();
 
             // basic REST controller for Dynamics.
-
             services.AddControllers(options => options.EnableEndpointRouting = false);
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
@@ -85,18 +82,16 @@ namespace Pssg.Dmf.LegacyAdapter
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RSBC DPS Adapter v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RSBC DMF Services for DPS, DFWEB and DFCMS"));
                 IdentityModelEventSource.ShowPII = true;
             }
 
             app.UseForwardedHeaders();
-
             app.UseRouting();
-
             app.UseAuthentication();
             app.UseAuthorization();
 
@@ -111,7 +106,6 @@ namespace Pssg.Dmf.LegacyAdapter
                 // Exclude all checks and return a 200-Ok.
                 Predicate = _ => false
             });
-
 
             app.UseEndpoints(endpoints =>
             {                
@@ -130,7 +124,6 @@ namespace Pssg.Dmf.LegacyAdapter
                 
                 // Fix for bad SSL issues 
 
-
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
@@ -148,9 +141,7 @@ namespace Pssg.Dmf.LegacyAdapter
                         }
 #pragma warning restore CA2000 // Dispose objects before losing scope
                     )
-                    .CreateLogger();
-
-                
+                    .CreateLogger();                
             }
             else
             {
