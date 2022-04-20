@@ -22,7 +22,7 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Sinks.Splunk;
 
-namespace Pssg.IcbcAdapter
+namespace Pssg.Dmf.LegacyAdapter
 {
     public class Startup
     {
@@ -74,7 +74,7 @@ namespace Pssg.IcbcAdapter
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "DPS Adapter", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
             });
 
             // health checks. 
@@ -160,7 +160,7 @@ namespace Pssg.IcbcAdapter
                     .WriteTo.Console()
                     .CreateLogger();
             }
-            Log.Logger.Information("Document Storage Adapter Container Started");
+            Log.Logger.Information("RSBC DMF Services for DPS, DFWEB and DFCMS Container Started");
             SelfLog.Enable(Console.Error);
         }
     }

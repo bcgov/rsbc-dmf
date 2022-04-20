@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DpsAdapter", "Pssg.DpsAdapter\Pssg.DpsAdapter.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.LegacyAdapter", "Pssg.Dmf.LegacyAdapter\Pssg.Dmf.LegacyAdapter.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Unit.Tests.Interfaces.Dps", "Pssg.Unit.Tests.Interfaces.dps\Pssg.Unit.Tests.Interfaces.Dps.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Unit.Tests.Dmf.LegacyAdapter", "Pssg.Unit.Tests.Dmf.LegacyAdapter\Pssg.Unit.Tests.Dmf.LegacyAdapter.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

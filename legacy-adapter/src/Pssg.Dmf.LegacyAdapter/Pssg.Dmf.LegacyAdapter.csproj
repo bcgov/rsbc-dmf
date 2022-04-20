@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5A</UserSecretsId>
-    <RootNamespace>Pssg.IcbcAdapter</RootNamespace>
+    <RootNamespace>Pssg.Dmf.LegacyAdapter</RootNamespace>
   </PropertyGroup>
 
 
