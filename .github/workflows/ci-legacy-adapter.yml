@@ -1,14 +1,14 @@
-name: ci-dps-adapter
+name: ci-legacy-adapter
 
 on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "dps-adapter/src/**"
-      - ".github/workflows/ci-dps-adapter.yml"
+      - "legacy-adapter/src/**"
+      - ".github/workflows/ci-legacy-adapter.yml"
 
 env:
-  IMAGE_NAME: dps-adapter
+  IMAGE_NAME: legacy-adapter
 
 jobs:
   build:
@@ -17,4 +17,4 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build . --file ./dps-adapter/src/Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file ./legacy-adapter/src/Dockerfile --tag $IMAGE_NAME
