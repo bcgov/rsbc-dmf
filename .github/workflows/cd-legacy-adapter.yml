@@ -1,4 +1,4 @@
-name: cd-dps-adapter
+name: cd-legacy-adapter
 
 on:
   push:
@@ -10,12 +10,12 @@ on:
     tags:
       - v*
     paths:    
-      - "dps-adapter/src/**"
-      - ".github/workflows/cd-dps-adapter.yml"
+      - "legacy-adapter/src/**"
+      - ".github/workflows/cd-legacy-adapter.yml"
 
 env:
-  IMAGE_NAME: dps-adapter
-  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/dps-adapter
+  IMAGE_NAME: legacy-adapter
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/legacy-adapter
 
 jobs:
   build:
@@ -32,7 +32,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./dps-adapter/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
+        run: docker build . --file ./legacy-adapter/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |
