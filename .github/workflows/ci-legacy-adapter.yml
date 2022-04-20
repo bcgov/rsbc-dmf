@@ -1,0 +1,20 @@
+name: ci-legacy-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - "legacy-adapter/src/**"
+      - ".github/workflows/ci-legacy-adapter.yml"
+
+env:
+  IMAGE_NAME: legacy-adapter
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: docker build . --file ./legacy-adapter/src/Dockerfile --tag $IMAGE_NAME
