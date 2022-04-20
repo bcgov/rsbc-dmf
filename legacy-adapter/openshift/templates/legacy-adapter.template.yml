@@ -1,0 +1,243 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: legacy-adapter-template
+
+parameters:
+  - description: openshift namespace prefix
+    name: NAMESPACE_PREFIX
+    required: true
+  - description: openshift namespace env name
+    name: ENV
+    required: true
+  - description: app name
+    name: APP_NAME
+    required: true
+  - description: image name
+    name: IMAGENAME
+    value: legacy-adapter
+    
+  - description: image tag for deployments
+    name: TAG
+    required: true
+  - description: Hostname
+    name: HOST
+    required: true
+  - description: ASPNET runtime environment (Development/Staging/Production)
+    name: RUNTIME_ENVIRONMENT
+    value: Staging
+  - description: Password used for authentication
+    from: "[A-Z0-9]{8}"
+    generate: expression
+    name: PASSWORD
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_URI
+    name: DOCUMENT_STORAGE_ADAPTER_URI
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+    name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+    required: true
+  - description: CMS_ADAPTER_URI
+    name: CMS_ADAPTER_URI
+    required: true
+  - description: CMS_ADAPTER_JWT_SECRET
+    name: CMS_ADAPTER_SECRET
+    required: true
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-config
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+    data:
+      ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
+      KEY_RING_PATH: "/dpkeys"      
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+      name: ${APP_NAME}-secrets
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+    stringData:
+      USERNAME: "legacy"
+      PASSWORD: "${PASSWORD}"
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      DOCUMENT_STORAGE_ADAPTER_URI: ${DOCUMENT_STORAGE_ADAPTER_URI}
+      DOCUMENT_STORAGE_ADAPTER_JWT_SECRET: ${DOCUMENT_STORAGE_ADAPTER_JWT_SECRET}
+      DOCUMENT_TRIAGE_SERVICE_URI: ${DOCUMENT_TRIAGE_SERVICE_URI}
+      DOCUMENT_TRIAGE_SERVICE_JWT_SECRET: ${DOCUMENT_TRIAGE_SERVICE_JWT_SECRET}
+      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}
+      CMS_JWT_SECRET: ${CMS_ADAPTER_JWT_SECRET}
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${APP_NAME}
+      type: ClusterIP
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      host: ${HOST}
+      port:
+        targetPort: 8080-tcp
+      # tls:
+      #   insecureEdgeTerminationPolicy: Redirect
+      #   termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}
+        weight: 100
+      tls:
+        termination: edge
+        insecureEdgeTerminationPolicy: Allow
+      wildcardPolicy: None
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${APP_NAME}
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      podSelector:
+        matchLabels:
+          app: ${APP_NAME}
+      ingress:
+        - ports:
+            - protocol: TCP
+              port: 8080
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 2
+      selector:
+        deploymentconfig: ${APP_NAME}
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}
+        spec:
+          containers:
+            - name: ${APP_NAME}
+              env:
+                - name: SPLUNK_COLLECTOR_URL
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: url
+                - name: SPLUNK_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: splunk
+                      key: token
+                - name: CMS_ADAPTER_JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${CMS_ADAPTER_SECRET}
+                      key: JWT_TOKEN_KEY
+              envFrom:                
+                - configMapRef:
+                    name: ${APP_NAME}-config
+                - secretRef:
+                    name: ${APP_NAME}-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/${IMAGENAME}:${TAG}
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /dpkeys
+                  name: dp-keys
+              livenessProbe:
+                httpGet:
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: dp-keys
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-key-ring
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - ${APP_NAME}
+            from:
+              kind: ImageStreamTag
+              name: ${IMAGENAME}:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-key-ring
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "100Mi"
