@@ -1,7 +1,7 @@
 
 
 using Microsoft.Extensions.Configuration;
-using Pssg.IcbcAdapter;
+using Pssg.Dmf.LegacyAdapter;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 
-namespace Pssg.IcbcAdapter.Tests
+namespace Pssg.Unit.Tests.Dmf.LegacyAdapter
 {
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<Startup>
