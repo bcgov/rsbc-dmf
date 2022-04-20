@@ -6,7 +6,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
-namespace Pssg.IcbcAdapter.Controllers
+namespace Pssg.Dmf.LegacyAdapter.Controllers
 {
     [Route("[controller]")]
     public class AuthenticationController : Controller

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "RSBC.Tests.Unit.DMF.MedicalPortal.API": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:51736;http://localhost:51737"
+    }
+  }
+}
