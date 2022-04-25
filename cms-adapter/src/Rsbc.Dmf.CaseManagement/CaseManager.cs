@@ -21,6 +21,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
 
+        Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
+
         Task<List<Flag>> GetAllFlags();
 
         Task<CaseSearchReply> GetUnsentMedicalUpdates();
@@ -780,6 +782,50 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             return new SetCaseFlagsReply { Success = false };
+        }
+
+        public async Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId)
+        {
+            logger.LogInformation($"SetCasePractitionerClinic - looking for DMER with identifier {caseId} {practitionerId} {clinicId}");
+
+            // future state - the case name will contain three letters of the name and the driver licence number
+
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+            if (dmerEntity != null)
+            {
+                // set the Practitioner
+
+                if (!string.IsNullOrEmpty(practitionerId))
+                {
+                    // set the Practitioner
+                    dfp_medicalpractitioner medicalpractitioner = dynamicsContext.dfp_medicalpractitioners.ByKey(Guid.Parse(caseId)).GetValue();
+
+                    dynamicsContext.SetLink(dmerEntity, nameof(incident.dfp_MedicalPractitionerId), medicalpractitioner);
+                }
+
+                if (! string.IsNullOrEmpty(clinicId))
+                {
+                    // set the Clinic
+                    account clinic = dynamicsContext.accounts.ByKey(Guid.Parse(caseId)).GetValue();
+
+                    dynamicsContext.SetLink(dmerEntity, nameof(incident.dfp_ClinicId), clinic);
+                }
+
+                dynamicsContext.UpdateObject(dmerEntity);
+
+                try
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();                    
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, $"SetCasePractitionerClinic - Error updating");
+                }
+
+            }
+
         }
 
         ///

@@ -234,8 +234,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        public async override Task<SetCasePractitionerClinicReply> SetCasePractitionerClinic(SetCasePractitionerClinicRequest request, ServerCallContext context)
+        {
+            var reply = new SetCasePractitionerClinicReply();
 
-        DecisionOutcomeOptions ConvertDecisionOutcome(DecisionOutcome? value)
+            // call the case manager to update data
+            try
+            {
+                await _caseManager.SetCasePractitionerClinic(request.ClinicId, request.PractitionerId, request.ClinicId);
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }            
+
+            return reply;
+
+        }
+
+
+            DecisionOutcomeOptions ConvertDecisionOutcome(DecisionOutcome? value)
         {
             DecisionOutcomeOptions result = DecisionOutcomeOptions.Unknown;
             switch (value)

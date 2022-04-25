@@ -602,6 +602,10 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         [HttpPost("Bundle")]        
         public async Task<IActionResult> PostBundle()
         {
+            // get the user ID
+            
+            string practitionerId = User.FindFirstValue(ClaimTypes.Sid);
+
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 string body = await reader.ReadToEndAsync();
@@ -682,7 +686,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 PdfFileKey = pdfFileKey,
                                 PdfFileSize = pdfFileSize,
                                 DataFileKey = dataFileKey,
-                                DataFileSize = dataFileSize
+                                DataFileSize = dataFileSize,
+                                PractitionerId = practitionerId,
+                                ClinicId = "" // in order to pass this by value we would need some way to pass the data to the PHSA controller.
                             };
 
                             triageRequest.AddItems(questionnaireResponse.Item);
