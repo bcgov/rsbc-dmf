@@ -29,6 +29,8 @@ message TriageRequest {
 	int64 pdfFileSize = 9;
 	string dataFileKey = 10;
 	int64 dataFileSize = 11;
+	string practitionerId = 12;
+	string clinicId = 13;
 }
 
 message QuestionItem {
