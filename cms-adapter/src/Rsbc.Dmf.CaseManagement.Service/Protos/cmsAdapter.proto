@@ -20,6 +20,8 @@ service CaseManager {
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
+  rpc SetCasePractitionerClinic(SetCasePractitionerClinicRequest) returns (SetCasePractitionerClinicReply);
+
   // Get all the flags
   rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
 
@@ -129,6 +131,17 @@ message UpdateCaseRequest{
 }
 
 message UpdateCaseReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+}
+
+message SetCasePractitionerClinicRequest{
+	string caseId = 1;
+	string PractitionerId = 2;
+	string ClinicId = 3;
+}
+
+message SetCasePractitionerClinicReply{
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 }

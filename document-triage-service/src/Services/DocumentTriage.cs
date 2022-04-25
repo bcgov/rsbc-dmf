@@ -42,7 +42,7 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
                 // start by requesting the available flags.
 
-                var availableFlags = _caseManagerClient.GetAllFlags(new GetAllFlagsRequest());
+                var availableFlags = _caseManagerClient.GetAllFlags(new EmptyRequest());
 
                 bool cleanPass = true;
 
@@ -103,8 +103,20 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
             }
 
             var caseResult = _caseManagerClient.UpdateCase(updateCaseRequest);
-
+            // if the flags were received, update the practitioner.
             _logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
+
+            SetCasePractitionerClinicRequest scpcr = new SetCasePractitionerClinicRequest()
+            {
+                CaseId = request.Id,
+                PractitionerId = request.PractitionerId,
+                ClinicId = request.ClinicId
+            };
+            var setCpcResult = _caseManagerClient.SetCasePractitionerClinic(scpcr);
+
+            _logger.LogInformation($"SetCasePractitionerClinic Result is {setCpcResult.ResultStatus}");
+
+
 
             result.ResultStatus = ResultStatus.Success;
             result.ErrorDetail = "";

@@ -46,6 +46,25 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
 
+        /// <summary>
+        /// Verify that the Practioner and Clinic set function can be called with the empty string.
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanSetCasePractitionerClinicEmpty()
+        {
+            var title = "222";
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+
+            var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            await caseManager.SetCasePractitionerClinic (caseId, "", "");
+
+        }
+
+
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByTitle()
         {
