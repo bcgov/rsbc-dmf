@@ -606,6 +606,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
             
             string practitionerId = User.FindFirstValue(ClaimTypes.Sid);
 
+            Serilog.Log.Logger.Information ($"POST Bundle - practitionerId is {practitionerId}");
+
             using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
             {
                 string body = await reader.ReadToEndAsync();
@@ -687,7 +689,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                                 PdfFileSize = pdfFileSize,
                                 DataFileKey = dataFileKey,
                                 DataFileSize = dataFileSize,
-                                PractitionerId = practitionerId,
+                                PractitionerId = practitionerId == null ? "" : practitionerId,
                                 ClinicId = "" // in order to pass this by value we would need some way to pass the data to the PHSA controller.
                             };
 
