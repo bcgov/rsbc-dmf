@@ -70,7 +70,7 @@ namespace Pssg.Dmf.LegacyAdapter
             // basic REST controller for Dynamics.
             services.AddControllers(options => options.EnableEndpointRouting = false);
             services.AddSwaggerGen(c =>
-            {
+            {               
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
             });
 
@@ -86,7 +86,7 @@ namespace Pssg.Dmf.LegacyAdapter
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "RSBC DMF Services for DPS, DFWEB and DFCMS"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "RSBC DMF Services for DPS, DFWEB and DFCMS"));
                 IdentityModelEventSource.ShowPII = true;
             }
 
