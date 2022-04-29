@@ -604,7 +604,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
         {
             // get the user ID
             
-            string practitionerId = User.FindFirstValue(ClaimTypes.Sid);
+            string practitionerId = User.FindFirstValue("sid");
+            practitionerId = null;
 
             Serilog.Log.Logger.Information ($"POST Bundle - practitionerId is {practitionerId}");
 
