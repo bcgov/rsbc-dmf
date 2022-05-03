@@ -16,7 +16,8 @@ namespace Pssg.Dmf.LegacyAdapter.ViewModels
         /// The Drivers License Number
         /// </summary>
         [Required]
-        public string driversLicense { get; set; }
+
+        public ViewModels.Driver driver { get; set; }
 
         /// <summary>
         /// Sequence Number
