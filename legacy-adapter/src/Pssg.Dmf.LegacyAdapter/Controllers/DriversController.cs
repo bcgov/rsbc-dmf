@@ -52,15 +52,15 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         [HttpGet("{driversLicense}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(500)]        
         public ActionResult GetComments([FromRoute] string driversLicense)
         
         {
             // get the comments
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            result.Add (new ViewModels.Comment() { caseId = Guid.NewGuid().ToString(), commentText = "SAMPLE TEXT", commentTypeCode="W", 
-                driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
-                sequenceNumber = 0, userId = "TESTUSER" });
+            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W", 
+                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
+                SequenceNumber = 0, UserId = "TESTUSER" });
             
             return Json(result);
         }
@@ -75,18 +75,26 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult CreateComments([FromRoute] string driversLicense, [FromBody] ViewModels.Comment comment )
-        {            
+        public ActionResult CreateCommentForDriver([FromRoute] string driversLicense, [FromBody] ViewModels.Comment comment )
+        {
             // add the comment
-            return CreatedAtAction("Comments", comment);
+
+            var actionName = nameof(CreateCommentForDriver);
+            var routeValues = new
+            {
+                driversLicence = Guid.NewGuid().ToString()
+            };
+
+            return CreatedAtAction(actionName, routeValues, comment);
         }
+
 
         [HttpGet("{driversLicense}/Documents")]
         public ActionResult GetDocuments([FromRoute] string driversLicense)
         {
             bool result = false;
             // get the comments
-            return Json(result);
+            return Ok(); //return Json(result);
         }
 
 
@@ -106,10 +114,6 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         {
             return Ok();
         }
-        
-
-        
-
 
     }
 }

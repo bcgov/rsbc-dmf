@@ -11,36 +11,36 @@ namespace Pssg.Dmf.LegacyAdapter.ViewModels
         /// The text body of the comment.
         /// </summary>
         [Required]
-        public string commentText { get; set; }
+        public string CommentText { get; set; }
         /// <summary>
         /// The Drivers License Number
         /// </summary>
         [Required]
 
-        public ViewModels.Driver driver { get; set; }
+        public ViewModels.Driver Driver { get; set; }
 
         /// <summary>
         /// Sequence Number
         /// </summary>
         [Required]
-        public short sequenceNumber { get; set;}
+        public short SequenceNumber { get; set;}
 
         /// <summary>
         /// Comment Type Code - typically "W" for DFWEB
         /// </summary>
         [Required]
-        public string commentTypeCode { get; set;}
+        public string CommentTypeCode { get; set;}
 
         /// <summary>
         /// The User ID for the user making the comment
         /// </summary>
         [Required]
-        public string userId { get; set; }
+        public string UserId { get; set; }
 
         /// <summary>
         /// GUID Case Id from the Case Management System
         /// </summary>
         [Required]
-        public string caseId { get; set; }
+        public string CaseId { get; set; }
     }
 }
