@@ -90,6 +90,8 @@ namespace Pssg.Dmf.LegacyAdapter
                 IdentityModelEventSource.ShowPII = true;
             }
 
+
+
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
