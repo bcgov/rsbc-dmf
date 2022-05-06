@@ -82,10 +82,10 @@ namespace Pssg.Unit.Tests.Dmf.LegacyAdapter
     }
 
 
-    public class DpsInterfaceTest : ApiIntegrationTestBaseWithLogin
+    public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
     {
 
-        public DpsInterfaceTest(CustomWebApplicationFactory<Startup> factory)
+        public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
             : base(factory)
         { }
 
@@ -124,5 +124,40 @@ namespace Pssg.Unit.Tests.Dmf.LegacyAdapter
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
         }
+
+
+        [Fact]
+        public async void TestDfwebSubmitComment()
+        {
+            string testDl = Configuration["ICBC_TEST_DL"];
+
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
+
+            var driver = new Pssg.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = "1000098"};
+
+            var comment = new Pssg.Dmf.LegacyAdapter.ViewModels.Comment() 
+            {  
+                CommentText = "This is a test comment",
+                Driver = driver,
+                SequenceNumber = 3,
+                CommentTypeCode = "W",
+                UserId = "TESTUSER",
+                CaseId = Guid.NewGuid().ToString()           
+            };
+
+            var stringContent = JsonConvert.SerializeObject(comment);
+
+            request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+
     }
 }
