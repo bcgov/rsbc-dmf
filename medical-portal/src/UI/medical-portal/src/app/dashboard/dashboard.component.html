@@ -1,25 +1,16 @@
 <div class="page-desc">
   <div class="container">
-    <img
-      src="assets/images/u541.svg"
-      alt="Dashboard-icon"
-      class="dashboard-icon"
-    />
-    <h1>Welcome to the new<br />Medical Practitioner Portal</h1>
+    <h1>Portal Dashboard</h1>
     <p>
-      The portal will allow you to easily find, fill out and submit a driver
-      medical examination report (DMER) to RoadSafetyBC.
+      In this portal you can start, access and submit a driver medical examination report (DMER) for a driver to RoadSafetyBC. 
     </p>
     <p>
-      Upon submission, RoadSafetyBC will review the information and if they have
-      subsequent questions or require extra information they will message you.
-      To ensure privacy and security, you will get an email letting you know
-      that you have a message waiting in this portal.
+      You will also be able to see the DMER status with RoadSafetyBC in the event the driver contacts you for an update.
     </p>
   </div>
 </div>
 
-<div class="container" style="margin-top: 20px">
+<!-- <div class="container" style="margin-top: 20px">
   <div style="width: 90%; margin-left: auto; margin-right: auto">
     <div
       class="bc-gov-alertbanner bc-gov-alertbanner-warning"
@@ -34,7 +25,7 @@
       </p>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="container">
   <mat-card class="search">
@@ -70,6 +61,70 @@
       </form>
     </mat-card-content>
   </mat-card>
+
+  <div class="list">
+    <h2>DMER Definitions</h2>
+    <ng-container>
+      <div>
+        <button mat-button (click)="accordion.openAll()">Expand All</button>
+        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      </div>
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="dmer-Title">
+              DMER Types
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+         
+           RoadSafetyBC has two types of DMERs.  The difference between them is when a medical practice is able to receive a reimbursement from RoadSafetyBC.<br>
+           <div class="dmer-types">
+           <b>No Reimbursement</b><br>
+           The routine DMERs noted below are not subsidized by RoadSafetyBC.<br>
+           
+            <mat-chip-list class="chips">
+              <mat-chip  class="no-reimbursement-chips">Scheduled Age</mat-chip>
+              <mat-chip  class="no-reimbursement-chips" >Commercial</mat-chip>
+            </mat-chip-list>
+           </div>
+           <div class="dmer-types">
+           <b>Reimbursement</b> <br>
+           If a DMER has been issued for the reasons below, the medical practitioner is able to submit a request for reimbursement of $75 to RoadSafetyBC for each submission.
+           <mat-chip-list class="chips">
+            <mat-chip  class="reimbursement-chips">Suspected Medical Condition</mat-chip>
+            <mat-chip  class="reimbursement-chips">Known Medical Condition</mat-chip>
+          </mat-chip-list>
+
+          </div>
+        </mat-expansion-panel>
+      
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title class="dmerTitle">
+            Case Status
+            </mat-panel-title> 
+          </mat-expansion-panel-header>
+
+          <div>
+            
+          A case's lifecycle progresses through five different statuses. 
+            <ul>
+              <li><b>Not Started</b> – DMER has been issued by RoadSafetyBC.  No one has opened the case.</li>
+              <li><b>In progress </b> – DMER has been started by a medical practitioner, but it has not been submitted to RoadSafetyBC.</li>
+              <li><b>RSBC received<</b> – DMER has been submitted successfully to RoadSafetyBC. </li>
+              <li><b>Under RSBC review </b> – RoadSafetyBC has started reviewing this case. </li>
+              <li><b>Decision rendered </b> – RoadSafetyBC has assessed the case and has made a decision whether the driver is fit or unit to drive.  The driver is notified of the decision.  Due to privacy legislation the decision is not able to be displayed.</li>
+              <li><b>Cancelled/Closed </b> - This case is closed or a DMER no longer needs to be performed.</li>
+              <li><b>Transferred</b> - DMER was never submitted/completed by medical practitioner on record.  Another medical practitioner has started a new DMER for this patient.  The previous answers collected were deleted.</li>
+            </ul>
+          </div>
+          
+         
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+    </ng-container>
+  </div>
 
   <div class="list">
     <h2>Your DMERs</h2>
@@ -228,7 +283,13 @@
         </div>
       </ng-container>
 
-      <ng-template #noData> No Records Found </ng-template>
+      <ng-template #noData> 
+        <p>
+         <b>No record found for DMER Case ID {{this.searchCasesInput}}.</b> Please re-enter the DMER Case ID and try again. Alternatively you can search by patient name.<br>
+          If you think you have the incorrect ID, you will want to provide options for the driver to obtain the correct DMER Case ID. <br>
+          If continue to experience issues please contact support at XXX-XXX-XXXX.
+        </p>
+      </ng-template>
     </ng-container>
   </div>
 </div>
