@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CaseManagementService, DMERCase, DMERSearchCases } from '../shared/services/case-management/case-management.service';
 import { Sort } from '@angular/material/sort';
 import { faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +21,7 @@ export class DashboardComponent implements OnInit {
   public pageSize = 2;
   public totalRecords = 0;
   public isLoading = true;
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   statuses = [
     { label: "All Status" },

@@ -69,6 +69,7 @@
 
 
 .list {
+  padding-top: 20px;
   h2 {
     font-weight: bold;
     color: #003366;
@@ -105,4 +106,27 @@
   margin-left: 10px;
 }
 
+.dmer-Title{
+  color: #003366;
+}
+
+.dmer-types{
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.no-reimbursement-chips{
+  background-color: white;
+  border: 1px solid #fcba19;
+}
+
+.reimbursement-chips{
+  background-color: white;
+  border: 1px solid #96c0e6;
+}
+
+.chips{
+  margin-top: 10px;
+  display: block;
+}
 
