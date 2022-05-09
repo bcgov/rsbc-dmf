@@ -58,7 +58,11 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         {
             // get the comments
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            result.Add (new ViewModels.Comment() { caseId = caseId, commentText = "SAMPLE TEXT", commentTypeCode="W", driversLicense = "", sequenceNumber = 0, userId = "TESTUSER" });
+            result.Add (new ViewModels.Comment() { CaseId = caseId, CommentText = "SAMPLE TEXT", CommentTypeCode="W", 
+                
+                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now },
+                
+                SequenceNumber = 0, UserId = "TESTUSER" });  
             
             return Json(result);
         }
