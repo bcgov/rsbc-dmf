@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Pssg.Dmf.LegacyAdapter
+namespace Rsbc.Dmf.LegacyAdapter
 {
     /// <summary>
     ///     Helper methods for working with <see cref="Guid" />.

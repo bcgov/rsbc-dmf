@@ -247,6 +247,10 @@ namespace Rsbc.Dmf.IcbcAdapter
             
             foreach (DmerCase item in unsentItems.Items)
             {
+                // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
+
+                // (TODO)
+
                 var newUpdate = new MedicalUpdate()
                 {
                      LicenseNumber = item.Driver.DriverLicenceNumber,
