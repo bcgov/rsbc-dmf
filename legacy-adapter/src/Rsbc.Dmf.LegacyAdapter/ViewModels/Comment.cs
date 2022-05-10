@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Pssg.Dmf.LegacyAdapter.ViewModels
+namespace Rsbc.Dmf.LegacyAdapter.ViewModels
 {
     /// <summary>
     /// Container for a Comment object.  Used by DFWeb

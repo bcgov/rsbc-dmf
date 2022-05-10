@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 
 
-namespace Pssg.Dmf.LegacyAdapter.Controllers
+namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
 
     [ApiController]
