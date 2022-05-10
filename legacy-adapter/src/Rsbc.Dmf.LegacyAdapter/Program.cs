@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace Pssg.Dmf.LegacyAdapter
+namespace Rsbc.Dmf.LegacyAdapter
 {
     public class Program
     {

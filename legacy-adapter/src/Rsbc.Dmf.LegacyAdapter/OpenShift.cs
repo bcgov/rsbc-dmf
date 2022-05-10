@@ -14,13 +14,13 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Math;
 using Org.BouncyCastle.OpenSsl;
-using Pssg.Dmf.LegacyAdapter;
+using Rsbc.Dmf.LegacyAdapter;
 using RedHat.OpenShift.Utils;
 
 
 // from https://raw.githubusercontent.com/redhat-developer/s2i-dotnetcore-ex/dotnetcore-2.1-https/app/OpenShift.cs
 
-namespace Pssg.Dmf.LegacyAdapter
+namespace Rsbc.Dmf.LegacyAdapter
 {
     public static class PlatformEnvironment
     {

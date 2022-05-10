@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pssg.Dmf.LegacyAdapter\Pssg.Dmf.LegacyAdapter.csproj" />
+    <ProjectReference Include="..\Rsbc.Dmf.LegacyAdapter\Rsbc.Dmf.LegacyAdapter.csproj" />
   </ItemGroup>
 
   <ItemGroup>
