@@ -1,7 +1,8 @@
 {
-  "/api/*": {
-    "target": "http://localhost:3020",
+  "/api": {
+    "target": "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca/rsbc-dfp-medical-portal",
     "secure": false,
+    "changeOrigin": true,
     "logLevel": "debug"
   }
 }

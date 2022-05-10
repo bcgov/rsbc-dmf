@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Pssg.DocumentStorageAdapter;
+using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 
 
-namespace Pssg.Dmf.LegacyAdapter.Controllers
+namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
 
     [ApiController]
@@ -21,12 +23,17 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         private readonly ILogger<DriversController> _logger;
 
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration)
+        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
         {
             _configuration = configuration;
+            _cmsAdapterClient = cmsAdapterClient;
             _logger = logger;
-
         }
+
+       
 
         /// <summary>
         /// DoesCaseExist
@@ -79,10 +86,13 @@ namespace Pssg.Dmf.LegacyAdapter.Controllers
         {
             // add the comment
 
+            
+
+
             var actionName = nameof(CreateCommentForDriver);
             var routeValues = new
             {
-                driversLicence = Guid.NewGuid().ToString()
+                driversLicence = driversLicense
             };
 
             return CreatedAtAction(actionName, routeValues, comment);
