@@ -24,13 +24,14 @@ namespace RSBC.DMF.MedicalPortal.API.Services
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
+        public string LastName { get; set; }        
+    public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
         public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
     }
 
     public record ClinicAssignment
     {
+        public string PractitionerId { get; set; }
         public string Role { get; set; }
         public string ClinicId { get; set; }
         public string ClinicName { get; set; }
@@ -108,6 +109,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
             claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
             {
+                PractitionerId = p.MedicalPractitioner.Id,
                 Role = p.MedicalPractitioner.Role,
                 ClinicId = p.MedicalPractitioner.Clinic.Id,
                 ClinicName = p.MedicalPractitioner.Clinic.Name

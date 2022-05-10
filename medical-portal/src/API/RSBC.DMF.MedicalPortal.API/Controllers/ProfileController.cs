@@ -28,9 +28,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 Id = profile.Id,
                 FirstName = profile.FirstName,
-                LastName = profile.LastName,
+                LastName = profile.LastName,                
                 Clinics = profile.ClinicAssignments.Select(c => new ClinicUserProfile
                 {
+                    PractitionerId = c.PractitionerId,
                     ClinicId = c.ClinicId,
                     ClinicName = c.ClinicName,
                     Role = c.Role
@@ -49,6 +50,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
     public record ClinicUserProfile
     {
+        public string PractitionerId { get; set;}
         public string ClinicId { get; set; }
         public string ClinicName { get; set; }
         public string Role { get; set; }
