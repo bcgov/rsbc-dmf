@@ -8,3 +8,4 @@
 **/environment.local.ts
 /landing-page/src/html/.idea
 /.idea
+./medical-portal\src\UI\medical-portal\proxy.conf.json

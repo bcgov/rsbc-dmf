@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { CaseManagementService, DMERCase } from '../shared/services/case-management/case-management.service';
-import {Sort} from '@angular/material/sort';
+import { CaseManagementService, DMERCase, DMERSearchCases } from '../shared/services/case-management/case-management.service';
+import { Sort } from '@angular/material/sort';
+import { faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
+import {MatAccordion} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,6 +15,24 @@ export class DashboardComponent implements OnInit {
   public dataSource: DMERCase[] = [];
   public sortedData: DMERCase[] = [];
   public searchBox: string = '';
+  public searchCasesInput: string = '';
+  public selectedStatus : string = 'All Status';
+  public pageNumber = 1;
+  public pageSize = 2;
+  public totalRecords = 0;
+  public isLoading = true;
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+
+  statuses = [
+    { label: "All Status" },
+    { label: "In Progress" },
+    {label:"RSBC Received"},
+    {label:"Under RSBC Review"},
+    {label:"Decision Rendered"},
+    { label: "Cancelled/Closed" },
+    { label: "Trasferred" }
+  ]
+
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -20,10 +40,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.caseManagementService.getCases({ byStatus: ['Pending'] }).subscribe(cases => {
-      this.dataSource = cases;
-      this.sortedData = this.dataSource.slice();
-    } );
+    this.searchCases({ byStatus: ['Pending'] })
   }
 
   public search(): void {
@@ -32,12 +49,57 @@ export class DashboardComponent implements OnInit {
     let searchParams = {
       byTitle: this.searchBox
     };
+    this.searchCases(searchParams)
+  }
+
+  searchCases(query?: any): void {
+    let searchParams: DMERSearchCases = {
+      ...query
+    }
+    if (this.searchCasesInput?.length > 0) {
+      searchParams['byPatientName']  = this.searchCasesInput;
+      searchParams['byTitle'] = this.searchCasesInput;
+    } 
+
+    if (this.selectedStatus?.length > 0) {
+      searchParams['byStatus'] = [this.selectedStatus];
+    }
+    
     this.caseManagementService.getCases(searchParams).subscribe(cases => {
+      this.totalRecords = cases.length;
+      this.pageNumber = 1;
       this.dataSource = cases;
-      this.sortedData = this.dataSource.slice();
+      this.sortedData = this.dataSource.slice(0, this.pageSize);
+
+      this.isLoading =false;
     });
+  }
 
+  filterLocally() {
+    const filteredData = this.dataSource.filter((item) => {
+      if (this.selectedStatus !== 'All Status' && item.status !== this.selectedStatus) return false;
+      if (this.searchCasesInput?.length > 0 && !(item.title?.includes(this.searchCasesInput))) return false;
+      return true;  
+    })
 
+    this.totalRecords = filteredData.length;
+    this.pageNumber = 1;
+
+    this.sortedData = filteredData.slice(0, this.pageSize);
+  }
+
+  onStatusChanged() {
+    this.filterLocally();
+  }
+
+  loadRecords(){
+     this.sortedData = this.dataSource.slice(0, this.pageSize * ++this.pageNumber);
+  }
+
+  clear(){
+    this.searchCasesInput='';
+    this.selectedStatus='All Status';
+    this.searchCases();
   }
 
   sortData(sort: Sort) {
