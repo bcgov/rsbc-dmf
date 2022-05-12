@@ -5,6 +5,8 @@
 }
 
 .search {
+  margin-bottom: 2px ;
+
   .mat-card-header {
     padding-left: 10px;
 
@@ -30,6 +32,7 @@
       flex-flow: row;
       justify-content: stretch;
       align-items: center;
+      padding-bottom: 1px;
     }
     .search-input {
       width: 845px;
@@ -43,6 +46,28 @@
       font-style: normal;
       font-weight: 700;
     }
+    .dmer-missing{
+      padding-left: 30px;
+    }
+  }
+}
+
+.search-results{
+  margin-top: 2px;
+
+  .mat-card-title {
+    padding-left: 30px;
+    padding-top: 20px;
+  }
+
+  .show-results{
+    border: solid 2px  #003366;
+    border-radius: 5px;
+    padding: 20px;
+  }
+
+  .no-results{
+    padding: 30px;
   }
 }
 
@@ -88,9 +113,13 @@
 
 }
 
+.dmer-search{
+  margin-top: 20px;
+}
+
 .cases-input{
   color: #003366;
-  width:350px;
+  width:35%;
 }
 
 .filter-icon{
@@ -102,7 +131,7 @@
 
 .cases-filter{
   color: #003366;
-  width:300px;
+  width:30%;
   margin-left: 10px;
 }
 
