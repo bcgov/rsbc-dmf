@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,6 +10,7 @@ import { SharedModule } from './shared/shared.module';
 import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
 import { HttpClientModule } from '@angular/common/http';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import {
   FontAwesomeModule,
@@ -35,6 +35,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
     SharedModule,
     PortalLayoutModule,
     HttpClientModule,
+    FlexLayoutModule,
     ApiModule.forRoot({ rootUrl: '.' }),
     OAuthModule.forRoot({
       resourceServer: {
