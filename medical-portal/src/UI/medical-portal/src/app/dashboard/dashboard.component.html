@@ -2,10 +2,12 @@
   <div class="container">
     <h1>Portal Dashboard</h1>
     <p>
-      In this portal you can start, access and submit a driver medical examination report (DMER) for a driver to RoadSafetyBC. 
+      In this portal you can start, access and submit a driver medical
+      examination report (DMER) for a driver to RoadSafetyBC.
     </p>
     <p>
-      You will also be able to see the DMER status with RoadSafetyBC in the event the driver contacts you for an update.
+      You will also be able to see the DMER status with RoadSafetyBC in the
+      event the driver contacts you for an update.
     </p>
   </div>
 </div>
@@ -40,16 +42,14 @@
           <label class="form-label">DMER Case ID</label><br />
 
           <mat-form-field class="search-input" appearance="outline">
-            <mat-label>Enter DMER case ID</mat-label>
             <input
               matInput
-              placeholder=" "
+              placeholder="Enter the DMER Case ID to start or access a DMER "
               [(ngModel)]="searchBox"
               [ngModelOptions]="{ standalone: true }"
             />
           </mat-form-field>
         </div>
-
         <button
           mat-flat-button
           color="primary"
@@ -59,8 +59,95 @@
           Search DMER Case
         </button>
       </form>
+      <div class="dmer-missing">
+        <p>
+          Missing DMER Case ID? Find out options for the driver to obtain their
+          DMER Case ID.
+        </p>
+      </div>
     </mat-card-content>
   </mat-card>
+
+  <ng-container *ngIf="isShowResults">
+    <mat-card class="search-results">
+      <mat-card-title>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          Showing search results for DMER Case ID '{{ this.searchBox }}'
+          <button mat-button color="primary" (click)="closeResults()">
+            <mat-icon>close</mat-icon>Clear Results
+          </button>
+        </div>
+      </mat-card-title>
+      <div *ngIf="searchedCase; else noResult" style="padding: 8px 48px;">
+        <mat-card-content
+          class="show-results"
+          fxLayout="row"
+          fxLayoutAlign="space-between"
+        >
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              DMER Case ID: <b>{{ searchedCase?.title }}</b>
+            </div>
+            <div>
+              Patient Name: <b>{{ searchedCase?.patientName }} </b>
+            </div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              DMER Type:
+              <mat-chip class="no-reimbursement-chips">Scheduled Age</mat-chip>
+            </div>
+            <div>Date of Birth: <b>May 13, 1990</b></div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>&nbsp;</div>
+            <div>
+              Driver Licence Number: <b>{{ searchedCase?.driverLicense }}</b>
+            </div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              Case Status: <b>{{ searchedCase?.status }}</b>
+            </div>
+            <button mat-stroked-button color="primary">
+              <mat-icon>edit</mat-icon>Start DMER
+            </button>
+          </div>
+        </mat-card-content>
+      </div>
+      <ng-template #noResult>
+        <mat-card-content class="no-results">
+          <p>
+            <b>No record found for DMER Case ID '{{ this.searchBox }}'. </b>
+            Please re-enter the DMER Case ID and try again. <br />
+
+            If you think you have the incorrect ID, you will want to provide
+            options to the driver on how to obtain the correct DMER Case ID.
+            <br />
+
+            If you continue to experience issues please contact support at
+            XXX-XXX-XXXX.
+          </p>
+        </mat-card-content>
+      </ng-template>
+    </mat-card>
+  </ng-container>
 
   <div class="list">
     <h2>DMER Definitions</h2>
@@ -72,68 +159,90 @@
       <mat-accordion multi>
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title class="dmer-Title">
-              DMER Types
-            </mat-panel-title>
+            <mat-panel-title class="dmer-Title"> DMER Types </mat-panel-title>
           </mat-expansion-panel-header>
-         
-           RoadSafetyBC has two types of DMERs.  The difference between them is when a medical practice is able to receive a reimbursement from RoadSafetyBC.<br>
-           <div class="dmer-types">
-           <b>No Reimbursement</b><br>
-           The routine DMERs noted below are not subsidized by RoadSafetyBC.<br>
-           
-            <mat-chip-list class="chips">
-              <mat-chip  class="no-reimbursement-chips">Scheduled Age</mat-chip>
-              <mat-chip  class="no-reimbursement-chips" >Commercial</mat-chip>
-            </mat-chip-list>
-           </div>
-           <div class="dmer-types">
-           <b>Reimbursement</b> <br>
-           If a DMER has been issued for the reasons below, the medical practitioner is able to submit a request for reimbursement of $75 to RoadSafetyBC for each submission.
-           <mat-chip-list class="chips">
-            <mat-chip  class="reimbursement-chips">Suspected Medical Condition</mat-chip>
-            <mat-chip  class="reimbursement-chips">Known Medical Condition</mat-chip>
-          </mat-chip-list>
 
+          RoadSafetyBC has two types of DMERs. The difference between them is
+          when a medical practice is able to receive a reimbursement from
+          RoadSafetyBC.<br />
+          <div class="dmer-types">
+            <b>No Reimbursement</b><br />
+            The routine DMERs noted below are not subsidized by RoadSafetyBC.<br />
+
+            <mat-chip-list class="chips">
+              <mat-chip class="no-reimbursement-chips">Scheduled Age</mat-chip>
+              <mat-chip class="no-reimbursement-chips">Commercial</mat-chip>
+            </mat-chip-list>
+          </div>
+          <div class="dmer-types">
+            <b>Reimbursement</b> <br />
+            If a DMER has been issued for the reasons below, the medical
+            practitioner is able to submit a request for reimbursement of $75 to
+            RoadSafetyBC for each submission.
+            <mat-chip-list class="chips">
+              <mat-chip class="reimbursement-chips"
+                >Suspected Medical Condition</mat-chip
+              >
+              <mat-chip class="reimbursement-chips"
+                >Known Medical Condition</mat-chip
+              >
+            </mat-chip-list>
           </div>
         </mat-expansion-panel>
-      
+
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title class="dmerTitle">
-            Case Status
-            </mat-panel-title> 
+            <mat-panel-title class="dmerTitle"> Case Status </mat-panel-title>
           </mat-expansion-panel-header>
 
           <div>
-            
-          A case's lifecycle progresses through five different statuses. 
+            A case's lifecycle progresses through five different statuses.
             <ul>
-              <li><b>Not Started</b> – DMER has been issued by RoadSafetyBC.  No one has opened the case.</li>
-              <li><b>In progress </b> – DMER has been started by a medical practitioner, but it has not been submitted to RoadSafetyBC.</li>
-              <li><b>RSBC received<</b> – DMER has been submitted successfully to RoadSafetyBC. </li>
-              <li><b>Under RSBC review </b> – RoadSafetyBC has started reviewing this case. </li>
-              <li><b>Decision rendered </b> – RoadSafetyBC has assessed the case and has made a decision whether the driver is fit or unit to drive.  The driver is notified of the decision.  Due to privacy legislation the decision is not able to be displayed.</li>
-              <li><b>Cancelled/Closed </b> - This case is closed or a DMER no longer needs to be performed.</li>
-              <li><b>Transferred</b> - DMER was never submitted/completed by medical practitioner on record.  Another medical practitioner has started a new DMER for this patient.  The previous answers collected were deleted.</li>
+              <li>
+                <b>Not Started</b> – DMER has been issued by RoadSafetyBC. No
+                one has opened the case.
+              </li>
+              <li>
+                <b>In progress </b> – DMER has been started by a medical
+                practitioner, but it has not been submitted to RoadSafetyBC.
+              </li>
+              <li>
+                <b>RSBC received<</b> – DMER has been submitted successfully to
+                RoadSafetyBC.
+              </li>
+              <li>
+                <b>Under RSBC review </b> – RoadSafetyBC has started reviewing
+                this case.
+              </li>
+              <li>
+                <b>Decision rendered </b> – RoadSafetyBC has assessed the case
+                and has made a decision whether the driver is fit or unit to
+                drive. The driver is notified of the decision. Due to privacy
+                legislation the decision is not able to be displayed.
+              </li>
+              <li>
+                <b>Cancelled/Closed </b> - This case is closed or a DMER no
+                longer needs to be performed.
+              </li>
+              <li>
+                <b>Transferred</b> - DMER was never submitted/completed by
+                medical practitioner on record. Another medical practitioner has
+                started a new DMER for this patient. The previous answers
+                collected were deleted.
+              </li>
             </ul>
           </div>
-          
-         
         </mat-expansion-panel>
       </mat-accordion>
-      
     </ng-container>
   </div>
 
   <div class="list">
     <h2>Your DMERs</h2>
-    <p>
-      Quickly access the DMERs you have worked on. Use the filter option to
-      better define what you’re looking for.
-    </p>
-
-    <div>
+    Browse the list or search for DMERs you have been working on using the
+    search field and filters below. See above for DMER Type and Case Status
+    definitions.
+    <div class="dmer-search">
       <mat-form-field class="cases-input" appearance="outline">
         <input
           matInput
@@ -283,11 +392,15 @@
         </div>
       </ng-container>
 
-      <ng-template #noData> 
+      <ng-template #noData>
         <p>
-         <b>No record found for DMER Case ID {{this.searchCasesInput}}.</b> Please re-enter the DMER Case ID and try again. Alternatively you can search by patient name.<br>
-          If you think you have the incorrect ID, you will want to provide options for the driver to obtain the correct DMER Case ID. <br>
-          If continue to experience issues please contact support at XXX-XXX-XXXX.
+          <b>No record found for DMER Case ID {{ this.searchCasesInput }}.</b>
+          Please re-enter the DMER Case ID and try again. Alternatively you can
+          search by patient name.<br />
+          If you think you have the incorrect ID, you will want to provide
+          options for the driver to obtain the correct DMER Case ID. <br />
+          If continue to experience issues please contact support at
+          XXX-XXX-XXXX.
         </p>
       </ng-template>
     </ng-container>

@@ -15,12 +15,16 @@ export class DashboardComponent implements OnInit {
   public dataSource: DMERCase[] = [];
   public sortedData: DMERCase[] = [];
   public searchBox: string = '';
+  public prevSearchBox: string = '';
   public searchCasesInput: string = '';
   public selectedStatus : string = 'All Status';
   public pageNumber = 1;
   public pageSize = 2;
   public totalRecords = 0;
   public isLoading = true;
+  public isShowResults = false;
+  public searchedCase: DMERCase | null = {};
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   statuses = [
@@ -44,12 +48,30 @@ export class DashboardComponent implements OnInit {
   }
 
   public search(): void {
-    console.debug('search', this.searchBox);
+    if (this.searchBox === '' || this.prevSearchBox === this.searchBox) return;
+    // console.debug('search', this.searchBox);
 
     let searchParams = {
       byTitle: this.searchBox
     };
-    this.searchCases(searchParams)
+    this.caseManagementService.getCases(searchParams).subscribe(cases => {
+      if(cases && Array.isArray(cases) && cases?.[0]) {
+        this.searchedCase = cases[0];
+        // console.log(this.searchedCase)
+      } else {
+        this.searchedCase  = null;
+      }
+
+      this.prevSearchBox = this.searchBox;
+      this.isShowResults = true;
+    })
+  }
+
+  closeResults(){
+    this.searchBox = '';
+    this.prevSearchBox = '';
+    this.searchedCase = null;
+    this.isShowResults = false;
   }
 
   searchCases(query?: any): void {
