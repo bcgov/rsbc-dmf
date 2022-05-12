@@ -1,7 +1,7 @@
 
 
 using Microsoft.Extensions.Configuration;
-using Pssg.Dmf.LegacyAdapter;
+using Rsbc.Dmf.LegacyAdapter;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 
-namespace Pssg.Unit.Tests.Dmf.LegacyAdapter
+namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<Startup>
@@ -135,9 +135,9 @@ namespace Pssg.Unit.Tests.Dmf.LegacyAdapter
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
-            var driver = new Pssg.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = "1000098"};
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl};
 
-            var comment = new Pssg.Dmf.LegacyAdapter.ViewModels.Comment() 
+            var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment() 
             {  
                 CommentText = "This is a test comment",
                 Driver = driver,

@@ -15,7 +15,8 @@ export class ViewComponent implements OnInit {
     private configService: ConfigurationService,
     private route: ActivatedRoute,
     private loginService: LoginService
-  ) { }
+  ) {
+  }
 
   public ngOnInit(): void {
     return;
@@ -24,9 +25,25 @@ export class ViewComponent implements OnInit {
   public serverOptions(): EFormsServerOptions {
     return this.configService.getEFormsServerOptions();
   }
-  public formId(): string { return this.configService.getEFormsFormId('DMER'); }
-  public patientId(): string { return '123' };
-  public practitionerId(): string { return '123' };
+
+  public formId(): string {
+    return this.configService.getEFormsFormId('DMER');
+  }
+
+  public patientId(): string {
+    return '123'
+  };
+
+  public practitionerId(): string {
+    if (this.loginService.userProfile?.clinics) {
+      return this.loginService.userProfile?.clinics[0]?.practitionerId ? this.loginService.userProfile.clinics[0].practitionerId : '123'
+    }
+    else {
+      return '123';
+    }
+  };
+
+
   public sessionId(): string { return this.loginService.getUserSession() };
   public submissionId(): string { return this.route.snapshot.params['id'] };
 }
