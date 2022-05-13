@@ -25,6 +25,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)
         {
             var cases = await caseQueryService.SearchCases(query);
+
+            // second pass to populate birthdate.
+
+
+
             return Ok(cases);
         }
     }

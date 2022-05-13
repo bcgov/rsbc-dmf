@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "changeme",
+    "target": "http://localhost:3020",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

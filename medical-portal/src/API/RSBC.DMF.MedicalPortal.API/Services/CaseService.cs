@@ -32,6 +32,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string Status { get; set; }
         public string Title { get; set; }
 
+        public string DmerType {  get; set; }
+
+        public DateTimeOffset? DriverBirthDate {  get; set;}
+
+        public bool IsStarted { get; set;}
+
+
     }
 
     public class CaseService : ICaseQueryService
@@ -88,7 +95,10 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 ModifiedOn = c.ModifiedOn.ToDateTime(),
                 PatientName = c.Driver.Name,
                 DriverLicense = c.Driver.DriverLicenceNumber,
-                Status = c.Status
+                Status = c.Status,
+                DmerType = c.DmerType,
+                DriverBirthDate = c.Driver?.BirthDate != null ? c.Driver?.BirthDate.ToDateTimeOffset() : null,
+                IsStarted = false
             });
         }
     }
