@@ -85,11 +85,13 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
     public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
     {
         public string testDl;
+        public string testSurcode;
         public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
             : base(factory)
         {
 
             testDl = Configuration["ICBC_TEST_DL"];
+            testSurcode = Configuration["ICBC_TEST_SURCODE"];
         }
 
 
@@ -121,6 +123,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var request = new HttpRequestMessage(HttpMethod.Post, "/Cases/Documents");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
             response.EnsureSuccessStatusCode();
         }
 
@@ -132,7 +137,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
-            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = "TestDriver"};
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = testSurcode};
 
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment() 
             {  
@@ -140,7 +145,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 Driver = driver,
                 SequenceNumber = 3,
                 CommentTypeCode = "W",
-                UserId = "TESTUSER",
+                UserId = "IDIR\\TESTUSER",
                 CaseId = Guid.NewGuid().ToString()           
             };
 
