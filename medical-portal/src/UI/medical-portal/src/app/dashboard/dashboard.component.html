@@ -61,8 +61,8 @@
       </form>
       <div class="dmer-missing">
         <p>
-          Missing DMER Case ID? Find out options for the driver to obtain their
-          DMER Case ID.
+          Missing DMER Case ID? <a routerLink="/caseAssistance" >Find out options for the driver to obtain their
+          DMER Case ID. </a>
         </p>
       </div>
     </mat-card-content>
@@ -138,7 +138,7 @@
             Please re-enter the DMER Case ID and try again. <br />
 
             If you think you have the incorrect ID, you will want to provide
-            options to the driver on how to obtain the correct DMER Case ID.
+           <a routerLink="/caseAssistance"> options to the driver on how to obtain the correct DMER Case ID.</a>
             <br />
 
             If you continue to experience issues please contact support at
@@ -275,6 +275,7 @@
       <button mat-button (click)="clear()">Clear</button>
     </div>
   </div>
+  
   <div>
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="totalRecords > 0; else noData">
@@ -394,7 +395,7 @@
 
       <ng-template #noData>
         <p>
-          <b>No record found for DMER Case ID {{ this.searchCasesInput }}.</b>
+          <b>No record found for DMER Case ID '{{ this.searchCasesInput }}'.</b>
           Please re-enter the DMER Case ID and try again. Alternatively you can
           search by patient name.<br />
           If you think you have the incorrect ID, you will want to provide
