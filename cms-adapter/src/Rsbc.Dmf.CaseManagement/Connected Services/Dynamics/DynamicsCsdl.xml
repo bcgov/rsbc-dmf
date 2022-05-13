@@ -235,6 +235,7 @@
         <NavigationProperty Name="bcgov_account_bcgov_templatesession" Type="Collection(mscrm.bcgov_templatesession)" Partner="bcgov_Customer_account" />
         <NavigationProperty Name="dfp_clinic_incident" Type="Collection(mscrm.incident)" Partner="dfp_ClinicId" />
         <NavigationProperty Name="dfp_account_dfp_medicalpractitioner" Type="Collection(mscrm.dfp_medicalpractitioner)" Partner="dfp_ClinicId" />
+        <NavigationProperty Name="dfp_account_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_ClinicId" />
         <NavigationProperty Name="ownerid" Type="mscrm.principal" Nullable="false" Partner="owner_accounts">
           <ReferentialConstraint Property="_ownerid_value" ReferencedProperty="ownerid" />
         </NavigationProperty>
@@ -2058,6 +2059,7 @@
         <Property Name="dfp_decisioncanbemadebyintakeagent" Type="Edm.Boolean" />
         <Property Name="dfp_extensiondays" Type="Edm.Int32" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_dfp_medicalpractitionerid_value" Type="Edm.Guid" />
         <Property Name="_dfp_businessunitid_value" Type="Edm.Guid" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
@@ -2090,6 +2092,7 @@
         <Property Name="bcgov_filesize" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_expectedorigin" Type="Edm.Int32" />
+        <Property Name="_dfp_clinicid_value" Type="Edm.Guid" />
         <Property Name="dfp_solicitedreason" Type="Edm.String" Unicode="false" />
         <Property Name="bcgov_origincode" Type="Edm.Int32" />
         <Property Name="bcgov_fileextension" Type="Edm.String" Unicode="false" />
@@ -2103,7 +2106,7 @@
         <Property Name="_bcgov_tag2id_value" Type="Edm.Guid" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_bcgov_appointmentid_value" Type="Edm.Guid" />
-        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
+        <Property Name="_dfp_lettercreatedby_value" Type="Edm.Guid" />
         <Property Name="_dfp_documentchannelid_value" Type="Edm.Guid" />
         <Property Name="_dfp_documenttypeid_value" Type="Edm.Guid" />
         <Property Name="bcgov_documenturlid" Type="Edm.Guid" />
@@ -2115,8 +2118,8 @@
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="dfp_extendeddays2" Type="Edm.Int32" />
         <Property Name="_dfp_xsstatuscodeid_value" Type="Edm.Guid" />
+        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
         <Property Name="dfp_lettersentdate" Type="Edm.DateTimeOffset" />
-        <Property Name="_dfp_lettercreatedby_value" Type="Edm.Guid" />
         <Property Name="dfp_dmertype" Type="Edm.Int32" />
         <Property Name="dfp_reasonforextension1" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_dayspastduedate" Type="Edm.Int32" />
@@ -2205,6 +2208,12 @@
           <ReferentialConstraint Property="_dfp_lettercreatedby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_bcgov_documenturl_dfp_documentextension" Type="Collection(mscrm.dfp_documentextension)" Partner="dfp_DocumentId" />
+        <NavigationProperty Name="dfp_MedicalPractitionerId" Type="mscrm.dfp_medicalpractitioner" Nullable="false" Partner="dfp_medicalpractitioner_bcgov_documenturl">
+          <ReferentialConstraint Property="_dfp_medicalpractitionerid_value" ReferencedProperty="dfp_medicalpractitionerid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_ClinicId" Type="mscrm.account" Nullable="false" Partner="dfp_account_bcgov_documenturl">
+          <ReferentialConstraint Property="_dfp_clinicid_value" ReferencedProperty="accountid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="bcgov_field" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6757,9 +6766,10 @@
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="dfp_label" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_type" Type="Edm.Int32" />
         <Property Name="dfp_flagid" Type="Edm.Guid" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_type" Type="Edm.Int32" />
+        <Property Name="dfp_resourcelink" Type="Edm.String" Unicode="false" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="statuscode" Type="Edm.Int32" />
@@ -7029,6 +7039,7 @@
         <NavigationProperty Name="dfp_LoginId" Type="mscrm.dfp_login" Nullable="false" Partner="dfp_login_dfp_medicalpractitioner">
           <ReferentialConstraint Property="_dfp_loginid_value" ReferencedProperty="dfp_loginid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_medicalpractitioner_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_MedicalPractitionerId" />
       </EntityType>
       <EntityType Name="dfp_outcomestatus" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -10140,6 +10151,7 @@
         <Property Name="_resolvebykpiid_value" Type="Edm.Guid" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="customercontacted" Type="Edm.Boolean" />
+        <Property Name="dfp_dmertype" Type="Edm.Int32" />
         <Property Name="dfp_progressstatus" Type="Edm.Int32" />
         <Property Name="_accountid_value" Type="Edm.Guid" />
         <Property Name="caseorigincode" Type="Edm.Int32" />
@@ -28854,6 +28866,7 @@
           <NavigationPropertyBinding Path="bcgov_account_bcgov_templatesession" Target="bcgov_templatesessions" />
           <NavigationPropertyBinding Path="dfp_clinic_incident" Target="incidents" />
           <NavigationPropertyBinding Path="dfp_account_dfp_medicalpractitioner" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="dfp_account_bcgov_documenturl" Target="bcgov_documenturls" />
           <NavigationPropertyBinding Path="ownerid" Target="owners" />
           <NavigationPropertyBinding Path="Account_ActivityPointers" Target="activitypointers" />
           <NavigationPropertyBinding Path="Account_SyncErrors" Target="syncerrors" />
@@ -29499,6 +29512,8 @@
           <NavigationPropertyBinding Path="dfp_BusinessUnitID" Target="businessunits" />
           <NavigationPropertyBinding Path="dfp_LetterCreatedBy" Target="systemusers" />
           <NavigationPropertyBinding Path="dfp_bcgov_documenturl_dfp_documentextension" Target="dfp_documentextensions" />
+          <NavigationPropertyBinding Path="dfp_MedicalPractitionerId" Target="dfp_medicalpractitioners" />
+          <NavigationPropertyBinding Path="dfp_ClinicId" Target="accounts" />
         </EntitySet>
         <EntitySet Name="bcgov_fields" EntityType="Microsoft.Dynamics.CRM.bcgov_field">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -31105,6 +31120,7 @@
           <NavigationPropertyBinding Path="dfp_dfp_medicalpractitioner_incident" Target="incidents" />
           <NavigationPropertyBinding Path="dfp_ClinicId" Target="accounts" />
           <NavigationPropertyBinding Path="dfp_LoginId" Target="dfp_logins" />
+          <NavigationPropertyBinding Path="dfp_medicalpractitioner_bcgov_documenturl" Target="bcgov_documenturls" />
         </EntitySet>
         <EntitySet Name="dfp_outcomestatuses" EntityType="Microsoft.Dynamics.CRM.dfp_outcomestatus">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />

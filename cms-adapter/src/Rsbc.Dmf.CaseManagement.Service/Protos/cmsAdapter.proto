@@ -96,7 +96,8 @@ message DmerCase {
 	Driver driver = 10;
 	Provider provider = 11;	
 	string status = 12;
-	string clinicName = 13;
+	string dmerType = 13;
+	string clinicName = 14;
 	repeated FlagItem Flags = 30;
 	repeated DecisionItem Decisions = 35;
 }
