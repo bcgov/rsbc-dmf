@@ -8,6 +8,10 @@ package CaseManagement;
 
 service CaseManager {
 
+  rpc CreateLegacyCaseComment (LegacyComment) returns (CreateStatusReply);
+
+  rpc GetDriverComments (GetDriverCommentsRequest) returns (GetDriverCommentsReply);
+
   // process a line item from the legacy candidate list
   rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
 
@@ -30,12 +34,42 @@ service CaseManager {
   rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 }
 
+message GetDriverCommentsRequest {
+	string driverLicenceNumber = 1;
+}
+
+message GetDriverCommentsReply {
+	repeated LegacyComment items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+message LegacyComment {
+	int64 SequenceNumber = 1;
+	string CommentTypeCode = 2;
+	string CommentText = 3;
+	string UserId = 4;
+	string CaseId = 5;
+	string CommentId = 6;
+	google.protobuf.Timestamp CommentDate = 7;
+	Driver Driver = 8;
+}
+
+
+message CreateStatusReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	string id = 3;
+}
+
+
 message SearchRequest {
   string caseId = 1;
   string title = 2;
-  string clinicId = 3;
-  string driverLicenseNumber = 4;
-  repeated string statuses = 5;
+  string comment = 3;
+  string clinicId = 4;
+  string driverLicenseNumber = 5;
+  repeated string statuses = 6;
 }
 
 message SearchReply {

@@ -24,6 +24,8 @@ using Serilog.Sinks.Splunk;
 using System.Net;
 using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
+using System.Reflection;
+using System.IO;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -77,6 +79,9 @@ namespace Rsbc.Dmf.LegacyAdapter
             services.AddSwaggerGen(c =>
             {               
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
+                // add Xml comments to the swagger docs
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
 

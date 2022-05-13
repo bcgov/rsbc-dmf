@@ -84,10 +84,13 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
     public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
     {
-
+        public string testDl;
         public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
             : base(factory)
-        { }
+        {
+
+            testDl = Configuration["ICBC_TEST_DL"];
+        }
 
 
         private void Login()
@@ -101,9 +104,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         /// </summary>
         [Fact]
         public async void TestCaseExist()
-        {
-            string testDl = Configuration["ICBC_TEST_DL"];
-
+        {            
             Login();
 
             var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?driversLicence=" + testDl);
@@ -114,9 +115,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         [Fact]
         public async void TestCaseDocuments()
-        {
-            string testDl = Configuration["ICBC_TEST_DL"];
-
+        {         
             Login();
 
             var request = new HttpRequestMessage(HttpMethod.Post, "/Cases/Documents");
@@ -129,13 +128,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         [Fact]
         public async void TestDfwebSubmitComment()
         {
-            string testDl = Configuration["ICBC_TEST_DL"];
-
             Login();
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
-            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl};
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = "TestDriver"};
 
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment() 
             {  
@@ -158,6 +155,20 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
+        [Fact]
+        public async void TestDfwebGetComments()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
 
     }
+
+    
+
 }
