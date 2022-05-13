@@ -237,31 +237,40 @@ namespace Rsbc.Dmf.CaseManagement
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
 
-            var @driver = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber).FirstOrDefault();
-            if (@driver != null)
-            {
-                // get the cases for that driver.
-                var @cases = dynamicsContext.incidents.Expand(x => x.dfp_incident_dfp_comment).Where(i => i._dfp_driverid_value == @driver.dfp_driverid                
-                ).ToList();
+            var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
 
-                foreach (var @case in @cases)
+            foreach (var @driver in @drivers)
+            {
+                if (@driver != null)
                 {
-                    foreach (var comment in @case.dfp_incident_dfp_comment )
+                    // .Expand(x => x.dfp_incident_dfp_comment)
+                    // get the cases for that driver.
+                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
+                    ).ToList();
+
+                    foreach (var @case in @cases)
                     {
-                        if (allComments || comment.dfp_webcomments.GetValueOrDefault())
+                        // ensure related data is loaded.
+
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
+                        foreach (var comment in @case.dfp_incident_dfp_comment)
                         {
-                            LegacyComment legacyComment = new LegacyComment
+                            await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                            if (allComments || comment.dfp_webcomments.GetValueOrDefault())
                             {
-                                CaseId = @case.incidentid.ToString(),
-                                CommentDate = comment.dfp_date.GetValueOrDefault(),
-                                CommentId = comment.dfp_commentid.ToString(),
-                                CommentText = comment.dfp_commentdetails,
-                                CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
-                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                UserId = comment.dfp_userid
-                            };
-                            result.Add(legacyComment);
-                        }                        
+                                LegacyComment legacyComment = new LegacyComment
+                                {
+                                    CaseId = @case.incidentid.ToString(),
+                                    CommentDate = comment.dfp_date.GetValueOrDefault(),
+                                    CommentId = comment.dfp_commentid.ToString(),
+                                    CommentText = comment.dfp_commentdetails,
+                                    CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
+                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                    UserId = comment.dfp_userid
+                                };
+                                result.Add(legacyComment);
+                            }
+                        }
                     }
                 }
             }
@@ -318,7 +327,8 @@ namespace Rsbc.Dmf.CaseManagement
                  dfp_date = DateTimeOffset.Now,
                  dfp_webcomments = true,
                  dfp_userid = request.UserId,
-                 dfp_commentdetails = request.CommentText                 
+                 dfp_commentdetails = request.CommentText  
+                 
             };
 
             try
@@ -520,10 +530,6 @@ namespace Rsbc.Dmf.CaseManagement
                 dynamicsContext.AddTodfp_drivers(driver);
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
             }
-            //await dynamicsContext.SaveChangesAsync();
-
-            //var driverContact = dynamicsContext.contacts.Where(x => x.contactid == driverContactId).FirstOrDefault();
-
 
 
             // create the case.
