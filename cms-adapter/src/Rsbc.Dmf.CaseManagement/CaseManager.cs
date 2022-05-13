@@ -142,6 +142,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string ClinicId { get; set; }
 
         public string ClinicName { get; set;}
+
+        public string DmerType { get; set;}
     }
 
     public class Flag
@@ -414,6 +416,7 @@ namespace Rsbc.Dmf.CaseManagement
                         ModifiedOn = c.modifiedon.Value.DateTime,
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
                         ClinicName = c.dfp_ClinicId?.name,
+                        DmerType = TranslateDmerType (c.dfp_dmertype),
                         Driver = new CaseManagement.Driver()
                         {
                             Id = c.dfp_DriverId.dfp_driverid.ToString(),
@@ -565,13 +568,61 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
-        private string TranslateStatus (int? statuscode)
+        /// <summary>
+        /// Translate the Dynamics statuscode (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private string TranslateStatus (int? statusCode)
         {
-            string result = "In Progress";
-            
-            // add extra logic here.            
-            return result;
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 1, "In Progress" },
+                { 2, "On Hold" },
+                { 3, "Waiting on Details" },
+                { 4, "Case Created" },
+                { 100000000, "Open - Pending Submission" },
+                { 5, "Decision Rendered" },
+                { 1000, "RSCB received" },
+                { 6, "Closed/Canceled" },
+                { 2000, "Merged" },
+            };
+
+            if (statusCode != null && statusMap.ContainsKey(statusCode.Value))
+            {
+                return statusMap[statusCode.Value];
+            }
+            else
+            {
+                return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// Translate the Dynamics DMER Type field to text
+        /// </summary>
+        /// <param name="dmerType"></param>
+        /// <returns></returns>
+        private string TranslateDmerType(int? dmerType)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000000, "Commercial/NSC" },
+                { 100000001, "Age" },
+                { 100000002, "Industrial Road" },
+                { 100000003, "Known/Suspected Condition" },
+                { 100000004, "Scheduled Routine"},
+                { 100000005, "No DMER"}
+            };
+
+            if (dmerType != null && statusMap.ContainsKey(dmerType.Value))
+            {
+                return statusMap[dmerType.Value];
+            }
+            else
+            {
+                return "Unknown";
+            }
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
@@ -601,6 +652,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.bcgov_incident_bcgov_documenturl)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
