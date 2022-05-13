@@ -33,6 +33,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     {
                         // match is found, add the comment.
                         
+                        //_cmsAdapterClient.CreateCaseComment(new );
                     }
                 }
             }
