@@ -29,6 +29,79 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _caseManager = caseManager;
         }
 
+        public async override Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenceNumber = request.Driver.DriverLicenceNumber;
+            }
+
+            var newComment = new CaseManagement.LegacyComment()
+            {
+                CaseId = request.CaseId,
+                CommentText = request.CommentText,
+                CommentTypeCode = request.CommentTypeCode,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,            
+                 Driver = driver
+            };
+
+            var result = await _caseManager.CreateLegacyCaseComment(newComment);
+
+            if (result.Success )
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        public async override Task<GetDriverCommentsReply> GetDriverComments(GetDriverCommentsRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriverCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenceNumber, false);
+                
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenceNumber = item.Driver.DriverLicenceNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add (new LegacyComment { 
+                        CaseId = item.CaseId, 
+                         CommentDate = Timestamp.FromDateTimeOffset( item.CommentDate),
+                          CommentTypeCode = item.CommentTypeCode,
+                           CommentId = item.CommentId,
+                           SequenceNumber = (long) item.SequenceNumber,
+                            UserId=item.UserId,
+                            Driver = driver,
+                        CommentText = item.CommentText });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+                
+                
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+        
 
         public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
         {

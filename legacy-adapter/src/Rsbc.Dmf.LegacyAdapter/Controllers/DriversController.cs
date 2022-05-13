@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -62,14 +63,49 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(500)]        
         public ActionResult GetComments([FromRoute] string driversLicense)
         
-        {
-            // get the comments
-            List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W", 
+        {            
+            // call the back end
+
+            var reply = _cmsAdapterClient.GetDriverComments( new GetDriverCommentsRequest () { DriverLicenceNumber = driversLicense } );
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                List<ViewModels.Comment> result = new List<ViewModels.Comment>();
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = driversLicense,
+                        Flag51 = false, LastName = "LASTNAME", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now 
+                    };
+
+                    result.Add(new ViewModels.Comment
+                    {
+                        CaseId = item.CaseId,
+                        CommentDate = item.CommentDate.ToDateTimeOffset(),
+                        CommentId = item.CommentId,
+                        CommentText = item.CommentText,
+                        CommentTypeCode = item.CommentTypeCode,
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+            /*
+            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W",  CommentDate = DateTime.Now, CommentId = Guid.NewGuid().ToString(),
                 Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
                 SequenceNumber = 0, UserId = "TESTUSER" });
-            
-            return Json(result);
+            */
+
         }
 
         /// <summary>
@@ -86,16 +122,43 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // add the comment
 
-            
-
-
-            var actionName = nameof(CreateCommentForDriver);
-            var routeValues = new
+            var driver = new CaseManagement.Service.Driver()
             {
-                driversLicence = driversLicense
+                DriverLicenceNumber = driversLicense                
+
             };
 
-            return CreatedAtAction(actionName, routeValues, comment);
+            if (comment.Driver != null)
+            {
+                driver.Surname = comment.Driver.LastName;
+            }
+
+            var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
+            {
+                CaseId = comment.CaseId,
+                CommentText = comment.CommentText,
+                CommentTypeCode = comment.CommentTypeCode,
+                SequenceNumber = comment.SequenceNumber,
+                UserId = comment.UserId,
+                CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
+                Driver = driver
+
+            });
+
+            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                var actionName = nameof(CreateCommentForDriver);
+                var routeValues = new
+                {
+                    driversLicence = driversLicense
+                };
+
+                return CreatedAtAction(actionName, routeValues, comment);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
 

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Rsbc.Dmf.LegacyAdapter.ViewModels
 {
@@ -23,7 +24,7 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// Sequence Number
         /// </summary>
         [Required]
-        public short SequenceNumber { get; set;}
+        public long SequenceNumber { get; set;}
 
         /// <summary>
         /// Comment Type Code - typically "W" for DFWEB
@@ -42,5 +43,15 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// </summary>
         [Required]
         public string CaseId { get; set; }
+
+        /// <summary>
+        /// GUID Comment Id from the Case Management System
+        /// </summary>
+        public string CommentId { get; set;}
+
+        /// <summary>
+        /// Date the comment was made
+        /// </summary>
+        public DateTimeOffset CommentDate { get; set; }
     }
 }
