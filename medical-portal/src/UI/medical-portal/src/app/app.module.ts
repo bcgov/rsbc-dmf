@@ -18,6 +18,7 @@ import {
 } from '@fortawesome/angular-fontawesome';
 
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { CaseAssistanceComponent } from './case-assistance/case-assistance.component';
 
 
 
@@ -25,7 +26,8 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent
+    DashboardComponent,
+    CaseAssistanceComponent
   ],
   imports: [
     BrowserModule,
