@@ -12,7 +12,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
-            this.SaveChangesDefaultOptions = SaveChangesOptions.None; //BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
+            this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
 
             Func<Uri, Uri> formatUri = requestUri => requestUri.IsAbsoluteUri

@@ -37,6 +37,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             if (request.Driver != null)
             {
                 driver.DriverLicenceNumber = request.Driver.DriverLicenceNumber;
+                driver.Surname = request.Driver.Surname;
             }
 
             var newComment = new CaseManagement.LegacyComment()
@@ -70,7 +71,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenceNumber, false);
-                
+
                 foreach (var item in result)
                 {
                     var driver = new Driver();
@@ -79,15 +80,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         driver.DriverLicenceNumber = item.Driver.DriverLicenceNumber;
                         driver.Surname = item.Driver.Surname;
                     }
-                    reply.Items.Add (new LegacyComment { 
-                        CaseId = item.CaseId, 
-                         CommentDate = Timestamp.FromDateTimeOffset( item.CommentDate),
-                          CommentTypeCode = item.CommentTypeCode,
-                           CommentId = item.CommentId,
-                           SequenceNumber = (long) item.SequenceNumber,
-                            UserId=item.UserId,
-                            Driver = driver,
-                        CommentText = item.CommentText });
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode,
+                        CommentId = item.CommentId,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId,
+                        Driver = driver,
+                        CommentText = item.CommentText
+                    });
                 }
                 reply.ResultStatus = ResultStatus.Success;
                 
@@ -195,6 +198,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         {
                             Id = c.Driver.Id,
                             Surname = c.Driver.Surname ?? string.Empty,
+                            Middlename = c.Driver.Middlename ?? string.Empty,
                             GivenName = c.Driver.GivenName ?? string.Empty,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
                             DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
@@ -211,7 +215,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         Provider = provider,
                         IsCommercial = c.IsCommercial,
                         ClinicName = c.ClinicName ?? string.Empty,
-                        Status = c.Status
+                        Status = c.Status,
+                        DmerType = c.DmerType ?? string.Empty,
                     };
                     newCase.Flags.Add(c.Flags.Select(f => new FlagItem
                     {
