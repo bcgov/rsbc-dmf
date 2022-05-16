@@ -198,6 +198,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         {
                             Id = c.Driver.Id,
                             Surname = c.Driver.Surname ?? string.Empty,
+                            Middlename = c.Driver.Middlename ?? string.Empty,
                             GivenName = c.Driver.GivenName ?? string.Empty,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
                             DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
