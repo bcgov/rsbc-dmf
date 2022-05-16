@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
   public searchBox: string = '';
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
-  public selectedStatus : string = 'All Status';
+  public selectedStatus : string = 'All Statuses';
   public pageNumber = 1;
   public pageSize = 2;
   public totalRecords = 0;
@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   statuses = [
-    { label: "All Status" },
+    { label: "All Statuses" },
     { label: "In Progress" },
     {label:"RSBC Received"},
     {label:"Under RSBC Review"},
@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.searchCases({ byStatus: ['Pending'] })
+    this.searchCases({ byStatus: ['All Statuses'] })
   }
 
   public search(): void {
@@ -99,7 +99,7 @@ export class DashboardComponent implements OnInit {
 
   filterLocally() {
     const filteredData = this.dataSource.filter((item) => {
-      if (this.selectedStatus !== 'All Status' && item.status !== this.selectedStatus) return false;
+      if (this.selectedStatus !== 'All Statuses' && item.status !== this.selectedStatus) return false;
       if (this.searchCasesInput?.length > 0 && !(item.title?.includes(this.searchCasesInput))) return false;
       return true;  
     })
@@ -120,7 +120,7 @@ export class DashboardComponent implements OnInit {
 
   clear(){
     this.searchCasesInput='';
-    this.selectedStatus='All Status';
+    this.selectedStatus='All Statuses';
     this.searchCases();
   }
 

@@ -33,7 +33,7 @@
   <mat-card class="search">
     <mat-card-header class="primary">
       <mat-card-title
-        ><i class="fas fa-search"></i> Search DMER Case</mat-card-title
+        > <mat-icon class="search-icon">search</mat-icon> Search DMER Case</mat-card-title
       >
     </mat-card-header>
     <mat-card-content>
@@ -78,7 +78,7 @@
           </button>
         </div>
       </mat-card-title>
-      <div *ngIf="searchedCase; else noResult" style="padding: 8px 48px;">
+      <div *ngIf="searchedCase; else noResult" class="searched-case">
         <mat-card-content
           class="show-results"
           fxLayout="row"
@@ -103,7 +103,7 @@
           >
             <div>
               DMER Type:
-              <mat-chip class="no-reimbursement-chips">Scheduled Age</mat-chip>
+              <label  class="no-reimbursement-chips">Scheduled Age</label>
             </div>
             <div>Date of Birth: <b>May 13, 1990</b></div>
           </div>
@@ -126,7 +126,7 @@
               Case Status: <b>{{ searchedCase?.status }}</b>
             </div>
             <button mat-stroked-button color="primary">
-              <mat-icon>edit</mat-icon>Start DMER
+              <mat-icon class="cases-button">edit</mat-icon>Start DMER
             </button>
           </div>
         </mat-card-content>
@@ -152,9 +152,10 @@
   <div class="list">
     <h2>DMER Definitions</h2>
     <ng-container>
-      <div>
-        <button mat-button (click)="accordion.openAll()">Expand All</button>
-        <button mat-button (click)="accordion.closeAll()">Collapse All</button>
+      <div class="accordion-btn-container">
+        <a class="accordion-btn show-btn" (click)="accordion.openAll()">Expand All</a>
+        <span class="accordion-bar">&nbsp;|&nbsp;</span>
+        <a class="accordion-btn hide-btn" (click)="accordion.closeAll()">Collapse All</a>
       </div>
       <mat-accordion multi>
         <mat-expansion-panel>
@@ -168,31 +169,28 @@
           <div class="dmer-types">
             <b>No Reimbursement</b><br />
             The routine DMERs noted below are not subsidized by RoadSafetyBC.<br />
+            <div class ="chips" fxLayout="row" fxLayoutGap="24px" >
+              <label  class="no-reimbursement-chips">Scheduled Age</label>
+              <label  class="no-reimbursement-chips">Commercial</label>
+            </div>
 
-            <mat-chip-list class="chips">
-              <mat-chip class="no-reimbursement-chips">Scheduled Age</mat-chip>
-              <mat-chip class="no-reimbursement-chips">Commercial</mat-chip>
-            </mat-chip-list>
           </div>
           <div class="dmer-types">
             <b>Reimbursement</b> <br />
             If a DMER has been issued for the reasons below, the medical
             practitioner is able to submit a request for reimbursement of $75 to
             RoadSafetyBC for each submission.
-            <mat-chip-list class="chips">
-              <mat-chip class="reimbursement-chips"
-                >Suspected Medical Condition</mat-chip
-              >
-              <mat-chip class="reimbursement-chips"
-                >Known Medical Condition</mat-chip
-              >
-            </mat-chip-list>
+
+            <div class ="chips" fxLayout="row" fxLayoutGap="24px" >
+              <label  class="reimbursement-chips">Suspected Medical Condition</label>
+              <label  class="reimbursement-chips">Known Medical Condition</label>
+            </div>
           </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            <mat-panel-title class="dmerTitle"> Case Status </mat-panel-title>
+            <mat-panel-title class="dmer-Title"> Case Statuses </mat-panel-title>
           </mat-expansion-panel-header>
 
           <div>
@@ -238,7 +236,7 @@
   </div>
 
   <div class="list">
-    <h2>Your DMERs</h2>
+    <h2>DMERs</h2>
     Browse the list or search for DMERs you have been working on using the
     search field and filters below. See above for DMER Type and Case Status
     definitions.
@@ -247,7 +245,7 @@
         <input
           matInput
           type="text"
-          placeholder="Search By Name or Case Id"
+          placeholder="Search by Name or Case ID"
           [(ngModel)]="searchCasesInput"
         />
         <button
@@ -347,7 +345,7 @@
               mat-sort-header="status"
               sortActionDescription="Sort by Status"
             >
-              Status
+             Case Status
             </th>
             <td mat-cell *matCellDef="let row">{{ row.status }}</td>
           </ng-container>
