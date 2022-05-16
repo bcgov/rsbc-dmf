@@ -105,6 +105,9 @@ namespace Rsbc.Dmf.CaseManagement
         public string Name { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
+
+        public string Middlename { get; set; }
+
         public double Weight { get; set; }
         public string Sex { get; set; }
         public DateTime BirthDate { get; set; }
@@ -398,8 +401,8 @@ namespace Rsbc.Dmf.CaseManagement
                                 Line2 = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_line2,
                             },
                             FaxNumber = c.dfp_MedicalPractitionerId.dfp_PersonId?.fax,
-                            GivenName = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname}",
-                            Name =
+                            GivenName = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname}",                            
+                            Name = 
                                 $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname} {c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
                             Surname = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
                             FaxUseType = "work",
@@ -440,6 +443,7 @@ namespace Rsbc.Dmf.CaseManagement
                             BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
                             DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
                             GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
+                            Middlename = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.middlename}",
                             Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
                             Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
                             Name =
