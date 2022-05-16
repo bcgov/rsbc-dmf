@@ -443,7 +443,7 @@ namespace Rsbc.Dmf.CaseManagement
                             BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
                             DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
                             GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
-                            Middlename = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.middlename}",
+                            Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename,
                             Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
                             Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
                             Name =
