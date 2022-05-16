@@ -105,6 +105,9 @@ namespace Rsbc.Dmf.CaseManagement
         public string Name { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
+
+        public string Middlename { get; set; }
+
         public double Weight { get; set; }
         public string Sex { get; set; }
         public DateTime BirthDate { get; set; }
@@ -142,6 +145,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string ClinicId { get; set; }
 
         public string ClinicName { get; set;}
+
+        public string DmerType { get; set;}
     }
 
     public class Flag
@@ -235,31 +240,40 @@ namespace Rsbc.Dmf.CaseManagement
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
 
-            var @driver = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber).FirstOrDefault();
-            if (@driver != null)
-            {
-                // get the cases for that driver.
-                var @cases = dynamicsContext.incidents.Expand(x => x.dfp_incident_dfp_comment).Where(i => i._dfp_driverid_value == @driver.dfp_driverid                
-                ).ToList();
+            var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
 
-                foreach (var @case in @cases)
+            foreach (var @driver in @drivers)
+            {
+                if (@driver != null)
                 {
-                    foreach (var comment in @case.dfp_incident_dfp_comment )
+                    // .Expand(x => x.dfp_incident_dfp_comment)
+                    // get the cases for that driver.
+                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
+                    ).ToList();
+
+                    foreach (var @case in @cases)
                     {
-                        if (allComments || comment.dfp_webcomments.GetValueOrDefault())
+                        // ensure related data is loaded.
+
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
+                        foreach (var comment in @case.dfp_incident_dfp_comment)
                         {
-                            LegacyComment legacyComment = new LegacyComment
+                            await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                            if (allComments || comment.dfp_webcomments.GetValueOrDefault())
                             {
-                                CaseId = @case.incidentid.ToString(),
-                                CommentDate = comment.dfp_date.GetValueOrDefault(),
-                                CommentId = comment.dfp_commentid.ToString(),
-                                CommentText = comment.dfp_commentdetails,
-                                CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
-                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                UserId = comment.dfp_userid
-                            };
-                            result.Add(legacyComment);
-                        }                        
+                                LegacyComment legacyComment = new LegacyComment
+                                {
+                                    CaseId = @case.incidentid.ToString(),
+                                    CommentDate = comment.dfp_date.GetValueOrDefault(),
+                                    CommentId = comment.dfp_commentid.ToString(),
+                                    CommentText = comment.dfp_commentdetails,
+                                    CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
+                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                    UserId = comment.dfp_userid
+                                };
+                                result.Add(legacyComment);
+                            }
+                        }
                     }
                 }
             }
@@ -316,7 +330,8 @@ namespace Rsbc.Dmf.CaseManagement
                  dfp_date = DateTimeOffset.Now,
                  dfp_webcomments = true,
                  dfp_userid = request.UserId,
-                 dfp_commentdetails = request.CommentText                 
+                 dfp_commentdetails = request.CommentText  
+                 
             };
 
             try
@@ -386,8 +401,8 @@ namespace Rsbc.Dmf.CaseManagement
                                 Line2 = c.dfp_MedicalPractitionerId.dfp_PersonId?.address1_line2,
                             },
                             FaxNumber = c.dfp_MedicalPractitionerId.dfp_PersonId?.fax,
-                            GivenName = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname}",
-                            Name =
+                            GivenName = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname}",                            
+                            Name = 
                                 $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.firstname} {c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
                             Surname = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.lastname}",
                             FaxUseType = "work",
@@ -414,6 +429,7 @@ namespace Rsbc.Dmf.CaseManagement
                         ModifiedOn = c.modifiedon.Value.DateTime,
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
                         ClinicName = c.dfp_ClinicId?.name,
+                        DmerType = TranslateDmerType (c.dfp_dmertype),
                         Driver = new CaseManagement.Driver()
                         {
                             Id = c.dfp_DriverId.dfp_driverid.ToString(),
@@ -427,6 +443,7 @@ namespace Rsbc.Dmf.CaseManagement
                             BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
                             DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
                             GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
+                            Middlename = $"{c.dfp_MedicalPractitionerId.dfp_PersonId?.middlename}",
                             Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
                             Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
                             Name =
@@ -517,10 +534,6 @@ namespace Rsbc.Dmf.CaseManagement
                 dynamicsContext.AddTodfp_drivers(driver);
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
             }
-            //await dynamicsContext.SaveChangesAsync();
-
-            //var driverContact = dynamicsContext.contacts.Where(x => x.contactid == driverContactId).FirstOrDefault();
-
 
 
             // create the case.
@@ -565,13 +578,61 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
-        private string TranslateStatus (int? statuscode)
+        /// <summary>
+        /// Translate the Dynamics statuscode (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private string TranslateStatus (int? statusCode)
         {
-            string result = "In Progress";
-            
-            // add extra logic here.            
-            return result;
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 1, "In Progress" },
+                { 2, "On Hold" },
+                { 3, "Waiting on Details" },
+                { 4, "Case Created" },
+                { 100000000, "Open - Pending Submission" },
+                { 5, "Decision Rendered" },
+                { 1000, "RSCB received" },
+                { 6, "Closed/Canceled" },
+                { 2000, "Merged" },
+            };
+
+            if (statusCode != null && statusMap.ContainsKey(statusCode.Value))
+            {
+                return statusMap[statusCode.Value];
+            }
+            else
+            {
+                return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// Translate the Dynamics DMER Type field to text
+        /// </summary>
+        /// <param name="dmerType"></param>
+        /// <returns></returns>
+        private string TranslateDmerType(int? dmerType)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000000, "Commercial/NSC" },
+                { 100000001, "Age" },
+                { 100000002, "Industrial Road" },
+                { 100000003, "Known/Suspected Condition" },
+                { 100000004, "Scheduled Routine"},
+                { 100000005, "No DMER"}
+            };
+
+            if (dmerType != null && statusMap.ContainsKey(dmerType.Value))
+            {
+                return statusMap[dmerType.Value];
+            }
+            else
+            {
+                return "Unknown";
+            }
         }
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
@@ -601,6 +662,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.bcgov_incident_bcgov_documenturl)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
