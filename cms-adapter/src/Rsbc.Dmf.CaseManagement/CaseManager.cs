@@ -15,7 +15,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request);
 
-        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments);
+        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);        
+
+        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
+
+        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
 
@@ -60,6 +64,19 @@ namespace Rsbc.Dmf.CaseManagement
         public string CaseId { get; set; }
         public DateTimeOffset CommentDate { get; set; }
         public string CommentId { get; set; }
+        public Driver Driver { get; set; }
+    }
+
+
+    public class LegacyDocument
+    {
+        public int? SequenceNumber { get; set; }        
+        public string DocumentUrl { get; set; }
+        public long FileSize { get; set; }
+        public string UserId { get; set; }
+        public string CaseId { get; set; }
+        public DateTimeOffset DocumentDate { get; set; }
+        public string DocumentId { get; set; }
         public Driver Driver { get; set; }
     }
 
@@ -113,7 +130,7 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime BirthDate { get; set; }
         public double Height { get; set; }
         public Address Address { get; set; }
-        public string DriverLicenceNumber { get; set; }
+        public string DriverLicenseNumber { get; set; }
     }
 
     public class Provider
@@ -282,6 +299,49 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber)
+        {
+            List<LegacyDocument> result = new List<LegacyDocument>();
+            // start by the driver
+
+            var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
+
+            foreach (var @driver in @drivers)
+            {
+                if (@driver != null)
+                {
+                    // .Expand(x => x.dfp_incident_dfp_comment)
+                    // get the cases for that driver.
+                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
+                    ).ToList();
+
+                    foreach (var @case in @cases)
+                    {
+                        // ensure related data is loaded.
+
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+
+                            LegacyDocument legacyDocument = new LegacyDocument
+                            {
+                                CaseId = @case.incidentid.ToString(),
+                                DocumentDate = document.createdon.GetValueOrDefault(),
+                                DocumentId = document.bcgov_documenturlid.ToString(),
+                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault()
+                            };
+
+                            result.Add(legacyDocument);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
         private incident GetIncidentBySequence (int sequence)
         {
             incident result = null;
@@ -320,7 +380,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (@case == null)
             {
                 // create it.
-                await LegacyCandidateCreate (new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenceNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber } );
+                await LegacyCandidateCreate (new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber } );
                 @case = GetIncidentBySequence((int)request.SequenceNumber);
             }
 
@@ -343,6 +403,47 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.SaveChangesAsync();
                 result.Success = true;
                 result.Id = @comment.dfp_commentid.ToString();
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;                
+            }
+
+            return result;
+        }
+
+
+        public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
+        {
+            CreateStatusReply result = new CreateStatusReply();
+
+            // create the comment.
+            incident @case = GetIncidentBySequence((int)request.SequenceNumber);
+
+            if (@case == null)
+            {
+                // create it.
+                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber });
+                @case = GetIncidentBySequence((int)request.SequenceNumber);
+            }
+
+            // create the document.
+            bcgov_documenturl @documentUrl = new bcgov_documenturl()
+            {
+                
+
+            };
+
+            try
+            {
+                dynamicsContext.AddTobcgov_documenturls(@documentUrl);
+                dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), @documentUrl);
+
+
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+                result.Id = @documentUrl.bcgov_documenturlid.ToString();
                 dynamicsContext.DetachAll();
             }
             catch (Exception ex)
@@ -441,7 +542,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2,
                             },
                             BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
-                            DriverLicenceNumber = c.dfp_DriverId?.dfp_licensenumber,
+                            DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
                             GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
                             Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename,
                             Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),

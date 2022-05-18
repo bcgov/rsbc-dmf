@@ -33,12 +33,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// DoesCaseExist
         /// </summary>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="surcode"></param>
         /// <returns>True if the case exists</returns>
         // GET: /Comments/Exist
         [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string driversLicense, string surcode)
+        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
         {
             bool result = false;
             // get the case                                                
