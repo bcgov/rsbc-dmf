@@ -262,16 +262,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                         };
                     }
-                    var newCase = new DmerCase
+
+                    Driver driver = null;
+                    if (c.Driver != null && c.Driver.Id != null) // only create a driver if it is a valid record
                     {
-                        CaseId = c.Id,
-                        Title = c.Title,
-                        CreatedBy = c.CreatedBy ?? string.Empty,
-                        CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                        ModifiedBy = c.CreatedBy ?? string.Empty,
-                        ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                        Driver = new Driver()
-                        {
+                        driver = new Driver {
                             Id = c.Driver.Id,
                             Surname = c.Driver.Surname ?? string.Empty,
                             Middlename = c.Driver.Middlename ?? string.Empty,
@@ -287,7 +282,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             },
                             Sex = c.Driver.Sex ?? string.Empty,
                             Name = c.Driver.Name ?? string.Empty
-                        },
+                        };
+                    }
+
+                    var newCase = new DmerCase
+                    {
+                        CaseId = c.Id,
+                        Title = c.Title,
+                        CreatedBy = c.CreatedBy ?? string.Empty,
+                        CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        ModifiedBy = c.CreatedBy ?? string.Empty,
+                        ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        Driver = driver,
                         Provider = provider,
                         IsCommercial = c.IsCommercial,
                         ClinicName = c.ClinicName ?? string.Empty,
