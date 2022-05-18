@@ -79,7 +79,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ViewModels.Driver driver = new ViewModels.Driver()
                     {
                         LicenseNumber = licenseNumber,
-                        Flag51 = false, LastName = "LASTNAME", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now 
+                        Flag51 = false, 
+                        LastName = "LASTNAME", 
+                        LoadedFromICBC = false, 
+                        MedicalIssueDate = DateTimeOffset.Now 
                     };
 
                     result.Add(new ViewModels.Comment
