@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CaseManagement.Driver driver = new CaseManagement.Driver();
             if (request.Driver != null)
             {
-                driver.DriverLicenceNumber = request.Driver.DriverLicenceNumber;
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
                 driver.Surname = request.Driver.Surname;
             }
 
@@ -65,31 +65,66 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        public async override Task<GetDriverCommentsReply> GetDriverComments(GetDriverCommentsRequest request, ServerCallContext context)
+
+        public async override Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
+                driver.Surname = request.Driver.Surname;
+            }
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                CaseId = request.CaseId,                
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,
+                Driver = driver
+            };
+
+            var result = await _caseManager.CreateLegacyCaseDocument(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        public async override Task<GetDriverCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDriverCommentsReply();
             try
             {
-                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenceNumber, false);
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, false);
 
                 foreach (var item in result)
                 {
                     var driver = new Driver();
                     if (item.Driver != null)
                     {
-                        driver.DriverLicenceNumber = item.Driver.DriverLicenceNumber;
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
                         driver.Surname = item.Driver.Surname;
                     }
                     reply.Items.Add(new LegacyComment
                     {
-                        CaseId = item.CaseId,
+                        CaseId = item.CaseId ?? string.Empty,
                         CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
-                        CommentTypeCode = item.CommentTypeCode,
-                        CommentId = item.CommentId,
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
                         SequenceNumber = (long)item.SequenceNumber,
-                        UserId = item.UserId,
+                        UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText
+                        CommentText = item.CommentText ?? string.Empty
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -104,7 +139,48 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             return reply;
         }
-        
+
+
+        public async override Task<GetDriverDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriverDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyDocument
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),                        
+                        DocumentId = item.DocumentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
 
         public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
         {
@@ -201,7 +277,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             Middlename = c.Driver.Middlename ?? string.Empty,
                             GivenName = c.Driver.GivenName ?? string.Empty,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
-                            DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
+                            DriverLicenseNumber = c.Driver.DriverLicenseNumber ?? string.Empty,
                             Address = new Address()
                             {
                                 City = c.Driver.Address.City ?? string.Empty,
@@ -422,7 +498,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         Surname = c.Driver.Surname ?? string.Empty,
                         GivenName = c.Driver.GivenName ?? string.Empty,
                         BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
-                        DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
+                        DriverLicenseNumber = c.Driver.DriverLicenseNumber ?? string.Empty,
                         Address = new Address()
                         {
                             City = c.Driver.Address.City ?? string.Empty,
