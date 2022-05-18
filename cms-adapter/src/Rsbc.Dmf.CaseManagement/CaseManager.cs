@@ -533,7 +533,7 @@ namespace Rsbc.Dmf.CaseManagement
                         DmerType = TranslateDmerType (c.dfp_dmertype),
                         Driver = new CaseManagement.Driver()
                         {
-                            Id = c.dfp_DriverId.dfp_driverid.ToString(),
+                            Id = c.dfp_DriverId?.dfp_driverid.ToString(),
                             Address = new Address()
                             {
                                 City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
