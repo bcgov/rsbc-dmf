@@ -31,12 +31,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// DoesCaseExist
         /// </summary>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="surcode"></param>
         /// <returns>True if the case exists</returns>
         // GET: /Cases/Exist
         [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string driversLicense, string surcode)
+        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
         {
             bool result = false;
             // get the case                                                
@@ -96,14 +96,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// Add a document to a case
         /// </summary>
         /// <param name="caseId"></param>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="surcode"></param>
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> UpdateCaseDocuments([FromRoute] string caseId, [FromForm] string driversLicense, [FromForm] string surcode,
+        public async Task<IActionResult> UpdateCaseDocuments([FromRoute] string caseId, [FromForm] string licenseNumber, [FromForm] string surcode,
             [FromForm] IFormFile file)
         {
             return Ok();

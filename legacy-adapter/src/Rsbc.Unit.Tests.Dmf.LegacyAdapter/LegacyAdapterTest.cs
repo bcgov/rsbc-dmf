@@ -129,7 +129,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
-
         [Fact]
         public async void TestDfwebSubmitComment()
         {
@@ -164,6 +163,53 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public async void TestDfwebGetComments()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void TestDfcmsAddDocument()
+        {
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Documents");
+
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = testSurcode };
+
+            string testString = "Test1234";
+            // Convert a C# string to a byte array    
+            byte[] bytes = Encoding.ASCII.GetBytes(testString);
+
+            var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Document()
+            {
+                DocumentDate = DateTimeOffset.Now,
+                DocumentId = Guid.NewGuid().ToString(),
+                FileContents = bytes,
+                Driver = driver,
+                SequenceNumber = 3,                
+                UserId = "IDIR\\TESTUSER",
+                CaseId = Guid.NewGuid().ToString()
+            };
+
+            var stringContent = JsonConvert.SerializeObject(comment);
+
+            request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void TestDfcmsGetDocuments()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
