@@ -7,6 +7,7 @@
     <AnalysisMode>Default</AnalysisMode>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <UserSecretsId>17a596c2-15db-4bbd-aa75-cb3c4a6e6c1a</UserSecretsId>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
