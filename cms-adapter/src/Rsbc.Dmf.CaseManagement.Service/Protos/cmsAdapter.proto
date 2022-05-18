@@ -10,7 +10,11 @@ service CaseManager {
 
   rpc CreateLegacyCaseComment (LegacyComment) returns (CreateStatusReply);
 
-  rpc GetDriverComments (GetDriverCommentsRequest) returns (GetDriverCommentsReply);
+  rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
+
+  rpc GetDriverComments (DriverLicenseRequest) returns (GetDriverCommentsReply);
+
+  rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDriverDocumentsReply);
 
   // process a line item from the legacy candidate list
   rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
@@ -34,12 +38,18 @@ service CaseManager {
   rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 }
 
-message GetDriverCommentsRequest {
-	string driverLicenceNumber = 1;
+message DriverLicenseRequest {
+	string driverLicenseNumber= 1;
 }
 
 message GetDriverCommentsReply {
 	repeated LegacyComment items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+message GetDriverDocumentsReply {
+	repeated LegacyDocument items = 1;
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
 }
@@ -55,13 +65,23 @@ message LegacyComment {
 	Driver Driver = 8;
 }
 
+message LegacyDocument {
+	int64 SequenceNumber = 1;
+	string DocumentTypeCode = 2;
+	string DocumentUrl = 3;
+	string UserId = 4;
+	string CaseId = 5;
+	string DocumentId = 6;
+	google.protobuf.Timestamp DocumentDate = 7;
+	Driver Driver = 8;
+}
+
 
 message CreateStatusReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 	string id = 3;
 }
-
 
 message SearchRequest {
   string caseId = 1;
@@ -114,7 +134,7 @@ message Driver {
 	double height = 9;
 	string seck = 10;
     Address address = 11;
-	string driverLicenceNumber = 12;
+	string driverLicenseNumber = 12;
 }
 
 message Provider {

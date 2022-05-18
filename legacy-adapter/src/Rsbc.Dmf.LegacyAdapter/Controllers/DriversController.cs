@@ -39,12 +39,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// DoesCaseExist
         /// </summary>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="surcode"></param>
         /// <returns>True if the case exists</returns>
         // GET: /Drivers/Exist
         [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string driversLicense, string surcode)
+        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
         {
             bool result = false;
             // get the case                                                
@@ -57,16 +57,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="caseId"></param>
         /// <returns></returns>
         // GET: /Drivers/Exist
-        [HttpGet("{driversLicense}/Comments")]
+        [HttpGet("{licenseNumber}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
-        public ActionResult GetComments([FromRoute] string driversLicense)
+        public ActionResult GetComments([FromRoute] string licenseNumber)
         
         {            
             // call the back end
 
-            var reply = _cmsAdapterClient.GetDriverComments( new GetDriverCommentsRequest () { DriverLicenceNumber = driversLicense } );
+            var reply = _cmsAdapterClient.GetDriverComments( new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber } );
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -78,7 +78,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
                     ViewModels.Driver driver = new ViewModels.Driver()
                     {
-                        LicenseNumber = driversLicense,
+                        LicenseNumber = licenseNumber,
                         Flag51 = false, LastName = "LASTNAME", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now 
                     };
 
@@ -114,18 +114,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="caseId"></param>
         /// <param name="comment"></param>
         /// <returns></returns>
-        [HttpPost("{driversLicense}/Comments")]
+        [HttpPost("{licenseNumber}/Comments")]
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult CreateCommentForDriver([FromRoute] string driversLicense, [FromBody] ViewModels.Comment comment )
+        public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment )
         {
             // add the comment
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenceNumber = driversLicense                
-
+                DriverLicenseNumber = licenseNumber                
             };
 
             if (comment.Driver != null)
@@ -150,7 +149,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 var actionName = nameof(CreateCommentForDriver);
                 var routeValues = new
                 {
-                    driversLicence = driversLicense
+                    driversLicence = licenseNumber
                 };
 
                 return CreatedAtAction(actionName, routeValues, comment);
@@ -161,31 +160,108 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
         }
 
-
-        [HttpGet("{driversLicense}/Documents")]
-        public ActionResult GetDocuments([FromRoute] string driversLicense)
+        /// <summary>
+        /// Get documents for a given driver
+        /// </summary>
+        /// <param name="licenseNumber">The drivers licence</param>
+        /// <returns></returns>
+        [HttpGet("{licenseNumber}/Documents")]
+        [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult GetDocuments([FromRoute] string licenseNumber)
         {
-            bool result = false;
-            // get the comments
-            return Ok(); //return Json(result);
+            // call the back end
+
+            var reply = _cmsAdapterClient.GetDriverDocuments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                List<ViewModels.Document> result = new List<ViewModels.Document>();
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = licenseNumber,
+                        Flag51 = false,
+                        LastName = "LASTNAME",
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    // fetch the file contents
+                    Byte[] data = new byte[0];
+
+                    result.Add(new ViewModels.Document
+                    {
+                        CaseId = item.CaseId,
+                        DocumentDate = item.DocumentDate.ToDateTimeOffset(),
+                        DocumentId = item.DocumentId,
+                        FileContents = data,                        
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
 
         /// <summary>
         /// Add a document to a case
         /// </summary>
-        /// <param name="caseId"></param>
-        /// <param name="driversLicense"></param>
-        /// <param name="surcode"></param>
-        /// <param name="file"></param>
+        /// <param name="licenseNumber">Driver Licence</param>
+        /// <param name="document">The document to add</param>
         /// <returns></returns>
-        [HttpPost("{caseId}/Documents")]
+        [HttpPost("{licenseNumber}/Documents")]
         // allow large uploads
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> UpdateCaseDocuments([FromRoute] string caseId, [FromForm] string driversLicense, [FromForm] string surcode,
-            [FromForm] IFormFile file)
+        public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
-            return Ok();
+            // add the document
+
+            var driver = new CaseManagement.Service.Driver()
+            {
+                DriverLicenseNumber = licenseNumber
+            };
+
+            if (document.Driver != null)
+            {
+                driver.Surname = document.Driver.LastName;
+            }
+
+            var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
+            {
+                CaseId = document.CaseId,                
+                SequenceNumber = document.SequenceNumber,
+                UserId = document.UserId,
+                DocumentDate = Timestamp.FromDateTimeOffset(document.DocumentDate),
+                Driver = driver
+
+            });
+
+            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                var actionName = nameof(CreateDocumentForDriver);
+                var routeValues = new
+                {
+                    driversLicence = licenseNumber
+                };
+
+                return CreatedAtAction(actionName, routeValues, document);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
 
     }
