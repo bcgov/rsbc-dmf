@@ -12,7 +12,9 @@ service CaseManager {
 
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
-  rpc GetDriverComments (DriverLicenseRequest) returns (GetDriverCommentsReply);
+  rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
+
+  rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDriverDocumentsReply);
 
@@ -42,7 +44,11 @@ message DriverLicenseRequest {
 	string driverLicenseNumber= 1;
 }
 
-message GetDriverCommentsReply {
+message CaseIdRequest {
+	string caseId= 1;
+}
+
+message GetCommentsReply {
 	repeated LegacyComment items = 1;
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
