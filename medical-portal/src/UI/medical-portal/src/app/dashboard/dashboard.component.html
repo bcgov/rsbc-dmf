@@ -93,7 +93,7 @@
               DMER Case ID: <b>{{ searchedCase?.title }}</b>
             </div>
             <div>
-              Patient Name: <b>{{ searchedCase?.patientName }} </b>
+              Patient Name: <b>{{ searchedCase?.patientFirstname }}, {{searchedCase?.patientLastname}} {{searchedCase?.patientMiddlename}}</b>
             </div>
           </div>
           <div
@@ -103,9 +103,9 @@
           >
             <div>
               DMER Type:
-              <label  class="no-reimbursement-chips">Scheduled Age</label>
+              <label  class="no-reimbursement-chips">{{searchedCase?.dmerType}}</label>
             </div>
-            <div>Date of Birth: <b>May 13, 1990</b></div>
+            <div>Date of Birth: <b>{{ searchedCase?.driverBirthDate | date:'longDate'}}</b></div>
           </div>
           <div
             fxLayout="column"
@@ -282,7 +282,7 @@
           #formsList
           matSort
           (matSortChange)="sortData($event)"
-          [dataSource]="sortedData"
+          [dataSource]="showingDataInView"
           matSortActive="title"
           matSortDirection="asc"
           matSortDisableClear
@@ -314,7 +314,29 @@
             >
               Patient's Name
             </th>
-            <td mat-cell *matCellDef="let row">{{ row.patientName }}</td>
+            <td mat-cell *matCellDef="let row">{{ row?.patientLastname}}, {{row?.patientFirstname }} {{row?.patientMiddlename}}</td>
+          </ng-container>
+          <ng-container matColumnDef="driverBirthDate">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="driverBirthDate"
+              sortActionDescription="Sort by Birth Date"
+            >
+              Date of Birth
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.driverBirthDate | date:'longDate'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="dmerType">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="dmerType"
+              sortActionDescription="Sort by Dmer Type"
+            >
+              DMER Type
+            </th>
+            <td mat-cell *matCellDef="let row" >{{ row.dmerType }}</td>
           </ng-container>
           <ng-container matColumnDef="lastUpdatedOn">
             <th
@@ -355,6 +377,8 @@
             *matHeaderRowDef="[
               'title',
               'patientName',
+              'driverBirthDate',
+              'dmerType',
               'lastUpdatedOn',
               'clinicName',
               'status'
@@ -367,6 +391,8 @@
               columns: [
                 'title',
                 'patientName',
+                'driverBirthDate',
+                'dmerType',
                 'lastUpdatedOn',
                 'clinicName',
                 'status'
@@ -392,6 +418,7 @@
       </ng-container>
 
       <ng-template #noData>
+        <div class="no-data">
         <p>
           <b>No record found for DMER Case ID '{{ this.searchCasesInput }}'.</b>
           Please re-enter the DMER Case ID and try again. Alternatively you can
@@ -401,6 +428,7 @@
           If continue to experience issues please contact support at
           XXX-XXX-XXXX.
         </p>
+      </div>
       </ng-template>
     </ng-container>
   </div>
