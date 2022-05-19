@@ -186,8 +186,6 @@ namespace Rsbc.Dmf.LegacyAdapter
                 IdentityModelEventSource.ShowPII = true;
             }
 
-
-
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
@@ -209,8 +207,6 @@ namespace Rsbc.Dmf.LegacyAdapter
             {                
                 endpoints.MapControllers();                
             });
-
-
 
             // enable Splunk logger using Serilog
             if (!string.IsNullOrEmpty(Configuration["SPLUNK_COLLECTOR_URL"]) &&

@@ -24,6 +24,7 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -110,7 +111,9 @@ namespace RSBC.DMF.MedicalPortal.API
             });
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "RSBC.DMF.MedicalPortal.API.xml"), true);
+                // add Xml comments to the swagger docs
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));                
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });
             var dpBuilder = services.AddDataProtection();
