@@ -19,6 +19,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
+        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
+
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
@@ -252,6 +254,46 @@ namespace Rsbc.Dmf.CaseManagement
             return MapCases(cases);            
         }
 
+
+        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments)
+        {
+            List<LegacyComment> result = new List<LegacyComment>();
+            // start by the driver
+
+            
+            var @cases = dynamicsContext.incidents.Expand(x => x.dfp_incident_dfp_comment)                        
+                .Where(i => i.incidentid == Guid.Parse(caseId))
+            .ToList();
+
+            foreach (var @case in @cases)
+            {
+                // ensure related data is loaded.
+
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
+                foreach (var comment in @case.dfp_incident_dfp_comment)
+                {
+                    await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                    if (allComments || comment.dfp_webcomments.GetValueOrDefault())
+                    {
+                        LegacyComment legacyComment = new LegacyComment
+                        {
+                            CaseId = @case.incidentid.ToString(),
+                            CommentDate = comment.dfp_date.GetValueOrDefault(),
+                            CommentId = comment.dfp_commentid.ToString(),
+                            CommentText = comment.dfp_commentdetails,
+                            CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
+                            SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                            UserId = comment.dfp_userid
+                        };
+                        result.Add(legacyComment);
+                    }
+                }
+            }
+               
+            return result;
+        }
+
+
         public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments )
         {
             List<LegacyComment> result = new List<LegacyComment>();
@@ -342,6 +384,37 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+        private incident GetIncidentById(string id)
+        {
+            incident result = null;
+            try
+            {
+                result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                result = null;
+            }
+            return result;
+        }
+
+
+        private incident GetIncidentByIdWithComments(string id)
+        {
+            incident result = null;
+            try
+            {
+                result = dynamicsContext.incidents.Expand(d => d.dfp_incident_dfp_comment)
+                    .Where(d => d.incidentid == Guid.Parse(id))
+                    .FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                result = null;
+            }
+            return result;
+        }
+
         private incident GetIncidentBySequence (int sequence)
         {
             incident result = null;
@@ -374,16 +447,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply();
 
-            // create the comment.
-            incident @case = GetIncidentBySequence((int)request.SequenceNumber);
-
-            if (@case == null)
-            {
-                // create it.
-                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() 
-                { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber });
-                @case = GetIncidentBySequence((int)request.SequenceNumber);
-            }
+            // get the case
+            incident @case = GetIncidentById(request.CaseId);            
 
             // create the case.
             dfp_comment @comment = new dfp_comment()
@@ -746,11 +811,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
-            var shouldSearchCases =
-                !string.IsNullOrEmpty(criteria.CaseId) ||
-                !string.IsNullOrEmpty(criteria.Title) ||
+            bool notJustDriverLicenseSearch = !string.IsNullOrEmpty(criteria.CaseId) || !string.IsNullOrEmpty(criteria.Title) || !string.IsNullOrEmpty(criteria.ClinicId);
+            bool shouldSearchCases =                
                 !string.IsNullOrEmpty(criteria.DriverLicenseNumber) ||
-                !string.IsNullOrEmpty(criteria.ClinicId);
+                notJustDriverLicenseSearch;
 
             Guid? driverId = Guid.Empty;
             // pre-search if the driver licence number is a parameter.
@@ -762,8 +826,13 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driverId = driverResults[0].dfp_driverid;
                 }
+                else if (!notJustDriverLicenseSearch)
+                {
+                    shouldSearchCases = false;
+                }
             }
 
+            
             if (!shouldSearchCases) return Array.Empty<incident>();
 
             var caseQuery = ctx.incidents
