@@ -100,12 +100,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        public async override Task<GetDriverCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
+        public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
         {
-            var reply = new GetDriverCommentsReply();
+            var reply = new GetCommentsReply();
             try
             {
-                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, false);
+                var result = await _caseManager.GetCaseLegacyComments(request.CaseId, false);
 
                 foreach (var item in result)
                 {
@@ -306,6 +306,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }));
                     return newCase;
                 }));
+                reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception e)
             {
