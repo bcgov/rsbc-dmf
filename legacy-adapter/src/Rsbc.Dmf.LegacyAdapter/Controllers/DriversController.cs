@@ -80,7 +80,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         LicenseNumber = licenseNumber,
                         Flag51 = false, 
-                        LastName = "LASTNAME", 
+                        LastName = item.Driver.Surname, 
                         LoadedFromICBC = false, 
                         MedicalIssueDate = DateTimeOffset.Now 
                     };
@@ -111,13 +111,36 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         }
 
-        /// <summary>
-        /// Add a comment to a case
-        /// </summary>
-        /// <param name="caseId"></param>
-        /// <param name="comment"></param>
-        /// <returns></returns>
-        [HttpPost("{licenseNumber}/Comments")]
+
+        [HttpGet("{licenseNumber}/Cases")]
+        [ProducesResponseType(typeof(List<ViewModels.Case>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult GetCases([FromRoute] string licenseNumber)
+        {
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                List<ViewModels.Case> result = new List<ViewModels.Case>();
+                foreach (var item in reply.Items)
+                {
+                    result.Add(new ViewModels.Case() { CaseId = item.CaseId});
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+        }
+
+    /// <summary>
+    /// Add a comment to a case
+    /// </summary>
+    /// <param name="licenseNumber"></param>
+    /// <param name="comment"></param>
+    /// <returns></returns>
+    [HttpPost("{licenseNumber}/Comments")]
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
