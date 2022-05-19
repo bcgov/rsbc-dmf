@@ -13,7 +13,8 @@ import {MatAccordion} from '@angular/material/expansion';
 export class DashboardComponent implements OnInit {
 
   public dataSource: DMERCase[] = [];
-  public sortedData: DMERCase[] = [];
+  public filteredData: DMERCase[] = [];
+  public showingDataInView: DMERCase[] = [];
   public searchBox: string = '';
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
@@ -91,23 +92,24 @@ export class DashboardComponent implements OnInit {
       this.totalRecords = cases.length;
       this.pageNumber = 1;
       this.dataSource = cases;
-      this.sortedData = this.dataSource.slice(0, this.pageSize);
+      this.filteredData = cases;
+      this.showingDataInView =  this.dataSource.slice(0, this.pageSize);
 
       this.isLoading =false;
     });
   }
 
   filterLocally() {
-    const filteredData = this.dataSource.filter((item) => {
+    this.filteredData = this.dataSource.filter((item) => {
       if (this.selectedStatus !== 'All Statuses' && item.status !== this.selectedStatus) return false;
       if (this.searchCasesInput?.length > 0 && !(item.title?.includes(this.searchCasesInput))) return false;
       return true;  
     })
 
-    this.totalRecords = filteredData.length;
+    this.totalRecords = this.filteredData.length;
     this.pageNumber = 1;
 
-    this.sortedData = filteredData.slice(0, this.pageSize);
+    this.showingDataInView = this.filteredData.slice(0, this.pageSize);
   }
 
   onStatusChanged() {
@@ -115,7 +117,8 @@ export class DashboardComponent implements OnInit {
   }
 
   loadRecords(){
-     this.sortedData = this.dataSource.slice(0, this.pageSize * ++this.pageNumber);
+    if (this.pageNumber * this.pageSize > this.totalRecords) return; 
+    this.showingDataInView = this.filteredData.slice(0, this.pageSize * ++this.pageNumber);
   }
 
   clear(){
@@ -125,19 +128,23 @@ export class DashboardComponent implements OnInit {
   }
 
   sortData(sort: Sort) {
-    const data = this.dataSource.slice();
+    const data = this.filteredData.slice(0, this.pageSize * ++this.pageNumber);
     if (!sort.active || sort.direction === '') {
-      this.sortedData = data;
+      this.showingDataInView = data;
       return;
     }
 
-    this.sortedData = data.sort((a, b) => {
+    this.showingDataInView = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'title':
           return compare(a.title, b.title, isAsc);
         case 'patientName':
           return compare(a.patientName, b.patientName, isAsc);
+        case 'driverBirthDate':
+            return compare(a.driverBirthDate, b.driverBirthDate, isAsc);
+        case 'dmerType':
+            return compare(a.dmerType, b.dmerType, isAsc);
         case 'modifiedOn':
           return compare(a.modifiedOn, b.modifiedOn, isAsc);
         case 'clinicName':
