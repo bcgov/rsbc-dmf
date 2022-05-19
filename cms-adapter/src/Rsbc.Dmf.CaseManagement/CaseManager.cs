@@ -380,7 +380,8 @@ namespace Rsbc.Dmf.CaseManagement
             if (@case == null)
             {
                 // create it.
-                await LegacyCandidateCreate (new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber } );
+                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() 
+                { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber });
                 @case = GetIncidentBySequence((int)request.SequenceNumber);
             }
 
@@ -390,8 +391,7 @@ namespace Rsbc.Dmf.CaseManagement
                  dfp_date = DateTimeOffset.Now,
                  dfp_webcomments = true,
                  dfp_userid = request.UserId,
-                 dfp_commentdetails = request.CommentText  
-                 
+                 dfp_commentdetails = request.CommentText                   
             };
 
             try
@@ -585,7 +585,7 @@ namespace Rsbc.Dmf.CaseManagement
             contact driverContact;
             Guid? driverContactId;
 
-            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber);
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
             dfp_driver[] driverResults;
@@ -611,7 +611,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driverContact = new contact()
                     {
-                        lastname = request.Surname
+                        lastname = request.Surname                        
                     };
                     dynamicsContext.AddTocontacts(driverContact);
                     driver.dfp_PersonId = driverContact;
@@ -630,7 +630,8 @@ namespace Rsbc.Dmf.CaseManagement
                 driver = new dfp_driver()
                 {
                     dfp_licensenumber = request.DriverLicenseNumber,
-                    dfp_PersonId = driverContact
+                    dfp_PersonId = driverContact,
+                    statuscode = 1
                 };
                 dynamicsContext.AddTodfp_drivers(driver);
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
@@ -649,14 +650,21 @@ namespace Rsbc.Dmf.CaseManagement
                 importsequencenumber = request.SequenceNumber,
                 dfp_DriverId = driver
             };
+
             dynamicsContext.AddToincidents(@case);
+
             if (driverContact != null)
             {
                 dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
             }
+
             dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
-            
+
+            // temporarily turn off batch so that incident will create properly
+            dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.None;
             await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;
+
             dynamicsContext.DetachAll();
         }
 

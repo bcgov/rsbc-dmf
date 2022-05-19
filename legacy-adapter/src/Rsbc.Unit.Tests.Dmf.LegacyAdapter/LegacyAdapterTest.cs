@@ -136,13 +136,14 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
-            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = testSurcode};
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() 
+            { LicenseNumber = testDl, LastName = testSurcode};
 
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment() 
             {  
                 CommentText = "This is a test comment",
                 Driver = driver,
-                SequenceNumber = 3,
+                SequenceNumber = 4,
                 CommentTypeCode = "W",
                 UserId = "IDIR\\TESTUSER",
                 CaseId = Guid.NewGuid().ToString()           
@@ -170,6 +171,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
+
 
         [Fact]
         public async void TestDfcmsAddDocument()
