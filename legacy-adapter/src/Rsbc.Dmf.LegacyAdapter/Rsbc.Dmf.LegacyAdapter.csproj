@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5A</UserSecretsId>
     <RootNamespace>Rsbc.Dmf.LegacyAdapter</RootNamespace>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
 
