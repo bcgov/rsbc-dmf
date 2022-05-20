@@ -19,6 +19,7 @@ import {
 
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { CaseAssistanceComponent } from './case-assistance/case-assistance.component';
+import { CaseDetailsComponent } from './case-details/case-details.component';
 
 
 
@@ -27,7 +28,8 @@ import { CaseAssistanceComponent } from './case-assistance/case-assistance.compo
   declarations: [
     AppComponent,
     DashboardComponent,
-    CaseAssistanceComponent
+    CaseAssistanceComponent,
+    CaseDetailsComponent
   ],
   imports: [
     BrowserModule,
