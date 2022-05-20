@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
   public searchCasesInput: string = '';
   public selectedStatus: string = 'All Statuses';
   public pageNumber = 1;
-  public pageSize = 2;
+  public pageSize = 10;
   public totalRecords = 0;
   public isLoading = true;
   public isShowResults = false;
@@ -145,8 +145,12 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/cases/case/' + this.searchedCase?.id);
   }
 
+  navigateToCaseDetails(){
+    this.router.navigateByUrl('/caseDetails');
+  }
+
   sortData(sort: Sort) {
-    const data = this.filteredData.slice(0, this.pageSize * ++this.pageNumber);
+    const data = this.showingDataInView.slice();
     if (!sort.active || sort.direction === '') {
       this.showingDataInView = data;
       return;
