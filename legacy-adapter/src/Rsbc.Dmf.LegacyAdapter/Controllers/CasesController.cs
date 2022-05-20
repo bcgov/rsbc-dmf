@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Pssg.DocumentStorageAdapter;
+using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,11 +23,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly ILogger<CasesController> _logger;
 
 
-        public CasesController(ILogger<CasesController> logger, IConfiguration configuration)
+        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+
+        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
         {
             _configuration = configuration;
+            _cmsAdapterClient = cmsAdapterClient;
             _logger = logger;
-
         }
 
         /// <summary>
@@ -56,15 +61,50 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult GetComments([FromRoute] string caseId)
         
         {
-            // get the comments
-            List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            result.Add (new ViewModels.Comment() { CaseId = caseId, CommentText = "SAMPLE TEXT", CommentTypeCode="W", 
-                
-                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now },
-                
-                SequenceNumber = 0, UserId = "TESTUSER" });  
-            
-            return Json(result);
+            // call the back end
+
+            var reply = _cmsAdapterClient.GetCaseComments(new CaseIdRequest() { CaseId = caseId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                List<ViewModels.Comment> result = new List<ViewModels.Comment>();
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    result.Add(new ViewModels.Comment
+                    {
+                        CaseId = item.CaseId,
+                        CommentDate = item.CommentDate.ToDateTimeOffset(),
+                        CommentId = item.CommentId,
+                        CommentText = item.CommentText,
+                        CommentTypeCode = item.CommentTypeCode,
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+            /*
+            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W",  CommentDate = DateTime.Now, CommentId = Guid.NewGuid().ToString(),
+                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
+                SequenceNumber = 0, UserId = "TESTUSER" });
+            */
         }
 
         /// <summary>
