@@ -105,7 +105,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         /// Test the MS Dynamics interface
         /// </summary>
         [Fact]
-        public async void TestCaseExist()
+        public async void CaseExist()
         {            
             Login();
 
@@ -116,7 +116,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         }
 
         [Fact]
-        public async void TestCaseDocuments()
+        public async void CaseDocuments()
         {         
             Login();
 
@@ -129,12 +129,52 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
+
         [Fact]
-        public async void TestDfwebSubmitComment()
+        public async void DfwebGetCaseComments()
         {
             Login();
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
+            // start by getting comments.  This will allow us to get the CaseId
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case> cases = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case>>(responseContent);
+
+            string caseId = cases[0].CaseId;
+
+            request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Comments");
+
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+
+            [Fact]
+        public async void DfwebSubmitComment()
+        {
+            Login();
+
+            // start by getting comments.  This will allow us to get the CaseId
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case> cases = JsonConvert.DeserializeObject< List <Rsbc.Dmf.LegacyAdapter.ViewModels.Case>> (responseContent);
+
+            string caseId = cases[0].CaseId;
+
+            request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
             var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() 
             { LicenseNumber = testDl, LastName = testSurcode};
@@ -146,22 +186,22 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 4,
                 CommentTypeCode = "W",
                 UserId = "IDIR\\TESTUSER",
-                CaseId = Guid.NewGuid().ToString()           
+                CaseId = caseId
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);
 
             request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
 
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
 
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
         }
 
         [Fact]
-        public async void TestDfwebGetComments()
+        public async void DfwebGetComments()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
 
@@ -174,7 +214,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
 
         [Fact]
-        public async void TestDfcmsAddDocument()
+        public async void DfcmsAddDocument()
         {
             Login();
 
@@ -209,7 +249,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         }
 
         [Fact]
-        public async void TestDfcmsGetDocuments()
+        public async void DfcmsGetDocuments()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
 
