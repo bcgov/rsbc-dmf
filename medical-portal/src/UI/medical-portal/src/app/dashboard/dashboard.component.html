@@ -158,7 +158,7 @@
               </ng-container>
 
               <ng-container *ngSwitchDefault>
-                <button mat-stroked-button color="primary">
+                <button mat-stroked-button color="primary" (click)="navigateToCaseDetails()">
                   <mat-icon class="cases-button">description</mat-icon>View
                   Record
                 </button>
@@ -240,7 +240,7 @@
           </mat-expansion-panel-header>
 
           <div>
-            A case's lifecycle progresses through five different statuses.
+            A case's lifecycle progresses through seven different statuses.
             <ul>
               <li>
                 <b>Not Started</b> – DMER has been issued by RoadSafetyBC. No
@@ -251,7 +251,7 @@
                 practitioner, but it has not been submitted to RoadSafetyBC.
               </li>
               <li>
-                <b>RSBC received<</b> – DMER has been submitted successfully to
+                <b>RSBC received </b> – DMER has been submitted successfully to
                 RoadSafetyBC.
               </li>
               <li>
@@ -260,7 +260,7 @@
               </li>
               <li>
                 <b>Decision rendered </b> – RoadSafetyBC has assessed the case
-                and has made a decision whether the driver is fit or unit to
+                and has made a decision whether the driver is fit or unfit to
                 drive. The driver is notified of the decision. Due to privacy
                 legislation the decision is not able to be displayed.
               </li>
