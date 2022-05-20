@@ -298,7 +298,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                     Surname = caseReply?.Driver?.Surname,
                     GivenName = caseReply?.Driver?.GivenName,
                     BirthDate = caseReply?.Driver?.BirthDate != null ? caseReply.Driver.BirthDate.ToDateTime().ToString("yyyy-MM-dd") : "",
-                    DriverLicenceNumber = caseReply?.Driver?.DriverLicenceNumber,
+                    DriverLicenceNumber = caseReply?.Driver?.DriverLicenseNumber,
                     Address = new Models.Address()
                     {
                         City = caseReply?.Driver?.Address?.City ?? "",
