@@ -39,9 +39,8 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         public string UserId { get; set; }
 
         /// <summary>
-        /// GUID Case Id from the Case Management System
-        /// </summary>
-        [Required]
+        /// GUID Case Id from the Case Management System.  If this is empty the case will be created
+        /// </summary>        
         public string CaseId { get; set; }
 
         /// <summary>
