@@ -116,7 +116,7 @@
             </div>
             <div>
               Date of Birth:
-              <b>{{ searchedCase?.driverBirthDate | date: "longDate" }}</b>
+              <b>{{ searchedCase?.driverBirthDate | date }}</b>
             </div>
           </div>
           <div
@@ -158,7 +158,11 @@
               </ng-container>
 
               <ng-container *ngSwitchDefault>
-                <button mat-stroked-button color="primary" (click)="navigateToCaseDetails()">
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="navigateToCaseDetails()"
+                >
                   <mat-icon class="cases-button">description</mat-icon>View
                   Record
                 </button>
@@ -320,7 +324,9 @@
     </div>
   </div>
 
-  <div>
+  <div [ngBusy]="busy"></div>
+  <div class="table-data">
+   
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="totalRecords > 0; else noData">
         <table
@@ -375,7 +381,7 @@
               Date of Birth
             </th>
             <td mat-cell *matCellDef="let row">
-              {{ row.driverBirthDate | date: "longDate" }}
+              {{ row.driverBirthDate | date }}
             </td>
           </ng-container>
           <ng-container matColumnDef="dmerType">
@@ -396,11 +402,13 @@
               mat-sort-header="modifiedOn"
               sortActionDescription="Sort by Last Date Modified"
             >
-              Last Date Modified
+              Last Modified
             </th>
-            <td mat-cell *matCellDef="let row">{{ row.modifiedOn | date }}</td>
+            <td mat-cell *matCellDef="let row">
+              {{ row.modifiedOn | date }}
+            </td>
           </ng-container>
-          <ng-container matColumnDef="clinicName">
+          <!-- <ng-container matColumnDef="clinicName">
             <th
               mat-header-cell
               *matHeaderCellDef
@@ -410,7 +418,7 @@
               Clinic Name
             </th>
             <td mat-cell *matCellDef="let row">{{ row.clinicName }}</td>
-          </ng-container>
+          </ng-container> -->
           <ng-container matColumnDef="status">
             <th
               mat-header-cell
@@ -431,7 +439,6 @@
               'driverBirthDate',
               'dmerType',
               'lastUpdatedOn',
-              'clinicName',
               'status'
             ]"
           ></tr>
@@ -445,7 +452,6 @@
                 'driverBirthDate',
                 'dmerType',
                 'lastUpdatedOn',
-                'clinicName',
                 'status'
               ]
             "
