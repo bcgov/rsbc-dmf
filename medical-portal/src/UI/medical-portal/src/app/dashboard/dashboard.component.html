@@ -158,7 +158,11 @@
               </ng-container>
 
               <ng-container *ngSwitchDefault>
-                <button mat-stroked-button color="primary" (click)="navigateToCaseDetails()">
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="navigateToCaseDetails()"
+                >
                   <mat-icon class="cases-button">description</mat-icon>View
                   Record
                 </button>
@@ -320,7 +324,9 @@
     </div>
   </div>
 
-  <div>
+  <div [ngBusy]="busy"></div>
+  <div class="table-data">
+   
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="totalRecords > 0; else noData">
         <table
@@ -398,7 +404,9 @@
             >
               Last Modified
             </th>
-            <td mat-cell *matCellDef="let row">{{ row.modifiedOn | date }}</td>
+            <td mat-cell *matCellDef="let row">
+              {{ row.modifiedOn | date }}
+            </td>
           </ng-container>
           <!-- <ng-container matColumnDef="clinicName">
             <th
