@@ -172,7 +172,12 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case> cases = JsonConvert.DeserializeObject< List <Rsbc.Dmf.LegacyAdapter.ViewModels.Case>> (responseContent);
 
-            string caseId = cases[0].CaseId;
+            string caseId = string.Empty;
+
+            if (cases.Count > 0)
+            {
+                caseId = cases[0].CaseId;
+            }            
 
             request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 

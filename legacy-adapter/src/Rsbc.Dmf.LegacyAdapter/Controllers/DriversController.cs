@@ -156,7 +156,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (comment.Driver != null)
             {
                 driver.Surname = comment.Driver.LastName;
-            }
+            }            
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
@@ -167,7 +167,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 UserId = comment.UserId,
                 CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
                 Driver = driver
-
             });
 
             if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
