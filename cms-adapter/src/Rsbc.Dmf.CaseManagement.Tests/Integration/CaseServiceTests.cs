@@ -52,5 +52,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             queryResults.ShouldNotBeEmpty();
 
         }
+
+        [Fact]
+        public async void GetUnsentMedicalUpdates()
+        {
+            var unsentItems = await caseService.GetUnsentMedicalUpdates(new EmptyRequest(), null);
+
+            var size = unsentItems.Items.Count;
+        }
     }
 }

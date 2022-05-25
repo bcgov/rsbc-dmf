@@ -651,7 +651,7 @@ namespace Rsbc.Dmf.CaseManagement
                             .Select(d => new Decision
                             {
                                 Id = d.dfp_decisionid.ToString(),
-                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus.dfp_outcomestatusid),
+                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus?.dfp_outcomestatusid),
                                 CreatedOn = d.createdon ?? default
                             }),                        
                         Status = TranslateStatus(c.statuscode)
@@ -969,18 +969,20 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.dfp_incident_dfp_dmerflag)
                 .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.dfp_datesenttoicbc == null);
             var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
+            var caseArray = cases.ToArray();
 
-            foreach (var @case in cases)
+            foreach (var @case in caseArray)
             {
                 await LazyLoadProperties(@case);
             }
 
             dynamicsContext.DetachAll();
 
-            return MapCases(cases);            
+            return MapCases(caseArray);            
         }
 
         public async Task MarkMedicalUpdatesSent(List<string> ids)

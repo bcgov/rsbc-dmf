@@ -530,17 +530,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                     };
                 }
-                var newCase = new DmerCase
+
+                Driver driver = null;
+                if (c.Driver != null && c.Driver.Id != null)
                 {
-                    CaseId = c.Id,
-                    Title = c.Title,
-                    CreatedBy = c.CreatedBy ?? string.Empty,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    ModifiedBy = c.CreatedBy ?? string.Empty,
-                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    Driver = new Driver()
+                    driver = new Driver()
                     {
-                        Id = c.Driver.Id,
+                        Id = c.Driver.Id ?? string.Empty,
                         Surname = c.Driver.Surname ?? string.Empty,
                         GivenName = c.Driver.GivenName ?? string.Empty,
                         BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
@@ -554,7 +550,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         },
                         Sex = c.Driver.Sex ?? string.Empty,
                         Name = c.Driver.Name ?? string.Empty
-                    },
+                    };
+                }
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    Title = c.Title ?? string.Empty,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    Driver = driver,
                     Provider = provider,
                     IsCommercial = c.IsCommercial,
                     ClinicName = c.ClinicName ?? string.Empty,
