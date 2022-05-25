@@ -141,6 +141,45 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
+        public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, false);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
         public async override Task<GetDriverDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDriverDocumentsReply();
@@ -288,7 +327,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     var newCase = new DmerCase
                     {
                         CaseId = c.Id,
-                        Title = c.Title,
+                        Title = c.Title ?? string.Empty,
                         CreatedBy = c.CreatedBy ?? string.Empty,
                         CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                         ModifiedBy = c.CreatedBy ?? string.Empty,
@@ -491,17 +530,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                     };
                 }
-                var newCase = new DmerCase
+
+                Driver driver = null;
+                if (c.Driver != null && c.Driver.Id != null)
                 {
-                    CaseId = c.Id,
-                    Title = c.Title,
-                    CreatedBy = c.CreatedBy ?? string.Empty,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    ModifiedBy = c.CreatedBy ?? string.Empty,
-                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    Driver = new Driver()
+                    driver = new Driver()
                     {
-                        Id = c.Driver.Id,
+                        Id = c.Driver.Id ?? string.Empty,
                         Surname = c.Driver.Surname ?? string.Empty,
                         GivenName = c.Driver.GivenName ?? string.Empty,
                         BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
@@ -515,7 +550,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         },
                         Sex = c.Driver.Sex ?? string.Empty,
                         Name = c.Driver.Name ?? string.Empty
-                    },
+                    };
+                }
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    Title = c.Title ?? string.Empty,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    Driver = driver,
                     Provider = provider,
                     IsCommercial = c.IsCommercial,
                     ClinicName = c.ClinicName ?? string.Empty,

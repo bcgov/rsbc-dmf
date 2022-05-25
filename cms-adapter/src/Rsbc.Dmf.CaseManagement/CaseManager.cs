@@ -25,7 +25,12 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
 
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request);
+        /// <summary>
+        /// Create a Legacy Candidate
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Guid of the created case</returns>
+        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
@@ -445,10 +450,26 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request)
         {
-            CreateStatusReply result = new CreateStatusReply();
+            CreateStatusReply result = new CreateStatusReply();            
+            string caseId = request.CaseId;
+            if (string.IsNullOrEmpty( request.CaseId))
+            {
+                // create a new case.
+                LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
+                {
+                     DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                     SequenceNumber = request.SequenceNumber,
+                     Surname = request.Driver.Surname
+                };
+                Guid? createResult = await LegacyCandidateCreate(newCandidate);
+                if (createResult != null) 
+                {
+                    caseId = createResult.ToString();
+                }
+            }
 
             // get the case
-            incident @case = GetIncidentById(request.CaseId);            
+            incident @case = GetIncidentById(caseId);
 
             // create the case.
             dfp_comment @comment = new dfp_comment()
@@ -630,7 +651,7 @@ namespace Rsbc.Dmf.CaseManagement
                             .Select(d => new Decision
                             {
                                 Id = d.dfp_decisionid.ToString(),
-                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus.dfp_outcomestatusid),
+                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus?.dfp_outcomestatusid),
                                 CreatedOn = d.createdon ?? default
                             }),                        
                         Status = TranslateStatus(c.statuscode)
@@ -641,10 +662,9 @@ namespace Rsbc.Dmf.CaseManagement
        }
 
 
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request)
+        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request)
         {
-            //Guid? driverId = Guid.Empty;
-            //Guid? contactId = Guid.Empty;
+            Guid? result = null;
 
             dfp_driver driver;
             contact driverContact;
@@ -728,9 +748,14 @@ namespace Rsbc.Dmf.CaseManagement
             // temporarily turn off batch so that incident will create properly
             dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.None;
             await dynamicsContext.SaveChangesAsync();
+
+            result = @case.incidentid;
+
             dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;
 
             dynamicsContext.DetachAll();
+
+            return result;
         }
 
 
@@ -944,18 +969,20 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.customerid_contact)
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
+                .Expand(i => i.dfp_incident_dfp_dmerflag)
                 .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.dfp_datesenttoicbc == null);
             var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
+            var caseArray = cases.ToArray();
 
-            foreach (var @case in cases)
+            foreach (var @case in caseArray)
             {
                 await LazyLoadProperties(@case);
             }
 
             dynamicsContext.DetachAll();
 
-            return MapCases(cases);            
+            return MapCases(caseArray);            
         }
 
         public async Task MarkMedicalUpdatesSent(List<string> ids)
