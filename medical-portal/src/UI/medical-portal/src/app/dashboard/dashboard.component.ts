@@ -8,6 +8,7 @@ import {
 import { Sort } from '@angular/material/sort';
 import { faHourglassEnd } from '@fortawesome/free-solid-svg-icons';
 import { MatAccordion } from '@angular/material/expansion';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +16,8 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
+  busy!: Subscription;
+  
   public dataSource: DMERCase[] = [];
   public filteredData: DMERCase[] = [];
   public showingDataInView: DMERCase[] = [];
@@ -38,7 +41,7 @@ export class DashboardComponent implements OnInit {
     { label: 'Under RSBC Review' },
     { label: 'Decision Rendered' },
     { label: 'Cancelled/Closed' },
-    { label: 'Trasferred' },
+    { label: 'Transferred' },
   ];
 
   constructor(
@@ -90,7 +93,7 @@ export class DashboardComponent implements OnInit {
       searchParams['byStatus'] = [this.selectedStatus];
     }
 
-    this.caseManagementService.getCases(searchParams).subscribe((cases) => {
+    this.busy = this.caseManagementService.getCases(searchParams).subscribe((cases) => {
       this.totalRecords = cases.length;
       this.pageNumber = 1;
       this.dataSource = cases;
@@ -146,7 +149,9 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToCaseDetails(){
-    this.router.navigateByUrl('/caseDetails');
+    if (!this.searchedCase?.id) return;
+    this.caseManagementService.selectedCase = this.searchedCase;
+    this.router.navigateByUrl('/caseDetails/' + this.searchedCase?.id);
   }
 
   sortData(sort: Sort) {

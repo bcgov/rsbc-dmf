@@ -245,3 +245,9 @@ body {
     font-style: normal;
   }
 }
+
+.ng-busy {
+  position: fixed;
+  overflow: hidden;
+  background-color: rgba(0, 51, 102, 0.3);
+}

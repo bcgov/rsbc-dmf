@@ -1,6 +1,95 @@
 <div class="page-desc">
-    <div class="container">
-      <h1>DMER Case Details</h1>
-      <p>Find below DMER submission information as well as how to submit further information to RoadSafetyBC regarding this driver.</p>
+  <div class="container">
+    <div class="list">
+      <h2>DMER Case Details</h2>
+      <p>
+        Find below DMER submission information as well as how to submit further
+        information to RoadSafetyBC regarding this driver.
+      </p>
     </div>
   </div>
+</div>
+
+<div class="container">
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-icon class="info-icon">description</mat-icon> DMER Information
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      class="dmer-information"
+      fxLayout="row"
+      fxLayoutGap="120px"
+    >
+      <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+        <div>
+          DMER Case ID: <b> {{ selectedCase?.title }}</b>
+        </div>
+        <div>
+          DMER Type:
+          <label class="dmer-type">{{ selectedCase?.dmerType }}</label>
+        </div>
+        <div>
+          Driver Name :
+          <b
+            >{{ selectedCase?.patientFirstname }},
+            {{ selectedCase?.patientLastname }}
+            {{ selectedCase?.patientMiddlename }}</b
+          >
+        </div>
+      </div>
+
+      <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+        <div>
+          Status: <b> {{ selectedCase?.status }}</b>
+        </div>
+        <div>
+          Submission Date :
+          <b>{{ selectedCase?.createdOn | date }}</b>
+        </div>
+        <div>Medical Practioner on Record : <b>Dr. Shelby Drew</b></div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container">
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-icon class="info-icon">info</mat-icon> Further Information
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="further-info">
+        <b
+          >When would a medical professional submit further information to
+          RoadSafetyBC regarding this driver?</b
+        >
+        <ul>
+          <li>
+            A driver can contact a medical professional to determine if they
+            have one or more specific documents or reports which RoadSafetyBC
+            requires to perform their assessment.
+          </li>
+          <li>
+            A medical professional can submit further information regarding a
+            driver at any time. This information can include an amendment to
+            this DMER submission or any updates they believe should be taken
+            into consideration when assessing this driver's ability to drive.
+          </li>
+        </ul>
+
+        <b>
+          How does a medical professional submit further information to
+          RoadSafetyBC?
+        </b>
+        <ul>
+          <li>Fax number: ###-###-####</li>
+          <li>Include driver's full name, address and date of birth</li>
+        </ul>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

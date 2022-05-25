@@ -11,7 +11,7 @@ const routes: Routes = [
   { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
   { path: 'notifications', loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule) },
   { path:'caseAssistance', component:CaseAssistanceComponent },
-  {path:'caseDetails', component:CaseDetailsComponent}
+  {path:'caseDetails/:id', component:CaseDetailsComponent}
 ];
 
 @NgModule({
