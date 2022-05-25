@@ -53,7 +53,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
         }
 
-        [Fact]
+        [Fact(Skip = RequiresDynamics)]
         public async void GetUnsentMedicalUpdates()
         {
             var unsentItems = await caseService.GetUnsentMedicalUpdates(new EmptyRequest(), null);
