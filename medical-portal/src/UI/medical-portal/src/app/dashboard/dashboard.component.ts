@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
     { label: 'Under RSBC Review' },
     { label: 'Decision Rendered' },
     { label: 'Cancelled/Closed' },
-    { label: 'Trasferred' },
+    { label: 'Transferred' },
   ];
 
   constructor(
@@ -146,7 +146,9 @@ export class DashboardComponent implements OnInit {
   }
 
   navigateToCaseDetails(){
-    this.router.navigateByUrl('/caseDetails');
+    if (!this.searchedCase?.id) return;
+    this.caseManagementService.selectedCase = this.searchedCase;
+    this.router.navigateByUrl('/caseDetails/' + this.searchedCase?.id);
   }
 
   sortData(sort: Sort) {
