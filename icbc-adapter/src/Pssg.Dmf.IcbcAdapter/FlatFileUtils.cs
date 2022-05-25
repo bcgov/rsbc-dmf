@@ -253,7 +253,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 var newUpdate = new MedicalUpdate()
                 {
-                     LicenseNumber = item.Driver.DriverLicenceNumber,
+                     LicenseNumber = item.Driver.DriverLicenseNumber,
                      Surname = item.Driver.Surname,                     
                 };
 
