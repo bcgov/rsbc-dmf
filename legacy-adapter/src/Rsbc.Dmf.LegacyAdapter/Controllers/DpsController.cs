@@ -39,6 +39,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult DoesCaseExist(string licenseNumber, string surcode)
         {
             bool result = false;
+            //TODO
+
             // get the case                                                
             return Json (result);
         }
