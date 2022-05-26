@@ -203,6 +203,30 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
+
+            // now check for the comment to be in the response.
+
+            request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
+
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment> comments = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment>>(responseContent);
+
+            bool found = false;
+
+            foreach (var item in comments)
+            {
+                if (item.CommentText == comment.CommentText && item.Driver.LastName == comment.Driver.LastName)
+                {
+                    found = true;
+                }
+            }
+
+            Assert.True(found);
         }
 
         [Fact]
