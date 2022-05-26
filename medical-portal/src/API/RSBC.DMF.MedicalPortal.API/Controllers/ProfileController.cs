@@ -37,15 +37,76 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     Role = c.Role
                 })
             };
-        }
+        }        
+
     }
+
+    public record EmailUpdate
+    {
+        public string Email { get; set;}
+    }
+
+
+    /// <summary>
+    /// set the user's profile email
+    /// </summary>
+    /// <param name="newEmail"></param>
+    /// <returns></returns>
+    [HttpPut("email")]
+    public ActionResult UpdateEmail([FromBody] EmailUpdate newEmail)
+    {
+        return Ok();
+    }
+
+
+    /// <summary>
+    /// Add the given practitioner role
+    /// </summary>
+    /// <param name="newRole"></param>
+    /// <returns></returns>
+    [HttpPut("practitionerRole")]
+    public ActionResult SetRole([FromBody] PractitionerBridge newRole)
+    {
+        return Ok();
+    }
+
+    /// <summary>
+    /// Remove the given practioner role
+    /// </summary>
+    /// <param name="newRole"></param>
+    /// <returns></returns>
+    [HttpDelete("practitionerRole")]
+    public ActionResult ClearRole([FromBody] PractitionerBridge newRole)
+    {
+        return Ok();
+    }
+
+
+    public enum ProviderRole 
+        {None = 0, 
+         Practitioner,
+        [EnumMember(Value = "Medical Office Manager")]
+        MedicalOfficeManager,
+        [EnumMember(Value = "Medical Office Assistant")]
+        MedicalOfficeAssistant,
+        }
 
     public record UserProfile
     {
+        public string EmailAddress {  get; set;}
+
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public IEnumerable<PractitionerBridge> Practitioners { get; set; }
+        
         public IEnumerable<ClinicUserProfile> Clinics { get; set; }
+    }
+
+    public record PractitionerBridge
+    {
+        public string PractitionerId { get; set;}
+        public ProviderRole Role { get; set; }
     }
 
     public record ClinicUserProfile
