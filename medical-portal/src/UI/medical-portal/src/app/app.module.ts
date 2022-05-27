@@ -16,9 +16,10 @@ import {
   FontAwesomeModule,
   FaIconLibrary,
 } from '@fortawesome/angular-fontawesome';
-
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { NgBusyModule } from 'ng-busy';
 import { CaseAssistanceComponent } from './case-assistance/case-assistance.component';
+import { CaseDetailsComponent } from './case-details/case-details.component';
 
 
 
@@ -27,7 +28,8 @@ import { CaseAssistanceComponent } from './case-assistance/case-assistance.compo
   declarations: [
     AppComponent,
     DashboardComponent,
-    CaseAssistanceComponent
+    CaseAssistanceComponent,
+    CaseDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -37,6 +39,11 @@ import { CaseAssistanceComponent } from './case-assistance/case-assistance.compo
     SharedModule,
     PortalLayoutModule,
     HttpClientModule,
+    NgBusyModule.forRoot({
+      backdrop: true,
+      wrapperClass: 'ng-busy',
+
+    }),
     FlexLayoutModule,
     ApiModule.forRoot({ rootUrl: '.' }),
     OAuthModule.forRoot({
