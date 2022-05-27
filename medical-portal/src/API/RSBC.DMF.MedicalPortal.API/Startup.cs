@@ -51,6 +51,7 @@ namespace RSBC.DMF.MedicalPortal.API
                     };
 
                     configuration.GetSection("auth:token").Bind(options);
+                    options.au
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateAudience = false

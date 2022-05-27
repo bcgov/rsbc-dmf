@@ -12,8 +12,8 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCmsAdapterGrpcService(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["serverUrl"];
-            var clientSecret = config["clientSecret"];
+            var serviceUrl = "https://rsbc-dfp-cms-adapter-dev.apps.silver.devops.gov.bc.ca/";// config["serverUrl"];
+            var clientSecret = @"wFD{PXu+].!""""9Nk}"; //config["clientSecret"];
             var validateServerCertificate = config.GetValue("validateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
