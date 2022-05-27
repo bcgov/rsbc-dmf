@@ -306,13 +306,19 @@ namespace Rsbc.Dmf.CaseManagement
 
             var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
 
-            foreach (var @driver in @drivers)
+            foreach (var driverItem in @drivers)
             {
-                if (@driver != null)
+                if (driverItem != null)
                 {
-                    // .Expand(x => x.dfp_incident_dfp_comment)
+                    await dynamicsContext.LoadPropertyAsync(driverItem, nameof(dfp_driver.dfp_PersonId));
+                    Driver driver = new Driver()
+                    {
+                        DriverLicenseNumber = driverItem.dfp_licensenumber,
+                        Surname = driverItem.dfp_PersonId?.lastname ?? String.Empty
+                    };
+
                     // get the cases for that driver.
-                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
+                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid
                     ).ToList();
 
                     foreach (var @case in @cases)
@@ -320,11 +326,13 @@ namespace Rsbc.Dmf.CaseManagement
                         // ensure related data is loaded.
 
                         await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+
                         foreach (var comment in @case.dfp_incident_dfp_comment)
                         {
                             await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                             if (allComments || comment.dfp_webcomments.GetValueOrDefault())
-                            {
+                            {                                
                                 LegacyComment legacyComment = new LegacyComment
                                 {
                                     CaseId = @case.incidentid.ToString(),
@@ -333,7 +341,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     CommentText = comment.dfp_commentdetails,
                                     CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
                                     SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                    UserId = comment.dfp_userid
+                                    UserId = comment.dfp_userid,
+                                    Driver = driver
                                 };
                                 result.Add(legacyComment);
                             }
@@ -696,7 +705,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driverContact = new contact()
                     {
-                        lastname = request.Surname                        
+                        lastname = request.Surname                         
                     };
                     dynamicsContext.AddTocontacts(driverContact);
                     driver.dfp_PersonId = driverContact;
