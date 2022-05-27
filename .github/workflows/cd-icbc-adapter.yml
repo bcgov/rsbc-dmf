@@ -3,8 +3,7 @@ name: cd-icbc-adapter
 on:
   push:
     # Publish `main` as Docker `latest` image.
-    branches:
-      - main
+    branches: [main, codecov]
 
     # Publish `v1.2.3` tags as releases.
     tags:
@@ -21,9 +20,61 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    env:
+       working-directory: ./icbc-adapter/src
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       GIT_BRANCH: "${{github.ref}}"
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "6.0.x"
+
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: ${{env.working-directory}}
+
+      - name: Install coverlet for code coverage
+        run: dotnet tool install -g coverlet.console --version 1.7.2
+        working-directory: ${{env.working-directory}}
+        
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ${{env.working-directory}}
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+        working-directory: ${{env.working-directory}}
+        
+      - name: Generate code coverage
+        working-directory: ${{env.working-directory}}/Pssg.Unit.Tests.Interfaces.Icbc
+        run: |
+          mkdir -p TestResults
+          rm -rf ./TestResults
+          rm -rf ./TestResults
+          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
+          mv TestResults/*/* ../TestResults/
+          head TestResults/coverage.opencover.xml
+          
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          # User defined upload name. Visible in Codecov UI
+          name: DMFT
+          # Repository upload token - get it from codecov.io. Required only for private repositories
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Path to coverage file to upload
+          file: ${{env.working-directory}}/Pssg.Unit.Tests.Interfaces.Icbc/TestResults/coverage.opencover.xml
+          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+          flags: unittests
+          # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
+          env_vars: C#
+          # Specify whether or not CI build should fail if Codecov runs into an error during upload
+          fail_ci_if_error: true
+        
 
       - name: Log into registry
         run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
