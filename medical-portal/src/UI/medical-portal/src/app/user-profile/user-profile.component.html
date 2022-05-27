@@ -1,0 +1,58 @@
+<div class="page-desc">
+  <div class="container">
+    <h1>User Profile</h1>
+    <p>Manage your profile information and medical team associations</p>
+  </div>
+</div>
+
+<div class="container">
+<div class="list">
+  <h2>Manage Profile</h2>
+</div>
+<mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+              <mat-label><mat-icon class="info-icon">person</mat-icon> Personal Information</mat-label>
+        
+              <button mat-button  (click)="openDialog()">
+                <mat-icon class="edit-button">edit</mat-icon>Edit Profile Information
+              </button>
+    </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="personal-information"
+    fxLayout="row"
+    fxLayoutGap="120px">
+
+    <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+        <div>
+          Name: <b> {{userProfile?.lastName}} {{userProfile?.firstName}} </b>
+        </div>
+        <div>
+          Provider Role :
+          <b>Medical Office Assistant</b>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+          <div>Primary Email Address : <b>storres@victoriaclinic.com</b></div>
+      </div>
+      
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container">
+  <div class="list">
+    <h2>Manage Associations</h2>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <p>This area allows you to manage your associations with medical practitioners.</p>
+
+    <button mat-button  (click)="openDialog()">
+      <mat-icon class="edit-button">add_circle</mat-icon>Request Association
+    </button>
+</div>
+</div>
+

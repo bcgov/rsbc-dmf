@@ -13,10 +13,10 @@
         </a>
       <div class="title">Medical Practitioner Portal</div>
       <div class="profile" *ngIf="showProfile">
-        <h1 class="avatar">{{ profileInitials }}</h1>
+        <h1 class="avatar" routerLink="/userProfile">{{ profileInitials }}</h1>
         <div>
           <span class="user-name">{{ profileName }}</span><br/>
-          <span>{{ profileRole }}</span>
+          <!-- <span>{{ profileRole }}</span> -->
         </div>
         <button mat-button [matMenuTriggerFor]="menu">
           <mat-icon>arrow_drop_down</mat-icon>
