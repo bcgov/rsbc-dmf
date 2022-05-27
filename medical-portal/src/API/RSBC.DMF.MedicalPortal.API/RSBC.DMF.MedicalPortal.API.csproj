@@ -20,7 +20,7 @@
     <Protobuf Include="../../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
       <Link>Protos\cmsAdapter.proto</Link>
     </Protobuf>
-	<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
+	<Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
 		<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
 	</Protobuf>
   </ItemGroup>
