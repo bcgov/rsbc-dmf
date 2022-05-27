@@ -26,6 +26,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Reflection;
 using Grpc.Net.Client;
+using Pssg.DocumentStorageAdapter;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -190,7 +191,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 // call the token service to get a token.
                 var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
                 {
-                    Secret = Configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                    Secret = configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
                 };
 
                 var tokenReply = initialClient.GetToken(tokenRequest);
