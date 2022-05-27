@@ -60,6 +60,11 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             this.userService = userService;
         }
 
+        private bool GetDmerStarted(string caseId)
+        {
+            return true;
+        }
+
         public async Task<IEnumerable<DmerCaseListItem>> SearchCases(CaseSearchQuery query)
         {
             var userContext = await userService.GetCurrentUserContext();
@@ -109,8 +114,10 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 Status = c.Status,
                 DmerType = c.DmerType,
                 DriverBirthDate = c.Driver?.BirthDate != null ? c.Driver?.BirthDate.ToDateTimeOffset() : null,
-                IsStarted = false
+                IsStarted = GetDmerStarted(c.CaseId)
             });
         }
     }
+
+
 }
