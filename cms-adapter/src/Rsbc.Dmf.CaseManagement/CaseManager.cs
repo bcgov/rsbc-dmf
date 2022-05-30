@@ -21,6 +21,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
 
+        Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
+
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
@@ -298,6 +300,43 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        public async Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId)
+        {
+            List<LegacyDocument> result = new List<LegacyDocument>();
+            
+            var @cases = dynamicsContext.incidents.Where(i => i.incidentid == Guid.Parse(caseId)    ).ToList();
+
+            foreach (var @case in @cases)
+            {
+                // ensure related data is loaded.
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                Driver driver = new Driver()
+                {
+                    DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,                    
+                };
+
+                foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                {
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                    
+                    LegacyDocument legacyDocument = new LegacyDocument
+                    {
+                        CaseId = @case.incidentid.ToString(),
+                        DocumentDate = document.createdon.GetValueOrDefault(),
+                        DocumentId = document.bcgov_documenturlid.ToString(),
+                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                        Driver = driver
+                    };
+
+                    result.Add(legacyDocument);
+                }
+            }
+             
+            return result;
+        }
 
         public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments )
         {
