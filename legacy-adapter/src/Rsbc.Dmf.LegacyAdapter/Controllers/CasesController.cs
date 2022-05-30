@@ -38,14 +38,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// </summary>
         /// <param name="licenseNumber"></param>
         /// <param name="surcode"></param>
-        /// <returns>True if the case exists</returns>
+        /// <returns>The Case Id or Null</returns>
         // GET: /Cases/Exist
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist(string licenseNumber, string surcode)
         {
-            bool result = false;
-            // get the case                                                
-            return Json (result);
+            string caseId = null;
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber  });
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {                
+                foreach (var item in reply.Items)
+                {
+                    caseId = item.CaseId;
+                }                
+            }
+            return Json(caseId);
         }
 
         /// <summary>
@@ -126,9 +133,52 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{caseId}/Documents")]
         public ActionResult GetDocuments([FromRoute] string caseId)
         {
-            bool result = false;
-            // get the comments
-            return Json(result);
+            // call the back end
+
+            var reply = _cmsAdapterClient.GetCaseDocuments(new CaseIdRequest() { CaseId = caseId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                List<ViewModels.Document> result = new List<ViewModels.Document>();
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    // fetch the file contents
+                    Byte[] data = new byte[0];
+
+                    result.Add(new ViewModels.Document
+                    {
+                        CaseId = item.CaseId,
+                        DocumentDate = item.DocumentDate.ToDateTimeOffset(),
+                        DocumentId = item.DocumentId,
+                        FileContents = data,
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+            /*
+            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W",  CommentDate = DateTime.Now, CommentId = Guid.NewGuid().ToString(),
+                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
+                SequenceNumber = 0, UserId = "TESTUSER" });
+            */
         }
 
 
