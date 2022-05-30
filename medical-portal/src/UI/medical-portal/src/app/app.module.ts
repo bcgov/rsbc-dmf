@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LayoutModule } from '@angular/cdk/layout';
+import {MatDialogModule} from '@angular/material/dialog';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule as PortalLayoutModule } from './layout/layout.module';
 import { ApiModule } from './shared/api/api.module';
@@ -20,6 +21,10 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { NgBusyModule } from 'ng-busy';
 import { CaseAssistanceComponent } from './case-assistance/case-assistance.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { EditUserProfileDialogComponent } from './user-profile/edit-user-profile-dialog/edit-user-profile-dialog.component';
+import { CreateMedicalPractitionerAssociationDialogComponent } from './user-profile/create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
+
 
 
 
@@ -29,13 +34,17 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
     AppComponent,
     DashboardComponent,
     CaseAssistanceComponent,
-    CaseDetailsComponent
+    CaseDetailsComponent,
+    UserProfileComponent,
+    EditUserProfileDialogComponent,
+    CreateMedicalPractitionerAssociationDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     LayoutModule,
+    MatDialogModule,
     SharedModule,
     PortalLayoutModule,
     HttpClientModule,
