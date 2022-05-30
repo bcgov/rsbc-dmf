@@ -14,9 +14,11 @@ service CaseManager {
 
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
+  rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
+
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
-  rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDriverDocumentsReply);
+  rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
   // process a line item from the legacy candidate list
   rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
@@ -54,7 +56,7 @@ message GetCommentsReply {
 	string errorDetail = 3;
 }
 
-message GetDriverDocumentsReply {
+message GetDocumentsReply {
 	repeated LegacyDocument items = 1;
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;

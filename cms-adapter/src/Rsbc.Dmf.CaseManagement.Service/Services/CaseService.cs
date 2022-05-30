@@ -141,6 +141,45 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
+        public async override Task<GetDocumentsReply> GetCaseDocuments(CaseIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetCaseLegacyDocuments(request.CaseId);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyDocument
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),
+                        DocumentId = item.DocumentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
         public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -180,9 +219,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<GetDriverDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
+        public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
-            var reply = new GetDriverDocumentsReply();
+            var reply = new GetDocumentsReply();
             try
             {
                 var result = await _caseManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
