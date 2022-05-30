@@ -12,4 +12,8 @@ export class ProfileManagementService {
   public getProfile(params: Parameters<ProfileService['apiProfileCurrentGet$Json']>[0]) {
     return this.profileService.apiProfileCurrentGet$Json({...params});
   }
+
+  public updateProfile(params: Parameters<ProfileService['apiProfileEmailPut']>[0]) {
+    return this.profileService.apiProfileEmailPut({...params});
+  }
 }

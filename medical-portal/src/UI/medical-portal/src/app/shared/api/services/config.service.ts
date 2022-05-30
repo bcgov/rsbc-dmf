@@ -11,10 +11,6 @@ import { map, filter } from 'rxjs/operators';
 
 import { Configuration } from '../models/configuration';
 
-
-/**
- * Configuration endpoint
- */
 @Injectable({
   providedIn: 'root',
 })
