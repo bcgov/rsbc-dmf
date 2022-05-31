@@ -28,6 +28,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return new UserProfile
             {
                 Id = profile.Id,
+                EmailAddress = profile.Email,
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
                 Clinics = profile.ClinicAssignments.Select(c => new ClinicUserProfile
@@ -48,8 +49,16 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// <param name="newEmail"></param>
         /// <returns></returns>
         [HttpPut("email")]
-        public ActionResult UpdateEmail([FromBody] EmailUpdate newEmail)
+        public async Task<ActionResult> UpdateEmail([FromBody] EmailUpdate newEmail)
         {
+            var profile = await userService.GetCurrentUserContext();
+
+            if (profile == null) return NotFound();
+
+            // update the user email.
+
+            await userService.SetEmail( profile.Id, newEmail.Email);
+
             return Ok();
         }
 
