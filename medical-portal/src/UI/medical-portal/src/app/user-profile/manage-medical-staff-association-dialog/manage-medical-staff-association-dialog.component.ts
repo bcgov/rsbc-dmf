@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-manage-medical-staff-association-dialog',
@@ -7,17 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageMedicalStaffAssociationDialogComponent {
   displayedColumns: string[] = ['fullName', 'role', 'lastActive'];
-  dataSource = [
-    {
-      id: '1',
-      fullName: 'Dr. Rajan Mehra',
-      role: 'Medical Practitioner',
-      lastActive: 'October 5, 2021',
-    },
-    // { id: "2", fullName: "Dr. Shelby Drew", role: "June 15, 2023", lastActive: "Active" },
-  ];
+  dataSource = [this.data];
 
-  constructor() {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   onManageAssociation() {}
 

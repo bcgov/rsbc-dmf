@@ -11,12 +11,12 @@
       <div class="container">
         <h1>Are you sure you want to remove the following association?</h1>
         <p>
-          You are about to remove the association between <b>Sharon Torres</b> and the following medical practitioner.
+          You are about to remove the association between <b>{{data.fullName}}</b> and the following medical practitioner.
         </p>
         <table mat-table #formsList [dataSource]="dataSource">
           <ng-container matColumnDef="fullName">
             <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.medicalPractitionerName }}</td>
           </ng-container>
           <ng-container matColumnDef="role">
             <th mat-header-cell *matHeaderCellDef>Role</th>

@@ -194,7 +194,7 @@
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
-          (click)="openEditMedicalStaffAssociationDialog()"
+          (click)="openEditMedicalStaffAssociationDialog(row)"
         >
           <mat-icon>edit</mat-icon> Edit
         </button>
@@ -205,7 +205,7 @@
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
-          (click)="openManageMedicalStaffAssociationDialog()"
+          (click)="openManageMedicalStaffAssociationDialog(row)"
         >
           <mat-icon>clear</mat-icon> Remove
         </button>
@@ -319,7 +319,7 @@
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
-          (click)="openManageMedicalPractitionerAssociationDialog()"
+          (click)="openManageMedicalPractitionerAssociationDialog(row)"
         >
           <mat-icon>clear</mat-icon> Remove
         </button>
