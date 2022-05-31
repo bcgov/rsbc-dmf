@@ -1,5 +1,5 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
-  <h1>Edit Profile</h1>
+  <h1 class="title">Edit Profile</h1>
   <button mat-icon-button aria-label="Close" mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -38,12 +38,12 @@
         <div fxflex style="width: 100%">
           <label class="form-label">Email Address</label><br />
           <mat-form-field appearance="outline">
-            <input 
-            matInput 
-            name="email" 
-            placeholder="Email Address " 
-            [(ngModel)]="data.emailAddress"
-             />
+            <input
+              matInput
+              name="email"
+              placeholder="Email Address "
+              [(ngModel)]="data.emailAddress"
+            />
           </mat-form-field>
         </div>
       </div>
@@ -54,11 +54,7 @@
     fxLayout="column"
     fxLayoutAlign="space-between center"
   >
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onConfirmChanges()"
-    >
+    <button mat-raised-button color="primary" (click)="onConfirmChanges()">
       Confirm Changes
     </button>
     <br />

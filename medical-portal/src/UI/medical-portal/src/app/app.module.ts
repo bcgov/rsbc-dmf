@@ -25,6 +25,9 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { EditUserProfileDialogComponent } from './user-profile/edit-user-profile-dialog/edit-user-profile-dialog.component';
 import { CreateMedicalPractitionerAssociationDialogComponent } from './user-profile/create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
 import { ManageMedicalPractitionerAssociationDialogComponent } from './user-profile/manage-medical-practitioner-association-dialog/manage-medical-practitioner-association-dialog.component';
+import { CreateMedicalStaffAssociationDialogComponent } from './user-profile/create-medical-staff-association-dialog/create-medical-staff-association-dialog.component';
+import { EditMedicalStaffAssociationDialogComponent } from './user-profile/edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
+import { ManageMedicalStaffAssociationDialogComponent } from './user-profile/manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 
 
 
@@ -39,7 +42,10 @@ import { ManageMedicalPractitionerAssociationDialogComponent } from './user-prof
     UserProfileComponent,
     EditUserProfileDialogComponent,
     CreateMedicalPractitionerAssociationDialogComponent,
-    ManageMedicalPractitionerAssociationDialogComponent
+    ManageMedicalPractitionerAssociationDialogComponent,
+    CreateMedicalStaffAssociationDialogComponent,
+    EditMedicalStaffAssociationDialogComponent,
+    ManageMedicalStaffAssociationDialogComponent
   ],
   imports: [
     BrowserModule,
