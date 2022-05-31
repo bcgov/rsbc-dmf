@@ -6,8 +6,8 @@ on:
     paths:
       - "cms-adapter/src/**"
       - ".github/workflows/ci-cms-adapter.yml"
-   push:
-     branches: [main, codecov]
+  push:
+    branches: [main, codecov]
 
 env:
   working-directory: ./
