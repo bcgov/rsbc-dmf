@@ -253,8 +253,13 @@ message DecisionItem {
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
+  rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
 }
 
+message UserSetEmailRequest {
+	string userId = 1;
+	string email = 2;
+}
 
 message UsersSearchRequest {
 	string userId = 1;
@@ -282,6 +287,7 @@ message UserLoginReply {
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 	string userId = 10;
+	string userEmail = 11;
 }
 
 message User {
