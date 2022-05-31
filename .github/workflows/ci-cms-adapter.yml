@@ -1,13 +1,14 @@
 name: ci-cms-adapter
 
 on:
+  push:
+     branches: [main, codecov]
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
       - "cms-adapter/src/**"
       - ".github/workflows/ci-cms-adapter.yml"
-   push:
-     branches: [main, codecov]
+   
 
 env:
   working-directory: ./
