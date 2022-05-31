@@ -5,8 +5,10 @@ import { UserProfile } from '../shared/api/models';
 import { ProfileManagementService } from '../shared/services/profile.service';
 import { CreateMedicalPractitionerAssociationDialogComponent } from './create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
 import { CreateMedicalStaffAssociationDialogComponent } from './create-medical-staff-association-dialog/create-medical-staff-association-dialog.component';
+import { EditMedicalStaffAssociationDialogComponent } from './edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
 import { EditUserProfileDialogComponent } from './edit-user-profile-dialog/edit-user-profile-dialog.component';
 import { ManageMedicalPractitionerAssociationDialogComponent } from './manage-medical-practitioner-association-dialog/manage-medical-practitioner-association-dialog.component';
+import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -83,6 +85,36 @@ medicalStaffDataSource = [
   
     }
 
+    openEditMedicalStaffAssociationDialog(){
+      const dialogRef = this.dialog.open(EditMedicalStaffAssociationDialogComponent, {
+        height: '600px',
+        width: '820px',
+        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+        
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        //this.userProfile.emailAddress = result;
+  
+      });
+  
+    }
+
+    openManageMedicalStaffAssociationDialog(){
+      const dialogRef = this.dialog.open(ManageMedicalStaffAssociationDialogComponent, {
+        height: '600px',
+        width: '820px',
+        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+        
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        //this.userProfile.emailAddress = result;
+  
+      });
+
+    }
+
 
   // Medical Practitioner Association
 
@@ -100,7 +132,7 @@ medicalStaffDataSource = [
     });
   }
 
-  openManageMedicalPractitionerAssociationAssociation(){
+  openManageMedicalPractitionerAssociationDialog(){
     const dialogRef = this.dialog.open(ManageMedicalPractitionerAssociationDialogComponent, {
       height: '600px',
       width: '820px',
@@ -145,6 +177,8 @@ medicalStaffDataSource = [
       }
     });
   }
+
+  
 }
 
 function compare(

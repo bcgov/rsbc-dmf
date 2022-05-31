@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-manage-medical-practitioner-association-dialog',
-  templateUrl:
-    './manage-medical-practitioner-association-dialog.component.html',
-  styleUrls: [
-    './manage-medical-practitioner-association-dialog.component.scss',
-  ],
+  selector: 'app-manage-medical-staff-association-dialog',
+  templateUrl: './manage-medical-staff-association-dialog.component.html',
+  styleUrls: ['./manage-medical-staff-association-dialog.component.scss'],
 })
-export class ManageMedicalPractitionerAssociationDialogComponent {
+export class ManageMedicalStaffAssociationDialogComponent {
   displayedColumns: string[] = ['fullName', 'role', 'lastActive'];
   dataSource = [
     {
