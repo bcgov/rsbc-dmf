@@ -18,6 +18,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
 
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
+
+        Task SetEmail(string userId, string email);
     }
 
     public record UserContext
@@ -27,6 +29,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string LastName { get; set; }        
     public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
         public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
+        public string Email { get; set; }
+
     }
 
     public record ClinicAssignment
@@ -63,6 +67,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 Id = user.FindFirstValue(ClaimTypes.Sid),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
+                Email = user.FindFirstValue(ClaimTypes.Email),
                 ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
             });
         }
@@ -104,6 +109,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+            claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
             claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
@@ -120,6 +126,21 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
             return user;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task SetEmail (string userId, string email)
+        {
+            UserSetEmailRequest request = new UserSetEmailRequest()
+            {
+                UserId = userId, Email = email
+            };
+            var result = await userManager.SetEmailAsync(request);
         }
     }
 }
