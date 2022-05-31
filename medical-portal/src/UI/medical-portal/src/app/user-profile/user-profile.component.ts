@@ -33,17 +33,17 @@ export class UserProfileComponent implements OnInit {
 ];
 
 dataSource = [
-  { id: "1", fullName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending" },
-  { id: "2", fullName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active" },
-  { id: "3", fullName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active" },
-  { id: "4", fullName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive" },
+  { id: "1", fullName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending", role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "2", fullName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "3", fullName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "4", fullName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive",role:"Medical Practitioner", lastActive:"May 11, 2022" },
 ];
 
 medicalStaffDataSource = [
-  { id: "1", fullName:"Torres, Sharon", medicalPractitionerName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending" },
-  { id: "2", fullName:"Smith, Ingrid", medicalPractitionerName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active" },
-  { id: "3", fullName:"Tucker, Devi", medicalPractitionerName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active" },
-  { id: "4", fullName:"Varga, Tarik", medicalPractitionerName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive" },
+  { id: "1", fullName:"Torres, Sharon", medicalPractitionerName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending", role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "2", fullName:"Smith, Ingrid", medicalPractitionerName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "3", fullName:"Tucker, Devi", medicalPractitionerName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "4", fullName:"Varga, Tarik", medicalPractitionerName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive" ,role:"Medical Practitioner", lastActive:"May 11, 2022"},
 ]
 
   constructor(public dialog: MatDialog, public profileService: ProfileManagementService) {}
@@ -85,11 +85,11 @@ medicalStaffDataSource = [
   
     }
 
-    openEditMedicalStaffAssociationDialog(){
+    openEditMedicalStaffAssociationDialog(row: any){
       const dialogRef = this.dialog.open(EditMedicalStaffAssociationDialogComponent, {
         height: '600px',
         width: '820px',
-        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+        data: row,
         
       });
       dialogRef.afterClosed().subscribe(result => {
@@ -100,12 +100,11 @@ medicalStaffDataSource = [
   
     }
 
-    openManageMedicalStaffAssociationDialog(){
+    openManageMedicalStaffAssociationDialog(row: any){
       const dialogRef = this.dialog.open(ManageMedicalStaffAssociationDialogComponent, {
         height: '600px',
         width: '820px',
-        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
-        
+        data: row 
       });
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed', result);
@@ -132,11 +131,11 @@ medicalStaffDataSource = [
     });
   }
 
-  openManageMedicalPractitionerAssociationDialog(){
+  openManageMedicalPractitionerAssociationDialog(row:any){
     const dialogRef = this.dialog.open(ManageMedicalPractitionerAssociationDialogComponent, {
       height: '600px',
       width: '820px',
-      //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+      data: row,
       
     });
     dialogRef.afterClosed().subscribe(result => {
