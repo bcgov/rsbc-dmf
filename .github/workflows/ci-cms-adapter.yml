@@ -1,13 +1,13 @@
 name: ci-cms-adapter
 
 on:
+  push:
+     branches: [main, codecov]
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
       - "cms-adapter/src/**"
       - ".github/workflows/ci-cms-adapter.yml"
-  push:
-    branches: [main, codecov]
 
 env:
   working-directory: ./
@@ -47,7 +47,7 @@ jobs:
           dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings           
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - name: Generate code coverage
-        working-directory: ${{env.working-directory}}${{env.solution-folder}}/Pssg.Unit.Tests.Interfaces.Icbc
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}/Rsbc.Dmf.CaseManagement.Tests
         run: |
           mkdir -p CovTestResults
           rm -rf ./TestResults
