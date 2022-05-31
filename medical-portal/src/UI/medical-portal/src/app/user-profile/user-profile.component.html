@@ -18,7 +18,7 @@
             Information</mat-label
           >
 
-          <button mat-button (click)="openDialog()">
+          <button mat-button (click)="openEditUserProfileDialog()">
             <mat-icon class="edit-button">edit</mat-icon>Edit Profile
             Information
           </button>
@@ -60,7 +60,10 @@
       practitioners.
     </p>
 
-    <button mat-button (click)="openCreateMedicalPractitionerAssociationDialog()">
+    <button
+      mat-button
+      (click)="openCreateMedicalPractitionerAssociationDialog()"
+    >
       <mat-icon class="edit-button">add_circle</mat-icon>Request Association
     </button>
   </div>
@@ -90,45 +93,70 @@
         </button>
       </mat-form-field>
     </div>
-    <div >
+    <div>
       <button mat-button (click)="clear()" class="action-button">Clear</button>
     </div>
   </div>
 </div>
 
 <div class="container">
-  <table mat-table #formsList  [dataSource]="dataSource">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
+  <table
+    class="practiotioner-table"
+    mat-table
+    #formsList
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="sortData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
       <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
     </ng-container>
     <ng-container matColumnDef="expiryDate">
-      <th mat-header-cell *matHeaderCellDef>Expiry Date</th>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
       <td mat-cell *matCellDef="let row">{{ row.expiryDate }}</td>
     </ng-container>
     <ng-container matColumnDef="status">
-      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
       <td mat-cell *matCellDef="let row">{{ row.status }}</td>
     </ng-container>
-    <ng-container matColumnDef="lastUpdatedBy">
-      <th mat-header-cell *matHeaderCellDef>Action</th>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" class="col-action">
-        <button mat-icon-button>
+        <button
+          mat-icon-button
+          (click)="openManageMedicalPractitionerAssociationAssociation()"
+        >
           <mat-icon>clear</mat-icon> Remove
         </button>
       </td>
     </ng-container>
 
-    <tr
-      mat-header-row
-      *matHeaderRowDef="['name', 'expiryDate', 'status', 'lastUpdatedBy']"
-    ></tr>
-    <tr
-      mat-row
-      *matRowDef="
-        let row;
-        columns: ['name', 'expiryDate', 'status', 'lastUpdatedBy']
-      "
-    ></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </div>
