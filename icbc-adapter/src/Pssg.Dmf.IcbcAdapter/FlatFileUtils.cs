@@ -156,27 +156,34 @@ namespace Rsbc.Dmf.IcbcAdapter
                         client.DownloadFile(file.FullName, memoryStream);
 
                         string data = StringUtility.StreamToString(memoryStream);
-                        // process records
-                        var engine = new FileHelperEngine<NewDriver>();                        
-                        var records = engine.ReadString(data);
-                        foreach (var record in records)
-                        {
-                            LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
-                            // Add / Update cases
-                            LegacyCandidateRequest lcr = new LegacyCandidateRequest()
-                            {
-                                 LicenseNumber = record.LicenseNumber,
-                                 Surname = record.Surname,
-                                 ClientNumber = record.ClientNumber,
-                            };
-                            _caseManagerClient.ProcessLegacyCandidate(lcr);
-                        }
+                        
+                        ProcessCandidates(hangfireContext, data);
 
                     }
                 }
             }
            
             LogStatement(hangfireContext, "End of check for Candidates.");            
+        }
+
+        public void ProcessCandidates(PerformContext hangfireContext, string data)
+        {
+            // process records
+            var engine = new FileHelperEngine<NewDriver>();
+            engine.Options.IgnoreLastLines = 1;
+            var records = engine.ReadString(data);
+            foreach (var record in records)
+            {
+                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                // Add / Update cases
+                LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+                {
+                    LicenseNumber = record.LicenseNumber,
+                    Surname = record.Surname,
+                    ClientNumber = record.ClientNumber,
+                };
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
+            }
         }
 
         /// <summary>
