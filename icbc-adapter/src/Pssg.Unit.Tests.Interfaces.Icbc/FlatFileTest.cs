@@ -91,6 +91,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
+        public async void ProcessCandidatesTextFile()
+        {
+            string filename = Configuration["CANDIDATES_TEST_FILE"];
+
+            Assert.NotNull(filename);
+
+            string data = File.ReadAllText(filename);
+
+            flatFileUtils.ProcessCandidates(null, data);
+        }
+
+        [Fact]
         public async void TestCheckForCandidates()
         {
             flatFileUtils.CheckForCandidates(null);
