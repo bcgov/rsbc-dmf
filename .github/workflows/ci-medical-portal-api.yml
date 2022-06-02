@@ -43,7 +43,7 @@ jobs:
 
       - name: Test
         run: |          
-          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings           
+          dotnet test -c Release --no-restore --verbosity normal           
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       
       - name: Generate code coverage
@@ -52,7 +52,7 @@ jobs:
           mkdir -p CovTestResults
           rm -rf .RSBC.Tests.Unit.DMF.MedicalPortal.API/TestResults
           dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
-          mv RSBC.Tests.Unit.DMF.MedicalPortal.API/TestResults/*/* ./CovTestResults/ --backup=numbered
+          mv RSBC.Tests.Unit.DMF.MedicalPortal.API/TestResults/*/* ./CovTestResults/
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov

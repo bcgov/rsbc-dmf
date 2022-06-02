@@ -44,16 +44,17 @@ jobs:
 
       - name: Test
         run: |          
-          dotnet test -c Release --no-restore --verbosity normal --collect:"XPlat Code Coverage" --settings coverlet.runsettings           
+          dotnet test -c Release --no-restore --verbosity normal           
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
+        
       - name: Generate code coverage
-        working-directory: ${{env.working-directory}}${{env.solution-folder}}/Rsbc.Dmf.CaseManagement.Tests
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
         run: |
           mkdir -p CovTestResults
           rm -rf ./TestResults
           rm -rf ./TestResults
-          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
-          mv TestResults/*/* ./CovTestResults/
+          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore 
+          mv Rsbc.Dmf.CaseManagement.Tests/TestResults/*/* ./CovTestResults/
           head CovTestResults/coverage.opencover.xml
       - name: Codecov
         uses: codecov/codecov-action@v2.1.0
