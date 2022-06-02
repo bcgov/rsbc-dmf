@@ -225,7 +225,7 @@ body {
   }
 
   .mat-row:nth-child(even) {
-    background-color: #e0e0e0;
+    background-color: #EEEEEE
   }
 }
 
@@ -234,7 +234,7 @@ body {
   width: 100%;
   padding-top: 50px;
   padding-bottom: 50px;
-  padding-left: 60px;;
+  // padding-left: 60px;;
 
   h1 {
     color: rgb(0, 51, 102);
@@ -244,4 +244,10 @@ body {
     line-height: 60px;
     font-style: normal;
   }
+}
+
+.ng-busy {
+  position: fixed;
+  overflow: hidden;
+  background-color: rgba(0, 51, 102, 0.3);
 }

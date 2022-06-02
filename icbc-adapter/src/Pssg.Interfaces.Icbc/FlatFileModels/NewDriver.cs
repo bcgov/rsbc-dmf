@@ -55,7 +55,9 @@ namespace Pssg.Interfaces.Icbc.FlatFileModels
         [FieldFixedLength(10)]
         public string LastExamDate { get; set; }
 
-        // may have a field ADDT - 10 chars
+        // Add Date Char(10)
+        [FieldFixedLength(10)]
+        public string AddDate { get; set; }        
 
         // MSCD Master Status Code Char(1) 
         [FieldFixedLength(1)]

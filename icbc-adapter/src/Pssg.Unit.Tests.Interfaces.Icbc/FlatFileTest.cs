@@ -78,11 +78,28 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             flatFileUtils = new FlatFileUtils(Configuration,caseManagerClient);
         }
 
+        [Fact]
+        public async void GetUnsentMedicalUpdates()
+        {
+            var unsentItems = caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+        }
 
         [Fact]
         public async void BasicConnectionTest()
         {
             flatFileUtils.CheckConnection(null);
+        }
+
+        [Fact]
+        public async void ProcessCandidatesTextFile()
+        {
+            string filename = Configuration["CANDIDATES_TEST_FILE"];
+
+            Assert.NotNull(filename);
+
+            string data = File.ReadAllText(filename);
+
+            flatFileUtils.ProcessCandidates(null, data);
         }
 
         [Fact]

@@ -18,19 +18,24 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
 
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
+
+        Task SetEmail(string userId, string email);
     }
 
     public record UserContext
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
+        public string LastName { get; set; }        
+    public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
         public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
+        public string Email { get; set; }
+
     }
 
     public record ClinicAssignment
     {
+        public string PractitionerId { get; set; }
         public string Role { get; set; }
         public string ClinicId { get; set; }
         public string ClinicName { get; set; }
@@ -62,6 +67,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 Id = user.FindFirstValue(ClaimTypes.Sid),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
+                Email = user.FindFirstValue(ClaimTypes.Email),
                 ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
             });
         }
@@ -103,11 +109,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+            claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
             claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
             claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
             {
+                PractitionerId = p.MedicalPractitioner.Id,
                 Role = p.MedicalPractitioner.Role,
                 ClinicId = p.MedicalPractitioner.Clinic.Id,
                 ClinicName = p.MedicalPractitioner.Clinic.Name
@@ -118,6 +126,21 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
             return user;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        public async Task SetEmail (string userId, string email)
+        {
+            UserSetEmailRequest request = new UserSetEmailRequest()
+            {
+                UserId = userId, Email = email
+            };
+            var result = await userManager.SetEmailAsync(request);
         }
     }
 }

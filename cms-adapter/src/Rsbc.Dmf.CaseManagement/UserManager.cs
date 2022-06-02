@@ -14,6 +14,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
 
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
+
+        Task<bool> SetUserEmail(string userId, string email);
     }
 
     public class SearchUsersRequest
@@ -42,6 +44,7 @@ namespace Rsbc.Dmf.CaseManagement
     public class LoginUserResponse
     {
         public string Userid { get; set; }
+        public string Email { get; set; }
     }
 
     public abstract class User
@@ -51,6 +54,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ExternalSystemUserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; }
     }
 
     public class MedicalPractitionerUser : User
@@ -117,6 +121,7 @@ namespace Rsbc.Dmf.CaseManagement
                     Id = u.dfp_loginid.ToString(),
                     FirstName = u.dfp_DriverId?.dfp_PersonId.firstname,
                     LastName = u.dfp_DriverId?.dfp_PersonId.lastname,
+                    Email = u.dfp_DriverId?.dfp_PersonId.emailaddress1,
                     ExternalSystem = ((LoginType)u.dfp_type).ToString(),
                     ExternalSystemUserId = u.dfp_userid
                 }),
@@ -125,6 +130,7 @@ namespace Rsbc.Dmf.CaseManagement
                     Id = u.dfp_loginid.ToString(),
                     FirstName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.firstname,
                     LastName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.lastname,
+                    Email = u.dfp_login_dfp_medicalpractitioner?.FirstOrDefault()?.dfp_PersonId.emailaddress1,
                     ExternalSystem = ((LoginType)u.dfp_type).ToString(),
                     ExternalSystemUserId = u.dfp_userid,
                     ClinicAssignments = u.dfp_login_dfp_medicalpractitioner.Select(mp => new ClinicAssignment
@@ -146,10 +152,43 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
+        public async Task<bool> SetUserEmail(string userId, string email)
+        {
+            bool result = false;
+
+            var login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_login_dfp_medicalpractitioner)                
+                .Where(l => l.dfp_loginid == Guid.Parse(userId))
+                .FirstOrDefault();
+
+            if (login != null)
+            {
+                // get the first medical practitioner and update their email
+                var person = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault();
+                if (person != null)
+                {
+                    await dynamicsContext.LoadPropertyAsync(person, nameof(dfp_medicalpractitioner.dfp_PersonId));
+                    
+                    if (person.dfp_PersonId != null)
+                    {
+                        person.dfp_PersonId.emailaddress1 = email;
+
+                        dynamicsContext.UpdateObject(person.dfp_PersonId);
+                        dynamicsContext.SaveChanges();
+                        result = true;
+                    }                    
+                }
+            }
+
+            return result;
+        }
+
         public async Task<LoginUserResponse> LoginUser(LoginUserRequest request)
         {
             var loginType = ParseExternalSystem(request.User.ExternalSystem);
             var loginId = request.User.ExternalSystemUserId;
+            string userEmail = null;
 
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
@@ -195,7 +234,16 @@ namespace Rsbc.Dmf.CaseManagement
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
             {
                 //get or create person
-                var personId = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?._dfp_personid_value;
+
+                var person = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault();
+                if (person != null)
+                {
+                    await dynamicsContext.LoadPropertyAsync(person, nameof(dfp_medicalpractitioner.dfp_PersonId));
+                    userEmail = person.dfp_PersonId?.emailaddress1;
+                }
+                
+                var personId = person?._dfp_personid_value;
+                
                 contact personEntity;
                 if (!personId.HasValue)
                 {
@@ -227,7 +275,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
-            return new LoginUserResponse { Userid = login.dfp_loginid.ToString() };
+            return new LoginUserResponse { Userid = login.dfp_loginid.ToString() , Email = userEmail };
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch

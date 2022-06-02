@@ -1,99 +1,496 @@
 <div class="page-desc">
   <div class="container">
-  <img src="assets/images/u541.svg" alt="Dashboard-icon" class="dashboard-icon">
-  <h1>Welcome to the new<br>Medical Practitioner Portal</h1>
-  <p>The portal will allow you to easily find, fill out and submit a driver medical examination report (DMER) to
-    RoadSafetyBC.
-  </p>
-  <p>
-    Upon submission, RoadSafetyBC will review the information and if they have subsequent questions or require extra
-    information they will message you. To ensure privacy and security, you will get an email letting you know that you
-    have a message waiting in this portal.
-  </p>
+    <h1>Portal Dashboard</h1>
+    <p>
+      In this portal you can start, access and submit a driver medical
+      examination report (DMER) for a driver to RoadSafetyBC.
+    </p>
+    <p>
+      You will also be able to see the DMER status with RoadSafetyBC in the
+      event the driver contacts you for an update.
+    </p>
   </div>
 </div>
 
-<div class="container" style="margin-top:20px;">
-  <div style="width:90%;margin-left: auto;margin-right: auto;" >
-    <div class="bc-gov-alertbanner bc-gov-alertbanner-warning" role="alert" aria-labelledby="warning" aria-describedby="warning-desc">
+<!-- <div class="container" style="margin-top: 20px">
+  <div style="width: 90%; margin-left: auto; margin-right: auto">
+    <div
+      class="bc-gov-alertbanner bc-gov-alertbanner-warning"
+      role="alert"
+      aria-labelledby="warning"
+      aria-describedby="warning-desc"
+    >
       <p id="warning-desc">
         RoadsafetyBC has requested more information for one of your DMERs.
 
-        <a href="#" style="text-decoration: underline;">See my messages</a> </p>
+        <a href="#" style="text-decoration: underline">See my messages</a>
+      </p>
     </div>
   </div>
+</div> -->
 
-</div>
-
-
-<div class="container" >
+<div class="container">
   <mat-card class="search">
     <mat-card-header class="primary">
-      <mat-card-title><i class="fas fa-search"></i> Search DMER Case</mat-card-title>
+      <mat-card-title>
+        <mat-icon class="search-icon">search</mat-icon> Search DMER Case
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form>
         <div>
-          <label class="form-label">DMER Case ID</label><br>
+          <label class="form-label">DMER Case ID</label><br />
 
-          <mat-form-field class="search-input">
-            <mat-label>Enter DMER case ID</mat-label>
-            <input matInput placeholder=" " [(ngModel)]="searchBox" [ngModelOptions]="{standalone: true}" />
+          <mat-form-field class="search-input" appearance="outline">
+            <input
+              matInput
+              placeholder="Enter the DMER Case ID to start or access a DMER "
+              [(ngModel)]="searchBox"
+              [ngModelOptions]="{ standalone: true }"
+            />
           </mat-form-field>
         </div>
-
-
-        <button mat-flat-button color="primary" class="search-button" (click)="search()">Search DMER Case</button>
+        <button
+          mat-flat-button
+          color="primary"
+          class="search-button"
+          (click)="search()"
+        >
+          Search DMER Case
+        </button>
       </form>
+      <div class="dmer-missing">
+        <p>
+          Missing DMER Case ID?
+          <a routerLink="/caseAssistance"
+            >Find out options for the driver to obtain their DMER Case ID.
+          </a>
+        </p>
+      </div>
     </mat-card-content>
-
   </mat-card>
 
+  <ng-container *ngIf="isShowResults">
+    <mat-card class="search-results">
+      <mat-card-title>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          Showing search results for DMER Case ID '{{ this.searchBox }}'
+          <button mat-button color="primary" (click)="closeResults()">
+            <mat-icon>close</mat-icon>Clear Results
+          </button>
+        </div>
+      </mat-card-title>
+      <div *ngIf="searchedCase; else noResult" class="searched-case">
+        <mat-card-content
+          class="show-results"
+          fxLayout="row"
+          fxLayoutAlign="space-between"
+        >
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              DMER Case ID: <b>{{ searchedCase?.title }}</b>
+            </div>
+            <div>
+              Patient Name:
+              <b
+                >{{ searchedCase?.patientFirstname }},
+                {{ searchedCase?.patientLastname }}
+                {{ searchedCase?.patientMiddlename }}</b
+              >
+            </div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              DMER Type:
+              <label class="no-reimbursement-chips">{{
+                searchedCase?.dmerType
+              }}</label>
+            </div>
+            <div>
+              Date of Birth:
+              <b>{{ searchedCase?.driverBirthDate | date }}</b>
+            </div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>&nbsp;</div>
+            <div>
+              Driver Licence Number: <b>{{ searchedCase?.driverLicense }}</b>
+            </div>
+          </div>
+          <div
+            fxLayout="column"
+            fxLayoutAlign="space-between"
+            fxLayoutGap="24px"
+          >
+            <div>
+              Case Status: <b>{{ searchedCase?.status }}</b>
+            </div>
+            <ng-container [ngSwitch]="searchedCase?.status">
+              <ng-container *ngSwitchCase="'Not Started'">
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="navigatetoDMER()"
+                >
+                  <mat-icon class="cases-button">edit</mat-icon>Start DMER
+                </button>
+              </ng-container>
+              <ng-container *ngSwitchCase="'In Progress'">
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="navigatetoDMER()"
+                >
+                  <mat-icon class="cases-button">edit</mat-icon>Continue DMER
+                </button>
+              </ng-container>
+
+              <ng-container *ngSwitchDefault>
+                <button
+                  mat-stroked-button
+                  color="primary"
+                  (click)="navigateToCaseDetails()"
+                >
+                  <mat-icon class="cases-button">description</mat-icon>View
+                  Record
+                </button>
+              </ng-container>
+            </ng-container>
+          </div>
+        </mat-card-content>
+      </div>
+      <ng-template #noResult>
+        <mat-card-content class="no-results">
+          <p>
+            <b>No record found for DMER Case ID '{{ this.searchBox }}'. </b>
+            Please re-enter the DMER Case ID and try again. <br />
+
+            If you think you have the incorrect ID, you will want to provide
+            <a routerLink="/caseAssistance">
+              options to the driver on how to obtain the correct DMER Case
+              ID.</a
+            >
+            <br />
+
+            If you continue to experience issues please contact support at
+            XXX-XXX-XXXX.
+          </p>
+        </mat-card-content>
+      </ng-template>
+    </mat-card>
+  </ng-container>
 
   <div class="list">
+    <h2>DMER Definitions</h2>
+    <ng-container>
+      <div class="accordion-btn-container">
+        <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+          >Expand All</a
+        >
+        <span class="accordion-bar">&nbsp;|&nbsp;</span>
+        <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+          >Collapse All</a
+        >
+      </div>
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="dmer-Title"> DMER Types </mat-panel-title>
+          </mat-expansion-panel-header>
 
-    <h2>Your DMERs</h2>
-    <p>
-      Quickly access the DMERs you have worked on. Use the filter option to better define what you’re looking for.
-    </p>
+          RoadSafetyBC has two types of DMERs. The difference between them is
+          when a medical practice is able to receive a reimbursement from
+          RoadSafetyBC.<br />
+          <div class="dmer-types">
+            <b>No Reimbursement</b><br />
+            The routine DMERs noted below are not subsidized by RoadSafetyBC.<br />
+            <div class="chips" fxLayout="row" fxLayoutGap="24px">
+              <label class="no-reimbursement-chips">Scheduled Age</label>
+              <label class="no-reimbursement-chips">Commercial</label>
+            </div>
+          </div>
+          <div class="dmer-types">
+            <b>Reimbursement</b> <br />
+            If a DMER has been issued for the reasons below, the medical
+            practitioner is able to submit a request for reimbursement of $75 to
+            RoadSafetyBC for each submission.
 
-    <!-- TODO: Add Search Functionality -->
+            <div class="chips" fxLayout="row" fxLayoutGap="24px">
+              <label class="reimbursement-chips"
+                >Suspected Medical Condition</label
+              >
+              <label class="reimbursement-chips">Known Medical Condition</label>
+            </div>
+          </div>
+        </mat-expansion-panel>
 
-    <table mat-table #formsList matSort (matSortChange)="sortData($event)"  [dataSource]="sortedData" matSortActive="title"
-           matSortDirection="asc" matSortDisableClear>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="dmer-Title">
+              Case Statuses
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="title" sortActionDescription="Sort by DMER Case ID"> DMER Case ID </th>
-        <td mat-cell *matCellDef="let row">
-          <a [routerLink]="['/cases/case', row.id]" routerLinkActive="router-link-active"> {{row.title}} </a>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="patientName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="patientName" sortActionDescription="Sort by Patient's Name"> Patient's Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.patientName}} </td>
-      </ng-container>
-      <ng-container matColumnDef="lastUpdatedOn">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="modifiedOn" sortActionDescription="Sort by Last Date Modified"> Last Date Modified </th>
-        <td mat-cell *matCellDef="let row"> {{row.modifiedOn | date}} </td>
-      </ng-container>
-      <ng-container matColumnDef="clinicName">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="clinicName" sortActionDescription="Sort by Clinic Name"> Clinic Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.clinicName }} </td>
-      </ng-container>
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header="status" sortActionDescription="Sort by Status"> Status </th>
-        <td mat-cell *matCellDef="let row"> {{row.status }} </td>
-      </ng-container>
+          <div>
+            A case's lifecycle progresses through seven different statuses.
+            <ul>
+              <li>
+                <b>Not Started</b> – DMER has been issued by RoadSafetyBC. No
+                one has opened the case.
+              </li>
+              <li>
+                <b>In progress </b> – DMER has been started by a medical
+                practitioner, but it has not been submitted to RoadSafetyBC.
+              </li>
+              <li>
+                <b>RSBC received </b> – DMER has been submitted successfully to
+                RoadSafetyBC.
+              </li>
+              <li>
+                <b>Under RSBC review </b> – RoadSafetyBC has started reviewing
+                this case.
+              </li>
+              <li>
+                <b>Decision rendered </b> – RoadSafetyBC has assessed the case
+                and has made a decision whether the driver is fit or unfit to
+                drive. The driver is notified of the decision. Due to privacy
+                legislation the decision is not able to be displayed.
+              </li>
+              <li>
+                <b>Cancelled/Closed </b> - This case is closed or a DMER no
+                longer needs to be performed.
+              </li>
+              <li>
+                <b>Transferred</b> - DMER was never submitted/completed by
+                medical practitioner on record. Another medical practitioner has
+                started a new DMER for this patient. The previous answers
+                collected were deleted.
+              </li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-container>
+  </div>
 
-      <tr mat-header-row *matHeaderRowDef="['title', 'patientName', 'lastUpdatedOn', 'clinicName', 'status']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['title', 'patientName', 'lastUpdatedOn', 'clinicName', 'status'];">
-      </tr>
-    </table>
-    <div>
+  <div class="list">
+    <h2>DMERs</h2>
+    Browse the list or search for DMERs you have been working on using the
+    search field and filters below. See above for DMER Type and Case Status
+    definitions.
+    <div class="dmer-search">
+      <mat-form-field class="cases-input" appearance="outline">
+        <input
+          matInput
+          type="text"
+          placeholder="Search by Name or Case ID"
+          [(ngModel)]="searchCasesInput"
+        />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchCases()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
 
-    </div>
-    <div class="table-actions">
-      <p>Showing 10 of 25 records</p>
-      <a href="#">View more records<mat-icon>arrow_drop_down</mat-icon> </a>
+      <mat-icon class="filter-icon">filter_alt</mat-icon>
+      <mat-label style="color: #003366">Filter By: </mat-label>
+      <mat-form-field appearance="outline" class="cases-filter">
+        <mat-select
+          [(ngModel)]="selectedStatus"
+          (selectionChange)="onStatusChanged()"
+        >
+          <mat-option *ngFor="let status of statuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-button (click)="clear()">Clear</button>
     </div>
   </div>
+
+  <div [ngBusy]="busy"></div>
+  <div class="table-data">
+   
+    <ng-container *ngIf="!isLoading">
+      <ng-container *ngIf="totalRecords > 0; else noData">
+        <table
+          mat-table
+          #formsList
+          matSort
+          (matSortChange)="sortData($event)"
+          [dataSource]="showingDataInView"
+          matSortActive="title"
+          matSortDirection="asc"
+          matSortDisableClear
+        >
+          <ng-container matColumnDef="title">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="title"
+              sortActionDescription="Sort by DMER Case ID"
+            >
+              DMER Case ID
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <a
+                [routerLink]="['/cases/case', row.id]"
+                routerLinkActive="router-link-active"
+              >
+                {{ row.title }}
+              </a>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="patientName">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="patientName"
+              sortActionDescription="Sort by Patient's Name"
+            >
+              Patient's Name
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row?.patientLastname }}, {{ row?.patientFirstname }}
+              {{ row?.patientMiddlename }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="driverBirthDate">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="driverBirthDate"
+              sortActionDescription="Sort by Birth Date"
+            >
+              Date of Birth
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.driverBirthDate | date }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="dmerType">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="dmerType"
+              sortActionDescription="Sort by Dmer Type"
+            >
+              DMER Type
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.dmerType }}</td>
+          </ng-container>
+          <ng-container matColumnDef="lastUpdatedOn">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="modifiedOn"
+              sortActionDescription="Sort by Last Date Modified"
+            >
+              Last Modified
+            </th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.modifiedOn | date }}
+            </td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="clinicName">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="clinicName"
+              sortActionDescription="Sort by Clinic Name"
+            >
+              Clinic Name
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.clinicName }}</td>
+          </ng-container> -->
+          <ng-container matColumnDef="status">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header="status"
+              sortActionDescription="Sort by Status"
+            >
+              Case Status
+            </th>
+            <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="[
+              'title',
+              'patientName',
+              'driverBirthDate',
+              'dmerType',
+              'lastUpdatedOn',
+              'status'
+            ]"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: [
+                'title',
+                'patientName',
+                'driverBirthDate',
+                'dmerType',
+                'lastUpdatedOn',
+                'status'
+              ]
+            "
+          ></tr>
+        </table>
+
+        <div class="table-actions">
+          <p>
+            Showing
+            {{
+              pageNumber * pageSize > totalRecords
+                ? totalRecords
+                : pageNumber * pageSize
+            }}
+            of {{ totalRecords }} records
+          </p>
+          <a style="cursor: pointer" (click)="loadRecords()"
+            >View more records<mat-icon>arrow_drop_down</mat-icon>
+          </a>
+        </div>
+      </ng-container>
+
+      <ng-template #noData>
+        <div class="no-data">
+          <p>
+            <b
+              >No record found for DMER Case ID '{{
+                this.searchCasesInput
+              }}'.</b
+            >
+            Please re-enter the DMER Case ID and try again. Alternatively you
+            can search by patient name.<br />
+            If you think you have the incorrect ID, you will want to provide
+            options for the driver to obtain the correct DMER Case ID. <br />
+            If continue to experience issues please contact support at
+            XXX-XXX-XXXX.
+          </p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </div>
+</div>

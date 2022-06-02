@@ -24,6 +24,9 @@ using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Reflection;
+using Grpc.Net.Client;
+using Pssg.DocumentStorageAdapter;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -111,7 +114,9 @@ namespace RSBC.DMF.MedicalPortal.API
             });
             services.AddSwaggerGen(c =>
             {
-                c.IncludeXmlComments(Path.Combine(System.AppContext.BaseDirectory, "RSBC.DMF.MedicalPortal.API.xml"), true);
+                // add Xml comments to the swagger docs
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));                
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });
             var dpBuilder = services.AddDataProtection();
@@ -155,7 +160,54 @@ namespace RSBC.DMF.MedicalPortal.API
             });
 
             services.AddHttpContextAccessor();
+
+            // Add Case Management Service
+
             services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
+            
+
+
+            // Add Document Storage Adapter
+
+            string documentStorageAdapterURI = configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(documentStorageAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!environment.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                {
+                    Secret = configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
+                }
+            }
+
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
         }

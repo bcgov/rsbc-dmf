@@ -1,0 +1,32 @@
+.form-label {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+}
+
+.title {
+  margin: 0;
+}
+
+.mat-dialog-title {
+  padding: 20px;
+  border-bottom: solid 1px gray;
+}
+
+.mat-dialog-content {
+  padding: 20px 50px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.action-buttons {
+  padding-top: 175px;
+}
+
+::ng-deep .mat-dialog-container {
+  padding: 0;
+  overflow: hidden !important;
+}
