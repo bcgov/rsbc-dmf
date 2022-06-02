@@ -45,9 +45,9 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         
       - name: Upload coverage to Codecov
-          uses: codecov/codecov-action@v1
-          with:
-              token: ${{ secrets.YOUR_SECRET_TOKEN }}
+        uses: codecov/codecov-action@v1
+        with:
+            token: ${{ secrets.YOUR_SECRET_TOKEN }}
 
       - name: Build image
         working-directory: ./medical-portal/src/UI
