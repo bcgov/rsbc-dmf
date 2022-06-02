@@ -4,8 +4,11 @@ import { Sort } from '@angular/material/sort';
 import { UserProfile } from '../shared/api/models';
 import { ProfileManagementService } from '../shared/services/profile.service';
 import { CreateMedicalPractitionerAssociationDialogComponent } from './create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
+import { CreateMedicalStaffAssociationDialogComponent } from './create-medical-staff-association-dialog/create-medical-staff-association-dialog.component';
+import { EditMedicalStaffAssociationDialogComponent } from './edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
 import { EditUserProfileDialogComponent } from './edit-user-profile-dialog/edit-user-profile-dialog.component';
 import { ManageMedicalPractitionerAssociationDialogComponent } from './manage-medical-practitioner-association-dialog/manage-medical-practitioner-association-dialog.component';
+import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -18,6 +21,7 @@ export class UserProfileComponent implements OnInit {
  lastName!:string;
  emailAddress!: string;
  displayedColumns: string[] = ['fullName', 'expiryDate', 'status', 'action'];
+ displayedMedicalStaffColumns:string[] = ['fullName', 'medicalPractitionerName', 'expiryDate', 'status', 'editAction', 'removeAction'];
  
  statuses = [
   { label: 'Select Action' },
@@ -29,11 +33,18 @@ export class UserProfileComponent implements OnInit {
 ];
 
 dataSource = [
-  { id: "1", fullName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending" },
-  { id: "2", fullName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active" },
-  { id: "3", fullName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active" },
-  { id: "4", fullName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive" },
+  { id: "1", fullName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending", role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "2", fullName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "3", fullName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "4", fullName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive",role:"Medical Practitioner", lastActive:"May 11, 2022" },
 ];
+
+medicalStaffDataSource = [
+  { id: "1", fullName:"Torres, Sharon", medicalPractitionerName: "Dr. Rajan Mehra", expiryDate: "May 10, 2022", status: "pending", role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "2", fullName:"Smith, Ingrid", medicalPractitionerName: "Dr. Shelby Drew", expiryDate: "June 15, 2023", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "3", fullName:"Tucker, Devi", medicalPractitionerName: "Devi Iyer, NP", expiryDate: "March 30, 2024", status: "Active",role:"Medical Practitioner", lastActive:"May 11, 2022" },
+  { id: "4", fullName:"Varga, Tarik", medicalPractitionerName: "Dr. Tarik Haiga", expiryDate: "July 9, 2025", status: "InActive" ,role:"Medical Practitioner", lastActive:"May 11, 2022"},
+]
 
   constructor(public dialog: MatDialog, public profileService: ProfileManagementService) {}
   ngOnInit(): void {
@@ -42,6 +53,7 @@ dataSource = [
     );
   }
 
+  // User Profile
   openEditUserProfileDialog(): void {
     const dialogRef = this.dialog.open(EditUserProfileDialogComponent, {
       height: '600px',
@@ -55,6 +67,55 @@ dataSource = [
 
     });
   }
+
+    // Medical Staff Association 
+
+    openCreateMedicalStaffAssociationDialog(){
+      const dialogRef = this.dialog.open(CreateMedicalStaffAssociationDialogComponent, {
+        height: '600px',
+        width: '820px',
+        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+        
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        //this.userProfile.emailAddress = result;
+  
+      });
+  
+    }
+
+    openEditMedicalStaffAssociationDialog(row: any){
+      const dialogRef = this.dialog.open(EditMedicalStaffAssociationDialogComponent, {
+        height: '600px',
+        width: '820px',
+        data: row,
+        
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        //this.userProfile.emailAddress = result;
+  
+      });
+  
+    }
+
+    openManageMedicalStaffAssociationDialog(row: any){
+      const dialogRef = this.dialog.open(ManageMedicalStaffAssociationDialogComponent, {
+        height: '600px',
+        width: '820px',
+        data: row 
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+        //this.userProfile.emailAddress = result;
+  
+      });
+
+    }
+
+
+  // Medical Practitioner Association
 
   openCreateMedicalPractitionerAssociationDialog(){
     const dialogRef = this.dialog.open(CreateMedicalPractitionerAssociationDialogComponent, {
@@ -70,11 +131,11 @@ dataSource = [
     });
   }
 
-  openManageMedicalPractitionerAssociationAssociation(){
+  openManageMedicalPractitionerAssociationDialog(row:any){
     const dialogRef = this.dialog.open(ManageMedicalPractitionerAssociationDialogComponent, {
       height: '600px',
       width: '820px',
-      //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+      data: row,
       
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -115,6 +176,8 @@ dataSource = [
       }
     });
   }
+
+  
 }
 
 function compare(
