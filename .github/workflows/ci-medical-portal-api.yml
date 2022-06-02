@@ -68,7 +68,7 @@ jobs:
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
-          # env_vars: C#
+          env_vars: C#
           # Specify whether or not CI build should fail if Codecov runs into an error during upload
           fail_ci_if_error: true
 
