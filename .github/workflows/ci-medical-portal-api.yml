@@ -55,8 +55,8 @@ jobs:
           rm -rf ./TestResults
           rm -rf ./TestResults
           dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
-          mv TestResults/*/* ./CovTestResults/
-          head TestResults/coverage.opencover.xml      
+          mv RSBC.Tests.Unit.DMF.MedicalPortal.API/TestResults/*/* ./CovTestResults/
+          head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
         uses: codecov/codecov-action@v2.1.0
