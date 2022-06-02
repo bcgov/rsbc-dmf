@@ -76,10 +76,7 @@
       medical practitioners you are associated with.
     </p>
 
-    <button
-      mat-button
-      (click)="openCreateMedicalStaffAssociationDialog()"
-    >
+    <button mat-button (click)="openCreateMedicalStaffAssociationDialog()">
       <mat-icon class="edit-button">add_circle</mat-icon>Add Association
     </button>
   </div>
@@ -87,7 +84,7 @@
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select>
-          <mat-option *ngFor="let status of statuses" [value]="status.label">
+          <mat-option *ngFor="let status of MOMstatuses" [value]="status.label">
             {{ status.label }}
           </mat-option>
         </mat-select>
@@ -113,7 +110,7 @@
       <button mat-button (click)="clear()" class="action-button">Clear</button>
     </div>
 
-    <div style="padding-top: 16px;">
+    <div style="padding-top: 16px">
       <mat-icon class="filter-icon">filter_alt</mat-icon>
       <mat-label style="color: #003366">Filter By: </mat-label>
     </div>
@@ -121,7 +118,7 @@
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select>
-          <mat-option *ngFor="let status of statuses" [value]="status.label">
+          <mat-option *ngFor="let status of MOMstatuses" [value]="status.label">
             {{ status.label }}
           </mat-option>
         </mat-select>
@@ -140,11 +137,19 @@
     #formsList
     [dataSource]="medicalStaffDataSource"
     matSort
-    (matSortChange)="sortData($event)"
+    (matSortChange)="sortMedicalStaffData($event)"
     matSortActive="fullName"
     matSortDirection="asc"
     matSortDisableClear
   >
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox></mat-checkbox>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="fullName">
       <th
         mat-header-cell
@@ -213,7 +218,10 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedMedicalStaffColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedMedicalStaffColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedMedicalStaffColumns"
+    ></tr>
   </table>
 </div>
 
@@ -237,18 +245,18 @@
       <mat-icon class="edit-button">add_circle</mat-icon>Request Association
     </button>
   </div>
-  <div fxLayout="row" fxLayoutGap="8px" style="width:62%">
+  <div fxLayout="row" fxLayoutGap="8px" style="width: 62%">
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-select>
-          <mat-option *ngFor="let status of statuses" [value]="status.label">
+        <mat-select  [(ngModel)]="selectedPractitionerStatus">
+          <mat-option *ngFor="let status of MOAstatuses" [value]="status.label">
             {{ status.label }}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </div>
     <div class="action-button">
-      <button mat-raised-button color="primary">Apply</button>
+      <button mat-raised-button color="primary" (click)="medicalPractitionerStatusChange()">Apply</button>
     </div>
     <div fxFlex>
       <mat-form-field class="full-width" appearance="outline">
@@ -276,11 +284,23 @@
     #formsList
     [dataSource]="dataSource"
     matSort
-    (matSortChange)="sortData($event)"
+    (matSortChange)="sortMedicalPractitionerData($event)"
     matSortActive="fullName"
     matSortDirection="asc"
     matSortDisableClear
   >
+    	<!-- Checkbox Column -->
+		<ng-container matColumnDef="select">
+			<th mat-header-cell *matHeaderCellDef>
+				<mat-checkbox></mat-checkbox>
+			</th>
+			<td mat-cell *matCellDef="let row">
+				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? practitionerSelection.toggle(row) : null"
+					[checked]="practitionerSelection.isSelected(row)">
+				</mat-checkbox>
+			</td>
+		</ng-container>
+
     <ng-container matColumnDef="fullName">
       <th
         mat-header-cell

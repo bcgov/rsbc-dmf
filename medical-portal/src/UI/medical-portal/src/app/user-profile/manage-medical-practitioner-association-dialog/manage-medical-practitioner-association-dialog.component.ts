@@ -9,11 +9,15 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     './manage-medical-practitioner-association-dialog.component.scss',
   ],
 })
-export class ManageMedicalPractitionerAssociationDialogComponent {
+export class ManageMedicalPractitionerAssociationDialogComponent implements OnInit {
   displayedColumns: string[] = ['fullName', 'role', 'lastActive'];
-  dataSource = [this.data];
+  dataSource = [...this.data.selectedData];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+
+  ngOnInit() {
+    console.log(this.data);
+  }
 
   onManageAssociation() {}
 

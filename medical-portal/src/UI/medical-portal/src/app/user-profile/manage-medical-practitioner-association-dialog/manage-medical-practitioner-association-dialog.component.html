@@ -1,5 +1,14 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
-  <h1 class="title">Remove Association</h1>
+  <h1 class="title" *ngIf="data.selectedStatus === 'Request Renewal'">
+    Request Association Renewal
+  </h1>
+  <h1 class="title" *ngIf="data.selectedStatus === 'Deactivate Selected'">
+    Deactivate Association(s)
+  </h1>
+  <h1 class="title" *ngIf="data.selectedStatus === 'Remove Selected'">
+    Remove Association(s)
+  </h1>
+
   <button mat-icon-button aria-label="Close" mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
@@ -9,11 +18,32 @@
   <div mat-dialog-content class="dialog-content">
     <form>
       <div class="container">
-        <h1>Are you sure you want to remove the following assocation?</h1>
-        <p>
-          You are about to remove your association with the following
-          individual.
-        </p>
+        <div *ngIf="data.selectedStatus === 'Request Renewal'">
+          <h1>Are you sure you want to request an association renewal?</h1>
+          <p>
+            You are about to request your association be renewed with the
+            following individual(s).
+          </p>
+        </div>
+
+        <div *ngIf="data.selectedStatus === 'Deactivate Selected'">
+          <h1>
+            Are you sure you want to deactivate the following association(s)?
+          </h1>
+          <p>
+            You are about to deactivate your association with the following
+            individual(s).
+          </p>
+        </div>
+
+        <div *ngIf="data.selectedStatus === 'Remove Selected'">
+          <h1>Are you sure you want to remove the following assocation?</h1>
+          <p>
+            You are about to remove your association with the following
+            individual.
+          </p>
+        </div>
+
         <table mat-table #formsList [dataSource]="dataSource">
           <ng-container matColumnDef="fullName">
             <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -39,8 +69,14 @@
     fxLayout="column"
     fxLayoutAlign="space-between center"
   >
-    <button mat-raised-button color="primary" (click)="onManageAssociation()">
-      Remove User
+    <button *ngIf="data.selectedStatus === 'Request Renewal'" mat-raised-button color="primary" (click)="onManageAssociation()">
+      Request Association Renewal
+    </button>
+    <button *ngIf="data.selectedStatus === 'Deactivate Selected'" mat-raised-button color="primary" (click)="onManageAssociation()">
+      Deactivate Association(s) 
+    </button>
+    <button *ngIf="data.selectedStatus === 'Remove Selected'" mat-raised-button color="primary" (click)="onManageAssociation()">
+      Remove Association(s) 
     </button>
     <br />
     <button mat-button mat-dialog-close color="primary" (click)="onCancel()">
