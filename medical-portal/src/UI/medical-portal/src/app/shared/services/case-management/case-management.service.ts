@@ -9,6 +9,8 @@ import { CasesService } from '../../api/services';
 })
 export class CaseManagementService {
 
+  selectedCase!: DMERCase;
+
   constructor(private casesService: CasesService) { }
 
   public getCases(params: DMERSearchCases): Observable<DMERCase[]> {

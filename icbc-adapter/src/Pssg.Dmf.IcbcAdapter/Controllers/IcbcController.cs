@@ -71,6 +71,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [AllowAnonymous]
         public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
         {
+            // check for duplicates; if there is an existing case then do not create a new one
             return Ok();
         }
 

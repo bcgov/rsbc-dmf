@@ -3,6 +3,7 @@ import { LoginService } from './shared/services/login.service';
 import { ConfigurationService } from './shared/services/configuration.service';
 import { Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -24,12 +25,12 @@ export class AppComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     try {
       //load the configuration from the server
-      await this.configService.load().toPromise();
+      await firstValueFrom(this.configService.load());
       //attempt to log in
-      let nextRoute = await this.loginService.login(location.pathname.substring(1) || 'dashboard').toPromise();
+      let nextRoute = await firstValueFrom(this.loginService.login(location.pathname.substring(1) || 'dashboard'));
 
       //get the user's profile
-      await this.loginService.getUserProfile().toPromise();
+      await firstValueFrom(this.loginService.getUserProfile());
 
       //determine the next route
       nextRoute = '/' + decodeURIComponent(nextRoute);

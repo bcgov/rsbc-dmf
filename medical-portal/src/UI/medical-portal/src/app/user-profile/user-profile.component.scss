@@ -1,0 +1,49 @@
+.list {
+  padding-top: 50px;
+  h2 {
+    font-weight: bold;
+    color: #003366;
+    font-size: 31px;
+    border-left: 3px solid #fcba19;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  p {
+    padding-left: 13px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+}
+
+.personal-information {
+  padding: 30px;
+}
+
+.info-icon {
+  vertical-align: middle;
+}
+
+.edit-button {
+  padding-right: 5px;
+}
+
+.action-button {
+  padding-top: 10px;
+}
+
+.filter-icon {
+  color: #003366;
+  // margin-left:50px;
+  margin-right: 3px;
+  vertical-align: middle;
+}
+
+.practiotioner-table {
+  padding-bottom: 30px;
+}
+
+.full-width {
+  width: 100%;
+}

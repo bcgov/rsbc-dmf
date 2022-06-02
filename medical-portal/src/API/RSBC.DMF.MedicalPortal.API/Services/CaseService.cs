@@ -29,8 +29,23 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string ModifiedBy { get; set; }
         public DateTime ModifiedOn { get; set; }
         public string PatientName { get; set; }
+
+        public string PatientFirstname { get; set; }
+
+        public string PatientLastname { get; set; }
+
+        public string PatientMiddlename { get; set; }
+
+
         public string Status { get; set; }
         public string Title { get; set; }
+
+        public string DmerType {  get; set; }
+
+        public DateTimeOffset? DriverBirthDate {  get; set;}
+
+        public bool IsStarted { get; set;}
+
 
     }
 
@@ -43,6 +58,11 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             this.caseManager = caseManager;
             this.userService = userService;
+        }
+
+        private bool GetDmerStarted(string caseId)
+        {
+            return true;
         }
 
         public async Task<IEnumerable<DmerCaseListItem>> SearchCases(CaseSearchQuery query)
@@ -86,10 +106,18 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 CreatedOn = c.CreatedOn.ToDateTime(),
                 ModifiedBy = c.ModifiedBy,
                 ModifiedOn = c.ModifiedOn.ToDateTime(),
-                PatientName = c.Driver.Name,
-                DriverLicense = c.Driver.DriverLicenceNumber,
-                Status = c.Status
+                PatientName = c.Driver?.Name,
+                PatientFirstname = c.Driver?.GivenName,
+                PatientLastname = c.Driver?.Surname,
+                PatientMiddlename = c.Driver?.Middlename,
+                DriverLicense = c.Driver?.DriverLicenseNumber,
+                Status = c.Status,
+                DmerType = c.DmerType,
+                DriverBirthDate = c.Driver?.BirthDate != null ? c.Driver?.BirthDate.ToDateTimeOffset() : null,
+                IsStarted = GetDmerStarted(c.CaseId)
             });
         }
     }
+
+
 }
