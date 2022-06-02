@@ -3,6 +3,7 @@ Road Safety BC Driver Medical Fitness
 [![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](<Redirect-URL>)
 
 [![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/main/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
+[![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/codecov/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
 
 Technology Stack
 -----------------
