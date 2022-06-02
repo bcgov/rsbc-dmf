@@ -54,8 +54,10 @@ jobs:
           mkdir -p CovTestResults
           rm -rf ./TestResults
           rm -rf ./TestResults
+          cd RSBC.Tests.Unit.DMF.MedicalPortal.API
           dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
-          mv RSBC.Tests.Unit.DMF.MedicalPortal.API/TestResults/*/* ./CovTestResults/
+          mv TestResults/*/* ../CovTestResults/
+          cd ..
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
