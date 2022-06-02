@@ -2,7 +2,7 @@ name: ci-medical-portal-ui
 
 on:
   push:
-     branches: [main]
+     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
@@ -47,8 +47,12 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
-            name: DMFT
-            token: ${{ secrets.CODECOV_TOKEN }}
+          name: DMFT
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+          flags: unittests
+          # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
+          env_vars: javascript
 
       - name: Build image
         working-directory: ./medical-portal/src/UI
