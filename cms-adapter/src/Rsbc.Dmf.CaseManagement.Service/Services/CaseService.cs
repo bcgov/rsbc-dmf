@@ -29,6 +29,236 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _caseManager = caseManager;
         }
 
+        public async override Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
+                driver.Surname = request.Driver.Surname;
+            }
+
+            var newComment = new CaseManagement.LegacyComment()
+            {
+                CaseId = request.CaseId,
+                CommentText = request.CommentText,
+                CommentTypeCode = request.CommentTypeCode,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,            
+                 Driver = driver
+            };
+
+            var result = await _caseManager.CreateLegacyCaseComment(newComment);
+
+            if (result.Success )
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+
+        public async override Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
+                driver.Surname = request.Driver.Surname;
+            }
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                CaseId = request.CaseId,                
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,
+                Driver = driver
+            };
+
+            var result = await _caseManager.CreateLegacyCaseDocument(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetCaseLegacyComments(request.CaseId, false);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+                
+                
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
+        public async override Task<GetDocumentsReply> GetCaseDocuments(CaseIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetCaseLegacyDocuments(request.CaseId);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyDocument
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),
+                        DocumentId = item.DocumentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+        public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, false);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
+        public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyDocument
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),                        
+                        DocumentId = item.DocumentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
 
         public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
         {
@@ -110,21 +340,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                         };
                     }
-                    var newCase = new DmerCase
+
+                    Driver driver = null;
+                    if (c.Driver != null && c.Driver.Id != null) // only create a driver if it is a valid record
                     {
-                        CaseId = c.Id,
-                        Title = c.Title,
-                        CreatedBy = c.CreatedBy ?? string.Empty,
-                        CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                        ModifiedBy = c.CreatedBy ?? string.Empty,
-                        ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                        Driver = new Driver()
-                        {
+                        driver = new Driver {
                             Id = c.Driver.Id,
                             Surname = c.Driver.Surname ?? string.Empty,
+                            Middlename = c.Driver.Middlename ?? string.Empty,
                             GivenName = c.Driver.GivenName ?? string.Empty,
                             BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
-                            DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
+                            DriverLicenseNumber = c.Driver.DriverLicenseNumber ?? string.Empty,
                             Address = new Address()
                             {
                                 City = c.Driver.Address.City ?? string.Empty,
@@ -134,11 +360,23 @@ namespace Rsbc.Dmf.CaseManagement.Service
                             },
                             Sex = c.Driver.Sex ?? string.Empty,
                             Name = c.Driver.Name ?? string.Empty
-                        },
+                        };
+                    }
+
+                    var newCase = new DmerCase
+                    {
+                        CaseId = c.Id,
+                        Title = c.Title ?? string.Empty,
+                        CreatedBy = c.CreatedBy ?? string.Empty,
+                        CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        ModifiedBy = c.CreatedBy ?? string.Empty,
+                        ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                        Driver = driver,
                         Provider = provider,
                         IsCommercial = c.IsCommercial,
                         ClinicName = c.ClinicName ?? string.Empty,
-                        Status = c.Status
+                        Status = c.Status,
+                        DmerType = c.DmerType ?? string.Empty,
                     };
                     newCase.Flags.Add(c.Flags.Select(f => new FlagItem
                     {
@@ -146,6 +384,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }));
                     return newCase;
                 }));
+                reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception e)
             {
@@ -330,21 +569,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
                     };
                 }
-                var newCase = new DmerCase
+
+                Driver driver = null;
+                if (c.Driver != null && c.Driver.Id != null)
                 {
-                    CaseId = c.Id,
-                    Title = c.Title,
-                    CreatedBy = c.CreatedBy ?? string.Empty,
-                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    ModifiedBy = c.CreatedBy ?? string.Empty,
-                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
-                    Driver = new Driver()
+                    driver = new Driver()
                     {
-                        Id = c.Driver.Id,
+                        Id = c.Driver.Id ?? string.Empty,
                         Surname = c.Driver.Surname ?? string.Empty,
                         GivenName = c.Driver.GivenName ?? string.Empty,
                         BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
-                        DriverLicenceNumber = c.Driver.DriverLicenceNumber ?? string.Empty,
+                        DriverLicenseNumber = c.Driver.DriverLicenseNumber ?? string.Empty,
                         Address = new Address()
                         {
                             City = c.Driver.Address.City ?? string.Empty,
@@ -354,7 +589,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         },
                         Sex = c.Driver.Sex ?? string.Empty,
                         Name = c.Driver.Name ?? string.Empty
-                    },
+                    };
+                }
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    Title = c.Title ?? string.Empty,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    Driver = driver,
                     Provider = provider,
                     IsCommercial = c.IsCommercial,
                     ClinicName = c.ClinicName ?? string.Empty,

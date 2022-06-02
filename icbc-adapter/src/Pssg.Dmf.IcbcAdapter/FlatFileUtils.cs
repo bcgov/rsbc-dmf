@@ -156,27 +156,34 @@ namespace Rsbc.Dmf.IcbcAdapter
                         client.DownloadFile(file.FullName, memoryStream);
 
                         string data = StringUtility.StreamToString(memoryStream);
-                        // process records
-                        var engine = new FileHelperEngine<NewDriver>();                        
-                        var records = engine.ReadString(data);
-                        foreach (var record in records)
-                        {
-                            LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
-                            // Add / Update cases
-                            LegacyCandidateRequest lcr = new LegacyCandidateRequest()
-                            {
-                                 LicenseNumber = record.LicenseNumber,
-                                 Surname = record.Surname,
-                                 ClientNumber = record.ClientNumber,
-                            };
-                            _caseManagerClient.ProcessLegacyCandidate(lcr);
-                        }
+                        
+                        ProcessCandidates(hangfireContext, data);
 
                     }
                 }
             }
            
             LogStatement(hangfireContext, "End of check for Candidates.");            
+        }
+
+        public void ProcessCandidates(PerformContext hangfireContext, string data)
+        {
+            // process records
+            var engine = new FileHelperEngine<NewDriver>();
+            engine.Options.IgnoreLastLines = 1;
+            var records = engine.ReadString(data);
+            foreach (var record in records)
+            {
+                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                // Add / Update cases
+                LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+                {
+                    LicenseNumber = record.LicenseNumber,
+                    Surname = record.Surname,
+                    ClientNumber = record.ClientNumber,
+                };
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
+            }
         }
 
         /// <summary>
@@ -247,9 +254,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             
             foreach (DmerCase item in unsentItems.Items)
             {
+                // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
+
+                // (TODO)
+
                 var newUpdate = new MedicalUpdate()
                 {
-                     LicenseNumber = item.Driver.DriverLicenceNumber,
+                     LicenseNumber = item.Driver.DriverLicenseNumber,
                      Surname = item.Driver.Surname,                     
                 };
 

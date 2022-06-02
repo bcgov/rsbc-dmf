@@ -96,14 +96,31 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     throw new Exception($"invalid login request for user {request.ExternalSystemUserId}@{request.ExternalSystem}");
                 }
 
-                var userId = (await userManager.LoginUser(loginRequest)).Userid;
+                var loginResult = await userManager.LoginUser(loginRequest);
 
-                return new UserLoginReply { ResultStatus = ResultStatus.Success, UserId = userId };
+                var userId = loginResult.Userid;
+                var userEmail = loginResult.Email;
+
+                return new UserLoginReply { ResultStatus = ResultStatus.Success, UserId = userId, UserEmail = userEmail ?? String.Empty };
             }
             catch (Exception e)
             {
                 return new UserLoginReply { ResultStatus = ResultStatus.Fail, ErrorDetail = e.ToString() };
             }
+        }
+
+
+        public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
+        {
+            ResultStatusReply result = new ResultStatusReply();
+            result.ResultStatus = ResultStatus.Fail;
+
+            if (await userManager.SetUserEmail(request.UserId, request.Email))
+            {
+                result.ResultStatus = ResultStatus.Success;
+            }
+            
+            return result;
         }
     }
 }

@@ -7,6 +7,7 @@
     <AnalysisMode>Default</AnalysisMode>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <UserSecretsId>17a596c2-15db-4bbd-aa75-cb3c4a6e6c1a</UserSecretsId>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,6 +20,9 @@
     <Protobuf Include="../../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
       <Link>Protos\cmsAdapter.proto</Link>
     </Protobuf>
+	<Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
+		<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
+	</Protobuf>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.42.0" />

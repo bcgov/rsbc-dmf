@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY . .
-RUN dotnet restore ./legacy-adapter/src/Pssg.Dmf.LegacyAdapter 
+RUN dotnet restore ./legacy-adapter/src/Rsbc.Dmf.LegacyAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./legacy-adapter/src/Pssg.Dmf.LegacyAdapter -c Release -o /app/publish
+RUN dotnet publish ./legacy-adapter/src/Rsbc.Dmf.LegacyAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
@@ -22,4 +22,4 @@ COPY --from=publish /app/publish .
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Pssg.Dmf.LegacyAdapter.dll"]
+ENTRYPOINT ["dotnet", "Rsbc.Dmf.LegacyAdapter.dll"]

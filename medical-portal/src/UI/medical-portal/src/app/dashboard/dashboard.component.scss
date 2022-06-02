@@ -5,11 +5,13 @@
 }
 
 .search {
-  .mat-card-header {
-    padding-left: 10px;
+  margin-bottom: 2px ;
 
-    .mat-icon {
-      height: auto;
+  .mat-card-header {
+    // padding-left: 10px;
+
+    .search-icon {
+      vertical-align: middle;
     }
   }
 
@@ -30,9 +32,15 @@
       flex-flow: row;
       justify-content: stretch;
       align-items: center;
+      padding-bottom: 1px;
     }
     .search-input {
       width: 845px;
+
+      ::ng-deep .mat-form-field-flex {
+        background-color: #ffffff;
+        //border: solid 2px  #003366; 
+      }
     }
 
     .search-button {
@@ -43,6 +51,37 @@
       font-style: normal;
       font-weight: 700;
     }
+    .dmer-missing{
+      padding-left: 30px;
+    }
+  }
+}
+
+.search-results{
+  margin-top: 2px;
+
+  .mat-card-title {
+    padding-left: 30px;
+    padding-top: 20px;
+  }
+
+  .searched-case{
+    padding: 8px 48px;
+  }
+
+  .show-results{
+    border: solid 2px  #003366;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+
+  .no-results{
+    padding: 30px;
+  }
+
+  .cases-button{
+    padding-right: 5px;
   }
 }
 
@@ -69,6 +108,7 @@
 
 
 .list {
+  padding-top: 50px;
   h2 {
     font-weight: bold;
     color: #003366;
@@ -86,3 +126,87 @@
   }
 
 }
+
+.dmer-search{
+  margin-top: 20px;
+}
+
+.cases-input{
+  color: #003366;
+  width:35%;
+}
+
+.filter-icon{
+  color: #003366;
+  margin-left:50px; 
+  margin-right: 3px; 
+  vertical-align: middle
+}
+
+.cases-filter{
+  color: #003366;
+  width:30%;
+  margin-left: 10px;
+}
+
+.panel-header{
+  background-color: #f1f1f3;
+  border-color: #f1f1f3;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.dmer-Title{
+  font-weight: bold;
+  color: #1c5a97;
+  max-width: 95%;
+  font-size: 16px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.dmer-types{
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.no-reimbursement-chips{
+  background-color: #fff;
+  border: 2px solid #fcba19;
+  padding: 2px;
+  border-radius: 4px;
+}
+
+.reimbursement-chips{
+  background-color: #fff;
+  border: 2px solid #96c0e6;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.chips{
+  margin-top: 10px;
+  display: block;
+}
+
+a.accordion-btn {
+  background-color: #f1f1f3;
+  border: none;
+  padding: 5px 8px;
+  color: #1c5a97;
+  text-decoration: none !important;
+}
+
+.accordion-bar {
+  background-color: #f1f1f1;
+  padding: 5px 0px;
+}
+
+.accordion-btn-container{
+  padding-bottom: 10px;
+}
+
+.no-data{
+  padding: 30px;
+}
+
