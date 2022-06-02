@@ -44,20 +44,10 @@ jobs:
           npm test --codeCoverage=true --watch=false
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
-        with:
-          # User defined upload name. Visible in Codecov UI
-          name: DMF-MEDICAL-PORTAL-UI
-          # Repository upload token - get it from codecov.io. Required only for private repositories
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{env.working-directory}}${{env.solution-folder}}/coverage/coverage-final.json
-          # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
-          flags: unittests
-          # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
-          env_vars: javascript
-          # Specify whether or not CI build should fail if Codecov runs into an error during upload
-          fail_ci_if_error: true
+      - name: Upload coverage to Codecov
+          uses: codecov/codecov-action@v1
+          with:
+              token: ${{ secrets.YOUR_SECRET_TOKEN }}
 
       - name: Build image
         working-directory: ./medical-portal/src/UI
