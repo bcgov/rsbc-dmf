@@ -47,7 +47,7 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
-            name: rsbc-dmf
+            name: DMFT
             token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build image
