@@ -5,6 +5,7 @@
   </div>
 </div>
 
+<!-- Manage User Profile -->
 <div class="container">
   <div class="list">
     <h2>Manage Profile</h2>
@@ -49,9 +50,178 @@
   </mat-card>
 </div>
 
+<!-- Manage Medical Staff Associations -->
+
 <div class="container">
   <div class="list">
-    <h2>Manage Associations</h2>
+    <h2>Manage Staff Associations</h2>
+  </div>
+
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <div>
+          <mat-label
+            ><mat-icon class="info-icon">person</mat-icon> Medical Office
+            Staff</mat-label
+          >
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <p>
+      This area allows you to add, edit and remove any users associated with the
+      medical practitioners you are associated with.
+    </p>
+
+    <button
+      mat-button
+      (click)="openCreateMedicalStaffAssociationDialog()"
+    >
+      <mat-icon class="edit-button">add_circle</mat-icon>Add Association
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select>
+          <mat-option *ngFor="let status of statuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button">
+      <button mat-raised-button color="primary">Apply</button>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
+        <input matInput type="text" placeholder="Search by Name" />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchMedicalPractitioners()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button (click)="clear()" class="action-button">Clear</button>
+    </div>
+
+    <div style="padding-top: 16px;">
+      <mat-icon class="filter-icon">filter_alt</mat-icon>
+      <mat-label style="color: #003366">Filter By: </mat-label>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select>
+          <mat-option *ngFor="let status of statuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button (click)="clear()" class="action-button">Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <table
+    class="practiotioner-table"
+    mat-table
+    #formsList
+    [dataSource]="medicalStaffDataSource"
+    matSort
+    (matSortChange)="sortData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="medicalPractitionerName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="medicalPractitionerName"
+        sortActionDescription="Sort by name"
+      >
+        Medical Practitioner
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.medicalPractitionerName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.expiryDate }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+    </ng-container>
+    <ng-container matColumnDef="editAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          (click)="openEditMedicalStaffAssociationDialog(row)"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="removeAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          (click)="openManageMedicalStaffAssociationDialog(row)"
+        >
+          <mat-icon>clear</mat-icon> Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedMedicalStaffColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedMedicalStaffColumns"></tr>
+  </table>
+</div>
+
+<!-- Manage Medical Practitioner Associations -->
+
+<div class="container">
+  <div class="list">
+    <h2>Manage Medical Practitioner Associations</h2>
   </div>
 
   <div fxLayout="row" fxLayoutAlign="space-between">
@@ -67,9 +237,9 @@
       <mat-icon class="edit-button">add_circle</mat-icon>Request Association
     </button>
   </div>
-  <div fxLayout="row" fxLayoutGap="36px">
-    <div>
-      <mat-form-field appearance="outline" class="cases-filter">
+  <div fxLayout="row" fxLayoutGap="8px" style="width:62%">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
         <mat-select>
           <mat-option *ngFor="let status of statuses" [value]="status.label">
             {{ status.label }}
@@ -80,8 +250,8 @@
     <div class="action-button">
       <button mat-raised-button color="primary">Apply</button>
     </div>
-    <div>
-      <mat-form-field class="cases-input" appearance="outline">
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
         <input matInput type="text" placeholder="Search by Name" />
         <button
           matSuffix
@@ -149,7 +319,7 @@
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
-          (click)="openManageMedicalPractitionerAssociationAssociation()"
+          (click)="openManageMedicalPractitionerAssociationDialog(row)"
         >
           <mat-icon>clear</mat-icon> Remove
         </button>
