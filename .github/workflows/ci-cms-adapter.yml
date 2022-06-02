@@ -47,30 +47,30 @@ jobs:
           dotnet test -c Release --no-restore --verbosity normal           
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         
-      - name: Generate code coverage
-        working-directory: ${{env.working-directory}}${{env.solution-folder}}
-        run: |
-          mkdir -p CovTestResults
-          rm -rf ./TestResults
-          rm -rf ./TestResults
-          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore 
-          mv Rsbc.Dmf.CaseManagement.Tests/TestResults/*/* ./CovTestResults/
-          head CovTestResults/coverage.opencover.xml
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
-        with:
+      #- name: Generate code coverage
+        #working-directory: ${{env.working-directory}}${{env.solution-folder}}
+        #run: |
+          #mkdir -p CovTestResults
+          #rm -rf ./TestResults
+          #rm -rf ./TestResults
+          #dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore 
+          #mv Rsbc.Dmf.CaseManagement.Tests/TestResults/*/* ./CovTestResults/
+          #head CovTestResults/coverage.opencover.xml
+      #- name: Codecov
+        #uses: codecov/codecov-action@v2.1.0
+        #with:
           # User defined upload name. Visible in Codecov UI
-          name: DMFT
+          #name: DMFT
           # Repository upload token - get it from codecov.io. Required only for private repositories
-          token: ${{ secrets.CODECOV_TOKEN }}
+          #token: ${{ secrets.CODECOV_TOKEN }}
           # Path to coverage file to upload
-          file: ${{env.working-directory}}/Pssg.Unit.Tests.Interfaces.Icbc/CovTestResults/coverage.opencover.xml
+          #file: ${{env.working-directory}}/Pssg.Unit.Tests.Interfaces.Icbc/CovTestResults/coverage.opencover.xml
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
-          flags: unittests
+          #flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
-          env_vars: C#
+          #env_vars: C#
           # Specify whether or not CI build should fail if Codecov runs into an error during upload
-          fail_ci_if_error: false
+          #fail_ci_if_error: false
 
 
       - name: Build image
