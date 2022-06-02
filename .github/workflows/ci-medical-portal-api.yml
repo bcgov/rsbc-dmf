@@ -64,7 +64,7 @@ jobs:
           name: DMF-MEDICAL-PORTAL-API
           # Repository upload token - get it from codecov.io. Required only for private repositories
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ${{env.working-directory}}${{env.solution-folder}}/CovTestResults/coverage.opencover.xml
+          file: ${{env.working-directory}}${{env.solution-folder}}CovTestResults/coverage.opencover.xml
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
