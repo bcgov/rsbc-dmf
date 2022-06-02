@@ -1,8 +1,6 @@
 name: ci-medical-portal-api
 
 on:
-  push:
-     branches: [main, codecov]
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
