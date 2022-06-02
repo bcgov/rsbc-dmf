@@ -27,14 +27,11 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
             Configurations.RequestPipeline.OnEntryStarting((arg) =>
             {
+                
                 // do not send reference properties and null values to Dynamics
                 arg.Entry.Properties = arg.Entry.Properties.Where((prop) => !prop.Name.StartsWith('_') && prop.Value != null);
             });
-
-            Configurations.RequestPipeline.OnEntityReferenceLink((arg) =>
-            {
-                logger.LogDebug("OnEntityReferenceLink url {0}", arg.EntityReferenceLink.Url);
-            });
+            
         }
 
         public void DetachAll()

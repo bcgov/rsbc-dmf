@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5A</UserSecretsId>
+    <RootNamespace>Rsbc.Dmf.LegacyAdapter</RootNamespace>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+
+	  <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+
+	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.3" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.45.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Serilog.Exceptions" Version="8.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+    <PackageReference Include="Serilog.Sinks.Splunk" Version="3.7.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
+	  <PackageReference Include="Grpc.Tools" Version="2.37.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	  </PackageReference>
+  </ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="gRPC Prototypes\" />
+	</ItemGroup>
+	<ItemGroup>
+		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
+		</Protobuf>
+
+		<Protobuf Include="../../../document-triage-service/src/Protos/documentTriage.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\documentTriage.proto</Link>
+		</Protobuf>
+
+		<Protobuf Include="../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
+		</Protobuf>
+
+	</ItemGroup>
+
+
+</Project>
