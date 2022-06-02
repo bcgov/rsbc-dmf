@@ -54,7 +54,6 @@ namespace RSBC.DMF.MedicalPortal.API
                     };
 
                     configuration.GetSection("auth:token").Bind(options);
-                    options.au
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateAudience = false
@@ -116,7 +115,7 @@ namespace RSBC.DMF.MedicalPortal.API
             {
                 // add Xml comments to the swagger docs
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));                
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });
             var dpBuilder = services.AddDataProtection();
@@ -164,7 +163,7 @@ namespace RSBC.DMF.MedicalPortal.API
             // Add Case Management Service
 
             services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
-            
+
 
 
             // Add Document Storage Adapter
@@ -175,7 +174,7 @@ namespace RSBC.DMF.MedicalPortal.API
             {
                 var httpClientHandler = new HttpClientHandler();
                 if (!environment.IsProduction()) // Ignore certificate errors in non-production modes.  
-                                          // This allows you to use OpenShift self-signed certificates for testing.
+                                                 // This allows you to use OpenShift self-signed certificates for testing.
                 {
                     // Return `true` to allow certificates that are untrusted/invalid                    
                     httpClientHandler.ServerCertificateCustomValidationCallback =

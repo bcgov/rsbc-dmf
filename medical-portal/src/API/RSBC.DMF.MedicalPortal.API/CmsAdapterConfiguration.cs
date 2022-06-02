@@ -12,8 +12,8 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCmsAdapterGrpcService(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = "https://rsbc-dfp-cms-adapter-dev.apps.silver.devops.gov.bc.ca/";// config["serverUrl"];
-            var clientSecret = @"wFD{PXu+].!""""9Nk}"; //config["clientSecret"];
+            var serviceUrl = config["serverUrl"];
+            var clientSecret = config["clientSecret"];
             var validateServerCertificate = config.GetValue("validateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
@@ -29,7 +29,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
-                if (string.IsNullOrEmpty (clientSecret))
+                if (string.IsNullOrEmpty(clientSecret))
                 {
                     // add the service without authentication.
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
@@ -62,7 +62,7 @@ namespace RSBC.DMF.MedicalPortal.API
                         Log.Logger.Information("Error getting token for Case Management Service");
                     }
                 }
-                
+
             }
             return services;
         }
