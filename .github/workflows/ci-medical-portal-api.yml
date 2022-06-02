@@ -11,7 +11,7 @@ on:
 
 env:
   working-directory: ./
-  solution-folder: /medical-portal/src/API/  
+  solution-folder: medical-portal/src/API/  
   IMAGE_NAME: medical-portal-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
 
