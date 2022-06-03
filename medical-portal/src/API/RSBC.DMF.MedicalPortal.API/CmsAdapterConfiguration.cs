@@ -29,7 +29,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
-                if (string.IsNullOrEmpty (clientSecret))
+                if (string.IsNullOrEmpty(clientSecret))
                 {
                     // add the service without authentication.
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
@@ -62,7 +62,7 @@ namespace RSBC.DMF.MedicalPortal.API
                         Log.Logger.Information("Error getting token for Case Management Service");
                     }
                 }
-                
+
             }
             return services;
         }
