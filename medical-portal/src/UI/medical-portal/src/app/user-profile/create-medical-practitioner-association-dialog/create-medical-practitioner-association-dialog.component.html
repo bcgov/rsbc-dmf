@@ -1,48 +1,34 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
-    <h1 class="title">Request Association</h1>
-    <button mat-icon-button aria-label="Close" mat-dialog-close>
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-  <div mat-dialog-content>
-    <!-- <h1 mat-dialog-title class="modal-title">Edit Profile</h1> -->
-    <div mat-dialog-content class="dialog-content">
-      <form>
-        <div fxLayout="row">
-          <div fxflex style="width: 100%">
-            <label class="form-label">Medical Practitioner's Email Address</label><br />
-            <mat-form-field appearance="outline">
-              <input 
-              matInput 
-              name="email" 
-              placeholder="Email Address " 
-               />
-            </mat-form-field>
-          </div>
-        </div>
-      </form>
+  <h1 class="title">Request Association</h1>
+  <button mat-icon-button aria-label="Close" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<div mat-dialog-content class="dialog-content">
+  <form>
+    <div fxLayout="row">
+      <div fxflex style="width: 100%">
+        <label class="form-label">Medical Practitioner's Email Address</label
+        ><br />
+        <mat-form-field appearance="outline">
+          <input matInput name="email" placeholder="Email Address " />
+        </mat-form-field>
+      </div>
     </div>
-    <div
-      class="action-buttons"
-      fxLayout="column"
-      fxLayoutAlign="space-between center"
-    >
-      <button
-        mat-raised-button
-        color="primary"
-        (click)="onRequestAssociation()"
-      >
-        Request Association
-      </button>
-      <br />
-      <button
-        mat-button
-        mat-dialog-close
-        color="primary"
-        (click)="onCancelDialog()"
-      >
-        Cancel
-      </button>
-    </div>
-  </div>
-  
+  </form>
+</div>
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-between center">
+  <button mat-raised-button color="primary" (click)="onRequestAssociation()">
+    Request Association
+  </button>
+  <br />
+  <button
+    mat-button
+    mat-dialog-close
+    color="primary"
+    (click)="onCancelDialog()"
+  >
+    Cancel
+  </button>
+</div>

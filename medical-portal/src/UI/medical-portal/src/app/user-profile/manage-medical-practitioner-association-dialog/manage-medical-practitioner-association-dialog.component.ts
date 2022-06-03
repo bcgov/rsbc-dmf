@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -9,11 +9,16 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
     './manage-medical-practitioner-association-dialog.component.scss',
   ],
 })
-export class ManageMedicalPractitionerAssociationDialogComponent {
+export class ManageMedicalPractitionerAssociationDialogComponent implements OnInit {
+  @HostBinding('class') className = 'mat-dialog-container-host';
   displayedColumns: string[] = ['fullName', 'role', 'lastActive'];
-  dataSource = [this.data];
+  dataSource = [...this.data.selectedData];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
+
+  ngOnInit() {
+    console.log(this.data);
+  }
 
   onManageAssociation() {}
 
