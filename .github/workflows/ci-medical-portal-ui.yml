@@ -1,6 +1,8 @@
 name: ci-medical-portal-ui
 
 on:
+  push:
+     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
@@ -28,25 +30,29 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
+      - run: npm ci
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - run: npm run lint
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - run: npm run build --if-present
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - name: Test
         run: |          
           npm install
           npm test --codeCoverage=true --watch=false
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
-      - name: Codecov
-        uses: codecov/codecov-action@v2
+        
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
         with:
-          # User defined upload name. Visible in Codecov UI
-          name: DMF-MEDICAL-PORTAL-UI
-          # Repository upload token - get it from codecov.io. Required only for private repositories
+          name: DMFT
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ${{env.working-directory}}${{env.solution-folder}}
           # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
-          # env_vars: C#
-          # Specify whether or not CI build should fail if Codecov runs into an error during upload
-          fail_ci_if_error: false
+          env_vars: javascript
 
       - name: Build image
         working-directory: ./medical-portal/src/UI
