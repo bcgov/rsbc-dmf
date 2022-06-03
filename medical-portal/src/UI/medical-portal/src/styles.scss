@@ -251,3 +251,34 @@ body {
   overflow: hidden;
   background-color: rgba(0, 51, 102, 0.3);
 }
+
+.mat-dialog-container-host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .mat-dialog-content {
+    flex: 1 1 0;
+  }
+
+  .title {
+    margin: 0;
+  }
+  
+  .mat-dialog-title {
+    padding: 20px;
+    border-bottom: solid 1px gray;
+  }
+  
+  .mat-dialog-content {
+    padding: 20px 96px;
+  }
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  
+  .mat-dialog-actions {
+    padding-bottom: 30px;
+  }
+}

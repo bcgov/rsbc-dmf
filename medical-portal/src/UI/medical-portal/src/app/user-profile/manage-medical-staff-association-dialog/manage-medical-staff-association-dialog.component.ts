@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -7,12 +7,15 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./manage-medical-staff-association-dialog.component.scss'],
 })
 export class ManageMedicalStaffAssociationDialogComponent {
-  displayedColumns: string[] = ['fullName', 'role', 'lastActive'];
-  dataSource = [this.data];
+  @HostBinding('class') className = 'mat-dialog-container-host';
+  displayedColumns: string[] = ['moaName', 'medicalPractitionerName'];
+  dataSource = [...this.data.selectedData];
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any) {}
 
   onManageAssociation() {}
 
-  onCancel() {}
+  onCancel() {
+    
+  }
 }

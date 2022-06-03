@@ -10,6 +10,7 @@ import { EditMedicalStaffAssociationDialogComponent } from './edit-medical-staff
 import { EditUserProfileDialogComponent } from './edit-user-profile-dialog/edit-user-profile-dialog.component';
 import { ManageMedicalPractitionerAssociationDialogComponent } from './manage-medical-practitioner-association-dialog/manage-medical-practitioner-association-dialog.component';
 import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
+import { RemoveMedicalStaffAssociationDialogComponent } from './remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
 
 @Component({
   selector: 'app-user-profile',
@@ -21,7 +22,9 @@ export class UserProfileComponent implements OnInit {
   firstName!: string;
   lastName!: string;
   emailAddress!: string;
-  public selectedPractitionerStatus: string = 'Select Action';
+  selectedPractitionerStatus: string = 'Select Action';
+  selectedStaffStatus: string = 'Select Action';
+
   displayedColumns: string[] = [
     'select',
     'fullName',
@@ -35,11 +38,11 @@ export class UserProfileComponent implements OnInit {
     'medicalPractitionerName',
     'expiryDate',
     'status',
-    'editAction',
     'removeAction',
   ];
 
   practitionerSelection = new SelectionModel<any>(true, []);
+  staffSelection = new SelectionModel<any>(true, []);
 
   MOAstatuses = [
     { label: 'Select Action' },
@@ -190,18 +193,63 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  openRemoveMedicalStaffAssociationDialog(row: any) {
+    const dialogRef = this.dialog.open(
+      RemoveMedicalStaffAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: [row],
+      }
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      //this.userProfile.emailAddress = result;
+    });
+  }
+
   openManageMedicalStaffAssociationDialog(row: any) {
     const dialogRef = this.dialog.open(
       ManageMedicalStaffAssociationDialogComponent,
       {
         height: '600px',
         width: '820px',
-        data: row,
+        data: {
+          selectedStaffStatus: 'Remove Selected',
+          selectedData: [row],
+        },
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
       //this.userProfile.emailAddress = result;
+    });
+  }
+
+  medicalStaffStatusChange() {
+    if (this.staffSelection.selected.length == 0) {
+      // @TODO: Not selected any rows so show error message
+      return;
+    }
+
+    const selectedStaffStatus = this.selectedStaffStatus;
+
+    const selectedData = this.staffSelection.selected;
+    console.log(selectedData);
+
+    const dialogRef = this.dialog.open(
+      ManageMedicalStaffAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: {
+          selectedStaffStatus,
+          selectedData: [...selectedData],
+        },
+      }
+    );
+    dialogRef.afterClosed().subscribe((selectedAction) => {
+      this.staffSelection.clear();
     });
   }
 
@@ -229,8 +277,8 @@ export class UserProfileComponent implements OnInit {
         height: '600px',
         width: '820px',
         data: {
-          selectedStatus :"Remove Selected",
-          selectedData:[row]
+          selectedStatus: 'Remove Selected',
+          selectedData: [row],
         },
       }
     );
@@ -250,16 +298,24 @@ export class UserProfileComponent implements OnInit {
 
     const selectedStatus = this.selectedPractitionerStatus;
 
-   const selectedData = this.practitionerSelection.selected;
+    const selectedData = this.practitionerSelection.selected;
     console.log(selectedData);
 
-    this.dialog.open(ManageMedicalPractitionerAssociationDialogComponent, {
-      data: {
-        selectedStatus,
-        selectedData: [...selectedData],
-        
+    const dialogRef = this.dialog.open(
+      ManageMedicalPractitionerAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: {
+          selectedStatus,
+          selectedData: [...selectedData],
+        },
       }
-    })
+    );
+
+    dialogRef.afterClosed().subscribe((selectedAction) => {
+      this.practitionerSelection.clear();
+    });
   }
 
   clear() {}
