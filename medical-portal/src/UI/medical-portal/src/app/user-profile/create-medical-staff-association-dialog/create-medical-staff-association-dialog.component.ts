@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-create-medical-staff-association-dialog',
@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./create-medical-staff-association-dialog.component.scss']
 })
 export class CreateMedicalStaffAssociationDialogComponent{
+  @HostBinding('class') className = 'mat-dialog-container-host';
   listOfPractitioners : string[] = ['Dr. Shelby', 'Dr. Robert'] 
 
   constructor() { }

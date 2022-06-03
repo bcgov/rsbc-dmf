@@ -28,6 +28,7 @@ import { ManageMedicalPractitionerAssociationDialogComponent } from './user-prof
 import { CreateMedicalStaffAssociationDialogComponent } from './user-profile/create-medical-staff-association-dialog/create-medical-staff-association-dialog.component';
 import { EditMedicalStaffAssociationDialogComponent } from './user-profile/edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
 import { ManageMedicalStaffAssociationDialogComponent } from './user-profile/manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
+import { RemoveMedicalStaffAssociationDialogComponent } from './user-profile/remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
 
 
 
@@ -45,7 +46,8 @@ import { ManageMedicalStaffAssociationDialogComponent } from './user-profile/man
     ManageMedicalPractitionerAssociationDialogComponent,
     CreateMedicalStaffAssociationDialogComponent,
     EditMedicalStaffAssociationDialogComponent,
-    ManageMedicalStaffAssociationDialogComponent
+    ManageMedicalStaffAssociationDialogComponent,
+    RemoveMedicalStaffAssociationDialogComponent
   ],
   imports: [
     BrowserModule,
