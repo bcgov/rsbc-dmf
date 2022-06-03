@@ -2,11 +2,7 @@ name: ci-medical-portal-ui
 
 on:
   push:
-<<<<<<< HEAD
      branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
-=======
-     branches: [main]
->>>>>>> fa5c8479b58986477a712bb5ca718bc45cf23f0a
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
