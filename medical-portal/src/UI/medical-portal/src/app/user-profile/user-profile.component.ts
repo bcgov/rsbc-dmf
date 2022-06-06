@@ -5,10 +5,14 @@ import { Sort } from '@angular/material/sort';
 import { UserProfile } from '../shared/api/models';
 import { ProfileManagementService } from '../shared/services/profile.service';
 import { CreateMedicalPractitionerAssociationDialogComponent } from './create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
+import { CreateMedicalPractitionerRoleAssociationDialogComponent } from './create-medical-practitioner-role-association-dialog/create-medical-practitioner-role-association-dialog.component';
 import { CreateMedicalStaffAssociationDialogComponent } from './create-medical-staff-association-dialog/create-medical-staff-association-dialog.component';
+import { EditMedicalPractitionerRoleAssociationDialogComponent } from './edit-medical-practitioner-role-association-dialog/edit-medical-practitioner-role-association-dialog.component';
+import { EditMedicalPractitionerUserProfileDialogComponent } from './edit-medical-practitioner-user-profile-dialog/edit-medical-practitioner-user-profile-dialog.component';
 import { EditMedicalStaffAssociationDialogComponent } from './edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
 import { EditUserProfileDialogComponent } from './edit-user-profile-dialog/edit-user-profile-dialog.component';
 import { ManageMedicalPractitionerAssociationDialogComponent } from './manage-medical-practitioner-association-dialog/manage-medical-practitioner-association-dialog.component';
+import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './manage-medical-practitioner-role-association-dialog/manage-medical-practitioner-role-association-dialog.component';
 import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 import { RemoveMedicalStaffAssociationDialogComponent } from './remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
 
@@ -24,6 +28,8 @@ export class UserProfileComponent implements OnInit {
   emailAddress!: string;
   selectedPractitionerStatus: string = 'Select Action';
   selectedStaffStatus: string = 'Select Action';
+  selectedMedicalPractitionerStatus = 'Select Action'
+  selectedUserRole: string = 'All Roles';
 
   displayedColumns: string[] = [
     'select',
@@ -41,8 +47,19 @@ export class UserProfileComponent implements OnInit {
     'removeAction',
   ];
 
+  displayedMedicalPractitionerProfileColumns: string[] = [
+    'select',
+    'fullName',
+    'role',
+    'expiryDate',
+    'status',
+    'editAction',
+    'removeAction',
+  ];
+
   practitionerSelection = new SelectionModel<any>(true, []);
   staffSelection = new SelectionModel<any>(true, []);
+  medicalPractitionerSelection = new SelectionModel<any>(true,[]);
 
   MOAstatuses = [
     { label: 'Select Action' },
@@ -60,12 +77,26 @@ export class UserProfileComponent implements OnInit {
     { label: 'Remove Selected' },
   ];
 
+  MedicalPractitionerStatuses = [
+    { label: 'Select Action' },
+    { label: 'Accept Selected' },
+    { label: 'Request Renewal' },
+    { label: 'Reject Selected' },
+    { label: 'Deactivate Selected' },
+    { label: 'Remove Selected' },
+  ];
+
+  rolesFilter = [
+    { label: 'All Roles' },
+    { label: 'Medical Office Assistant' },
+    { label: 'Medical Office Manager' },
+  ];
   dataSource = [
     {
       id: '1',
       fullName: 'Dr. Rajan Mehra',
       expiryDate: 'May 10, 2022',
-      status: 'pending',
+      status: 'Pending',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
@@ -101,7 +132,7 @@ export class UserProfileComponent implements OnInit {
       fullName: 'Torres, Sharon',
       medicalPractitionerName: 'Dr. Rajan Mehra',
       expiryDate: 'May 10, 2022',
-      status: 'pending',
+      status: 'Pending',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
@@ -134,6 +165,49 @@ export class UserProfileComponent implements OnInit {
     },
   ];
 
+  medicalPractitionerProfileDataSource = [
+    {
+      id: '1',
+      fullName: 'Dr. Rajan Mehra',
+      role: 'MOA',
+      expiryDate: 'May 11, 2022',
+      status: 'Active',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '2',
+      fullName: 'Dr.Castor, Ingrid',
+      role: 'MOM',
+      expiryDate: 'January 11, 2024',
+      status: 'Active',
+      lastActive: 'March 11, 2021',
+    },
+    {
+      id: '3',
+      fullName: 'Dr.Dodge, Mike',
+      role: 'MOA',
+      expiryDate: 'June 15, 2022',
+      status: 'Active',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '4',
+      fullName: 'Dr. Varga, Tarik',
+      role: 'MOA',
+      expiryDate: 'March 11, 2025',
+      status: 'Active',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '5',
+      fullName: 'Dr. Tucker, Devi',
+      role: 'MOM',
+      expiryDate: 'June 15, 2024',
+      status: 'Active',
+      lastActive: 'May 11, 2022',
+    },
+  ];
+
   constructor(
     public dialog: MatDialog,
     public profileService: ProfileManagementService
@@ -158,6 +232,94 @@ export class UserProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
       this.userProfile.emailAddress = result;
+    });
+  }
+
+  openCreateMedicalPractitionerRoleAssociationDialog():void{
+    const dialogRef = this.dialog.open(CreateMedicalPractitionerRoleAssociationDialogComponent, {
+      height: '600px',
+      width: '820px',
+      // data 
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      this.userProfile.emailAddress = result;
+    });
+
+  }
+
+  openEditMedicalPractitionerRoleAssociationDialog():void{
+    const dialogRef = this.dialog.open(EditMedicalPractitionerRoleAssociationDialogComponent, {
+      height: '600px',
+      width: '820px',
+      // data 
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      this.userProfile.emailAddress = result;
+    });
+
+  }
+
+  openManageMedicalPractitionerRoleAssociationDialog(row:any):void{
+    const dialogRef = this.dialog.open(ManageMedicalPractitionerRoleAssociationDialogComponent, {
+      height: '600px',
+      width: '820px',
+      data: {
+        selectedMedicalPractitionerStatus: 'Remove Selected',
+        selectedData: [row],
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      this.userProfile.emailAddress = result;
+    });
+
+  }
+
+  medicalPractitionerProfileStatusChange(){
+
+    if (this.medicalPractitionerSelection.selected.length == 0) {
+      // @TODO: Not selected any rows so show error message
+      return;
+    }
+
+    const selectedMedicalPractitionerStatus = this.selectedMedicalPractitionerStatus;
+
+    const selectedData = this.medicalPractitionerSelection.selected;
+    console.log(selectedData);
+
+    const dialogRef = this.dialog.open(
+      ManageMedicalPractitionerRoleAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: {
+          selectedMedicalPractitionerStatus,
+          selectedData: [...selectedData],
+        },
+      }
+    );
+
+    dialogRef.afterClosed().subscribe((selectedAction) => {
+      this.medicalPractitionerSelection.clear();
+    });
+
+  }
+  // Medical Practitioner User Profile  openEditMedicalPractitionerUserProfileDialogComponent
+
+  openEditMedicalPractitionerUserProfileDialogComponent(): void {
+    const dialogRef = this.dialog.open(
+      EditMedicalPractitionerUserProfileDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
+      }
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      //this.userProfile.emailAddress = result;
     });
   }
 
