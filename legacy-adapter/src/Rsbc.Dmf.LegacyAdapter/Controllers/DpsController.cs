@@ -29,23 +29,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
         /// <summary>
-        /// DoesCaseExist
-        /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <param name="surcode"></param>
-        /// <returns>True if the case exists</returns>
-        // GET: /Cases/Exist
-        [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
-        {
-            bool result = false;
-            //TODO
-
-            // get the case                                                
-            return Json (result);
-        }
-
-        /// <summary>
         /// Get Comments for a case
         /// </summary>
         /// <param name="caseId"></param>

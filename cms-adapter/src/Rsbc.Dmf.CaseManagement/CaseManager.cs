@@ -448,6 +448,9 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 result = null;
             }
+            // ensure the driver is fetched.
+            LazyLoadProperties(result).GetAwaiter().GetResult();
+
             return result;
         }
 
@@ -519,7 +522,9 @@ namespace Rsbc.Dmf.CaseManagement
             // get the case
             incident @case = GetIncidentById(caseId);
 
-            // create the case.
+            var driver = @case.dfp_DriverId;
+
+            // create the comment
             dfp_comment @comment = new dfp_comment()
             {
                  dfp_date = DateTimeOffset.Now,
@@ -531,8 +536,9 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 dynamicsContext.AddTodfp_comments(@comment);
-                dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), @comment);
 
+                dynamicsContext.SetLink(@comment, nameof(dfp_comment.dfp_DriverId), driver);
+                dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), @comment);
 
                 await dynamicsContext.SaveChangesAsync();
                 result.Success = true;
