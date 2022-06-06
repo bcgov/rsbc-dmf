@@ -50,6 +50,235 @@
   </mat-card>
 </div>
 
+<!-- Medical Practioner Profile -->
+<div class="container">
+  <div class="list">
+    <h2>Manage Medical Practitioner Profile</h2>
+  </div>
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-label
+            ><mat-icon class="info-icon">person</mat-icon> Personal
+            Information</mat-label
+          >
+
+          <button
+            mat-button
+            (click)="openEditMedicalPractitionerUserProfileDialogComponent()"
+          >
+            <mat-icon class="edit-button">edit</mat-icon>Edit Profile
+            Information
+          </button>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      class="personal-information"
+      fxLayout="row"
+      fxLayoutGap="120px"
+    >
+      <div fxLayout="column" fxLayoutGap="24px">
+        <div>
+          Name:
+          <b> {{ userProfile?.lastName }} {{ userProfile?.firstName }} </b>
+        </div>
+        <div>
+          Provider Role :
+          <b>{{userProfile?.clinics?.[0]?.role}}</b>
+        </div>
+        <div>Practitioner License Number : <b>12344555</b></div>
+        <div>
+          Licensing Institution: <b>College of physicians and surgeons</b>
+        </div>
+        <div>
+          Practitioner License validation expiry date: <b>September 2, 2022</b>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutGap="24px">
+        <div>Business Name/Operating as : <b>Dr. Shelby Drew</b></div>
+        <div>
+          Primary Email Address : <b>{{ userProfile?.emailAddress }}</b>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container">
+  <div class="list">
+    <h2>Manage Associations</h2>
+  </div>
+
+  <div>
+    <p>
+      This area allows you to add, edit and remove any users associated with
+      you.
+    </p>
+    <p><b> What role should I assign to a user?</b></p>
+    <p><b>Medical Office Manager (MOM):</b> : When you associate your profile with a users as an MOM role, you are allowing that MOM to create MOA associations on your behalf.  A MOM can also start an eDMER for you and the patient as well as input visual acuity values as needed.</p>
+    <p><b>Medical Office Assistant (MOA):</b> A MOA can start an eDMER for you and the patient as well as input visual acuity values as needed.</p>
+    <button mat-button (click)="openCreateMedicalPractitionerRoleAssociationDialog()" style="float:right">
+      <mat-icon class="edit-button">add_circle</mat-icon>Add Association
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px" class="searchMedicalPractitioner">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select [(ngModel)]="selectedMedicalPractitionerStatus">
+          <mat-option *ngFor="let status of MedicalPractitionerStatuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalPractitionerProfileStatusChange()"
+      >
+        Apply
+      </button>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
+        <input matInput type="text" placeholder="Search by Name" />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchMedicalPractitioners()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button (click)="clear()" class="action-button">Clear</button>
+    </div>
+
+    <div style="padding-top: 16px">
+      <mat-icon class="filter-icon">filter_alt</mat-icon>
+      <mat-label style="color: #003366">Filter By: </mat-label>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select>
+          <mat-option *ngFor="let status of rolesFilter" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-button (click)="clear()" class="action-button">Clear</button>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <table
+    class="practiotioner-profile-table"
+    mat-table
+    #formsList
+    [dataSource]="medicalPractitionerProfileDataSource"
+    matSort
+    (matSortChange)="sortMedicalStaffData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? medicalPractitionerSelection.toggle(row) : null"
+          [checked]="medicalPractitionerSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="role"
+        sortActionDescription="Sort by name"
+      >
+        Role
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.role }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.expiryDate }}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.status }}</td>
+    </ng-container>
+    <ng-container matColumnDef="editAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          (click)="openEditMedicalPractitionerRoleAssociationDialog()"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="removeAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          (click)="openManageMedicalPractitionerRoleAssociationDialog(row)"
+        >
+          <mat-icon>clear</mat-icon> Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedMedicalPractitionerProfileColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedMedicalPractitionerProfileColumns"
+    ></tr>
+  </table>
+</div>
+
 <!-- Manage Medical Staff Associations -->
 
 <div class="container">
@@ -91,7 +320,13 @@
       </mat-form-field>
     </div>
     <div class="action-button">
-      <button mat-raised-button color="primary" (click)="medicalStaffStatusChange()">Apply</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalStaffStatusChange()"
+      >
+        Apply
+      </button>
     </div>
     <div fxFlex>
       <mat-form-field class="full-width" appearance="outline">
@@ -142,17 +377,20 @@
     matSortDirection="asc"
     matSortDisableClear
   >
-   	<!-- Checkbox Column -->
-		<ng-container matColumnDef="select">
-			<th mat-header-cell *matHeaderCellDef>
-				<mat-checkbox></mat-checkbox>
-			</th>
-			<td mat-cell *matCellDef="let row">
-				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? staffSelection.toggle(row) : null"
-					[checked]="staffSelection.isSelected(row)">
-				</mat-checkbox>
-			</td>
-		</ng-container>
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? staffSelection.toggle(row) : null"
+          [checked]="staffSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
     <ng-container matColumnDef="fullName">
       <th
         mat-header-cell
@@ -251,7 +489,7 @@
   <div fxLayout="row" fxLayoutGap="8px" style="width: 62%">
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
-        <mat-select  [(ngModel)]="selectedPractitionerStatus">
+        <mat-select [(ngModel)]="selectedPractitionerStatus">
           <mat-option *ngFor="let status of MOAstatuses" [value]="status.label">
             {{ status.label }}
           </mat-option>
@@ -259,7 +497,13 @@
       </mat-form-field>
     </div>
     <div class="action-button">
-      <button mat-raised-button color="primary" (click)="medicalPractitionerStatusChange()">Apply</button>
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalPractitionerStatusChange()"
+      >
+        Apply
+      </button>
     </div>
     <div fxFlex>
       <mat-form-field class="full-width" appearance="outline">
@@ -292,17 +536,20 @@
     matSortDirection="asc"
     matSortDisableClear
   >
-    	<!-- Checkbox Column -->
-		<ng-container matColumnDef="select">
-			<th mat-header-cell *matHeaderCellDef>
-				<mat-checkbox></mat-checkbox>
-			</th>
-			<td mat-cell *matCellDef="let row">
-				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? practitionerSelection.toggle(row) : null"
-					[checked]="practitionerSelection.isSelected(row)">
-				</mat-checkbox>
-			</td>
-		</ng-container>
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? practitionerSelection.toggle(row) : null"
+          [checked]="practitionerSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
 
     <ng-container matColumnDef="fullName">
       <th
