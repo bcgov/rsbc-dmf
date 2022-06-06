@@ -29,6 +29,10 @@ import { CreateMedicalStaffAssociationDialogComponent } from './user-profile/cre
 import { EditMedicalStaffAssociationDialogComponent } from './user-profile/edit-medical-staff-association-dialog/edit-medical-staff-association-dialog.component';
 import { ManageMedicalStaffAssociationDialogComponent } from './user-profile/manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 import { RemoveMedicalStaffAssociationDialogComponent } from './user-profile/remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
+import { EditMedicalPractitionerUserProfileDialogComponent } from './user-profile/edit-medical-practitioner-user-profile-dialog/edit-medical-practitioner-user-profile-dialog.component';
+import { CreateMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/create-medical-practitioner-role-association-dialog/create-medical-practitioner-role-association-dialog.component';
+import { EditMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/edit-medical-practitioner-role-association-dialog/edit-medical-practitioner-role-association-dialog.component';
+import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/manage-medical-practitioner-role-association-dialog/manage-medical-practitioner-role-association-dialog.component';
 
 
 
@@ -47,7 +51,11 @@ import { RemoveMedicalStaffAssociationDialogComponent } from './user-profile/rem
     CreateMedicalStaffAssociationDialogComponent,
     EditMedicalStaffAssociationDialogComponent,
     ManageMedicalStaffAssociationDialogComponent,
-    RemoveMedicalStaffAssociationDialogComponent
+    RemoveMedicalStaffAssociationDialogComponent,
+    EditMedicalPractitionerUserProfileDialogComponent,
+    CreateMedicalPractitionerRoleAssociationDialogComponent,
+    EditMedicalPractitionerRoleAssociationDialogComponent,
+    ManageMedicalPractitionerRoleAssociationDialogComponent
   ],
   imports: [
     BrowserModule,

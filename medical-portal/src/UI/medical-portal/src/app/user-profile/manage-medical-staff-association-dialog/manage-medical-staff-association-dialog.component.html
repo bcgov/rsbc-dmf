@@ -41,8 +41,7 @@
         <div *ngIf="data.selectedStaffStatus === 'Remove Selected'">
           <h1>Are you sure you want to remove the following association?</h1>
           <p>
-            You are about to remove the association between
-            <b>{{ data.fullName }}</b> and the following medical practitioner.
+            You are about to remove the following associations.
           </p>
         </div>
         <table mat-table #formsList [dataSource]="dataSource">
