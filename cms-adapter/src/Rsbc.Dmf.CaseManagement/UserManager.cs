@@ -55,10 +55,12 @@ namespace Rsbc.Dmf.CaseManagement
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+
+        public string[] Roles { get; set;}
     }
 
     public class MedicalPractitionerUser : User
-    {
+    {   
         public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
     }
 
@@ -89,62 +91,105 @@ namespace Rsbc.Dmf.CaseManagement
         {
             IQueryable<dfp_login> query = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_login_dfp_role)
                 .Where(l => l.statecode == (int)EntityState.Active);
 
+            
             if (!string.IsNullOrEmpty(request.ByUserId)) query = query.Where(l => l.dfp_loginid == Guid.Parse(request.ByUserId));
             if (request.ByExternalUserId.HasValue) query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
                 l.dfp_type == (int)ParseExternalSystem(request.ByExternalUserId.Value.externalSystem));
 
             var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
 
+            
+
+
             foreach (var user in users)
             {
+                // ensure login role data is present
+                
+                //await dynamicsContext.LoadPropertyAsync(user, nameof(dfp_login.dfp_login_dfp_medicalpractitioner));
+
                 if (request.ByType == UserType.Driver && user._dfp_driverid_value.HasValue)
                 {
                     await dynamicsContext.LoadPropertyAsync(user.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
                 }
                 if (request.ByType == UserType.MedicalPractitioner)
                 {
+                    await dynamicsContext.LoadPropertyAsync(user, nameof(dfp_login.dfp_login_dfp_role));     
+
                     user.dfp_login_dfp_medicalpractitioner = new Collection<dfp_medicalpractitioner>((await dynamicsContext.GetAllPagesAsync(dynamicsContext.dfp_medicalpractitioners
                         .Expand(d => d.dfp_PersonId)
-                        .Expand(d => d.dfp_ClinicId)
-                        .Where(d => d._dfp_loginid_value == user.dfp_loginid))).ToList());
+                        .Expand(d => d.dfp_ClinicId)                        
+                        .Where(d => d._dfp_loginid_value == user.dfp_loginid))).ToList());                    
                 }
             }
-
+           
             dynamicsContext.DetachAll();
 
-            IEnumerable<User> mappedUsers = request.ByType switch
+            IEnumerable<User> mappedUsers;
+            
+            switch (request.ByType)
             {
-                UserType.Driver => users.Select(u => new DriverUser
-                {
-                    Id = u.dfp_loginid.ToString(),
-                    FirstName = u.dfp_DriverId?.dfp_PersonId.firstname,
-                    LastName = u.dfp_DriverId?.dfp_PersonId.lastname,
-                    Email = u.dfp_DriverId?.dfp_PersonId.emailaddress1,
-                    ExternalSystem = ((LoginType)u.dfp_type).ToString(),
-                    ExternalSystemUserId = u.dfp_userid
-                }),
-                UserType.MedicalPractitioner => users.Select(u => new MedicalPractitionerUser
-                {
-                    Id = u.dfp_loginid.ToString(),
-                    FirstName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.firstname,
-                    LastName = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault()?.dfp_PersonId.lastname,
-                    Email = u.dfp_login_dfp_medicalpractitioner?.FirstOrDefault()?.dfp_PersonId.emailaddress1,
-                    ExternalSystem = ((LoginType)u.dfp_type).ToString(),
-                    ExternalSystemUserId = u.dfp_userid,
-                    ClinicAssignments = u.dfp_login_dfp_medicalpractitioner.Select(mp => new ClinicAssignment
+                case UserType.Driver:
+                    mappedUsers = users.Select(u => new DriverUser
                     {
-                        Roles = new[] { ((ProviderRole)mp.dfp_providerrole).ToString() },
-                        Clinic = new Clinic
+                        Id = u.dfp_loginid.ToString(),
+                        FirstName = u.dfp_DriverId?.dfp_PersonId.firstname,
+                        LastName = u.dfp_DriverId?.dfp_PersonId.lastname,
+                        Email = u.dfp_DriverId?.dfp_PersonId.emailaddress1,
+                        ExternalSystem = ((LoginType)u.dfp_type).ToString(),
+                        ExternalSystemUserId = u.dfp_userid
+                    });
+                    break;
+                case UserType.MedicalPractitioner:
+
+                    // get the user's name.
+
+                    mappedUsers = users.Select(u =>
+                    {
+                        var firstPractitioner = u.dfp_login_dfp_medicalpractitioner.FirstOrDefault();
+
+                        Guid? personId = firstPractitioner?.dfp_PersonId?.contactid;
+
+                        contact person = null;
+                        if (personId != null)
                         {
-                            Id = mp.dfp_ClinicId?.accountid.ToString(),
-                            Name = mp.dfp_ClinicId?.name
+                            person = dynamicsContext.contacts.Where(x => x.contactid == personId).FirstOrDefault();
                         }
-                    })
-                }),
-                _ => throw new NotImplementedException()
-            };
+
+                        var firstRole = u.dfp_login_dfp_role.FirstOrDefault();
+
+                        return new MedicalPractitionerUser()
+                        {
+                            Id = u.dfp_loginid.ToString(),
+                            FirstName = person?.firstname,
+                            LastName = person?.lastname,
+                            Email = person?.emailaddress1,
+                            ExternalSystem = ((LoginType)u.dfp_type).ToString(),
+                            ExternalSystemUserId = u.dfp_userid,
+                            Roles = u.dfp_login_dfp_role.Select(r => r.dfp_name).ToArray(),
+                            ClinicAssignments = u.dfp_login_dfp_medicalpractitioner.Select(mp => new ClinicAssignment
+                            {
+                                
+                                Roles = new[] { firstRole?.dfp_name },
+                                Clinic = new Clinic
+                                {
+                                    Id = mp.dfp_ClinicId?.accountid.ToString(),
+                                    Name = mp.dfp_ClinicId?.name
+                                }
+                            })
+                        };
+
+
+                    });
+
+
+                    break;    
+                    default:
+                        throw new ArgumentException();
+            }
+                        
 
             return new SearchUsersResponse
             {

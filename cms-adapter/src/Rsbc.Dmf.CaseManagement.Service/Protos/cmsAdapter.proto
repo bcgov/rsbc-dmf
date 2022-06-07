@@ -296,6 +296,7 @@ message User {
 	string externalSystem = 3;
 	string firstName = 10;
 	string lastName = 11;
+	repeated string roles = 12;
 	repeated UserProfile linkedProfiles = 20;
 }
 
