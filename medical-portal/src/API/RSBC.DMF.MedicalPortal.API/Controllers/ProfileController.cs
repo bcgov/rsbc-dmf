@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -140,6 +141,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         {
             public string PractitionerId { get; set; }
 
+            
             [JsonConverter(typeof(JsonStringEnumConverter))]
             public ProviderRole Role { get; set; }
         }
