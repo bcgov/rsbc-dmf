@@ -2,7 +2,8 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
-import { UserProfile } from '../shared/api/models';
+import { map } from 'rxjs';
+import { ProviderRole, UserProfile } from '../shared/api/models';
 import { ProfileManagementService } from '../shared/services/profile.service';
 import { CreateMedicalPractitionerAssociationDialogComponent } from './create-medical-practitioner-association-dialog/create-medical-practitioner-association-dialog.component';
 import { CreateMedicalPractitionerRoleAssociationDialogComponent } from './create-medical-practitioner-role-association-dialog/create-medical-practitioner-role-association-dialog.component';
@@ -16,19 +17,21 @@ import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './manag
 import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 import { RemoveMedicalStaffAssociationDialogComponent } from './remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
 
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
 })
 export class UserProfileComponent implements OnInit {
+  allRoles = ProviderRole;
   userProfile!: UserProfile;
   firstName!: string;
   lastName!: string;
   emailAddress!: string;
   selectedPractitionerStatus: string = 'Select Action';
   selectedStaffStatus: string = 'Select Action';
-  selectedMedicalPractitionerStatus = 'Select Action'
+  selectedMedicalPractitionerStatus = 'Select Action';
   selectedUserRole: string = 'All Roles';
 
   displayedColumns: string[] = [
@@ -59,7 +62,7 @@ export class UserProfileComponent implements OnInit {
 
   practitionerSelection = new SelectionModel<any>(true, []);
   staffSelection = new SelectionModel<any>(true, []);
-  medicalPractitionerSelection = new SelectionModel<any>(true,[]);
+  medicalPractitionerSelection = new SelectionModel<any>(true, []);
 
   MOAstatuses = [
     { label: 'Select Action' },
@@ -218,6 +221,176 @@ export class UserProfileComponent implements OnInit {
       .subscribe((profile) => (this.userProfile = profile));
   }
 
+  permissions(
+    feature:
+      | 'manageUserProfile'
+      | 'manageMedicalPractitionerUserProfile'
+      | 'manageMedicalPractitionerAssociations'
+      | 'manageMedicalPractitionerAssociationTable'
+      | 'manageMedicalStaffAssociation'
+      | 'manageMedicalStaffTable'
+      | 'manageMOAAssociation'
+      | 'manageMOMAssociation'
+      | 'manageMOASearch'
+      | 'manageMOATable'
+  ) {
+    switch (feature) {
+      case 'manageUserProfile':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) =>
+                UserRole.role === ProviderRole.MedicalOfficeAssistant
+            ) ||
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalOfficeManager
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMedicalPractitionerUserProfile':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalPractitioner
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+
+      case 'manageMedicalPractitionerAssociations':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalPractitioner
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMedicalPractitionerAssociationTable':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalPractitioner
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+
+      case 'manageMedicalStaffAssociation':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalOfficeManager
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMedicalStaffTable':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalOfficeManager
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMOAAssociation':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) =>
+                UserRole.role === ProviderRole.MedicalOfficeAssistant
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMOMAssociation':
+        {
+          if (
+            this.userProfile?.clinics?.some((UserRole) => {
+              console.log(
+                'UserRole',
+                UserRole.role,
+                ProviderRole.MedicalOfficeManager
+              );
+              return UserRole.role === ProviderRole.MedicalOfficeManager;
+            })
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMOASearch':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) =>
+                UserRole.role === ProviderRole.MedicalOfficeAssistant
+            ) ||
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalOfficeManager
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case 'manageMOATable':
+        {
+          if (
+            this.userProfile?.clinics?.some(
+              (UserRole) =>
+                UserRole.role === ProviderRole.MedicalOfficeAssistant
+            ) ||
+            this.userProfile?.clinics?.some(
+              (UserRole) => UserRole.role === ProviderRole.MedicalOfficeManager
+            )
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+
+      default:
+        return false;
+    }
+  }
+
   // User Profile
   openEditUserProfileDialog(): void {
     const dialogRef = this.dialog.open(EditUserProfileDialogComponent, {
@@ -235,56 +408,62 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  openCreateMedicalPractitionerRoleAssociationDialog():void{
-    const dialogRef = this.dialog.open(CreateMedicalPractitionerRoleAssociationDialogComponent, {
-      height: '600px',
-      width: '820px',
-      // data 
-    });
+  openCreateMedicalPractitionerRoleAssociationDialog(): void {
+    const dialogRef = this.dialog.open(
+      CreateMedicalPractitionerRoleAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        // data
+      }
+    );
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
       this.userProfile.emailAddress = result;
     });
-
   }
 
-  openEditMedicalPractitionerRoleAssociationDialog():void{
-    const dialogRef = this.dialog.open(EditMedicalPractitionerRoleAssociationDialogComponent, {
-      height: '600px',
-      width: '820px',
-      // data 
-    });
+  openEditMedicalPractitionerRoleAssociationDialog(): void {
+    const dialogRef = this.dialog.open(
+      EditMedicalPractitionerRoleAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        // data
+      }
+    );
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
       this.userProfile.emailAddress = result;
     });
-
   }
 
-  openManageMedicalPractitionerRoleAssociationDialog(row:any):void{
-    const dialogRef = this.dialog.open(ManageMedicalPractitionerRoleAssociationDialogComponent, {
-      height: '600px',
-      width: '820px',
-      data: {
-        selectedMedicalPractitionerStatus: 'Remove Selected',
-        selectedData: [row],
-      },
-    });
+  openManageMedicalPractitionerRoleAssociationDialog(row: any): void {
+    const dialogRef = this.dialog.open(
+      ManageMedicalPractitionerRoleAssociationDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: {
+          selectedMedicalPractitionerStatus: 'Remove Selected',
+          selectedData: [row],
+        },
+      }
+    );
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
       this.userProfile.emailAddress = result;
     });
-
   }
 
-  medicalPractitionerProfileStatusChange(){
-
+  medicalPractitionerProfileStatusChange() {
     if (this.medicalPractitionerSelection.selected.length == 0) {
       // @TODO: Not selected any rows so show error message
       return;
     }
 
-    const selectedMedicalPractitionerStatus = this.selectedMedicalPractitionerStatus;
+    const selectedMedicalPractitionerStatus =
+      this.selectedMedicalPractitionerStatus;
 
     const selectedData = this.medicalPractitionerSelection.selected;
     console.log(selectedData);
@@ -304,7 +483,6 @@ export class UserProfileComponent implements OnInit {
     dialogRef.afterClosed().subscribe((selectedAction) => {
       this.medicalPractitionerSelection.clear();
     });
-
   }
   // Medical Practitioner User Profile  openEditMedicalPractitionerUserProfileDialogComponent
 
