@@ -39,7 +39,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     PractitionerId = c.PractitionerId,
                     ClinicId = c.ClinicId,
                     ClinicName = c.ClinicName,
-                    Role = c.Role
+                    Role = ConvertProviderRole(c.Role)
                 })
             };
         }
@@ -149,7 +149,25 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             public string PractitionerId { get; set; }
             public string ClinicId { get; set; }
             public string ClinicName { get; set; }
-            public string Role { get; set; }
+            public ProviderRole Role { get; set; }
+        }
+
+        private ProviderRole ConvertProviderRole (string data)
+        {
+            ProviderRole result = ProviderRole.None;
+            switch (data)
+            {
+                case "Medical Practitioner":
+                    result = ProviderRole.MedicalPractitioner;
+                    break;
+                case "Medical Office Manager":
+                    result = ProviderRole.MedicalOfficeManager;
+                    break;
+                case "Medical Office Assistant":
+                    result = ProviderRole.MedicalOfficeAssistant;
+                    break;
+            }
+            return result;
         }
     }
 }
