@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     LastName = u.LastName ?? string.Empty,
                     ExternalSystem = u.ExternalSystem,
                     ExternalSystemUserId = u.ExternalSystemUserId,
-                    LinkedProfiles = { MapUserProfiles(u) }
+                    LinkedProfiles = { MapUserProfiles(u) },                                        
                 });
 
                 return new UsersSearchReply { ResultStatus = ResultStatus.Success, User = { users } };
@@ -50,7 +50,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 MedicalPractitioner = new MedicalPractitionerProfile
                 {
                     Id = medicalPractictioner.Id,
-                    Role = ca.Roles.FirstOrDefault(),
+                    Role = ca.Roles.FirstOrDefault() ?? String.Empty,
                     Clinic = new Clinic { Id = ca.Clinic.Id, Name = ca.Clinic.Name }
                 }
             }),
