@@ -140,9 +140,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public record PractitionerBridge
         {
             public string PractitionerId { get; set; }
-
-            
-            [JsonConverter(typeof(JsonStringEnumConverter))]
+           
             public ProviderRole Role { get; set; }
         }
 
