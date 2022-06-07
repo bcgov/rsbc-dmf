@@ -1,14 +1,15 @@
 .container {
-  position: relative;
-  overflow: hidden;
-  padding-top: 56.25%;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+
 
   iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
-    height: 100%;
-    border: 0;
+    height: 2200px;
+    border:  0;
   }
 }
