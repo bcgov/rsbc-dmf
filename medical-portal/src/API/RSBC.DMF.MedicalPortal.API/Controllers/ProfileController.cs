@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
@@ -38,7 +39,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     PractitionerId = c.PractitionerId,
                     ClinicId = c.ClinicId,
                     ClinicName = c.ClinicName,
-                    Role = c.Role
+                    Role = ConvertProviderRole(c.Role)
                 })
             };
         }
@@ -139,8 +140,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public record PractitionerBridge
         {
             public string PractitionerId { get; set; }
-
-            [JsonConverter(typeof(JsonStringEnumConverter))]
+           
             public ProviderRole Role { get; set; }
         }
 
@@ -149,7 +149,25 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             public string PractitionerId { get; set; }
             public string ClinicId { get; set; }
             public string ClinicName { get; set; }
-            public string Role { get; set; }
+            public ProviderRole Role { get; set; }
+        }
+
+        private ProviderRole ConvertProviderRole (string data)
+        {
+            ProviderRole result = ProviderRole.None;
+            switch (data)
+            {
+                case "Medical Practitioner":
+                    result = ProviderRole.MedicalPractitioner;
+                    break;
+                case "Medical Office Manager":
+                    result = ProviderRole.MedicalOfficeManager;
+                    break;
+                case "Medical Office Assistant":
+                    result = ProviderRole.MedicalOfficeAssistant;
+                    break;
+            }
+            return result;
         }
     }
 }
