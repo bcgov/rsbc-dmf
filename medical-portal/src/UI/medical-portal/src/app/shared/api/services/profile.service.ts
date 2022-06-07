@@ -160,27 +160,25 @@ export class ProfileService extends BaseService {
   }
 
   /**
-   * Path part for operation apiProfilePractitionerRolePut
+   * Path part for operation apiProfilePractitionerRolesGet
    */
-  static readonly ApiProfilePractitionerRolePutPath = '/api/Profile/practitionerRole';
+  static readonly ApiProfilePractitionerRolesGetPath = '/api/Profile/practitionerRoles';
 
   /**
-   * Add the given practitioner role.
+   * Get the current practitioner roles.
    *
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiProfilePractitionerRolePut()` instead.
+   * To access only the response body, use `apiProfilePractitionerRolesGet()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiProfilePractitionerRolePut$Response(params?: {
-    body?: PractitionerBridge
+  apiProfilePractitionerRolesGet$Response(params?: {
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ProfileService.ApiProfilePractitionerRolePutPath, 'put');
+    const rb = new RequestBuilder(this.rootUrl, ProfileService.ApiProfilePractitionerRolesGetPath, 'get');
     if (params) {
-      rb.body(params.body, 'application/*+json');
     }
 
     return this.http.request(rb.build({
@@ -195,28 +193,81 @@ export class ProfileService extends BaseService {
   }
 
   /**
-   * Add the given practitioner role.
+   * Get the current practitioner roles.
    *
    *
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `apiProfilePractitionerRolePut$Response()` instead.
+   * To access the full response (for headers, for example), `apiProfilePractitionerRolesGet$Response()` instead.
    *
-   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   * This method doesn't expect any request body.
    */
-  apiProfilePractitionerRolePut(params?: {
-    body?: PractitionerBridge
+  apiProfilePractitionerRolesGet(params?: {
   }): Observable<void> {
 
-    return this.apiProfilePractitionerRolePut$Response(params).pipe(
+    return this.apiProfilePractitionerRolesGet$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
 
   /**
-   * Path part for operation apiProfilePractitionerRoleDelete
+   * Path part for operation apiProfilePractitionerRolesPut
    */
-  static readonly ApiProfilePractitionerRoleDeletePath = '/api/Profile/practitionerRole';
+  static readonly ApiProfilePractitionerRolesPutPath = '/api/Profile/practitionerRoles';
+
+  /**
+   * Add the given practitioner role.
+   *
+   *
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiProfilePractitionerRolesPut()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfilePractitionerRolesPut$Response(params?: {
+    body?: Array<PractitionerBridge>
+  }): Observable<StrictHttpResponse<void>> {
+
+    const rb = new RequestBuilder(this.rootUrl, ProfileService.ApiProfilePractitionerRolesPutPath, 'put');
+    if (params) {
+      rb.body(params.body, 'application/*+json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'text',
+      accept: '*/*'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      })
+    );
+  }
+
+  /**
+   * Add the given practitioner role.
+   *
+   *
+   *
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `apiProfilePractitionerRolesPut$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfilePractitionerRolesPut(params?: {
+    body?: Array<PractitionerBridge>
+  }): Observable<void> {
+
+    return this.apiProfilePractitionerRolesPut$Response(params).pipe(
+      map((r: StrictHttpResponse<void>) => r.body as void)
+    );
+  }
+
+  /**
+   * Path part for operation apiProfilePractitionerRolesDelete
+   */
+  static readonly ApiProfilePractitionerRolesDeletePath = '/api/Profile/practitionerRoles';
 
   /**
    * Remove the given practioner role.
@@ -224,15 +275,15 @@ export class ProfileService extends BaseService {
    *
    *
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiProfilePractitionerRoleDelete()` instead.
+   * To access only the response body, use `apiProfilePractitionerRolesDelete()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfilePractitionerRoleDelete$Response(params?: {
-    body?: PractitionerBridge
+  apiProfilePractitionerRolesDelete$Response(params?: {
+    body?: Array<PractitionerBridge>
   }): Observable<StrictHttpResponse<void>> {
 
-    const rb = new RequestBuilder(this.rootUrl, ProfileService.ApiProfilePractitionerRoleDeletePath, 'delete');
+    const rb = new RequestBuilder(this.rootUrl, ProfileService.ApiProfilePractitionerRolesDeletePath, 'delete');
     if (params) {
       rb.body(params.body, 'application/*+json');
     }
@@ -254,15 +305,15 @@ export class ProfileService extends BaseService {
    *
    *
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `apiProfilePractitionerRoleDelete$Response()` instead.
+   * To access the full response (for headers, for example), `apiProfilePractitionerRolesDelete$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfilePractitionerRoleDelete(params?: {
-    body?: PractitionerBridge
+  apiProfilePractitionerRolesDelete(params?: {
+    body?: Array<PractitionerBridge>
   }): Observable<void> {
 
-    return this.apiProfilePractitionerRoleDelete$Response(params).pipe(
+    return this.apiProfilePractitionerRolesDelete$Response(params).pipe(
       map((r: StrictHttpResponse<void>) => r.body as void)
     );
   }
