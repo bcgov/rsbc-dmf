@@ -443,13 +443,14 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
+                // ensure the driver is fetched.
+                LazyLoadProperties(result).GetAwaiter().GetResult();
             }
             catch (Exception ex)
             {
                 result = null;
             }
-            // ensure the driver is fetched.
-            LazyLoadProperties(result).GetAwaiter().GetResult();
+            
 
             return result;
         }
