@@ -107,11 +107,23 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         public enum ProviderRole
         {
+            /// <summary>
+            /// None
+            /// </summary>
             None = 0,
-            [EnumMember(Value = "Medical Practitioner")]
+            /// <summary>
+            /// Medical Practitioner
+            /// </summary>
+            [EnumMember(Value = "Medical Practitioner")]           
             MedicalPractitioner,
+            /// <summary>
+            /// Medical Office Manager
+            /// </summary>
             [EnumMember(Value = "Medical Office Manager")]
             MedicalOfficeManager,
+            /// <summary>
+            /// Medical Office Assistant
+            /// </summary>
             [EnumMember(Value = "Medical Office Assistant")]
             MedicalOfficeAssistant,
         }
