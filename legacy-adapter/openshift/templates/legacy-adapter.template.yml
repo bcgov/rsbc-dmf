@@ -45,6 +45,15 @@ parameters:
   - description: CMS_ADAPTER_JWT_SECRET
     name: CMS_ADAPTER_SECRET
     required: true
+  - description: JWT_TOKEN_KEY
+    name: JWT_TOKEN_KEY
+    required: true
+  - description: JWT_VALID_AUDIENCE
+    name: JWT_VALID_AUDIENCE
+    required: true
+  - description: JWT_VALID_ISSUER
+    name: JWT_VALID_ISSUER
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -73,10 +82,11 @@ objects:
       CORS_ORIGINS: ${CORS_ORIGINS}
       DOCUMENT_STORAGE_ADAPTER_URI: ${DOCUMENT_STORAGE_ADAPTER_URI}
       DOCUMENT_STORAGE_ADAPTER_JWT_SECRET: ${DOCUMENT_STORAGE_ADAPTER_JWT_SECRET}
-      DOCUMENT_TRIAGE_SERVICE_URI: ${DOCUMENT_TRIAGE_SERVICE_URI}
-      DOCUMENT_TRIAGE_SERVICE_JWT_SECRET: ${DOCUMENT_TRIAGE_SERVICE_JWT_SECRET}
-      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}
-      CMS_JWT_SECRET: ${CMS_ADAPTER_JWT_SECRET}
+      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}      
+      JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
+      JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
+      JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
+
   - kind: Service
     apiVersion: v1
     metadata:
