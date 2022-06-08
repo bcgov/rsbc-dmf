@@ -17,7 +17,6 @@ import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './manag
 import { ManageMedicalStaffAssociationDialogComponent } from './manage-medical-staff-association-dialog/manage-medical-staff-association-dialog.component';
 import { RemoveMedicalStaffAssociationDialogComponent } from './remove-medical-staff-association-dialog/remove-medical-staff-association-dialog.component';
 
-
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -97,33 +96,41 @@ export class UserProfileComponent implements OnInit {
   dataSource = [
     {
       id: '1',
-      fullName: 'Dr. Rajan Mehra',
-      expiryDate: 'May 10, 2022',
-      status: 'Pending',
+      fullName: 'Dr. Shelby Drew',
+      expiryDate: 'July 5, 2022',
+      status: 'Active',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
     {
       id: '2',
-      fullName: 'Dr. Shelby Drew',
-      expiryDate: 'June 15, 2023',
-      status: 'Active',
+      fullName: 'Dr. Sally Jones',
+      expiryDate: '-',
+      status: 'Inactive',
       role: 'Medical Practitioner',
-      lastActive: 'May 11, 2022',
+      lastActive: 'September 11, 2021',
     },
     {
       id: '3',
-      fullName: 'Devi Iyer, NP',
-      expiryDate: 'March 30, 2024',
-      status: 'Active',
+      fullName: 'Mark Watkins, NP',
+      expiryDate: 'March 2, 2022',
+      status: 'Inactive',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
     {
       id: '4',
-      fullName: 'Dr. Tarik Haiga',
-      expiryDate: 'July 9, 2025',
-      status: 'InActive',
+      fullName: 'Eric Vern, NP',
+      expiryDate: '-',
+      status: 'Pending',
+      role: 'Medical Practitioner',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '5',
+      fullName: 'Tobi McIntosh, NP',
+      expiryDate: '-',
+      status: 'Rejected',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
@@ -134,16 +141,16 @@ export class UserProfileComponent implements OnInit {
       id: '1',
       fullName: 'Torres, Sharon',
       medicalPractitionerName: 'Dr. Rajan Mehra',
-      expiryDate: 'May 10, 2022',
-      status: 'Pending',
+      expiryDate: 'July 5, 2022',
+      status: 'Active',
       role: 'Medical Practitioner',
-      lastActive: 'May 11, 2022',
+      lastActive: 'September 11, 2021',
     },
     {
       id: '2',
-      fullName: 'Smith, Ingrid',
-      medicalPractitionerName: 'Dr. Shelby Drew',
-      expiryDate: 'June 15, 2023',
+      fullName: 'Torres, Sharon',
+      medicalPractitionerName: 'Eric Vern, NP',
+      expiryDate: 'August 24, 2022',
       status: 'Active',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
@@ -152,17 +159,35 @@ export class UserProfileComponent implements OnInit {
       id: '3',
       fullName: 'Tucker, Devi',
       medicalPractitionerName: 'Devi Iyer, NP',
-      expiryDate: 'March 30, 2024',
-      status: 'Active',
+      expiryDate: '-',
+      status: 'Inactive',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
     {
       id: '4',
       fullName: 'Varga, Tarik',
-      medicalPractitionerName: 'Dr. Tarik Haiga',
-      expiryDate: 'July 9, 2025',
+      medicalPractitionerName: 'Dr. Sally Jones',
+      expiryDate: 'February 1, 2022',
       status: 'InActive',
+      role: 'Medical Practitioner',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '5',
+      fullName: 'Marsh, Caleb',
+      medicalPractitionerName: 'Eric Vern, NP',
+      expiryDate: '-',
+      status: 'Pending',
+      role: 'Medical Practitioner',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '6',
+      fullName: 'Mehra, Rajan',
+      medicalPractitionerName: 'Dr. Sally Jones',
+      expiryDate: '-',
+      status: 'Rejected',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
@@ -171,42 +196,50 @@ export class UserProfileComponent implements OnInit {
   medicalPractitionerProfileDataSource = [
     {
       id: '1',
-      fullName: 'Dr. Rajan Mehra',
-      role: 'MOA',
-      expiryDate: 'May 11, 2022',
+      fullName: 'Mehra, Rajan',
+      role: 'MOM',
+      expiryDate: 'July 5, 2022',
       status: 'Active',
-      lastActive: 'May 11, 2022',
+      lastActive: 'October 5, 2021',
     },
     {
       id: '2',
-      fullName: 'Dr.Castor, Ingrid',
-      role: 'MOM',
-      expiryDate: 'January 11, 2024',
+      fullName: 'Castor, Ingrid',
+      role: 'MOA',
+      expiryDate: 'September 17, 2022',
       status: 'Active',
       lastActive: 'March 11, 2021',
     },
     {
       id: '3',
-      fullName: 'Dr.Dodge, Mike',
+      fullName: 'Dodge, Mike',
       role: 'MOA',
-      expiryDate: 'June 15, 2022',
-      status: 'Active',
+      expiryDate: '-',
+      status: 'InActive',
       lastActive: 'May 11, 2022',
     },
     {
       id: '4',
-      fullName: 'Dr. Varga, Tarik',
+      fullName: 'Varga, Tarik',
       role: 'MOA',
-      expiryDate: 'March 11, 2025',
-      status: 'Active',
+      expiryDate: 'February 1, 2022',
+      status: 'InActive',
       lastActive: 'May 11, 2022',
     },
     {
       id: '5',
-      fullName: 'Dr. Tucker, Devi',
-      role: 'MOM',
-      expiryDate: 'June 15, 2024',
-      status: 'Active',
+      fullName: 'Tucker, Devi',
+      role: 'MOA',
+      expiryDate: '-',
+      status: 'Pending',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '6',
+      fullName: 'Tucker, Devi',
+      role: 'MOA',
+      expiryDate: '-',
+      status: 'Pending',
       lastActive: 'May 11, 2022',
     },
   ];
@@ -219,6 +252,12 @@ export class UserProfileComponent implements OnInit {
     this.profileService
       .getProfile({})
       .subscribe((profile) => (this.userProfile = profile));
+
+    // Get data to Medical Practitioner Roles Table
+
+    this.profileService.getProfilePractitionerRoles({}).subscribe((profile) => {
+      console.log('Get Practioners roles data', profile);
+    });
   }
 
   permissions(
@@ -408,6 +447,25 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  // Medical Practitioner User Profile
+
+  openEditMedicalPractitionerUserProfileDialogComponent(): void {
+    const dialogRef = this.dialog.open(
+      EditMedicalPractitionerUserProfileDialogComponent,
+      {
+        height: '600px',
+        width: '820px',
+        data: {
+          ...this.userProfile
+        },
+      }
+    );
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+      //this.userProfile = result;
+    });
+  }
+
   openCreateMedicalPractitionerRoleAssociationDialog(): void {
     const dialogRef = this.dialog.open(
       CreateMedicalPractitionerRoleAssociationDialogComponent,
@@ -482,22 +540,6 @@ export class UserProfileComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((selectedAction) => {
       this.medicalPractitionerSelection.clear();
-    });
-  }
-  // Medical Practitioner User Profile  openEditMedicalPractitionerUserProfileDialogComponent
-
-  openEditMedicalPractitionerUserProfileDialogComponent(): void {
-    const dialogRef = this.dialog.open(
-      EditMedicalPractitionerUserProfileDialogComponent,
-      {
-        height: '600px',
-        width: '820px',
-        //data: {firstName: this.userProfile.firstName, lastName: this.userProfile.lastName, emailAddress: this.userProfile.emailAddress },
-      }
-    );
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
-      //this.userProfile.emailAddress = result;
     });
   }
 

@@ -16,6 +16,7 @@
             name="firstName"
             [disabled]="true"
             placeholder="First Name"
+            [(ngModel)]="data.firstName"
           />
         </mat-form-field>
       </div>
@@ -27,6 +28,7 @@
             name="lastName"
             [disabled]="true"
             placeholder="Last Name "
+            [(ngModel)]="data.lastName"
           />
         </mat-form-field>
       </div>
@@ -35,41 +37,52 @@
       <div fxflex style="width: 100%">
         <label class="form-label">Business Name/ Operating as</label><br />
         <mat-form-field appearance="outline">
-          <input matInput name="businessName" placeholder="Business Name/ Operating as " />
+          <input
+            matInput
+            name="businessName"
+            placeholder="Business Name/ Operating as "
+            [(ngModel)]="data.businessName"
+          />
         </mat-form-field>
       </div>
     </div>
     <div fxLayout="row" fxFlexAlign="space-between" fxLayoutGap="24px">
-        <div fxFlex>
-          <label class="form-label">Practitioner License Number </label><br />
-          <mat-form-field appearance="outline">
-            <input
-              matInput
-              name="licenseNumber"
-              placeholder="Practitioner License Number "
-            />
-          </mat-form-field>
-        </div>
-        <div fxFlex>
-          <label class="form-label">Licensing Institution</label><br />
-          <mat-form-field appearance="outline">
-            <input
-              matInput
-              name="licensingIntution"
-              [disabled]="true"
-              placeholder="Licensing Institution"
-            />
-          </mat-form-field>
-        </div>
+      <div fxFlex>
+        <label class="form-label">Practitioner License Number </label><br />
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            name="licenseNumber"
+            placeholder="Practitioner License Number "
+            [(ngModel)]="data.licenseNumber"
+          />
+        </mat-form-field>
       </div>
-      <div fxLayout="row">
-        <div fxflex style="width: 100%">
-          <label class="form-label">Email Address</label><br />
-          <mat-form-field appearance="outline">
-            <input matInput name="email" placeholder="Email Address " />
-          </mat-form-field>
-        </div>
+      <div fxFlex>
+        <label class="form-label">Licensing Institution</label><br />
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            name="licensingInstitution"
+            placeholder="Licensing Institution"
+            [(ngModel)]="data.licensingInstitution"
+          />
+        </mat-form-field>
       </div>
+    </div>
+    <div fxLayout="row">
+      <div fxflex style="width: 100%">
+        <label class="form-label">Email Address</label><br />
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            name="email"
+            placeholder="Email Address "
+            [(ngModel)]="data.emailAddress"
+          />
+        </mat-form-field>
+      </div>
+    </div>
   </form>
 </div>
 <div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-between center">
