@@ -709,6 +709,19 @@ export class UserProfileComponent implements OnInit {
       }
     });
   }
+
+  translatePortalUserRole(role: any) {
+    switch (role) {
+      case 1:
+        return 'Medical Practitioner';
+      case 2:
+        return 'Medical Office Manager';
+      case 3:
+        return 'Medical Office Assistant';
+      default:
+        return 'None';
+    }
+  }
 }
 
 function compare(
