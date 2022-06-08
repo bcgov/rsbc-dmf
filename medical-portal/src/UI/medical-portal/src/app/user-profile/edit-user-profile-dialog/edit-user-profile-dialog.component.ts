@@ -33,7 +33,6 @@ export class EditUserProfileDialogComponent implements OnInit {
   }
 
   onConfirmChanges() {
-    console.log(this.data.emailAddress);
     this.profileService
       .updateProfile({ body: { email: this.data.emailAddress } })
       .subscribe((success) => {
