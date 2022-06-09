@@ -196,7 +196,7 @@ export class UserProfileComponent implements OnInit {
   medicalPractitionerProfileDataSource = [
     {
       id: '1',
-      fullName: 'Mehra, Rajan',
+      fullName: 'Castor, Ingrid',
       role: 'MOM',
       expiryDate: 'July 5, 2022',
       status: 'Active',
@@ -204,7 +204,7 @@ export class UserProfileComponent implements OnInit {
     },
     {
       id: '2',
-      fullName: 'Castor, Ingrid',
+      fullName: 'Dodge,Mike',
       role: 'MOA',
       expiryDate: 'September 17, 2022',
       status: 'Active',
@@ -212,7 +212,7 @@ export class UserProfileComponent implements OnInit {
     },
     {
       id: '3',
-      fullName: 'Dodge, Mike',
+      fullName: 'Mehra, Rajan',
       role: 'MOA',
       expiryDate: '-',
       status: 'InActive',
@@ -456,7 +456,7 @@ export class UserProfileComponent implements OnInit {
         height: '600px',
         width: '820px',
         data: {
-          ...this.userProfile
+          ...this.userProfile,
         },
       }
     );
@@ -701,6 +701,30 @@ export class UserProfileComponent implements OnInit {
   }
 
   clear() {}
+
+  sortMedicalPractitionerRolesData(sort: Sort) {
+    const data = this.medicalPractitionerProfileDataSource.slice();
+    if (!sort.active || sort.direction === '') {
+      this.medicalPractitionerProfileDataSource = data;
+      return;
+    }
+
+    this.medicalPractitionerProfileDataSource = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'fullName':
+          return compare(a.fullName, b.fullName, isAsc);
+        case 'role':
+          return compare(a.role, b.role, isAsc);
+        case 'expiryDate':
+          return compare(a.expiryDate, b.expiryDate, isAsc);
+        case 'status':
+          return compare(a.status, b.status, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
 
   sortMedicalStaffData(sort: Sort) {
     const data = this.medicalStaffDataSource.slice();
