@@ -13,9 +13,9 @@
         </a>
       <div class="title">Medical Practitioner Portal</div>
       <div class="profile" *ngIf="showProfile">
-        <h1 class="avatar" routerLink="/userProfile">{{ profileInitials }}</h1>
+        <h1 class="avatar" routerLink="/userProfile" style="cursor:pointer;">{{ profileInitials }}</h1>
         <div>
-          <span class="user-name">{{ profileName }}</span><br/>
+          <span class="user-name" routerLink="/userProfile">{{ profileName }}</span><br/>
           <!-- <span>{{ profileRole }}</span> -->
         </div>
         <button mat-button [matMenuTriggerFor]="menu">
