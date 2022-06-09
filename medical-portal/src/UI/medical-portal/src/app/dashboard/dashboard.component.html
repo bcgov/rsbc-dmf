@@ -1,33 +1,19 @@
 <div class="page-desc">
   <div class="container">
     <h1>Portal Dashboard</h1>
-    <p>
-      In this portal you can start, access and submit a driver medical
-      examination report (DMER) for a driver to RoadSafetyBC.
-    </p>
-    <p>
-      You will also be able to see the DMER status with RoadSafetyBC in the
-      event the driver contacts you for an update.
-    </p>
+    
+      In this portal you can :
+      
+      <ul>
+        <li>
+          Start, access and submit a Driver’s Medical Exam Report (DMER)
+        </li>
+        <li>
+          See DMER Status within RoadSafetyBC in the event the patient contacts you for an update
+        </li>
+      </ul>
   </div>
 </div>
-
-<!-- <div class="container" style="margin-top: 20px">
-  <div style="width: 90%; margin-left: auto; margin-right: auto">
-    <div
-      class="bc-gov-alertbanner bc-gov-alertbanner-warning"
-      role="alert"
-      aria-labelledby="warning"
-      aria-describedby="warning-desc"
-    >
-      <p id="warning-desc">
-        RoadsafetyBC has requested more information for one of your DMERs.
-
-        <a href="#" style="text-decoration: underline">See my messages</a>
-      </p>
-    </div>
-  </div>
-</div> -->
 
 <div class="container">
   <mat-card class="search">
@@ -97,8 +83,8 @@
             <div>
               Patient Name:
               <b
-                >{{ searchedCase?.patientFirstname }},
-                {{ searchedCase?.patientLastname }}
+                >{{ searchedCase?.patientLastname }},
+                {{ searchedCase?.patientFirstname }}
                 {{ searchedCase?.patientMiddlename }}</b
               >
             </div>
@@ -223,15 +209,13 @@
           </div>
           <div class="dmer-types">
             <b>Reimbursement</b> <br />
-            If a DMER has been issued for the reasons below, the medical
-            practitioner is able to submit a request for reimbursement of $75 to
-            RoadSafetyBC for each submission.
+            The DMERs noted below are applicable for a reimbursement of $75.00. 
 
             <div class="chips" fxLayout="row" fxLayoutGap="24px">
-              <label class="reimbursement-chips"
+              <!-- <label class="reimbursement-chips"
                 >Suspected Medical Condition</label
-              >
-              <label class="reimbursement-chips">Known Medical Condition</label>
+              > -->
+              <label class="reimbursement-chips">Known/Suspected Condition</label>
             </div>
           </div>
         </mat-expansion-panel>
@@ -239,7 +223,7 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="dmer-Title">
-              Case Statuses
+              Case Status
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -247,26 +231,21 @@
             A case's lifecycle progresses through seven different statuses.
             <ul>
               <li>
-                <b>Not Started</b> – DMER has been issued by RoadSafetyBC. No
-                one has opened the case.
+                <b>Not Started</b> – DMER has been issued by RoadSafetyBC. Medical assessment has not yet begun.
               </li>
               <li>
-                <b>In progress </b> – DMER has been started by a medical
+                <b>In Progress </b> – DMER has been started by a medical
                 practitioner, but it has not been submitted to RoadSafetyBC.
               </li>
               <li>
-                <b>RSBC received </b> – DMER has been submitted successfully to
+                <b>RSBC Received </b> – DMER has been submitted successfully to
                 RoadSafetyBC.
               </li>
               <li>
-                <b>Under RSBC review </b> – RoadSafetyBC has started reviewing
-                this case.
+                <b>Under RSBC Review </b> –  DMER is currently under review by RoadSafetyBC. 
               </li>
               <li>
-                <b>Decision rendered </b> – RoadSafetyBC has assessed the case
-                and has made a decision whether the driver is fit or unfit to
-                drive. The driver is notified of the decision. Due to privacy
-                legislation the decision is not able to be displayed.
+                <b>RSBC Decision Rendered </b> – Fitness to drive has been assessed and driver will be or has been notified of RSBC’s decision. Due to privacy legislation the decision cannot be displayed.
               </li>
               <li>
                 <b>Cancelled/Closed </b> - This case is closed or a DMER no
@@ -350,7 +329,7 @@
             </th>
             <td mat-cell *matCellDef="let row">
               <a
-                [routerLink]="['/cases/case', row.id]"
+                [routerLink]="[row.status === 'In Progress' ? '/cases/case' : '/caseDetails', row.id]"
                 routerLinkActive="router-link-active"
               >
                 {{ row.title }}
