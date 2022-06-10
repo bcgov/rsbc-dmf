@@ -13,17 +13,13 @@
   <mat-card class="search">
     <mat-card-header class="primary">
       <mat-card-title>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-          <mat-label
-            ><mat-icon class="info-icon">person</mat-icon> Personal
-            Information</mat-label
-          >
-
-          <button mat-button (click)="openEditUserProfileDialog()">
-            <mat-icon class="edit-button">edit</mat-icon>Edit Profile
-            Information
-          </button>
-        </div>
+        <mat-label
+          ><mat-icon class="info-icon">person</mat-icon> Personal
+          Information</mat-label
+        >
+        <button mat-button (click)="openEditUserProfileDialog()">
+          <mat-icon class="edit-button">edit</mat-icon>Edit Profile Information
+        </button>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content
@@ -61,20 +57,16 @@
   <mat-card class="search">
     <mat-card-header class="primary">
       <mat-card-title>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-          <mat-label
-            ><mat-icon class="info-icon">person</mat-icon> Personal
-            Information</mat-label
-          >
-
-          <button
-            mat-button
-            (click)="openEditMedicalPractitionerUserProfileDialogComponent()"
-          >
-            <mat-icon class="edit-button">edit</mat-icon>Edit Profile
-            Information
-          </button>
-        </div>
+        <mat-label
+          ><mat-icon class="info-icon">person</mat-icon> Personal
+          Information</mat-label
+        >
+        <button
+          mat-button
+          (click)="openEditMedicalPractitionerUserProfileDialogComponent()"
+        >
+          <mat-icon>edit</mat-icon>Edit Profile Information
+        </button>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content
@@ -136,10 +128,10 @@
     <button
       mat-button
       (click)="openCreateMedicalPractitionerRoleAssociationDialog()"
-      class="add-association-btn"
+      class="manage-button"
       style="float: right"
     >
-      <mat-icon class="edit-button">add_circle</mat-icon>Add Association
+      <mat-icon>add_circle</mat-icon>Add Association
     </button>
   </div>
   <div fxLayout="row" fxLayoutGap="8px" class="searchMedicalPractitioner">
@@ -271,13 +263,20 @@
       >
         Status
       </th>
-      <td mat-cell *matCellDef="let row"><mat-chip-list><mat-chip style="width:100px; justify-content:center">{{ row.status }}</mat-chip></mat-chip-list></td>
+      <td mat-cell *matCellDef="let row">
+        <mat-chip-list
+          ><mat-chip style="width: 100px; justify-content: center">{{
+            row.status
+          }}</mat-chip></mat-chip-list
+        >
+      </td>
     </ng-container>
     <ng-container matColumnDef="editAction">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
+          class="manage-button"
           (click)="openEditMedicalPractitionerRoleAssociationDialog()"
         >
           <mat-icon>edit</mat-icon> Edit
@@ -288,6 +287,7 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
+          class="manage-button"
           mat-icon-button
           (click)="openManageMedicalPractitionerRoleAssociationDialog(row)"
         >
@@ -305,8 +305,8 @@
       *matRowDef="let row; columns: displayedMedicalPractitionerProfileColumns"
     ></tr>
   </table>
-  <div  class="table-actions">
-    <p>Showing 6 of 6 Records</p>
+  <div class="table-actions">
+    <p>Showing 7 of 7 Records</p>
   </div>
 </div>
 
@@ -336,8 +336,12 @@
       medical practitioners you are associated with.
     </p>
 
-    <button mat-button (click)="openCreateMedicalStaffAssociationDialog()">
-      <mat-icon class="edit-button">add_circle</mat-icon>Add Association
+    <button
+      mat-button
+      class="manage-button"
+      (click)="openCreateMedicalStaffAssociationDialog()"
+    >
+      <mat-icon>add_circle</mat-icon>Add Association
     </button>
   </div>
   <div fxLayout="row" fxLayoutGap="8px">
@@ -481,6 +485,7 @@
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
+          class="manage-button"
           mat-icon-button
           (click)="openRemoveMedicalStaffAssociationDialog(row)"
         >
@@ -495,8 +500,8 @@
       *matRowDef="let row; columns: displayedMedicalStaffColumns"
     ></tr>
   </table>
-  <div  class="table-actions">
-    <p>Showing 6 of 6 Records</p>
+  <div class="table-actions">
+    <p>Showing 10 of 10 Records</p>
   </div>
 </div>
 
@@ -515,9 +520,10 @@
 
     <button
       mat-button
+      class="manage-button"
       (click)="openCreateMedicalPractitionerAssociationDialog()"
     >
-      <mat-icon class="edit-button">add_circle</mat-icon>Request Association
+      <mat-icon>add_circle</mat-icon>Request Association
     </button>
   </div>
 </div>
@@ -528,22 +534,34 @@
       <mat-card-title>
         <div>
           <mat-label
-            ><mat-icon class="info-icon">local_hospital</mat-icon> Medical Practitioners</mat-label
+            ><mat-icon class="info-icon">local_hospital</mat-icon> Medical
+            Practitioners</mat-label
           >
         </div>
       </mat-card-title>
     </mat-card-header>
   </mat-card>
 
-  <p>This area allows you to manage your associations with medical practitioners.</p>
-  <p>In order to manage associations between MOAs and medical practitioners, a MOM needs an association with one or more medical practitioner. </p>
-  <p>Medical practitioners must initiate an association with a MOM.  If you are a MOM and need an association with a specific medical practitioner, please provide them with your email address used to create your portal account and ask them to ‘Add a MOM Association’ with you in the portal. Once the medical practitioner has completed that step, their name will appear in the table below.  You can then use the 'Add Association' link in the Medical Office Staff section above to create associations between MOAs and your associated medical practitioners, on their behalf.
-
+  <p>
+    This area allows you to manage your associations with medical practitioners.
+  </p>
+  <p>
+    In order to manage associations between MOAs and medical practitioners, a
+    MOM needs an association with one or more medical practitioner.
+  </p>
+  <p>
+    Medical practitioners must initiate an association with a MOM. If you are a
+    MOM and need an association with a specific medical practitioner, please
+    provide them with your email address used to create your portal account and
+    ask them to ‘Add a MOM Association’ with you in the portal. Once the medical
+    practitioner has completed that step, their name will appear in the table
+    below. You can then use the 'Add Association' link in the Medical Office
+    Staff section above to create associations between MOAs and your associated
+    medical practitioners, on their behalf.
   </p>
 </div>
 
-
-<div class="container" *ngIf="permissions('manageMOASearch')" >
+<div class="container" *ngIf="permissions('manageMOASearch')">
   <div fxLayout="row" fxLayoutGap="8px" style="width: 62%">
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
@@ -647,6 +665,7 @@
       <td mat-cell *matCellDef="let row" class="col-action">
         <button
           mat-icon-button
+          class="manage-button"
           (click)="openManageMedicalPractitionerAssociationDialog(row)"
         >
           <mat-icon>clear</mat-icon> Remove
@@ -657,7 +676,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
-  <div  class="table-actions">
-    <p>Showing 5 of 5 Records</p>
+  <div class="table-actions">
+    <p>Showing 6 of 6 Records</p>
   </div>
 </div>
