@@ -7,7 +7,7 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 })
 export class CreateMedicalStaffAssociationDialogComponent{
   @HostBinding('class') className = 'mat-dialog-container-host';
-  listOfPractitioners : string[] = ['Dr. Shelby', 'Dr. Robert'] 
+  listOfPractitioners : string[] = ['Dr. Shelby Drew', 'Will Mathews, NP'] 
 
   constructor() { }
 

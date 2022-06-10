@@ -25,15 +25,20 @@
   vertical-align: middle;
 }
 
-.mat-button{
-  color: #003366;
+.mat-icon{
+  padding-right: 5px;
 }
 
-.mat-icon-button{
-  color: #003366;
-}
+// .mat-button{
+//   color: #003366;
+// }
 
-.edit-button {
+// .mat-icon-button{
+//   color: #003366;
+// }
+
+.manage-button {
+  color: #003366;
   padding-right: 5px;
 }
 
@@ -67,4 +72,29 @@
 
 .button{
   color: #003366;
+}
+
+.mat-card-header{
+  border-radius: 5px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.mat-card-title{
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.mat-card-content{
+  background-color: #fff;
+}
+
+.th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type{
+padding: 0;
 }
