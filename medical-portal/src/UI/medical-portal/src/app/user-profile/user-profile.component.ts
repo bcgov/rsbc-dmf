@@ -73,7 +73,7 @@ export class UserProfileComponent implements OnInit {
   MOMstatuses = [
     { label: 'Select Action' },
     { label: 'Accept Selected' },
-    { label: 'Request Renewal' },
+    { label: 'Renew Selected' },
     { label: 'Reject Selected' },
     { label: 'Deactivate Selected' },
     { label: 'Remove Selected' },
@@ -82,7 +82,7 @@ export class UserProfileComponent implements OnInit {
   MedicalPractitionerStatuses = [
     { label: 'Select Action' },
     { label: 'Accept Selected' },
-    { label: 'Request Renewal' },
+    { label: 'Renew Selected' },
     { label: 'Reject Selected' },
     { label: 'Deactivate Selected' },
     { label: 'Remove Selected' },
@@ -507,7 +507,7 @@ export class UserProfileComponent implements OnInit {
     const dialogRef = this.dialog.open(
       EditMedicalPractitionerUserProfileDialogComponent,
       {
-        height: '600px',
+        height: '650px',
         width: '820px',
         data: {
           ...this.userProfile,
@@ -539,7 +539,7 @@ export class UserProfileComponent implements OnInit {
     const dialogRef = this.dialog.open(
       EditMedicalPractitionerRoleAssociationDialogComponent,
       {
-        height: '600px',
+        height: '720px',
         width: '820px',
         // data
       }
