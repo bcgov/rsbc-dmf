@@ -6,7 +6,7 @@
     Deactivate Association(s)
   </h1>
   <h1 class="title" *ngIf="data.selectedStatus === 'Remove Selected'">
-    Remove Association(s)
+    Remove Association(s) From Associations Table
   </h1>
 
   <button mat-icon-button aria-label="Close" mat-dialog-close>
@@ -33,9 +33,13 @@
     </div>
 
     <div *ngIf="data.selectedStatus === 'Remove Selected'">
-      <h1>Are you sure you want to remove the following assocation?</h1>
+      <h1>
+        Are you sure you want to remove the following association(s) from your
+        medical practitioner associations table?
+      </h1>
       <p>
-        You are about to remove your association with the following individual.
+        You are about to remove your association with the following
+        individual(s) from your medical practitioner associations table.
       </p>
     </div>
 
@@ -57,39 +61,35 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     </table>
   </div>
-  </div>
+</div>
 
-  <div mat-dialog-actions
-    fxLayout="column"
-    fxLayoutAlign="space-between center"
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-between center">
+  <button
+    *ngIf="data.selectedStatus === 'Request Renewal'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
   >
-    <button
-      *ngIf="data.selectedStatus === 'Request Renewal'"
-      mat-raised-button
-      color="primary"
-      (click)="onManageAssociation()"
-    >
-      Request Association Renewal
-    </button>
-    <button
-      *ngIf="data.selectedStatus === 'Deactivate Selected'"
-      mat-raised-button
-      color="primary"
-      (click)="onManageAssociation()"
-    >
-      Deactivate Association(s)
-    </button>
-    <button
-      *ngIf="data.selectedStatus === 'Remove Selected'"
-      mat-raised-button
-      color="primary"
-      (click)="onManageAssociation()"
-    >
-      Remove Association(s)
-    </button>
-    <br />
-    <button mat-button mat-dialog-close color="primary" (click)="onCancel()">
-      Cancel
-    </button>
-  </div>
-
+    Request Association Renewal
+  </button>
+  <button
+    *ngIf="data.selectedStatus === 'Deactivate Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Deactivate Association(s)
+  </button>
+  <button
+    *ngIf="data.selectedStatus === 'Remove Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Remove Association(s)
+  </button>
+  <br />
+  <button mat-button mat-dialog-close color="primary" (click)="onCancel()">
+    Cancel
+  </button>
+</div>
