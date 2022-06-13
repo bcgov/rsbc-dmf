@@ -143,10 +143,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             services.AddHangfire(x => x.UseMemoryStorage());
             services.AddHangfireServer();
 
+            services.AddEndpointsApiExplorer();
+
             // Swagger is used for API documentation
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "ICBC Adapter", Version = "v1" });
+                c.EnableAnnotations();
 
                 string baseUri = Configuration["BASE_URI"];
                 if (baseUri != null)
