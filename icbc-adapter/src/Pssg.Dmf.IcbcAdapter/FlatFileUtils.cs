@@ -147,7 +147,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(".");
+                    var files = client.ListDirectory(client.WorkingDirectory);
 
                     foreach (var file in files)
                     {
@@ -157,7 +157,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         string data = StringUtility.StreamToString(memoryStream);
                         
-                        ProcessCandidates(hangfireContext, data);
+                        //ProcessCandidates(hangfireContext, data);
 
                     }
                 }
@@ -182,7 +182,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     Surname = record.Surname,
                     ClientNumber = record.ClientNumber,
                 };
-                _caseManagerClient.ProcessLegacyCandidate(lcr);
+                //_caseManagerClient.ProcessLegacyCandidate(lcr);
             }
         }
 
