@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using System.Web;
+using System.Net;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
@@ -97,7 +99,23 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         private void Login()
         {
-            // TODO - do a JWT login
+            // determine if authentication is enabled.
+
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                string encodedSecret = HttpUtility.UrlEncode(Configuration["JWT_TOKEN_KEY"]);
+                var request = new HttpRequestMessage(HttpMethod.Get, "/Authentication/Token?secret=" + encodedSecret);
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                response.EnsureSuccessStatusCode();
+
+                var token = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                if (!string.IsNullOrEmpty(token))
+                {
+                    // Add the bearer token to the client.
+                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+                }
+            }
 
         }
 
@@ -289,8 +307,19 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
-    }
+        [Fact]
+        public async void TestLoginRequired()
+        {            
 
-    
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            // should be 401 if there was no login.
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+
+        }
+
+    }
 
 }

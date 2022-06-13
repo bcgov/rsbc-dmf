@@ -205,7 +205,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             app.UseEndpoints(endpoints =>
             {                
-                endpoints.MapControllers();                
+                endpoints.MapControllers().RequireAuthorization();                 
             });
 
             // enable Splunk logger using Serilog
