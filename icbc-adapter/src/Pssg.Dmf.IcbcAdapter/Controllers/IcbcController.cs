@@ -30,13 +30,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         /// <summary>
         /// Date that the requirement for a Medical Exam was issued
         /// </summary>
-        [SwaggerSchema("Date that the requirement for a Medical Exam was issued", Format = "date")]
+        [SwaggerSchema("Date that the requirement for a Medical Exam was issued")]
         public DateTimeOffset? EffectiveDate { get; set; }
 
         /// <summary>
         /// Birthdate for the Driver
         /// </summary>
-        [SwaggerSchema("Birthdate for the Driver", Format = "date")]
+        [SwaggerSchema("Birthdate for the Driver")]
         public DateTimeOffset? BirthDate { get; set; }
 
     }
