@@ -282,3 +282,16 @@ body {
     padding-bottom: 30px;
   }
 }
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  opacity: 1 !important;
+  color:rgb(0, 51, 102) !important;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+  background-color: #F2F2F2 !important;
+}
+
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: black;
+}
