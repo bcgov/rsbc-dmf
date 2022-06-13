@@ -106,7 +106,7 @@ export class UserProfileComponent implements OnInit {
       id: '2',
       fullName: 'Dr. Sally Jones',
       expiryDate: '-',
-      status: 'Inactive',
+      status: 'Rejected',
       role: 'Medical Practitioner',
       lastActive: 'September 11, 2021',
     },
@@ -128,14 +128,6 @@ export class UserProfileComponent implements OnInit {
     },
     {
       id: '5',
-      fullName: 'Tobi McIntosh, NP',
-      expiryDate: '-',
-      status: 'Rejected',
-      role: 'Medical Practitioner',
-      lastActive: 'May 11, 2022',
-    },
-    {
-      id: '6',
       fullName: 'Will Mathews, NP',
       expiryDate: 'October 10, 2022',
       status: 'Active',
@@ -148,15 +140,6 @@ export class UserProfileComponent implements OnInit {
     {
       id: '1',
       fullName: 'Torres, Sharon',
-      medicalPractitionerName: 'Dr. Rajan Mehra',
-      expiryDate: 'July 5, 2022',
-      status: 'Active',
-      role: 'Medical Practitioner',
-      lastActive: 'September 11, 2021',
-    },
-    {
-      id: '2',
-      fullName: 'Torres, Sharon',
       medicalPractitionerName: 'Will Mathews, NP',
       expiryDate: 'August 24, 2022',
       status: 'Active',
@@ -164,7 +147,7 @@ export class UserProfileComponent implements OnInit {
       lastActive: 'May 11, 2022',
     },
     {
-      id: '3',
+      id: '2',
       fullName: 'Tucker, Devi',
       medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: '-',
@@ -173,16 +156,17 @@ export class UserProfileComponent implements OnInit {
       lastActive: 'May 11, 2022',
     },
     {
-      id: '4',
+      id: '3',
       fullName: 'Varga, Tarik',
       medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: 'February 1, 2022',
-      status: 'InActive',
+      status: 'Inactive',
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
+    
     {
-      id: '5',
+      id: '4',
       fullName: 'Marsh, Caleb',
       medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: '-',
@@ -191,7 +175,7 @@ export class UserProfileComponent implements OnInit {
       lastActive: 'May 11, 2022',
     },
     {
-      id: '6',
+      id: '5',
       fullName: 'Torres, Sharon',
       medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: 'July 5, 2022',
@@ -200,7 +184,7 @@ export class UserProfileComponent implements OnInit {
       lastActive: 'May 11, 2022',
     },
     {
-      id: '7',
+      id: '6',
       fullName: 'Dodge, Mike',
       medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: 'September 17, 2022',
@@ -210,7 +194,7 @@ export class UserProfileComponent implements OnInit {
     },
 
     {
-      id: '8',
+      id: '7',
       fullName: 'Mehra, Rajan',
       medicalPractitionerName: 'Tobi McIntosh, NP',
       expiryDate: '-',
@@ -219,7 +203,7 @@ export class UserProfileComponent implements OnInit {
       lastActive: 'May 11, 2022',
     },
     {
-      id: '9',
+      id: '8',
       fullName: 'Ram, Peter ',
       medicalPractitionerName: 'Will Mathews, NP',
       expiryDate: '-',
@@ -231,6 +215,15 @@ export class UserProfileComponent implements OnInit {
       id: '9',
       fullName: 'Smith, John',
       medicalPractitionerName: 'Will Mathews, NP',
+      expiryDate: '-',
+      status: 'Rejected',
+      role: 'Medical Practitioner',
+      lastActive: 'May 11, 2022',
+    },
+    {
+      id: '10',
+      fullName: 'Varga, Tarik',
+      medicalPractitionerName: 'Dr. Shelby Drew',
       expiryDate: '-',
       status: 'Rejected',
       role: 'Medical Practitioner',
@@ -260,7 +253,7 @@ export class UserProfileComponent implements OnInit {
       fullName: 'Mehra, Rajan',
       role: 'MOM',
       expiryDate: '-',
-      status: 'InActive',
+      status: 'Inactive',
       lastActive: 'May 11, 2022',
     },
     {
@@ -268,7 +261,7 @@ export class UserProfileComponent implements OnInit {
       fullName: 'Varga, Tarik',
       role: 'MOA',
       expiryDate: 'February 1, 2022',
-      status: 'InActive',
+      status: 'Inactive',
       lastActive: 'May 11, 2022',
     },
     {
@@ -295,6 +288,14 @@ export class UserProfileComponent implements OnInit {
       status: 'Active',
       lastActive: 'March 11, 2022',
     },
+    {
+      id: '8',
+      fullName: 'Varga, Tarik',
+      role: 'MOA',
+      expiryDate:'',
+      status: 'Rejected',
+      lastActive: 'May 11, 2022',
+    },
   
   ];
 
@@ -312,6 +313,17 @@ export class UserProfileComponent implements OnInit {
     this.profileService.getProfilePractitionerRoles({}).subscribe((profile) => {
       console.log('Get Practioners roles data', profile);
     });
+
+    // Sort Medical Staff table
+    this.sortMedicalPractitionerRolesData({active:'fullName', direction: 'asc'});
+
+    // Sort Medical Staff table
+    this.sortMedicalStaffData({active:'fullName', direction: 'asc'});
+
+    // Sort Medical Practitioner table
+    this.sortMedicalPractitionerData({active:'fullName', direction: 'asc'});
+
+
   }
 
   permissions(
@@ -430,11 +442,6 @@ export class UserProfileComponent implements OnInit {
         {
           if (
             this.userProfile?.clinics?.some((UserRole) => {
-              console.log(
-                'UserRole',
-                UserRole.role,
-                ProviderRole.MedicalOfficeManager
-              );
               return UserRole.role === ProviderRole.MedicalOfficeManager;
             })
           ) {
@@ -809,6 +816,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   sortMedicalPractitionerData(sort: Sort) {
+    console.log(sort)
     const data = this.dataSource.slice();
     if (!sort.active || sort.direction === '') {
       this.dataSource = data;
