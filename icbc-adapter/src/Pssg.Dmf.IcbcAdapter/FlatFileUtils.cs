@@ -102,7 +102,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(".");
+                    var files = client.ListDirectory(client.WorkingDirectory);
 
                     foreach (var file in files)
                     {
@@ -251,42 +251,47 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
 
-            
             foreach (DmerCase item in unsentItems.Items)
             {
                 // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
-
-                // (TODO)
-
-                var newUpdate = new MedicalUpdate()
-                {
-                     LicenseNumber = item.Driver.DriverLicenseNumber,
-                     Surname = item.Driver.Surname,                     
-                };
-
-                var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
                 
-                if (firstDecision != null)
+                if (item.Driver != null)
                 {
-                    if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                    var newUpdate = new MedicalUpdate()
                     {
-                        newUpdate.MedicalDisposition = "P";
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Surname = item.Driver.Surname,
+                    };
+
+                    var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+
+                    if (firstDecision != null)
+                    {
+                        if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                        {
+                            newUpdate.MedicalDisposition = "P";
+                        }
+                        else
+                        {
+                            newUpdate.MedicalDisposition = "J";
+                        }
                     }
                     else
                     {
                         newUpdate.MedicalDisposition = "J";
                     }
+
+                    DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
+
+                    newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
+
+                    data.Add(newUpdate);
                 }
                 else
                 {
-                    newUpdate.MedicalDisposition = "J";
+                    Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
                 }
-
-                DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
-
-                newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
-
-                data.Add(newUpdate);
+                
             }
 
             return data;
