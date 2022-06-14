@@ -1,118 +1,549 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Driver Fitness Program</title>
-	<link href="css/style.css" type="text/css" rel="stylesheet">
-	<style type="text/css">
-		@font-face {
-			font-family: 'BCSans';
-			font-style: normal;
-			src: url('assets/fonts/BC-Sans/BCSans-Regular.woff2') format('woff2'),
-			url('assets/fonts/BC-Sans/BCSans-Regular.woff') format('woff');
-		}
-	</style>
-	<style type="text/css">
-		@font-face {
-			font-family: 'BCSans';
-			font-style: italic;
-			src: url('assets/fonts/BC-Sans/BCSans-Italic.woff2') format('woff2'),
-			url('assets/fonts/BC-Sans/BCSans-Italic.woff') format('woff');
-		}
-	</style>
+	<title>DMFT</title>
+	<style>
+
+* {
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'BC Sans',Arial,sans-serif;
+	font-size: 16px;
+}
+
+img {
+	width: 100%;
+}
+
+.center {
+	text-align: center;
+}
+
+.center-item {
+	margin: 0 auto;
+	display: block;
+}
+
+.spacer {
+	margin: 0 16px;
+}
+
+/*--Typography----------------*/
+p {
+	margin-bottom: 24px;
+}
+h1,
+h2,
+h3 {
+	line-height: 1.25;
+	font-weight: 700;
+}
+
+h1 {
+	font-size: 38px;
+	margin-bottom: 16px;
+}
+
+h2 {
+	font-size: 30px;
+}
+
+h3 {
+	font-size: 24px;
+	margin-bottom: 16px;
+}
+
+
+/*--Links----------------*/
+
+.--link-white {
+	color: #fff;
+	font-weight: 700;
+}
+
+/*--Buttons----------------*/
+
+.BC-Gov-PrimaryButton {
+    background-color: #003366;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 12px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.BC-Gov-PrimaryButton:hover {
+  text-decoration: underline;
+  opacity: 0.80;
+}
+
+:focus {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+.BC-Gov-PrimaryButton:active {
+  opacity: 1;
+}
+
+.BC-Gov-PrimaryButton-Dark {
+    background-color: #fff;
+    border: none;
+    border-radius: 4px;
+    color: #313132;
+    padding: 12px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.BC-Gov-PrimaryButton-Dark:hover {
+  text-decoration: underline;
+  background-color: #f2f2f2
+}
+
+:focus {
+  outline: 4px solid #3B99FC;
+  outline-offset: 1px;
+}
+
+.BC-Gov-PrimaryButton-Dark:active {
+  background-color: #fff;
+}
+
+.background-colour {
+  background-color: #003366;
+  height: 100px;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.BC-Gov-SecondaryButton-Dark {
+    background: none;
+    border-radius: 4px;
+    border: 2px solid #fff;
+    padding: 10px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    color: #fff;
+}
+
+.BC-Gov-SecondaryButton-Dark:hover {
+    text-decoration: underline;
+    background-color: #fff;
+    color: #313132;
+    }
+
+:focus {
+    outline-offset: 1px;
+    outline: 4px solid #3B99FC;
+    }
+
+.BC-Gov-SecondaryButton-Dark:active {
+    background-color: #f2f2f2;
+    color: #313132;
+    }
+
+.background-colour {
+    background-color: #003366;
+    height: 100px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+
+/*--Images----------------*/
+.site-logo {
+	max-width: 193px;
+}
+
+.medical-professional-icon {
+	width: 38px;
+	margin-bottom: 8px;
+}
+
+.about-icon,
+.concern-icon {
+	width: 60px;
+	height: 60px;
+	margin-bottom: 8px;
+}
+
+.contact-icon {
+	width: 95px;
+	height: 80px;
+	margin-right: 20px;
+}
+
+.phone-icon,
+.email-icon {
+	width: 25px;
+	height: 25px;
+	margin-right: 6px;
+	vertical-align: bottom;
+}
+
+/*--Containers----------------*/
+.container {
+	width: 1200px;
+	margin: 0 auto;
+	z-index: -10;
+}
+
+.container-alt {
+	width: 1180px;
+	margin: 0 auto;
+}
+
+.container-background {
+	width: 1180px;
+	margin: 0 auto;
+	border-radius: 4px;
+    background-color: #ecf5ff;
+	margin-top: -20px;
+	z-index: 100;
+	border-top: 5px solid #fcba19;
+	padding: 50px 30px;
+	height: 1240px;
+}
+
+/*--Header----------------*/
+.site-header {
+	width: 100%;
+	height: 100px;
+	background-color: #003366;
+	border-bottom: 4px solid #fcba19;
+}
+
+.site-header__inner {
+	display: flex;
+	justify-content: space-between;
+}
+
+.site-header__buttons {
+	margin-top: 24px;
+}
+
+.site-logo {
+	margin-top: 10px;
+}
+
+/*--Hero----------------*/
+.hero {
+	height: 455px;
+	position: relative;
+	overflow: hidden;
+}
+
+.hero__img {
+	margin-top: -60px;
+}
+
+.hero__content {
+	position: absolute;
+	top: 40px;
+	left: 40px;
+	color: #fff;
+	max-width: 573px;
+}
+
+.hero__content p {
+	font-size: 18px;
+	margin-bottom: 20px;
+}
+
+.hero h1 span {
+	font-size: 30px;
+}
+
+.hero__content ul {
+	font-size: 18px;
+	margin-left: 40px;
+}
+
+.hero__content ul li {
+	margin-bottom: 16px;
+}
+
+.hero__overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+/*--Medical Professionals----------------*/
+.medical-professionals {
+	background-color: #003366;
+	color: #fff;
+	margin-bottom: 20px;
+	padding: 40px 180px;
+	border-radius: 4px;
+	box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
+}
+
+.medical-professionals__buttons {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 40px;
+	margin-left: -21px;
+}
+
+.medical-professionals__buttons div {
+	display: flex;
+	width: 290px;
+	justify-content: space-between;
+}
+
+.medical-professionals h2 {
+	font-size: 30px;
+	margin-bottom: 16px;
+}
+
+.medical-professionals hr {
+	width: 679px;
+	margin-bottom: 30px;
+	border: 1px solid;
+}
+
+/*--Card Container----------------*/
+.card-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+/*--About----------------*/
+.about {
+	background: #fff;
+	padding: 40px;
+	width: 49%;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
+}
+
+.about p {
+	font-size: 18px;
+}
+
+.about hr {
+	width: 400px;
+	margin-bottom: 30px;
+	border: 1px solid;
+}
+
+/*--Concern----------------*/
+.concerns {
+	background: #38598a;
+	color: #fff;
+	padding: 40px;
+	width: 49%;
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
+}
+
+.concerns p {
+	font-size: 18px;
+}
+
+p.note {
+	font-size: 14px;
+	text-align: center;
+	background: rgba(242, 242, 242, 0.32);
+	padding: 2px;
+	border-radius: 4px;
+}
+
+.concerns hr {
+	width: 400px;
+	margin-bottom: 30px;
+	border: 1px solid;
+}
+
+/*--Assistance----------------*/
+.assistance {
+	background: #fff;
+	margin-bottom: 20px;
+	display: flex;
+	justify-content: center;
+	border: 2px solid #fcba19;
+	padding: 35px;
+	border-radius: 4px;
+	box-shadow: 0px 5px 5px 0px rgba(0, 51, 102, 0.35);
+}
+
+.assistance h2 {
+	color: #003366;
+	margin-bottom: 16px;
+}
+
+.assistance__contacts {
+	display: flex;
+	width: 400px;
+	justify-content: space-between;
+}
+
+
+/*--Footer----------------*/
+
+.site-footer {
+	width: 100%;
+	height: 80px;
+	background-color: #003366;
+	border-top: 3px solid #fcba19;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 120px;
+}
+
+.site-footer-links {
+	display: flex;
+	list-style: none;
+	justify-content: center;
+}
+
+.site-footer-links a {
+	color: #fff;
+	margin-left: 10px;
+	margin-right: 10px;
+	text-decoration: none;
+}
+
+.site-footer-links a:hover {
+	text-decoration: underline;
+}
+
+.site-footer-links span {
+	color: #fff;
+}
+
+.site-copyright {
+	text-align: center;
+	padding: 12px 0;
+}
+</style>
 </head>
 
 <body>
-
 	<header class="site-header">
-		<div class="container">
-			<div class="site-header-content">
-				<a href="" class="site-logo"><img src="./img/gov_bc_logo.svg" alt="Government of B.C."></a>
-
-				<a class="btn btn-secondary header-nav-buttons" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card"
-				   target="_blank"><span class="button_text">Register</span></a>
-				<a class="btn header-nav-buttons" href="rsbc-dfp-medical-portal/"
-				   target="_blank"><span class="button_text">Login</span></a>
+		<div class="site-header__inner container">
+			<a href="/"><img class="site-logo" src="img/british-columbia-logo.svg" alt="British Columbia Logo"></a>
+			<div class="site-header__buttons">
+				<a  href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card"  target="_blank" class="BC-Gov-SecondaryButton-Dark spacer">Register</a>
+				<a href="rsbc-dfp-medical-portal"  target="_blank" class="BC-Gov-PrimaryButton-Dark">Login</a>
 			</div>
 		</div>
 	</header>
 
 	<main>
-		<section class="hero">
-			<div class="container">
-			<div style="background-image: url('../img/u23.svg');background-repeat: no-repeat;background-size: auto;			height: 455px;">
-				<div class="hero-content">
-					<span class="section_title">Welcome to RoadSafetyBC's</span>
-					<span class="section_heading">Driver Medical Fitness Portal</span>
-					<span style="width: 426px; margin-bottom: 30px;">RoadSafetyBC is part of the Ministry of Public Safety and Solicitor General and is responsible for road safety in the province. We govern drivers, implement road safety policies, and work with our partners to help reach our goal of zero traffic fatalities.</span>
+		<section class="hero container">
+			<img class="hero__img" src="img/hero.svg" alt="">
+			<img class="hero__overlay" src="img/hero-overlay.svg" alt="">
+			<div class="hero__content">
+				<h1><span>RoadSafetyBC's</span><br>Driver Medical Fitness Portal</h1>
+				<p>RoadSafetyBC is part of the Ministry of Public Safety and Solicitor General. This portal serves the medical community by:</p>
+				<ul>
+					<li>Modernizing BC’s driver medical fitness process by providing an electronic Driver's Medical Examination Report (DMER)</li>
+					<li>Simplifying the process of completing, submitting and monitoring the status of a DMER</li>
+					<li>Enhancing public safety and contributing to RoadSafetyBC's Vision Zero goal</li>
+				</ul>
+			</div>
+		</section>
+
+		<div class="container-background">
+			<section class="medical-professionals">
+				<img class="medical-professional-icon center-item" src="img/medical-professionals-icon.svg" alt="Medical Professionals Icon">
+				<h3 class="center">Medical Professionals</h3>
+				<hr class="center-item">
+				<h2 class="center">Has RoadSafetyBC required your patient to have a DMER completed?  Or do you want to check the status of a DMER you have submitted?</h2>
+				<p>If you are a medical practitioner, Medical Office Manager or Medical Office Assistant, click below to access the RoadSafetyBC Medical Practitioner Portal.</p>
+				<div class="medical-professionals__buttons">
 					<div>
-						<a class="btn btn-secondary" href="https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/"
-						   target="_blank"><span class="button_text">Learn More</span></a>
+						<a class="BC-Gov-SecondaryButton-Dark" target="_blank" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card">Register</a>
+						<a class="BC-Gov-PrimaryButton-Dark" target="_blank" href="rsbc-dfp-medical-portal">Login</a>
 					</div>
 				</div>
-			</div>
-			</div>
-		</section>
-
-		<section>
-			<div class="container">
-				<p class="hero-footnote" color="#313132" > To help fulfill our responsibility for assessing and determining driver medical fitness, RoadSafetyBC may request an individual to complete a Driver’s Medical Examination Report (DMER), which is the principal assessment tool used to help determine if a driver’s medical condition affects their ability to drive safely. </p>
-			</div>
-		</section>
-
-		<section class="drivers-cta">
-			<div class="container">
-
-				<div class="drivers-cta-content center">
-					<span class="section_title">For Drivers</span>
-					<div><img id="u41_img" class="content-divider" src="img/u41.svg"></div>
-
-					<span class="section_title">Are you required to have a DMER completed?</span>
-					<p>Have you or someone you know been notified  to complete a DMER? Click below to access information on what to do and what to expect once you have received a notification to complete a DMER.</p>
-					<div class="driver-buttons">
-						<a class="btn wide-button header-nav-buttons" href="rsbc-dfp-driver-portal"
-						   target="_blank">Log In to the Drivers Portal</a>
-						<a class="btn btn-secondary header-nav-buttons" href="https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov/"
-						   target="_blank">Learn more about DMER process</a>
+				<a class="--link-white center-item center" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof" target="_blank">Learn more about DMER guidelines for medical practitioners</a>
+			</section>
+			
+			<section class="card-container">
+				<div class="about">
+					<div>
+						<img class="about-icon center-item" src="img/about-icon.svg" alt="About Icon">
+						<h3 class="center">About RoadSafetyBC</h3>
+						<hr class="center-item">
+						<p>At RoadSafetyBC we are responsible for determining driver medical fitness. We require certain individuals to complete a DMER. We use DMERs to assess if a driver's medical condition affects their ability to drive safely.</p>
 					</div>
-
-				</div>
-			</div>
-		</section>
-
-		<section class="cards">
-			<div class="container">
-				<div class="cards-content">
-					<div class="card center">
-						Card 1
-					</div>
-					<div class="card center card--isblue">
-						Card 2
-					</div>
-					<div class="card center card--isdark">
-						Card 3
+					<div class="center center-item">
+						<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc" target="_blank">Learn more</a>
 					</div>
 				</div>
-			</div>
 
-			<section class="contact-cta">
-				<div class="container">
-					<div class="contact-cta__content center">
-						<img class="contact-cta__icon" src="https://ess.gov.bc.ca/img/contact.svg" alt="Phone">
-						<h3>Contact Us</h3>
-						<p>If you have any questions or need assistance, please contact our Support team toll free at
-							1-800-000-0000.</p>
+				<div class="concerns">
+					<div>
+						<img class="concern-icon center-item" src="img/concern-icon.svg" alt="Concern Icon">
+						<h3 class="center">Do you have a concern?</h3>
+						<hr class="center-item">
+						<p>If a patient has a medical condition that raises significant concern about their ability to safely operate a motor vehicle
+						<p class="note">NOTE: If a patient needs a DMER completed, this does not replace performing a medical assessment and submitting a DMER for them.</p>
+					</div>
+					<div class="center center-item">
+						<a class="BC-Gov-PrimaryButton-Dark" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof/reporting-person" target="_blank">Report a condition</a>
 					</div>
 				</div>
 			</section>
 
+			<div class="assistance">
+				<img class="contact-icon" src="img/contact-icon.svg" alt="Contact Icon">
+				<div>
+					<h2>Need assistance?</h2>
+					<p><strong>Contact RoadSafetyBC</strong><br>Hours of operation: Monday to Friday from 8am to 5pm</p>
+					
+					<div class="assistance__contacts">
+						<div><img class="phone-icon" src="img/phone-icon.svg">1-855 387-7747</div>
+						<div><img class="email-icon" src="img/email-icon.svg">RoadSafetyBC@gov.bc.ca</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</main>
 
 	<footer class="site-footer">
-		<div class="container">
+		<div class="site-footer-inner">
 			<ul class="site-footer-links">
 				<li><a href="/">Home</a></li>
 				<span class="divider">|</span>
@@ -126,11 +557,11 @@
 				<span class="divider">|</span>
 				<li><a href="https://www2.gov.bc.ca/gov/content/home/copyright">Copyright</a></li>
 				<span class="divider">|</span>
-				<li><a href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services">Contact Us</a>
-				</li>
-				<span class="divider">
+				<li><a href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services">Contact Us</a></li>
 			</ul>
 		</div>
 	</footer>
+	<section class="site-copyright">Copyright © 2022 Province of British Columbia. All rights reserved.</section>
 
 </body>
+</html>
