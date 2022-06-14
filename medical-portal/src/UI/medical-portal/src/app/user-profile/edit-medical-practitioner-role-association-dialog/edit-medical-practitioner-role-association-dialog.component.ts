@@ -1,4 +1,6 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-edit-medical-practitioner-role-association-dialog',
@@ -10,7 +12,11 @@ import { Component, HostBinding, OnInit } from '@angular/core';
 })
 export class EditMedicalPractitionerRoleAssociationDialogComponent {
   @HostBinding('class') className = 'mat-dialog-container-host';
-  constructor() {}
+  constructor(
+    public dialogRef: MatDialogRef<EditMedicalPractitionerRoleAssociationDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) 
+    public data: any,
+  ) {}
 
   onConfirmChanges() {}
 
