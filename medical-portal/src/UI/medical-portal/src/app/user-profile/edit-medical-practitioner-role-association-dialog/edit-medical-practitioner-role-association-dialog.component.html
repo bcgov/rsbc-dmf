@@ -16,6 +16,7 @@
             name="firstName"
             [disabled]="true"
             placeholder="First Name"
+            [(ngModel)]="data.firstName"
           />
         </mat-form-field>
       </div>
@@ -27,6 +28,7 @@
             name="lastName"
             [disabled]="true"
             placeholder="Last Name "
+            [(ngModel)]="data.lastName"
           />
         </mat-form-field>
       </div>
@@ -35,16 +37,16 @@
       <div fxflex style="width: 100%">
         <label class="form-label">Email Address</label><br />
         <mat-form-field appearance="outline">
-          <input matInput name="email" placeholder="Email Address " />
+          <input matInput name="email" placeholder="Email Address " [disabled]="true" [(ngModel)]="data.email"/>
         </mat-form-field>
       </div>
     </div>
 
     <div>
       <label class="form-label">Role</label>
-      <mat-radio-group aria-label="Select an option" class="role-radio-group">
-        <mat-radio-button value="1">Medical Office Manager</mat-radio-button>
-        <mat-radio-button value="2">Medical Office Assistant</mat-radio-button>
+      <mat-radio-group name="role" aria-label="Select an option" class="role-radio-group" [(ngModel)]="data.role">
+        <mat-radio-button name="role" value="MOM" >Medical Office Manager</mat-radio-button>
+        <mat-radio-button name="role" value="MOA">Medical Office Assistant</mat-radio-button>
       </mat-radio-group>
     </div>
     <div>
