@@ -380,7 +380,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
-                        sourceType: "documentstorage", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                        sourceType: "icbc-adapter", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
                         restrictedToMinimumLevel: LogEventLevel.Information,
 #pragma warning disable CA2000 // Dispose objects before losing scope
                         messageHandler: new HttpClientHandler
@@ -393,8 +393,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 #pragma warning restore CA2000 // Dispose objects before losing scope
                     )
                     .CreateLogger();
-
-                
             }
             else
             {
