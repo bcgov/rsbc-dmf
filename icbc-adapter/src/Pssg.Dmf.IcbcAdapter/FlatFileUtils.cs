@@ -179,6 +179,9 @@ namespace Rsbc.Dmf.IcbcAdapter
             var engine = new FileHelperEngine<NewDriver>();
             engine.Options.IgnoreLastLines = 1;
             var records = engine.ReadString(data);
+            
+            LogStatement(hangfireContext, $"{records.Length} records were found.");
+            
             foreach (var record in records)
             {
                 LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
