@@ -164,7 +164,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         string data = StringUtility.StreamToString(memoryStream);
                         
-                        //ProcessCandidates(hangfireContext, data);
+                        ProcessCandidates(hangfireContext, data);
 
                     }
                 }
