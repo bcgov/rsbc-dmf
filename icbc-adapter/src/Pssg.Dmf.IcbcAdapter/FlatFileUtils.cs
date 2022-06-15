@@ -163,7 +163,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                         client.DownloadFile(file.FullName, memoryStream);
 
                         string data = StringUtility.StreamToString(memoryStream);
-                        
+                        LogStatement(hangfireContext, data);
                         ProcessCandidates(hangfireContext, data);
 
                     }
