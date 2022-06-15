@@ -134,6 +134,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
+            string folder = _configuration["SCP_FOLDER"];
+
             if (!CheckScpSettings(host, username, password, key))
             {
                 LogStatement (hangfireContext, "No SCP configuration, skipping check for work.");
@@ -147,7 +149,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory("data");
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = client.WorkingDirectory;
+                    }
+
+                    var files = client.ListDirectory(folder);
 
                     foreach (var file in files)
                     {
