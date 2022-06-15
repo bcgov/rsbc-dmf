@@ -147,7 +147,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(client.WorkingDirectory);
+                    var files = client.ListDirectory("data");
 
                     foreach (var file in files)
                     {
