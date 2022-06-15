@@ -22,6 +22,10 @@ REM PHSA Adapter
 
 oc process -f ..\phsa-adapter\openshift\templates\phsa-adapter.template.yml --param-file ..\..\..\params\phsa-adapter.dev.params | oc apply -f -
 
+REM Legacy Adapter (DPS, DFCMS, DFWEB)
+
+oc process -f ..\legacy-adapter\openshift\templates\legacy-adapter.template.yml --param-file ..\..\..\params\legacy-adapter.dev.params | oc apply -f -
+
 REM LANDING PAGE
 
 oc process -f ..\landing-page\openshift\templates\landing-page.template.yml --param-file ..\..\..\params\landing-page.dev.params | oc apply -f -
