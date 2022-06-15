@@ -280,7 +280,7 @@ namespace Rsbc.Dmf.CaseManagement
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
                     await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
-                    if (allComments || comment.dfp_webcomments.GetValueOrDefault())
+                    if (allComments || comment.dfp_icbc.GetValueOrDefault())
                     {
                         LegacyComment legacyComment = new LegacyComment
                         {
@@ -288,7 +288,7 @@ namespace Rsbc.Dmf.CaseManagement
                             CommentDate = comment.dfp_date.GetValueOrDefault(),
                             CommentId = comment.dfp_commentid.ToString(),
                             CommentText = comment.dfp_commentdetails,
-                            CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
+                            CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "",
                             SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                             UserId = comment.dfp_userid
                         };
@@ -370,7 +370,7 @@ namespace Rsbc.Dmf.CaseManagement
                         foreach (var comment in @case.dfp_incident_dfp_comment)
                         {
                             await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
-                            if (allComments || comment.dfp_webcomments.GetValueOrDefault())
+                            if (allComments || comment.dfp_icbc.GetValueOrDefault())
                             {                                
                                 LegacyComment legacyComment = new LegacyComment
                                 {
@@ -378,7 +378,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     CommentDate = comment.dfp_date.GetValueOrDefault(),
                                     CommentId = comment.dfp_commentid.ToString(),
                                     CommentText = comment.dfp_commentdetails,
-                                    CommentTypeCode = comment.dfp_webcomments.GetValueOrDefault() == true ? "W" : "",
+                                    CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "",
                                     SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                                     UserId = comment.dfp_userid,
                                     Driver = driver
@@ -529,7 +529,7 @@ namespace Rsbc.Dmf.CaseManagement
             dfp_comment @comment = new dfp_comment()
             {
                  dfp_date = DateTimeOffset.Now,
-                 dfp_webcomments = true,
+                 dfp_icbc = true,
                  dfp_userid = request.UserId,
                  dfp_commentdetails = request.CommentText                   
             };
