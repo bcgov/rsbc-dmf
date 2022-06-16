@@ -134,6 +134,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
+            string folder = _configuration["SCP_FOLDER"];
+
             if (!CheckScpSettings(host, username, password, key))
             {
                 LogStatement (hangfireContext, "No SCP configuration, skipping check for work.");
@@ -147,7 +149,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(client.WorkingDirectory);
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = client.WorkingDirectory;
+                    }
+
+                    var files = client.ListDirectory(folder);
 
                     foreach (var file in files)
                     {
@@ -156,8 +163,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                         client.DownloadFile(file.FullName, memoryStream);
 
                         string data = StringUtility.StreamToString(memoryStream);
-                        
-                        //ProcessCandidates(hangfireContext, data);
+                        LogStatement(hangfireContext, data);
+                        ProcessCandidates(hangfireContext, data);
 
                     }
                 }
@@ -172,6 +179,9 @@ namespace Rsbc.Dmf.IcbcAdapter
             var engine = new FileHelperEngine<NewDriver>();
             engine.Options.IgnoreLastLines = 1;
             var records = engine.ReadString(data);
+            
+            LogStatement(hangfireContext, $"{records.Length} records were found.");
+            
             foreach (var record in records)
             {
                 LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
