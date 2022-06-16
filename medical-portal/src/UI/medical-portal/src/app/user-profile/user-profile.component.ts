@@ -565,8 +565,6 @@ export class UserProfileComponent implements OnInit {
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
-      //this.userProfile = result;
     });
   }
 
