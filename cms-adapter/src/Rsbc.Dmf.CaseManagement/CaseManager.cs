@@ -440,18 +440,20 @@ namespace Rsbc.Dmf.CaseManagement
         private incident GetIncidentById(string id)
         {
             incident result = null;
-            try
+            if (!string.IsNullOrEmpty(id))
             {
-                result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
-                // ensure the driver is fetched.
-                LazyLoadProperties(result).GetAwaiter().GetResult();
+                try
+                {
+                    result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
+                    // ensure the driver is fetched.
+                    LazyLoadProperties(result).GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    result = null;
+                }
             }
-            catch (Exception ex)
-            {
-                result = null;
-            }
-            
-
+                       
             return result;
         }
 
@@ -502,7 +504,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request)
         {
-            CreateStatusReply result = new CreateStatusReply();            
+            CreateStatusReply result = new CreateStatusReply()
+            {
+                Success = false
+            };            
             string caseId = request.CaseId;
             if (string.IsNullOrEmpty( request.CaseId))
             {
@@ -513,43 +518,51 @@ namespace Rsbc.Dmf.CaseManagement
                      SequenceNumber = request.SequenceNumber,
                      Surname = request.Driver.Surname
                 };
-                Guid? createResult = await LegacyCandidateCreate(newCandidate);
-                if (createResult != null) 
+
+                await LegacyCandidateCreate(newCandidate);
+                
+                // now do a search to get the case.
+                var searchResult = await LegacyCandidateSearch(newCandidate);
+                var firstCase = searchResult.Items.FirstOrDefault();
+                if (firstCase != null)
                 {
-                    caseId = createResult.ToString();
+                    caseId = firstCase.Id;
                 }
+
             }
-
-            // get the case
-            incident @case = GetIncidentById(caseId);
-
-            var driver = @case.dfp_DriverId;
-
-            // create the comment
-            dfp_comment @comment = new dfp_comment()
+            if (!string.IsNullOrEmpty(caseId))
             {
-                 dfp_date = DateTimeOffset.Now,
-                 dfp_icbc = true,
-                 dfp_userid = request.UserId,
-                 dfp_commentdetails = request.CommentText                   
-            };
+                // get the case
+                incident @case = GetIncidentById(caseId);
 
-            try
-            {
-                dynamicsContext.AddTodfp_comments(@comment);
+                var driver = @case.dfp_DriverId;
 
-                dynamicsContext.SetLink(@comment, nameof(dfp_comment.dfp_DriverId), driver);
-                dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), @comment);
+                // create the comment
+                dfp_comment @comment = new dfp_comment()
+                {
+                    dfp_date = DateTimeOffset.Now,
+                    dfp_icbc = true,
+                    dfp_userid = request.UserId,
+                    dfp_commentdetails = request.CommentText
+                };
 
-                await dynamicsContext.SaveChangesAsync();
-                result.Success = true;
-                result.Id = @comment.dfp_commentid.ToString();
-                dynamicsContext.DetachAll();
-            }
-            catch (Exception ex)
-            {
-                result.Success = false;                
-            }
+                try
+                {
+                    dynamicsContext.AddTodfp_comments(@comment);
+
+                    dynamicsContext.SetLink(@comment, nameof(dfp_comment.dfp_DriverId), driver);
+                    dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), @comment);
+
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    result.Id = @comment.dfp_commentid.ToString();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                }
+            }           
 
             return result;
         }
@@ -732,7 +745,7 @@ namespace Rsbc.Dmf.CaseManagement
             
             if (! string.IsNullOrEmpty(request?.Surname))
             {
-                driverResults = data.Where(x => x?.dfp_PersonId?.lastname == request?.Surname).ToArray();
+                driverResults = data.Where(x => (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
             }
             else
             {
@@ -956,7 +969,7 @@ namespace Rsbc.Dmf.CaseManagement
             var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber );
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
-            var driverResults = data.Where (x => x?.dfp_PersonId?.lastname == criteria?.Surname).ToArray();
+            var driverResults = data.Where (x => (bool)(x?.dfp_PersonId?.lastname.StartsWith( criteria?.Surname))).ToArray();
 
             if (driverResults.Length > 0)
             {
