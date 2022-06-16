@@ -160,11 +160,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
-                CaseId = comment.CaseId,
-                CommentText = comment.CommentText,
-                CommentTypeCode = comment.CommentTypeCode,
+                CaseId = comment.CaseId ?? String.Empty,
+                CommentText = comment.CommentText ?? String.Empty,
+                CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
                 SequenceNumber = comment.SequenceNumber,
-                UserId = comment.UserId,
+                UserId = comment.UserId ?? String.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
                 Driver = driver
             });
