@@ -247,7 +247,43 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Assert.True(found);
         }
 
-        [Fact]
+       // {"userId":"IDIR\\SMILLAR","driver":\{"licenseNumber":"0200103","lastName":"KNI","loadedFromICBC":false,"flag51":false} 
+// ,"sequenceNumber":4,"commentTypeCode":"W","commentText":"test new one"}
+
+
+    [Fact]
+    public async void DfwebSubmitCommentNoCase()
+    {
+        Login();
+
+
+        var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
+
+        var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver()
+        { LicenseNumber = testDl, LastName = testSurcode };
+
+        var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment()
+        {
+            CommentText = "test new one",
+            Driver = driver,
+            SequenceNumber = 4,
+            CommentTypeCode = "W",
+            UserId = "IDIR\\TESTUSER",
+            CaseId = null
+        };
+
+        var stringContent = JsonConvert.SerializeObject(comment);
+
+        request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+
+        var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+        var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
         public async void DfwebGetComments()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
