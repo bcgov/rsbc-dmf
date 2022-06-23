@@ -196,18 +196,18 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
         [DisableRequestSizeLimit]
-        public async Task<IActionResult> UpdateCaseDocuments([FromRoute] string caseId, 
-            [FromForm] string driversLicense, 
-            [FromForm] string surcode,
-            [FromForm] string batchId,
-            [FromForm] DateTimeOffset faxReceivedDate,
-            [FromForm] DateTimeOffset importDate,
-            [FromForm] string importID,
-            [FromForm] string originatingNumber,
-            [FromForm] int documentPages,
-            [FromForm] string documentType,
-            [FromForm] string validationMethod,
-            [FromForm] string validationPrevious,
+        public async Task<IActionResult> UpdateCaseDocuments([FromRoute] string caseId,  // GUID
+            [FromForm] string driversLicense,  // Driver -> DL
+            [FromForm] string surcode,         // Driver -> Lastname
+            [FromForm] string batchId,         // add to document entity
+            [FromForm] DateTimeOffset faxReceivedDate,  // dfp_faxreceivedate
+            [FromForm] DateTimeOffset importDate,  // dfp_dpsprocessingdate
+            [FromForm] string importID, // add to document entity
+            [FromForm] string originatingNumber, // dfp_faxnumber
+            [FromForm] int documentPages, // add to document entity
+            [FromForm] string documentType, // dfp_documenttypeid
+            [FromForm] string validationMethod, // add to document entity
+            [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file)
         {
             return Ok();
