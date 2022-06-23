@@ -21,10 +21,12 @@ using System.Web;
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
   
-    public class DynamicsInterfaceTest : ApiIntegrationTestBaseWithLogin
+
+
+    public class IcbcInterfaceTest : ApiIntegrationTestBaseWithLogin
     {
 
-        public DynamicsInterfaceTest(CustomWebApplicationFactory<Startup> factory)
+        public IcbcInterfaceTest(CustomWebApplicationFactory<Startup> factory)
             : base(factory)
         { }
 
@@ -48,20 +50,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         /// <summary>
-        /// Test the MS Dynamics interface
+        /// Test the Candidates List
         /// </summary>
         [Fact]
-        public async void TestDriverHistory()
+        public async void TestCandidatesList()
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
             Login();
 
-            TestDl(testDl);
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
 
-            testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];            
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
 
-            TestDl(testDl);
+            // parse as JSON.
+            var jsonString = await response.Content.ReadAsStringAsync();
+
 
         }
     }
