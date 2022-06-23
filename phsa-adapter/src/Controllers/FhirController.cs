@@ -494,7 +494,10 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             }
                         }
                     }
-                },
+                }
+                /*
+                ,
+                
                 new Bundle.EntryComponent()
                 {
                     Resource = new Practitioner()
@@ -535,7 +538,9 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
                             }
                         }
                     }
+                
                 }
+                */
             }
             };
 
