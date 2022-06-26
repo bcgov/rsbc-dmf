@@ -271,7 +271,7 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             if (!env.IsProduction()) {
                 
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
 
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICBC Adapter v1"));

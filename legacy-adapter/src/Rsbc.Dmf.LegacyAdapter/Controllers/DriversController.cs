@@ -223,7 +223,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
-                        DocumentDate = item.DocumentDate.ToDateTimeOffset(),
+                        FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
+                        ImportDate = item.ImportDate.ToDateTimeOffset(),
+
                         DocumentId = item.DocumentId,
                         FileContents = data,                        
                         Driver = driver,
@@ -268,7 +270,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CaseId = document.CaseId,                
                 SequenceNumber = document.SequenceNumber,
                 UserId = document.UserId,
-                DocumentDate = Timestamp.FromDateTimeOffset(document.DocumentDate),
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate),
+                ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate),
                 Driver = driver
 
             });

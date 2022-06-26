@@ -158,13 +158,25 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }
                     reply.Items.Add(new LegacyDocument
                     {
+                        BatchId = item.BatchId ?? string.Empty,
+                        DocumentPages = 0,
+                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
+                   
                         CaseId = item.CaseId ?? string.Empty,
-                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),
+                        FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
+                        ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
+                        ImportId = item.ImportId ?? string.Empty,
+                         
+                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
+                          
                         DocumentId = item.DocumentId ?? string.Empty,
                         SequenceNumber = (long)item.SequenceNumber,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                        DocumentUrl = item.DocumentUrl ?? string.Empty,
+                        ValidationMethod = item.ValidationMethod ?? string.Empty,
+                        ValidationPrevious = item.ValidationPrevious ?? string.Empty
+                        
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -236,19 +248,24 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }
                     reply.Items.Add(new LegacyDocument
                     {
-                        CaseId = item.CaseId ?? string.Empty,
-                        DocumentDate = Timestamp.FromDateTimeOffset(item.DocumentDate),                        
-                        DocumentId = item.DocumentId ?? string.Empty,
-                        SequenceNumber = (long)item.SequenceNumber,
-                        UserId = item.UserId ?? string.Empty,
-                        Driver = driver,
-                        DocumentUrl = item.DocumentUrl ?? string.Empty
+                        BatchId = item.BatchId,
+                        CaseId = item.CaseId,
+                        DocumentPages = item.DocumentPages,
+                        DocumentId = item.DocumentId,
+                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty,
+                        FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
+                        ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
+                        ImportId = item.ImportId ?? string.Empty,
+                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
+                        ValidationMethod = item.ValidationMethod ?? string.Empty,
+                        ValidationPrevious = item.ValidationPrevious ?? string.Empty,
+                        SequenceNumber = item.SequenceNumber ?? -1,
+                        Driver = driver
+                        
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
-
-
-
             }
             catch (Exception ex)
             {

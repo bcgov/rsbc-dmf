@@ -65,7 +65,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             }
         }
 
-        protected async void Login()
+        protected void Login()
         {
             // determine if authentication is enabled.
 
@@ -76,7 +76,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 var response = _client.SendAsync(request).GetAwaiter().GetResult();
                 response.EnsureSuccessStatusCode();
 
-                var token = await response.Content.ReadAsStringAsync();
+                var token = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                 if (!string.IsNullOrEmpty(token))
                 {
