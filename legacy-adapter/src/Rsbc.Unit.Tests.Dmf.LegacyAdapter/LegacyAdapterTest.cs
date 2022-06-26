@@ -81,23 +81,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             }
         }
-    }
 
 
-    public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
-    {
-        public string testDl;
-        public string testSurcode;
-        public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
-            : base(factory)
-        {
-
-            testDl = Configuration["ICBC_TEST_DL"];
-            testSurcode = Configuration["ICBC_TEST_SURCODE"];
-        }
-
-
-        private void Login()
+        protected void Login()
         {
             // determine if authentication is enabled.
 
@@ -117,7 +103,24 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 }
             }
 
+
         }
+    }
+
+
+    public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
+    {
+        public string testDl;
+        public string testSurcode;
+        public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
+            : base(factory)
+        {
+
+            testDl = Configuration["ICBC_TEST_DL"];
+            testSurcode = Configuration["ICBC_TEST_SURCODE"];
+        }
+
+
 
         /// <summary>
         /// Test the MS Dynamics interface
@@ -311,7 +314,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Document()
             {
-                DocumentDate = DateTimeOffset.Now,
+                FaxReceivedDate = DateTimeOffset.Now,
                 DocumentId = Guid.NewGuid().ToString(),
                 FileContents = bytes,
                 Driver = driver,
