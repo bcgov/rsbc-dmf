@@ -78,15 +78,26 @@ namespace Rsbc.Dmf.CaseManagement
 
 
     public class LegacyDocument
-    {
-        public int? SequenceNumber { get; set; }        
+    {     
+        public int? SequenceNumber { get; set; }    
+        
+        public string DocumentTypeCode { get; set; }
+
         public string DocumentUrl { get; set; }
         public long FileSize { get; set; }
         public string UserId { get; set; }
         public string CaseId { get; set; }
-        public DateTimeOffset DocumentDate { get; set; }
+        public DateTimeOffset FaxReceivedDate { get; set; }
+        public DateTimeOffset ImportDate { get; set; }
         public string DocumentId { get; set; }
+        public string ImportId { get; set; }
         public Driver Driver { get; set; }
+
+        public string BatchId { get; set; }
+        public string OriginatingNumber { get; set; }
+        public int DocumentPages { get; set; }
+        public string ValidationMethod { get; set; }
+        public string ValidationPrevious { get; set; }
     }
 
     public class CreateStatusReply
@@ -321,12 +332,22 @@ namespace Rsbc.Dmf.CaseManagement
                 foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                 {
                     await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                    
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+
                     LegacyDocument legacyDocument = new LegacyDocument
                     {
+                        BatchId = document.dfp_batchid,                       
                         CaseId = @case.incidentid.ToString(),
-                        DocumentDate = document.createdon.GetValueOrDefault(),
+                        DocumentPages = ConvertPagesToInt (document.dfp_documentpages),
                         DocumentId = document.bcgov_documenturlid.ToString(),
+                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name,
+                        DocumentUrl = document.bcgov_url,
+                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                        ImportId = document.dfp_importid,
+                        OriginatingNumber = document.dfp_faxsender,
+                        ValidationMethod = document.dfp_validationmethod,
+                        ValidationPrevious = document.dfp_validationprevious,                      
                         SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                         Driver = driver
                     };
@@ -336,6 +357,17 @@ namespace Rsbc.Dmf.CaseManagement
             }
              
             return result;
+        }
+
+        private int ConvertPagesToInt (string data)
+        {
+            int result = 0;
+            if (!int.TryParse (data, out result))
+            {
+                result = 0;
+            }
+            return result;
+
         }
 
         public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments )
@@ -414,6 +446,11 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         // ensure related data is loaded.
 
+                        Driver caseDriver = new Driver()
+                        {
+                            DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
+                        };
+
                         await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
                         foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                         {
@@ -421,10 +458,20 @@ namespace Rsbc.Dmf.CaseManagement
 
                             LegacyDocument legacyDocument = new LegacyDocument
                             {
+                                BatchId = document.dfp_batchid,
                                 CaseId = @case.incidentid.ToString(),
-                                DocumentDate = document.createdon.GetValueOrDefault(),
+                                DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
                                 DocumentId = document.bcgov_documenturlid.ToString(),
-                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault()
+                                DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name,
+                                DocumentUrl = document.bcgov_url,
+                                FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                                ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                                ImportId = document.dfp_importid,
+                                OriginatingNumber = document.dfp_faxsender,
+                                ValidationMethod = document.dfp_validationmethod,
+                                ValidationPrevious = document.dfp_validationprevious,
+                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                Driver = caseDriver
                             };
 
                             result.Add(legacyDocument);

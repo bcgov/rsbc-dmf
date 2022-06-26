@@ -46,6 +46,7 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Date the document was made
         /// </summary>
-        public DateTimeOffset DocumentDate { get; set; }
+        public DateTimeOffset FaxReceivedDate { get; set; }
+        public DateTimeOffset ImportDate { get; set; }
     }
 }
