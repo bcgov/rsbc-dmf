@@ -83,6 +83,22 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// POST: /Icbc/Candidates
+        /// </summary>
+        /// <param name="newCandidates">List of Candidates to be added to the case management system</param>
+        /// <returns></returns>
+        [HttpPost("CandidatesError")]
+        [SwaggerResponse(200, "The candidates were processed correctly")]
+        [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
+        [AllowAnonymous]
+        public ActionResult CreateCandidatesError([FromBody] List<NewCandidate> newCandidates)
+        {
+            throw new Exception("Sample Error.");
+            return Ok();
+        }
+
         [AllowAnonymous]
         [HttpGet("Cases")]
         public CaseStatus GetCaseStatus(string caseId)
