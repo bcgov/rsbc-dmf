@@ -79,8 +79,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
         {
 
-            throw new Exception( "The system has an error" );
-
             // check for duplicates; if there is an existing case then do not create a new one
             return Ok();
         }
