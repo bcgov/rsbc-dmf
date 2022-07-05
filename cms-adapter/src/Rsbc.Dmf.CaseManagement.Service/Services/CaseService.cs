@@ -79,10 +79,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             var newDocument = new CaseManagement.LegacyDocument()
             {
-                CaseId = request.CaseId,                
+                BatchId = request.BatchId,
+                CaseId = request.CaseId,  
+                DocumentId = request.DocumentId,
+                DocumentPages = (int) request.DocumentPages,
+                DocumentTypeCode = request.DocumentTypeCode,
+                DocumentUrl = request.DocumentUrl,
+                FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
+                // may need to add FileSize,
+                ImportDate = request.ImportDate.ToDateTimeOffset(),
+                ImportId = request.ImportId,
+                OriginatingNumber = request.OriginatingNumber,
+                ValidationMethod = request.ValidationMethod,
+                ValidationPrevious = request.ValidationPrevious,
                 SequenceNumber = (int)request.SequenceNumber,
                 UserId = request.UserId,
-                Driver = driver
+                Driver = driver 
             };
 
             var result = await _caseManager.CreateLegacyCaseDocument(newDocument);
