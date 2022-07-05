@@ -50,7 +50,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             Assert.NotNull(result);
 
 
-
             result = IcbcClient.GetDriverHistory(Configuration["ICBC_ALTERNATE_TEST_DL"]);
             Assert.NotNull(result);            
         }

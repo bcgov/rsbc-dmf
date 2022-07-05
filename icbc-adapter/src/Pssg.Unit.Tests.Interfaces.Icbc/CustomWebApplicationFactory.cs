@@ -1,27 +1,14 @@
-
-
-using Microsoft.Extensions.Configuration;
-using Rsbc.Dmf.IcbcAdapter;
-using Pssg.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Text;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using Rsbc.Dmf.IcbcAdapter.ViewModels;
-using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Pssg.Interfaces.Icbc.Models;
-using Pssg.Interfaces.Icbc.ViewModels;
-using System.Web;
-using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Pssg.Interfaces;
 using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
-using Microsoft.Extensions.DependencyInjection;
+using System.Net.Http;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -96,10 +83,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .UseSolutionRelativeContentRoot("")
                 .UseEnvironment("Staging")
                 .UseConfiguration(Configuration)
-                .UseStartup<Startup>()
+                //.UseStartup<Startup>()
                 .ConfigureTestServices(
-                    services => { services.AddTransient(_ => caseManagerClient);
-                    services.AddTransient(_ => icbcClient);
+               
+                    services => {                         
+                        services.AddTransient(_ => caseManagerClient);
+                        services.AddTransient(_ => icbcClient);
                     });
 
         }

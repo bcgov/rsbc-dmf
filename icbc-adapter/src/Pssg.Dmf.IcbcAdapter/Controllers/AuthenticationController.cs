@@ -63,7 +63,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             string result = "Invalid secret.";
             string token = "";
-            string expires_in = "";
+            
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(secret))
             {
