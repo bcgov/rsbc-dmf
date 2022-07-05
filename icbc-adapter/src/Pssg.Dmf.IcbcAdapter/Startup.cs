@@ -16,7 +16,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.IcbcAdapter.Services;
-using Pssg.Rsbc.Dmf.DocumentTriage;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using Serilog.Debugging;
@@ -244,46 +243,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 services.AddTransient(_ => new IcbcClient(Configuration));
             }
-            
 
-            string documentTriageServiceURI = Configuration["DOCUMENT_TRIAGE_SERVICE_URI"];
-
-            if (!string.IsNullOrEmpty(documentTriageServiceURI))
-            {
-                var httpClientHandler = new HttpClientHandler();
-                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
-                                          // This allows you to use OpenShift self-signed certificates for testing.
-                {
-                    // Return `true` to allow certificates that are untrusted/invalid                    
-                    httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                }
-
-                var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
-                var initialChannel = GrpcChannel.ForAddress(documentTriageServiceURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                var initialClient = new DocumentTriage.DocumentTriageClient(initialChannel);
-                // call the token service to get a token.
-                var tokenRequest = new Pssg.Rsbc.Dmf.DocumentTriage.TokenRequest
-                {
-                    Secret = Configuration["DOCUMENT_TRIAGE_SERVICE_JWT_SECRET"]
-                };
-
-                var tokenReply = initialClient.GetToken(tokenRequest);
-
-                if (tokenReply != null && tokenReply.ResultStatus == Pssg.Rsbc.Dmf.DocumentTriage.ResultStatus.Success)
-                {
-                    // Add the bearer token to the client.
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-
-                    var channel = GrpcChannel.ForAddress(documentTriageServiceURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                    services.AddTransient(_ => new DocumentTriage.DocumentTriageClient(channel));
-                }
-            }
         }
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
@@ -334,7 +294,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             // do not start Hangfire if we are running tests.        
             foreach (var assem in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                if (assem.FullName.ToLowerInvariant().StartsWith("xunit"))
+                if (assem.FullName.ToLowerInvariant().StartsWith("xunit") || assem.FullName.Contains("Unit.Tests"))
                 {
                     startHangfire = false;
                     break;

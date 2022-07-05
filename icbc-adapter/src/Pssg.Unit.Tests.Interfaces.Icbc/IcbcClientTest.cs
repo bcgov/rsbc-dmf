@@ -44,7 +44,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
 
         [Fact]
-        public async void GetDriverHistoryTest()
+        public void GetDriverHistoryTest()
         {
             CLNT result = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
             Assert.NotNull(result);

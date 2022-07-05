@@ -11,7 +11,15 @@ namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
             var icbcClient = new Mock<IIcbcClient>();
             icbcClient
                 .Setup(x => x.GetDriverHistory(It.IsAny<string>()))
-                .Returns<string>(x => new CLNT() {  DR1MST = new DR1MST() { LNUM = int.Parse(x) } }); // clientResult.DriverMasterStatus.LicenceNumber
+                .Returns<string>(x => {
+                    int licenceNumber = 0;
+                    
+                    int.TryParse(x, out licenceNumber );
+
+                    return new CLNT() {  DR1MST = new DR1MST() { LNUM = licenceNumber } };
+
+
+                    }); // clientResult.DriverMasterStatus.LicenceNumber
             return icbcClient.Object;
         }
     }

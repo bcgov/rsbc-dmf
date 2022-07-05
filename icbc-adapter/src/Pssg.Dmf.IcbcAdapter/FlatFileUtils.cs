@@ -47,8 +47,7 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             return string.IsNullOrEmpty(host) ||
                 string.IsNullOrEmpty(username) ||
-                !(string.IsNullOrEmpty(password) &&
-                string.IsNullOrEmpty(key));
+                string.IsNullOrEmpty(key);
         }
 
         private ConnectionInfo GetConnectionInfo (string host, string username, string password, string keyUser, string key)
@@ -89,7 +88,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
@@ -136,7 +135,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             string folder = _configuration["SCP_FOLDER"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement (hangfireContext, "No SCP configuration, skipping check for work.");
             }
@@ -212,7 +211,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
