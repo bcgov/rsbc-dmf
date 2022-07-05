@@ -20,13 +20,15 @@ using System.Web;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {   
-    public abstract class ApiIntegrationTestBaseWithLogin : IClassFixture<CustomWebApplicationFactory<Startup>>
+    public abstract class ApiIntegrationTestBaseWithLogin : IClassFixture<CustomWebApplicationFactory<Startup>>, IDisposable
     {
         protected readonly CustomWebApplicationFactory<Startup> _factory;
 
         protected HttpClient _client { get; }
 
         protected readonly IConfiguration Configuration;
+
+        public void Dispose() => this._client.Dispose();
 
         public ApiIntegrationTestBaseWithLogin(CustomWebApplicationFactory<Startup> fixture)
         {
