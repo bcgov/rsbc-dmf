@@ -152,9 +152,14 @@ namespace Rsbc.Dmf.IcbcAdapter
                 options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
             });
 
-            // Hangfire is used for scheduled jobs
-            services.AddHangfire(x => x.UseMemoryStorage());
-            services.AddHangfireServer();
+            if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
+            {
+                // Hangfire is used for scheduled jobs
+                services.AddHangfire(x => x.UseMemoryStorage());
+                services.AddHangfireServer();
+            }
+
+            
 
             services.AddEndpointsApiExplorer();
 
@@ -313,12 +318,11 @@ namespace Rsbc.Dmf.IcbcAdapter
                 };
 
                 app.UseHangfireDashboard("/hangfire", dashboardOptions);
-            }
 
-            if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
-            {
                 SetupHangfireJobs(app);
             }
+
+            
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -407,7 +411,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     .WriteTo.Console()
                     .CreateLogger();
             }
-            Log.Logger.Information("Document Storage Adapter Container Started");
+            Log.Logger.Information("Icbc Adapter Container Started");
             SelfLog.Enable(Console.Error);
         }
 
