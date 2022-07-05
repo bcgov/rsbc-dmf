@@ -16,6 +16,8 @@ service CaseManager {
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
+  rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
+
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
@@ -279,6 +281,12 @@ message UsersSearchReply {
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 	repeated User user = 10;
+}
+
+message GetDriversReply {
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	repeated Driver items = 10;
 }
 
 message UserLoginRequest {
