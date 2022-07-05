@@ -192,6 +192,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
         public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -264,6 +265,34 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         Driver = driver
                         
                     });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
+        public async override Task<GetDriversReply> GetDrivers(EmptyRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriversReply();
+            try
+            {
+                var result = await _caseManager.GetDrivers();
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item != null && item.DriverLicenseNumber != null)
+                    {
+                        driver.DriverLicenseNumber = item.DriverLicenseNumber;
+                        driver.Surname = item.Surname ?? string.Empty;
+                    }
+                    reply.Items.Add(driver);
                 }
                 reply.ResultStatus = ResultStatus.Success;
             }

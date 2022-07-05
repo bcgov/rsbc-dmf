@@ -61,13 +61,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
 
+            request.Content = new StringContent("[]", Encoding.UTF8, "application/json");
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
 
             // parse as JSON.
             var jsonString = await response.Content.ReadAsStringAsync();
-
-
         }
     }
 }
