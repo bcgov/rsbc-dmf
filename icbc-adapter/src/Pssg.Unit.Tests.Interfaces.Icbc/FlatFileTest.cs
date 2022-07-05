@@ -131,7 +131,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
-                LicenseNumber = Configuration["ICBC_TEST_DL"],
+                LicenseNumber = Configuration["ICBC_TEST_DL"] ?? string.Empty,
                 Surname = client?.INAM?.SURN ?? string.Empty,
             };
             CaseManagerClient.ProcessLegacyCandidate(lcr);
@@ -166,7 +166,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         {
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
-                LicenseNumber = Configuration["ICBC_TEST_DL"],
+                LicenseNumber = Configuration["ICBC_TEST_DL"] ?? string.Empty,
                 Surname = Configuration["ICBC_TEST_SURNAME"] ?? string.Empty,
                 ClientNumber = String.Empty,
             };
