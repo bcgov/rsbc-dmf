@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         /// Test the MS Dynamics interface
         /// </summary>
         [Fact]
-        public async void TestDriverHistory()
+        public void TestDriverHistory()
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
