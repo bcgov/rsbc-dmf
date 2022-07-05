@@ -1,16 +1,11 @@
 Road Safety BC Driver Medical Fitness
 ======================
 [![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](<Redirect-URL>)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-
+[![ci-medical-portal-api](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml)
+[![cd-legacy-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-legacy-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-legacy-adapter.yml)
+[![cd-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-cms-adapter.yml)
+[![ci-medical-portal-ui](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml)
 [![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/main/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
-[![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/codecov/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
 
 Technology Stack
 -----------------
