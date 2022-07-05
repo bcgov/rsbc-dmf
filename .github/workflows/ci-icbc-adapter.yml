@@ -40,7 +40,8 @@ jobs:
 
       - name: Test
         run: |          
-          dotnet test -c Release --no-restore --verbosity normal           
+          dotnet test -c Release --no-restore --verbosity normal 
+        timeout-minutes: 3          
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Generate code coverage

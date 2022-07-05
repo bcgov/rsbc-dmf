@@ -96,7 +96,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult CreateCandidatesError([FromBody] List<NewCandidate> newCandidates)
         {
             throw new Exception("Sample Error.");
-            return Ok();
         }
 
         [AllowAnonymous]
