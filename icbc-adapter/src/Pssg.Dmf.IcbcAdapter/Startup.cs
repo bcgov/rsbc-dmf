@@ -290,7 +290,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             app.UseRouting();
 
             bool startHangfire = true;
-
+#if DEBUG
             // do not start Hangfire if we are running tests.        
             foreach (var assem in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
@@ -300,9 +300,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                     break;
                 }
             }
+#endif
 
-
-            if (startHangfire)
+            if (startHangfire && !string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
             {
                 // enable Hangfire, using the default authentication model (local connections only)
                 app.UseHangfireServer();
