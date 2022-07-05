@@ -27,8 +27,6 @@ namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
             {
                 mockDriverResult.Items.Add(new Driver() { DriverLicenseNumber = "2222222" });
             }
-            
-            var mockCall = CallHelpers.CreateAsyncUnaryCall(mockDriverResult);
 
             var mockClient = new Mock<CaseManager.CaseManagerClient>();
             mockClient
