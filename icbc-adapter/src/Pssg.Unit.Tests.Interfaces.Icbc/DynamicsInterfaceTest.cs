@@ -41,17 +41,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             Driver clientResult = JsonConvert.DeserializeObject<Driver>(jsonString);
 
-
+            int result = 0;
+            int.TryParse(testDl, out result);
             // content should match
 
-            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber.Value, int.Parse(testDl));
+            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber.Value, result);
         }
 
         /// <summary>
         /// Test the MS Dynamics interface
         /// </summary>
         [Fact]
-        public async void TestDriverHistory()
+        public void TestDriverHistory()
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
