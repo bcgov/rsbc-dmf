@@ -290,17 +290,17 @@ namespace Rsbc.Dmf.IcbcAdapter
             app.UseRouting();
 
             bool startHangfire = true;
-#if DEBUG
+
             // do not start Hangfire if we are running tests.        
             foreach (var assem in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                if (assem.FullName.ToLowerInvariant().StartsWith("xunit") || assem.FullName.Contains("Unit.Tests"))
+                if (assem.FullName.ToLowerInvariant().StartsWith("xunit") || assem.FullName.ToLowerInvariant().Contains("unit.tests"))
                 {
                     startHangfire = false;
                     break;
                 }
             }
-#endif
+
 
             if (startHangfire)
             {
