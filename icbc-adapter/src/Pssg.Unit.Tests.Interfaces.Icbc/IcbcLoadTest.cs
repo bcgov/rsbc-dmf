@@ -144,19 +144,19 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void TestOneRecord()
+        public void TestOneRecord()
         {
             TestTombstone(1);
         }
 
         [Fact]
-        public async void Test50Records()
+        public void Test50Records()
         {
             TestTombstone(50);
         }
 
         [Fact]
-        public async void TestAllRecords()
+        public void TestAllRecords()
         {
             TestTombstone(-1);
         }

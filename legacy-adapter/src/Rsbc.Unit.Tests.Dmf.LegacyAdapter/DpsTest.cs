@@ -28,8 +28,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             testSurcode = Configuration["ICBC_TEST_SURCODE"];
         }
 
-
-
         /// <summary>
         /// Test the case exist service - parameters are license number and surcode.
         /// </summary>

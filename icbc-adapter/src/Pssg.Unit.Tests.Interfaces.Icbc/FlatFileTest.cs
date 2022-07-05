@@ -125,7 +125,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void TestAddCandidate()
+        public void TestAddCandidate()
         {
             CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
 
@@ -140,11 +140,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async void TestSendUpdates()
         {
-            flatFileUtils.SendMedicalUpdates(null);
+            await flatFileUtils.SendMedicalUpdates(null);
         }
 
         [Fact]
-        public async void CheckDriverNewFileFormat()
+        public void CheckDriverNewFileFormat()
         {
             var engine = new FileHelperEngine<NewDriver>();
             string sampleData = "2222222022222224EXPERIMENTAL_______________________2012-01-011M2002-02-012004-01-011998-01-012002-04-042002-04-040100";
@@ -153,7 +153,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void CheckMedicalUpdateFormat()
+        public void CheckMedicalUpdateFormat()
         {
             var engine = new FileHelperEngine<MedicalUpdate>();
             string sampleData = "2222222EXPERIMENTAL_______________________P2012-01-01";
@@ -162,7 +162,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
         
         [Fact]
-        public async void CandidateListTest()
+        public void CandidateListTest()
         {
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
@@ -175,7 +175,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void MedicalStatusPass()
+        public void MedicalStatusPass()
         {
             // create a FlatFilesUtil class.
             var f = new FlatFileUtils(Configuration, CaseManagerClient);
@@ -191,7 +191,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void MedicalStatusFail()
+        public void MedicalStatusFail()
         {
             // create a FlatFilesUtil class.
             var f = new FlatFileUtils(Configuration, CaseManagerClient);
@@ -207,7 +207,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void MedicalStatusFailPass()
+        public void MedicalStatusFailPass()
         {
             // create a FlatFilesUtil class.
             var f = new FlatFileUtils(Configuration, CaseManagerClient);
