@@ -94,7 +94,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void GetUnsentMedicalUpdates()
+        public void GetUnsentMedicalUpdates()
         {
             var unsentItems = CaseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
         }
@@ -102,11 +102,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async void BasicConnectionTest()
         {
-            flatFileUtils.CheckConnection(null);
+            await flatFileUtils.CheckConnection(null);
         }
 
         [Fact]
-        public async void ProcessCandidatesTextFile()
+        public void ProcessCandidatesTextFile()
         {
             string filename = Configuration["CANDIDATES_TEST_FILE"];
 
@@ -121,7 +121,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public async void TestCheckForCandidates()
         {
-            flatFileUtils.CheckForCandidates(null);
+            await flatFileUtils.CheckForCandidates(null);
         }
 
         [Fact]
