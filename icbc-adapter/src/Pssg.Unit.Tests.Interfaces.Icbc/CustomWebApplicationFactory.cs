@@ -96,7 +96,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .UseSolutionRelativeContentRoot("")
                 .UseEnvironment("Staging")
                 .UseConfiguration(Configuration)
-                //.UseStartup<Startup>()
+                .UseStartup<Startup>()
                 .ConfigureServices(
                
                     services => {                         
