@@ -634,31 +634,75 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        private string GetDocumentTypeId(string documentTypeCode)
+        {
+            // lookup the document Type Code
+            string result = null;
+            if (!string.IsNullOrEmpty(documentTypeCode))
+            {
+                try
+                {
+                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault(); 
+                    if (record == null)
+                    {
+                        var newRecord = new dfp_submittaltype { dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
+                        dynamicsContext.AddTodfp_submittaltypes(newRecord);
+                        dynamicsContext.SaveChanges();
+
+                        record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault();
+                    }
+                    if (record != null)
+                    {
+                        result = record.dfp_submittaltypeid.ToString();
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    result = null;
+                }
+            }
+
+            return result;
+        }
 
         public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
 
-            // create the comment.
-            incident @case = GetIncidentBySequence((int)request.SequenceNumber);
+            // create the document.
+            incident @case = GetIncidentById(request.CaseId);
 
             if (@case == null)
             {
                 // create it.
                 await LegacyCandidateCreate(new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber });
-                @case = GetIncidentBySequence((int)request.SequenceNumber);
+                @case = GetIncidentById(request.CaseId);
             }
+
+            // TODO - add missing properties
 
             // create the document.
             bcgov_documenturl @documentUrl = new bcgov_documenturl()
             {
-                
-
+                 dfp_batchid = request.BatchId,
+                 dfp_documentpages = request.DocumentPages.ToString(),
+                 bcgov_url = request.DocumentUrl,
+                 dfp_faxreceiveddate = request.FaxReceivedDate,
+                 dfp_dpsprocessingdate = request.ImportDate,
+                 dfp_importid = request.ImportId,
+                 dfp_faxnumber = request.OriginatingNumber,
+                 dfp_validationmethod = request.ValidationMethod,
+                 dfp_validationprevious = request.ValidationPrevious
             };
+
+            // document type ID
+            var documentTypeId = GetDocumentTypeId(request.DocumentTypeCode);
 
             try
             {
                 dynamicsContext.AddTobcgov_documenturls(@documentUrl);
+                dynamicsContext.AddLink( @documentUrl, nameof (bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                 dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), @documentUrl);
 
 
