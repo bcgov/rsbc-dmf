@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FileHelpers;
-using Microsoft.Rest;
-using Microsoft.Rest.Serialization;
-using Newtonsoft.Json;
-using System.Linq;
+﻿using FileHelpers;
 
 namespace Pssg.Interfaces.FlatFileModels
 {
