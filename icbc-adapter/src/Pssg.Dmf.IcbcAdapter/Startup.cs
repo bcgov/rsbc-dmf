@@ -334,7 +334,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             // do not start Hangfire if we are running tests.        
             foreach (var assem in Assembly.GetEntryAssembly().GetReferencedAssemblies())
             {
-                if (assem.FullName.ToLowerInvariant().StartsWith("xunit"))
+                if (assem.FullName.ToLowerInvariant().StartsWith("xunit") || assem.FullName.Contains("Unit.Tests"))
                 {
                     startHangfire = false;
                     break;

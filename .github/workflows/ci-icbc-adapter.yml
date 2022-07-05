@@ -38,6 +38,11 @@ jobs:
         run: dotnet build --configuration Release --no-restore
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
+      - name: Test
+        run: |          
+          dotnet test -c Release --no-restore --verbosity normal           
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
       - name: Generate code coverage
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         run: |
