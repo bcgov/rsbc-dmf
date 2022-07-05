@@ -8,7 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Xunit;
-
+using Moq;
+using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -17,7 +18,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
         IConfiguration Configuration;
 
-        private IcbcClient IcbcClient {  get; set;}
+        private IIcbcClient IcbcClient {  get; set;}
 
         /// <summary>
         /// Setup the test
@@ -30,8 +31,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
                 .Build();
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            {
+                IcbcClient = new IcbcClient(Configuration);
+            }
+            else
+            {
+                IcbcClient = IcbcHelper.CreateMock();
+            }
 
-            IcbcClient = new IcbcClient(Configuration);          
         }
 
 

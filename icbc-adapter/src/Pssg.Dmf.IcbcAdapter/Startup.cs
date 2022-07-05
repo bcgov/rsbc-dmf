@@ -37,6 +37,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Serilog.Context;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
+using Pssg.Interfaces;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -237,7 +238,13 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
-            }            
+            }
+
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            {
+                services.AddTransient(_ => new IcbcClient(Configuration));
+            }
+            
 
             string documentTriageServiceURI = Configuration["DOCUMENT_TRIAGE_SERVICE_URI"];
 

@@ -25,6 +25,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
+        Task<IEnumerable<Driver>> GetDrivers();
+
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
 
         /// <summary>
@@ -483,6 +485,24 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public async Task<IEnumerable<Driver>> GetDrivers()
+        {
+            List<Driver> result = new List<Driver>();
+
+            var @drivers = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1).ToList();
+
+            foreach (var item in @drivers)
+            {
+                Driver d = new Driver ()
+                {
+                    DriverLicenseNumber = item.dfp_licensenumber,
+                    Surname = item.dfp_PersonId?.lastname
+                };
+                result.Add(d);
+            }
+
+            return result;
+        }
 
         private incident GetIncidentById(string id)
         {
