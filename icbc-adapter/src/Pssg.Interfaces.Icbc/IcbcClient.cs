@@ -9,7 +9,7 @@ using Pssg.Interfaces.Icbc.Models;
 
 namespace Pssg.Interfaces
 {
-    public class IcbcClient
+    public class IcbcClient: IIcbcClient
     {
         private readonly IConfiguration Configuration;
         private HttpClient _Client;
@@ -99,44 +99,88 @@ namespace Pssg.Interfaces
                 }
                 catch (Exception)
                 {
-                    var tempResult = JsonConvert.DeserializeObject<ClientResult3>(jsonText);
-                    result = new ClientResult()
+                    try
                     {
-                        // transfer items over
-                        CLNT = new CLNT()
+                        var tempResult = JsonConvert.DeserializeObject<ClientResult3>(jsonText);
+                        result = new ClientResult()
                         {
-                            ADDR = tempResult.CLNT.ADDR,
-                            BIDT = tempResult.CLNT.BIDT,
-                            DR1MST = new DR1MST()
+                            // transfer items over
+                            CLNT = new CLNT()
                             {
-                                DR1MEDN = tempResult.CLNT.DR1MST?.DR1MEDN,
-                                RSCD = tempResult.CLNT.DR1MST?.RSCD,                                
-                                LCLS = tempResult.CLNT.DR1MST?.LCLS,
-                                LNUM = tempResult.CLNT.DR1MST?.LNUM,
-                                MSCD = tempResult.CLNT.DR1MST?.MSCD,
-                                RRDT = tempResult.CLNT.DR1MST?.RRDT,
-                            },
-                            HGHT = tempResult.CLNT.HGHT,
-                            INAM = tempResult.CLNT.INAM,
-                            SECK = tempResult.CLNT.SECK,
-                            SEX = tempResult.CLNT.SEX,
-                            WGHT = tempResult.CLNT.WGHT
+                                ADDR = tempResult.CLNT.ADDR,
+                                BIDT = tempResult.CLNT.BIDT,
+                                DR1MST = new DR1MST()
+                                {
+                                    DR1MEDN = tempResult.CLNT.DR1MST?.DR1MEDN,
+                                    RSCD = tempResult.CLNT.DR1MST?.RSCD,
+                                    LCLS = tempResult.CLNT.DR1MST?.LCLS,
+                                    LNUM = tempResult.CLNT.DR1MST?.LNUM,
+                                    MSCD = tempResult.CLNT.DR1MST?.MSCD,
+                                    RRDT = tempResult.CLNT.DR1MST?.RRDT,
+                                },
+                                HGHT = tempResult.CLNT.HGHT,
+                                INAM = tempResult.CLNT.INAM,
+                                SECK = tempResult.CLNT.SECK,
+                                SEX = tempResult.CLNT.SEX,
+                                WGHT = tempResult.CLNT.WGHT
+                            }
+                        };
+                        // convert DR1STAT to list.
+                        if (tempResult.CLNT.DR1MST?.DR1STAT != null)
+                        {
+                            result.CLNT.DR1MST.DR1STAT = new List<DR1STAT>();
+                            result.CLNT.DR1MST.DR1STAT.Add(tempResult.CLNT.DR1MST.DR1STAT);
                         }
-                    };
-
-                    // convert DR1STAT to list.
-                    if (tempResult.CLNT.DR1MST?.DR1STAT != null)
+                    }
+                    catch (Exception)
                     {
-                        result.CLNT.DR1MST.DR1STAT = new List<DR1STAT>();
-                        result.CLNT.DR1MST.DR1STAT.Add(tempResult.CLNT.DR1MST.DR1STAT);
+                        var tempResult = JsonConvert.DeserializeObject<ClientResult4>(jsonText);
+                        result = new ClientResult()
+                        {
+                            // transfer items over
+                            CLNT = new CLNT()
+                            {
+                                ADDR = tempResult.CLNT.ADDR,
+                                BIDT = tempResult.CLNT.BIDT,
+                                DR1MST = new DR1MST()
+                                {
+                                    DR1MEDN = tempResult.CLNT.DR1MST?.DR1MEDN,
+                                    LCLS = tempResult.CLNT.DR1MST?.LCLS,
+                                    LNUM = tempResult.CLNT.DR1MST?.LNUM,
+                                    MSCD = tempResult.CLNT.DR1MST?.MSCD,
+                                    RRDT = tempResult.CLNT.DR1MST?.RRDT,
+                                },
+                                HGHT = tempResult.CLNT.HGHT,
+                                INAM = tempResult.CLNT.INAM,
+                                SECK = tempResult.CLNT.SECK,
+                                SEX = tempResult.CLNT.SEX,
+                                WGHT = tempResult.CLNT.WGHT
+                            }
+                        };
+                        // convert DR1STAT to list.
+                        if (tempResult.CLNT.DR1MST?.DR1STAT != null)
+                        {
+                            result.CLNT.DR1MST.DR1STAT = new List<DR1STAT>();
+                            foreach (var stat in tempResult.CLNT.DR1MST?.DR1STAT)
+                            {
+                                result.CLNT.DR1MST.DR1STAT.Add(stat);
+                            }
+                            
+                        }
+                        if (tempResult.CLNT.DR1MST?.RSCD != null)
+                        {
+                            result.CLNT.DR1MST.RSCD = new List<int>();
+                            result.CLNT.DR1MST.RSCD.Add(tempResult.CLNT.DR1MST.RSCD);
+                        }
+
                     }
                 }
-
-                
-                
             }
+                    
 
-            return result.CLNT;
+                
+            
+            return result?.CLNT;
         }
 
         private class ClientResult
@@ -152,6 +196,11 @@ namespace Pssg.Interfaces
         private class ClientResult3
         {
             public CLNT3 CLNT { get; set; }
+        }
+
+        private class ClientResult4
+        {
+            public CLNT4 CLNT { get; set; }
         }
     }
 

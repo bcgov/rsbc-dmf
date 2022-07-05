@@ -24,7 +24,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public DpsTest(CustomWebApplicationFactory<Startup> factory)
             : base(factory)
         {
-
             testDl = Configuration["ICBC_TEST_DL"];
             testSurcode = Configuration["ICBC_TEST_SURCODE"];
         }
@@ -55,10 +54,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var result = JsonConvert.DeserializeObject<string>(responseContent);
 
             return result;
-
         }
-
-
 
         [Fact]
         public async void AddDocument()
@@ -68,7 +64,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             // start by getting the case.
             var caseId = GetCaseId();
             Assert.True(caseId != null);
-
 
             string testData = "This is just a test.";
             string fileName = "fax.pdf";
@@ -98,7 +93,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             string validationMethod = "Single User";
             string validationPrevious = "TESTUSER";
 
-            multiPartContent.Add(new StringContent(documentType), "driversLicense");
+            multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
             multiPartContent.Add(new StringContent(surcode), "surcode");
             multiPartContent.Add(new StringContent(batchId), "batchId");
             multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
@@ -119,7 +114,5 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-
     }
-
 }
