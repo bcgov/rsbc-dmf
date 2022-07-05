@@ -96,10 +96,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .UseSolutionRelativeContentRoot("")
                 .UseEnvironment("Staging")
                 .UseConfiguration(Configuration)
-                .UseStartup<Startup>()
-                .ConfigureTestServices(
-                    services => { services.AddTransient(_ => caseManagerClient);
-                    services.AddTransient(_ => icbcClient);
+                //.UseStartup<Startup>()
+                .ConfigureServices(
+               
+                    services => {                         
+                        services.AddTransient(_ => caseManagerClient);
+                        services.AddTransient(_ => icbcClient);
                     });
 
         }
