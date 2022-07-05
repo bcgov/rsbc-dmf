@@ -383,7 +383,6 @@ namespace Rsbc.Dmf.IcbcAdapter
                 
                 // Fix for bad SSL issues 
 
-
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
@@ -443,8 +442,6 @@ namespace Rsbc.Dmf.IcbcAdapter
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), interval);
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), interval);
-
-
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
