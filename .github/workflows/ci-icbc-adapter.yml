@@ -41,7 +41,7 @@ jobs:
       - name: Test
         run: |          
           dotnet test -c Release --no-restore --verbosity normal --blame-hang --blame-hang-timeout 30s
-        timeout-minutes: 3          
+        timeout-minutes: 10          
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Generate code coverage

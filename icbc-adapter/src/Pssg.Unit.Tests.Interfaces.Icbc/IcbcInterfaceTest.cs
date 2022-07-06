@@ -6,11 +6,11 @@ using Pssg.Interfaces.Icbc.ViewModels;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
-    public class IcbcInterfaceTest : ApiIntegrationTestBaseWithLogin
+    [Collection(nameof(HttpClientCollection))]
+    public class IcbcInterfaceTest : ApiIntegrationTestBase
     {
-
-        public IcbcInterfaceTest(CustomWebApplicationFactory<Startup> factory)
-            : base(factory)
+        public IcbcInterfaceTest(HttpClientFixture fixture)
+            : base(fixture)
         { }
 
 
@@ -25,7 +25,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var jsonString = await response.Content.ReadAsStringAsync();
 
             Driver clientResult = JsonConvert.DeserializeObject<Driver>(jsonString);
-
 
             // content should match
 
