@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Pssg.Interfaces.Icbc.ViewModels;
 using System.Net.Http;
@@ -5,12 +6,11 @@ using Xunit;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
-
-    public class DynamicsInterfaceTest : ApiIntegrationTestBaseWithLogin
+    [Collection(nameof(HttpClientCollection))]
+    public class DynamicsInterfaceTest : ApiIntegrationTestBase
     {
-
-        public DynamicsInterfaceTest(CustomWebApplicationFactory<Startup> factory)
-            : base(factory)
+        public DynamicsInterfaceTest(HttpClientFixture fixture)
+            : base(fixture)
         { }
 
 
