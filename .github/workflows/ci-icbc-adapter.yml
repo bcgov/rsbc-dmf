@@ -40,7 +40,7 @@ jobs:
 
       - name: Test
         run: |          
-          dotnet test -c Release --no-restore --verbosity normal 
+          dotnet test -c Release --no-restore --verbosity normal --blame-hang --blame-hang-timeout 10s
         timeout-minutes: 3          
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
