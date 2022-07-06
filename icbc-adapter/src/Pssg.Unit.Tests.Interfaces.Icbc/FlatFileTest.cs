@@ -162,7 +162,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
         
         [Fact]
-        public void CandidateListTest()
+        public void FlatCandidateListTest()
         {
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
