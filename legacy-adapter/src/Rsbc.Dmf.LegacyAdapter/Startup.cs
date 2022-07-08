@@ -27,11 +27,26 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System.Reflection;
 using System.IO;
 using Pssg.DocumentStorageAdapter;
+using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using System.Linq;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
     public class Startup
     {
+
+        public class AllowAnonymous : IAuthorizationHandler
+        {
+            public Task HandleAsync(AuthorizationHandlerContext context)
+            {
+                foreach (IAuthorizationRequirement requirement in context.PendingRequirements.ToList())
+                    context.Succeed(requirement); //Simply pass all requirements
+
+                return Task.CompletedTask;
+            }
+        }
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
@@ -51,10 +66,13 @@ namespace Rsbc.Dmf.LegacyAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddDefaultTokenProviders();
+            
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddDefaultTokenProviders();
+
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -73,10 +91,24 @@ namespace Rsbc.Dmf.LegacyAdapter
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
                 });
+                
+            }
+            else
+            {
+                services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
+            }
             services.AddAuthorization();
 
             // basic REST controller for Dynamics.
-            services.AddControllers(options => options.EnableEndpointRouting = false);
+            services.AddControllers(options => {
+                // only allow anonymous access if there is no JWT secret...
+                if (_env.IsDevelopment() && string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+                {
+                    options.Filters.Add(new AllowAnonymousFilter());
+                }
+                options.EnableEndpointRouting = false;
+
+            });
             services.AddSwaggerGen(c =>
             {               
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
@@ -172,7 +204,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // health checks. 
             services.AddHealthChecks()
-                .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
+                .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -204,7 +236,14 @@ namespace Rsbc.Dmf.LegacyAdapter
             });
 
             app.UseEndpoints(endpoints =>
-            {                
+            {
+                endpoints.MapGet("/",
+                    async context =>
+                    {
+                        await context.Response.WriteAsync(
+                            "RSBC Legacy Adapter");
+                    });
+
                 endpoints.MapControllers().RequireAuthorization();                 
             });
 

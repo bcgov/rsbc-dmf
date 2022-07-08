@@ -7,6 +7,7 @@ using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,10 +43,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <returns>The Case Id or Null</returns>
         // GET: /Cases/Exist
         [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
+        public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
             string caseId = null;
-            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber  });
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty});
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {                
                 foreach (var item in reply.Items)
