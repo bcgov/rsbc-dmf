@@ -43,14 +43,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
     public class DriverTest : ApiIntegrationTestBase
     {
-        public string testDl;
-        public string testSurcode;
 
         public DriverTest(HttpClientFixture fixture)
             : base(fixture)
         {
-            testDl = Configuration["ICBC_TEST_DL"];
-            testSurcode = Configuration["ICBC_TEST_SURCODE"];
+            
         }
 
 
