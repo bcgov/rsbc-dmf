@@ -23,10 +23,16 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         protected readonly IConfiguration Configuration;
 
+        protected string testDl;
+        protected string testSurcode;
+
         public ApiIntegrationTestBase(HttpClientFixture fixture)
         {
             _client = fixture.Client;
             Configuration = fixture.Configuration;
+
+            testDl = Configuration["ICBC_TEST_DL"] ?? "2222222";
+            testSurcode = Configuration["ICBC_TEST_SURCODE"] ?? "TST";
         }
         
 
