@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SharedUtils
+namespace Pssg.SharedUtils
 {
     public class StringUtility
     {
