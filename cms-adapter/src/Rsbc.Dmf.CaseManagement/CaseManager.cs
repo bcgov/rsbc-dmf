@@ -301,7 +301,7 @@ namespace Rsbc.Dmf.CaseManagement
                             CommentDate = comment.dfp_date.GetValueOrDefault(),
                             CommentId = comment.dfp_commentid.ToString(),
                             CommentText = comment.dfp_commentdetails,
-                            CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "",
+                            CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
                             SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                             UserId = comment.dfp_userid
                         };
@@ -412,7 +412,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     CommentDate = comment.dfp_date.GetValueOrDefault(),
                                     CommentId = comment.dfp_commentid.ToString(),
                                     CommentText = comment.dfp_commentdetails,
-                                    CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "",
+                                    CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
                                     SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                                     UserId = comment.dfp_userid,
                                     Driver = driver
@@ -608,7 +608,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_comment @comment = new dfp_comment()
                 {
                     dfp_date = DateTimeOffset.Now,
-                    dfp_icbc = true,
+                    dfp_icbc = "W" == request.CommentTypeCode,
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText
                 };
