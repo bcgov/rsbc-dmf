@@ -16,17 +16,17 @@ using System.Net.Http.Headers;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
-
-    public class DpsTest : ApiIntegrationTestBaseWithLogin
+    [Collection(nameof(HttpClientCollection))]
+    public class CaseTest : ApiIntegrationTestBase
     {
-        public string testDl;
-        public string testSurcode;
-        public DpsTest(CustomWebApplicationFactory<Startup> factory)
-            : base(factory)
+        
+
+        public CaseTest(HttpClientFixture fixture)
+            : base(fixture)
         {
-            testDl = Configuration["ICBC_TEST_DL"];
-            testSurcode = Configuration["ICBC_TEST_SURCODE"];
+          
         }
+
 
         /// <summary>
         /// Test the case exist service - parameters are license number and surcode.
@@ -42,20 +42,25 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         private string GetCaseId()
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
+            string result = null;
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
 
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                response.EnsureSuccessStatusCode();
 
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            var result = JsonConvert.DeserializeObject<string>(responseContent);
+                result = JsonConvert.DeserializeObject<string>(responseContent);
+            }
+            
 
             return result;
         }
 
         [Fact]
-        public async void AddDocument()
+        public async void AddCaseDocument()
         {
             Login();
 
@@ -67,7 +72,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             string fileName = "fax.pdf";
             byte[] bytes = Encoding.ASCII.GetBytes(testData);
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/cases/{caseId}/Documents");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
 
             MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
             var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
@@ -112,5 +117,25 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
+
+
+        [Fact]
+        public async void GetDocuments()
+        {
+            Login();
+
+            var caseId = GetCaseId();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Documents");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+       
+
     }
 }

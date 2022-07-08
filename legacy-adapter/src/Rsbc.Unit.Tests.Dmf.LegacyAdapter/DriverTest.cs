@@ -17,6 +17,7 @@ using System.Net;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
+    /*
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<Startup>
     {
@@ -35,147 +36,26 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 .UseConfiguration(Configuration)
                 .UseStartup<Startup>();
         }
-    }
+    
+    */
 
-    public abstract class ApiIntegrationTestBaseWithLogin : IClassFixture<CustomWebApplicationFactory<Startup>>
+    [Collection(nameof(HttpClientCollection))]
+
+    public class DriverTest : ApiIntegrationTestBase
     {
-        protected readonly CustomWebApplicationFactory<Startup> _factory;
 
-        protected HttpClient _client { get; }
-
-        protected readonly IConfiguration Configuration;
-
-        public ApiIntegrationTestBaseWithLogin(CustomWebApplicationFactory<Startup> fixture)
+        public DriverTest(HttpClientFixture fixture)
+            : base(fixture)
         {
-            _factory = fixture;
-            Configuration = new ConfigurationBuilder()
-                .AddUserSecrets<Startup>() // Add secrets from the service.
-                .AddEnvironmentVariables()
-                .Build();
-            // determine if this is an external or internal test.
-            if (Configuration["TEST_BASE_URI"] != null)
-            {
-                // allow self signed certificates
-                var handler = new HttpClientHandler();
-                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-                handler.ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) =>
-                    {
-                        return true;
-                    };
-
-                _client = new HttpClient(handler)
-                {
-                    BaseAddress = new Uri(Configuration["TEST_BASE_URI"])
-                };
-            }
-
-            else // local test
-            {
-                _factory = fixture;
-                _client = _factory
-                    .CreateClient(new WebApplicationFactoryClientOptions
-                    {
-                        AllowAutoRedirect = false,
-                    });
-
-            }
-        }
-
-
-        protected void Login()
-        {
-            // determine if authentication is enabled.
-
-            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
-            {
-                string encodedSecret = HttpUtility.UrlEncode(Configuration["JWT_TOKEN_KEY"]);
-                var request = new HttpRequestMessage(HttpMethod.Get, "/Authentication/Token?secret=" + encodedSecret);
-                var response = _client.SendAsync(request).GetAwaiter().GetResult();
-                response.EnsureSuccessStatusCode();
-
-                var token = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                if (!string.IsNullOrEmpty(token))
-                {
-                    // Add the bearer token to the client.
-                    _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
-                }
-            }
-
-
-        }
-    }
-
-
-    public class LegacyAdapterTest : ApiIntegrationTestBaseWithLogin
-    {
-        public string testDl;
-        public string testSurcode;
-        public LegacyAdapterTest(CustomWebApplicationFactory<Startup> factory)
-            : base(factory)
-        {
-
-            testDl = Configuration["ICBC_TEST_DL"];
-            testSurcode = Configuration["ICBC_TEST_SURCODE"];
+            
         }
 
 
 
-        /// <summary>
-        /// Test the MS Dynamics interface
-        /// </summary>
-        [Fact]
-        public async void CaseExist()
-        {            
-            Login();
-
-            var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?driversLicence=" + testDl);
-
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
-        }
-
-        [Fact]
-        public async void CaseDocuments()
-        {         
-            Login();
-
-            var request = new HttpRequestMessage(HttpMethod.Post, "/Cases/Documents");
-
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-            response.EnsureSuccessStatusCode();
-        }
+        
 
 
-        [Fact]
-        public async void DfwebGetCaseComments()
-        {
-            Login();
-
-            // start by getting comments.  This will allow us to get the CaseId
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
-
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case> cases = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case>>(responseContent);
-
-            string caseId = cases[0].CaseId;
-
-            request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Comments");
-
-            response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-            response.EnsureSuccessStatusCode();
-        }
+        
 
 
             [Fact]
@@ -237,17 +117,22 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment> comments = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment>>(responseContent);
 
-            bool found = false;
-
-            foreach (var item in comments)
+            if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_URI"]))
             {
-                if (item.CommentText == comment.CommentText && item.Driver.LastName == comment.Driver.LastName)
+                bool found = false;
+
+                foreach (var item in comments)
                 {
-                    found = true;
+                    if (item.CommentText == comment.CommentText && item.Driver.LastName == comment.Driver.LastName)
+                    {
+                        found = true;
+                    }
                 }
+
+                Assert.True(found);
             }
 
-            Assert.True(found);
+            
         }
 
        // {"userId":"IDIR\\SMILLAR","driver":\{"licenseNumber":"0200103","lastName":"KNI","loadedFromICBC":false,"flag51":false} 
@@ -349,14 +234,43 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         [Fact]
         public async void TestLoginRequired()
         {            
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                // should be 401 if there was no login.
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            }
+            
+
+        }
+
+        [Fact]
+        public async void DfwebGetCaseComments()
+        {
+            Login();
+
+            // start by getting comments.  This will allow us to get the CaseId
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
-            // should be 401 if there was no login.
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case> cases = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Case>>(responseContent);
+
+            string caseId = cases[0].CaseId;
+
+            request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Comments");
+
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
         }
 
     }
