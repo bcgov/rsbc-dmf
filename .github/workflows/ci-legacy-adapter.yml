@@ -9,7 +9,7 @@ on:
 
 env:
   IMAGE_NAME: legacy-adapter
-  solution-folder: icbc-adapter/src/ 
+  solution-folder: legacy-adapter/src/ 
 
 jobs:
   build:
