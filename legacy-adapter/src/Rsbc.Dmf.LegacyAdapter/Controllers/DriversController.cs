@@ -65,7 +65,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
-        public ActionResult GetComments([FromRoute] string licenseNumber, [FromQuery] int? filter, [FromQuery] char sort)
+        public ActionResult GetComments([FromRoute] string licenseNumber, [FromQuery] string filter, [FromQuery] char sort)
         
         {            
             // call the back end
@@ -90,10 +90,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     };
 
                     bool addItem = true;
-
-                    if (filter != null)
+                    Guid filterValue;
+                    Guid caseId;
+                    if (filter != null && Guid.TryParse(filter, out filterValue ) && Guid.TryParse(item.CaseId, out caseId))
                     {
-                        addItem = filter == item.SequenceNumber;
+                        addItem = filterValue == caseId;
                     }
 
                     if (addItem)
