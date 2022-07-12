@@ -14,10 +14,12 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
-
+    /// <summary>
+    /// Controller providing data related to a Driver
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [Produces("application/json")]
+    [Produces("application/json")] 
     public class DriversController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -54,14 +56,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// Get Comments for a case
         /// </summary>
-        /// <param name="caseId"></param>
+        /// <param name="licenseNumber"></param>
+        /// <param name="filter">Optional numeric sequence number to filter results by.</param>
+        /// <param name="sort">Optional Char, one of 'D' - commentDate, 'T' - commentTypeCode, 'U' - userId, 'C' - commentText</param>
         /// <returns></returns>
         // GET: /Drivers/Exist
         [HttpGet("{licenseNumber}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
-        public ActionResult GetComments([FromRoute] string licenseNumber)
+        public ActionResult GetComments([FromRoute] string licenseNumber, [FromQuery] int? filter, [FromQuery] char sort)
         
         {            
             // call the back end
@@ -85,17 +89,47 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now 
                     };
 
-                    result.Add(new ViewModels.Comment
+                    bool addItem = true;
+
+                    if (filter != null)
                     {
-                        CaseId = item.CaseId,
-                        CommentDate = item.CommentDate.ToDateTimeOffset(),
-                        CommentId = item.CommentId,
-                        CommentText = item.CommentText,
-                        CommentTypeCode = item.CommentTypeCode,
-                        Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
-                    });
+                        addItem = filter == item.SequenceNumber;
+                    }
+
+                    if (addItem)
+                    {
+
+                        result.Add(new ViewModels.Comment
+                        {
+                            CaseId = item.CaseId,
+                            CommentDate = item.CommentDate.ToDateTimeOffset(),
+                            CommentId = item.CommentId,
+                            CommentText = item.CommentText,
+                            CommentTypeCode = item.CommentTypeCode,
+                            Driver = driver,
+                            SequenceNumber = item.SequenceNumber,
+                            UserId = item.UserId
+                        });
+                    }
+                }
+
+                if (sort != null)
+                {
+                    switch (sort)
+                    {
+                        case 'D': // - commentDate
+                            result = result.OrderBy(x => x.CommentDate).ToList();
+                            break;
+                        case 'T': // - commentTypeCode
+                            result = result.OrderBy(x => x.CommentTypeCode).ToList();
+                            break;
+                        case 'U': // - userId
+                            result = result.OrderBy(x => x.UserId).ToList();
+                            break;
+                        case 'C': // - commentText
+                            result = result.OrderBy(x => x.CommentText).ToList();
+                            break;
+                    }                 
                 }
                 return Json(result);
             }
@@ -207,6 +241,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 foreach (var item in reply.Items)
                 {
+                   
+
                     // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
                     ViewModels.Driver driver = new ViewModels.Driver()
                     {
@@ -220,6 +256,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     // fetch the file contents
                     Byte[] data = new byte[0];
 
+                    
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
@@ -227,12 +264,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
 
                         DocumentId = item.DocumentId,
-                        FileContents = data,                        
+                        FileContents = data,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
                     });
+                    
+                    
                 }
+
+                
+
                 return Json(result);
             }
             else

@@ -174,7 +174,75 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
     [Fact]
         public async void DfwebGetComments()
         {
+            Login();
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void DfwebGetCommentsFilter()
+        {
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments?filter=1");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void DfwebGetCommentsSortC()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments?sort=C");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void DfwebGetCommentsSortD()
+        {
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments?sort=D");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void DfwebGetCommentsSortT()
+        {
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments?sort=T");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async void DfwebGetCommentsSortU()
+        {
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments?sort=U");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
@@ -222,6 +290,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         [Fact]
         public async void DfcmsGetDocuments()
         {
+
+            Login();
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
@@ -236,6 +307,10 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {            
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
+                if (_client.DefaultRequestHeaders.Contains("Authorization"))
+                {
+                    _client.DefaultRequestHeaders.Remove("Authorization");
+                }
                 var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Cases");
 
                 var response = _client.SendAsync(request).GetAwaiter().GetResult();
