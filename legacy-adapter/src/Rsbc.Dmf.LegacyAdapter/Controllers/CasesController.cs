@@ -224,7 +224,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 BatchId = batchId ?? String.Empty,
                 DocumentPages = documentPages,
-                DocumentTypeCode = documentType,
+                DocumentTypeCode = documentType ?? String.Empty,
 
                 CaseId = caseId ?? string.Empty,
                 FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
