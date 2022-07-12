@@ -40,7 +40,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {
             // determine if authentication is enabled.
 
-            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]) && !_client.DefaultRequestHeaders.Contains("Authorization"))
             {
                 string encodedSecret = HttpUtility.UrlEncode(Configuration["JWT_TOKEN_KEY"]);
                 var request = new HttpRequestMessage(HttpMethod.Get, "/Authentication/Token?secret=" + encodedSecret);
