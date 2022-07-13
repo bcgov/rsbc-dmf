@@ -141,7 +141,7 @@ namespace OAuthServer
 
                        //set token validation parameters
                        var validationParameters = ctx.Options.TokenValidationParameters.Clone();
-                       //validationParameters.IssuerSigningKeys = oidcConfig.JsonWebKeySet.GetSigningKeys();
+                       validationParameters.IssuerSigningKeys = oidcConfig.JsonWebKeySet.GetSigningKeys();
                        validationParameters.ValidateLifetime = false;
                        validationParameters.ValidateIssuer = false;
                        var userInfoRequest = new UserInfoRequest
