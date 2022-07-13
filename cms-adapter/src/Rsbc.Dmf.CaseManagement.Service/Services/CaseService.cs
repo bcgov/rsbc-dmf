@@ -171,7 +171,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Items.Add(new LegacyDocument
                     {
                         BatchId = item.BatchId ?? string.Empty,
-                        DocumentPages = 0,
+                        DocumentPages = item.DocumentPages,
                         DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
                    
                         CaseId = item.CaseId ?? string.Empty,
@@ -182,7 +182,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         OriginatingNumber = item.OriginatingNumber ?? string.Empty,
                           
                         DocumentId = item.DocumentId ?? string.Empty,
-                        SequenceNumber = (long)item.SequenceNumber,
+                        SequenceNumber = (long)item.SequenceNumber ?? -1,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
                         DocumentUrl = item.DocumentUrl ?? string.Empty,
