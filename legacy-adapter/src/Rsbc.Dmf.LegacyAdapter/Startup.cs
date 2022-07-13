@@ -68,7 +68,6 @@ namespace Rsbc.Dmf.LegacyAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
@@ -160,7 +159,6 @@ namespace Rsbc.Dmf.LegacyAdapter
                     services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
                 }
             }
-
 
             // Add Case Management System (CMS) Adapter 
 
@@ -268,7 +266,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
-                        sourceType: "documentstorage", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                        sourceType: "legacyadapter", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
                         restrictedToMinimumLevel: LogEventLevel.Information,
 #pragma warning disable CA2000 // Dispose objects before losing scope
                         messageHandler: new HttpClientHandler
@@ -301,7 +299,6 @@ namespace Rsbc.Dmf.LegacyAdapter
             // to set this as it's the default behavior. It's just included here for completeness :)
             //options.IncludeExceptionDetails = (ctx, ex) => Environment.IsDevelopment();
             options.IncludeExceptionDetails = (ctx, ex) => true;
-
 
             // You can configure the middleware to re-throw certain types of exceptions, all exceptions or based on a predicate.
             // This is useful if you have upstream middleware that needs to do additional handling of exceptions.
