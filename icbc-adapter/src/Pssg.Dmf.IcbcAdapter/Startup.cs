@@ -159,8 +159,6 @@ namespace Rsbc.Dmf.IcbcAdapter
                 services.AddHangfireServer();
             }
 
-            
-
             services.AddEndpointsApiExplorer();
 
             // Swagger is used for API documentation
@@ -200,6 +198,12 @@ namespace Rsbc.Dmf.IcbcAdapter
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
+            // add ICBC client
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            {
+                IIcbcClient icbcClient = new IcbcClient(Configuration);
+                services.AddTransient(_ => icbcClient);
+            }
 
             // Add Case Management System (CMS) Adapter 
 

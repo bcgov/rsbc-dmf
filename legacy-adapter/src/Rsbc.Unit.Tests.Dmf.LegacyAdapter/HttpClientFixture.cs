@@ -12,8 +12,16 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
                 .Build();
-
-            Client = new CustomWebApplicationFactory<Startup>().CreateClient();
+            if (!string.IsNullOrEmpty(Configuration["TEST_BASE_URI"]))
+            {
+                Client = new HttpClient();
+                Client.BaseAddress = new Uri(Configuration["TEST_BASE_URI"]);
+            }
+            else
+            {
+                Client = new CustomWebApplicationFactory<Startup>().CreateClient();
+            }
+            
         }
 
         public void Dispose() => Client.Dispose();
