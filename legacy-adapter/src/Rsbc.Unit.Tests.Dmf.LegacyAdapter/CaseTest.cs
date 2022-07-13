@@ -104,7 +104,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             multiPartContent.Add(new StringContent(importID), "importID");
             multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
             multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
-            multiPartContent.Add(new StringContent(documentType), "documentType");
+            multiPartContent.Add(new StringContent(documentType), "002");
             multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
             multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
 
