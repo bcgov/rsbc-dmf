@@ -328,7 +328,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 Driver driver = new Driver()
                 {
-                    DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,                    
+                    DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber ?? string.Empty,                    
                 };
 
                 foreach (var document in @case.bcgov_incident_bcgov_documenturl)
@@ -338,19 +338,19 @@ namespace Rsbc.Dmf.CaseManagement
 
                     LegacyDocument legacyDocument = new LegacyDocument
                     {
-                        BatchId = document.dfp_batchid,                       
+                        BatchId = document.dfp_batchid ?? string.Empty,                       
                         CaseId = @case.incidentid.ToString(),
                         DocumentPages = ConvertPagesToInt (document.dfp_documentpages),
                         DocumentId = document.bcgov_documenturlid.ToString(),
-                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name,
-                        DocumentUrl = document.bcgov_url,
+                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                        DocumentUrl = document.bcgov_url ?? string.Empty,
                         FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
                         ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                        ImportId = document.dfp_importid,
-                        OriginatingNumber = document.dfp_faxsender,
-                        ValidationMethod = document.dfp_validationmethod,
-                        ValidationPrevious = document.dfp_validationprevious,                      
-                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                        ImportId = document.dfp_importid ?? string.Empty,
+                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,                      
+                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault() ,
                         Driver = driver
                     };
 
