@@ -20,7 +20,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
     public class CaseTest : ApiIntegrationTestBase
     {
         
-
         public CaseTest(HttpClientFixture fixture)
             : base(fixture)
         {
@@ -134,8 +133,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-
-       
 
     }
 }
