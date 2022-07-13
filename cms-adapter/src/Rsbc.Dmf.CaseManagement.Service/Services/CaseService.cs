@@ -198,6 +198,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             catch (Exception ex)
             {
+                Serilog.Log.Error(ex, "GetCaseDocuments Error");
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
