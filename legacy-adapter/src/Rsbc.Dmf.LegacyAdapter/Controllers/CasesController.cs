@@ -251,7 +251,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                return StatusCode(500);
+                Serilog.Log.Error(result.ErrorDetail);
+                return StatusCode(500, result.ErrorDetail);
             }
         }
 
