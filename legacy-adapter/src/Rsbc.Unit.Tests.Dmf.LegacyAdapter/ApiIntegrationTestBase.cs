@@ -34,7 +34,26 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             testDl = Configuration["ICBC_TEST_DL"] ?? "2222222";
             testSurcode = Configuration["ICBC_TEST_SURCODE"] ?? "TST";
         }
-        
+
+
+        protected string GetCaseId()
+        {
+            string result = null;
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                response.EnsureSuccessStatusCode();
+
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                result = JsonConvert.DeserializeObject<string>(responseContent);
+            }
+
+
+            return result;
+        }
 
         protected void Login()
         {

@@ -257,6 +257,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {
             Login();
 
+            var caseId = GetCaseId();
+
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Documents");
 
             var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver() { LicenseNumber = testDl, LastName = testSurcode };
@@ -268,12 +270,13 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Document()
             {
                 FaxReceivedDate = DateTimeOffset.Now,
+                ImportDate = DateTimeOffset.Now,
                 DocumentId = Guid.NewGuid().ToString(),
                 FileContents = bytes,
                 Driver = driver,
                 SequenceNumber = 3,                
                 UserId = "IDIR\\TESTUSER",
-                CaseId = Guid.NewGuid().ToString()
+                CaseId = caseId
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);
