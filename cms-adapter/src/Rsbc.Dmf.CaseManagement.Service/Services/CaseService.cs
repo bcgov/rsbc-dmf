@@ -165,8 +165,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     var driver = new Driver();
                     if (item.Driver != null)
                     {
-                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
-                        driver.Surname = item.Driver.Surname;
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber ?? string.Empty;
+                        driver.Surname = item.Driver.Surname ?? string.Empty;
                     }
                     reply.Items.Add(new LegacyDocument
                     {
@@ -178,7 +178,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
                         ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
                         ImportId = item.ImportId ?? string.Empty,
-                         
+                        
                         OriginatingNumber = item.OriginatingNumber ?? string.Empty,
                           
                         DocumentId = item.DocumentId ?? string.Empty,
@@ -198,7 +198,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             catch (Exception ex)
             {
-                Serilog.Log.Error(ex, "GetCaseDocuments Error");
+                Serilog.Log.Error(ex, $"GetCaseDocuments {request.CaseId} Error");
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
