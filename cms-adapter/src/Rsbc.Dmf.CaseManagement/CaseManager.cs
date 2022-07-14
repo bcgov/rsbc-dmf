@@ -332,7 +332,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber ?? string.Empty,
                     };
-                    if (@case.bcgov_incident_bcgov_documenturl != null)]
+                    if (@case.bcgov_incident_bcgov_documenturl != null)
                     {
                         foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                         {
