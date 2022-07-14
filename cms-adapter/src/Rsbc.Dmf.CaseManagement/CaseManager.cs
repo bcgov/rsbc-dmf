@@ -707,7 +707,10 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 dynamicsContext.AddTobcgov_documenturls(@documentUrl);
-                dynamicsContext.AddLink( @documentUrl, nameof (bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                if (!string.IsNullOrEmpty (documentTypeId) )
+                {
+                    dynamicsContext.AddLink(@documentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                }
                 dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), @documentUrl);
 
 
