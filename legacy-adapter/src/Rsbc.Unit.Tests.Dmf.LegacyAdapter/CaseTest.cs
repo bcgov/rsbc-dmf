@@ -39,24 +39,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Assert.True(caseId != null);
         }
 
-        private string GetCaseId()
-        {
-            string result = null;
-            if (!string.IsNullOrEmpty(testDl))
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
-
-                var response = _client.SendAsync(request).GetAwaiter().GetResult();
-                response.EnsureSuccessStatusCode();
-
-                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                result = JsonConvert.DeserializeObject<string>(responseContent);
-            }
-            
-
-            return result;
-        }
 
         [Fact]
         public async void AddCaseDocument()
