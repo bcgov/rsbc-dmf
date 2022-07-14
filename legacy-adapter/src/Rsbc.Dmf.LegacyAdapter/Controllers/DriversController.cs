@@ -280,7 +280,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                return StatusCode(500);
+                return StatusCode(500, reply.ErrorDetail);
             }
         }
 
@@ -298,7 +298,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // add the document
 
-            var driver = new CaseManagement.Service.Driver()
+            var driver = new Driver()
             {
                 DriverLicenseNumber = licenseNumber
             };
@@ -331,7 +331,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                return StatusCode(500);
+                return StatusCode(500, result.ErrorDetail);
             }
         }
 
