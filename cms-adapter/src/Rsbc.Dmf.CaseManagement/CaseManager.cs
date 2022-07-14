@@ -438,54 +438,67 @@ namespace Rsbc.Dmf.CaseManagement
             List<LegacyDocument> result = new List<LegacyDocument>();
             // start by the driver
 
-            var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
-
-            foreach (var @driver in @drivers)
+            var driversRaw = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1);
+            if (driversRaw != null)
             {
-                if (@driver != null)
+                var drivers = driversRaw.ToList();
+                foreach (var @driver in drivers)
                 {
-                    // .Expand(x => x.dfp_incident_dfp_comment)
-                    // get the cases for that driver.
-                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
-                    ).ToList();
-
-                    foreach (var @case in @cases)
+                    if (@driver != null)
                     {
-                        // ensure related data is loaded.
+                        // .Expand(x => x.dfp_incident_dfp_comment)
+                        // get the cases for that driver.
+                        var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
+                        ).ToList();
 
-                        Driver caseDriver = new Driver()
+                        foreach (var @case in @cases)
                         {
-                            DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
-                        };
+                            // ensure related data is loaded.
+                            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
 
-                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
-                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
-                        {
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-
-                            LegacyDocument legacyDocument = new LegacyDocument
+                            if (@case.dfp_DriverId != null)
                             {
-                                BatchId = document.dfp_batchid,
-                                CaseId = @case.incidentid.ToString(),
-                                DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                                DocumentId = document.bcgov_documenturlid.ToString(),
-                                DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name,
-                                DocumentUrl = document.bcgov_url,
-                                FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                                ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                                ImportId = document.dfp_importid,
-                                OriginatingNumber = document.dfp_faxsender,
-                                ValidationMethod = document.dfp_validationmethod,
-                                ValidationPrevious = document.dfp_validationprevious,
-                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                Driver = caseDriver
+                                await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
+                            }
+
+                            Driver caseDriver = new Driver()
+                            {
+                                DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
+                                Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty
                             };
 
-                            result.Add(legacyDocument);
+                            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                            {
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+
+                                LegacyDocument legacyDocument = new LegacyDocument
+                                {
+                                    BatchId = document.dfp_batchid ?? string.Empty,
+                                    CaseId = @case.incidentid.ToString(),
+                                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                                    DocumentId = document.bcgov_documenturlid.ToString(),
+                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                    DocumentUrl = document.bcgov_url ?? string.Empty,
+                                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                                    ImportId = document.dfp_importid ?? string.Empty,
+                                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                    Driver = caseDriver
+                                };
+
+                                result.Add(legacyDocument);
+                            }
                         }
                     }
                 }
+
             }
+
 
             return result;
         }
