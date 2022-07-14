@@ -73,27 +73,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CaseManagement.Driver driver = new CaseManagement.Driver();
             if (request.Driver != null)
             {
-                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
-                driver.Surname = request.Driver.Surname;
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
+                driver.Surname = request.Driver.Surname ?? string.Empty;
             }
 
             var newDocument = new CaseManagement.LegacyDocument()
             {
-                BatchId = request.BatchId,
-                CaseId = request.CaseId,  
-                DocumentId = request.DocumentId,
+                BatchId = request.BatchId ?? string.Empty,
+                CaseId = request.CaseId ?? string.Empty,  
+                DocumentId = request.DocumentId ?? string.Empty,
                 DocumentPages = (int) request.DocumentPages,
-                DocumentTypeCode = request.DocumentTypeCode,
-                DocumentUrl = request.DocumentUrl,
+                DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentUrl = request.DocumentUrl ?? string.Empty,
                 FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
                 // may need to add FileSize,
                 ImportDate = request.ImportDate.ToDateTimeOffset(),
-                ImportId = request.ImportId,
-                OriginatingNumber = request.OriginatingNumber,
-                ValidationMethod = request.ValidationMethod,
-                ValidationPrevious = request.ValidationPrevious,
+                ImportId = request.ImportId ?? string.Empty,
+                OriginatingNumber = request.OriginatingNumber ?? string.Empty,
+                ValidationMethod = request.ValidationMethod ?? string.Empty,
+                ValidationPrevious = request.ValidationPrevious ?? string.Empty,
                 SequenceNumber = (int)request.SequenceNumber,
-                UserId = request.UserId,
+                UserId = request.UserId ?? string.Empty,
                 Driver = driver 
             };
 
@@ -106,6 +106,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             else
             {
+       
                 reply.ResultStatus = ResultStatus.Fail;
             }
 

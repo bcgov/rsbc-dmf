@@ -718,6 +718,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception ex)
             {
+                Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
                 result.Success = false;                
             }
 
