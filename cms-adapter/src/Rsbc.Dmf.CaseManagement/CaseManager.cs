@@ -318,46 +318,51 @@ namespace Rsbc.Dmf.CaseManagement
         {
             List<LegacyDocument> result = new List<LegacyDocument>();
             
-            var @cases = dynamicsContext.incidents.Where(i => i.incidentid == Guid.Parse(caseId)    ).ToList();
-
-            foreach (var @case in @cases)
+            var casesRaw = dynamicsContext.incidents.Where(i => i.incidentid == Guid.Parse(caseId));
+            if (casesRaw != null)
             {
-                // ensure related data is loaded.
-                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
-
-                Driver driver = new Driver()
+                var @cases = casesRaw.ToList();
+                foreach (var @case in @cases)
                 {
-                    DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber ?? string.Empty,                    
-                };
+                    // ensure related data is loaded.
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                foreach (var document in @case.bcgov_incident_bcgov_documenturl)
-                {
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                    LegacyDocument legacyDocument = new LegacyDocument
+                    Driver driver = new Driver()
                     {
-                        BatchId = document.dfp_batchid ?? string.Empty,                       
-                        CaseId = @case.incidentid.ToString(),
-                        DocumentPages = ConvertPagesToInt (document.dfp_documentpages),
-                        DocumentId = document.bcgov_documenturlid.ToString(),
-                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                        DocumentUrl = document.bcgov_url ?? string.Empty,
-                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                        ImportId = document.dfp_importid ?? string.Empty,
-                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,                      
-                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault() ,
-                        Driver = driver
+                        DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber ?? string.Empty,
                     };
+                    if (@case.bcgov_incident_bcgov_documenturl != null)]
+                    {
+                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
-                    result.Add(legacyDocument);
+                            LegacyDocument legacyDocument = new LegacyDocument
+                            {
+                                BatchId = document.dfp_batchid ?? string.Empty,
+                                CaseId = @case.incidentid.ToString(),
+                                DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                                DocumentId = document.bcgov_documenturlid.ToString(),
+                                DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                DocumentUrl = document.bcgov_url ?? string.Empty,
+                                FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                                ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                                ImportId = document.dfp_importid ?? string.Empty,
+                                OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                                ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                                ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                Driver = driver
+                            };
+
+                            result.Add(legacyDocument);
+                        }
+                    }                    
                 }
             }
-             
+            
             return result;
         }
 
