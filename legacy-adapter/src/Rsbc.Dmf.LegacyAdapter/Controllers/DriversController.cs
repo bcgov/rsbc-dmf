@@ -119,7 +119,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     switch (sort)
                     {
                         case 'D': // - commentDate
-                            result = result.OrderBy(x => x.CommentDate).ToList();
+                            result = result.OrderByDescending(x => x.CommentDate).ToList();
                             break;
                         case 'T': // - commentTypeCode
                             result = result.OrderBy(x => x.CommentTypeCode).ToList();
