@@ -441,11 +441,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), interval);
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), Cron.Never);
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), "0 0 29 2/12000 MON"); 
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), Cron.Never); 
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), interval);
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
