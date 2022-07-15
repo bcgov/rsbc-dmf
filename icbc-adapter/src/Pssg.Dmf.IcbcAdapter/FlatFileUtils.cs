@@ -100,7 +100,14 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    SpiderFolder(client, hangfireContext, client.WorkingDirectory);
+                    string folder = _configuration["SCP_FOLDER"];
+
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = client.WorkingDirectory;
+                    }
+                       
+                    SpiderFolder(client, hangfireContext, folder);
                 }
 
             }
