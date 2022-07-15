@@ -443,7 +443,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), interval);
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), interval);
+                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), "0 0 29 2/12000 MON"); 
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), interval);
 
