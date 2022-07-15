@@ -100,20 +100,27 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(client.WorkingDirectory);
-
-                    foreach (var file in files)
-                    {
-                        LogStatement(hangfireContext, file.Name);
-                    }
-
+                    SpiderFolder(client, hangfireContext, client.WorkingDirectory);
                 }
 
             }
 
-
-
             LogStatement(hangfireContext, "End of CheckConnection.");
+        }
+
+        private void SpiderFolder (SftpClient client, PerformContext hangfireContext, string folder)
+        {
+            var files = client.ListDirectory(folder);
+
+            foreach (var file in files)
+            {
+                LogStatement(hangfireContext, folder + "/" + file.Name);
+
+                if (file.Attributes.IsDirectory && !file.Name.StartsWith ("."))
+                {
+                    SpiderFolder (client, hangfireContext, folder + "/" + file.Name);
+                }
+            }
         }
 
         /// <summary>
