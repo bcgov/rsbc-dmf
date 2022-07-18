@@ -204,10 +204,17 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
                 // Add / Update cases
+
+                string surname = record.Surname ?? string.Empty;
+                if (surname.EndsWith(","))
+                {
+                    surname = surname.Substring(0, surname.Length - 1);
+                }
+
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
                     LicenseNumber = record.LicenseNumber,
-                    Surname = record.Surname ?? string.Empty,
+                    Surname = surname,
                     ClientNumber = record.ClientNumber ?? string.Empty,
                 };
                 _caseManagerClient.ProcessLegacyCandidate(lcr);
