@@ -32,10 +32,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         /// <summary>
-        /// Test the Candidates List
+        /// Test the Empty Candidates List
         /// </summary>
         [Fact]
-        public async void TestCandidatesList()
+        public async void TestEmptyCandidatesList()
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
@@ -50,5 +50,56 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             // parse as JSON.
             var jsonString = await response.Content.ReadAsStringAsync();
         }
+
+        /// <summary>
+        /// Test zulu time
+        /// </summary>
+        [Fact]
+        public async void TestZuluDateCandidatesList()
+        {
+            string testDl = Configuration["ICBC_TEST_DL"];
+
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+
+            request.Content = new StringContent("[{\"dlNumber\":\""+testDl
+                +"\",\"effectiveDate\":\"2022-06-22T00:00:00.000Z\"}]", Encoding.UTF8, "application/json");
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+
+            // parse as JSON.
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        /// <summary>
+        /// Test zulu time
+        /// </summary>
+        [Fact]
+        public async void TestGMT8List()
+        {
+            string testDl = Configuration["ICBC_TEST_DL"];
+
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+
+            string data = "[{\"dlNumber\":\"" + testDl
+                + "\",\"effectiveDate\":\"2022-06-22T08:00:00.000Z\"}]";
+
+            request.Content = new StringContent(data, Encoding.UTF8, "application/json");
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+
+            // parse as JSON.
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+       
+
     }
 }

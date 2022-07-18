@@ -343,7 +343,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 else
                 {
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest);
+                    await _caseManager.LegacyCandidateCreate(searchRequest, request.EffectiveDate.ToDateTimeOffset());
+
                     reply.ResultStatus = ResultStatus.Success;
                 }
             }
