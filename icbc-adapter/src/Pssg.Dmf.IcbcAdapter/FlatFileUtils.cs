@@ -202,14 +202,17 @@ namespace Rsbc.Dmf.IcbcAdapter
             
             foreach (var record in records)
             {
-                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                
                 // Add / Update cases
 
                 string surname = record.Surname ?? string.Empty;
-                if (surname.Trim().EndsWith(","))
+                if (! string.IsNullOrEmpty(surname) && surname.Trim().EndsWith(","))               
                 {
-                    surname = surname.Trim().Substring(surname.Length - 1);
+                    surname = surname.Trim();
+                    surname = surname.Substring(surname.Length - 1);
                 }
+
+                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
 
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
