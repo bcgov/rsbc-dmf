@@ -146,7 +146,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            string folder = _configuration["SCP_FOLDER"];
+            string folder = _configuration["SCP_FOLDER_INBOUND"];
 
             if (CheckScpSettings(host, username, password, key))
             {
@@ -172,11 +172,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                     {
                         if (file.Name.StartsWith("drvnew-"))
                         {
-                            LogStatement(hangfireContext, file.Name);
-                            var memoryStream = new MemoryStream();
-                            client.DownloadFile(file.FullName, memoryStream);
+                            LogStatement(hangfireContext, file.FullName);
 
-                            string data = StringUtility.StreamToString(memoryStream);
+                            string data = client.ReadAllText(file.FullName);
+             
                             LogStatement(hangfireContext, data);
                             ProcessCandidates(hangfireContext, data);
                             if (first)
@@ -230,6 +229,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             string host = _configuration["SCP_HOST"];
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
+
+            string folder = _configuration["SCP_FOLDER_OUTBOUND"];
 
             if (CheckScpSettings(host, username, password, key))
             {
