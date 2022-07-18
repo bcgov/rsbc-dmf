@@ -167,17 +167,24 @@ namespace Rsbc.Dmf.IcbcAdapter
                     }
 
                     var files = client.ListDirectory(folder);
-
+                    bool first = true;
                     foreach (var file in files)
                     {
-                        LogStatement(hangfireContext, file.Name);
-                        var memoryStream = new MemoryStream();
-                        client.DownloadFile(file.FullName, memoryStream);
+                        if (file.Name.StartsWith("drvnew-"))
+                        {
+                            LogStatement(hangfireContext, file.Name);
+                            var memoryStream = new MemoryStream();
+                            client.DownloadFile(file.FullName, memoryStream);
 
-                        string data = StringUtility.StreamToString(memoryStream);
-                        LogStatement(hangfireContext, data);
-                        ProcessCandidates(hangfireContext, data);
-
+                            string data = StringUtility.StreamToString(memoryStream);
+                            LogStatement(hangfireContext, data);
+                            ProcessCandidates(hangfireContext, data);
+                            if (first)
+                            {
+                                break; // just process one file.
+                            }
+                        }
+                        
                     }
                 }
             }
@@ -201,10 +208,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
                     LicenseNumber = record.LicenseNumber,
-                    Surname = record.Surname,
-                    ClientNumber = record.ClientNumber,
+                    Surname = record.Surname ?? string.Empty,
+                    ClientNumber = record.ClientNumber ?? string.Empty,
                 };
-                //_caseManagerClient.ProcessLegacyCandidate(lcr);
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
             }
         }
 
