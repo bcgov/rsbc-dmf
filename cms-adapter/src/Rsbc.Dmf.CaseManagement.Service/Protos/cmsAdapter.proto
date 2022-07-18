@@ -224,6 +224,9 @@ message LegacyCandidateRequest{
 	string licenseNumber = 1;
     string clientNumber = 2;
 	string surname = 3;
+	google.protobuf.Timestamp birthDate = 4;
+	google.protobuf.Timestamp effectiveDate = 5;
+
 }
 
 message LegacyCandidateReply{

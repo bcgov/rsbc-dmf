@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Guid of the created case</returns>
-        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request);
+        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset effectiveDate);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
@@ -604,7 +604,7 @@ namespace Rsbc.Dmf.CaseManagement
                      Surname = request.Driver.Surname
                 };
 
-                await LegacyCandidateCreate(newCandidate);
+                await LegacyCandidateCreate(newCandidate, DateTimeOffset.MinValue);
                 
                 // now do a search to get the case.
                 var searchResult = await LegacyCandidateSearch(newCandidate);
@@ -694,7 +694,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (@case == null)
             {
                 // create it.
-                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber });
+                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber }, DateTime.MinValue);
                 @case = GetIncidentById(request.CaseId);
             }
 
@@ -725,7 +725,6 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.AddLink(@documentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                 }
                 dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), @documentUrl);
-
 
                 await dynamicsContext.SaveChangesAsync();
                 result.Success = true;
@@ -863,7 +862,7 @@ namespace Rsbc.Dmf.CaseManagement
        }
 
 
-        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request)
+        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset effectiveDate)
         {
             Guid? result = null;
 
@@ -935,7 +934,13 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_progressstatus = 100000000,
                 importsequencenumber = request.SequenceNumber,
                 dfp_DriverId = driver
+
             };
+
+            if (effectiveDate != null && effectiveDate != DateTimeOffset.MinValue)
+            {
+                //@case.dfp_datesenttoicbc = effectiveDate;
+            }
 
             dynamicsContext.AddToincidents(@case);
 

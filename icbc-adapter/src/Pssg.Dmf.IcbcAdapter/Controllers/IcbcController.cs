@@ -13,6 +13,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -59,11 +60,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IcbcClient icbcClient;
 
-        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration)
+        private readonly CaseManager.CaseManagerClient _caseManagerClient;
+
+        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
         {
             _configuration = configuration;
             _logger = logger;
             icbcClient = new IcbcClient(configuration);
+            _caseManagerClient = caseManagerClient;
         }
         
         /// <summary>
@@ -80,6 +84,20 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
 
             // check for duplicates; if there is an existing case then do not create a new one
+            foreach (var item in newCandidates)
+            {
+                LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+                {
+                    LicenseNumber = item.DlNumber,
+                    Surname = item.LastName ?? string.Empty,
+                    ClientNumber = string.Empty,
+                    BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.BirthDate ?? DateTimeOffset.MinValue ),
+                    EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.EffectiveDate ?? DateTimeOffset.MinValue ),
+                };
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
+
+            }
+
             return Ok();
         }
 
