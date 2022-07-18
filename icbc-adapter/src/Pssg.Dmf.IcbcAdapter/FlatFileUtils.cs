@@ -206,9 +206,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                 // Add / Update cases
 
                 string surname = record.Surname ?? string.Empty;
-                if (surname.EndsWith(","))
+                if (surname.Trim().EndsWith(","))
                 {
-                    surname = surname.Substring(0, surname.Length - 1);
+                    surname = surname.Trim().Substring(surname.Length - 1);
                 }
 
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
