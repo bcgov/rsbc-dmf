@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -29,10 +30,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
         }
 
@@ -298,6 +300,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // add the document
 
+            UploadFileRequest pdfData = new UploadFileRequest()
+            {
+                ContentType = "application/pdf",
+                Data = ByteString.CopyFrom(document.FileContents),
+                EntityName = "incident",
+                FileName = $"DMER.pdf",
+                FolderName = document.CaseId,
+            };
+            var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                return StatusCode(500, fileReply.ErrorDetail);   
+            }
+
             var driver = new Driver()
             {
                 DriverLicenseNumber = licenseNumber
@@ -319,20 +336,34 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             });
 
-            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                var actionName = nameof(CreateDocumentForDriver);
-                var routeValues = new
-                {
-                    driversLicence = licenseNumber
-                };
-
-                return CreatedAtAction(actionName, routeValues, document);
-            }
-            else
+            if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
                 return StatusCode(500, result.ErrorDetail);
             }
+
+            UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
+            {
+                CaseId = document.CaseId,
+                IsCleanPass = false,
+                DataFileKey = string.Empty,
+                DataFileSize = 0,
+                PdfFileKey = fileReply.FileName,
+                PdfFileSize = document.FileContents.Length,
+
+            };
+
+            // may need to add flags here.
+
+            var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
+
+            var actionName = nameof(CreateDocumentForDriver);
+            var routeValues = new
+            {
+                driversLicence = licenseNumber
+            };
+
+            return CreatedAtAction(actionName, routeValues, document);
+            
         }
 
     }
