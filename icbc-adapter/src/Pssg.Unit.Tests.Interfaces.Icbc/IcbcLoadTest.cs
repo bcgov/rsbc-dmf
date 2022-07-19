@@ -103,22 +103,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             foreach (var item in reply.Items)
             {
-                if (counter == 0)
-                {
-                    break;
-                }
+                
                 CLNT c = null;
                 try
                 {
                     c = IcbcClient.GetDriverHistory(item.DriverLicenseNumber);
+                    passed++;
                 }
                 catch (Exception)
                 {
                     errors++;
-                }
-                if (c != null)
-                {
-                    passed++;
                 }
 
 
@@ -126,11 +120,15 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 {
                     counter--;
                 }
-                
+                if (counter == 0)
+                {
+                    break;
+                }
             }
             if (recordLimit < 0)
             {
                 Assert.Equal(reply.Items.Count, passed );
+                Assert.Equal(0, errors);
             }
             else
             {
@@ -139,6 +137,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                     recordLimit = reply.Items.Count;
                 }
                 Assert.Equal(recordLimit, passed );
+                Assert.Equal(0, errors);
             }
             
         }
