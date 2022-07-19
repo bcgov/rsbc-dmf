@@ -212,7 +212,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     surname = surname.Substring(surname.Length - 1);
                 }
 
-                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {surname}");
 
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
