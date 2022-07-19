@@ -342,8 +342,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 }
                 else
                 {
+                    DateTimeOffset? dto = null;
+                    if (request.EffectiveDate != null)
+                    {
+                        dto = request.EffectiveDate.ToDateTimeOffset();
+                    }
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest, request.EffectiveDate.ToDateTimeOffset());
+                    await _caseManager.LegacyCandidateCreate(searchRequest, dto);
 
                     reply.ResultStatus = ResultStatus.Success;
                 }
