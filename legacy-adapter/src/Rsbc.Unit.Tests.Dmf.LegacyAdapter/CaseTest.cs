@@ -74,6 +74,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             string originatingNumber = "BCGovtFax";
             int documentPages = 1;
             string documentType = "002";
+            documentType = "Clean Pass";
             string validationMethod = "Single User";
             string validationPrevious = "TESTUSER";
 

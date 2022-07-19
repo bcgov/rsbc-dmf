@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -220,12 +222,32 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             // TODO fetch driver from ICBC
 
+            // add the document
+            var ms = new MemoryStream();
+            file.OpenReadStream().CopyTo(ms);
+            var data = ms.ToArray();
+
+            UploadFileRequest pdfData = new UploadFileRequest()
+            {
+                ContentType = "application/pdf",
+                Data = ByteString.CopyFrom(data),
+                EntityName = "incident",
+                FileName = $"DMER.pdf",
+                FolderName = caseId,
+            };
+            var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                return StatusCode(500, fileReply.ErrorDetail);
+            }
+
             var document = new LegacyDocument()
             {
                 BatchId = batchId ?? String.Empty,
                 DocumentPages = documentPages,
                 DocumentTypeCode = documentType ?? String.Empty,
-
+                DocumentUrl = fileReply.FileName,
                 CaseId = caseId ?? string.Empty,
                 FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                 ImportDate = Timestamp.FromDateTimeOffset(importDate),
