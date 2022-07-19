@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Guid of the created case</returns>
-        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset effectiveDate);
+        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? effectiveDate);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
@@ -862,7 +862,7 @@ namespace Rsbc.Dmf.CaseManagement
        }
 
 
-        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset effectiveDate)
+        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? effectiveDate)
         {
             Guid? result = null;
 
