@@ -209,7 +209,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 if (! string.IsNullOrEmpty(surname) && surname.Trim().EndsWith(","))               
                 {
                     surname = surname.Trim();
-                    surname = surname.Substring(surname.Length - 1);
+                    surname = surname.Substring(0, surname.Length - 1);
                 }
 
                 LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {surname}");
