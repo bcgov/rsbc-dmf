@@ -214,6 +214,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {surname}");
 
+
+
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
                     LicenseNumber = record.LicenseNumber,

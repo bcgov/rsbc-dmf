@@ -6284,11 +6284,13 @@
         <Key>
           <PropertyRef Name="dfp_commentid" />
         </Key>
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="dfp_medicalportal" Type="Edm.Boolean" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
@@ -6296,21 +6298,19 @@
         <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="dfp_caseidguid" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_driverportal" Type="Edm.Boolean" />
-        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_rsbcusers" Type="Edm.Boolean" />
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="dfp_userid" Type="Edm.String" Unicode="false" />
         <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="_dfp_caseid_value" Type="Edm.Guid" />
-        <Property Name="dfp_mdportal" Type="Edm.Boolean" />
+        <Property Name="dfp_icbc" Type="Edm.Boolean" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
         <Property Name="dfp_commentdetails" Type="Edm.String" Unicode="false" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="dfp_commentid" Type="Edm.Guid" />
-        <Property Name="dfp_webcomments" Type="Edm.Boolean" />
-        <Property Name="dfp_icbc" Type="Edm.Boolean" />
-        <Property Name="dfp_decisionnote" Type="Edm.Boolean" />
-        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="dfp_commenttype" Type="Edm.Int32" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="dfp_date" Type="Edm.DateTimeOffset" />
@@ -6824,29 +6824,31 @@
         <Key>
           <PropertyRef Name="dfp_knownmedicalconditionid" />
         </Key>
-        <Property Name="statuscode" Type="Edm.Int32" />
-        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
-        <Property Name="_createdby_value" Type="Edm.Guid" />
-        <Property Name="_owningteam_value" Type="Edm.Guid" />
-        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="statecode" Type="Edm.Int32" />
-        <Property Name="_dfp_medicalconditionid_value" Type="Edm.Guid" />
-        <Property Name="createdon" Type="Edm.DateTimeOffset" />
-        <Property Name="_ownerid_value" Type="Edm.Guid" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="dfp_id" Type="Edm.String" Unicode="false" />
-        <Property Name="_dfp_decisionid_value" Type="Edm.Guid" />
-        <Property Name="_modifiedby_value" Type="Edm.Guid" />
-        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
-        <Property Name="dfp_knownmedicalconditionid" Type="Edm.Guid" />
-        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_note" Type="Edm.String" Unicode="false" />
+        <Property Name="_dfp_decisionid_value" Type="Edm.Guid" />
+        <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_id" Type="Edm.String" Unicode="false" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_dfp_medicalconditionid_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_origin" Type="Edm.Int32" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="dfp_knownmedicalconditionid" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_knownmedicalcondition_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -6944,7 +6946,7 @@
           <PropertyRef Name="dfp_medicalconditionid" />
         </Key>
         <Property Name="dfp_note" Type="Edm.String" Unicode="false" />
-        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="dfp_classification" Type="Edm.Int32" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
@@ -6955,10 +6957,11 @@
         <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="dfp_medicalconditionid" Type="Edm.Guid" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="_organizationid_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_medicalcondition_createdby">
@@ -7444,6 +7447,7 @@
         </Key>
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_businessarea" Type="Edm.Int32" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
         <Property Name="dfp_submittaltypeid" Type="Edm.Guid" />
         <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
@@ -7462,6 +7466,7 @@
         <Property Name="dfp_documentcategory" Type="Edm.Int32" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_apidocumenttype" Type="Edm.String" Unicode="false" />
         <Property Name="_createdby_value" Type="Edm.Guid" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_createdby">
@@ -10276,112 +10281,123 @@
         <Key>
           <PropertyRef Name="incidentid" />
         </Key>
-        <Property Name="_resolvebykpiid_value" Type="Edm.Guid" />
-        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
-        <Property Name="customercontacted" Type="Edm.Boolean" />
+        <Property Name="_subjectid_value" Type="Edm.Guid" />
         <Property Name="dfp_dmertype" Type="Edm.Int32" />
-        <Property Name="dfp_progressstatus" Type="Edm.Int32" />
-        <Property Name="_accountid_value" Type="Edm.Guid" />
-        <Property Name="caseorigincode" Type="Edm.Int32" />
-        <Property Name="incidentstagecode" Type="Edm.Int32" />
-        <Property Name="_createdbyexternalparty_value" Type="Edm.Guid" />
-        <Property Name="isescalated" Type="Edm.Boolean" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="checkemail" Type="Edm.Boolean" />
-        <Property Name="followupby" Type="Edm.DateTimeOffset" />
-        <Property Name="ticketnumber" Type="Edm.String" Unicode="false" />
-        <Property Name="numberofchildincidents" Type="Edm.Int32" />
-        <Property Name="_slainvokedid_value" Type="Edm.Guid" />
-        <Property Name="decremententitlementterm" Type="Edm.Boolean" />
-        <Property Name="dfp_datesenttoicbc" Type="Edm.DateTimeOffset" />
-        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="dfp_readyforreview" Type="Edm.Boolean" />
-        <Property Name="onholdtime" Type="Edm.Int32" />
-        <Property Name="resolveby" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_communicationissuedtothedriveron" Type="Edm.DateTimeOffset" />
-        <Property Name="messagetypecode" Type="Edm.Int32" />
-        <Property Name="firstresponseslastatus" Type="Edm.Int32" />
-        <Property Name="merged" Type="Edm.Boolean" />
-        <Property Name="description" Type="Edm.String" Unicode="false" />
-        <Property Name="billedserviceunits" Type="Edm.Int32" />
-        <Property Name="contractservicelevelcode" Type="Edm.Int32" />
-        <Property Name="stageid" Type="Edm.Guid" />
-        <Property Name="dfp_allexpecteddocumentsreceived" Type="Edm.Boolean" />
-        <Property Name="emailaddress" Type="Edm.String" Unicode="false" />
-        <Property Name="_contactid_value" Type="Edm.Guid" />
-        <Property Name="_existingcase_value" Type="Edm.Guid" />
-        <Property Name="_primarycontactid_value" Type="Edm.Guid" />
-        <Property Name="dfp_flagschecked" Type="Edm.Boolean" />
-        <Property Name="dfp_edmerstarted" Type="Edm.Boolean" />
-        <Property Name="lastonholdtime" Type="Edm.DateTimeOffset" />
-        <Property Name="createdon" Type="Edm.DateTimeOffset" />
-        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="isdecrementing" Type="Edm.Boolean" />
         <Property Name="entityimage_timestamp" Type="Edm.Int64" />
-        <Property Name="_owninguser_value" Type="Edm.Guid" />
-        <Property Name="_productid_value" Type="Edm.Guid" />
-        <Property Name="prioritycode" Type="Edm.Int32" />
-        <Property Name="title" Type="Edm.String" Unicode="false" />
-        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_iscleanpass" Type="Edm.Boolean" />
+        <Property Name="escalatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="incidentid" Type="Edm.Guid" />
         <Property Name="_socialprofileid_value" Type="Edm.Guid" />
+        <Property Name="blockedprofile" Type="Edm.Boolean" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="lastonholdtime" Type="Edm.DateTimeOffset" />
+        <Property Name="billedserviceunits" Type="Edm.Int32" />
+        <Property Name="productserialnumber" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_tempdlstatus" Type="Edm.Int32" />
+        <Property Name="dfp_tempnewrestrictionis25262851" Type="Edm.Boolean" />
+        <Property Name="dfp_tempfollowuprequired" Type="Edm.Int32" />
+        <Property Name="_dfp_clinicid_value" Type="Edm.Guid" />
+        <Property Name="dfp_isnoncompliant" Type="Edm.Boolean" />
+        <Property Name="activitiescomplete" Type="Edm.Boolean" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_datesenttoicbc" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_communicationissuedtothedriver" Type="Edm.Boolean" />
+        <Property Name="processid" Type="Edm.Guid" />
+        <Property Name="actualserviceunits" Type="Edm.Int32" />
+        <Property Name="prioritycode" Type="Edm.Int32" />
+        <Property Name="dfp_icbcsystemupdated" Type="Edm.Boolean" />
+        <Property Name="_dfp_medicalpractitionerid_value" Type="Edm.Guid" />
+        <Property Name="_slaid_value" Type="Edm.Guid" />
+        <Property Name="isescalated" Type="Edm.Boolean" />
+        <Property Name="entityimage" Type="Edm.Binary" />
+        <Property Name="customersatisfactioncode" Type="Edm.Int32" />
+        <Property Name="dfp_tempnondmfrequirementsoutstanding" Type="Edm.Boolean" />
+        <Property Name="severitycode" Type="Edm.Int32" />
+        <Property Name="_transactioncurrencyid_value" Type="Edm.Guid" />
+        <Property Name="_productid_value" Type="Edm.Guid" />
+        <Property Name="firstresponsesent" Type="Edm.Boolean" />
+        <Property Name="dfp_flagschecked" Type="Edm.Boolean" />
+        <Property Name="decremententitlementterm" Type="Edm.Boolean" />
+        <Property Name="dfp_allexpecteddocumentsreceived" Type="Edm.Boolean" />
+        <Property Name="_resolvebykpiid_value" Type="Edm.Guid" />
+        <Property Name="_customerid_value" Type="Edm.Guid" />
+        <Property Name="traversedpath" Type="Edm.String" Unicode="false" />
+        <Property Name="stageid" Type="Edm.Guid" />
+        <Property Name="emailaddress" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_decisioncreated" Type="Edm.Boolean" />
+        <Property Name="dfp_tempcodewremoved" Type="Edm.Boolean" />
+        <Property Name="dfp_readyforreview" Type="Edm.Boolean" />
+        <Property Name="_accountid_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="_contractid_value" Type="Edm.Guid" />
+        <Property Name="dfp_iscommercial" Type="Edm.Int32" />
+        <Property Name="ticketnumber" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_edmerstarted" Type="Edm.Boolean" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_kbarticleid_value" Type="Edm.Guid" />
+        <Property Name="_modifiedbyexternalparty_value" Type="Edm.Guid" />
+        <Property Name="dfp_temperacompleted" Type="Edm.Boolean" />
+        <Property Name="customercontacted" Type="Edm.Boolean" />
+        <Property Name="dfp_iscleanpass" Type="Edm.Boolean" />
+        <Property Name="resolveby" Type="Edm.DateTimeOffset" />
+        <Property Name="_contractdetailid_value" Type="Edm.Guid" />
+        <Property Name="responseby" Type="Edm.DateTimeOffset" />
+        <Property Name="_parentcaseid_value" Type="Edm.Guid" />
+        <Property Name="caseorigincode" Type="Edm.Int32" />
+        <Property Name="description" Type="Edm.String" Unicode="false" />
+        <Property Name="resolvebyslastatus" Type="Edm.Int32" />
         <Property Name="_masterid_value" Type="Edm.Guid" />
         <Property Name="entityimage_url" Type="Edm.String" Unicode="false" />
-        <Property Name="dfp_isnoncompliant" Type="Edm.Boolean" />
-        <Property Name="_transactioncurrencyid_value" Type="Edm.Guid" />
-        <Property Name="_createdby_value" Type="Edm.Guid" />
-        <Property Name="routecase" Type="Edm.Boolean" />
-        <Property Name="blockedprofile" Type="Edm.Boolean" />
-        <Property Name="statecode" Type="Edm.Int32" />
-        <Property Name="_owningteam_value" Type="Edm.Guid" />
-        <Property Name="dfp_knownmedicalconditionsupdated" Type="Edm.Boolean" />
-        <Property Name="dfp_icbcsystemupdated" Type="Edm.Boolean" />
-        <Property Name="traversedpath" Type="Edm.String" Unicode="false" />
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="_customerid_value" Type="Edm.Guid" />
-        <Property Name="dfp_noadditionalsubmissionsrequired" Type="Edm.Int32" />
-        <Property Name="entityimage" Type="Edm.Binary" />
-        <Property Name="_dfp_clinicid_value" Type="Edm.Guid" />
-        <Property Name="_entitlementid_value" Type="Edm.Guid" />
-        <Property Name="activitiescomplete" Type="Edm.Boolean" />
-        <Property Name="statuscode" Type="Edm.Int32" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="_modifiedbyexternalparty_value" Type="Edm.Guid" />
-        <Property Name="_modifiedby_value" Type="Edm.Guid" />
-        <Property Name="_dfp_medicalpractitionerid_value" Type="Edm.Guid" />
-        <Property Name="_contractdetailid_value" Type="Edm.Guid" />
-        <Property Name="followuptaskcreated" Type="Edm.Boolean" />
-        <Property Name="entityimageid" Type="Edm.Guid" />
-        <Property Name="responseby" Type="Edm.DateTimeOffset" />
-        <Property Name="processid" Type="Edm.Guid" />
-        <Property Name="sentimentvalue" Type="Edm.Double" />
-        <Property Name="_slaid_value" Type="Edm.Guid" />
-        <Property Name="influencescore" Type="Edm.Double" />
-        <Property Name="_firstresponsebykpiid_value" Type="Edm.Guid" />
-        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
-        <Property Name="_parentcaseid_value" Type="Edm.Guid" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
-        <Property Name="incidentid" Type="Edm.Guid" />
-        <Property Name="customersatisfactioncode" Type="Edm.Int32" />
-        <Property Name="escalatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="casetypecode" Type="Edm.Int32" />
-        <Property Name="resolvebyslastatus" Type="Edm.Int32" />
-        <Property Name="dfp_communicationissuedtothedriver" Type="Edm.Boolean" />
-        <Property Name="severitycode" Type="Edm.Int32" />
+        <Property Name="checkemail" Type="Edm.Boolean" />
+        <Property Name="_existingcase_value" Type="Edm.Guid" />
         <Property Name="dfp_restrictionsupdated" Type="Edm.Boolean" />
-        <Property Name="exchangerate" Type="Edm.Decimal" Scale="Variable" />
-        <Property Name="_subjectid_value" Type="Edm.Guid" />
+        <Property Name="firstresponseslastatus" Type="Edm.Int32" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
-        <Property Name="servicestage" Type="Edm.Int32" />
-        <Property Name="dfp_icbccasedetailsreviewed" Type="Edm.Int32" />
-        <Property Name="dfp_iscommercial" Type="Edm.Int32" />
-        <Property Name="actualserviceunits" Type="Edm.Int32" />
-        <Property Name="isdecrementing" Type="Edm.Boolean" />
-        <Property Name="dfp_decisioncreated" Type="Edm.Boolean" />
-        <Property Name="productserialnumber" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_templettertype" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="dfp_temprestrictionsremoved" Type="Edm.Boolean" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
-        <Property Name="_kbarticleid_value" Type="Edm.Guid" />
-        <Property Name="firstresponsesent" Type="Edm.Boolean" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="followuptaskcreated" Type="Edm.Boolean" />
+        <Property Name="messagetypecode" Type="Edm.Int32" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="title" Type="Edm.String" Unicode="false" />
+        <Property Name="incidentstagecode" Type="Edm.Int32" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="_modifiedby_value" Type="Edm.Guid" />
+        <Property Name="merged" Type="Edm.Boolean" />
+        <Property Name="_primarycontactid_value" Type="Edm.Guid" />
+        <Property Name="_firstresponsebykpiid_value" Type="Edm.Guid" />
+        <Property Name="dfp_communicationissuedtothedriveron" Type="Edm.DateTimeOffset" />
+        <Property Name="numberofchildincidents" Type="Edm.Int32" />
+        <Property Name="_createdbyexternalparty_value" Type="Edm.Guid" />
+        <Property Name="entityimageid" Type="Edm.Guid" />
+        <Property Name="dfp_temprestrictionsadded" Type="Edm.Boolean" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="servicestage" Type="Edm.Int32" />
+        <Property Name="exchangerate" Type="Edm.Decimal" Scale="Variable" />
+        <Property Name="sentimentvalue" Type="Edm.Double" />
+        <Property Name="routecase" Type="Edm.Boolean" />
+        <Property Name="_slainvokedid_value" Type="Edm.Guid" />
+        <Property Name="followupby" Type="Edm.DateTimeOffset" />
+        <Property Name="_contactid_value" Type="Edm.Guid" />
+        <Property Name="contractservicelevelcode" Type="Edm.Int32" />
+        <Property Name="dfp_tempconditionsrequired" Type="Edm.Boolean" />
+        <Property Name="dfp_knownmedicalconditionsupdated" Type="Edm.Boolean" />
+        <Property Name="onholdtime" Type="Edm.Int32" />
+        <Property Name="casetypecode" Type="Edm.Int32" />
+        <Property Name="dfp_noadditionalsubmissionsrequired" Type="Edm.Int32" />
+        <Property Name="influencescore" Type="Edm.Double" />
+        <Property Name="dfp_tempexpectationsforfollowup" Type="Edm.Int32" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_entitlementid_value" Type="Edm.Guid" />
+        <Property Name="dfp_icbccasedetailsreviewed" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_progressstatus" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_incidentbase_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -24330,7 +24346,7 @@
         <Property Name="SeriesCanBeExpanded" Type="Edm.Boolean" />
       </ComplexType>
       <Action Name="CreateInstance">
-        <Parameter Name="Target" Type="mscrm.crmbaseentity" Nullable="false" />
+        <Parameter Name="Target" Type="mscrm.recurringappointmentmaster" Nullable="false" />
         <Parameter Name="Count" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="mscrm.CreateInstanceResponse" Nullable="false" />
       </Action>
@@ -24396,7 +24412,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
+        <Parameter Name="ExtraProperties" Type="mscrm.email" />
         <Parameter Name="ValidateBeforeCreate" Type="Edm.Boolean" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
@@ -24413,7 +24429,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
+        <Parameter Name="ExtraProperties" Type="mscrm.email" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
       <Action Name="DeprovisionLanguage">
@@ -25357,7 +25373,7 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedqueryvisualization" Nullable="false" />
-        <ReturnType Type="mscrm.savedqueryvisualization" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.systemform" Nullable="false" />
@@ -25365,43 +25381,43 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.customcontroldefaultconfig" Nullable="false" />
-        <ReturnType Type="mscrm.customcontroldefaultconfig" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.webresource" Nullable="false" />
-        <ReturnType Type="mscrm.webresource" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.sitemap" Nullable="false" />
-        <ReturnType Type="mscrm.sitemap" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedquery" Nullable="false" />
-        <ReturnType Type="mscrm.savedquery" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofileitem" Nullable="false" />
-        <ReturnType Type="mscrm.mobileofflineprofileitem" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofile" Nullable="false" />
-        <ReturnType Type="mscrm.mobileofflineprofile" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfig" Nullable="false" />
-        <ReturnType Type="mscrm.appconfig" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfiginstance" Nullable="false" />
-        <ReturnType Type="mscrm.appconfiginstance" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.navigationsetting" Nullable="false" />
-        <ReturnType Type="mscrm.navigationsetting" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appmodule" Nullable="false" />
-        <ReturnType Type="mscrm.appmodule" Nullable="false" />
+        <ReturnType Type="mscrm.systemform" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublishedMultiple" IsBound="true" IsComposable="true">
         <Parameter Name="entityset" Type="Collection(mscrm.savedqueryvisualization)" Nullable="false" />
