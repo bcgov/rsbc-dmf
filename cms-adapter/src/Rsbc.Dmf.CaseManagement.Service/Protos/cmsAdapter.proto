@@ -54,6 +54,10 @@ message CaseIdRequest {
 	string caseId= 1;
 }
 
+message GetLegacyDocumentRequest {
+	string documentId=1;
+}
+
 message GetCommentsReply {
 	repeated LegacyComment items = 1;
 	ResultStatus resultStatus = 2;
@@ -99,7 +103,7 @@ message GetDocumentRequest {
 	string documentId = 1;
 }
 
-message GetDocumentReply {	
+message GetLegacyDocumentReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 	LegacyDocument document = 3;

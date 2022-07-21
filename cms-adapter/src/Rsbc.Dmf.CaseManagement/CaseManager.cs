@@ -660,7 +660,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d. == documentTypeCode).FirstOrDefault(); 
+                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault(); 
                     if (record == null)
                     {
                         var newRecord = new dfp_submittaltype { dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
