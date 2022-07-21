@@ -244,7 +244,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 foreach (var item in reply.Items)
                 {
-                   
 
                     // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
                     ViewModels.Driver driver = new ViewModels.Driver()
@@ -256,27 +255,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now
                     };
 
-                    // fetch the file contents
-                    Byte[] data = new byte[0];
-
                     
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
                         FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
-
+                        
                         DocumentId = item.DocumentId,
-                        FileContents = data,
+                        DocumentTypeCode = item.DocumentTypeCode,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
                     });
                     
-                    
                 }
-
-                
 
                 return Json(result);
             }
