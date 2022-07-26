@@ -58,9 +58,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// Get Comments for a case
         /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <param name="filter">Optional numeric sequence number to filter results by.</param>
-        /// <param name="sort">Optional Char, one of 'D' - commentDate, 'T' - commentTypeCode, 'U' - userId, 'C' - commentText</param>
+        /// <param name="documentId"></param>
         /// <returns></returns>
         // GET: /Drivers/Exist
         [HttpGet("{documentId}")]
@@ -74,7 +72,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                var fileContents = reply.Data.ToByteArray();
+                // fetch the file from S3
+                DownloadFileRequest downloadFileRequest = new DownloadFileRequest()
+                {
+                     ServerRelativeUrl = reply.Document.DocumentUrl
+                };
+                var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
+
+                var fileContents = documentReply.Data.ToByteArray();
                 return new FileContentResult(fileContents, "application/octet-stream");
             }
             else
@@ -82,6 +87,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 Serilog.Log.Error(reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
+
 
         }
 
