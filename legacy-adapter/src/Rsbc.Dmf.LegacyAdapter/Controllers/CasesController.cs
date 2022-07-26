@@ -164,21 +164,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         LoadedFromICBC = false,
                         MedicalIssueDate = DateTimeOffset.Now
                     };
-
-                    _documentStorageAdapterClient.DownloadFile()
-
-                    // fetch the file contents
-                    Byte[] data = new byte[0];
-
-
-
+                 
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
                         FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
                         DocumentId = item.DocumentId,
-                        FileContents = data,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
