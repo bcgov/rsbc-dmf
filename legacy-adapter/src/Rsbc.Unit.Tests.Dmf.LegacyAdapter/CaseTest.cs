@@ -38,7 +38,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var caseId = GetCaseId();
             Assert.True(caseId != null);
         }
-
+        /*
 
         [Fact]
         public async void AddCaseDocument()
@@ -116,6 +116,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-
+        */
     }
 }
