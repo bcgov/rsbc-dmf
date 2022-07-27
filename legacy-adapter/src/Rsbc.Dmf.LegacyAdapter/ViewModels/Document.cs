@@ -44,6 +44,11 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         public string DocumentId { get; set;}
 
         /// <summary>
+        /// Document Type Code
+        /// </summary>
+        public string DocumentTypeCode { get; set; }
+
+        /// <summary>
         /// Date the document was made
         /// </summary>
         public DateTimeOffset FaxReceivedDate { get; set; }

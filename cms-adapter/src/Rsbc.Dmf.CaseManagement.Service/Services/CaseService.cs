@@ -739,5 +739,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return Task.FromResult(result);
         }
+
+
+        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(GetLegacyDocumentRequest request, ServerCallContext context)
+        {
+            GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
+            
+            return reply;
+        }
     }
 }

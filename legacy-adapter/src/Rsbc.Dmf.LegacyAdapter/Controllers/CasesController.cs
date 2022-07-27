@@ -30,10 +30,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
+        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
         }
 
@@ -138,6 +139,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
         [HttpGet("{caseId}/Documents")]
+        [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public ActionResult GetDocuments([FromRoute] string caseId)
         {
             // call the back end
@@ -160,17 +164,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         LoadedFromICBC = false,
                         MedicalIssueDate = DateTimeOffset.Now
                     };
-
-                    // fetch the file contents
-                    Byte[] data = new byte[0];
-
+                 
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
                         FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
                         DocumentId = item.DocumentId,
-                        FileContents = data,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId

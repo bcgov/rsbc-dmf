@@ -44,13 +44,14 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
 
                 var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
                 response.EnsureSuccessStatusCode();
 
-                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                
 
                 result = JsonConvert.DeserializeObject<string>(responseContent);
             }
-
 
             return result;
         }

@@ -12,6 +12,8 @@ service CaseManager {
 
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
+  rpc GetLegacyDocument (GetLegacyDocumentRequest) returns (GetLegacyDocumentReply);
+
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
@@ -50,6 +52,10 @@ message DriverLicenseRequest {
 
 message CaseIdRequest {
 	string caseId= 1;
+}
+
+message GetLegacyDocumentRequest {
+	string documentId=1;
 }
 
 message GetCommentsReply {
@@ -91,6 +97,16 @@ message LegacyDocument {
 	int64 DocumentPages = 13;
 	string ValidationMethod = 14;
 	string ValidationPrevious = 15;
+}
+
+message GetDocumentRequest {	
+	string documentId = 1;
+}
+
+message GetLegacyDocumentReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	LegacyDocument document = 3;
 }
 
 
