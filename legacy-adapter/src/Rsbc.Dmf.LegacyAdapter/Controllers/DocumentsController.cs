@@ -38,25 +38,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             _logger = logger;
         }
 
-       
 
         /// <summary>
-        /// DoesCaseExist
-        /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <param name="surcode"></param>
-        /// <returns>True if the case exists</returns>
-        // GET: /Drivers/Exist
-        [HttpGet("Exist")]
-        public ActionResult DoesCaseExist(string licenseNumber, string surcode)
-        {
-            bool result = false;
-            // get the case                                                
-            return Json (result);
-        }
-
-        /// <summary>
-        /// Get Comments for a case
+        /// Get Document Content
         /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
@@ -80,16 +64,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
 
                 var fileContents = documentReply.Data.ToByteArray();
-                return new FileContentResult(fileContents, "application/octet-stream");
+                return new FileContentResult(fileContents, "application/pdf");
             }
             else
             {
                 Serilog.Log.Error(reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
-
-
         }
-
     }
 }
