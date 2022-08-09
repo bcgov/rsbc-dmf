@@ -4,6 +4,7 @@ using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -716,6 +717,8 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+
         public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
@@ -730,37 +733,44 @@ namespace Rsbc.Dmf.CaseManagement
                 @case = GetIncidentById(request.CaseId);
             }
 
-            // TODO - add missing properties
-
             // create the document.
-            bcgov_documenturl @documentUrl = new bcgov_documenturl()
+            bcgov_documenturl bcgovDocumentUrl = new bcgov_documenturl()
             {
                  dfp_batchid = request.BatchId,
                  dfp_documentpages = request.DocumentPages.ToString(),
                  bcgov_url = request.DocumentUrl,
+                 bcgov_receiveddate = DateTimeOffset.Now,
                  dfp_faxreceiveddate = request.FaxReceivedDate,
                  dfp_dpsprocessingdate = request.ImportDate,
                  dfp_importid = request.ImportId,
                  dfp_faxnumber = request.OriginatingNumber,
                  dfp_validationmethod = request.ValidationMethod,
-                 dfp_validationprevious = request.ValidationPrevious
+                 dfp_validationprevious = request.ValidationPrevious,
+                 dfp_submittalstatus = 100000002 // open pending intake agent review
+
             };
+
+            if (!string.IsNullOrEmpty(request.DocumentUrl))
+            {
+                bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+            }
 
             // document type ID
             var documentTypeId = GetDocumentTypeId(request.DocumentTypeCode);
 
             try
             {
-                dynamicsContext.AddTobcgov_documenturls(@documentUrl);
+                dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
                 if (!string.IsNullOrEmpty (documentTypeId) )
                 {
-                    dynamicsContext.AddLink(@documentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    dynamicsContext.AddLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                 }
-                dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), @documentUrl);
+                dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
 
                 await dynamicsContext.SaveChangesAsync();
                 result.Success = true;
-                result.Id = @documentUrl.bcgov_documenturlid.ToString();
+                result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                 dynamicsContext.DetachAll();
             }
             catch (Exception ex)
