@@ -25,6 +25,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
+        Task<LegacyDocument> GetLegacyDocument(string documentId);
+
         Task<IEnumerable<Driver>> GetDrivers();
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
@@ -520,6 +522,36 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+        public async Task<LegacyDocument> GetLegacyDocument(string documentId)
+        {
+            LegacyDocument legacyDocument  = null;
+            
+            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            if (document != null)
+            {
+                legacyDocument = new LegacyDocument
+                {
+                    BatchId = document.dfp_batchid ?? string.Empty,
+                    CaseId = null,
+                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                    DocumentId = document.bcgov_documenturlid.ToString(),
+                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                    DocumentUrl = document.bcgov_url ?? string.Empty,
+                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                    ImportId = document.dfp_importid ?? string.Empty,
+                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                    SequenceNumber = null,
+                    Driver = null
+                };
+            }
+
+            return legacyDocument;
+
         }
 
         private incident GetIncidentById(string id)
