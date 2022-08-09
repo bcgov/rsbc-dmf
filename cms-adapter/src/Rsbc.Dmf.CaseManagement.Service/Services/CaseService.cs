@@ -134,7 +134,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
                         CommentTypeCode = item.CommentTypeCode ?? string.Empty,
                         CommentId = item.CommentId ?? string.Empty,
-                        SequenceNumber = (long)item.SequenceNumber,
+                        SequenceNumber = (long)(item.SequenceNumber ?? -1),
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
                         CommentText = item.CommentText ?? string.Empty
@@ -744,7 +744,41 @@ namespace Rsbc.Dmf.CaseManagement.Service
         public async override Task<GetLegacyDocumentReply> GetLegacyDocument(GetLegacyDocumentRequest request, ServerCallContext context)
         {
             GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
+
+            // fetch the document.
+            try
+            {
+                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                reply.Document = new LegacyDocument
+                {
+                    BatchId = d.BatchId ?? string.Empty,
+                    CaseId = d.CaseId ?? string.Empty,
+                    DocumentId = d.DocumentId ?? string.Empty,
+                    DocumentPages = (int)d.DocumentPages,
+                    DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
+                    DocumentUrl = d.DocumentUrl ?? string.Empty,
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(d.FaxReceivedDate),
+                    // may need to add FileSize,
+                    ImportDate = Timestamp.FromDateTimeOffset(d.ImportDate),
+                    ImportId = d.ImportId ?? string.Empty,
+                    OriginatingNumber = d.OriginatingNumber ?? string.Empty,
+                    ValidationMethod = d.ValidationMethod ?? string.Empty,
+                    ValidationPrevious = d.ValidationPrevious ?? string.Empty,
+                    SequenceNumber = (int)(d.SequenceNumber ?? -1),
+                    UserId = d.UserId ?? string.Empty,                    
+                };
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
             
+            
+
+
+
             return reply;
         }
     }
