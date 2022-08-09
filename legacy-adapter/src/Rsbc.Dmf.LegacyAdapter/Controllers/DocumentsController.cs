@@ -56,14 +56,24 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                // fetch the file from S3
-                DownloadFileRequest downloadFileRequest = new DownloadFileRequest()
-                {
-                     ServerRelativeUrl = reply.Document.DocumentUrl
-                };
-                var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
 
-                var fileContents = documentReply.Data.ToByteArray();
+                byte[] fileContents= Array.Empty<byte>();
+
+                if (! string.IsNullOrEmpty(reply.Document?.DocumentUrl))
+                {
+                    // fetch the file from S3
+                    DownloadFileRequest downloadFileRequest = new DownloadFileRequest()
+                    {
+                        ServerRelativeUrl = reply.Document.DocumentUrl
+                    };
+                    var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
+                    if (documentReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                    {
+                        fileContents = documentReply.Data.ToByteArray();
+                    }
+                    
+                }
+                
                 return new FileContentResult(fileContents, "application/pdf");
             }
             else
