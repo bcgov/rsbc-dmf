@@ -29,15 +29,17 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             {
                 // Add the bearer token to the client.
                 _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
+
+                request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+
+                request.Content = new StringContent("[]", Encoding.UTF8, "application/json");
+
+                response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             }
 
-            request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
-
-            request.Content = new StringContent("[]", Encoding.UTF8, "application/json");
-           
-            response = _client.SendAsync(request).GetAwaiter().GetResult();
             
-            Assert.Equal (HttpStatusCode.Unauthorized, response.StatusCode);
 
         }
 
