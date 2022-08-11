@@ -78,8 +78,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("Candidates")]
         [SwaggerResponse(200, "The candidates were processed correctly")]
         [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
-        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
-        [AllowAnonymous]
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]        
         public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
         {
 
@@ -109,8 +108,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("CandidatesError")]
         [SwaggerResponse(200, "The candidates were processed correctly")]
         [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
-        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
-        [AllowAnonymous]
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")] 
         public ActionResult CreateCandidatesError([FromBody] List<NewCandidate> newCandidates)
         {
             throw new Exception("Sample Error.");
