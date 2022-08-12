@@ -62,7 +62,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="filter">Optional numeric sequence number to filter results by.</param>
         /// <param name="sort">Optional Char, one of 'D' - commentDate, 'T' - commentTypeCode, 'U' - userId, 'C' - commentText</param>
         /// <returns></returns>
-        // GET: /Drivers/Exist
+        // GET: /Drivers/<DL>/Comments
         [HttpGet("{licenseNumber}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
