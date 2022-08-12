@@ -94,6 +94,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.EffectiveDate ?? DateTimeOffset.MinValue ),
                 };
                 _caseManagerClient.ProcessLegacyCandidate(lcr);
+                _logger.LogInformation($"Received Candidate {item.DlNumber}");
 
             }
 

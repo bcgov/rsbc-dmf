@@ -810,6 +810,27 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         //map cases from query results (TODO: consider replacing with AutoMapper)
+
+        private string CombineName (string firstname, string lastname)
+        {
+            string result = string.Empty;
+
+            if (!string.IsNullOrEmpty(lastname))
+            {
+                result = lastname.ToUpper();
+            }
+
+            if (!string.IsNullOrEmpty(firstname))
+            {
+                if (!string.IsNullOrEmpty(result))
+                {
+                    result += ", ";
+                }
+                result += firstname.ToUpper();
+            }
+
+            return result;
+        }
         private CaseSearchReply MapCases(IEnumerable<incident> cases)
         {               
             return new CaseSearchReply
@@ -851,32 +872,31 @@ namespace Rsbc.Dmf.CaseManagement
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
-                        Title = c.title,
+                        Title = c.title ?? string.Empty,
                         CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         ModifiedOn = c.modifiedon.Value.DateTime,
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
-                        ClinicName = c.dfp_ClinicId?.name,
+                        ClinicName = c.dfp_ClinicId?.name  ?? string.Empty,
                         DmerType = TranslateDmerType (c.dfp_dmertype),
                         Driver = new CaseManagement.Driver()
                         {
                             Id = c.dfp_DriverId?.dfp_driverid.ToString(),
                             Address = new Address()
                             {
-                                City = c.dfp_DriverId?.dfp_PersonId?.address1_city,
-                                Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode,
-                                Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1,
-                                Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2,
+                                City = c.dfp_DriverId?.dfp_PersonId?.address1_city ?? string.Empty,
+                                Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode ?? string.Empty,
+                                Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1 ?? string.Empty,
+                                Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2 ?? string.Empty,
                             },
                             BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
                             DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
-                            GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname,
-                            Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename,
+                            GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname ?? string.Empty,
+                            Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename ?? string.Empty,
                             Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
-                            Surname = c.dfp_DriverId?.dfp_PersonId?.lastname,
-                            Name =
-                                $"{c.dfp_DriverId?.dfp_PersonId?.lastname.ToUpper()}, {c.dfp_DriverId?.dfp_PersonId?.firstname}",
+                            Surname = c.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty,
+                            Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname, c.dfp_DriverId?.dfp_PersonId?.firstname)
                         },
                         Provider = provider,
                         IsCommercial =
