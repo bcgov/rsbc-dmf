@@ -244,6 +244,17 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             string folder = _configuration["SCP_FOLDER_OUTBOUND"];
 
+            // construct the medical update file
+            string fileName = GetMedicalUpdateFilename();
+
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+
+            var updateList = GetMedicalUpdateData(unsentItems);
+
+            string rawData = GetMedicalUpdateString(updateList);
+
+            MemoryStream data = StringUtility.StringToStream(rawData);
+
             if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
@@ -257,16 +268,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    // construct the medical update file
-                    string fileName = GetMedicalUpdateFilename();
-
-                    var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
-
-                    var updateList = GetMedicalUpdateData(unsentItems);
-
-                    string rawData = GetMedicalUpdateString(updateList);
-
-                    MemoryStream data = StringUtility.StringToStream(rawData);
+                    
 
                     // transfer it.
                     client.UploadFile(data, fileName);

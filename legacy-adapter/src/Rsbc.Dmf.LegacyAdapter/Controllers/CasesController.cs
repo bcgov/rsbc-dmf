@@ -48,19 +48,32 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
+            string caseId = GetCaseId( licenseNumber, surcode);
+            
+
+            if (caseId == null) // create it
+            {
+                var driver = 
+            }
+            caseId = GetCaseId(licenseNumber, surcode);
+            return Json(caseId);
+        }
+
+        private string GetCaseId(string licenseNumber, string surcode)
+        {
             string caseId = null;
-            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty});
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {                
+            {
                 foreach (var item in reply.Items)
                 {
-                    if ((bool)(item.Driver?.Surname.StartsWith (surcode)))
+                    if ((bool)(item.Driver?.Surname.StartsWith(surcode)))
                     {
                         caseId = item.CaseId;
                     }
-                }                
+                }
             }
-            return Json(caseId);
+            return caseId;
         }
 
         /// <summary>
@@ -252,7 +265,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                 ImportDate = Timestamp.FromDateTimeOffset(importDate),
                 ImportId = importID ?? string.Empty,
-
+                 
                 OriginatingNumber = originatingNumber ?? string.Empty,
                 Driver = driver,
                 ValidationMethod = validationMethod ?? string.Empty,
