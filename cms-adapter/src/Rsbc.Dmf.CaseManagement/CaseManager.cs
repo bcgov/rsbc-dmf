@@ -1300,10 +1300,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (givenUrl == null)
                     {
+                        var dateUploaded = DateTimeOffset.Now;
                         givenUrl = new bcgov_documenturl()
                         {
                             bcgov_url = fileKey,
-                            bcgov_receiveddate = DateTimeOffset.Now,
+                            bcgov_receiveddate = dateUploaded,
+                            dfp_uploadeddate = dateUploaded,
                             bcgov_filename = filename,
                             bcgov_fileextension = extension,
                             bcgov_origincode = 931490000,

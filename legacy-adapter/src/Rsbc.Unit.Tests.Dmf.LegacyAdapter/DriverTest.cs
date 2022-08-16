@@ -251,7 +251,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
-        /*
+        
         [Fact]
         public async void DfcmsAddDocument()
         {
@@ -289,6 +289,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
+
+        /*
 
         [Fact]
         public async void DfcmsGetDocuments()
