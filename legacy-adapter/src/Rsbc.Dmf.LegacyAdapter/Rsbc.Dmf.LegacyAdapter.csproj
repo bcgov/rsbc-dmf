@@ -31,6 +31,10 @@
 	<ItemGroup>
 		<Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\..\interfaces\icbc-adapter\icbc-adapter-client.csproj" />
+	</ItemGroup>
 	<ItemGroup>
 		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
 			<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
