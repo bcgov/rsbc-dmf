@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.LegacyAdapter", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Unit.Tests.Dmf.LegacyAdapter", "Rsbc.Unit.Tests.Dmf.LegacyAdapter\Rsbc.Unit.Tests.Dmf.LegacyAdapter.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "icbc-adapter-client", "..\..\interfaces\icbc-adapter\icbc-adapter-client.csproj", "{1D470E6A-3E23-41D1-B18A-0D6263FE0D82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D470E6A-3E23-41D1-B18A-0D6263FE0D82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D470E6A-3E23-41D1-B18A-0D6263FE0D82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D470E6A-3E23-41D1-B18A-0D6263FE0D82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D470E6A-3E23-41D1-B18A-0D6263FE0D82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

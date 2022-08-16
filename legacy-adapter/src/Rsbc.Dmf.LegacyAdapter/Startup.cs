@@ -33,6 +33,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Linq;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -118,6 +119,10 @@ namespace Rsbc.Dmf.LegacyAdapter
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
+
+            // Add ICBC adapter
+
+            services.AddHttpClient<IIcbcClient, IcbcClient>();
 
             // Add Document Storage Adapter
 

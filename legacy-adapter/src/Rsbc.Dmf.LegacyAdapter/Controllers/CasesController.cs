@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -29,13 +30,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        private readonly IIcbcClient _icbcClient;
 
-        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
+            _icbcClient = icbcClient;;
         }
 
         /// <summary>
@@ -50,12 +53,29 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             string caseId = GetCaseId( licenseNumber, surcode);
             
-
             if (caseId == null) // create it
             {
-                var driver = 
+                try
+                {
+                    var driver = _icbcClient.GetDriver(licenseNumber);
+                    if (driver != null)
+                    {
+                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                        {
+                            LicenseNumber = licenseNumber,
+                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                            Surname = driver.CLNT.INAM.SURN
+                        };
+                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogInformation(e,"Error getting driver.");
+                }
+                caseId = GetCaseId(licenseNumber, surcode);
             }
-            caseId = GetCaseId(licenseNumber, surcode);
+            
             return Json(caseId);
         }
 

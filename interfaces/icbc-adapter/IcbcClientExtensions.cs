@@ -18,14 +18,14 @@ namespace Rsbc.Dmf.Interfaces.IcbcAdapter
     /// </summary>
     public static partial class IcbcClientExtensions
     {
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='id'>
-            /// </param>
-            public static CLNTRESPONSE GetDriver(this IIcbcClient operations, string id)
+        /// <param name='operations'>
+        /// The operations group for this extension method.
+        /// </param>
+        /// <param name='driversLicense'>
+        /// </param>
+        public static CLNTRESPONSE GetDriver(this IIcbcClient operations, string driversLicense)
             {
-                return operations.GetDriverAsync(id).GetAwaiter().GetResult();
+                return operations.GetDriverAsync(driversLicense).GetAwaiter().GetResult();
             }
 
             /// <param name='operations'>
