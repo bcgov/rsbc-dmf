@@ -245,7 +245,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string folder = _configuration["SCP_FOLDER_OUTBOUND"];
 
             // construct the medical update file
-            string fileName = GetMedicalUpdateFilename();
+            string fileName = GetMedicalUpdateFilename(folder);
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
 
@@ -349,7 +349,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             return result;
         }
 
-        private string GetMedicalUpdateFilename(DateTimeOffset? currentTime = null)
+        private string GetMedicalUpdateFilename(string folder, DateTimeOffset? currentTime = null)
         {
             string result = null;
             if (currentTime == null)
@@ -359,7 +359,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             DateTime? adjustedDate = DateUtility.FormatDatePacific(currentTime);
 
-            string prefix = "RSBCMED-UPDATE";            
+            string prefix = $"{folder}/RSBCMED-UPDATE";            
             string formattedDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");                            
             string suffix = ".dat";
             result = $"{prefix}{formattedDate}{suffix}";
