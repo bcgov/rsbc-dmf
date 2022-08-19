@@ -2,7 +2,7 @@
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 
-namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
+namespace Pssg.Interfaces.Icbc.Helpers
 {
     public static class IcbcHelper
     {

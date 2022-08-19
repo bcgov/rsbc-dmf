@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Helpers;
 using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
