@@ -26,8 +26,7 @@ namespace Pssg.Interfaces
             _Client = new HttpClient();
 
             // check that we have the right settings.
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null && Configuration["ICBC_LOOKUP_SERVICE_USERNAME"] != null &&
-                Configuration["ICBC_LOOKUP_SERVICE_PASSWORD"] != null )
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
             {
                 // ICBC configuration settings.
                 IcbcLookupServiceUri = Configuration["ICBC_LOOKUP_SERVICE_URI"];

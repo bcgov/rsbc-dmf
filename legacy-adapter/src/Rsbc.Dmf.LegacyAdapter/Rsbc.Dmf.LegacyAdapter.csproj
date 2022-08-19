@@ -33,7 +33,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\interfaces\icbc-adapter\icbc-adapter-client.csproj" />
+	  <ProjectReference Include="..\..\..\icbc-adapter\src\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">

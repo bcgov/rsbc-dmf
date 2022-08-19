@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.Interfaces.IcbcAdapter;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -57,14 +57,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 try
                 {
-                    var driver = _icbcClient.GetDriver(licenseNumber);
+                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
                     if (driver != null)
                     {
                         LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.CLNT.INAM.SURN
+                            Surname = driver.INAM?.SURN
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                     }
