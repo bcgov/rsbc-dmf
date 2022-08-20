@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pssg.Interfaces;
-using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
+using Pssg.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using System.Net.Http;
+using Rsbc.Dmf.CaseManagement.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -21,12 +22,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         {
             
             IIcbcClient icbcClient ;
-            CaseManager.CaseManagerClient caseManagerClient;
-
-        Configuration = new ConfigurationBuilder()
-                .AddUserSecrets<Startup>()
-                .AddEnvironmentVariables()
-                .Build();
+            Configuration = new ConfigurationBuilder()
+                    .AddUserSecrets<Startup>()
+                    .AddEnvironmentVariables()
+                    .Build();
 
             if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
             {
@@ -39,10 +38,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
 
+            CaseManager.CaseManagerClient caseManagerClient;
             if (string.IsNullOrEmpty(cmsAdapterURI))
             {
                 // setup from Mock
-                caseManagerClient = CmsHelper.CreateMock();
+                caseManagerClient = CmsHelper.CreateMock(Configuration);
             }
             else
             {

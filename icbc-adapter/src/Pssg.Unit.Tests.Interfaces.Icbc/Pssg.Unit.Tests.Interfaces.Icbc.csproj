@@ -20,7 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-    <PackageReference Include="Moq" Version="4.18.1" />
+    <PackageReference Include="Moq" Version="4.18.2" />
     <PackageReference Include="ReportGenerator" Version="5.1.9" /> 
     
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj" />
     <ProjectReference Include="..\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
   </ItemGroup>

@@ -12,7 +12,9 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System.Net.Http;
 using System.Net;
 using Grpc.Net.Client;
-using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
+using Pssg.Interfaces.Icbc.Helpers;
+using Rsbc.Dmf.CaseManagement;
+using Rsbc.Dmf.CaseManagement.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -53,7 +55,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             if (string.IsNullOrEmpty(cmsAdapterURI))
             {
                 // setup from Mock
-                CaseManagerClient = CmsHelper.CreateMock();
+                CaseManagerClient = CmsHelper.CreateMock(Configuration);
             }
             else
             {
