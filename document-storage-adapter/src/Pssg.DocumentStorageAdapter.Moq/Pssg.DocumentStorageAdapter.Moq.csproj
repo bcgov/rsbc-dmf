@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+	
+	<ItemGroup>
+		<PackageReference Include="Moq" Version="4.18.2" />
+  </ItemGroup>
+
+	
+	<ItemGroup>
+	  <ProjectReference Include="..\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+	</ItemGroup>
+
+</Project>
