@@ -1,7 +1,11 @@
-﻿using Castle.Core.Configuration;
+﻿
+using Grpc.Core;
 using Moq;
 using Pssg.DocumentStorageAdapter;
+using System;
 using System.Threading;
+using Microsoft.Extensions.Configuration;
+using System.Reflection.Metadata;
 
 
 namespace Pssg.DocumentStorageAdapter.Helpers
@@ -21,28 +25,31 @@ namespace Pssg.DocumentStorageAdapter.Helpers
 
             var mockClient = new Mock<DocumentStorageAdapter.DocumentStorageAdapterClient>();
 
-            /*
             mockClient
-                .Setup(m => m.GetDriverComments(It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
-                .Returns<DriverLicenseRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+                .Setup (m => m.UploadFile(It.IsAny<UploadFileRequest>(),null,null, CancellationToken.None))
+                .Returns<UploadFileRequest, Metadata, DateTime ?, CancellationToken > ((x, b, c, d) => 
                 {
-                    GetCommentsReply reply = new() { ResultStatus = ResultStatus.Success };
-                    Driver driver = new Driver
+                    UploadFileReply reply = new UploadFileReply()
                     {
-                        DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
-                        Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
-                    }; 
-                    reply.Items.Add(new LegacyComment()
-                    {
-                        Driver = driver,
-                        CaseId = Guid.NewGuid().ToString(),
-                        CommentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
-                    });
-
+                         ResultStatus = ResultStatus.Success,
+                         FileName = x.FileName
+                    };
                     return reply;
                 });
 
-            */
+            
+            mockClient
+                .Setup(m => m.DownloadFile(It.IsAny<DownloadFileRequest>(), null, null, CancellationToken.None))
+                .Returns<DownloadFileRequest, Metadata, DateTime?, CancellationToken>((x, b, c, d) =>
+                {
+                    DownloadFileReply reply = new DownloadFileReply()
+                    {
+                        ResultStatus = ResultStatus.Success,
+                        
+                    };
+                    return reply;
+                });
+            
 
 
 
