@@ -37,6 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj" />
+    <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj" />
     <ProjectReference Include="..\Rsbc.Dmf.LegacyAdapter\Rsbc.Dmf.LegacyAdapter.csproj" />
   </ItemGroup>
 
@@ -44,6 +46,10 @@
     <Content Update="xunit.runner.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Helpers\" />
   </ItemGroup>
 
 </Project>

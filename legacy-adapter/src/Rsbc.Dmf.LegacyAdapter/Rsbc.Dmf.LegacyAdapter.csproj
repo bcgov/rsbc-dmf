@@ -33,21 +33,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+	  <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
 	  <ProjectReference Include="..\..\..\icbc-adapter\src\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
-			<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
-		</Protobuf>
 
 		<Protobuf Include="../../../document-triage-service/src/Protos/documentTriage.proto" GrpcServices="Client">
 			<Link>gRPC Prototypes\documentTriage.proto</Link>
 		</Protobuf>
 
-		<Protobuf Include="../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
-			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
-		</Protobuf>
-
+		
 	</ItemGroup>
 
 

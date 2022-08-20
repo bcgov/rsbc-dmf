@@ -55,7 +55,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             if (string.IsNullOrEmpty(cmsAdapterURI))
             {
                 // setup from Mock
-                CaseManagerClient = CmsHelper.CreateMock();
+                CaseManagerClient = CmsHelper.CreateMock(Configuration);
             }
             else
             {
