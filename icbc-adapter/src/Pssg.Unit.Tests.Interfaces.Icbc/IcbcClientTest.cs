@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using Xunit;
 using Moq;
-using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
 using Pssg.Interfaces.Icbc.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests

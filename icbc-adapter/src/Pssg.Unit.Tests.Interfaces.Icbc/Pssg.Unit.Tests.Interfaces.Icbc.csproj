@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj" />
     <ProjectReference Include="..\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
   </ItemGroup>
