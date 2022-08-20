@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.LegacyAdapter;
 using System.Net;
@@ -22,11 +24,21 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             
             CaseManager.CaseManagerClient caseManagerClient;
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient = null;
+            IIcbcClient icbcClient = null;
 
             Configuration = new ConfigurationBuilder()
                     .AddUserSecrets<Startup>()
                     .AddEnvironmentVariables()
                     .Build();
+
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            {
+                icbcClient = new IcbcClient(Configuration);
+            }
+            else
+            {
+                icbcClient = IcbcHelper.CreateMock();
+            }
 
             // Document Storage Adapter
 
@@ -123,6 +135,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                
                     services => {                         
                         services.AddTransient(_ => caseManagerClient);
+                        services.AddTransient(_ => icbcClient);
+
                         if (documentStorageAdapterClient != null)
                         {
                             services.AddTransient(_ => documentStorageAdapterClient);
