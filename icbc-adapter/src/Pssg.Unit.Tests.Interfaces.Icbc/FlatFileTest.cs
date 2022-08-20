@@ -15,8 +15,8 @@ using System.Net.Http;
 using System.Net;
 using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
-using Pssg.Unit.Tests.Interfaces.Icbc.Helpers;
 using Pssg.Interfaces.Icbc.Helpers;
+using Rsbc.Dmf.CaseManagement.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {

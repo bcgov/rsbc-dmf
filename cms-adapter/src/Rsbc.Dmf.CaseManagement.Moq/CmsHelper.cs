@@ -1,10 +1,9 @@
 ﻿using Moq;
-using Pssg.Interfaces;
-using Pssg.Interfaces.Icbc.Models;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Threading;
 
-namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
+
+namespace Rsbc.Dmf.CaseManagement.Helpers
 {
     public static class CmsHelper
     {
@@ -19,13 +18,13 @@ namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
         public static CaseManager.CaseManagerClient CreateMock()
         {
 
-            var mockDriverResult = new GetDriversReply
+            var mockDriverResult = new Service.GetDriversReply
             {
                 ResultStatus = ResultStatus.Success
             };
             for (int i = 0; i < 55; i++)
             {
-                mockDriverResult.Items.Add(new Driver() { DriverLicenseNumber = "2222222" });
+                mockDriverResult.Items.Add(new Service.Driver() { DriverLicenseNumber = "2222222" });
             }
 
             var mockClient = new Mock<CaseManager.CaseManagerClient>();
@@ -44,7 +43,7 @@ namespace Pssg.Unit.Tests.Interfaces.Icbc.Helpers
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
                 .Returns(new LegacyCandidateReply { ResultStatus = ResultStatus.Success });
 
-            
+
             return mockClient.Object;
         }
     }

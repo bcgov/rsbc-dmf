@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CmsHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="Google.Protobuf" Version="3.21.2" />
+	  <PackageReference Include="Grpc.Net.Client" Version="2.47.0" />
+	  <PackageReference Include="Grpc.Tools" Version="2.47.0">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	</PackageReference>		  
+  </ItemGroup>
+	
+
+
+	<ItemGroup>
+		<Folder Include="gRPC Prototypes\" />
+	</ItemGroup>
+	
+
+	<ItemGroup>
+		<Protobuf Include="../Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
+		</Protobuf>
+	</ItemGroup>
+
+
+</Project>
