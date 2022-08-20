@@ -1,12 +1,14 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Microsoft.Extensions.Configuration;
 using Moq;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Threading;
+using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using Microsoft.Extensions.Configuration;
 
-namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
+namespace Rsbc.Dmf.CaseManagement.Helpers
 {
     public static class CmsHelper
     {
@@ -22,39 +24,54 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public static CaseManager.CaseManagerClient CreateMock(IConfiguration configuration)
         {
 
-            var mockDriverResult = new GetDriversReply
+            var mockDriverResult = new Service.GetDriversReply
             {
                 ResultStatus = ResultStatus.Success
             };
             for (int i = 0; i < 55; i++)
             {
-                mockDriverResult.Items.Add(new Driver() { DriverLicenseNumber = DEFAULT_DL });
+                mockDriverResult.Items.Add(new Service.Driver() { DriverLicenseNumber = "2222222" });
             }
 
             var mockClient = new Mock<CaseManager.CaseManagerClient>();
+            mockClient
+                .Setup(m => m.GetDrivers(
+                    It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
+                .Returns(mockDriverResult);
 
             mockClient
-                .Setup(m => m.Search(It.IsAny<SearchRequest>(), null, null, CancellationToken.None))
-                .Returns<SearchRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
-                {
-                    SearchReply reply = new() { ResultStatus = ResultStatus.Success };
+                .Setup(m => m.GetUnsentMedicalUpdates(
+                    It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
+                .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
 
-                    if (!string.IsNullOrEmpty(a.CaseId))
-                    {
-                        Driver driver = new Driver 
-                        { 
-                            DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL, 
-                            Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
-                        };
-                        reply.Items.Add(new DmerCase() { CaseId = a.CaseId, Driver = driver });
-                    }
-                    else if (a.DriverLicenseNumber != null)
-                    {
-                        Driver driver = new Driver { DriverLicenseNumber = a.DriverLicenseNumber, Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE };
-                        reply.Items.Add(new DmerCase() { CaseId = Guid.NewGuid().ToString(), Driver = driver });
-                    }
-                    return reply;
-                });
+            mockClient
+                .Setup(m => m.ProcessLegacyCandidate(
+                    It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
+                .Returns(new LegacyCandidateReply { ResultStatus = ResultStatus.Success });
+
+
+            mockClient
+               .Setup(m => m.Search(It.IsAny<SearchRequest>(), null, null, CancellationToken.None))
+               .Returns<SearchRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               {
+                   SearchReply reply = new() { ResultStatus = ResultStatus.Success };
+
+                   if (!string.IsNullOrEmpty(a.CaseId))
+                   {
+                       Driver driver = new Driver
+                       {
+                           DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
+                           Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
+                       };
+                       reply.Items.Add(new DmerCase() { CaseId = a.CaseId, Driver = driver });
+                   }
+                   else if (a.DriverLicenseNumber != null)
+                   {
+                       Driver driver = new Driver { DriverLicenseNumber = a.DriverLicenseNumber, Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE };
+                       reply.Items.Add(new DmerCase() { CaseId = Guid.NewGuid().ToString(), Driver = driver });
+                   }
+                   return reply;
+               });
             mockClient
                 .Setup(m => m.CreateLegacyCaseDocument(It.IsAny<LegacyDocument>(), null, null, CancellationToken.None))
                 .Returns<LegacyDocument, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
@@ -72,7 +89,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     {
                         DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
                         Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
-                    }; 
+                    };
                     reply.Items.Add(new LegacyDocument()
                     {
                         CaseId = Guid.NewGuid().ToString(),
@@ -96,7 +113,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     {
                         DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
                         Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
-                    }; 
+                    };
                     reply.Items.Add(new LegacyDocument()
                     {
                         CaseId = Guid.NewGuid().ToString(),
@@ -120,7 +137,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     {
                         DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
                         Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
-                    }; 
+                    };
                     reply.Items.Add(new LegacyComment()
                     {
                         Driver = driver,
@@ -131,8 +148,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     return reply;
                 });
 
-
-
+            
 
 
             mockClient
@@ -153,20 +169,24 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 });
 
             mockClient
-                .Setup(m => m.CreateLegacyCaseComment(It.IsAny<LegacyComment>(), null, null, CancellationToken.None))
-                .Returns<LegacyComment, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
-                {
-                    CreateStatusReply reply = new() { ResultStatus = ResultStatus.Success };
+               .Setup(m => m.CreateLegacyCaseComment(It.IsAny<LegacyComment>(), null, null, CancellationToken.None))
+               .Returns<LegacyComment, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               {
+                   CreateStatusReply reply = new() { ResultStatus = ResultStatus.Success };
 
-                    return reply;
-                });
-
-
+                   return reply;
+               });
 
             mockClient
-                .Setup(m => m.GetDrivers(
-                    It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
-                .Returns(mockDriverResult);
+               .Setup(m => m.GetLegacyDocument(It.IsAny<GetLegacyDocumentRequest>(), null, null, CancellationToken.None))
+               .Returns<GetLegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               {
+
+                   LegacyDocument legacyDocument = new LegacyDocument() { DocumentUrl = a.DocumentId};
+                   GetLegacyDocumentReply reply = new() { ResultStatus = ResultStatus.Success , Document = legacyDocument };
+
+                   return reply;
+               });
 
             mockClient
                 .Setup(m => m.GetUnsentMedicalUpdates(
@@ -177,6 +197,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 .Setup(m => m.ProcessLegacyCandidate(
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
                 .Returns(new LegacyCandidateReply { ResultStatus = ResultStatus.Success });
+
+
 
 
             return mockClient.Object;
