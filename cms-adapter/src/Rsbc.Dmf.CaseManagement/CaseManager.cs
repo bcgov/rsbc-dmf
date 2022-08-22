@@ -741,6 +741,7 @@ namespace Rsbc.Dmf.CaseManagement
                  bcgov_url = request.DocumentUrl,
                  bcgov_receiveddate = DateTimeOffset.Now,
                  dfp_faxreceiveddate = request.FaxReceivedDate,
+                 dfp_uploadeddate = DateTimeOffset.Now,
                  dfp_dpsprocessingdate = request.ImportDate,
                  dfp_importid = request.ImportId,
                  dfp_faxnumber = request.OriginatingNumber,
