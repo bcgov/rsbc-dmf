@@ -8,6 +8,7 @@ using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -73,7 +74,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     }
                     
                 }
-                
+                string filename = Path.GetFileName(reply.Document.DocumentUrl);
+                Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
+                Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                 return new FileContentResult(fileContents, "application/pdf");
             }
             else
