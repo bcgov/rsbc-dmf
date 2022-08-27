@@ -75,9 +75,18 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     
                 }
                 string filename = Path.GetFileName(reply.Document.DocumentUrl);
+
+                string extension = Path.GetExtension(filename);
+
+                string mimetype = "application/pdf";
+
+                if (extension != null && (".tif" == extension.ToLower() || ".tiff" == extension.ToLower()))
+                {
+                    mimetype = "image/tiff";
+                }
                 Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
                 Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
-                return new FileContentResult(fileContents, "application/pdf");
+                return new FileContentResult(fileContents, mimetype);
             }
             else
             {
