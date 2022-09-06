@@ -40,13 +40,50 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
 
-        /// <summary>
-        /// Get Document Content
-        /// </summary>
-        /// <param name="documentId"></param>
-        /// <returns></returns>
-        // GET: /Drivers/Exist
-        [HttpGet("{documentId}")]
+        private string GetMimeType (string filename)
+        {
+            string mimetype = "application/pdf";
+            if (!string.IsNullOrEmpty(filename))
+            {
+                string extension = Path.GetExtension(filename);
+
+                if (extension != null && (".tif" == extension.ToLower() || ".tiff" == extension.ToLower()))
+                {
+                    mimetype = "image/tiff";
+                }
+            }
+            
+            return mimetype;
+        }
+
+        [HttpGet("{documentId}/mimetype")]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult GetDocumentMimeType([FromRoute] string documentId)
+
+        {
+            var reply = _cmsAdapterClient.GetLegacyDocument(new GetLegacyDocumentRequest() { DocumentId = documentId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                string filename = Path.GetFileName(reply.Document.DocumentUrl);
+                string mimetype = GetMimeType(filename);
+                return Json(mimetype);
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+
+                /// <summary>
+                /// Get Document Content
+                /// </summary>
+                /// <param name="documentId"></param>
+                /// <returns></returns>
+                // GET: /Drivers/Exist
+                [HttpGet("{documentId}")]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
         public ActionResult GetDocument([FromRoute] string documentId)
@@ -75,15 +112,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     
                 }
                 string filename = Path.GetFileName(reply.Document.DocumentUrl);
-
-                string extension = Path.GetExtension(filename);
-
-                string mimetype = "application/pdf";
-
-                if (extension != null && (".tif" == extension.ToLower() || ".tiff" == extension.ToLower()))
-                {
-                    mimetype = "image/tiff";
-                }
+                string mimetype = GetMimeType(filename);
                 Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
                 Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                 return new FileContentResult(fileContents, mimetype);
