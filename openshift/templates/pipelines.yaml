@@ -55,6 +55,7 @@ objects:
               oc tag landing-page:test landing-page:prod
               oc tag oauth-server:test oauth-server:prod
               oc tag phsa-adapter:test phsa-adapter:prod              
+              oc tag legacy-adapter:test legacy-adapter:prod
         taskRef:
           kind: ClusterTask
           name: openshift-client
@@ -77,6 +78,7 @@ objects:
               oc tag landing-page:latest landing-page:test
               oc tag oauth-server:latest oauth-server:test
               oc tag phsa-adapter:latest phsa-adapter:test
+              oc tag legacy-adapter:latest legacy-adapter:test
         taskRef:
           kind: ClusterTask
           name: openshift-client        
@@ -99,6 +101,7 @@ objects:
               oc tag landing-page:prod-backup landing-page:prod
               oc tag oauth-server:prod-backup oauth-server:prod
               oc tag phsa-adapter:prod-backup phsa-adapter:prod
+              oc tag legacy-adapter:prod-backup legacy-adapter:prod
         taskRef:
           kind: ClusterTask
           name: openshift-client

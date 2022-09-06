@@ -9,7 +9,7 @@
     "http"
   ],
   "paths": {
-    "/icbcadapter/v3/drivers/{id}": {
+    "/icbcadapter/v3/drivers/{driversLicense}": {
       "get": {
         "tags": [
           "GetDriver"
@@ -24,7 +24,7 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "driversLicense",
             "in": "path",
             "type": "string",
             "required": true

@@ -1,26 +1,23 @@
-﻿namespace SharedUtils
+﻿namespace Pssg.SharedUtils
 {
-    namespace Gov.Lclb.Cllb.Public.Utils
+    public class DateUtility
     {
-        public class DateUtility
+        public static DateTime? FormatDatePacific(DateTimeOffset? inputDate)
         {
-            public static DateTime? FormatDatePacific(DateTimeOffset? inputDate)
+            TimeZoneInfo hwZone;
+            try
             {
-                TimeZoneInfo hwZone;
-                try
-                {
-                    hwZone = TimeZoneInfo.FindSystemTimeZoneById("America/Vancouver");
-                }
-                catch (TimeZoneNotFoundException)
-                {
-                    hwZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-                }
-
-                DateTime? result = inputDate.HasValue
-                    ? TimeZoneInfo.ConvertTimeFromUtc(inputDate.Value.DateTime, hwZone)
-                    : (DateTime?)null;
-                return result;
+                hwZone = TimeZoneInfo.FindSystemTimeZoneById("America/Vancouver");
             }
+            catch (TimeZoneNotFoundException)
+            {
+                hwZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            }
+
+            DateTime? result = inputDate.HasValue
+                ? TimeZoneInfo.ConvertTimeFromUtc(inputDate.Value.DateTime, hwZone)
+                : (DateTime?)null;
+            return result;
         }
     }
 }

@@ -13,6 +13,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -59,11 +60,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IcbcClient icbcClient;
 
-        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration)
+        private readonly CaseManager.CaseManagerClient _caseManagerClient;
+
+        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
         {
             _configuration = configuration;
             _logger = logger;
             icbcClient = new IcbcClient(configuration);
+            _caseManagerClient = caseManagerClient;
         }
         
         /// <summary>
@@ -74,12 +78,41 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("Candidates")]
         [SwaggerResponse(200, "The candidates were processed correctly")]
         [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
-        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
-        [AllowAnonymous]
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]        
         public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
         {
+
             // check for duplicates; if there is an existing case then do not create a new one
+            foreach (var item in newCandidates)
+            {
+                LegacyCandidateRequest lcr = new LegacyCandidateRequest()
+                {
+                    LicenseNumber = item.DlNumber,
+                    Surname = item.LastName ?? string.Empty,
+                    ClientNumber = string.Empty,
+                    BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.BirthDate ?? DateTimeOffset.MinValue ),
+                    EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.EffectiveDate ?? DateTimeOffset.MinValue ),
+                };
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
+                _logger.LogInformation($"Received Candidate {item.DlNumber}");
+
+            }
+
             return Ok();
+        }
+
+        /// <summary>
+        /// POST: /Icbc/Candidates
+        /// </summary>
+        /// <param name="newCandidates">List of Candidates to be added to the case management system</param>
+        /// <returns></returns>
+        [HttpPost("CandidatesError")]
+        [SwaggerResponse(200, "The candidates were processed correctly")]
+        [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")] 
+        public ActionResult CreateCandidatesError([FromBody] List<NewCandidate> newCandidates)
+        {
+            throw new Exception("Sample Error.");
         }
 
         [AllowAnonymous]

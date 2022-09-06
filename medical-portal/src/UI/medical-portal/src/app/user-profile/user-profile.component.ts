@@ -93,6 +93,14 @@ export class UserProfileComponent implements OnInit {
     { label: 'Medical Office Assistant' },
     { label: 'Medical Office Manager' },
   ];
+
+  MedicalStaffFilter = [
+    { label: 'All Medical Practitioners' },
+    { label: 'Dr. Shelby Drew' },
+    { label: 'Will Mathews, NP' },
+  ];
+
+
   dataSource = [
     {
       id: '1',
@@ -229,72 +237,106 @@ export class UserProfileComponent implements OnInit {
       role: 'Medical Practitioner',
       lastActive: 'May 11, 2022',
     },
+    {
+      id: '11',
+      fullName: 'Castor, Ingrid',
+      medicalPractitionerName: 'Dr. Shelby Drew',
+      expiryDate: 'July 5, 2022',
+      status: 'Active',
+      role: 'Medical Practitioner',
+      lastActive: 'May 11, 2022',
+    },
+
   ];
 
   medicalPractitionerProfileDataSource = [
     {
       id: '1',
       fullName: 'Castor, Ingrid',
+      firstName:'Ingrid',
+      lastName:'Castor',
       role: 'MOA',
       expiryDate: 'July 5, 2022',
       status: 'Active',
       lastActive: 'October 5, 2021',
+      email:'Ingrid@gmail.com'
     },
     {
       id: '2',
       fullName: 'Dodge, Mike',
+      firstName:'Mike',
+      lastName:'Dodge',
       role: 'MOA',
       expiryDate: 'September 17, 2022',
       status: 'Active',
       lastActive: 'March 11, 2021',
+      email:'Mike@gmail.com'
     },
     {
       id: '3',
       fullName: 'Mehra, Rajan',
+      firstName:'Rajan',
+      lastName:'Mehra',
       role: 'MOM',
       expiryDate: '-',
       status: 'Inactive',
       lastActive: 'May 11, 2022',
+      email:'Rajan@gmail.com'
     },
     {
       id: '4',
       fullName: 'Varga, Tarik',
+      firstName:'Tarik',
+      lastName:'Varga',
       role: 'MOA',
       expiryDate: 'February 1, 2022',
       status: 'Inactive',
       lastActive: 'May 11, 2022',
+      email:'Tarik@gmail.com'
     },
     {
       id: '5',
       fullName: 'Tucker, Devi',
       role: 'MOA',
+      firstName:'Tucker',
+      lastName:'Varga',
       expiryDate: '-',
       status: 'Pending',
       lastActive: 'May 11, 2022',
+      email:'Devi@gmail.com'
     },
     {
       id: '6',
       fullName: 'Marsh, Caleb',
+      firstName:'Caleb',
+      lastName:'Marsh',
       role: 'MOA',
       expiryDate: '-',
       status: 'Pending',
       lastActive: 'May 11, 2022',
+      email:'Caleb@gmail.com'
     },
     {
       id: '7',
       fullName: 'Torres, Sharon',
+      firstName:'Sharon',
+      lastName:'Torres',
       role: 'MOA',
       expiryDate: 'July 5, 2022',
       status: 'Active',
       lastActive: 'March 11, 2022',
+      email:'Sharon@gmail.com'
     },
     {
       id: '8',
       fullName: 'Varga, Tarik',
+      firstName:'Tarik',
+      lastName:'Varga',
       role: 'MOA',
       expiryDate:'',
       status: 'Rejected',
       lastActive: 'May 11, 2022',
+      email:'Tarik@gmail.com'
     },
   
   ];
@@ -504,6 +546,7 @@ export class UserProfileComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
+      if(!result) return
       this.userProfile.emailAddress = result;
     });
   }
@@ -522,8 +565,6 @@ export class UserProfileComponent implements OnInit {
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
-      //this.userProfile = result;
     });
   }
 
@@ -542,17 +583,17 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  openEditMedicalPractitionerRoleAssociationDialog(): void {
+  openEditMedicalPractitionerRoleAssociationDialog(row:any): void {
     const dialogRef = this.dialog.open(
       EditMedicalPractitionerRoleAssociationDialogComponent,
       {
         height: '720px',
         width: '820px',
-        // data
+        data: row,
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
+      if(!result) return
       this.userProfile.emailAddress = result;
     });
   }
@@ -570,7 +611,7 @@ export class UserProfileComponent implements OnInit {
       }
     );
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed', result);
+     if(!result) return
       this.userProfile.emailAddress = result;
     });
   }

@@ -3,6 +3,8 @@ WORKDIR /src
 COPY ["Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj", "Rsbc.Dmf.CaseManagement.Service/"]
 COPY ["Rsbc.Dmf.CaseManagement/Rsbc.Dmf.CaseManagement.csproj", "Rsbc.Dmf.CaseManagement/"]
 COPY ["Rsbc.Dmf.CaseManagement.Tests/Rsbc.Dmf.CaseManagement.Tests.csproj", "Rsbc.Dmf.CaseManagement.Tests/"]
+COPY ["Rsbc.Dmf.CaseManagement.Moq/Rsbc.Dmf.CaseManagement.Moq.csproj", "Rsbc.Dmf.CaseManagement.Moq/"]
+COPY ["Rsbc.Dmf.CaseManagement.Client/Rsbc.Dmf.CaseManagement.Client.csproj", "Rsbc.Dmf.CaseManagement.Client/"]
 COPY ["cms-adapter.sln", "./"]
 
 RUN dotnet restore .

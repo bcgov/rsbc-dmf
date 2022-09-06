@@ -31,18 +31,26 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             string result = "Invalid secret.";
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
-            if (configuredSecret.Equals(secret))
-            {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                var jwtSecurityToken = new JwtSecurityToken(
-                    Configuration["JWT_VALID_ISSUER"],
-                    Configuration["JWT_VALID_ISSUER"],
-                    expires: DateTime.UtcNow.AddMinutes(15),
-                    signingCredentials: creds
-                    );
-                result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken); 
+            if (string.IsNullOrEmpty(configuredSecret))
+            {
+                result = "";
+            }
+            else
+            {
+                if (configuredSecret.Equals(secret))
+                {
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                    var jwtSecurityToken = new JwtSecurityToken(
+                        Configuration["JWT_VALID_ISSUER"],
+                        Configuration["JWT_VALID_ISSUER"],
+                        expires: DateTime.UtcNow.AddMinutes(15),
+                        signingCredentials: creds
+                        );
+                    result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                }
             }
 
             return result;
@@ -63,7 +71,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
             string result = "Invalid secret.";
             string token = "";
-            string expires_in = "";
+            
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(secret))
             {

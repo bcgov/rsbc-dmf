@@ -281,7 +281,7 @@
         <button
           mat-icon-button
           class="manage-button"
-          (click)="openEditMedicalPractitionerRoleAssociationDialog()"
+          (click)="openEditMedicalPractitionerRoleAssociationDialog(row)"
         >
           <mat-icon>edit</mat-icon> Edit
         </button>
@@ -394,7 +394,7 @@
     <div fxFlex>
       <mat-form-field appearance="outline" class="full-width">
         <mat-select>
-          <mat-option *ngFor="let status of MOMstatuses" [value]="status.label">
+          <mat-option *ngFor="let status of MedicalStaffFilter" [value]="status.label">
             {{ status.label }}
           </mat-option>
         </mat-select>
@@ -421,7 +421,7 @@
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox></mat-checkbox>
+        <mat-checkbox style="color:#fff ;"></mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
         <mat-checkbox

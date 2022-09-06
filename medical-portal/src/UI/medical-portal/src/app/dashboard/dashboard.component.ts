@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
   busy!: Subscription;
-  
+
   public dataSource: DMERCase[] = [];
   public filteredData: DMERCase[] = [];
   public showingDataInView: DMERCase[] = [];
@@ -80,6 +80,15 @@ export class DashboardComponent implements OnInit {
     this.isShowResults = false;
   }
 
+  onRowClick(event: any, row: any) {
+    if (row.status == 'In Progress') {
+      this.router.navigateByUrl('/cases/case/' + row.id);
+    } else {
+      // console.log("caseDetails", row);
+      this.router.navigateByUrl('/caseDetails/' + row.id);
+    }
+  }
+
   searchCases(query?: any): void {
     let searchParams: DMERSearchCases = {
       ...query,
@@ -93,15 +102,17 @@ export class DashboardComponent implements OnInit {
       searchParams['byStatus'] = [this.selectedStatus];
     }
 
-    this.busy = this.caseManagementService.getCases(searchParams).subscribe((cases) => {
-      this.totalRecords = cases.length;
-      this.pageNumber = 1;
-      this.dataSource = cases;
-      this.filteredData = cases;
-      this.showingDataInView = this.dataSource.slice(0, this.pageSize);
+    this.busy = this.caseManagementService
+      .getCases(searchParams)
+      .subscribe((cases) => {
+        this.totalRecords = cases.length;
+        this.pageNumber = 1;
+        this.dataSource = cases;
+        this.filteredData = cases;
+        this.showingDataInView = this.dataSource.slice(0, this.pageSize);
 
-      this.isLoading = false;
-    });
+        this.isLoading = false;
+      });
   }
 
   filterLocally() {
@@ -148,7 +159,7 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/cases/case/' + this.searchedCase?.id);
   }
 
-  navigateToCaseDetails(){
+  navigateToCaseDetails() {
     if (!this.searchedCase?.id) return;
     this.caseManagementService.selectedCase = this.searchedCase;
     this.router.navigateByUrl('/caseDetails/' + this.searchedCase?.id);

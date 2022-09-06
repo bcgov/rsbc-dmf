@@ -295,3 +295,9 @@ body {
 .mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
   color: black;
 }
+
+.mat-sort-header-arrow {
+  transform: none !important;
+  opacity: 1 !important;
+  color: #fff;
+}
