@@ -39,106 +39,114 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             // get the history from ICBC
             CLNT data = _icbcClient.GetDriverHistory(driversLicence);
 
-            Driver result = new Driver()
+            if (data != null)
             {
-                Surname = data.INAM?.SURN,
-                GivenName = data.INAM?.GIV1,                
-                Weight = data.WGHT,
-                Sex = data.SEX,
-                BirthDate = data.BIDT,
-                Height = data.HGHT,
-                SecurityKeyword = data.SECK,
-                City = data.ADDR?.CITY,
-                PostalCode = data.ADDR?.POST,
-                Province = data.ADDR?.PROV,
-                Country = data.ADDR?.CNTY
-            };
-
-            // handle address
-            if (data.ADDR != null)
-            {
-                List<string> addressComponents = new List<string>();
-
-                if (!string.IsNullOrEmpty(data.ADDR.APR1))
+                Driver result = new Driver()
                 {
-                    addressComponents.Add($"{data.ADDR.APR1}");
+                    Surname = data.INAM?.SURN,
+                    GivenName = data.INAM?.GIV1,
+                    Weight = data.WGHT,
+                    Sex = data.SEX,
+                    BirthDate = data.BIDT,
+                    Height = data.HGHT,
+                    SecurityKeyword = data.SECK,
+                    City = data.ADDR?.CITY,
+                    PostalCode = data.ADDR?.POST,
+                    Province = data.ADDR?.PROV,
+                    Country = data.ADDR?.CNTY
+                };
+
+                // handle address
+                if (data.ADDR != null)
+                {
+                    List<string> addressComponents = new List<string>();
+
+                    if (!string.IsNullOrEmpty(data.ADDR.APR1))
+                    {
+                        addressComponents.Add($"{data.ADDR.APR1}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.APR2))
+                    {
+                        addressComponents.Add($"{data.ADDR.APR2}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.APR3))
+                    {
+                        addressComponents.Add($"{data.ADDR.APR3}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.PSTN))
+                    {
+                        addressComponents.Add($"STN {data.ADDR.PSTN}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.SITE))
+                    {
+                        addressComponents.Add($"SITE {data.ADDR.SITE}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.COMP))
+                    {
+                        addressComponents.Add($"COMP {data.ADDR.COMP}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.RURR))
+                    {
+                        addressComponents.Add($"RR# {data.ADDR.RURR}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
+                    {
+                        addressComponents.Add($"PO BOX {data.ADDR.POBX}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.STNO))
+                    {
+                        addressComponents.Add($"{data.ADDR.STNO}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.STNM))
+                    {
+                        addressComponents.Add($"{data.ADDR.STNM}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.STTY))
+                    {
+                        addressComponents.Add($"{data.ADDR.STTY}");
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ADDR.STDI))
+                    {
+                        addressComponents.Add($"{data.ADDR.STDI}");
+                    }
+
+                    result.AddressLine1 = string.Join(" ", addressComponents.ToArray());
                 }
 
-                if (!string.IsNullOrEmpty(data.ADDR.APR2))
+                // handle two middle names, or just one.
+                if (data.INAM?.GIV2 != null && data.INAM?.GIV3 != null)
                 {
-                    addressComponents.Add($"{data.ADDR.APR2}");
+                    result.MiddleName = $"{data.INAM.GIV2} {data.INAM.GIV3}";
+                }
+                else if (data.INAM?.GIV2 != null)
+                {
+                    result.MiddleName = $"{data.INAM.GIV2}";
+                }
+                else if (data.INAM?.GIV3 != null)
+                {
+                    result.MiddleName = $"{data.INAM.GIV3}";
                 }
 
-                if (!string.IsNullOrEmpty(data.ADDR.APR3))
-                {
-                    addressComponents.Add($"{data.ADDR.APR3}");
-                }
+                result.DriverMasterStatus = data.DR1MST.ToViewModel();
 
-                if (!string.IsNullOrEmpty(data.ADDR.PSTN))
-                {
-                    addressComponents.Add($"STN {data.ADDR.PSTN}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.SITE))
-                {
-                    addressComponents.Add($"SITE {data.ADDR.SITE}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.COMP))
-                {
-                    addressComponents.Add($"COMP {data.ADDR.COMP}");
-                }
-
-                if (! string.IsNullOrEmpty(data.ADDR.RURR))
-                {
-                    addressComponents.Add ( $"RR# {data.ADDR.RURR}" );
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.POBX))
-                {
-                    addressComponents.Add($"PO BOX {data.ADDR.POBX}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.STNO))
-                {
-                    addressComponents.Add($"{data.ADDR.STNO}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.STNM))
-                {
-                    addressComponents.Add($"{data.ADDR.STNM}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.STTY))
-                {
-                    addressComponents.Add($"{data.ADDR.STTY}");
-                }
-
-                if (!string.IsNullOrEmpty(data.ADDR.STDI))
-                {
-                    addressComponents.Add($"{data.ADDR.STDI}");
-                }                
-
-                result.AddressLine1 = string.Join(" ",addressComponents.ToArray());
+                return Json(result);
             }
-
-            // handle two middle names, or just one.
-            if (data.INAM?.GIV2 != null && data.INAM?.GIV3 != null)
+            else
             {
-                result.MiddleName = $"{data.INAM.GIV2} {data.INAM.GIV3}";
+                return StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
             }
-            else if (data.INAM?.GIV2 != null)
-            {
-                result.MiddleName = $"{data.INAM.GIV2}";
-            }
-            else if (data.INAM?.GIV3 != null)
-            {
-                result.MiddleName = $"{data.INAM.GIV3}";
-            }           
-
-            result.DriverMasterStatus = data.DR1MST.ToViewModel();
-
-            return Json (result);
+            
         }
 
     }
