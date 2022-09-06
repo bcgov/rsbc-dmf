@@ -15,6 +15,8 @@ using System.Net.Http;
 using System.Net;
 using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
+using Pssg.Interfaces.Icbc.Helpers;
+using Rsbc.Dmf.CaseManagement.Helpers;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -23,7 +25,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
         IConfiguration Configuration;
         FlatFileUtils flatFileUtils;
-        CaseManagement.Service.CaseManager.CaseManagerClient caseManagerClient;
+        private IIcbcClient IcbcClient { get; set; }
+        CaseManager.CaseManagerClient CaseManagerClient { get; set; }
 
         /// <summary>
         /// Setup the test
@@ -37,10 +40,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddEnvironmentVariables()
                 .Build();
             // create a new case manager client.
+            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            {
+                IcbcClient = new IcbcClient(Configuration);
+            }
+            else
+            {
+                IcbcClient = IcbcHelper.CreateMock();
+            }
 
             string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
 
-            if (!string.IsNullOrEmpty(cmsAdapterURI))
+            if (string.IsNullOrEmpty(cmsAdapterURI))
+            {
+                // setup from Mock
+                CaseManagerClient = CmsHelper.CreateMock(Configuration);
+            }
+            else
             {
                 var httpClientHandler = new HttpClientHandler();
                 // Return `true` to allow certificates that are untrusted/invalid                    
@@ -72,73 +88,73 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 }
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-                caseManagerClient = new CaseManager.CaseManagerClient(channel);
+                CaseManagerClient = new CaseManager.CaseManagerClient(channel);
             }
              
-            flatFileUtils = new FlatFileUtils(Configuration,caseManagerClient);
+            flatFileUtils = new FlatFileUtils(Configuration,CaseManagerClient);
         }
 
         [Fact]
-        public async void GetUnsentMedicalUpdates()
+        public void GetUnsentMedicalUpdates()
         {
-            var unsentItems = caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            var unsentItems = CaseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
         }
 
         [Fact]
         public async void BasicConnectionTest()
         {
-            flatFileUtils.CheckConnection(null);
+            await flatFileUtils.CheckConnection(null);
         }
 
         [Fact]
-        public async void ProcessCandidatesTextFile()
+        public void ProcessCandidatesTextFile()
         {
             string filename = Configuration["CANDIDATES_TEST_FILE"];
 
-            Assert.NotNull(filename);
+            if (filename != null)
+            {
+                string data = File.ReadAllText(filename);
 
-            string data = File.ReadAllText(filename);
-
-            flatFileUtils.ProcessCandidates(null, data);
+                flatFileUtils.ProcessCandidates(null, data);
+            }
         }
 
         [Fact]
         public async void TestCheckForCandidates()
         {
-            flatFileUtils.CheckForCandidates(null);
+            await flatFileUtils.CheckForCandidates(null);
         }
 
         [Fact]
-        public async void TestAddCandidate()
+        public void TestAddCandidate()
         {
-            var IcbcClient = new IcbcClient(Configuration);
             CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
 
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
-                LicenseNumber = Configuration["ICBC_TEST_DL"],
-                Surname = client.INAM.SURN
+                LicenseNumber = Configuration["ICBC_TEST_DL"] ?? string.Empty,
+                Surname = client?.INAM?.SURN ?? string.Empty,
             };
-            caseManagerClient.ProcessLegacyCandidate(lcr);
+            CaseManagerClient.ProcessLegacyCandidate(lcr);
         }
 
         [Fact]
         public async void TestSendUpdates()
         {
-            flatFileUtils.SendMedicalUpdates(null);
+            await flatFileUtils.SendMedicalUpdates(null);
         }
 
         [Fact]
-        public async void CheckDriverNewFileFormat()
+        public void CheckDriverNewFileFormat()
         {
             var engine = new FileHelperEngine<NewDriver>();
-            string sampleData = "2222222022222224EXPERIMENTAL_______________________2012-01-011M2002-02-012004-01-011998-01-012002-04-040100";
+            string sampleData = "2222222022222224EXPERIMENTAL_______________________2012-01-011M2002-02-012004-01-011998-01-012002-04-042002-04-040100";
             var records = engine.ReadString(sampleData);
             Assert.Equal(records[0].LicenseNumber, sampleData.Substring(0,7));
         }
 
         [Fact]
-        public async void CheckMedicalUpdateFormat()
+        public void CheckMedicalUpdateFormat()
         {
             var engine = new FileHelperEngine<MedicalUpdate>();
             string sampleData = "2222222EXPERIMENTAL_______________________P2012-01-01";
@@ -147,23 +163,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
         
         [Fact]
-        public async void CandidateListTest()
+        public void FlatCandidateListTest()
         {
             LegacyCandidateRequest lcr = new LegacyCandidateRequest()
             {
-                LicenseNumber = Configuration["ICBC_TEST_DL"],
-                Surname = Configuration["ICBC_TEST_SURNAME"],
+                LicenseNumber = Configuration["ICBC_TEST_DL"] ?? string.Empty,
+                Surname = Configuration["ICBC_TEST_SURNAME"] ?? string.Empty,
                 ClientNumber = String.Empty,
             };
-            var result = caseManagerClient.ProcessLegacyCandidate(lcr);
+            var result = CaseManagerClient.ProcessLegacyCandidate(lcr);
             Assert.NotNull(result);            
         }
 
         [Fact]
-        public async void MedicalStatusPass()
+        public void MedicalStatusPass()
         {
             // create a FlatFilesUtil class.
-            var f = new FlatFileUtils(Configuration, caseManagerClient);
+            var f = new FlatFileUtils(Configuration, CaseManagerClient);
 
             SearchReply searchReply = new SearchReply();
             var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
@@ -176,10 +192,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void MedicalStatusFail()
+        public void MedicalStatusFail()
         {
             // create a FlatFilesUtil class.
-            var f = new FlatFileUtils(Configuration, caseManagerClient);
+            var f = new FlatFileUtils(Configuration, CaseManagerClient);
 
             SearchReply searchReply = new SearchReply();
             var testCase = new DmerCase() { Driver = new Driver() { Surname = "TEST" } };
@@ -192,10 +208,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         }
 
         [Fact]
-        public async void MedicalStatusFailPass()
+        public void MedicalStatusFailPass()
         {
             // create a FlatFilesUtil class.
-            var f = new FlatFileUtils(Configuration, caseManagerClient);
+            var f = new FlatFileUtils(Configuration, CaseManagerClient);
 
             SearchReply searchReply = new SearchReply();
 

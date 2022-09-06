@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -14,10 +15,12 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
-
+    /// <summary>
+    /// Controller providing data related to a Driver
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [Produces("application/json")]
+    [Produces("application/json")] 
     public class DriversController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -27,10 +30,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient)
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
+            _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
         }
 
@@ -54,14 +58,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// Get Comments for a case
         /// </summary>
-        /// <param name="caseId"></param>
+        /// <param name="licenseNumber"></param>
+        /// <param name="filter">Optional numeric sequence number to filter results by.</param>
+        /// <param name="sort">Optional Char, one of 'D' - commentDate, 'T' - commentTypeCode, 'U' - userId, 'C' - commentText</param>
         /// <returns></returns>
-        // GET: /Drivers/Exist
+        // GET: /Drivers/<DL>/Comments
         [HttpGet("{licenseNumber}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
-        public ActionResult GetComments([FromRoute] string licenseNumber)
+        public ActionResult GetComments([FromRoute] string licenseNumber, [FromQuery] string filter, [FromQuery] char sort)
         
         {            
             // call the back end
@@ -85,17 +91,48 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now 
                     };
 
-                    result.Add(new ViewModels.Comment
+                    bool addItem = true;
+                    Guid filterValue;
+                    Guid caseId;
+                    if (filter != null && Guid.TryParse(filter, out filterValue ) && Guid.TryParse(item.CaseId, out caseId))
                     {
-                        CaseId = item.CaseId,
-                        CommentDate = item.CommentDate.ToDateTimeOffset(),
-                        CommentId = item.CommentId,
-                        CommentText = item.CommentText,
-                        CommentTypeCode = item.CommentTypeCode,
-                        Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
-                    });
+                        addItem = filterValue == caseId;
+                    }
+
+                    if (addItem)
+                    {
+
+                        result.Add(new ViewModels.Comment
+                        {
+                            CaseId = item.CaseId,
+                            CommentDate = item.CommentDate.ToDateTimeOffset(),
+                            CommentId = item.CommentId,
+                            CommentText = item.CommentText,
+                            CommentTypeCode = item.CommentTypeCode,
+                            Driver = driver,
+                            SequenceNumber = item.SequenceNumber,
+                            UserId = item.UserId
+                        });
+                    }
+                }
+
+                if (sort != null)
+                {
+                    switch (sort)
+                    {
+                        case 'D': // - commentDate
+                            result = result.OrderByDescending(x => x.CommentDate).ToList();
+                            break;
+                        case 'T': // - commentTypeCode
+                            result = result.OrderBy(x => x.CommentTypeCode).ToList();
+                            break;
+                        case 'U': // - userId
+                            result = result.OrderBy(x => x.UserId).ToList();
+                            break;
+                        case 'C': // - commentText
+                            result = result.OrderBy(x => x.CommentText).ToList();
+                            break;
+                    }                 
                 }
                 return Json(result);
             }
@@ -160,11 +197,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
-                CaseId = comment.CaseId,
-                CommentText = comment.CommentText,
-                CommentTypeCode = comment.CommentTypeCode,
+                CaseId = comment.CaseId ?? String.Empty,
+                CommentText = comment.CommentText ?? String.Empty,
+                CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
                 SequenceNumber = comment.SequenceNumber,
-                UserId = comment.UserId,
+                UserId = comment.UserId ?? String.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
                 Driver = driver
             });
@@ -207,6 +244,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 foreach (var item in reply.Items)
                 {
+
                     // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
                     ViewModels.Driver driver = new ViewModels.Driver()
                     {
@@ -217,25 +255,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now
                     };
 
-                    // fetch the file contents
-                    Byte[] data = new byte[0];
-
+                    
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
-                        DocumentDate = item.DocumentDate.ToDateTimeOffset(),
+                        FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
+                        ImportDate = item.ImportDate.ToDateTimeOffset(),
+                        
                         DocumentId = item.DocumentId,
-                        FileContents = data,                        
+                        DocumentTypeCode = item.DocumentTypeCode,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
                     });
+                    
                 }
+
                 return Json(result);
             }
             else
             {
-                return StatusCode(500);
+                return StatusCode(500, reply.ErrorDetail);
             }
         }
 
@@ -253,7 +293,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // add the document
 
-            var driver = new CaseManagement.Service.Driver()
+            UploadFileRequest pdfData = new UploadFileRequest()
+            {
+                ContentType = "application/pdf",
+                Data = ByteString.CopyFrom(document.FileContents),
+                EntityName = "incident",
+                FileName = $"DMER.pdf",
+                FolderName = document.CaseId,
+            };
+            var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                return StatusCode(500, fileReply.ErrorDetail);   
+            }
+
+            var driver = new Driver()
             {
                 DriverLicenseNumber = licenseNumber
             };
@@ -268,25 +323,40 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CaseId = document.CaseId,                
                 SequenceNumber = document.SequenceNumber,
                 UserId = document.UserId,
-                DocumentDate = Timestamp.FromDateTimeOffset(document.DocumentDate),
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate),
+                ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate),
                 Driver = driver
 
             });
 
-            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
-                var actionName = nameof(CreateDocumentForDriver);
-                var routeValues = new
-                {
-                    driversLicence = licenseNumber
-                };
+                return StatusCode(500, result.ErrorDetail);
+            }
 
-                return CreatedAtAction(actionName, routeValues, document);
-            }
-            else
+            UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
             {
-                return StatusCode(500);
-            }
+                CaseId = document.CaseId,
+                IsCleanPass = false,
+                DataFileKey = string.Empty,
+                DataFileSize = 0,
+                PdfFileKey = fileReply.FileName,
+                PdfFileSize = document.FileContents.Length,
+
+            };
+
+            // may need to add flags here.
+
+            var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
+
+            var actionName = nameof(CreateDocumentForDriver);
+            var routeValues = new
+            {
+                driversLicence = licenseNumber
+            };
+
+            return CreatedAtAction(actionName, routeValues, document);
+            
         }
 
     }

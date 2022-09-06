@@ -13,8 +13,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Renci.SshNet;
 using System.IO;
-using SharedUtils.Gov.Lclb.Cllb.Public.Utils;
-using SharedUtils;
+using Pssg.SharedUtils;
 using FileHelpers;
 using Pssg.Interfaces.FlatFileModels;
 using Pssg.Interfaces.Icbc.FlatFileModels;
@@ -47,8 +46,7 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             return string.IsNullOrEmpty(host) ||
                 string.IsNullOrEmpty(username) ||
-                !(string.IsNullOrEmpty(password) &&
-                string.IsNullOrEmpty(key));
+                string.IsNullOrEmpty(key);
         }
 
         private ConnectionInfo GetConnectionInfo (string host, string username, string password, string keyUser, string key)
@@ -89,7 +87,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
@@ -102,20 +100,34 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(".");
+                    string folder = _configuration["SCP_FOLDER"];
 
-                    foreach (var file in files)
+                    if (string.IsNullOrEmpty(folder))
                     {
-                        LogStatement(hangfireContext, file.Name);
+                        folder = client.WorkingDirectory;
                     }
-
+                       
+                    SpiderFolder(client, hangfireContext, folder);
                 }
 
             }
 
-
-
             LogStatement(hangfireContext, "End of CheckConnection.");
+        }
+
+        private void SpiderFolder (SftpClient client, PerformContext hangfireContext, string folder)
+        {
+            var files = client.ListDirectory(folder);
+
+            foreach (var file in files)
+            {
+                LogStatement(hangfireContext, folder + "/" + file.Name);
+
+                if (file.Attributes.IsDirectory && !file.Name.StartsWith ("."))
+                {
+                    SpiderFolder (client, hangfireContext, folder + "/" + file.Name);
+                }
+            }
         }
 
         /// <summary>
@@ -134,7 +146,9 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            string folder = _configuration["SCP_FOLDER_INBOUND"];
+
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement (hangfireContext, "No SCP configuration, skipping check for work.");
             }
@@ -147,18 +161,29 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    var files = client.ListDirectory(client.WorkingDirectory);
+                    if (string.IsNullOrEmpty(folder))
+                    {
+                        folder = client.WorkingDirectory;
+                    }
 
+                    var files = client.ListDirectory(folder);
+                    bool first = true;
                     foreach (var file in files)
                     {
-                        LogStatement(hangfireContext, file.Name);
-                        var memoryStream = new MemoryStream();
-                        client.DownloadFile(file.FullName, memoryStream);
+                        if (file.Name.StartsWith("drvnew-"))
+                        {
+                            LogStatement(hangfireContext, file.FullName);
 
-                        string data = StringUtility.StreamToString(memoryStream);
+                            string data = client.ReadAllText(file.FullName);
+             
+                            LogStatement(hangfireContext, data);
+                            ProcessCandidates(hangfireContext, data);
+                            if (first)
+                            {
+                                break; // just process one file.
+                            }
+                        }
                         
-                        //ProcessCandidates(hangfireContext, data);
-
                     }
                 }
             }
@@ -172,17 +197,32 @@ namespace Rsbc.Dmf.IcbcAdapter
             var engine = new FileHelperEngine<NewDriver>();
             engine.Options.IgnoreLastLines = 1;
             var records = engine.ReadString(data);
+            
+            LogStatement(hangfireContext, $"{records.Length} records were found.");
+            
             foreach (var record in records)
             {
-                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {record.Surname}");
+                
                 // Add / Update cases
+
+                string surname = record.Surname ?? string.Empty;
+                if (! string.IsNullOrEmpty(surname) && surname.Trim().EndsWith(","))               
+                {
+                    surname = surname.Trim();
+                    surname = surname.Substring(0, surname.Length - 1);
+                }
+
+                LogStatement(hangfireContext, $"Found record {record.LicenseNumber} {surname}");
+
+
+
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {
                     LicenseNumber = record.LicenseNumber,
-                    Surname = record.Surname,
-                    ClientNumber = record.ClientNumber,
+                    Surname = surname,
+                    ClientNumber = record.ClientNumber ?? string.Empty,
                 };
-                //_caseManagerClient.ProcessLegacyCandidate(lcr);
+                _caseManagerClient.ProcessLegacyCandidate(lcr);
             }
         }
 
@@ -202,7 +242,20 @@ namespace Rsbc.Dmf.IcbcAdapter
             string keyUser = _configuration["SCP_KEY_USER"];
             string key = _configuration["SCP_KEY"];
 
-            if (!CheckScpSettings(host, username, password, key))
+            string folder = _configuration["SCP_FOLDER_OUTBOUND"];
+
+            // construct the medical update file
+            string fileName = GetMedicalUpdateFilename(folder);
+
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+
+            var updateList = GetMedicalUpdateData(unsentItems);
+
+            string rawData = GetMedicalUpdateString(updateList);
+
+            MemoryStream data = StringUtility.StringToStream(rawData);
+
+            if (CheckScpSettings(host, username, password, key))
             {
                 LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
             }
@@ -215,16 +268,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     client.Connect();
                     LogStatement(hangfireContext, "Connected.");
 
-                    // construct the medical update file
-                    string fileName = GetMedicalUpdateFilename();
-
-                    var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
-
-                    var updateList = GetMedicalUpdateData(unsentItems);
-
-                    string rawData = GetMedicalUpdateString(updateList);
-
-                    MemoryStream data = StringUtility.StringToStream(rawData);
+                    
 
                     // transfer it.
                     client.UploadFile(data, fileName);
@@ -251,42 +295,47 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             List<MedicalUpdate> data = new List<MedicalUpdate>();
 
-            
             foreach (DmerCase item in unsentItems.Items)
             {
                 // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
-
-                // (TODO)
-
-                var newUpdate = new MedicalUpdate()
-                {
-                     LicenseNumber = item.Driver.DriverLicenseNumber,
-                     Surname = item.Driver.Surname,                     
-                };
-
-                var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
                 
-                if (firstDecision != null)
+                if (item.Driver != null)
                 {
-                    if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                    var newUpdate = new MedicalUpdate()
                     {
-                        newUpdate.MedicalDisposition = "P";
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Surname = item.Driver.Surname,
+                    };
+
+                    var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+
+                    if (firstDecision != null)
+                    {
+                        if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                        {
+                            newUpdate.MedicalDisposition = "P";
+                        }
+                        else
+                        {
+                            newUpdate.MedicalDisposition = "J";
+                        }
                     }
                     else
                     {
                         newUpdate.MedicalDisposition = "J";
                     }
+
+                    DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
+
+                    newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
+
+                    data.Add(newUpdate);
                 }
                 else
                 {
-                    newUpdate.MedicalDisposition = "J";
+                    Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
                 }
-
-                DateTime? adjustedDate = DateUtility.FormatDatePacific(DateTimeOffset.UtcNow);
-
-                newUpdate.MedicalIssueDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");
-
-                data.Add(newUpdate);
+                
             }
 
             return data;
@@ -300,7 +349,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             return result;
         }
 
-        private string GetMedicalUpdateFilename(DateTimeOffset? currentTime = null)
+        private string GetMedicalUpdateFilename(string folder, DateTimeOffset? currentTime = null)
         {
             string result = null;
             if (currentTime == null)
@@ -310,7 +359,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             DateTime? adjustedDate = DateUtility.FormatDatePacific(currentTime);
 
-            string prefix = "RSBCMED-UPDATE";            
+            string prefix = $"{folder}/RSBCMED-UPDATE";            
             string formattedDate = adjustedDate.Value.ToString("yyyyMMddHHmmss");                            
             string suffix = ".dat";
             result = $"{prefix}{formattedDate}{suffix}";

@@ -14,44 +14,44 @@ namespace Pssg.Interfaces.Icbc.FlatFileModels
 
     [FixedLengthRecord()]
     public class NewDriver
-    {                
-        // LNUM Driver License Number Char(7)
+    {
+        // LNUM Driver License Number Char(7) - example 2222222
         [FieldFixedLength(7)]
         public string LicenseNumber { get; set;}
 
-        // CLNO Client Number Char(9)
+        // CLNO Client Number Char(9) - example 022222224
         [FieldFixedLength(9)]
         public string ClientNumber { get; set;}
 
-        // SURN Surname Char(35)
-        [FieldFixedLength(35)]
+        // SURN Surname Char(35) - example EXPERIMENTAL_______________________
+        [FieldFixedLength(35)] 
         public string Surname {  get; set;}
 
-        // MIDT Medical Issue Date Char(10)
+        // MIDT Medical Issue Date Char(10) - example 2012-01-01
         [FieldFixedLength(10)]
         public string MedicalIssueDate {  get; set;}
 
-        // MDTP Medical Type Char(1)
+        // MDTP Medical Type Char(1) - example 1
         [FieldFixedLength(1)]
         public string MedicalType { get; set;}
 
-        // SEX Sex Char(1)
+        // SEX Sex Char(1) - example M
         [FieldFixedLength(1)]
         public string Sex { get; set; }
 
-        // BIDT Birth Date Char(10)
+        // BIDT Birth Date Char(10) - example 2002-02-01
         [FieldFixedLength(10)]
         public string BirthDate { get; set; }
 
-        // RRSR License Expiry Date Char(10)
+        // RRSR License Expiry Date Char(10) - example 2004-01-01
         [FieldFixedLength(10)]
         public string LicenceExpiryDate { get; set; }
 
-        // LMDT Last Medical Date Char(10)
-        [FieldFixedLength(10)]
+        // LMDT Last Medical Date Char(10) - example 1998-01-01
+        [FieldFixedLength(10)] 
         public string LastMedicalDate { get; set; }
 
-        // LEDT Last Exam Date Char(10)
+        // LEDT Last Exam Date Char(10) - example 2002-04-040100
         [FieldFixedLength(10)]
         public string LastExamDate { get; set; }
 

@@ -1,16 +1,11 @@
 Road Safety BC Driver Medical Fitness
 ======================
 [![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)](<Redirect-URL>)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-[![ci-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-cms-adapter.yml)
-
+[![ci-medical-portal-api](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml)
+[![cd-legacy-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-legacy-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-legacy-adapter.yml)
+[![cd-cms-adapter](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-cms-adapter.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-cms-adapter.yml)
+[![ci-medical-portal-ui](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml/badge.svg)](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml)
 [![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/main/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
-[![codecov](https://codecov.io/gh/bcgov/rsbc-dmf/branch/codecov/graph/badge.svg?token=d5woacAxGD)](https://codecov.io/gh/bcgov/rsbc-dmf)
 
 Technology Stack
 -----------------
@@ -76,6 +71,20 @@ There are two main categories of Github Actions used in this project:
 2. Continuous Delivery - these pipelines are used to assist in building code for delivery (deployment) in OpenShift.
 
 An example of other Github Actions also used in the project is the stats action Code Cov uses.
+
+### Configuration Required for Github Actions
+
+1. OCP4_NAMESPACE - set to the full project identifier where images are stored.  For example proj-tools.
+
+2. OCP4_USERNAME - the username for a Service Account with access to read / write OCP4_NAMESPACE images
+
+Note that this username must have the following role bindings set:
+
+`oc policy add-role-to-user system:image-builder system:serviceaccount:<namespace>:<username>`
+
+3. OCP4_PASSWORD - the TOKEN from the OpenShift secret for the username in OCP4_USERNAME
+
+4. OCP4_REGISTRY - the hostname for the public image repository.  You can get this by viewing the details for an image in the given project; only put the hostname portion.
 
 ## Tekton Pipelines
 

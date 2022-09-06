@@ -12,9 +12,13 @@ service CaseManager {
 
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
+  rpc GetLegacyDocument (GetLegacyDocumentRequest) returns (GetLegacyDocumentReply);
+
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
+
+  rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
@@ -50,6 +54,10 @@ message CaseIdRequest {
 	string caseId= 1;
 }
 
+message GetLegacyDocumentRequest {
+	string documentId=1;
+}
+
 message GetCommentsReply {
 	repeated LegacyComment items = 1;
 	ResultStatus resultStatus = 2;
@@ -80,8 +88,25 @@ message LegacyDocument {
 	string UserId = 4;
 	string CaseId = 5;
 	string DocumentId = 6;
-	google.protobuf.Timestamp DocumentDate = 7;
-	Driver Driver = 8;
+	google.protobuf.Timestamp FaxReceivedDate = 7;
+	google.protobuf.Timestamp ImportDate = 8;
+	string ImportId = 9;
+	Driver Driver = 10;
+	string BatchId = 11;
+	string OriginatingNumber = 12;
+	int64 DocumentPages = 13;
+	string ValidationMethod = 14;
+	string ValidationPrevious = 15;
+}
+
+message GetDocumentRequest {	
+	string documentId = 1;
+}
+
+message GetLegacyDocumentReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	LegacyDocument document = 3;
 }
 
 
@@ -215,6 +240,9 @@ message LegacyCandidateRequest{
 	string licenseNumber = 1;
     string clientNumber = 2;
 	string surname = 3;
+	google.protobuf.Timestamp birthDate = 4;
+	google.protobuf.Timestamp effectiveDate = 5;
+
 }
 
 message LegacyCandidateReply{
@@ -272,6 +300,12 @@ message UsersSearchReply {
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
 	repeated User user = 10;
+}
+
+message GetDriversReply {
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	repeated Driver items = 10;
 }
 
 message UserLoginRequest {

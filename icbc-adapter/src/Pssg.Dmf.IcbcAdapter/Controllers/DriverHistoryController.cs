@@ -23,13 +23,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
-        private readonly IcbcClient icbcClient;
+        private readonly IIcbcClient _icbcClient;
 
-        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration)
+        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _logger = logger;
-            icbcClient = new IcbcClient(configuration);
+            _icbcClient = icbcClient;
         }
 
         // GET: /DriverHistory
@@ -37,7 +37,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult GetHistory(string driversLicence)
         {
             // get the history from ICBC
-            CLNT data = icbcClient.GetDriverHistory(driversLicence);
+            CLNT data = _icbcClient.GetDriverHistory(driversLicence);
 
             Driver result = new Driver()
             {

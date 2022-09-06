@@ -152,7 +152,7 @@
 .panel-header{
   background-color: #f1f1f3;
   border-color: #f1f1f3;
-  padding: 8px;
+  padding-left: 8px;
   cursor: pointer;
 }
 
@@ -166,8 +166,12 @@
 }
 
 .dmer-types{
-  margin-bottom: 20px;
-  margin-top: 20px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.dmer-categories{
+  margin-left: 38px;;
 }
 
 .no-reimbursement-chips{
@@ -179,10 +183,18 @@
 
 .reimbursement-chips{
   background-color: #fff;
-  border: 2px solid #96c0e6;
+  border: 2px solid #38598A;
   border-radius: 4px;
   padding: 2px;
 }
+
+.dmer-type {
+  border-radius: 5px;
+  padding: 2px;
+  width: 200px;
+  border: 2px solid #38598A;
+}
+
 
 .chips{
   margin-top: 10px;
