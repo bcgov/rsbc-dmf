@@ -1,17 +1,18 @@
 <div class="page-desc">
   <div class="container">
     <h1>Portal Dashboard</h1>
-    
-      In this portal you can :
-      
-      <ul>
-        <li>
-          Start, access and submit a Driver’s Medical Exam Report (DMER)
-        </li>
-        <li>
-          See DMER Status within RoadSafetyBC in the event the patient contacts you for an update
-        </li>
-      </ul>
+
+    In this portal you can :
+
+    <ul>
+      <li>Start, access and submit a Driver’s Medical Exam Report (DMER)</li>
+      <li>See DMER Status</li>
+      <li>
+        <a routerLink="/caseAssistance"
+          >Options for the driver to obtain a missing DMER Case ID.
+        </a>
+      </li>
+    </ul>
   </div>
 </div>
 
@@ -126,8 +127,9 @@
             <ng-container [ngSwitch]="searchedCase?.status">
               <ng-container *ngSwitchCase="'Not Started'">
                 <button
-                  mat-stroked-button
+                  mat-flat-button
                   color="primary"
+                  class="search-button"
                   (click)="navigatetoDMER()"
                 >
                   <mat-icon class="cases-button">edit</mat-icon>Start DMER
@@ -135,8 +137,9 @@
               </ng-container>
               <ng-container *ngSwitchCase="'In Progress'">
                 <button
-                  mat-stroked-button
+                  mat-flat-button
                   color="primary"
+                  class="search-button"
                   (click)="navigatetoDMER()"
                 >
                   <mat-icon class="cases-button">edit</mat-icon>Continue DMER
@@ -145,8 +148,9 @@
 
               <ng-container *ngSwitchDefault>
                 <button
-                  mat-stroked-button
+                  mat-flat-button
                   color="primary"
+                  class="search-button"
                   (click)="navigateToCaseDetails()"
                 >
                   <mat-icon class="cases-button">description</mat-icon>View
@@ -196,42 +200,56 @@
             <mat-panel-title class="dmer-Title"> DMER Types </mat-panel-title>
           </mat-expansion-panel-header>
 
-          RoadSafetyBC has two types of DMERs. The difference between them is
-          when a medical practice is able to receive a reimbursement from
-          RoadSafetyBC.<br />
+          There are two categories of DMERs. The difference between them is when
+          a medical practice is able to receive a reimbursement from
+          RoadSafetyBC.
           <div class="dmer-types">
-            <b>No Reimbursement</b><br />
-            The routine DMERs noted below are not subsidized by RoadSafetyBC.<br />
-            <div class="chips" fxLayout="row" fxLayoutGap="24px">
-              <label class="no-reimbursement-chips">Scheduled Age</label>
-              <label class="no-reimbursement-chips">Commercial</label>
+            <b
+              ><ul>
+                <li>No Reimbursement</li>
+              </ul>
+            </b>
+            <div class="dmer-categories">
+              The routine DMERs noted below are not subsidized by
+              RoadSafetyBC.<br />
+              <div class="chips" fxLayout="row" fxLayoutGap="24px">
+                <label class="no-reimbursement-chips">Scheduled Age</label>
+                <label class="no-reimbursement-chips">Commercial</label>
+              </div>
             </div>
           </div>
           <div class="dmer-types">
-            <b>Reimbursement</b> <br />
-            The DMERs noted below are applicable for a reimbursement of $75.00. 
-
-            <div class="chips" fxLayout="row" fxLayoutGap="24px">
-              <!-- <label class="reimbursement-chips"
-                >Suspected Medical Condition</label
-              > -->
-              <label class="reimbursement-chips">Known/Suspected Condition</label>
+            <b
+              ><ul>
+                <li>No Reimbursement</li>
+              </ul>
+            </b>
+            <div class="dmer-categories">
+              The DMERs noted below are eligible for a reimbursement of $75.00
+              from RoadSafetyBC.
+              <div class="chips" fxLayout="row" fxLayoutGap="24px">
+                <label class="reimbursement-chips"
+                  >Suspected Medical Condition</label
+                >
+                <label class="reimbursement-chips"
+                  >Known Medical Condition</label
+                >
+              </div>
             </div>
           </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="dmer-Title">
-              Case Status
-            </mat-panel-title>
+            <mat-panel-title class="dmer-Title"> Case Status </mat-panel-title>
           </mat-expansion-panel-header>
 
           <div>
             A case's lifecycle progresses through seven different statuses.
             <ul>
               <li>
-                <b>Not Started</b> – DMER has been issued by RoadSafetyBC. Medical assessment has not yet begun.
+                <b>Not Started</b> – DMER has been issued by RoadSafetyBC.
+                Medical assessment has not yet begun.
               </li>
               <li>
                 <b>In Progress </b> – DMER has been started by a medical
@@ -242,10 +260,14 @@
                 RoadSafetyBC.
               </li>
               <li>
-                <b>Under RSBC Review </b> –  DMER is currently under review by RoadSafetyBC. 
+                <b>Under RSBC Review </b> – DMER is currently under review by
+                RoadSafetyBC.
               </li>
               <li>
-                <b>RSBC Decision Rendered </b> – Fitness to drive has been assessed and driver will be or has been notified of RSBC’s decision. Due to privacy legislation the decision cannot be displayed.
+                <b>RSBC Decision Rendered </b> – Fitness to drive has been
+                assessed and driver will be or has been notified of
+                RoadSafetyBC’s decision. Due to privacy legislation the decision
+                cannot be displayed
               </li>
               <li>
                 <b>Cancelled/Closed </b> - This case is closed or a DMER no
@@ -305,7 +327,6 @@
 
   <div [ngBusy]="busy"></div>
   <div class="table-data">
-   
     <ng-container *ngIf="!isLoading">
       <ng-container *ngIf="totalRecords > 0; else noData">
         <table
@@ -328,12 +349,7 @@
               DMER Case ID
             </th>
             <td mat-cell *matCellDef="let row">
-              <a
-                [routerLink]="[row.status === 'In Progress' ? '/cases/case' : '/caseDetails', row.id]"
-                routerLinkActive="router-link-active"
-              >
-                {{ row.title }}
-              </a>
+              {{ row.title }}
             </td>
           </ng-container>
           <ng-container matColumnDef="patientName">
@@ -369,10 +385,12 @@
               *matHeaderCellDef
               mat-sort-header="dmerType"
               sortActionDescription="Sort by Dmer Type"
+              
             >
               DMER Type
             </th>
-            <td mat-cell *matCellDef="let row">{{ row.dmerType }}</td>
+            <td mat-cell *matCellDef="let row" >
+              <div class="dmer-type">{{ row.dmerType }}</div></td>
           </ng-container>
           <ng-container matColumnDef="lastUpdatedOn">
             <th
@@ -421,7 +439,7 @@
               'status'
             ]"
           ></tr>
-          <tr
+          <tr (click)="onRowClick($event, row)"
             mat-row
             *matRowDef="
               let row;
