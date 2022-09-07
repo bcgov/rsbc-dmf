@@ -79,6 +79,44 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(caseId);
         }
 
+        /// <summary>
+        /// DoesCaseExist
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+        /// <param name="surcode"></param>
+        /// <returns>The Case Id or Null</returns>
+        // GET: /Cases/ExistByDl
+        [HttpGet("ExistByDl")]
+        public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
+        {
+            string caseId = GetCaseIdByDl(licenseNumber);
+
+            if (caseId == null) // create it
+            {
+                try
+                {
+                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    if (driver != null)
+                    {
+                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                        {
+                            LicenseNumber = licenseNumber,
+                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                            Surname = driver.INAM?.SURN
+                        };
+                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                    }
+                }
+                catch (Exception e)
+                {
+                    _logger.LogInformation(e, "Error getting driver.");
+                }
+                caseId = GetCaseIdByDl(licenseNumber);
+            }
+
+            return Json(caseId);
+        }
+
         private string GetCaseId(string licenseNumber, string surcode)
         {
             string caseId = null;
@@ -91,6 +129,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         caseId = item.CaseId;
                     }
+                }
+            }
+            return caseId;
+        }
+
+
+        private string GetCaseIdByDl(string licenseNumber)
+        {
+            string caseId = null;
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                foreach (var item in reply.Items)
+                {
+                    caseId = item.CaseId;
+                    break;
                 }
             }
             return caseId;
