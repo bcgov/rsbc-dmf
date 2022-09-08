@@ -33,6 +33,7 @@ import { EditMedicalPractitionerUserProfileDialogComponent } from './user-profil
 import { CreateMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/create-medical-practitioner-role-association-dialog/create-medical-practitioner-role-association-dialog.component';
 import { EditMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/edit-medical-practitioner-role-association-dialog/edit-medical-practitioner-role-association-dialog.component';
 import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './user-profile/manage-medical-practitioner-role-association-dialog/manage-medical-practitioner-role-association-dialog.component';
+import { DmerSubmissionConfirmationComponent } from './dmer-submission-confirmation/dmer-submission-confirmation.component';
 
 
 
@@ -55,7 +56,8 @@ import { ManageMedicalPractitionerRoleAssociationDialogComponent } from './user-
     EditMedicalPractitionerUserProfileDialogComponent,
     CreateMedicalPractitionerRoleAssociationDialogComponent,
     EditMedicalPractitionerRoleAssociationDialogComponent,
-    ManageMedicalPractitionerRoleAssociationDialogComponent
+    ManageMedicalPractitionerRoleAssociationDialogComponent,
+    DmerSubmissionConfirmationComponent
   ],
   imports: [
     BrowserModule,
