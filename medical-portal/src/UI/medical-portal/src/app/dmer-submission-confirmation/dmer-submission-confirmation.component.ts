@@ -5,11 +5,8 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './dmer-submission-confirmation.component.html',
   styleUrls: ['./dmer-submission-confirmation.component.scss']
 })
-export class DmerSubmissionConfirmationComponent implements OnInit {
+export class DmerSubmissionConfirmationComponent  {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }
