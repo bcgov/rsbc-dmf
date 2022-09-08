@@ -71,6 +71,15 @@ h3 {
 	font-weight: 700;
 }
 
+.--link-dark {
+	color: #000000;
+	font-weight: 700;
+}
+
+.--link-white-normal {
+	color: #fff;
+}
+
 /*--Buttons----------------*/
 
 .BC-Gov-PrimaryButton {
@@ -191,7 +200,7 @@ h3 {
 }
 
 .about-icon,
-.concern-icon {
+.concern-icon, .ccmta-icon {
 	width: 60px;
 	height: 60px;
 	margin-bottom: 8px;
@@ -215,7 +224,7 @@ h3 {
 .container {
 	width: 1200px;
 	margin: 0 auto;
-	z-index: -10;
+	/*z-index: -10; Tanya hid this so link in hero image would work*/
 }
 
 .container-alt {
@@ -232,7 +241,7 @@ h3 {
 	z-index: 100;
 	border-top: 5px solid #fcba19;
 	padding: 50px 30px;
-	height: 1240px;
+	height: 1730px;
 }
 
 /*--Header----------------*/
@@ -312,7 +321,7 @@ h3 {
 .medical-professionals__buttons {
 	display: flex;
 	justify-content: center;
-	margin-bottom: 40px;
+	margin-bottom: 30px;
 	margin-left: -21px;
 }
 
@@ -340,9 +349,9 @@ h3 {
 	margin-bottom: 20px;
 }
 
-/*--About----------------*/
-.about {
-	background: #fff;
+/*--CCMTA----------------*/
+.ccmta {
+	background: #f2f2f2;
 	padding: 40px;
 	width: 49%;
 	border-radius: 4px;
@@ -352,14 +361,20 @@ h3 {
 	box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
 }
 
-.about p {
+.ccmta p {
 	font-size: 18px;
 }
 
-.about hr {
+.ccmta hr {
 	width: 400px;
 	margin-bottom: 30px;
 	border: 1px solid;
+}
+
+.ccmta__buttons {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 30px;
 }
 
 /*--Concern----------------*/
@@ -380,7 +395,6 @@ h3 {
 }
 
 p.note {
-	font-size: 14px;
 	text-align: center;
 	background: rgba(242, 242, 242, 0.32);
 	padding: 2px;
@@ -392,6 +406,32 @@ p.note {
 	margin-bottom: 30px;
 	border: 1px solid;
 }
+
+.concerns__buttons {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 30px;
+}
+
+/*--About----------------*/
+.about {
+	background: #fff;
+	padding: 40px 180px;
+	border-radius: 4px;
+	margin-bottom: 20px;
+	box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
+}
+
+.about p {
+	font-size: 18px;
+}
+
+.about hr {
+	width: 400px;
+	margin-bottom: 30px;
+	border: 1px solid;
+}
+
 
 /*--Assistance----------------*/
 .assistance {
@@ -463,7 +503,7 @@ p.note {
 		<div class="site-header__inner container">
 			<a href="/"><img class="site-logo" src="img/british-columbia-logo.svg" alt="British Columbia Logo"></a>
 			<div class="site-header__buttons">
-				<a  href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card"  target="_blank" class="BC-Gov-SecondaryButton-Dark spacer">Register</a>
+				<a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card"  target="_blank" class="BC-Gov-SecondaryButton-Dark spacer">Register</a>
 				<a href="rsbc-dfp-medical-portal"  target="_blank" class="BC-Gov-PrimaryButton-Dark">Login</a>
 			</div>
 		</div>
@@ -477,9 +517,9 @@ p.note {
 				<h1><span>RoadSafetyBC's</span><br>Driver Medical Fitness Portal</h1>
 				<p>RoadSafetyBC is part of the Ministry of Public Safety and Solicitor General. This portal serves the medical community by:</p>
 				<ul>
-					<li>Modernizing BC’s driver medical fitness process by providing an electronic Driver's Medical Examination Report (DMER)</li>
+					<li>Modernizing BC's driver medical fitness process by providing an electronic Driver's Medical Examination Report (DMER)</li>
 					<li>Simplifying the process of completing, submitting and monitoring the status of a DMER</li>
-					<li>Enhancing public safety and contributing to RoadSafetyBC's Vision Zero goal</li>
+					<li>Enhancing public safety and contributing to <a class="--link-white-normal" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/strategy" target="_blank">RoadSafetyBC's Vision Zero goal</a></li>
 				</ul>
 			</div>
 		</section>
@@ -496,35 +536,50 @@ p.note {
 						<a class="BC-Gov-SecondaryButton-Dark" target="_blank" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card">Register</a>
 						<a class="BC-Gov-PrimaryButton-Dark" target="_blank" href="rsbc-dfp-medical-portal">Login</a>
 					</div>
-				</div>
-				<a class="--link-white center-item center" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof" target="_blank">Learn more about DMER guidelines for medical practitioners</a>
+				</div>				
+				<span class="center-item center"><strong>Missing DMER Case ID?</strong> <a class="--link-white"  href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof" target="_blank">Find out options for the driver to obtain their DMER Case ID.</a></span>
 			</section>
 			
 			<section class="card-container">
-				<div class="about">
+				<div class="ccmta">
 					<div>
-						<img class="about-icon center-item" src="img/about-icon.svg" alt="About Icon">
-						<h3 class="center">About RoadSafetyBC</h3>
+						<img class="ccmta-icon center-item" src="img/ccmta-icon.svg" alt="CCMTA Icon">
+						<h3 class="center">Medical Standards and Guidelines</h3>
 						<hr class="center-item">
-						<p>At RoadSafetyBC we are responsible for determining driver medical fitness. We require certain individuals to complete a DMER. We use DMERs to assess if a driver's medical condition affects their ability to drive safely.</p>
+						<p>RoadSafetyBC follows the Canadian Council of Motor Transport Administrators (CCMTA) Medical Standards with B.C. Specific Guidelines when making driver medical fitness decisions.</p>
+						<p>Please refer to these guidelines when you have questions regarding which medical conditions may have an impact on your patient's fitness to drive.</p>
 					</div>
-					<div class="center center-item">
-						<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc" target="_blank">Learn more</a>
+					<div class="ccmta__buttons">
+						<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof/med-standards" target="_blank">View Guidelines</a>
 					</div>
+					<span class="center-item center"><a class="--link-dark" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof" target="_blank">Access driver medical fitness information and resources for medical professionals</a></span>
 				</div>
 
 				<div class="concerns">
 					<div>
 						<img class="concern-icon center-item" src="img/concern-icon.svg" alt="Concern Icon">
-						<h3 class="center">Do you have a concern?</h3>
+						<h3 class="center">Do you have a concern about a driver?</h3>
 						<hr class="center-item">
-						<p>If a patient has a medical condition that raises significant concern about their ability to safely operate a motor vehicle
-						<p class="note">NOTE: If a patient needs a DMER completed, this does not replace performing a medical assessment and submitting a DMER for them.</p>
+						<p>If a patient has a medical condition that raises significant concern about their ability to safely operate a motor vehicle, please submit a Report of a Condition Affecting Fitness and Ability to Drive.
+						<p class="note">NOTE: Reporting a condition does not replace performing a medical assessment and submitting a DMER which RoadSafetyBC has required for your patient.</p>
 					</div>
-					<div class="center center-item">
-						<a class="BC-Gov-PrimaryButton-Dark" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof/reporting-person" target="_blank">Report a condition</a>
+					<div class="concerns__buttons">
+						<a class="BC-Gov-PrimaryButton-Dark" href="https://www2.gov.bc.ca/assets/gov/driving-and-transportation/driving/roadsafetybc/medical-fitness/medical-prof/mv2351_condition_affecting_ability_to_drive_2022may.pdf" target="_blank">Report a condition</a>
 					</div>
+					<span class="center-item center"><a class="--link-white" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof/reporting-person" target="_blank">Learn more about reporting a driver’s medical condition</a></span>
 				</div>
+				
+			</section>
+
+			<section class="about">
+				<img class="about-icon center-item" src="img/about-icon.svg" alt="About Icon">
+				<h3 class="center">About RoadSafetyBC</h3>
+				<hr class="center-item">
+				<p>At RoadSafetyBC we are responsible for determining driver medical fitness. We require certain individuals to complete a DMER. We use DMERs to assess if a driver's medical condition affects their ability to drive safely.</p>
+				<p>Are you a driver?  Learn more about the Driver Medical Fitness process.</p>
+				<div class="center center-item">
+					<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness" target="_blank">Learn more</a>
+				</div>				
 			</section>
 
 			<div class="assistance">
