@@ -385,12 +385,12 @@
               *matHeaderCellDef
               mat-sort-header="dmerType"
               sortActionDescription="Sort by Dmer Type"
-              
             >
               DMER Type
             </th>
-            <td mat-cell *matCellDef="let row" >
-              <div class="dmer-type">{{ row.dmerType }}</div></td>
+            <td mat-cell *matCellDef="let row">
+              <div class="dmer-type">{{ row.dmerType }}</div>
+            </td>
           </ng-container>
           <ng-container matColumnDef="lastUpdatedOn">
             <th
@@ -439,7 +439,8 @@
               'status'
             ]"
           ></tr>
-          <tr (click)="onRowClick($event, row)"
+          <tr
+            (click)="onRowClick($event, row)"
             mat-row
             *matRowDef="
               let row;
@@ -489,5 +490,15 @@
         </div>
       </ng-template>
     </ng-container>
+    <div>
+      <button
+        mat-flat-button
+        color="primary"
+        class="search-button"
+        routerLink="/dmerSubmissionConfirmation"
+      >
+        Thank You Page
+      </button>
+    </div>
   </div>
 </div>
