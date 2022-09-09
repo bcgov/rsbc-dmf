@@ -87,6 +87,7 @@
           mat-flat-button
           color="primary"
           class="download-button"
+          (click)="openConfirmationDialog('dashboard')"
         >
          Back to Dashboard
         </button>   
@@ -94,6 +95,7 @@
     <div class="dmer-content">
         <button
           mat-flat-button
+          (click)="openConfirmationDialog('logout')"
           
         >
           Logout
