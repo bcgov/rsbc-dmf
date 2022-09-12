@@ -2073,11 +2073,12 @@
         <Property Name="_createdby_value" Type="Edm.Guid" />
         <Property Name="_dfp_intakeagentindpsid_value" Type="Edm.Guid" />
         <Property Name="dfp_issuedate" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_submittalstatus" Type="Edm.Int32" />
+        <Property Name="dfp_compliancedate" Type="Edm.DateTimeOffset" />
         <Property Name="bcgov_filename" Type="Edm.String" Unicode="false" />
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="dfp_extensionrequestedon" Type="Edm.DateTimeOffset" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="dfp_submittalstatus" Type="Edm.Int32" />
         <Property Name="dfp_extendeddays1" Type="Edm.Int32" />
         <Property Name="versionnumber" Type="Edm.Int64" />
         <Property Name="dfp_extendeddays3" Type="Edm.Int32" />
@@ -2127,6 +2128,7 @@
         <Property Name="dfp_documentpages" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_extendeddays2" Type="Edm.Int32" />
         <Property Name="_dfp_xsstatuscodeid_value" Type="Edm.Guid" />
+        <Property Name="dfp_isurgent" Type="Edm.Boolean" />
         <Property Name="dfp_priorityscore" Type="Edm.Int32" />
         <Property Name="dfp_lettersentdate" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_dmertype" Type="Edm.Int32" />
@@ -6284,20 +6286,22 @@
         <Key>
           <PropertyRef Name="dfp_commentid" />
         </Key>
+        <Property Name="dfp_descriptionformanagertoreview" Type="Edm.String" Unicode="false" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_sendformanagerreview" Type="Edm.Boolean" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="dfp_origin" Type="Edm.Int32" />
         <Property Name="dfp_medicalportal" Type="Edm.Boolean" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="dfp_commentsummary" Type="Edm.String" Unicode="false" />
-        <Property Name="statuscode" Type="Edm.Int32" />
-        <Property Name="dfp_caseidguid" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_driverportal" Type="Edm.Boolean" />
+        <Property Name="dfp_caseidguid" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_rsbcusers" Type="Edm.Boolean" />
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="dfp_userid" Type="Edm.String" Unicode="false" />
@@ -6310,6 +6314,8 @@
         <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="dfp_commentid" Type="Edm.Guid" />
+        <Property Name="dfp_priority" Type="Edm.Int32" />
+        <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="dfp_commenttype" Type="Edm.Int32" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
@@ -6353,6 +6359,7 @@
         <NavigationProperty Name="dfp_CaseId" Type="mscrm.incident" Nullable="false" Partner="dfp_incident_dfp_comment">
           <ReferentialConstraint Property="_dfp_caseid_value" ReferencedProperty="incidentid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_comment_task_CommentID" Type="Collection(mscrm.task)" Partner="dfp_CommentID_Task" />
       </EntityType>
       <EntityType Name="dfp_decision" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -6711,7 +6718,7 @@
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="dfp_fullname" Type="Edm.String" Unicode="false" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_dfp_personid_value" Type="Edm.Guid" />
         <Property Name="_ownerid_value" Type="Edm.Guid" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="statecode" Type="Edm.Int32" />
@@ -6719,6 +6726,7 @@
         <Property Name="_createdby_value" Type="Edm.Guid" />
         <Property Name="dfp_preferredcontactmethod" Type="Edm.Int32" />
         <Property Name="dfp_licensenumber" Type="Edm.String" Unicode="false" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="versionnumber" Type="Edm.Int64" />
@@ -6726,7 +6734,7 @@
         <Property Name="dfp_driverid" Type="Edm.Guid" />
         <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="_dfp_personid_value" Type="Edm.Guid" />
+        <Property Name="dfp_dob" Type="Edm.DateTimeOffset" />
         <Property Name="_owningteam_value" Type="Edm.Guid" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
@@ -7460,6 +7468,7 @@
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_isurgent" Type="Edm.Boolean" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="statecode" Type="Edm.Int32" />
@@ -10319,6 +10328,7 @@
         <Property Name="firstresponsesent" Type="Edm.Boolean" />
         <Property Name="dfp_flagschecked" Type="Edm.Boolean" />
         <Property Name="decremententitlementterm" Type="Edm.Boolean" />
+        <Property Name="dfp_lastmodifiedcasestatus" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_allexpecteddocumentsreceived" Type="Edm.Boolean" />
         <Property Name="_resolvebykpiid_value" Type="Edm.Guid" />
         <Property Name="_customerid_value" Type="Edm.Guid" />
@@ -22468,6 +22478,7 @@
         <Property Name="crmtaskassigneduniqueid" Type="Edm.Guid" />
         <Property Name="dfp_origin" Type="Edm.Int32" />
         <Property Name="category" Type="Edm.String" Unicode="false" />
+        <Property Name="_dfp_commentid_value" Type="Edm.Guid" />
         <NavigationProperty Name="task_PostRegardings" Type="Collection(mscrm.postregarding)" Partner="regardingobjectid_task" />
         <NavigationProperty Name="task_PostFollows" Type="Collection(mscrm.postfollow)" Partner="regardingobjectid_task" />
         <NavigationProperty Name="regardingobjectid_knowledgebaserecord_task" Type="mscrm.knowledgebaserecord" Nullable="false" Partner="KnowledgeBaseRecord_Tasks" />
@@ -22489,6 +22500,9 @@
         <NavigationProperty Name="regardingobjectid_salesorder_task" Type="mscrm.salesorder" Nullable="false" Partner="SalesOrder_Tasks" />
         <NavigationProperty Name="regardingobjectid_msdyn_postalbum_task" Type="mscrm.msdyn_postalbum" Nullable="false" Partner="msdyn_postalbum_Tasks" />
         <NavigationProperty Name="bcgov_task_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="bcgov_TaskId" />
+        <NavigationProperty Name="dfp_CommentID_Task" Type="mscrm.dfp_comment" Nullable="false" Partner="dfp_comment_task_CommentID">
+          <ReferentialConstraint Property="_dfp_commentid_value" ReferencedProperty="dfp_commentid" />
+        </NavigationProperty>
         <NavigationProperty Name="task_connections2" Type="Collection(mscrm.connection)" Partner="record2id_task" />
         <NavigationProperty Name="sla_task_sla" Type="mscrm.sla" Nullable="false" Partner="manualsla_task" />
         <NavigationProperty Name="Task_DuplicateBaseRecord" Type="Collection(mscrm.duplicaterecord)" Partner="baserecordid_task" />
@@ -24346,7 +24360,7 @@
         <Property Name="SeriesCanBeExpanded" Type="Edm.Boolean" />
       </ComplexType>
       <Action Name="CreateInstance">
-        <Parameter Name="Target" Type="mscrm.recurringappointmentmaster" Nullable="false" />
+        <Parameter Name="Target" Type="mscrm.crmbaseentity" Nullable="false" />
         <Parameter Name="Count" Type="Edm.Int32" Nullable="false" />
         <ReturnType Type="mscrm.CreateInstanceResponse" Nullable="false" />
       </Action>
@@ -24412,7 +24426,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.email" />
+        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
         <Parameter Name="ValidateBeforeCreate" Type="Edm.Boolean" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
@@ -24429,7 +24443,7 @@
         <Parameter Name="Importance" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Body" Type="Edm.String" Nullable="false" Unicode="false" />
         <Parameter Name="Attachments" Type="Collection(mscrm.activitymimeattachment)" Nullable="false" />
-        <Parameter Name="ExtraProperties" Type="mscrm.email" />
+        <Parameter Name="ExtraProperties" Type="mscrm.crmbaseentity" />
         <ReturnType Type="mscrm.email" Nullable="false" />
       </Action>
       <Action Name="DeprovisionLanguage">
@@ -25373,7 +25387,7 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedqueryvisualization" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.savedqueryvisualization" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.systemform" Nullable="false" />
@@ -25381,43 +25395,43 @@
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.customcontroldefaultconfig" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.customcontroldefaultconfig" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.webresource" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.webresource" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.sitemap" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.sitemap" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.savedquery" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.savedquery" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofileitem" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.mobileofflineprofileitem" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.mobileofflineprofile" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.mobileofflineprofile" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfig" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appconfig" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appconfiginstance" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appconfiginstance" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.navigationsetting" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.navigationsetting" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublished" IsBound="true" IsComposable="true">
         <Parameter Name="entity" Type="mscrm.appmodule" Nullable="false" />
-        <ReturnType Type="mscrm.systemform" Nullable="false" />
+        <ReturnType Type="mscrm.appmodule" Nullable="false" />
       </Function>
       <Function Name="RetrieveUnpublishedMultiple" IsBound="true" IsComposable="true">
         <Parameter Name="entityset" Type="Collection(mscrm.savedqueryvisualization)" Nullable="false" />
@@ -31085,6 +31099,7 @@
           <NavigationPropertyBinding Path="dfp_comment_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_DriverId" Target="dfp_drivers" />
           <NavigationPropertyBinding Path="dfp_CaseId" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_comment_task_CommentID" Target="tasks" />
         </EntitySet>
         <EntitySet Name="dfp_decisions" EntityType="Microsoft.Dynamics.CRM.dfp_decision">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -36693,6 +36708,7 @@
           <NavigationPropertyBinding Path="regardingobjectid_salesorder_task" Target="salesorders" />
           <NavigationPropertyBinding Path="regardingobjectid_msdyn_postalbum_task" Target="msdyn_postalbums" />
           <NavigationPropertyBinding Path="bcgov_task_bcgov_documenturl" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="dfp_CommentID_Task" Target="dfp_comments" />
           <NavigationPropertyBinding Path="task_connections2" Target="connections" />
           <NavigationPropertyBinding Path="sla_task_sla" Target="slas" />
           <NavigationPropertyBinding Path="Task_DuplicateBaseRecord" Target="duplicaterecords" />

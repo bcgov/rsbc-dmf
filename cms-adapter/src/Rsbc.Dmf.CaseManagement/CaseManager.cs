@@ -877,7 +877,7 @@ namespace Rsbc.Dmf.CaseManagement
                         CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                        ModifiedOn = c.modifiedon.Value.DateTime,
+                        ModifiedOn = c.dfp_lastmodifiedcasestatus.Value.DateTime,
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
                         ClinicName = c.dfp_ClinicId?.name  ?? string.Empty,
                         DmerType = TranslateDmerType (c.dfp_dmertype),
