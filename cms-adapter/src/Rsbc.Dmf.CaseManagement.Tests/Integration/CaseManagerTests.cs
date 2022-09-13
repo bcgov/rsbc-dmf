@@ -82,7 +82,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByDriverLicense()
         {
-            var driverLicenseNumber = "1234567";
+            var driverLicenseNumber = "1000098";
 
             var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
 
