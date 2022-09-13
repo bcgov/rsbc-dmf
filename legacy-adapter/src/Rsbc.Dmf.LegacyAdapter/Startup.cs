@@ -110,6 +110,7 @@ namespace Rsbc.Dmf.LegacyAdapter
             // basic REST controller 
             services.AddProblemDetails(ConfigureProblemDetails)
                 .AddControllers(options => {
+
                 // only allow anonymous access if there is no JWT secret...
                 if (_env.IsDevelopment() && string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
                 {
@@ -310,7 +311,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
-            // Only include exception details in a development environment. There's really no nee
+            // Only include exception details in a development environment. There's really no need
             // to set this as it's the default behavior. It's just included here for completeness :)
             //options.IncludeExceptionDetails = (ctx, ex) => Environment.IsDevelopment();
             options.IncludeExceptionDetails = (ctx, ex) => true;
@@ -327,7 +328,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // Because exceptions are handled polymorphically, this will act as a "catch all" mapping, which is why it's added last.
             // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
-            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            //options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
     }
 
