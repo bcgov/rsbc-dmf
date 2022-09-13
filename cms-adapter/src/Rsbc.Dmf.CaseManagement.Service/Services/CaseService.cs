@@ -264,9 +264,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Items.Add(new LegacyDocument
                     {
                         BatchId = item.BatchId,
+                        BusinessArea = item.BusinessArea,
                         CaseId = item.CaseId,
                         DocumentPages = item.DocumentPages,
                         DocumentId = item.DocumentId,
+                        DocumentType = item.DocumentType ?? string.Empty,
                         DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
                         DocumentUrl = item.DocumentUrl ?? string.Empty,
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
