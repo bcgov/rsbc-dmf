@@ -88,6 +88,10 @@ namespace Rsbc.Dmf.CaseManagement
         
         public string DocumentTypeCode { get; set; }
 
+        public string DocumentType { get; set; }
+
+        public string BusinessArea { get; set; }
+
         public string DocumentUrl { get; set; }
         public long FileSize { get; set; }
         public string UserId { get; set; }
@@ -482,7 +486,9 @@ namespace Rsbc.Dmf.CaseManagement
                                     CaseId = @case.incidentid.ToString(),
                                     DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
                                     DocumentId = document.bcgov_documenturlid.ToString(),
-                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
+                                    DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
                                     DocumentUrl = document.bcgov_url ?? string.Empty,
                                     FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
                                     ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
@@ -503,6 +509,24 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
 
+            return result;
+        }
+
+        private string ConvertBusinessAreaToString(int? businessArea)
+        {
+            string result = "";
+            if (businessArea != null)
+            {
+                switch (businessArea)
+                {
+                    case 100000000:
+                        result = "Driver Fitness";
+                        break;
+                    case 100000001:
+                        result = "Remedial";
+                        break;
+                }
+            }
             return result;
         }
 
