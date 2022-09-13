@@ -893,7 +893,30 @@ namespace Rsbc.Dmf.CaseManagement
                     else
                     {
                         provider = null;
-                    }                
+                    }
+
+
+                    CaseManagement.Driver driver = new CaseManagement.Driver()
+                    {
+                        Id = c.dfp_DriverId?.dfp_driverid.ToString(),
+                        Address = new Address()
+                        {
+                            City = c.dfp_DriverId?.dfp_PersonId?.address1_city ?? string.Empty,
+                            Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode ?? string.Empty,
+                            Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1 ?? string.Empty,
+                            Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2 ?? string.Empty,
+                        },
+                        BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
+                        DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
+                        GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname ?? string.Empty,
+                        Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename ?? string.Empty,
+                        Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
+                        Surname = c.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty,
+                        Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname, c.dfp_DriverId?.dfp_PersonId?.firstname)
+                    };
+
+                    
+
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
@@ -901,28 +924,11 @@ namespace Rsbc.Dmf.CaseManagement
                         CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
-                        ModifiedOn = c.dfp_lastmodifiedcasestatus.Value.DateTime,
+                        ModifiedOn = FilterLastCaseModified(c.dfp_lastmodifiedcasestatus, c.createdon.Value.DateTime),
                         ClinicId = c.dfp_ClinicId?.accountid.ToString(),
                         ClinicName = c.dfp_ClinicId?.name  ?? string.Empty,
                         DmerType = TranslateDmerType (c.dfp_dmertype),
-                        Driver = new CaseManagement.Driver()
-                        {
-                            Id = c.dfp_DriverId?.dfp_driverid.ToString(),
-                            Address = new Address()
-                            {
-                                City = c.dfp_DriverId?.dfp_PersonId?.address1_city ?? string.Empty,
-                                Postal = c.dfp_DriverId?.dfp_PersonId?.address1_postalcode ?? string.Empty,
-                                Line1 = c.dfp_DriverId?.dfp_PersonId?.address1_line1 ?? string.Empty,
-                                Line2 = c.dfp_DriverId?.dfp_PersonId?.address1_line2 ?? string.Empty,
-                            },
-                            BirthDate = c.dfp_DriverId?.dfp_PersonId?.birthdate ?? default(DateTime),
-                            DriverLicenseNumber = c.dfp_DriverId?.dfp_licensenumber,
-                            GivenName = c.dfp_DriverId?.dfp_PersonId?.firstname ?? string.Empty,
-                            Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename ?? string.Empty,
-                            Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
-                            Surname = c.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty,
-                            Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname, c.dfp_DriverId?.dfp_PersonId?.firstname)
-                        },
+                        Driver = driver,
                         Provider = provider,
                         IsCommercial =
                             c.dfp_iscommercial != null &&
@@ -948,6 +954,19 @@ namespace Rsbc.Dmf.CaseManagement
 
        }
 
+        private DateTime FilterLastCaseModified (DateTimeOffset? value, DateTime created)
+        {
+            DateTime result;
+            if (value == null)
+            {
+                result = created;
+            }
+            else
+            {
+                result = value.Value.DateTime;
+            }
+            return result;
+        }
 
         public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? effectiveDate)
         {
