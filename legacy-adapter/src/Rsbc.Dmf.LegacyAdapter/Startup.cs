@@ -34,6 +34,7 @@ using System.Linq;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
+using Invio.Extensions.Authentication.JwtBearer;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -92,8 +93,13 @@ namespace Rsbc.Dmf.LegacyAdapter
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
+                })
+                .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
+                {
+                    options.QueryStringParameterName = "access_token";
+                    options.QueryStringBehavior = QueryStringBehaviors.Redact;
                 });
-                
+
             }
             else
             {
@@ -231,6 +237,7 @@ namespace Rsbc.Dmf.LegacyAdapter
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseJwtBearerQueryString();
             app.UseAuthorization();
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
