@@ -305,7 +305,7 @@ namespace Rsbc.Dmf.CaseManagement
                         LegacyComment legacyComment = new LegacyComment
                         {
                             CaseId = @case.incidentid.ToString(),
-                            CommentDate = comment.dfp_date.GetValueOrDefault(),
+                            CommentDate = comment.createdon.GetValueOrDefault(),
                             CommentId = comment.dfp_commentid.ToString(),
                             CommentText = comment.dfp_commentdetails,
                             CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
@@ -421,7 +421,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 LegacyComment legacyComment = new LegacyComment
                                 {
                                     CaseId = @case.incidentid.ToString(),
-                                    CommentDate = comment.dfp_date.GetValueOrDefault(),
+                                    CommentDate = comment.createdon.GetValueOrDefault(),
                                     CommentId = comment.dfp_commentid.ToString(),
                                     CommentText = comment.dfp_commentdetails,
                                     CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
@@ -682,7 +682,7 @@ namespace Rsbc.Dmf.CaseManagement
                 // create the comment
                 dfp_comment @comment = new dfp_comment()
                 {
-                    dfp_date = DateTimeOffset.Now,
+                    createdon = DateTimeOffset.Now,
                     dfp_icbc = "W" == request.CommentTypeCode,
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText
@@ -720,11 +720,11 @@ namespace Rsbc.Dmf.CaseManagement
                     var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault(); 
                     if (record == null)
                     {
-                        var newRecord = new dfp_submittaltype { dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
+                        var newRecord = new dfp_submittaltype { dfp_apidocumenttype = documentTypeCode, dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
                         dynamicsContext.AddTodfp_submittaltypes(newRecord);
                         dynamicsContext.SaveChanges();
 
-                        record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault();
+                        record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
                     }
                     if (record != null)
                     {
