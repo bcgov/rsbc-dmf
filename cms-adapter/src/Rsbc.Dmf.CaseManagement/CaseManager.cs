@@ -709,10 +709,10 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private string GetDocumentTypeId(string documentTypeCode)
+        private dfp_submittaltype GetDocumentType(string documentTypeCode)
         {
             // lookup the document Type Code
-            string result = null;
+            dfp_submittaltype result = null;
             if (!string.IsNullOrEmpty(documentTypeCode))
             {
                 try
@@ -726,10 +726,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
                     }
-                    if (record != null)
-                    {
-                        result = record.dfp_submittaltypeid.ToString();
-                    }
+                    result = record;                    
                     
                 }
                 catch (Exception ex)
@@ -782,14 +779,15 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             // document type ID
-            var documentTypeId = GetDocumentTypeId(request.DocumentTypeCode);
+            var documentTypeId = GetDocumentType(request.DocumentTypeCode);
 
             try
             {
                 dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-                if (!string.IsNullOrEmpty (documentTypeId) )
+                //await dynamicsContext.SaveChangesAsync();
+                if (documentTypeId != null )
                 {
-                    dynamicsContext.AddLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                 }
                 dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
 
