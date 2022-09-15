@@ -254,16 +254,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         LoadedFromICBC = false,
                         MedicalIssueDate = DateTimeOffset.Now
                     };
-
                     
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
                         FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
-                        ImportDate = item.ImportDate.ToDateTimeOffset(),
-                        
+                        ImportDate = item.ImportDate.ToDateTimeOffset(),                        
                         DocumentId = item.DocumentId,
+                        DocumentType = item.DocumentType,
                         DocumentTypeCode = item.DocumentTypeCode,
+                        BusinessArea = item.BusinessArea,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
