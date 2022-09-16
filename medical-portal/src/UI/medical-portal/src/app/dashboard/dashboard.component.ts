@@ -165,6 +165,16 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/caseDetails/' + this.searchedCase?.id);
   }
 
+  isCommercialDmerType(dmerType: string)
+  {
+     return dmerType === 'Commercial';
+  }
+
+  isKnownSuspectedDmerType(dmerType: string)
+  {
+    return dmerType === 'Known/Suspected Condition';
+  }
+
   sortData(sort: Sort) {
     const data = this.showingDataInView.slice();
     if (!sort.active || sort.direction === '') {
