@@ -3,6 +3,15 @@
   width: 70px;
   margin-right: 30px;
 }
+.commercial-dmer-type {
+  // yellow
+  color: #f9cd0b;
+}
+
+.known-suspected-dmer-type {
+  // blue
+  color: #1a5a96;
+}
 
 .search {
   margin-bottom: 2px ;
@@ -39,7 +48,7 @@
 
       ::ng-deep .mat-form-field-flex {
         background-color: #ffffff;
-        //border: solid 2px  #003366; 
+        //border: solid 2px  #003366;
       }
     }
 
@@ -138,8 +147,8 @@
 
 .filter-icon{
   color: #003366;
-  margin-left:50px; 
-  margin-right: 3px; 
+  margin-left:50px;
+  margin-right: 3px;
   vertical-align: middle
 }
 

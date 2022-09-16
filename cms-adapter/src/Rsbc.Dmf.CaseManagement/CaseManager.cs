@@ -1125,10 +1125,20 @@ namespace Rsbc.Dmf.CaseManagement
         private string TranslateDmerType(int? dmerType)
         {
             var statusMap = new Dictionary<int, string>()
-            {
+            /*
+             * {
                 { 100000000, "Commercial/NSC" },
                 { 100000001, "Age" },
                 { 100000002, "Industrial Road" },
+                { 100000003, "Known/Suspected Condition" },
+                { 100000004, "Scheduled Routine"},
+                { 100000005, "No DMER"}
+               };
+            */
+            {
+                { 100000000, "Commercial" },
+                { 100000001, "Scheduled Age" },
+                { 100000002, "Commercial" },
                 { 100000003, "Known/Suspected Condition" },
                 { 100000004, "Scheduled Routine"},
                 { 100000005, "No DMER"}
