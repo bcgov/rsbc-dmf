@@ -379,7 +379,7 @@
               {{ row.driverBirthDate | date }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="dmerType">
+          <ng-container matColumnDef="dmerType" >
             <th
               mat-header-cell
               *matHeaderCellDef
@@ -389,7 +389,9 @@
               DMER Type
             </th>
             <td mat-cell *matCellDef="let row">
-              <div class="dmer-type">{{ row.dmerType }}</div>
+              <div class="dmer-type">
+                <div [ngClass]="{'commercial-dmer-type': this.isCommercialDmerType(row.dmerType), 'known-suspected-dmer-type': this.isKnownSuspectedDmerType(row.dmerType)}">{{ row.dmerType }}</div>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="lastUpdatedOn">
