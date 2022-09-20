@@ -97,7 +97,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
                 {
                     options.QueryStringParameterName = "access_token";
-                    options.QueryStringBehavior = QueryStringBehaviors.Redact;
+                    //options.QueryStringBehavior = QueryStringBehaviors.Redact;
                 });
 
             }
@@ -108,7 +108,7 @@ namespace Rsbc.Dmf.LegacyAdapter
             services.AddAuthorization();
 
             // basic REST controller 
-            services.AddProblemDetails(ConfigureProblemDetails)
+            services
                 .AddControllers(options => {
 
                 // only allow anonymous access if there is no JWT secret...
@@ -119,6 +119,16 @@ namespace Rsbc.Dmf.LegacyAdapter
                 options.EnableEndpointRouting = false;
 
             });
+            services.AddProblemDetails(opts => {
+                opts.IncludeExceptionDetails = (context, ex) =>
+                {
+                    var environment =
+         context.RequestServices.GetRequiredService
+        <IHostEnvironment>();
+                    return environment.IsDevelopment();
+                };
+            });
+
             services.AddSwaggerGen(c =>
             {               
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
