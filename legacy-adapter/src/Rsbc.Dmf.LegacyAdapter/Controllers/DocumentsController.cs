@@ -109,13 +109,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         fileContents = documentReply.Data.ToByteArray();
                     }
-                    
+                    string filename = Path.GetFileName(reply.Document.DocumentUrl);
+                    string mimetype = GetMimeType(filename);
+                    Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
+                    Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
+                    return new FileContentResult(fileContents, mimetype);
                 }
-                string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                string mimetype = GetMimeType(filename);
-                Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
-                Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
-                return new FileContentResult(fileContents, mimetype);
+                else
+                {
+                    return StatusCode(500, "Unexpected error - document URL is missing");
+                }
+                
             }
             else
             {
