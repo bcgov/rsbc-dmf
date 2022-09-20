@@ -477,30 +477,34 @@ namespace Rsbc.Dmf.CaseManagement
                             await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
                             foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                             {
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                                LegacyDocument legacyDocument = new LegacyDocument
+                                // only include documents that have a URL
+                                if (! string.IsNullOrEmpty(document.bcgov_url))                               
                                 {
-                                    BatchId = document.dfp_batchid ?? string.Empty,
-                                    CaseId = @case.incidentid.ToString(),
-                                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                                    DocumentId = document.bcgov_documenturlid.ToString(),
-                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
-                                    DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
-                                    DocumentUrl = document.bcgov_url ?? string.Empty,
-                                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                                    ImportId = document.dfp_importid ?? string.Empty,
-                                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                    Driver = caseDriver
-                                };
+                                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
-                                result.Add(legacyDocument);
+                                    LegacyDocument legacyDocument = new LegacyDocument
+                                    {
+                                        BatchId = document.dfp_batchid ?? string.Empty,
+                                        CaseId = @case.incidentid.ToString(),
+                                        DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                                        DocumentId = document.bcgov_documenturlid.ToString(),
+                                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
+                                        DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                        BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
+                                        DocumentUrl = document.bcgov_url ?? string.Empty,
+                                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                                        ImportId = document.dfp_importid ?? string.Empty,
+                                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                        Driver = caseDriver
+                                    };
+
+                                    result.Add(legacyDocument);
+                                }                       
                             }
                         }
                     }
