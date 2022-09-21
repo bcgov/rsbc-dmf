@@ -276,21 +276,28 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             */
         }
 
-
         /// <summary>
         /// Add a document to a case
         /// </summary>
         /// <param name="caseId"></param>
         /// <param name="driversLicense"></param>
         /// <param name="surcode"></param>
+        /// <param name="batchId"></param>
+        /// <param name="faxReceivedDate"></param>
+        /// <param name="importDate"></param>
+        /// <param name="importID"></param>
+        /// <param name="originatingNumber"></param>
+        /// <param name="documentPages"></param>
+        /// <param name="documentType"></param>
+        /// <param name="validationMethod"></param>
+        /// <param name="validationPrevious"></param>
         /// <param name="file"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
         [DisableRequestSizeLimit]
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
-            [FromForm] string driversLicense,  // Driver -> DL
-            [FromForm] string surcode,         // Driver -> Lastname
+            [FromForm] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
             [FromForm] DateTimeOffset faxReceivedDate,  // dfp_faxreceivedate
             [FromForm] DateTimeOffset importDate,  // dfp_dpsprocessingdate
@@ -300,7 +307,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string documentType, // dfp_documenttypeid
             [FromForm] string validationMethod, // add to document entity
             [FromForm] string validationPrevious, // add to document entity
-            [FromForm] IFormFile file)
+            [FromForm] IFormFile file,
+            [FromForm] string surcode = null         // Driver -> Lastname
+            )
         {
             var driver = new CaseManagement.Service.Driver()
             {
@@ -313,13 +322,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var ms = new MemoryStream();
             file.OpenReadStream().CopyTo(ms);
             var data = ms.ToArray();
-
+            string fileName = file.FileName ?? "UnknownFile.pdf";
             UploadFileRequest pdfData = new UploadFileRequest()
             {
-                ContentType = "application/pdf",
+                ContentType = MimeUtils.GetMimeType(fileName),
                 Data = ByteString.CopyFrom(data),
                 EntityName = "incident",
-                FileName = $"DMER.pdf",
+                FileName = fileName,
                 FolderName = caseId,
             };
             var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
