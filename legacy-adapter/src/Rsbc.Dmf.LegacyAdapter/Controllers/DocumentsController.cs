@@ -40,21 +40,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
 
-        private string GetMimeType (string filename)
-        {
-            string mimetype = "application/pdf";
-            if (!string.IsNullOrEmpty(filename))
-            {
-                string extension = Path.GetExtension(filename);
-
-                if (extension != null && (".tif" == extension.ToLower() || ".tiff" == extension.ToLower()))
-                {
-                    mimetype = "image/tiff";
-                }
-            }
-            
-            return mimetype;
-        }
 
         [HttpGet("{documentId}/mimetype")]
         [ProducesResponseType(401)]
@@ -67,7 +52,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                string mimetype = GetMimeType(filename);
+                string mimetype = MimeUtils.GetMimeType(filename);
                 return Json(mimetype);
             }
             else
@@ -109,9 +94,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         fileContents = documentReply.Data.ToByteArray();
                     }
-                    string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                    string mimetype = GetMimeType(filename);
-                    Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
+                    string fileName = Path.GetFileName(reply.Document.DocumentUrl);
+                    string mimetype = MimeUtils.GetMimeType(fileName);
+                    Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
                     Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                     return new FileContentResult(fileContents, mimetype);
                 }
