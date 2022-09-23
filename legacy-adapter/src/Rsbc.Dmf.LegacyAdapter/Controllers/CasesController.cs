@@ -299,11 +299,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
             [FromForm] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
-            [FromForm] DateTimeOffset faxReceivedDate,  // dfp_faxreceivedate
-            [FromForm] DateTimeOffset importDate,  // dfp_dpsprocessingdate
+            [FromForm] DateTimeOffset? faxReceivedDate,  // dfp_faxreceivedate
+            [FromForm] DateTimeOffset? importDate,  // dfp_dpsprocessingdate
             [FromForm] string importID, // add to document entity
             [FromForm] string originatingNumber, // dfp_faxnumber
-            [FromForm] int documentPages, // add to document entity
+            [FromForm] int? documentPages, // add to document entity
             [FromForm] string documentType, // dfp_documenttypeid
             [FromForm] string validationMethod, // add to document entity
             [FromForm] string validationPrevious, // add to document entity
@@ -316,13 +316,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 DriverLicenseNumber = driversLicense
             };
 
+            if (faxReceivedDate == null)
+            {
+                faxReceivedDate = DateTimeOffset.Now;
+            }
+
+            if (importDate == null)
+            {
+                importDate = DateTimeOffset.Now;
+            }
+
             // TODO fetch driver from ICBC
 
             // add the document
             var ms = new MemoryStream();
-            file.OpenReadStream().CopyTo(ms);
+            if (file!=null)
+            {
+                file.OpenReadStream().CopyTo(ms);
+            }
+           
             var data = ms.ToArray();
-            string fileName = file.FileName ?? "UnknownFile.pdf";
+            string fileName = file?.FileName ?? "UnknownFile.pdf";
             UploadFileRequest pdfData = new UploadFileRequest()
             {
                 ContentType = MimeUtils.GetMimeType(fileName),
@@ -341,12 +355,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var document = new LegacyDocument()
             {
                 BatchId = batchId ?? String.Empty,
-                DocumentPages = documentPages,
+                DocumentPages = documentPages ?? 1,
                 DocumentTypeCode = documentType ?? String.Empty,
                 DocumentUrl = fileReply.FileName,
                 CaseId = caseId ?? string.Empty,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
-                ImportDate = Timestamp.FromDateTimeOffset(importDate),
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate.Value),
+                ImportDate = Timestamp.FromDateTimeOffset(importDate.Value),
                 ImportId = importID ?? string.Empty,
                  
                 OriginatingNumber = originatingNumber ?? string.Empty,
