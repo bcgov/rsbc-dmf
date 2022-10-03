@@ -290,12 +290,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
-        /*
+        
 
         [Fact]
         public async void DfcmsGetDocuments()
         {
-
             Login();
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
@@ -306,7 +305,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-        */
+       
 
         [Fact]
         public async void TestLoginRequired()
