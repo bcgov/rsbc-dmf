@@ -259,13 +259,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     if (item.Driver != null)
                     {
                         driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
-                        driver.Surname = item.Driver.Surname;
+                        driver.Surname = item.Driver.Surname ?? string.Empty;
                     }
                     reply.Items.Add(new LegacyDocument
                     {
                         BatchId = item.BatchId,
                         BusinessArea = item.BusinessArea,
-                        CaseId = item.CaseId,
+                        CaseId = item.CaseId ?? string.Empty,
                         DocumentPages = item.DocumentPages,
                         DocumentId = item.DocumentId,
                         DocumentType = item.DocumentType ?? string.Empty,
