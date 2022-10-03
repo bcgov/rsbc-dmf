@@ -446,6 +446,7 @@ namespace Rsbc.Dmf.CaseManagement
             // start by the driver
 
             var driversRaw = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1);
+
             if (driversRaw != null)
             {
                 var drivers = driversRaw.ToList();
@@ -507,9 +508,68 @@ namespace Rsbc.Dmf.CaseManagement
                                 }                       
                             }
                         }
+                    
+                        var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driver.dfp_driverid).ToList();
+                        foreach (var document in driverDocuments)
+                        {
+                            // only include documents that have a URL
+                            if (!string.IsNullOrEmpty(document.bcgov_url))
+                            {
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+
+
+                                LegacyDocument legacyDocument = new LegacyDocument
+                                {
+                                    BatchId = document.dfp_batchid ?? string.Empty,
+                                    
+                                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                                    DocumentId = document.bcgov_documenturlid.ToString(),
+                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
+                                    DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
+                                    DocumentUrl = document.bcgov_url ?? string.Empty,
+                                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                                    ImportId = document.dfp_importid ?? string.Empty,
+                                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                                    
+                                };
+
+                                Driver caseDriver = new Driver()
+                                {
+                                    DriverLicenseNumber = driverLicenceNumber,
+
+                                };
+
+                                if (document._bcgov_caseid_value != null)
+                                {
+                                    var @case = dynamicsContext.incidents.Where(i => i.incidentid == document._bcgov_caseid_value).FirstOrDefault();
+
+                                    if (@case != null)
+
+                                    {
+                                        legacyDocument.CaseId = @case.incidentid.ToString();
+                                        if (@case.dfp_DriverId != null)
+                                        {
+                                            await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
+                                            caseDriver.Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty;
+                                        }                                       
+                                    }
+                                }
+
+                                legacyDocument.Driver = caseDriver;
+
+                                if (! result.Contains(legacyDocument))
+                                {
+                                    result.Add(legacyDocument);
+                                }
+                            }
+                        }
                     }
                 }
-
             }
 
 
