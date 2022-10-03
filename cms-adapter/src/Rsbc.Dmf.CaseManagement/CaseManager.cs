@@ -1045,7 +1045,7 @@ namespace Rsbc.Dmf.CaseManagement
             
             if (! string.IsNullOrEmpty(request?.Surname))
             {
-                driverResults = data.Where(x => (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
+                driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
             }
             else
             {
@@ -1285,7 +1285,7 @@ namespace Rsbc.Dmf.CaseManagement
             var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber );
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
-            var driverResults = data.Where (x => (bool)(x?.dfp_PersonId?.lastname.StartsWith( criteria?.Surname))).ToArray();
+            var driverResults = data.Where (x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith( criteria?.Surname))).ToArray();
 
             if (driverResults.Length > 0)
             {

@@ -123,7 +123,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
                 foreach (var item in comments)
                 {
-                    if (item.CommentText == comment.CommentText && item.Driver.LastName == comment.Driver.LastName)
+                    if (item.CommentText == comment.CommentText)
                     {
                         found = true;
                     }
