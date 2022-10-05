@@ -14,7 +14,7 @@
   <mat-card class="search">
     <mat-card-header class="primary">
       <mat-card-title>
-        <mat-icon class="info-icon">description</mat-icon> DMER Information
+        <mat-icon class="medical-professionals-icon" svgIcon="medical-professionals-icon"></mat-icon> DMER Information
       </mat-card-title>
     </mat-card-header>
     <mat-card-content
@@ -42,7 +42,7 @@
 
       <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
         <div>
-          Status: <b> {{ selectedCase?.status }}</b>
+          Case Status: <b> {{ selectedCase?.status }}</b>
         </div>
         <div>
           Submission Date :
@@ -111,7 +111,7 @@
             onClick="window.open('https://www2.gov.bc.ca/assets/gov/driving-and-transportation/driving/roadsafetybc/medical-fitness/medical-prof/mv2351_condition_affecting_ability_to_drive_2022may.pdf')"
           >
           Report a Condition
-          </button>   
+          </button>
       </div>
       </span>
     </div>
