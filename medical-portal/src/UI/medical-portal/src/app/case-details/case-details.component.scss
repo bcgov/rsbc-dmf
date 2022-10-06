@@ -2,7 +2,47 @@
   padding: 30px;
 }
 
-.info-icon {
+.mat-card-header {
+  height: 50px;
+}
+
+mat-card-title{
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+}
+
+.dmer-information{
+  background-color: #ffffff;
+}
+
+.further-info{
+  background-color: #ffffff;
+}
+
+.mat-card-content{
+  background-color: #ffffff;
+  padding-left: 0px;
+}
+.page-desc {
+  background-color: #ffffff;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 10px;;
+
+  h1 {
+    color: rgb(0, 51, 102);
+    font-family: 'BC Sans Bold', 'BC Sans Regular', 'BC Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 60px;
+    font-style: normal;
+  }
+}
+
+.medical-professionals-icon {
   vertical-align: middle;
 }
 
