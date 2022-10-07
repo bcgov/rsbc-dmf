@@ -323,8 +323,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 // should be 401 if there was no login.
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             }
-            
-
         }
 
         [Fact]

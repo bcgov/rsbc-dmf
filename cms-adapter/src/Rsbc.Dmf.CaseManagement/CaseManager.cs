@@ -454,6 +454,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     if (@driver != null)
                     {
+                        /*
                         // .Expand(x => x.dfp_incident_dfp_comment)
                         // get the cases for that driver.
                         var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
@@ -508,7 +509,9 @@ namespace Rsbc.Dmf.CaseManagement
                                 }                       
                             }
                         }
-                    
+                        */
+
+
                         var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driver.dfp_driverid).ToList();
                         foreach (var document in driverDocuments)
                         {
@@ -562,10 +565,10 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 legacyDocument.Driver = caseDriver;
 
-                                if (! result.Contains(legacyDocument))
-                                {
+                                //if (! result.Contains(legacyDocument))
+                                //{
                                     result.Add(legacyDocument);
-                                }
+                                //}
                             }
                         }
                     }
