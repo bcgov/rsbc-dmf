@@ -812,13 +812,22 @@ namespace Rsbc.Dmf.CaseManagement
             CreateStatusReply result = new CreateStatusReply();
 
             // create the document.
-            incident @case = GetIncidentById(request.CaseId);
+            incident driverCase = GetIncidentById(request.CaseId);
 
-            if (@case == null)
-            {
+            if (driverCase == null)
+            {                
                 // create it.
-                await LegacyCandidateCreate(new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber }, DateTime.MinValue);
-                @case = GetIncidentById(request.CaseId);
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                await LegacyCandidateCreate(newDriver, DateTime.MinValue);
+                var newDriverResult = await LegacyCandidateSearch(newDriver);
+
+                var firstCase = newDriverResult.Items.FirstOrDefault();
+
+                if (firstCase != null)
+                {
+                    driverCase = GetIncidentById(firstCase.Id);
+                }
+
             }
 
             // create the document.
@@ -856,8 +865,12 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                 }
-                dynamicsContext.AddLink(@case, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
 
+                if (driverCase != null)
+                {
+                    dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                }
+                
                 await dynamicsContext.SaveChangesAsync();
                 result.Success = true;
                 result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
