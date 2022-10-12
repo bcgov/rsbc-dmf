@@ -445,7 +445,9 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), Cron.Never); 
 
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
+                    //RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
+
+                    RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
