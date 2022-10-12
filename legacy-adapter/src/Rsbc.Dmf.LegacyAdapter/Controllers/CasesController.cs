@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -333,6 +334,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (file!=null)
             {
                 file.OpenReadStream().CopyTo(ms);
+
+                string jsonFile = JsonConvert.SerializeObject(file);
+                Serilog.Log.Error($"AddCaseDocument - File is {jsonFile}");
+            }
+            else
+            {
+                Serilog.Log.Error("AddCaseDocument - File is empty");
             }
            
             var data = ms.ToArray();
