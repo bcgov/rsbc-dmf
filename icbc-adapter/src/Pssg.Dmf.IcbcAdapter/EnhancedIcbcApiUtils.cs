@@ -58,7 +58,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
             
                 LogStatement(hangfireContext, $"{item.DlNumber} - sending update");
-                var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+                var request = new HttpRequestMessage(HttpMethod.Post, "medical-disposition/update");
 
                 request.Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
 
