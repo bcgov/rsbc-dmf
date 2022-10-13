@@ -69,9 +69,9 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        LogStatement(hangfireContext, $"HTTP Status was OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");
+                        LogStatement(hangfireContext, $"HTTP Status was OK {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");
                         // mark it as sent
-                        MarkMedicalUpdateSent(unsentItem.CaseId);
+                        MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);
                     }
                     else
                     {
@@ -83,22 +83,22 @@ namespace Rsbc.Dmf.IcbcAdapter
                     LogStatement(hangfireContext, $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
                 }
 
-         
             }
 
             LogStatement(hangfireContext, "End of SendMedicalUpdates.");
         }
 
-        private void MarkMedicalUpdateSent (string caseId)
+        private void MarkMedicalUpdateSent (PerformContext hangfireContext, string caseId)
         {            
             var idListRequest = new IdListRequest();
             idListRequest.IdList.Add(caseId);
-            _caseManagerClient.MarkMedicalUpdatesSent(idListRequest);
+            var result = _caseManagerClient.MarkMedicalUpdatesSent(idListRequest);
+
+            LogStatement(hangfireContext, $"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
         public IcbcMedicalUpdate GetMedicalUpdateData (DmerCase item)
         {
-
 
             // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
                 
@@ -138,9 +138,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
             }
-                
-            
-
+             
             return null;
         }
 
