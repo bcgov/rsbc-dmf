@@ -69,19 +69,18 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
+                        LogStatement(hangfireContext, $"HTTP Status was OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItem.CaseId);
                     }
                     else
                     {
                         LogStatement(hangfireContext, $"HTTP Status was not OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
-                        
-
                     }
                 }
                 else
                 {
-                    LogStatement(hangfireContext, "Null received from GetMedicalUpdateData");
+                    LogStatement(hangfireContext, $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
                 }
 
          
