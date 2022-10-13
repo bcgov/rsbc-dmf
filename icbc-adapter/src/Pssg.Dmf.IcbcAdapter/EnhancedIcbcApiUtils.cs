@@ -60,7 +60,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 if (item != null)
                 {
-                    LogStatement(hangfireContext, $"{unsentItem.Driver?.DriverLicenseNumber} - sending update");
+                    LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update");
                     var request = new HttpRequestMessage(HttpMethod.Post, "medical-disposition/update");
 
                     request.Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
@@ -69,8 +69,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-
-
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItem.CaseId);
                     }
