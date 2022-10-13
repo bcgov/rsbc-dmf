@@ -61,7 +61,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 if (item != null)
                 {
                     LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update");
-                    var request = new HttpRequestMessage(HttpMethod.Post, "medical-disposition/update");
+                    var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
 
                     request.Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
 
@@ -72,6 +72,16 @@ namespace Rsbc.Dmf.IcbcAdapter
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItem.CaseId);
                     }
+                    else
+                    {
+                        LogStatement(hangfireContext, $"HTTP Status was not OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
+                        
+
+                    }
+                }
+                else
+                {
+                    LogStatement(hangfireContext, "Null received from GetMedicalUpdateData");
                 }
 
          
