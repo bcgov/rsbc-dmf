@@ -1390,9 +1390,12 @@ namespace Rsbc.Dmf.CaseManagement
             DateTimeOffset dateSent = DateTimeOffset.UtcNow;
             foreach (var id in ids)
             {
-                var dmerEntity = dynamicsContext.incidents.First(x => x.incidentid == Guid.Parse(id));
-                dmerEntity.dfp_datesenttoicbc = dateSent;
-                dynamicsContext.UpdateObject(dmerEntity);
+                var dmerEntity = dynamicsContext.incidents.FirstOrDefault(x => x.incidentid == Guid.Parse(id));
+                if (dmerEntity != null)
+                {
+                    dmerEntity.dfp_datesenttoicbc = dateSent;
+                    dynamicsContext.UpdateObject(dmerEntity);
+                }                
             }
             
             await dynamicsContext.SaveChangesAsync();
