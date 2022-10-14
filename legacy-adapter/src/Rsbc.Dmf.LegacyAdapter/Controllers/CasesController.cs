@@ -39,7 +39,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
-            _icbcClient = icbcClient;;
+            _icbcClient = icbcClient;
         }
 
         /// <summary>
