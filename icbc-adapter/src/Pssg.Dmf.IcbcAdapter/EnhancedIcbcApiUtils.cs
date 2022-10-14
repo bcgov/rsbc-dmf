@@ -142,7 +142,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             newUpdate.MedicalDisposition = "J";
                         }
 
-                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow).Value;
+                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow.Date).Value;
 
                         newUpdate.MedicalIssueDate = adjustedDate;
 
