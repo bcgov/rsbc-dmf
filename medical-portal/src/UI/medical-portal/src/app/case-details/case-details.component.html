@@ -27,14 +27,19 @@
       fxLayout="row"
       fxLayoutGap="120px"
     >
-      <div fxLayout="column" fxFlex="1 1 50%" fxLayoutAlign="space-between" fxLayoutGap="24px">
-        <div fxLayout="row" >
+      <div
+        fxLayout="column"
+        fxFlex="1 1 50%"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="24px"
+      >
+        <div fxLayout="row">
           <div fxFlex="1 1 30%">DMER Case ID:</div>
           <div fxFlex="1 1 70%">
             <b> {{ selectedCase?.title }}</b>
           </div>
         </div>
-        <div fxLayout="row" >
+        <div fxLayout="row">
           <div fxFlex="1 1 30%">DMER Type:</div>
           <div fxFlex="1 1 70%">
             <label class="dmer-type">{{ selectedCase?.dmerType }}</label>
@@ -49,10 +54,15 @@
               {{ selectedCase?.patientMiddlename }}</b
             >
           </div>
-        </div> 
+        </div>
       </div>
 
-      <div fxLayout="column" fxFlex="1 1 50%" fxLayoutAlign="space-between" fxLayoutGap="24px">
+      <div
+        fxLayout="column"
+        fxFlex="1 1 50%"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="24px"
+      >
         <div fxLayout="row">
           <div fxFlex="1 1 40%">Case Status:</div>
           <div fxFlex="1 1 60%">
@@ -65,7 +75,7 @@
             <b>{{ selectedCase?.createdOn | date }}</b>
           </div>
         </div>
-        <div fxLayout="row" >
+        <div fxLayout="row">
           <div fxFlex="1 1 40%">Medical Practioner on Record :</div>
           <div fxFlex="1 1 60%"><b>Dr. Shelby Drew</b></div>
         </div>
@@ -129,7 +139,6 @@
       <span>
         <mat-icon class="info-icon">info</mat-icon>
       </span>
-
       <span>
         <div>
           <b
