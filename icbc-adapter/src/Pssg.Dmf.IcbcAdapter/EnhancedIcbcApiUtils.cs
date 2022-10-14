@@ -60,10 +60,11 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 if (item != null)
                 {
-                    LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update");
+                    
                     var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
-
-                    request.Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                    string payload = JsonConvert.SerializeObject(item);
+                    LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update {payload}");
+                    request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
                     var response = client.SendAsync(request).GetAwaiter().GetResult();
 
