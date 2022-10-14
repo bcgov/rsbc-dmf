@@ -817,56 +817,93 @@ namespace Rsbc.Dmf.CaseManagement
 
             }
 
-            // create the document.
-            bcgov_documenturl bcgovDocumentUrl = new bcgov_documenturl()
+            if (driverCase != null)
             {
-                 dfp_batchid = request.BatchId,
-                 dfp_documentpages = request.DocumentPages.ToString(),
-                 bcgov_url = request.DocumentUrl,
-                 bcgov_receiveddate = DateTimeOffset.Now,
-                 dfp_faxreceiveddate = request.FaxReceivedDate,
-                 dfp_uploadeddate = DateTimeOffset.Now,
-                 dfp_dpsprocessingdate = request.ImportDate,
-                 dfp_importid = request.ImportId,
-                 dfp_faxnumber = request.OriginatingNumber,
-                 dfp_validationmethod = request.ValidationMethod,
-                 dfp_validationprevious = request.ValidationPrevious,
-                 dfp_submittalstatus = 100000002 // open pending intake agent review
-
-            };
-
-            if (!string.IsNullOrEmpty(request.DocumentUrl))
-            {
-                bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
-                bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
-            }
-
-            // document type ID
-            var documentTypeId = GetDocumentType(request.DocumentTypeCode);
-
-            try
-            {
-                dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-                //await dynamicsContext.SaveChangesAsync();
-                if (documentTypeId != null )
+                bool found = false;
+                // ensure we have the documents.
+                await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
+                bcgov_documenturl bcgovDocumentUrl = null;
+                foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
                 {
-                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    if (doc.dfp_submittalstatus == 100000000) // open - required
+                    {
+                        bcgovDocumentUrl = doc;
+                        found = true;
+                        break;
+                    }
                 }
 
-                if (driverCase != null)
+                if (bcgovDocumentUrl == null)
                 {
-                    dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
-                }
+                    bcgovDocumentUrl = new bcgov_documenturl() ;                   
+                }               
                 
-                await dynamicsContext.SaveChangesAsync();
-                result.Success = true;
-                result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                dynamicsContext.DetachAll();
-            }
-            catch (Exception ex)
-            {
-                Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
-                result.Success = false;                
+                bcgovDocumentUrl.dfp_batchid = request.BatchId;
+                bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
+                bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
+                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
+                bcgovDocumentUrl.dfp_uploadeddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                bcgovDocumentUrl.dfp_importid = request.ImportId;
+                bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
+                bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
+                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious;
+                bcgovDocumentUrl.dfp_submittalstatus = 100000002; // open pending intake agent review
+            
+                if (!string.IsNullOrEmpty(request.DocumentUrl))
+                {
+                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                }
+
+                // document type ID
+                var documentTypeId = GetDocumentType(request.DocumentTypeCode);
+
+
+                if (found) // update
+                {
+                    try
+                    {
+                        dynamicsContext.UpdateObject(bcgovDocumentUrl);
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                        dynamicsContext.DetachAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                        result.Success = false;
+                    }
+                }
+                else // insert
+                {
+                    try
+                    {
+                        dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+
+                        if (documentTypeId != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        }
+
+                        if (driverCase != null)
+                        {
+                            dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                        }
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                        dynamicsContext.DetachAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                        result.Success = false;
+                    }
+                }
             }
 
             return result;
