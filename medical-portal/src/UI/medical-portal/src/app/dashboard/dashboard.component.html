@@ -389,8 +389,8 @@
               DMER Type
             </th>
             <td mat-cell *matCellDef="let row">
-              <div class="dmer-type">
-                <div [ngClass]="{'commercial-dmer-type': this.isCommercialDmerType(row.dmerType), 'known-suspected-dmer-type': this.isKnownSuspectedDmerType(row.dmerType)}">{{ row.dmerType }}</div>
+              <div class="dmer-type" [ngClass]="{'commercial-dmer-type': isCommercialDmerType(row.dmerType) || isScheduledAgeDmerType(row.dmerType), 'known-suspected-dmer-type': isKnownSuspectedDmerType(row.dmerType) || isSuspectedDmerType(row.dmerType)}">
+                <div >{{ row.dmerType }}</div>
               </div>
             </td>
           </ng-container>
