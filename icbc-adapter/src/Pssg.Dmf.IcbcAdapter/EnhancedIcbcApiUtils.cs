@@ -49,84 +49,98 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
 
-            var updateList = GetMedicalUpdateData(unsentItems);
+            
 
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_configuration["ICBC_API_URI"]);
 
-            foreach (var item in updateList)
+            foreach (var unsentItem in unsentItems.Items)
             {
-            
-                LogStatement(hangfireContext, $"{item.DlNumber} - sending update");
-                var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+                var item = GetMedicalUpdateData(unsentItem);
 
-                request.Content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-
-                var response = client.SendAsync(request).GetAwaiter().GetResult();
-
-                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                if (item != null)
                 {
-                    // mark it as sent
-                    MarkMedicalUpdateSent(item);
+                    
+                    var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
+                    string payload = JsonConvert.SerializeObject(item);
+                    LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update {payload}");
+                    request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                    var response = client.SendAsync(request).GetAwaiter().GetResult();
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        LogStatement(hangfireContext, $"HTTP Status was OK {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");
+                        // mark it as sent
+                        MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);
+                    }
+                    else
+                    {
+                        LogStatement(hangfireContext, $"HTTP Status was not OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
+                    }
                 }
+                else
+                {
+                    LogStatement(hangfireContext, $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
+                }
+
             }
 
             LogStatement(hangfireContext, "End of SendMedicalUpdates.");
         }
 
-        private void MarkMedicalUpdateSent (ViewModels.IcbcMedicalUpdate item)
+        private void MarkMedicalUpdateSent (PerformContext hangfireContext, string caseId)
         {            
-            //_caseManagerClient.MarkSent(item)
+            var idListRequest = new IdListRequest();
+            idListRequest.IdList.Add(caseId);
+            var result = _caseManagerClient.MarkMedicalUpdatesSent(idListRequest);
+
+            LogStatement(hangfireContext, $"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
-        public List<IcbcMedicalUpdate> GetMedicalUpdateData (SearchReply unsentItems)
+        public IcbcMedicalUpdate GetMedicalUpdateData (DmerCase item)
         {
-            List<IcbcMedicalUpdate> data = new List<IcbcMedicalUpdate>();
 
-            foreach (DmerCase item in unsentItems.Items)
-            {
-                // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
+            // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
                 
-                if (item.Driver != null)
+            if (item.Driver != null)
+            {
+                var newUpdate = new IcbcMedicalUpdate()
                 {
-                    var newUpdate = new IcbcMedicalUpdate()
-                    {
-                        DlNumber = item.Driver.DriverLicenseNumber,
-                        LastName = item.Driver.Surname,
-                    };
+                    DlNumber = item.Driver.DriverLicenseNumber,
+                    LastName = item.Driver.Surname,
+                };
 
-                    var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+                var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
 
-                    if (firstDecision != null)
+                if (firstDecision != null)
+                {
+                    if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
                     {
-                        if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
-                        {
-                            newUpdate.MedicalDisposition = "P";
-                        }
-                        else
-                        {
-                            newUpdate.MedicalDisposition = "J";
-                        }
+                        newUpdate.MedicalDisposition = "P";
                     }
                     else
                     {
                         newUpdate.MedicalDisposition = "J";
                     }
-
-                    DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow).Value;
-
-                    newUpdate.MedicalIssueDate = adjustedDate;
-
-                    data.Add(newUpdate);
                 }
                 else
                 {
-                    Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
+                    newUpdate.MedicalDisposition = "J";
                 }
-                
-            }
 
-            return data;
+                DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow).Value;
+
+                newUpdate.MedicalIssueDate = adjustedDate;
+
+                return newUpdate;
+            }
+            else
+            {
+                Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
+            }
+             
+            return null;
         }
 
 

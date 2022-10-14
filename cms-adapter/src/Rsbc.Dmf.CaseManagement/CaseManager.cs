@@ -697,19 +697,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private incident GetIncidentBySequenceWithComments(int sequence)
-        {
-            incident result = null;
-            try
-            {
-                result = dynamicsContext.incidents.Expand(d => d.dfp_incident_dfp_comment).FirstOrDefault(d => d.importsequencenumber == sequence);
-            }
-            catch (Exception ex)
-            {
-                result = null;
-            }
-            return result;
-        }
 
         public async Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request)
         {
@@ -892,7 +879,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 // get the decision record.
                 var d = dynamicsContext.dfp_decisions.Expand(x => x.dfp_OutcomeStatus)
-                    .First(x => x.dfp_decisionid == decisionId);
+                    .Where(x => x.dfp_decisionid == decisionId).FirstOrDefault();
                 if (d != null && d.dfp_OutcomeStatus != null )
                 {
                     switch (d.dfp_OutcomeStatus.dfp_name)
@@ -1390,9 +1377,12 @@ namespace Rsbc.Dmf.CaseManagement
             DateTimeOffset dateSent = DateTimeOffset.UtcNow;
             foreach (var id in ids)
             {
-                var dmerEntity = dynamicsContext.incidents.First(x => x.incidentid == Guid.Parse(id));
-                dmerEntity.dfp_datesenttoicbc = dateSent;
-                dynamicsContext.UpdateObject(dmerEntity);
+                var dmerEntity = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(id)).FirstOrDefault();
+                if (dmerEntity != null)
+                {
+                    dmerEntity.dfp_datesenttoicbc = dateSent;
+                    dynamicsContext.UpdateObject(dmerEntity);
+                }                
             }
             
             await dynamicsContext.SaveChangesAsync();
