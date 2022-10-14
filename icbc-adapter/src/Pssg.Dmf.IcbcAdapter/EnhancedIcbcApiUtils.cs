@@ -23,6 +23,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using Google.Protobuf.WellKnownTypes;
 using Pssg.Interfaces;
+using Newtonsoft.Json.Serialization;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -65,7 +66,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     
                     var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
-                    string payload = JsonConvert.SerializeObject(item);
+                    string payload = JsonConvert.SerializeObject(item, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
                     LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update {payload}");
                     request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
@@ -116,8 +120,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                     {
                         var newUpdate = new IcbcMedicalUpdate()
                         {
-                            DlNumber = item.Driver.DriverLicenseNumber,
-                            LastName = driver.INAM.SURN,
+                            DlNumber = licenseNumber,
+                            LastName = driver.INAM?.SURN,
                         };
 
                         var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
