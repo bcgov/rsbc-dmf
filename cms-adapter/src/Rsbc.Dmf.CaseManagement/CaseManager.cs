@@ -1022,7 +1022,7 @@ namespace Rsbc.Dmf.CaseManagement
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
-                        Title = c.title ?? string.Empty,
+                        Title = c.ticketnumber ?? string.Empty,
                         CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
@@ -1293,7 +1293,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
-            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.title == criteria.Title);
+            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
             if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
             {
