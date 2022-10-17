@@ -21,6 +21,9 @@ using Rsbc.Dmf.IcbcAdapter.ViewModels;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Net.Http;
 using Newtonsoft.Json;
+using Google.Protobuf.WellKnownTypes;
+using Pssg.Interfaces;
+using Newtonsoft.Json.Serialization;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -29,12 +32,13 @@ namespace Rsbc.Dmf.IcbcAdapter
         
         private IConfiguration _configuration { get; }
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
+        private readonly IIcbcClient _icbcClient;
 
-
-        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
+        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
+            _icbcClient = icbcClient;
         }
 
 
@@ -62,7 +66,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     
                     var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
-                    string payload = JsonConvert.SerializeObject(item);
+                    string payload = JsonConvert.SerializeObject(item, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
                     LogStatement(hangfireContext, $"{unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} - sending update {payload}");
                     request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
@@ -105,35 +112,53 @@ namespace Rsbc.Dmf.IcbcAdapter
                 
             if (item.Driver != null)
             {
-                var newUpdate = new IcbcMedicalUpdate()
+                string licenseNumber = item.Driver.DriverLicenseNumber;
+                try
                 {
-                    DlNumber = item.Driver.DriverLicenseNumber,
-                    LastName = item.Driver.Surname,
-                };
-
-                var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-
-                if (firstDecision != null)
-                {
-                    if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    if (driver != null)
                     {
-                        newUpdate.MedicalDisposition = "P";
+                        var newUpdate = new IcbcMedicalUpdate()
+                        {
+                            DlNumber = licenseNumber,
+                            LastName = driver.INAM?.SURN,
+                        };
+
+                        var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+
+                        if (firstDecision != null)
+                        {
+                            if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                            {
+                                newUpdate.MedicalDisposition = "P";
+                            }
+                            else
+                            {
+                                newUpdate.MedicalDisposition = "J";
+                            }
+                        }
+                        else
+                        {
+                            newUpdate.MedicalDisposition = "J";
+                        }
+
+                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow.Date).Value;
+
+                        newUpdate.MedicalIssueDate = adjustedDate;
+
+                        return newUpdate;
                     }
                     else
                     {
-                        newUpdate.MedicalDisposition = "J";
+                        Log.Logger.Error("Error getting driver from ICBC.");
                     }
                 }
-                else
+                catch (Exception e)
                 {
-                    newUpdate.MedicalDisposition = "J";
+                    Log.Logger.Error(e, "Error getting driver from ICBC.");
                 }
 
-                DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow).Value;
-
-                newUpdate.MedicalIssueDate = adjustedDate;
-
-                return newUpdate;
+                
             }
             else
             {

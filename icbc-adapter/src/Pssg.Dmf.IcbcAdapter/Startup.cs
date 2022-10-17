@@ -15,6 +15,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using Rsbc.Dmf.IcbcAdapter.Services;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
@@ -37,6 +38,7 @@ using Serilog.Context;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
+using Newtonsoft.Json.Serialization;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -67,6 +69,8 @@ namespace Rsbc.Dmf.IcbcAdapter
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+           
+
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders =
@@ -82,8 +86,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                                   });
-            });
-            
+            });            
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
@@ -134,13 +137,24 @@ namespace Rsbc.Dmf.IcbcAdapter
 
 
                 //options.Filters.Add( typeof(ServerErrorExceptionFilterAttribute));
-
                 options.EnableEndpointRouting = false;
 
 
                 })
-                    // Adds MVC conventions to work better with the ProblemDetails middleware.
-                    .AddProblemDetailsConventions();
+            .AddNewtonsoftJson(opts =>
+            {
+                opts.SerializerSettings.Formatting = Formatting.Indented;
+                opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            })
+
+            // Adds MVC conventions to work better with the ProblemDetails middleware.
+            .AddProblemDetailsConventions();
 
             //GlobalConfiguration.Configuration.Filters.Add(
             //new ServerErrorExceptionFilterAttribute());
@@ -441,13 +455,15 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
 
+                    var icbcClient = serviceScope.ServiceProvider.GetService<IIcbcClient>();
+
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), Cron.Never);
 
                     RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), Cron.Never); 
 
                     //RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
 
-                    RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
+                    RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient, icbcClient).SendMedicalUpdates(null), Cron.Never);
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
