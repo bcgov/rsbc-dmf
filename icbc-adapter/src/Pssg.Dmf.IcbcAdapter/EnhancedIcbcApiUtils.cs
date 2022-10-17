@@ -24,6 +24,7 @@ using Newtonsoft.Json;
 using Google.Protobuf.WellKnownTypes;
 using Pssg.Interfaces;
 using Newtonsoft.Json.Serialization;
+using Pssg.Interfaces.Icbc.Models;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -116,12 +117,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null)
+                    if (driver != null && driver.INAM.SURN != null)
                     {
                         var newUpdate = new IcbcMedicalUpdate()
                         {
                             DlNumber = licenseNumber,
-                            LastName = driver.INAM?.SURN,
+                            LastName = driver.INAM.SURN,
                         };
 
                         var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
@@ -142,7 +143,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                             newUpdate.MedicalDisposition = "J";
                         }
 
-                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(DateTimeOffset.UtcNow.Date).Value;
+                        // get most recent Medical Issue Date from the driver.
+
+                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
 
                         newUpdate.MedicalIssueDate = adjustedDate;
 
@@ -168,6 +171,20 @@ namespace Rsbc.Dmf.IcbcAdapter
             return null;
         }
 
+        private DateTime GetMedicalIssueDate(CLNT driver)
+        {
+            DateTime result = DateTime.MinValue;
+
+            foreach (var item in driver.DR1MST.DR1MEDN)
+            {
+                if (item.MIDT != null && item.MIDT > result)
+                {
+                    result = item.MIDT.Value;
+                }
+            }
+
+            return result;
+        }
 
         private void LogStatement(PerformContext hangfireContext, string message)
         {
