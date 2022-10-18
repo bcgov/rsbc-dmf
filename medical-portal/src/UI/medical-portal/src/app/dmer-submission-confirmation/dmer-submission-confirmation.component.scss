@@ -5,6 +5,7 @@
 }
 .dmer-content {
   margin-top: 20px;
+  margin-left: 15px;
 }
 
 .info-icon {
@@ -16,6 +17,29 @@
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
+  cursor: pointer;
+}
+
+.download-button:hover{
+  text-decoration: underline;
+  opacity: 0.80;
+}
+
+.logout-button{
+  background-color: #fff;
+  border: 1px solid #003366;
+  border-radius: 4px;
+  color: #003366;
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.logout-button:hover{
+  text-decoration: underline;
+  background-color: #f2f2f2
 }
 
 .dmer {
@@ -24,7 +48,7 @@
 }
 
 .footnote {
-  font-size: 12px;
+  //font-size: 12px;
   margin-left: 16px;
   margin-top: 20px;
 }
@@ -37,7 +61,7 @@
 .alert-toolbar {
   display: flex;
   width: 80%;
-  justify-content: space-between;
+  justify-content: start;
   padding: 20px;
   background-color: #d9e7d8;
   border-color: #accbaa;
@@ -67,3 +91,4 @@
 .flex-container {
   display: flex;
 }
+
