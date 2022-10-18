@@ -174,14 +174,17 @@ namespace Rsbc.Dmf.IcbcAdapter
         private DateTime GetMedicalIssueDate(CLNT driver)
         {
             DateTime result = DateTime.MinValue;
-
-            foreach (var item in driver.DR1MST.DR1MEDN)
+            if (driver.DR1MST != null && driver.DR1MST.DR1MEDN != null)
             {
-                if (item.MIDT != null && item.MIDT > result)
+                foreach (var item in driver.DR1MST.DR1MEDN)
                 {
-                    result = item.MIDT.Value;
+                    if (item.MIDT != null && item.MIDT > result)
+                    {
+                        result = item.MIDT.Value;
+                    }
                 }
             }
+            
 
             return result;
         }
