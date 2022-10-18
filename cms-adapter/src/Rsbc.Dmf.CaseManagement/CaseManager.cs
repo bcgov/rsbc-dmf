@@ -50,6 +50,10 @@ namespace Rsbc.Dmf.CaseManagement
         Task<CaseSearchReply> GetUnsentMedicalUpdates();
 
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
+
+        DateTimeOffset GetDpsProcessingDate();
+
+        Task UpdateNonComplyDocuments();
     }
        
 
@@ -667,37 +671,6 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-        private incident GetIncidentByIdWithComments(string id)
-        {
-            incident result = null;
-            try
-            {
-                result = dynamicsContext.incidents.Expand(d => d.dfp_incident_dfp_comment)
-                    .Where(d => d.incidentid == Guid.Parse(id))
-                    .FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                result = null;
-            }
-            return result;
-        }
-
-        private incident GetIncidentBySequence (int sequence)
-        {
-            incident result = null;
-            try
-            {
-                result = dynamicsContext.incidents.Where(d => d.importsequencenumber == sequence).FirstOrDefault();
-            }
-            catch (Exception ex)
-            {
-                result = null;
-            }
-            return result;
-        }
-
-
         public async Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request)
         {
             CreateStatusReply result = new CreateStatusReply()
@@ -1022,7 +995,7 @@ namespace Rsbc.Dmf.CaseManagement
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
-                        Title = c.title ?? string.Empty,
+                        Title = c.ticketnumber ?? string.Empty,
                         CreatedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
                         CreatedOn = c.createdon.Value.DateTime,
                         ModifiedBy = $"{c.customerid_contact?.lastname?.ToUpper()}, {c.customerid_contact?.firstname}",
@@ -1293,7 +1266,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
-            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.title == criteria.Title);
+            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
             if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
             {
@@ -1409,6 +1382,46 @@ namespace Rsbc.Dmf.CaseManagement
 
             return MapCases(caseArray);            
         }
+
+
+        public DateTimeOffset GetDpsProcessingDate()
+        {
+            var mostRecentRecord = dynamicsContext.bcgov_documenturls
+                .OrderByDescending(i => i.dfp_dpsprocessingdate)
+                .Take(1)
+                .FirstOrDefault();
+
+            if (mostRecentRecord != null && mostRecentRecord.dfp_dpsprocessingdate != null)
+            {
+                return mostRecentRecord.dfp_dpsprocessingdate.Value;
+            } 
+            else
+            {
+                return DateTimeOffset.UtcNow;
+            }            
+        }
+
+        public async Task UpdateNonComplyDocuments()
+        {
+
+            var dpsProcessingDate = GetDpsProcessingDate();
+
+            var nonComplyDocuments = dynamicsContext.bcgov_documenturls.Where(
+                x => x.dfp_submittalstatus == 100000000 // Open - Required
+                && x.dfp_compliancedate < dpsProcessingDate
+                );
+
+            foreach (var document in nonComplyDocuments)
+            {
+                document.dfp_submittalstatus = 100000005; // Non Comply
+                dynamicsContext.UpdateObject(document);
+            }
+
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
+        }
+
+
 
         public async Task MarkMedicalUpdatesSent(List<string> ids)
         {

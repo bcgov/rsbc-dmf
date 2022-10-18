@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
+using System;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -122,6 +123,24 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             queryResults.ShouldNotBeEmpty();
             
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanDoDpsProcessingDate()
+        {
+            var queryResults = caseManager.GetDpsProcessingDate();
+
+            Assert.NotEqual (queryResults, DateTimeOffset.MinValue );
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateNonComplyDocuments()
+        {
+            await caseManager.UpdateNonComplyDocuments();
+        }
+
+
+        
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
