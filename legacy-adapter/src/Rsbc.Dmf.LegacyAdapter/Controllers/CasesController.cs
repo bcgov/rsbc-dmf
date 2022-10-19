@@ -311,6 +311,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file,
             [FromForm] string priority = "Regular",
+            [FromForm] string assign = null,
             [FromForm] string surcode = null         // Driver -> Lastname
             )
         {
