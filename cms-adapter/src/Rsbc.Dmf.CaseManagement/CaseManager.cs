@@ -1368,8 +1368,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.dfp_incident_dfp_dmerflag)
                 .Expand(i => i.dfp_incident_dfp_decision)
-                .Where(i => i.statuscode == 5 // Decision Rendered
-                        && i.statecode == 0 // Active
+                .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null);
             var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
             var caseArray = cases.ToArray();
