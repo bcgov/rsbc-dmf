@@ -293,6 +293,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="validationMethod"></param>
         /// <param name="validationPrevious"></param>
         /// <param name="file"></param>
+        /// <param name="priority"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
@@ -309,6 +310,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string validationMethod, // add to document entity
             [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file,
+            [FromForm] string priority = "Regular",
             [FromForm] string surcode = null         // Driver -> Lastname
             )
         {
