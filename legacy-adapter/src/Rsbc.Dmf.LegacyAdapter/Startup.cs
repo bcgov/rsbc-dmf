@@ -110,14 +110,8 @@ namespace Rsbc.Dmf.LegacyAdapter
             // basic REST controller 
             services
                 .AddProblemDetails(opts => {
-                    opts.IncludeExceptionDetails = (context, ex) =>
-                    {
-                        Log.Logger.Error(ex, "ProblemDetails Error Report");
-                        var environment =
-             context.RequestServices.GetRequiredService
-            <IHostEnvironment>();
-                        return environment.IsDevelopment();
-                    };
+                    opts.RethrowAll();
+                    
                 })
                 .AddControllers(options => {
 
