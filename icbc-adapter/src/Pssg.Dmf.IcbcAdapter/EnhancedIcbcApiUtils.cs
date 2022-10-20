@@ -75,16 +75,26 @@ namespace Rsbc.Dmf.IcbcAdapter
                     request.Content = new StringContent(payload, Encoding.UTF8, "application/json");
 
                     var response = client.SendAsync(request).GetAwaiter().GetResult();
+                    string responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
                     if (response.StatusCode == System.Net.HttpStatusCode.OK)
                     {
-                        LogStatement(hangfireContext, $"HTTP Status was OK {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");
-                        // mark it as sent
-                        MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);
+                        LogStatement(hangfireContext, $"HTTP Status was OK {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber} {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()} - marking as sent.");                                                                       
+
+                        if (responseContent.Contains("SUCCESS"))
+                        {
+                            // mark it as sent
+                            MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);                             
+                        }
+                        else
+                        {
+                            LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
+                        }
+                        
                     }
                     else
                     {
-                        LogStatement(hangfireContext, $"HTTP Status was not OK {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
+                        LogStatement(hangfireContext, $"ICBC ERROR {response.Content.ReadAsStringAsync().GetAwaiter().GetResult()}");
                     }
                 }
                 else
@@ -145,7 +155,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         // get most recent Medical Issue Date from the driver.
 
-                        DateTimeOffset adjustedDate = DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
+                        DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
 
                         newUpdate.MedicalIssueDate = adjustedDate;
 
