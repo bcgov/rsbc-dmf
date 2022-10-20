@@ -191,8 +191,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             };
 
             if (comment.Driver != null)
-            {
-                driver.Surname = comment.Driver.LastName;
+            {                
+                driver.Surname = comment.Driver.LastName ?? string.Empty;
             }            
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
