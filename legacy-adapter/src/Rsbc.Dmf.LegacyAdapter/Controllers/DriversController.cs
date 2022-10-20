@@ -200,7 +200,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CaseId = comment.CaseId ?? String.Empty,
                 CommentText = comment.CommentText ?? String.Empty,
                 CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
-                SequenceNumber = comment.SequenceNumber,
+                SequenceNumber = comment.SequenceNumber ?? -1,
                 UserId = comment.UserId ?? String.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
                 Driver = driver

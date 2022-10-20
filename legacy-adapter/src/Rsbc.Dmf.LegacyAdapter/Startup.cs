@@ -109,12 +109,12 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // basic REST controller 
             services
-                /*
+                
                 .AddProblemDetails(opts => {
-                    opts.RethrowAll();
-                    
+                    opts.ValidationProblemStatusCode = StatusCodes.Status400BadRequest;
+
                 })
-                */
+                
                 .AddControllers(options => {
 
                 // only allow anonymous access if there is no JWT secret...
@@ -124,9 +124,9 @@ namespace Rsbc.Dmf.LegacyAdapter
                 }
                 options.EnableEndpointRouting = false;
 
-            });
+            })
                 
-               //.AddProblemDetailsConventions();
+              .AddProblemDetailsConventions();
             
            
 
@@ -245,7 +245,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                 IdentityModelEventSource.ShowPII = true;
             }
 
-            //app.UseProblemDetails();
+            app.UseProblemDetails();
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
