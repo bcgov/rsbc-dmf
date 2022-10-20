@@ -60,6 +60,12 @@
       font-style: normal;
       font-weight: 700;
     }
+
+    .search-button:hover{
+      text-decoration: underline;
+      opacity: 0.80;
+    }
+
     .dmer-missing{
       padding-left: 30px;
     }
@@ -92,6 +98,19 @@
   .cases-button{
     padding-right: 5px;
   }
+
+  .search-button {
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .search-button:hover{
+    text-decoration: underline;
+    opacity: 0.80;
+  }
+
 }
 
 
