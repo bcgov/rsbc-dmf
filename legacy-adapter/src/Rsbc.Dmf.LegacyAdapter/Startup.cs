@@ -109,6 +109,16 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // basic REST controller 
             services
+                .AddProblemDetails(opts => {
+                    opts.IncludeExceptionDetails = (context, ex) =>
+                    {
+                        Log.Logger.Error(ex, "ProblemDetails Error Report");
+                        var environment =
+             context.RequestServices.GetRequiredService
+            <IHostEnvironment>();
+                        return environment.IsDevelopment();
+                    };
+                })
                 .AddControllers(options => {
 
                 // only allow anonymous access if there is no JWT secret...
@@ -118,16 +128,10 @@ namespace Rsbc.Dmf.LegacyAdapter
                 }
                 options.EnableEndpointRouting = false;
 
-            });
-            services.AddProblemDetails(opts => {
-                opts.IncludeExceptionDetails = (context, ex) =>
-                {
-                    var environment =
-         context.RequestServices.GetRequiredService
-        <IHostEnvironment>();
-                    return environment.IsDevelopment();
-                };
-            });
+            })
+               .AddProblemDetailsConventions();
+            
+           
 
             services.AddSwaggerGen(c =>
             {               
