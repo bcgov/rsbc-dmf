@@ -51,6 +51,6 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Date the comment was made
         /// </summary>
-        public DateTimeOffset CommentDate { get; set; }
+        public DateTimeOffset? CommentDate { get; set; }
     }
 }
