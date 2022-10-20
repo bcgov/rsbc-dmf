@@ -191,8 +191,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             };
 
             if (comment.Driver != null)
-            {
-                driver.Surname = comment.Driver.LastName;
+            {                
+                driver.Surname = comment.Driver.LastName ?? string.Empty;
             }            
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
@@ -202,7 +202,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
                 SequenceNumber = comment.SequenceNumber ?? -1,
                 UserId = comment.UserId ?? String.Empty,
-                CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate),
+                CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate ?? DateTimeOffset.Now),
                 Driver = driver
             });
 
