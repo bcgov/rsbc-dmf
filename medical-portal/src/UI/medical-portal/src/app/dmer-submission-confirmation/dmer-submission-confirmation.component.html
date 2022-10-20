@@ -1,16 +1,17 @@
-<div class="page-desc">
+<!-- <div class="page-desc">
   <div class="container">
     <h1>DMER Submission Confirmation</h1>
   </div>
-</div>
-
-
+</div> -->
 
 <div class="dmer-submission">
     <div class="alertbar">
     <div class="alert-toolbar">
-        <span>
-            <mat-icon class="info-icon">check_circle</mat-icon><b>Driver's Medical Examination Report (DMER) Submission successful.</b><br/>
+      <span>
+        <mat-icon class="info-icon">check_circle</mat-icon>
+      </span>
+        <span style="margin-left:12px">
+            <b>Driver's Medical Examination Report (DMER) Submission successful.</b><br/>
             Thank you for your submission.  Please see the next steps below outlined for you and your patient.
         </span>
     </div>
@@ -18,7 +19,7 @@
     <div class="list">
         <h2>Next Steps</h2>
     </div>
-  <div>
+  <div class="dmer-content">
     
       <b>1. REQUIRED: Download DMER PDF file</b><br />
       <div class="dmer">
@@ -94,7 +95,9 @@
     </div>
     <div class="dmer-content">
         <button
-          mat-flat-button
+        mat-stroked-button
+          color="primary"
+          class="logout-button"
           (click)="openConfirmationDialog('logout')"
           
         >

@@ -1,22 +1,21 @@
 <div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
-  <h1 class="title">DMER submission Confirmation</h1>
+  <h1 class="title">Reminder Notification</h1>
   <button mat-icon-button aria-label="Close" mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
 </div>
 <div mat-dialog-content class="dialog-content">
-  <div class="form-label">
-    Have you downloaded the PDF of this DMER submission? <br />
-    If not please be sure to click the DOWNLOAD button to get a copy of this
-    record. This is your only opportunity to do so.
+  <div>
+   <b>Are you sure you want to leave this page?</b> <br/>
+   After exiting this page you will not longer be able to download the PDF of this DMER submission for your records.
   </div>
 </div>
 <div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-between center">
   <button mat-raised-button mat-dialog-close="true" color="primary">
-    Submit
+    Yes I’m sure
   </button>
   <br />
   <button mat-button mat-dialog-close color="primary">
-    Cancel
+    No.  I still need to download
   </button>
 </div>
