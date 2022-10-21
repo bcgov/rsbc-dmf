@@ -892,6 +892,8 @@ namespace Rsbc.Dmf.CaseManagement
                     .Where(x => x.dfp_decisionid == decisionId).FirstOrDefault();
                 if (d != null && d.dfp_OutcomeStatus != null )
                 {
+                    // ensure the decision has data.
+                    dynamicsContext.LoadPropertyAsync(d.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus)).GetAwaiter().GetResult();
                     switch (d.dfp_OutcomeStatus.dfp_name)
                     {
                         case "Fit to Drive":
