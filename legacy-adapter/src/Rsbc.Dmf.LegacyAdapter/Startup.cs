@@ -127,8 +127,7 @@ namespace Rsbc.Dmf.LegacyAdapter
             })
                 
               .AddProblemDetailsConventions();
-            
-           
+
 
             services.AddSwaggerGen(c =>
             {               
@@ -232,6 +231,8 @@ namespace Rsbc.Dmf.LegacyAdapter
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
