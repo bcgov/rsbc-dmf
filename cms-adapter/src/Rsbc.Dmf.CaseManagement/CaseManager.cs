@@ -1021,7 +1021,7 @@ namespace Rsbc.Dmf.CaseManagement
                             .Select(d => new Decision
                             {
                                 Id = d.dfp_decisionid.ToString(),
-                                Outcome = TranslateDecisionOutcome(d.dfp_OutcomeStatus?.dfp_outcomestatusid),
+                                Outcome = TranslateDecisionOutcome(d.dfp_decisionid),
                                 CreatedOn = d.createdon ?? default
                             }),                        
                         Status = TranslateStatus(c.statuscode)
