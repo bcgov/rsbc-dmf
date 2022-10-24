@@ -330,73 +330,100 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 importDate = DateTimeOffset.Now;
             }
 
-            // TODO fetch driver from ICBC
+            // get the case data
+            string driverId = null;
 
-            // add the document
-            var ms = new MemoryStream();
-            if (file!=null)
+            SearchReply reply;
+            if (caseId != null)
             {
-                file.OpenReadStream().CopyTo(ms);
-
-                string jsonFile = JsonConvert.SerializeObject(file);
-                Serilog.Log.Error($"AddCaseDocument - File is {jsonFile}");
+                reply = _cmsAdapterClient.Search(new SearchRequest { CaseId = caseId });
             }
             else
             {
-                Serilog.Log.Error("AddCaseDocument - File is empty");
-            }
-           
-            var data = ms.ToArray();
-            string fileName = file?.FileName ?? "UnknownFile.pdf";
-            UploadFileRequest pdfData = new UploadFileRequest()
-            {
-                ContentType = MimeUtils.GetMimeType(fileName),
-                Data = ByteString.CopyFrom(data),
-                EntityName = "incident",
-                FileName = fileName,
-                FolderName = caseId,
-            };
-            var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
-
-            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
-            {
-                return StatusCode(500, fileReply.ErrorDetail);
+                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = driversLicense });
             }
 
-            var document = new LegacyDocument()
+             
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                BatchId = batchId ?? String.Empty,
-                DocumentPages = documentPages ?? 1,
-                DocumentTypeCode = documentType ?? String.Empty,
-                DocumentUrl = fileReply.FileName,
-                CaseId = caseId ?? string.Empty,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate.Value),
-                ImportDate = Timestamp.FromDateTimeOffset(importDate.Value),
-                ImportId = importID ?? string.Empty,
-                 
-                OriginatingNumber = originatingNumber ?? string.Empty,
-                Driver = driver,
-                ValidationMethod = validationMethod ?? string.Empty,
-                ValidationPrevious = validationPrevious ?? string.Empty
-            };
-
-            var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
-
-            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                var actionName = nameof(AddCaseDocument);
-                var routeValues = new
+                foreach (var item in reply.Items)
                 {
-                    driversLicence = driversLicense
+                    driverId = item.Driver?.Id;
+                    break;
+                }
+
+                // add the document
+                var ms = new MemoryStream();
+                if (file != null)
+                {
+                    file.OpenReadStream().CopyTo(ms);
+
+                    string jsonFile = JsonConvert.SerializeObject(file);
+                    Serilog.Log.Error($"AddCaseDocument - File is {jsonFile}");
+                }
+                else
+                {
+                    Serilog.Log.Error("AddCaseDocument - File is empty");
+                }
+
+                var data = ms.ToArray();
+                string fileName = file?.FileName ?? "UnknownFile.pdf";
+                UploadFileRequest pdfData = new UploadFileRequest()
+                {
+                    ContentType = MimeUtils.GetMimeType(fileName),
+                    Data = ByteString.CopyFrom(data),
+                    EntityName = "dfp_driver",
+                    FileName = fileName,
+                    FolderName = driverId,
+                };
+                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    return StatusCode(500, fileReply.ErrorDetail);
+                }
+
+                var document = new LegacyDocument()
+                {
+                    BatchId = batchId ?? String.Empty,
+                    DocumentPages = documentPages ?? 1,
+                    DocumentTypeCode = documentType ?? String.Empty,
+                    DocumentUrl = fileReply.FileName,
+                    CaseId = caseId ?? string.Empty,
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate.Value),
+                    ImportDate = Timestamp.FromDateTimeOffset(importDate.Value),
+                    ImportId = importID ?? string.Empty,
+
+                    OriginatingNumber = originatingNumber ?? string.Empty,
+                    Driver = driver,
+                    ValidationMethod = validationMethod ?? string.Empty,
+                    ValidationPrevious = validationPrevious ?? string.Empty
                 };
 
-                return CreatedAtAction(actionName, routeValues, document);
+                var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
+
+                if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    var actionName = nameof(AddCaseDocument);
+                    var routeValues = new
+                    {
+                        driversLicence = driversLicense
+                    };
+
+                    return CreatedAtAction(actionName, routeValues, document);
+                }
+                else
+                {
+                    Serilog.Log.Error(result.ErrorDetail);
+                    return StatusCode(500, result.ErrorDetail);
+                }
             }
             else
             {
-                Serilog.Log.Error(result.ErrorDetail);
-                return StatusCode(500, result.ErrorDetail);
+                Serilog.Log.Error(reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
             }
+
         }
 
     }
