@@ -822,7 +822,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious;
-                bcgovDocumentUrl.dfp_submittalstatus = 100000002; // open pending intake agent review
+                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
             
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {

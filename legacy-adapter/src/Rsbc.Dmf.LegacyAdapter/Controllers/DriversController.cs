@@ -38,7 +38,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             _logger = logger;
         }
 
-       
 
         /// <summary>
         /// DoesCaseExist
@@ -297,7 +296,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 ContentType = "application/pdf",
                 Data = ByteString.CopyFrom(document.FileContents),
-                EntityName = "incident",
+                EntityName = "dfp_driver",
                 FileName = $"DMER.pdf",
                 FolderName = document.CaseId,
             };
