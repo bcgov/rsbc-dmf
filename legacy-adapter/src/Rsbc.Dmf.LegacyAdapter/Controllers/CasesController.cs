@@ -103,7 +103,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN
+                            Surname = driver.INAM?.SURN ?? string.Empty
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                     }
