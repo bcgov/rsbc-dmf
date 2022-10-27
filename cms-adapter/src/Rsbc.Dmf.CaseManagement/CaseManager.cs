@@ -312,7 +312,7 @@ namespace Rsbc.Dmf.CaseManagement
                             CommentDate = comment.createdon.GetValueOrDefault(),
                             CommentId = comment.dfp_commentid.ToString(),
                             CommentText = comment.dfp_commentdetails,
-                            CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
+                            CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
                             SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                             UserId = comment.dfp_userid
                         };
@@ -428,7 +428,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     CommentDate = comment.createdon.GetValueOrDefault(),
                                     CommentId = comment.dfp_commentid.ToString(),
                                     CommentText = comment.dfp_commentdetails,
-                                    CommentTypeCode = comment.dfp_icbc.GetValueOrDefault() == true ? "W" : "N",
+                                    CommentTypeCode = TranslateCommentTypeCodeFromInt (comment.dfp_commenttype),
                                     SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
                                     UserId = comment.dfp_userid,
                                     Driver = driver
@@ -710,7 +710,8 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_comment @comment = new dfp_comment()
                 {
                     createdon = DateTimeOffset.Now,
-                    dfp_icbc = "W" == request.CommentTypeCode,
+                    dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
+                    dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText
                 };
@@ -1715,6 +1716,68 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
+
+
+        private string TranslateCommentTypeCodeFromInt(int? commentTypeCode)
+        {
+            string result;
+
+            switch (commentTypeCode)
+            {
+                // W - Web Comments; D - Decision Notes; I - ICBC Comments; C - File Comments; N - Sticky Notes;
+
+                case 100000003:
+                    result = "W";
+                    break;
+                case 100000002:
+                    result = "D";
+                    break;
+                case 100000005:
+                    result = "I";
+                    break;
+                case 100000001:
+                    result = "C";
+                    break;
+                case 100000000:
+                    result = "N";
+                    break;
+                default:
+                    result = "C"; // case comment
+                    break;
+            }
+            return result;
+        }
+
+        private int TranslateCommentTypeCodeToInt(string commentTypeCode)
+        {
+            int result;
+
+            switch (commentTypeCode)
+            {
+                // W - Web Comments; D - Decision Notes; I - ICBC Comments; C - File Comments; N - Sticky Notes;
+
+                case "W":
+                    result = 100000003;
+                    break;
+                case "D":
+                    result = 100000002;
+                    break;
+                case "I":
+                    result = 100000005;
+                    break;
+                case "C":
+                    result = 100000001;
+                    break;
+                case "N":
+                    result = 100000000;
+                    break;
+                default:
+                    result = 100000001;
+                    break;
+            }
+            return result;
+        }
+
     }
 
     internal enum CaseTypeOptionSet
@@ -1729,4 +1792,5 @@ namespace Rsbc.Dmf.CaseManagement
         FollowUp = 100000002,
         Message = 100000003
     }
+
 }
