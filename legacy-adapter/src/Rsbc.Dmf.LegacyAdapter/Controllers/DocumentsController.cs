@@ -79,9 +79,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-
-                byte[] fileContents= Array.Empty<byte>();
-
                 if (! string.IsNullOrEmpty(reply.Document?.DocumentUrl))
                 {
                     // fetch the file from S3
@@ -92,23 +89,30 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
                     if (documentReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                     {
-                        fileContents = documentReply.Data.ToByteArray();
+                        byte[] fileContents = documentReply.Data.ToByteArray();
+                        string fileName = Path.GetFileName(reply.Document.DocumentUrl);
+                        string mimetype = MimeUtils.GetMimeType(fileName);
+                        Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
+                        Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
+                        return new FileContentResult(fileContents, mimetype)
+                        {
+                            FileDownloadName = $"{fileName}"
+                        };                        
                     }
-                    string fileName = Path.GetFileName(reply.Document.DocumentUrl);
-                    string mimetype = MimeUtils.GetMimeType(fileName);
-                    Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
-                    Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
-                    return new FileContentResult(fileContents, mimetype);
+                    else
+                    {
+                        Serilog.Log.Error($"Unexpected error - unable to fetch file from storage - {reply.ErrorDetail}");
+                        return StatusCode(500, "Unexpected error - unable to fetch file from storage");
+                    }                    
                 }
                 else
                 {
-                    return StatusCode(500, "Unexpected error - document URL is missing");
-                }
-                
+                    return StatusCode(500, "Unexpected error - document URL is missing from document object");
+                }                
             }
             else
             {
-                Serilog.Log.Error(reply.ErrorDetail);
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
