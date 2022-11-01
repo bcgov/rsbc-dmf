@@ -777,9 +777,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = e.Message;
             }
             
-            
+
+            return reply;
+        }
 
 
+        public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply();
+
+            // fetch the document.
+            try
+            {
+                // call _caseManager...
+
+                throw new Exception();
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
 
             return reply;
         }
