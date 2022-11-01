@@ -88,6 +88,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                         }
                         else
                         {
+                            // TODO - Add call to CMS Adapter to create a bring forward.
                             LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
                         }
                         
