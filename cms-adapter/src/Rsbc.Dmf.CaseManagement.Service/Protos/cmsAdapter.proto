@@ -44,6 +44,8 @@ service CaseManager {
   rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
 
   rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
+
+  rpc CreateBringForward(BringForwardRequest) returns (ResultStatusReply);
 }
 
 message DriverLicenseRequest {
@@ -371,5 +373,20 @@ message IdListRequest {
 message ResultStatusReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
+}
+
+enum  BringForwardPriority{
+	Low = 0;
+	Normal = 1;
+	High = 2;
+}
+
+message BringForwardRequest {
+	string caseId = 1;
+	// if assignee is blank, assign to the Owner of the Case.
+	string assignee = 2; 
+	string subject = 3;
+	string description = 4;	
+	BringForwardPriority priority = 5;
 }
 
