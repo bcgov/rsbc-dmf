@@ -534,7 +534,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     DocumentId = document.bcgov_documenturlid.ToString(),
                                     DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
                                     DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
+                                    BusinessArea = ConvertBusinessAreaToLegacyString(document.dfp_DocumentTypeID?.dfp_businessarea),
                                     DocumentUrl = document.bcgov_url ?? string.Empty,
                                     FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
                                     ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
@@ -583,6 +583,26 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        private int? ConvertStringToBusinessArea(string businessArea)
+        {
+            int? result = null;
+            if (businessArea != null)
+            {
+                switch (businessArea)
+                {
+                    case "Driver Fitness":
+                        result = 100000000;
+                        break;
+                    case "Remedial":
+                        result = 100000001;
+                        break;
+                }
+            }
+            return result;
+        }
+
+
         private string ConvertBusinessAreaToString(int? businessArea)
         {
             string result = "";
@@ -595,6 +615,25 @@ namespace Rsbc.Dmf.CaseManagement
                         break;
                     case 100000001:
                         result = "Remedial";
+                        break;
+                }
+            }
+            return result;
+        }
+
+
+        private string ConvertBusinessAreaToLegacyString(int? businessArea)
+        {
+            string result = "Client Services";
+            if (businessArea != null)
+            {
+                switch (businessArea)
+                {
+                    case 100000000:
+                        result = "Driver Fitness";
+                        break;
+                    default:
+                        result = "Client Services";
                         break;
                 }
             }
@@ -737,7 +776,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private dfp_submittaltype GetDocumentType(string documentTypeCode)
+        private dfp_submittaltype GetDocumentType(string documentTypeCode, string documentType, string businessArea)
         {
             // lookup the document Type Code
             dfp_submittaltype result = null;
@@ -748,11 +787,7 @@ namespace Rsbc.Dmf.CaseManagement
                     var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault(); 
                     if (record == null)
                     {
-                        var newRecord = new dfp_submittaltype { dfp_apidocumenttype = documentTypeCode, dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
-                        dynamicsContext.AddTodfp_submittaltypes(newRecord);
-                        dynamicsContext.SaveChanges();
-
-                        record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+                        
                     }
                     result = record;                    
                     
@@ -762,6 +797,25 @@ namespace Rsbc.Dmf.CaseManagement
                     result = null;
                 }
             }
+
+            if (result == null)
+            {
+                // try to create.
+                var newRecord = new dfp_submittaltype()
+                {
+                    dfp_apidocumenttype = documentTypeCode,
+                    dfp_code = documentTypeCode,
+                    dfp_name = documentType,
+                    dfp_businessarea = ConvertStringToBusinessArea(businessArea)
+                };
+
+                dynamicsContext.AddTodfp_submittaltypes(newRecord);
+                dynamicsContext.SaveChanges();
+
+                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+
+            }
+
 
             return result;
         }
@@ -832,8 +886,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 // document type ID
-                var documentTypeId = GetDocumentType(request.DocumentTypeCode);
-
+                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
                 if (found) // update
                 {

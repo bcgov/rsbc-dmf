@@ -8,6 +8,7 @@ using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -417,8 +418,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 UserId = document.UserId,
                 FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate),
                 ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate),
-                Driver = driver
-
+                Driver = driver,
+                DocumentTypeCode = document.DocumentTypeCode,
+                DocumentType = document.DocumentType,
+                BusinessArea = document.BusinessArea
             });
 
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
