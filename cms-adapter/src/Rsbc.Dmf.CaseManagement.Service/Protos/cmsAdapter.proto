@@ -22,6 +22,8 @@ service CaseManager {
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
+  rpc GetAllDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
+
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
   // process a line item from the legacy candidate list
