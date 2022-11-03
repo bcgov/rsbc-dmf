@@ -534,7 +534,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     DocumentId = document.bcgov_documenturlid.ToString(),
                                     DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
                                     DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                    BusinessArea = ConvertBusinessAreaToLegacyString(document.dfp_DocumentTypeID?.dfp_businessarea),
+                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
                                     DocumentUrl = document.bcgov_url ?? string.Empty,
                                     FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
                                     ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
@@ -597,6 +597,9 @@ namespace Rsbc.Dmf.CaseManagement
                     case "Remedial":
                         result = 100000001;
                         break;
+                    case "Client Services":
+                        result = 100000002;
+                        break;
                 }
             }
             return result;
@@ -616,29 +619,14 @@ namespace Rsbc.Dmf.CaseManagement
                     case 100000001:
                         result = "Remedial";
                         break;
-                }
-            }
-            return result;
-        }
-
-
-        private string ConvertBusinessAreaToLegacyString(int? businessArea)
-        {
-            string result = "Client Services";
-            if (businessArea != null)
-            {
-                switch (businessArea)
-                {
-                    case 100000000:
-                        result = "Driver Fitness";
-                        break;
-                    default:
+                    case 100000002:
                         result = "Client Services";
                         break;
                 }
             }
             return result;
         }
+
 
         public async Task<IEnumerable<Driver>> GetDrivers()
         {
@@ -893,7 +881,13 @@ namespace Rsbc.Dmf.CaseManagement
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
+
+                        dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+
                         await dynamicsContext.SaveChangesAsync();
+
+
+
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                         dynamicsContext.DetachAll();
@@ -919,6 +913,9 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                         }
+
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+
 
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
