@@ -98,6 +98,9 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                         ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
+                        DocumentTypeCode = "001",
+                        DocumentType = "Test Document",
+                        BusinessArea = "Driver Fitness",
                         UserId = "TESTUSER"
                     });
 
