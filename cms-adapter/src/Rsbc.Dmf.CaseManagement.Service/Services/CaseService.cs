@@ -84,6 +84,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentId = request.DocumentId ?? string.Empty,
                 DocumentPages = (int) request.DocumentPages,
                 DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
                 FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
                 // may need to add FileSize,
