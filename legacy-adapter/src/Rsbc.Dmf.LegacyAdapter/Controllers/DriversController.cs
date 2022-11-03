@@ -65,13 +65,106 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{licenseNumber}/Comments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]        
+        [ProducesResponseType(500)]
         public ActionResult GetComments([FromRoute] string licenseNumber, [FromQuery] string filter, [FromQuery] char sort)
+
+        {
+            // call the back end
+
+            var reply = _cmsAdapterClient.GetDriverComments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                List<ViewModels.Comment> result = new List<ViewModels.Comment>();
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = licenseNumber,
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    bool addItem = true;
+                    Guid filterValue;
+                    Guid caseId;
+                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseId))
+                    {
+                        addItem = filterValue == caseId;
+                    }
+
+                    if (addItem)
+                    {
+
+                        result.Add(new ViewModels.Comment
+                        {
+                            CaseId = item.CaseId,
+                            CommentDate = item.CommentDate.ToDateTimeOffset(),
+                            CommentId = item.CommentId,
+                            CommentText = item.CommentText,
+                            CommentTypeCode = item.CommentTypeCode,
+                            Driver = driver,
+                            SequenceNumber = item.SequenceNumber,
+                            UserId = item.UserId
+                        });
+                    }
+                }
+
+                if (sort != null)
+                {
+                    switch (sort)
+                    {
+                        case 'D': // - commentDate
+                            result = result.OrderByDescending(x => x.CommentDate).ToList();
+                            break;
+                        case 'T': // - commentTypeCode
+                            result = result.OrderBy(x => x.CommentTypeCode).ToList();
+                            break;
+                        case 'U': // - userId
+                            result = result.OrderBy(x => x.UserId).ToList();
+                            break;
+                        case 'C': // - commentText
+                            result = result.OrderBy(x => x.CommentText).ToList();
+                            break;
+                    }
+                }
+                return Json(result);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
+            /*
+            result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W",  CommentDate = DateTime.Now, CommentId = Guid.NewGuid().ToString(),
+                Driver = new ViewModels.Driver() { Flag51 = false, LastName = "LASTNAME", LicenseNumber = "01234567", LoadedFromICBC = false, MedicalIssueDate = DateTimeOffset.Now }, 
+                SequenceNumber = 0, UserId = "TESTUSER" });
+            */
+
+        }
+
+        /// <summary>
+        /// Get Comments for a driver
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+        /// <param name="filter">Optional numeric sequence number to filter results by.</param>
+        /// <param name="sort">Optional Char, one of 'D' - commentDate, 'T' - commentTypeCode, 'U' - userId, 'C' - commentText</param>
+        /// <returns></returns>
+        // GET: /Drivers/<DL>/Comments
+        [HttpGet("{licenseNumber}/AllComments")]
+        [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]        
+        public ActionResult GetAllComments([FromRoute] string licenseNumber, [FromQuery] string filter, [FromQuery] char sort)
         
         {            
             // call the back end
 
-            var reply = _cmsAdapterClient.GetDriverComments( new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber } );
+            var reply = _cmsAdapterClient.GetAllDriverComments( new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber } );
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -93,7 +186,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     bool addItem = true;
                     Guid filterValue;
                     Guid caseId;
-                    if (filter != null && Guid.TryParse(filter, out filterValue ) && Guid.TryParse(item.CaseId, out caseId))
+                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue ) && Guid.TryParse(item.CaseId, out caseId))
                     {
                         addItem = filterValue == caseId;
                     }
