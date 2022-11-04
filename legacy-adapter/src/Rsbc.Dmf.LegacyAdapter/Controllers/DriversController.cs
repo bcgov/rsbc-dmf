@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -241,6 +243,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         }
 
+        [HttpGet("test")]
+        [AllowAnonymous]
+        public ActionResult TestDoc()
+        {
+            var result = new ViewModels.Document();
+
+            result.FileContents = Encoding.ASCII.GetBytes("THIS IS A TEST");
+
+            return Json(result);
+        }
+
 
         [HttpGet("{licenseNumber}/Cases")]
         [ProducesResponseType(typeof(List<ViewModels.Case>), 200)]
@@ -382,6 +395,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpPost("{licenseNumber}/Documents")]
         // allow large uploads
         [DisableRequestSizeLimit]
+        [AllowAnonymous]
         public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
             // add the document
@@ -416,8 +430,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CaseId = document.CaseId,                
                 SequenceNumber = document.SequenceNumber,
                 UserId = document.UserId,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate),
-                ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate),
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
+                ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
                 Driver = driver,
                 DocumentTypeCode = document.DocumentTypeCode,
                 DocumentType = document.DocumentType,
