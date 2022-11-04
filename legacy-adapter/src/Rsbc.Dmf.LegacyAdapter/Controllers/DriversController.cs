@@ -405,7 +405,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 ContentType = "application/pdf",
                 Data = ByteString.CopyFrom(document.FileContents),
                 EntityName = "dfp_driver",
-                FileName = $"DMER.pdf",
+                FileName = $"{document.DocumentType}.pdf",
                 FolderName = document.CaseId,
             };
             var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
@@ -435,13 +435,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 Driver = driver,
                 DocumentTypeCode = document.DocumentTypeCode,
                 DocumentType = document.DocumentType,
-                BusinessArea = document.BusinessArea
+                BusinessArea = document.BusinessArea,
+                DocumentUrl = fileReply.FileName,
+
             });
 
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
                 return StatusCode(500, result.ErrorDetail);
             }
+
+            /*
 
             UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
             {
@@ -457,12 +461,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             // may need to add flags here.
 
             var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
+            */
 
             var actionName = nameof(CreateDocumentForDriver);
             var routeValues = new
             {
                 driversLicence = licenseNumber
             };
+
+            // reduce the data sent back.
+            document.FileContents = null;
 
             return CreatedAtAction(actionName, routeValues, document);
             
