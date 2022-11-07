@@ -16,8 +16,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request);
 
-        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);        
+        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);
 
+        Task<bool> DeleteLegacyDocument(string documentId);
+        
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
@@ -933,6 +935,28 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+
+        public async Task<bool> DeleteLegacyDocument(string documentId)
+        {
+            bool result = false;
+            LegacyDocument legacyDocument = null;
+
+            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            if (document != null)
+            {
+                // set to inactive.
+                document.statecode = 1;
+                document.statuscode = 2;
+            }
+
+            dynamicsContext.UpdateObject(document);
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
+
+            return result;
+
+        }
         private DecisionOutcome? TranslateDecisionOutcome(Guid? decisionId)
         {
             DecisionOutcome? result = null;

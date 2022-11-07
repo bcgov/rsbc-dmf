@@ -360,6 +360,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         LoadedFromICBC = false,
                         MedicalIssueDate = DateTimeOffset.Now
                     };
+
+                    bool isBcMailSent = false;
+
+                    if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
+                    {
+                        isBcMailSent = true;
+                    }
                     
                     result.Add(new ViewModels.Document
                     {
@@ -372,7 +379,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         BusinessArea = item.BusinessArea,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
+                        UserId = item.UserId,
+                        BcMailSent = isBcMailSent
                     });
                     
                 }
