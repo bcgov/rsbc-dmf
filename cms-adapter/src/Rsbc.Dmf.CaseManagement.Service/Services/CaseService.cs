@@ -116,7 +116,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<ResultStatusReply> DeleteLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> DeleteLegacyCaseDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
 
