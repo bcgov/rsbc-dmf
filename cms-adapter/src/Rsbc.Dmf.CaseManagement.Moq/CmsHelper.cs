@@ -181,13 +181,21 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                });
 
             mockClient
-               .Setup(m => m.GetLegacyDocument(It.IsAny<GetLegacyDocumentRequest>(), null, null, CancellationToken.None))
-               .Returns<GetLegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               .Setup(m => m.GetLegacyDocument(It.IsAny<LegacyDocumentRequest>(), null, null, CancellationToken.None))
+               .Returns<LegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
                {
 
                    LegacyDocument legacyDocument = new LegacyDocument() { DocumentUrl = a.DocumentId};
                    GetLegacyDocumentReply reply = new() { ResultStatus = ResultStatus.Success , Document = legacyDocument };
 
+                   return reply;
+               });
+
+            mockClient
+               .Setup(m => m.DeleteLegacyCaseDocument(It.IsAny<LegacyDocumentRequest>(), null, null, CancellationToken.None))
+               .Returns<ResultStatusReply, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               {                   
+                   ResultStatusReply reply = new() { ResultStatus = ResultStatus.Success };
                    return reply;
                });
 
