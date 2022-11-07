@@ -47,7 +47,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult GetDocumentMimeType([FromRoute] string documentId)
 
         {
-            var reply = _cmsAdapterClient.GetLegacyDocument(new GetLegacyDocumentRequest() { DocumentId = documentId });
+            var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -61,21 +61,57 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
         }
 
+        /// <summary>
+        /// Get Document Content
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        // GET: /Drivers/Exist
+        [HttpDelete("{documentId}")]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult DeleteDocument([FromRoute] string documentId)
 
-                /// <summary>
-                /// Get Document Content
-                /// </summary>
-                /// <param name="documentId"></param>
-                /// <returns></returns>
-                // GET: /Drivers/Exist
-                [HttpGet("{documentId}")]
+        {
+            // call the back end
+            var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // remove it from Dynamics.
+                var cmsDeleteReply = _cmsAdapterClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest() { DocumentId = documentId });
+
+                if (cmsDeleteReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {                            
+                    return Ok();
+                }
+                else
+                {
+                    return StatusCode(500, "Unexpected error - unable to remove document");
+                }
+            }
+            else
+            {
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+
+        /// <summary>
+        /// Get Document Content
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        // GET: /Drivers/Exist
+        [HttpGet("{documentId}")]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
         public ActionResult GetDocument([FromRoute] string documentId)
         
         {            
             // call the back end
-            var reply = _cmsAdapterClient.GetLegacyDocument( new GetLegacyDocumentRequest() { DocumentId = documentId } );
+            var reply = _cmsAdapterClient.GetLegacyDocument( new LegacyDocumentRequest() { DocumentId = documentId } );
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {

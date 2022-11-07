@@ -115,6 +115,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
+        public async override Task<ResultStatusReply> DeleteLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+
+            // fetch the document.
+            try
+            {
+                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                if (d != null)
+                {
+                    if (await _caseManager.DeleteLegacyDocument(request.DocumentId))
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+
+            return reply;
+        }
         public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -784,7 +810,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(GetLegacyDocumentRequest request, ServerCallContext context)
+        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
 

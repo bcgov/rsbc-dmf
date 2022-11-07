@@ -145,11 +145,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
         {
-
-            var queryResults = await caseManager.GetUnsentMedicalUpdates();
-
+            var queryResults = await caseManager.GetUnsentMedicalUpdates();            
             queryResults.Items.ShouldNotBeEmpty();
-
         }
 
 
