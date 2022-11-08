@@ -774,11 +774,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault(); 
-                    if (record == null)
-                    {
-                        
-                    }
+                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();                     
                     result = record;                    
                     
                 }
@@ -795,7 +791,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dfp_apidocumenttype = documentTypeCode,
                     dfp_code = documentTypeCode,
-                    dfp_name = documentType,
+                    dfp_name = documentType ?? documentTypeCode,
                     dfp_businessarea = ConvertStringToBusinessArea(businessArea)
                 };
 
