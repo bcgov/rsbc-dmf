@@ -1336,9 +1336,17 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
-                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+                .Where(i => i.statecode == 1);
 
-            if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
+            if (!string.IsNullOrEmpty(criteria.CaseId)) 
+            {
+                caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
+            }
+            else
+            {
+                caseQuery = caseQuery.Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+            }
+
             if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
             if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
