@@ -17,8 +17,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request);
 
-        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);        
+        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);
 
+        Task<bool> DeleteLegacyDocument(string documentId);
+        
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
@@ -617,6 +619,29 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        private int? ConvertStringToBusinessArea(string businessArea)
+        {
+            int? result = null;
+            if (businessArea != null)
+            {
+                switch (businessArea)
+                {
+                    case "Driver Fitness":
+                        result = 100000000;
+                        break;
+                    case "Remedial":
+                        result = 100000001;
+                        break;
+                    case "Client Services":
+                        result = 100000002;
+                        break;
+                }
+            }
+            return result;
+        }
+
+
         private string ConvertBusinessAreaToString(int? businessArea)
         {
             string result = "";
@@ -630,10 +655,14 @@ namespace Rsbc.Dmf.CaseManagement
                     case 100000001:
                         result = "Remedial";
                         break;
+                    case 100000002:
+                        result = "Client Services";
+                        break;
                 }
             }
             return result;
         }
+
 
         public async Task<IEnumerable<Driver>> GetDrivers()
         {
@@ -831,7 +860,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private dfp_submittaltype GetDocumentType(string documentTypeCode)
+        private dfp_submittaltype GetDocumentType(string documentTypeCode, string documentType, string businessArea)
         {
             // lookup the document Type Code
             dfp_submittaltype result = null;
@@ -839,15 +868,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault(); 
-                    if (record == null)
-                    {
-                        var newRecord = new dfp_submittaltype { dfp_apidocumenttype = documentTypeCode, dfp_code = documentTypeCode, dfp_name = $"NEW CODE {documentTypeCode}" };
-                        dynamicsContext.AddTodfp_submittaltypes(newRecord);
-                        dynamicsContext.SaveChanges();
-
-                        record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
-                    }
+                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();                     
                     result = record;                    
                     
                 }
@@ -856,6 +877,25 @@ namespace Rsbc.Dmf.CaseManagement
                     result = null;
                 }
             }
+
+            if (result == null)
+            {
+                // try to create.
+                var newRecord = new dfp_submittaltype()
+                {
+                    dfp_apidocumenttype = documentTypeCode,
+                    dfp_code = documentTypeCode,
+                    dfp_name = documentType ?? documentTypeCode,
+                    dfp_businessarea = ConvertStringToBusinessArea(businessArea)
+                };
+
+                dynamicsContext.AddTodfp_submittaltypes(newRecord);
+                dynamicsContext.SaveChanges();
+
+                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+
+            }
+
 
             return result;
         }
@@ -926,15 +966,20 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 // document type ID
-                var documentTypeId = GetDocumentType(request.DocumentTypeCode);
-
+                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
                 if (found) // update
                 {
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
+
+                        dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+
                         await dynamicsContext.SaveChangesAsync();
+
+
+
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                         dynamicsContext.DetachAll();
@@ -961,6 +1006,9 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                         }
 
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+
+
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
@@ -977,6 +1025,28 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+
+        public async Task<bool> DeleteLegacyDocument(string documentId)
+        {
+            bool result = false;
+            LegacyDocument legacyDocument = null;
+
+            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            if (document != null)
+            {
+                // set to inactive.
+                document.statecode = 1;
+                document.statuscode = 2;
+            }
+
+            dynamicsContext.UpdateObject(document);
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
+
+            return result;
+
+        }
         private DecisionOutcome? TranslateDecisionOutcome(Guid? decisionId)
         {
             DecisionOutcome? result = null;
@@ -1361,9 +1431,17 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
                 .Expand(i => i.ownerid)
-                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+                .Where(i => i.statecode == 1);
 
-            if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
+            if (!string.IsNullOrEmpty(criteria.CaseId)) 
+            {
+                caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
+            }
+            else
+            {
+                caseQuery = caseQuery.Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
+            }
+
             if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
             if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
             if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
