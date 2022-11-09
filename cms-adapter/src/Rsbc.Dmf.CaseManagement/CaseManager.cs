@@ -2,6 +2,7 @@
 using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +29,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<LegacyDocument> GetLegacyDocument(string documentId);
 
+        Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
+
         Task<IEnumerable<Driver>> GetDrivers();
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
@@ -41,7 +44,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null);
 
         Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
 
@@ -221,6 +224,30 @@ namespace Rsbc.Dmf.CaseManagement
         public DecisionOutcome? Outcome { get; set; }
     }
 
+    public class BringForwardRequest
+    {
+        public string CaseId { get; set; }
+        public string Assignee{ get; set; }
+        public string Subject { get; set; }
+        public string Description { get; set; }
+        public BringForwardPriority? Priority { get; set; }
+        
+    }
+
+    public enum BringForwardPriority
+    {
+        Low = 0,
+        Normal = 1,
+        High = 2
+
+    }
+
+    public class ResultStatusReply
+    {
+        public string Id;
+        public bool Success { get; set; }
+    }
+
     internal class CaseManager : ICaseManager
     {
         private readonly DynamicsContext dynamicsContext;
@@ -266,6 +293,13 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                 if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
             }
+
+            // load owner
+           /* if (@case._ownerid_value.HasValue)
+            {
+                //load driver info
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
+            }*/
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
@@ -648,6 +682,66 @@ namespace Rsbc.Dmf.CaseManagement
 
             return legacyDocument;
 
+        }
+
+        /// <summary>
+        /// Add BringForward to Task Entity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> CreateBringForward(BringForwardRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            string caseId = request.CaseId;
+
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                task newTask = new task()
+                {
+                    
+                    description = request.Description,
+                    subject = request.Subject,
+                    
+                   
+                };
+                // Get the case
+                var @case = GetIncidentById(caseId);
+
+                // Create a bring Forward
+                try
+                {
+                    dynamicsContext.AddTotasks(newTask);
+                    // set Case Id
+                    dynamicsContext.SetLink(newTask, nameof(task.regardingobjectid_incident), @case);
+                    // set the Assignee
+                    if (string.IsNullOrEmpty(request.Assignee) && @case.ownerid != null) 
+                    {
+                        
+                        // set the assignee to case owner
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid),@case.ownerid );
+
+                    };
+                   // TODO # Handle Assignee parameter in future
+ 
+
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    //result.Id = newTask.regardingobjectid_incident.ToString();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                    Log.Logger.Error(ex.Message);
+                }
+
+
+            }
+            return result;
         }
 
         private incident GetIncidentById(string id)
@@ -1266,6 +1360,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
+                .Expand(i => i.ownerid)
                 .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
@@ -1443,6 +1538,8 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+     
+
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
         {
             // add links to documents.
@@ -1532,7 +1629,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
+        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
             /* The structure for cases is
@@ -1778,6 +1875,8 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+       
     }
 
     internal enum CaseTypeOptionSet

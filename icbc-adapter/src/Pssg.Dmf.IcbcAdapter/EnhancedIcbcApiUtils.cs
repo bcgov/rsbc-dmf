@@ -88,7 +88,19 @@ namespace Rsbc.Dmf.IcbcAdapter
                         }
                         else
                         {
-                            // TODO - Add call to CMS Adapter to create a bring forward.
+                            var bringForwardRequest = new BringForwardRequest
+                            {
+                                CaseId = unsentItem.CaseId,
+                                Subject = "ICBC Error",
+                                Description = responseContent,
+                                Assignee = string.Empty,
+                                Priority = BringForwardPriority.Normal
+                            
+                            };
+                            
+                            var bringForwardReply = _caseManagerClient.CreateBringForward(bringForwardRequest);
+                            
+
                             LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
                         }
                         
