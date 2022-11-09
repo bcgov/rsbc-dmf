@@ -786,12 +786,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             ResultStatusReply reply = new ResultStatusReply();
 
-            // fetch the document.
             try
             {
+                var bringForwardRequest = new CaseManagement.BringForwardRequest()
+                {
+                    CaseId = request.CaseId ?? string.Empty,
+                    Assignee = request.Assignee ?? string.Empty,
+                    Description = request.Description?? string.Empty,                
+                    Subject = "ICBC Error",
+                    Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+                };
+                
                 // call _caseManager...
+                await _caseManager.CreateBringForward(bringForwardRequest);
 
-                throw new Exception();
+                reply.ResultStatus = ResultStatus.Success;
+                
             }
             catch (Exception e)
             {
