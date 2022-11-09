@@ -84,6 +84,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentId = request.DocumentId ?? string.Empty,
                 DocumentPages = (int) request.DocumentPages,
                 DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
                 FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
                 // may need to add FileSize,
@@ -113,6 +115,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
+        public async override Task<ResultStatusReply> DeleteLegacyCaseDocument(LegacyDocumentRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+
+            // fetch the document.
+            try
+            {
+                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                if (d != null)
+                {
+                    if (await _caseManager.DeleteLegacyDocument(request.DocumentId))
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+
+            return reply;
+        }
         public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -213,6 +241,45 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, false);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
+        public async override Task<GetCommentsReply> GetAllDriverComments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, true);
 
                 foreach (var item in result)
                 {
@@ -743,7 +810,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(GetLegacyDocumentRequest request, ServerCallContext context)
+        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
 
