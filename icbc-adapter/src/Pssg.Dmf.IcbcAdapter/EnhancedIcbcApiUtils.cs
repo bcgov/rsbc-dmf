@@ -98,7 +98,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             
                             };
                             
-                            var bringForwardReply = _caseManagerClient.CreateBringForward(bringForwardRequest);
+                            _caseManagerClient.CreateBringForward(bringForwardRequest);
                             
 
                             LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
