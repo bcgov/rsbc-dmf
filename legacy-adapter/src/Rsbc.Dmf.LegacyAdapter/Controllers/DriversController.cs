@@ -406,81 +406,97 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [AllowAnonymous]
         public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
-            // add the document
+            // first get the driver.
 
-            UploadFileRequest pdfData = new UploadFileRequest()
-            {
-                ContentType = "application/pdf",
-                Data = ByteString.CopyFrom(document.FileContents),
-                EntityName = "dfp_driver",
-                FileName = $"{document.DocumentType}.pdf",
-                FolderName = document.CaseId,
-            };
-            var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
+            var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
 
-            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
             {
-                return StatusCode(500, fileReply.ErrorDetail);   
+                var driverId = driverReply.Items.FirstOrDefault()?.Id;
+
+                // add the document
+                UploadFileRequest pdfData = new UploadFileRequest()
+                {
+                    ContentType = "application/pdf",
+                    Data = ByteString.CopyFrom(document.FileContents),
+                    EntityName = "dfp_driver",
+                    FileName = $"{document.DocumentType}.pdf",
+                    FolderName = driverId,
+                };
+                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    return StatusCode(500, fileReply.ErrorDetail);
+                }
+
+                var driver = new Driver()
+                {
+                    DriverLicenseNumber = licenseNumber
+                };
+
+                if (document.Driver != null)
+                {
+                    driver.Surname = document.Driver.LastName;
+                }
+
+                var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
+                {
+                    CaseId = document.CaseId,
+                    SequenceNumber = document.SequenceNumber,
+                    UserId = document.UserId,
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
+                    ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
+                    Driver = driver,
+                    DocumentTypeCode = document.DocumentTypeCode,
+                    DocumentType = document.DocumentType,
+                    BusinessArea = document.BusinessArea,
+                    DocumentUrl = fileReply.FileName,
+
+                });
+
+                if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                {
+                    return StatusCode(500, result.ErrorDetail);
+                }
+
+                /*
+
+                UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
+                {
+                    CaseId = document.CaseId,
+                    IsCleanPass = false,
+                    DataFileKey = string.Empty,
+                    DataFileSize = 0,
+                    PdfFileKey = fileReply.FileName,
+                    PdfFileSize = document.FileContents.Length,
+
+                };
+
+                // may need to add flags here.
+
+                var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
+                */
+
+                var actionName = nameof(CreateDocumentForDriver);
+                var routeValues = new
+                {
+                    driversLicence = licenseNumber
+                };
+
+                // reduce the data sent back.
+                document.FileContents = null;
+
+                return CreatedAtAction(actionName, routeValues, document);
             }
 
-            var driver = new Driver()
-            {
-                DriverLicenseNumber = licenseNumber
-            };
+            else
 
-            if (document.Driver != null)
             {
-                driver.Surname = document.Driver.LastName;
+                return StatusCode(500, driverReply.ErrorDetail);
             }
-
-            var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
-            {
-                CaseId = document.CaseId,                
-                SequenceNumber = document.SequenceNumber,
-                UserId = document.UserId,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
-                ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
-                Driver = driver,
-                DocumentTypeCode = document.DocumentTypeCode,
-                DocumentType = document.DocumentType,
-                BusinessArea = document.BusinessArea,
-                DocumentUrl = fileReply.FileName,
-
-            });
-
-            if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
-            {
-                return StatusCode(500, result.ErrorDetail);
-            }
-
-            /*
-
-            UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
-            {
-                CaseId = document.CaseId,
-                IsCleanPass = false,
-                DataFileKey = string.Empty,
-                DataFileSize = 0,
-                PdfFileKey = fileReply.FileName,
-                PdfFileSize = document.FileContents.Length,
-
-            };
-
-            // may need to add flags here.
-
-            var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
-            */
-
-            var actionName = nameof(CreateDocumentForDriver);
-            var routeValues = new
-            {
-                driversLicence = licenseNumber
-            };
-
-            // reduce the data sent back.
-            document.FileContents = null;
-
-            return CreatedAtAction(actionName, routeValues, document);
+            
             
         }
 
