@@ -31,6 +31,8 @@ service CaseManager {
 
   rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
 
+  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
+
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
 
   // Get a token given a secret.

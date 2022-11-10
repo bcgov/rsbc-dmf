@@ -30,6 +30,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<LegacyDocument> GetLegacyDocument(string documentId);
 
+        Task<IEnumerable<Driver>> GetDriver(string licensenumber);
+
         Task<IEnumerable<Driver>> GetDrivers();
 
         Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
@@ -626,6 +628,26 @@ namespace Rsbc.Dmf.CaseManagement
                         break;
                 }
             }
+            return result;
+        }
+
+
+        public async Task<IEnumerable<Driver>> GetDriver(string licensenumber)
+        {
+            List<Driver> result = new List<Driver>();
+
+            var @drivers = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
+
+            foreach (var item in @drivers)
+            {
+                Driver d = new Driver()
+                {
+                    DriverLicenseNumber = item.dfp_licensenumber,
+                    Surname = item.dfp_PersonId?.lastname
+                };
+                result.Add(d);
+            }
+
             return result;
         }
 
