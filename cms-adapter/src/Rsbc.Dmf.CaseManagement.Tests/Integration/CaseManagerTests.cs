@@ -145,7 +145,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateBringForward()
         {
-            var driverLicenseNumber = "111";
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
             // first do a search to get this case by title.
             var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
@@ -158,7 +158,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             {
                 CaseId = caseId,
                 Assignee = string.Empty,
-                Description = "Test Description",
+                Description = "Test Description1",
                 Subject = "ICBC Error",
                 Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
             };

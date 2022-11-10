@@ -860,15 +860,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     CaseId = request.CaseId ?? string.Empty,
                     Assignee = request.Assignee ?? string.Empty,
                     Description = request.Description?? string.Empty,                
-                    Subject = "ICBC Error",
+                    Subject = request.Subject ?? string.Empty,
                     Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
                 };
                 
                 // call _caseManager...
-                await _caseManager.CreateBringForward(bringForwardRequest);
+               var result =  await _caseManager.CreateBringForward(bringForwardRequest);
 
-                reply.ResultStatus = ResultStatus.Success;
-                
+                if(result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
             }
             catch (Exception e)
             {
