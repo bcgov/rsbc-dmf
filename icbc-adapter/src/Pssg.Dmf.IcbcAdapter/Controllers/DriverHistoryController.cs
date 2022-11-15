@@ -144,7 +144,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
+                return Json(null);
+                
+                //StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
             }
             
         }
