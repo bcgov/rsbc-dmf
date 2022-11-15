@@ -87,6 +87,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
                 else
                 {
+                    Serilog.Log.Error($"Unexpected error - unable to remove document {cmsDeleteReply.ErrorDetail}");
                     return StatusCode(500, "Unexpected error - unable to remove document");
                 }
             }
@@ -107,8 +108,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{documentId}")]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]        
-        public ActionResult GetDocument([FromRoute] string documentId)
-        
+        public ActionResult GetDocument([FromRoute] string documentId)        
         {            
             // call the back end
             var reply = _cmsAdapterClient.GetLegacyDocument( new LegacyDocumentRequest() { DocumentId = documentId } );
