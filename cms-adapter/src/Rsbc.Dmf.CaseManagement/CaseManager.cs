@@ -642,7 +642,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Driver d = new Driver()
                 {
-                    Id = item.dfp_driverid,
+                    Id = item.dfp_driverid.ToString(),
                     DriverLicenseNumber = item.dfp_licensenumber,
                     Surname = item.dfp_PersonId?.lastname
                 };
