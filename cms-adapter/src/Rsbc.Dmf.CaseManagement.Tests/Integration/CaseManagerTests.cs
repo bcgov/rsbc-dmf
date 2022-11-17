@@ -141,6 +141,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             await caseManager.UpdateNonComplyDocuments();
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateResolveCaseStatus()
+        {
+            await caseManager.ResolveCaseStatus();
+        }
+
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateBringForward()

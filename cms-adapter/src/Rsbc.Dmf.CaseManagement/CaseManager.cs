@@ -61,6 +61,8 @@ namespace Rsbc.Dmf.CaseManagement
         DateTimeOffset GetDpsProcessingDate();
 
         Task UpdateNonComplyDocuments();
+
+        Task ResolveCaseStatus();
     }
        
 
@@ -1619,6 +1621,31 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+        /// <summary>
+        /// Method to set the resolve case status
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task ResolveCaseStatus()
+        {
+
+           var dpsProcessingDate = GetDpsProcessingDate();
+
+            var resolveCase = dynamicsContext.incidents.Where(
+                 x => x.dfp_caseresolvedate < dpsProcessingDate
+                 ) ;
+
+            foreach (var incident in resolveCase)
+            {
+                // set resolve case status to yes
+                incident.dfp_resolvecase = true;
+
+                dynamicsContext.UpdateObject(incident);
+            }
+
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
+        }
 
 
         public async Task MarkMedicalUpdatesSent(List<string> ids)
