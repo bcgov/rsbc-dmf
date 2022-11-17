@@ -402,8 +402,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <returns></returns>
         [HttpPost("{licenseNumber}/Documents")]
         // allow large uploads
-        [DisableRequestSizeLimit]
-        [AllowAnonymous]
+        //[DisableRequestSizeLimit]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
             // first get the driver.
