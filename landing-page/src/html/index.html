@@ -54,11 +54,11 @@ h1 {
 	margin-bottom: 16px;
 }
 
-h2 {
+h2.large {
 	font-size: 30px;
 }
 
-h3 {
+h2 {
 	font-size: 24px;
 	margin-bottom: 16px;
 }
@@ -224,7 +224,7 @@ h3 {
 .container {
 	width: 1200px;
 	margin: 0 auto;
-	/*z-index: -10; Tanya hid this so link in hero image would work*/
+	/*z-index: -10; hiding and replacing with z index on container-background to get yellow border on bg to show*/
 }
 
 .container-alt {
@@ -233,12 +233,13 @@ h3 {
 }
 
 .container-background {
+	position: relative;
 	width: 1180px;
 	margin: 0 auto;
 	border-radius: 4px;
     background-color: #ecf5ff;
 	margin-top: -20px;
-	z-index: 100;
+	z-index: 1;
 	border-top: 5px solid #fcba19;
 	padding: 50px 30px;
 	height: 1730px;
@@ -273,7 +274,7 @@ h3 {
 }
 
 .hero__img {
-	margin-top: -60px;
+	margin-top: -220px;
 }
 
 .hero__content {
@@ -281,7 +282,10 @@ h3 {
 	top: 40px;
 	left: 40px;
 	color: #fff;
-	max-width: 573px;
+	max-width: 600px;
+	background-color: rgba(0,51,102,0.7);
+	border-radius: 10px;
+	padding: 10px;
 }
 
 .hero__content p {
@@ -332,6 +336,11 @@ h3 {
 }
 
 .medical-professionals h2 {
+	font-size: 24px;
+	margin-bottom: 16px;
+}
+
+.medical-professionals h3 {
 	font-size: 30px;
 	margin-bottom: 16px;
 }
@@ -395,11 +404,20 @@ h3 {
 }
 
 p.note {
-	text-align: center;
-	background: rgba(242, 242, 242, 0.32);
-	padding: 2px;
+	text-align: left;
+	border: 2px solid #f2f2f2;
 	border-radius: 4px;
+	padding: 4px;
 }
+/*
+p.note {
+	text-align: left;
+	border-color: #f2f2f2;
+	padding: 5px;
+	border-radius: 4px;
+	border-width: 2px;
+}
+*/
 
 .concerns hr {
 	width: 400px;
@@ -502,49 +520,41 @@ p.note {
 	<header class="site-header">
 		<div class="site-header__inner container">
 			<a href="/"><img class="site-logo" src="img/british-columbia-logo.svg" alt="British Columbia Logo"></a>
-			<div class="site-header__buttons">
-				<a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card"  target="_blank" class="BC-Gov-SecondaryButton-Dark spacer">Register</a>
-				<a href="rsbc-dfp-medical-portal"  target="_blank" class="BC-Gov-PrimaryButton-Dark">Login</a>
-			</div>
 		</div>
 	</header>
 
 	<main>
 		<section class="hero container">
-			<img class="hero__img" src="img/hero.svg" alt="">
-			<img class="hero__overlay" src="img/hero-overlay.svg" alt="">
+			<img class="hero__img" src="img/hero.jpg" alt="">
+			
 			<div class="hero__content">
-				<h1><span>RoadSafetyBC's</span><br>Driver Medical Fitness Portal</h1>
+				<h1><span>RoadSafetyBC's Driver Medical Fitness Portal for medical practitioners</span></h1>
 				<p>RoadSafetyBC is part of the Ministry of Public Safety and Solicitor General. This portal serves the medical community by:</p>
 				<ul>
 					<li>Modernizing BC's driver medical fitness process by providing an electronic Driver's Medical Examination Report (DMER)</li>
 					<li>Simplifying the process of completing, submitting and monitoring the status of a DMER</li>
 					<li>Enhancing public safety and contributing to <a class="--link-white-normal" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/strategy" target="_blank">RoadSafetyBC's Vision Zero goal</a></li>
 				</ul>
+
+			
+					
 			</div>
 		</section>
 
 		<div class="container-background">
-			<section class="medical-professionals">
-				<img class="medical-professional-icon center-item" src="img/medical-professionals-icon.svg" alt="Medical Professionals Icon">
-				<h3 class="center">Medical Professionals</h3>
+			<section class="medical-professionals">				
+				<img class="medical-professional-icon center-item" src="img/medical-professionals-icon.svg" alt="">
+				<h2 class="center">Medical Professionals</h2>
 				<hr class="center-item">
-				<h2 class="center">Has RoadSafetyBC required your patient to have a DMER completed?  Or do you want to check the status of a DMER you have submitted?</h2>
-				<p>If you are a medical practitioner, Medical Office Manager or Medical Office Assistant, click below to access the RoadSafetyBC Medical Practitioner Portal.</p>
-				<div class="medical-professionals__buttons">
-					<div>
-						<a class="BC-Gov-SecondaryButton-Dark" target="_blank" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/your-card/get-a-card">Register</a>
-						<a class="BC-Gov-PrimaryButton-Dark" target="_blank" href="rsbc-dfp-medical-portal">Login</a>
-					</div>
-				</div>				
-				<span class="center-item center"><strong>Missing DMER Case ID?</strong> <a class="--link-white"  href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/medical-prof" target="_blank">Find out options for the driver to obtain their DMER Case ID.</a></span>
-			</section>
+				<h3 class="center">Has RoadSafetyBC required your patient to have a DMER completed?  Or do you want to check the status of a DMER you have submitted?</h3>
+				<p>This portal is estimated to be available to medical practitioners in 2023. At that time if you are a medical practitioner, Medical Office Manager or Medical Office Assistant, you will be able to register for the RoadSafetyBC Medical Practitioner Portal in order to conduct DMERs online.</p>
+				</section>
 			
 			<section class="card-container">
 				<div class="ccmta">
 					<div>
-						<img class="ccmta-icon center-item" src="img/ccmta-icon.svg" alt="CCMTA Icon">
-						<h3 class="center">Medical Standards and Guidelines</h3>
+						<img class="ccmta-icon center-item" src="img/ccmta-icon.svg" alt="">
+						<h2 class="center">Medical Standards and Guidelines</h2>
 						<hr class="center-item">
 						<p>RoadSafetyBC follows the Canadian Council of Motor Transport Administrators (CCMTA) Medical Standards with B.C. Specific Guidelines when making driver medical fitness decisions.</p>
 						<p>Please refer to these guidelines when you have questions regarding which medical conditions may have an impact on your patient's fitness to drive.</p>
@@ -557,8 +567,8 @@ p.note {
 
 				<div class="concerns">
 					<div>
-						<img class="concern-icon center-item" src="img/concern-icon.svg" alt="Concern Icon">
-						<h3 class="center">Do you have a concern about a driver?</h3>
+						<img class="concern-icon center-item" src="img/concern-icon.svg" alt="">
+						<h2 class="center">Do you have a concern about a driver?</h2>
 						<hr class="center-item">
 						<p>If a patient has a medical condition that raises significant concern about their ability to safely operate a motor vehicle, please submit a Report of a Condition Affecting Fitness and Ability to Drive.
 						<p class="note">NOTE: Reporting a condition does not replace performing a medical assessment and submitting a DMER which RoadSafetyBC has required for your patient.</p>
@@ -572,25 +582,25 @@ p.note {
 			</section>
 
 			<section class="about">
-				<img class="about-icon center-item" src="img/about-icon.svg" alt="About Icon">
-				<h3 class="center">About RoadSafetyBC</h3>
+				<img class="about-icon center-item" src="img/about-icon.svg" alt="">
+				<h2 class="center">About RoadSafetyBC</h2>
 				<hr class="center-item">
 				<p>At RoadSafetyBC we are responsible for determining driver medical fitness. We require certain individuals to complete a DMER. We use DMERs to assess if a driver's medical condition affects their ability to drive safely.</p>
 				<p>Are you a driver?  Learn more about the Driver Medical Fitness process.</p>
 				<div class="center center-item">
-					<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness" target="_blank">Learn more</a>
+					<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness" target="_blank">More about RoadsafetyBC</a>
 				</div>				
 			</section>
 
 			<div class="assistance">
-				<img class="contact-icon" src="img/contact-icon.svg" alt="Contact Icon">
+				<img class="contact-icon" src="img/contact-icon.svg" alt="">
 				<div>
-					<h2>Need assistance?</h2>
+					<h2 class="large">Need assistance?</h2>
 					<p><strong>Contact RoadSafetyBC</strong><br>Hours of operation: Monday to Friday from 8am to 5pm</p>
 					
 					<div class="assistance__contacts">
-						<div><img class="phone-icon" src="img/phone-icon.svg">1-855 387-7747</div>
-						<div><img class="email-icon" src="img/email-icon.svg">RoadSafetyBC@gov.bc.ca</div>
+						<div><img class="phone-icon" src="img/phone-icon.svg" alt="Support phone number"><a href="tel:1-855 387-7747">1-855 387-7747</a></div>
+						<div><img class="email-icon" src="img/email-icon.svg" alt="Support email address"><a href="mailto:RoadSafetyBC@gov.bc.ca">RoadSafetyBC@gov.bc.ca</a></div>
 					</div>
 				</div>
 			</div>
