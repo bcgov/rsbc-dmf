@@ -402,7 +402,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <returns></returns>
         [HttpPost("{licenseNumber}/Documents")]
         // allow large uploads
-        //[DisableRequestSizeLimit]
+        [DisableRequestSizeLimit]
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
