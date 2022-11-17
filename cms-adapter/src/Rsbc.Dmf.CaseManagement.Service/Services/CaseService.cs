@@ -882,12 +882,28 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             ResultStatusReply reply = new ResultStatusReply();
 
-            // fetch the document.
             try
             {
+                var bringForwardRequest = new CaseManagement.BringForwardRequest()
+                {
+                    CaseId = request.CaseId ?? string.Empty,
+                    Assignee = request.Assignee ?? string.Empty,
+                    Description = request.Description?? string.Empty,                
+                    Subject = request.Subject ?? string.Empty,
+                    Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+                };
+                
                 // call _caseManager...
+               var result =  await _caseManager.CreateBringForward(bringForwardRequest);
 
-                throw new Exception();
+                if(result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
             }
             catch (Exception e)
             {

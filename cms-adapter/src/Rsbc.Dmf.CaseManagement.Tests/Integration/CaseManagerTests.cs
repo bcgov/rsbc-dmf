@@ -7,12 +7,14 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
 using System;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
     public class CaseManagerTests : WebAppTestBase
     {
         private readonly ICaseManager caseManager;
+       
 
         public CaseManagerTests(ITestOutputHelper output) : base(output)
         {
@@ -139,8 +141,37 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             await caseManager.UpdateNonComplyDocuments();
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateResolveCaseStatus()
+        {
+            await caseManager.ResolveCaseStatus();
+        }
 
-        
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateBringForward()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            // We need to get a valid case Id to test
+
+            var bringForwardRequest = new CaseManagement.BringForwardRequest()
+            {
+                CaseId = caseId,
+                Assignee = string.Empty,
+                Description = "Test Description1",
+                Subject = "ICBC Error",
+                Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+            };
+            var result = await caseManager.CreateBringForward(bringForwardRequest);
+            result.ShouldNotBeNull();
+            Assert.True(result.Success);
+        }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
