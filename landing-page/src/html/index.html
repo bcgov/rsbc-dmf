@@ -513,6 +513,39 @@ p.note {
 	text-align: center;
 	padding: 12px 0;
 }
+
+.popup{
+	background-color: #f2f2f2;
+	width: 520px;
+	padding: 30px 40px;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	left: 50%;
+	border-radius: 8px;
+	z-index: 9;
+	font-family: 'BC Sans',Arial,sans-serif;
+}
+
+.popup-header{
+    display: flex;
+	justify-content: center;
+	position: relative;
+}
+
+.popup button{
+	display: block;
+	margin: 0 0 20px auto;
+	background-color: transparent;
+	font-size: 30px;
+	color: #c5c5c5; 
+	border: none;
+	outline: none;
+	cursor: pointer;
+}
+.popup p{
+font-size: 14px;
+text-align: justify;
+}
 </style>
 </head>
 
@@ -534,13 +567,23 @@ p.note {
 					<li>Modernizing BC's driver medical fitness process by providing an electronic Driver's Medical Examination Report (DMER)</li>
 					<li>Simplifying the process of completing, submitting and monitoring the status of a DMER</li>
 					<li>Enhancing public safety and contributing to <a class="--link-white-normal" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/strategy" target="_blank">RoadSafetyBC's Vision Zero goal</a></li>
-				</ul>
-
-			
+				</ul>		
 					
 			</div>
 		</section>
 
+		<div class="popup">
+			<div class="popup-header">
+				<h2> Portal In Progress</h2>
+				<button id="close">&times;</button>
+				
+			</div>
+			
+			<p>RoadSafetyBC's Driver Medical Fitness Portal for medical practitioners is currently in progress.  You cannot register or login at this time. <br/>
+				However, you can access resources on this page to assist you with completing driver medical fitness forms.<br/>
+				This portal is estimated to be available to medical practitioners in 2023.</p>
+		</div>
+		
 		<div class="container-background">
 			<section class="medical-professionals">				
 				<img class="medical-professional-icon center-item" src="img/medical-professionals-icon.svg" alt="">
@@ -626,7 +669,14 @@ p.note {
 			</ul>
 		</div>
 	</footer>
-	<section class="site-copyright">Copyright © 2022 Province of British Columbia. All rights reserved.</section>
+	<section class="site-copyright">Copyright © 2023 Province of British Columbia. All rights reserved.</section>
 
+	<script>
+	 document.querySelector("#close").addEventListener
+	 ("click", function(){
+		document.querySelector(".popup").style.display = "none";
+	 });
+	</script>
 </body>
 </html>
+
