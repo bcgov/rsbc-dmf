@@ -123,7 +123,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
                 foreach (var item in comments)
                 {
-                    if (item.CommentText == comment.CommentText && item.Driver.LastName == comment.Driver.LastName)
+                    if (item.CommentText == comment.CommentText)
                     {
                         found = true;
                     }
@@ -139,36 +139,44 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 // ,"sequenceNumber":4,"commentTypeCode":"W","commentText":"test new one"}
 
 
+    private void SubmitCommentNoCase(string commentText, string commentTypeCode)
+    {
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
+
+            var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver()
+            { LicenseNumber = testDl, LastName = testSurcode };
+
+            var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment()
+            {
+                CommentText = commentText,
+                Driver = driver,
+                SequenceNumber = 4,
+                CommentTypeCode = commentTypeCode,
+                UserId = "IDIR\\TESTUSER",
+                CaseId = null
+            };
+
+            var stringContent = JsonConvert.SerializeObject(comment);
+
+            request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+
+
+        }
+
     [Fact]
     public async void DfwebSubmitCommentNoCase()
     {
         Login();
 
+        SubmitCommentNoCase("test new one", "W");
 
-        var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
-
-        var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver()
-        { LicenseNumber = testDl, LastName = testSurcode };
-
-        var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment()
-        {
-            CommentText = "test new one",
-            Driver = driver,
-            SequenceNumber = 4,
-            CommentTypeCode = "W",
-            UserId = "IDIR\\TESTUSER",
-            CaseId = null
-        };
-
-        var stringContent = JsonConvert.SerializeObject(comment);
-
-        request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
-
-        var response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-        var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
@@ -184,6 +192,50 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
+        /*
+        [Fact]
+        public async void DfwebTestCommentType()
+        {
+            Login();
+
+            string commentText = DateTime.Now.ToString() + " COMMENT TEST";
+
+            // W - Web Comments; D - Decision Notes; I - ICBC Comments; C - File Comments; N - Sticky Notes;
+
+            var commentTypes = new string[] { "W","D","I","C","N" };
+
+            foreach (var commentType in commentTypes)
+            {
+                SubmitCommentNoCase(commentText, commentType);
+            }
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment> commentResults = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment>>(responseContent);
+
+            List<string> foundTypes = new List<string>();
+
+            foreach (var item in commentResults)
+            {
+                if (item.CommentText == commentText)
+                {
+                    if (!foundTypes.Contains(item.CommentTypeCode))
+                    {
+                        foundTypes.Add(item.CommentTypeCode);
+                    }
+                }
+            }
+            Assert.Equal (foundTypes.Count, commentTypes.Length);
+
+        }
+        */
+
 
         [Fact]
         public async void DfwebGetCommentsFilter()
@@ -276,7 +328,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 Driver = driver,
                 SequenceNumber = 3,                
                 UserId = "IDIR\\TESTUSER",
-                CaseId = caseId
+                CaseId = caseId,
+                DocumentType = "Test",
+                DocumentTypeCode = "001",
+                BusinessArea = "Driver Fitness"
+
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);
@@ -290,12 +346,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             response.EnsureSuccessStatusCode();
         }
 
-        /*
+        
 
         [Fact]
         public async void DfcmsGetDocuments()
         {
-
             Login();
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
@@ -306,7 +361,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-        */
+       
 
         [Fact]
         public async void TestLoginRequired()
@@ -324,8 +379,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 // should be 401 if there was no login.
                 Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
             }
-            
-
         }
 
         [Fact]

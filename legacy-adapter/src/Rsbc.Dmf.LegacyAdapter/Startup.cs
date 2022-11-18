@@ -34,6 +34,7 @@ using System.Linq;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
+using Invio.Extensions.Authentication.JwtBearer;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -92,8 +93,13 @@ namespace Rsbc.Dmf.LegacyAdapter
                         IssuerSigningKey =
                             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
                     };
+                })
+                .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
+                {
+                    options.QueryStringParameterName = "access_token";
+                    //options.QueryStringBehavior = QueryStringBehaviors.Redact;
                 });
-                
+
             }
             else
             {
@@ -102,8 +108,15 @@ namespace Rsbc.Dmf.LegacyAdapter
             services.AddAuthorization();
 
             // basic REST controller 
-            services.AddProblemDetails(ConfigureProblemDetails)
+            services
+                
+                .AddProblemDetails(opts => {
+                    opts.ValidationProblemStatusCode = StatusCodes.Status400BadRequest;
+
+                })
+                
                 .AddControllers(options => {
+
                 // only allow anonymous access if there is no JWT secret...
                 if (_env.IsDevelopment() && string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
                 {
@@ -111,7 +124,11 @@ namespace Rsbc.Dmf.LegacyAdapter
                 }
                 options.EnableEndpointRouting = false;
 
-            });
+            })
+                
+              .AddProblemDetailsConventions();
+
+
             services.AddSwaggerGen(c =>
             {               
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC DMF Services for DPS, DFWEB and DFCMS", Version = "v1" });
@@ -214,6 +231,8 @@ namespace Rsbc.Dmf.LegacyAdapter
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -231,6 +250,7 @@ namespace Rsbc.Dmf.LegacyAdapter
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseJwtBearerQueryString();
             app.UseAuthorization();
 
             app.UseHealthChecks("/hc/ready", new HealthCheckOptions
@@ -303,7 +323,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
-            // Only include exception details in a development environment. There's really no nee
+            // Only include exception details in a development environment. There's really no need
             // to set this as it's the default behavior. It's just included here for completeness :)
             //options.IncludeExceptionDetails = (ctx, ex) => Environment.IsDevelopment();
             options.IncludeExceptionDetails = (ctx, ex) => true;
@@ -320,7 +340,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // Because exceptions are handled polymorphically, this will act as a "catch all" mapping, which is why it's added last.
             // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
-            options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
+            //options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
     }
 

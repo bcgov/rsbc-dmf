@@ -165,6 +165,28 @@ export class DashboardComponent implements OnInit {
     this.router.navigateByUrl('/caseDetails/' + this.searchedCase?.id);
   }
 
+
+  isScheduledAgeDmerType(dmerType: string)
+  {
+     return dmerType === 'Scheduled Age';
+  }
+
+  isCommercialDmerType(dmerType: string)
+  {
+     return dmerType === 'Commercial';
+  }
+
+  isKnownSuspectedDmerType(dmerType: string)
+  {
+    return dmerType === 'Known/Suspected Condition';
+  }
+
+  isSuspectedDmerType(dmerType: string)
+  {
+    return dmerType === 'Suspected Medical Condition';
+  }
+
+
   sortData(sort: Sort) {
     const data = this.showingDataInView.slice();
     if (!sort.active || sort.direction === '') {

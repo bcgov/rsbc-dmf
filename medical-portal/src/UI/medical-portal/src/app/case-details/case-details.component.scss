@@ -1,42 +1,103 @@
-.further-info{
-    padding: 30px;
+.further-info {
+  padding: 30px;
 }
 
-.info-icon {
-    vertical-align: middle;
-  }
+.mat-card-header {
+  height: 50px;
+}
 
-  .dmer-information{
-      padding: 30px;
-  }
+mat-card-title{
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+}
 
-  .footnote{
-    font-size: 12px;
-  }
+.dmer-information{
+  background-color: #ffffff;
+}
 
-  .dmer-type{
-    background-color: #fff;
-    border: 2px solid #fcba19;
-    padding: 2px;
-    border-radius: 4px;
-  }
+.further-info{
+  background-color: #ffffff;
+}
 
-  
+.mat-card-content{
+  background-color: #ffffff;
+  padding-left: 0px;
+}
+.page-desc {
+  background-color: #ffffff;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 10px;;
+
+  h1 {
+    color: rgb(0, 51, 102);
+    font-family: 'BC Sans Bold', 'BC Sans Regular', 'BC Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 60px;
+    font-style: normal;
+  }
+}
+
+.medical-professionals-icon {
+  vertical-align: middle;
+}
+
+.dmer-information {
+  padding: 30px;
+}
+
+.footnote {
+  //font-size: 12px;
+  margin-top: 12px;
+}
+
+.dmer-type {
+  background-color: #fff;
+  border: 2px solid #fcba19;
+  padding: 2px;
+  border-radius: 4px;
+}
+
 .list {
-    h2 {
-      font-weight: bold;
-      color: #003366;
-      font-size: 31px;
-      border-left: 3px solid #fcba19;
-      padding-left: 10px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-  
-    p {
-      padding-left: 13px;
-      font-size: 18px;
-      line-height: 1.6;
-    }
-  
+  h2 {
+    font-weight: bold;
+    color: #003366;
+    font-size: 31px;
+    border-left: 3px solid #fcba19;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
   }
+
+  p {
+    padding-left: 13px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+}
+
+.alert-toolbar {
+  display: flex;
+  width: 68%;
+  justify-content: space-between;
+  padding: 40px;
+  background-color: #eaf2fa;
+  border-color: #b8d4ee;
+  color: #4e6478;
+  border-radius: 8px;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+
+.download-button {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+  background-color: #fcba19;
+  color: black;
+}
