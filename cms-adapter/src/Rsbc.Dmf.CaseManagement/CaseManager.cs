@@ -838,6 +838,10 @@ namespace Rsbc.Dmf.CaseManagement
             // create the document.
             incident driverCase = GetIncidentById(request.CaseId);
 
+            // document type ID
+            var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+
+
             if (driverCase == null)
             {                
                 // create it.
@@ -862,7 +866,8 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgov_documenturl bcgovDocumentUrl = null;
                 foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
                 {
-                    if (doc.dfp_submittalstatus == 100000000) // open - required
+                    await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
+                    if (doc.dfp_submittalstatus == 100000000 && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
                     {
                         bcgovDocumentUrl = doc;
                         found = true;
@@ -894,8 +899,7 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
 
-                // document type ID
-                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+                
 
                 if (found) // update
                 {

@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -394,6 +396,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
 
+
+        public static string SanitizeKeyFilename(string data)
+        {
+
+            var invalidCharacters = Path.GetInvalidFileNameChars().ToList();
+            invalidCharacters.Add(' ');
+            invalidCharacters.Add('/');
+            invalidCharacters.Add('\\');
+
+            string result = new string(data
+                .Where(x => !invalidCharacters.Contains(x))
+                .ToArray());
+
+            return result;
+        }
+
         /// <summary>
         /// Add a document to a case
         /// </summary>
@@ -413,6 +431,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
             var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
 
+            string filename = SanitizeKeyFilename(document.DocumentType);
+
             if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
             {
                 var driverId = driverReply.Items.FirstOrDefault()?.Id;
@@ -423,7 +443,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ContentType = "application/pdf",
                     Data = ByteString.CopyFrom(document.FileContents),
                     EntityName = "dfp_driver",
-                    FileName = $"{document.DocumentType}.pdf",
+                    FileName = $"{filename}.pdf",
                     FolderName = driverId,
                 };
                 var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
@@ -442,7 +462,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     driver.Surname = document.Driver.LastName;
                 }
-
+                
                 var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
                 {
                     CaseId = document.CaseId,
