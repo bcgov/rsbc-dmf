@@ -47,11 +47,18 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// Document Type Code
         /// </summary>
         public string DocumentTypeCode { get; set; }
+        public string DocumentType { get; set; }
+        public string BusinessArea { get; set; }
 
         /// <summary>
         /// Date the document was made
         /// </summary>
-        public DateTimeOffset FaxReceivedDate { get; set; }
-        public DateTimeOffset ImportDate { get; set; }
+        public DateTimeOffset? FaxReceivedDate { get; set; }
+        public DateTimeOffset? ImportDate { get; set; }
+
+        /// <summary>
+        /// True if sent to BC Mail
+        /// </summary>
+        public bool? BcMailSent { get; set; }
     }
 }

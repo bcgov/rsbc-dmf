@@ -23,8 +23,8 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Sequence Number
         /// </summary>
-        [Required]
-        public long SequenceNumber { get; set;}
+        
+        public long? SequenceNumber { get; set;}
 
         /// <summary>
         /// Comment Type Code - typically "W" for DFWEB
@@ -51,6 +51,6 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Date the comment was made
         /// </summary>
-        public DateTimeOffset CommentDate { get; set; }
+        public DateTimeOffset? CommentDate { get; set; }
     }
 }

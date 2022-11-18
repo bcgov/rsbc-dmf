@@ -8,21 +8,39 @@ package CaseManagement;
 
 service CaseManager {
 
+  rpc CreateBringForward(BringForwardRequest) returns (ResultStatusReply);
+
   rpc CreateLegacyCaseComment (LegacyComment) returns (CreateStatusReply);
 
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
-  rpc GetLegacyDocument (GetLegacyDocumentRequest) returns (GetLegacyDocumentReply);
+  rpc DeleteLegacyCaseDocument (LegacyDocumentRequest) returns (ResultStatusReply);
+
+  rpc GetAllDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
+
+  // Get all the flags
+  rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
 
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
-  rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
-
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
+
+  rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
+
+  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
+
+  rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
+
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+
+  rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
+
+  rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 
   // process a line item from the legacy candidate list
   rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
@@ -30,20 +48,11 @@ service CaseManager {
   // Seach cases. Can also return a specific case.
   rpc Search (SearchRequest) returns (SearchReply);
 
-  // Get a token given a secret.
-  rpc GetToken (TokenRequest) returns (TokenReply);
+  rpc SetCasePractitionerClinic(SetCasePractitionerClinicRequest) returns (SetCasePractitionerClinicReply);
 
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
-  rpc SetCasePractitionerClinic(SetCasePractitionerClinicRequest) returns (SetCasePractitionerClinicReply);
-
-  // Get all the flags
-  rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
-
-  rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
-
-  rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 }
 
 message DriverLicenseRequest {
@@ -54,7 +63,7 @@ message CaseIdRequest {
 	string caseId= 1;
 }
 
-message GetLegacyDocumentRequest {
+message LegacyDocumentRequest {
 	string documentId=1;
 }
 
@@ -84,19 +93,21 @@ message LegacyComment {
 message LegacyDocument {
 	int64 SequenceNumber = 1;
 	string DocumentTypeCode = 2;
-	string DocumentUrl = 3;
-	string UserId = 4;
-	string CaseId = 5;
-	string DocumentId = 6;
-	google.protobuf.Timestamp FaxReceivedDate = 7;
-	google.protobuf.Timestamp ImportDate = 8;
-	string ImportId = 9;
-	Driver Driver = 10;
-	string BatchId = 11;
-	string OriginatingNumber = 12;
-	int64 DocumentPages = 13;
-	string ValidationMethod = 14;
-	string ValidationPrevious = 15;
+	string DocumentType = 3;
+	string BusinessArea = 4;
+	string DocumentUrl = 5;
+	string UserId = 6;
+	string CaseId = 7;
+	string DocumentId = 8;
+	google.protobuf.Timestamp FaxReceivedDate = 9;
+	google.protobuf.Timestamp ImportDate = 10;
+	string ImportId = 11;
+	Driver Driver = 12;
+	string BatchId = 13;
+	string OriginatingNumber = 14;
+	int64 DocumentPages = 15;
+	string ValidationMethod = 16;
+	string ValidationPrevious = 17;
 }
 
 message GetDocumentRequest {	
@@ -369,5 +380,20 @@ message IdListRequest {
 message ResultStatusReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
+}
+
+enum  BringForwardPriority{
+	Low = 0;
+	Normal = 1;
+	High = 2;
+}
+
+message BringForwardRequest {
+	string caseId = 1;
+	// if assignee is blank, assign to the Owner of the Case.
+	string assignee = 2; 
+	string subject = 3;
+	string description = 4;	
+	BringForwardPriority priority = 5;
 }
 

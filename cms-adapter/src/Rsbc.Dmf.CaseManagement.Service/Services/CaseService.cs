@@ -84,6 +84,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentId = request.DocumentId ?? string.Empty,
                 DocumentPages = (int) request.DocumentPages,
                 DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
                 FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
                 // may need to add FileSize,
@@ -113,6 +115,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
+        public async override Task<ResultStatusReply> DeleteLegacyCaseDocument(LegacyDocumentRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+
+            // fetch the document.
+            try
+            {
+                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                if (d != null)
+                {
+                    if (await _caseManager.DeleteLegacyDocument(request.DocumentId))
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+
+            return reply;
+        }
         public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -246,6 +274,45 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
+        public async override Task<GetCommentsReply> GetAllDriverComments(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyComments(request.DriverLicenseNumber, true);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Items.Add(new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)item.SequenceNumber,
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    });
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
         public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
@@ -259,14 +326,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     if (item.Driver != null)
                     {
                         driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
-                        driver.Surname = item.Driver.Surname;
+                        driver.Surname = item.Driver.Surname ?? string.Empty;
                     }
                     reply.Items.Add(new LegacyDocument
                     {
                         BatchId = item.BatchId,
-                        CaseId = item.CaseId,
+                        BusinessArea = item.BusinessArea,
+                        CaseId = item.CaseId ?? string.Empty,
                         DocumentPages = item.DocumentPages,
                         DocumentId = item.DocumentId,
+                        DocumentType = item.DocumentType ?? string.Empty,
                         DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
                         DocumentUrl = item.DocumentUrl ?? string.Empty,
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
@@ -305,6 +374,36 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.DriverLicenseNumber;
                         driver.Surname = item.Surname ?? string.Empty;
+                    }
+                    reply.Items.Add(driver);
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
+
+        public async override Task<GetDriversReply> GetDriver(DriverLicenseRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriversReply();
+            try
+            {
+                var result = await _caseManager.GetDriver(request.DriverLicenseNumber);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item != null && item.DriverLicenseNumber != null)
+                    {
+                        driver.DriverLicenseNumber = item.DriverLicenseNumber;
+                        driver.Surname = item.Surname ?? string.Empty;
+                        driver.Id = item.Id;
                     }
                     reply.Items.Add(driver);
                 }
@@ -741,7 +840,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(GetLegacyDocumentRequest request, ServerCallContext context)
+        public async override Task<GetLegacyDocumentReply> GetLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
 
@@ -775,9 +874,43 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = e.Message;
             }
             
-            
+
+            return reply;
+        }
 
 
+        public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply();
+
+            try
+            {
+                var bringForwardRequest = new CaseManagement.BringForwardRequest()
+                {
+                    CaseId = request.CaseId ?? string.Empty,
+                    Assignee = request.Assignee ?? string.Empty,
+                    Description = request.Description?? string.Empty,                
+                    Subject = request.Subject ?? string.Empty,
+                    Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+                };
+                
+                // call _caseManager...
+               var result =  await _caseManager.CreateBringForward(bringForwardRequest);
+
+                if(result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
 
             return reply;
         }

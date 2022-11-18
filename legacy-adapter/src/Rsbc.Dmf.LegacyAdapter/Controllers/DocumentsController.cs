@@ -40,21 +40,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
 
-        private string GetMimeType (string filename)
-        {
-            string mimetype = "application/pdf";
-            if (!string.IsNullOrEmpty(filename))
-            {
-                string extension = Path.GetExtension(filename);
-
-                if (extension != null && (".tif" == extension.ToLower() || ".tiff" == extension.ToLower()))
-                {
-                    mimetype = "image/tiff";
-                }
-            }
-            
-            return mimetype;
-        }
 
         [HttpGet("{documentId}/mimetype")]
         [ProducesResponseType(401)]
@@ -62,12 +47,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult GetDocumentMimeType([FromRoute] string documentId)
 
         {
-            var reply = _cmsAdapterClient.GetLegacyDocument(new GetLegacyDocumentRequest() { DocumentId = documentId });
+            var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                string mimetype = GetMimeType(filename);
+                string mimetype = MimeUtils.GetMimeType(filename);
                 return Json(mimetype);
             }
             else
@@ -76,27 +61,60 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
         }
 
-
-                /// <summary>
-                /// Get Document Content
-                /// </summary>
-                /// <param name="documentId"></param>
-                /// <returns></returns>
-                // GET: /Drivers/Exist
-                [HttpGet("{documentId}")]
+        /// <summary>
+        /// Get Document Content
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        // GET: /Drivers/Exist
+        [HttpDelete("{documentId}")]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]        
-        public ActionResult GetDocument([FromRoute] string documentId)
-        
-        {            
+        [ProducesResponseType(500)]
+        public ActionResult DeleteDocument([FromRoute] string documentId)
+
+        {
             // call the back end
-            var reply = _cmsAdapterClient.GetLegacyDocument( new GetLegacyDocumentRequest() { DocumentId = documentId } );
+            var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
+                // remove it from Dynamics.
+                var cmsDeleteReply = _cmsAdapterClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest() { DocumentId = documentId });
 
-                byte[] fileContents= Array.Empty<byte>();
+                if (cmsDeleteReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {                            
+                    return Ok();
+                }
+                else
+                {
+                    Serilog.Log.Error($"Unexpected error - unable to remove document {cmsDeleteReply.ErrorDetail}");
+                    return StatusCode(500, "Unexpected error - unable to remove document");
+                }
+            }
+            else
+            {
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
 
+
+        /// <summary>
+        /// Get Document Content
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        // GET: /Drivers/Exist
+        [HttpGet("{documentId}")]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]        
+        public ActionResult GetDocument([FromRoute] string documentId)        
+        {            
+            // call the back end
+            var reply = _cmsAdapterClient.GetLegacyDocument( new LegacyDocumentRequest() { DocumentId = documentId } );
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
                 if (! string.IsNullOrEmpty(reply.Document?.DocumentUrl))
                 {
                     // fetch the file from S3
@@ -107,19 +125,30 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     var documentReply = _documentStorageAdapterClient.DownloadFile(downloadFileRequest);
                     if (documentReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                     {
-                        fileContents = documentReply.Data.ToByteArray();
+                        byte[] fileContents = documentReply.Data.ToByteArray();
+                        string fileName = Path.GetFileName(reply.Document.DocumentUrl);
+                        string mimetype = MimeUtils.GetMimeType(fileName);
+                        Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
+                        Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
+                        return new FileContentResult(fileContents, mimetype)
+                        {
+                            FileDownloadName = $"{fileName}"
+                        };                        
                     }
-                    
+                    else
+                    {
+                        Serilog.Log.Error($"Unexpected error - unable to fetch file from storage - {reply.ErrorDetail}");
+                        return StatusCode(500, "Unexpected error - unable to fetch file from storage");
+                    }                    
                 }
-                string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                string mimetype = GetMimeType(filename);
-                Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={filename}");
-                Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
-                return new FileContentResult(fileContents, mimetype);
+                else
+                {
+                    return StatusCode(500, "Unexpected error - document URL is missing from document object");
+                }                
             }
             else
             {
-                Serilog.Log.Error(reply.ErrorDetail);
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }

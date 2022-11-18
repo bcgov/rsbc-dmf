@@ -168,8 +168,78 @@ namespace Pssg.DocumentStorageAdapter.Tests
 
         }
 
-        
-        
+
+        /// <summary>
+        /// Test the MS Dynamics interface
+        /// </summary>
+        [Fact]
+        public async void UploadDownloadTest()
+        {
+            S3 s3 = new S3(Configuration);
+
+            Random random = new Random();
+
+            string testString = "test";
+
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/file/upload");
+
+            Upload upload = new Upload()
+            {
+                Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(testString)),
+                ContentType = "text/plain",
+                EntityId = Guid.NewGuid(),
+                EntityName = "contact",
+                FileName = "upload-test" + random.Next().ToString(),
+                Tag1 = "TEST-TAG1",
+                Tag2 = "TEST-TAG2",
+                Tag3 = "TEST-TAG3"
+            };
+
+            string expectedFilename = s3.GetServerRelativeUrl(s3.GetDocumentListTitle(upload.EntityName),
+                $"{upload.EntityId}", upload.FileName);
+
+            string jsonString = JsonConvert.SerializeObject(upload);
+
+            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
+
+            // parse as JSON.
+            jsonString = await response.Content.ReadAsStringAsync();
+            Download download = JsonConvert.DeserializeObject<Download>(jsonString);
+
+            // filename should match.
+            Assert.Equal(expectedFilename, download.FileUrl);
+
+            // download the file
+
+            request = new HttpRequestMessage(HttpMethod.Post, "/file/download");
+            jsonString = JsonConvert.SerializeObject(download);
+            request.Content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
+
+            // content should match
+            /* test for download as file
+            string result = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            Assert.Equal(result, testString);
+            */
+
+            // test for download as object
+            jsonString = await response.Content.ReadAsStringAsync();
+            Upload received = JsonConvert.DeserializeObject<Upload>(jsonString);
+
+            Assert.Equal(Convert.FromBase64String(received.Body), Encoding.ASCII.GetBytes(testString));
+
+
+        }
+
+
+
 
     }
 }
