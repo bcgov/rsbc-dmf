@@ -97,7 +97,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public void GetUnsentMedicalUpdates()
         {
-            var unsentItems = CaseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            var unsentItems = CaseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
         }
 
         [Fact]

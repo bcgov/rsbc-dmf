@@ -247,7 +247,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             // construct the medical update file
             string fileName = GetMedicalUpdateFilename(folder);
 
-            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
 
             var updateList = GetMedicalUpdateData(unsentItems);
 

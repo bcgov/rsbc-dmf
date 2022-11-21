@@ -36,6 +36,8 @@ using Serilog.Context;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Newtonsoft.Json.Serialization;
+using Rsbc.Dmf.CaseManagement.Service;
+using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -228,7 +230,7 @@ namespace Rsbc.Dmf.Scheduler
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
-                /*
+
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
                     var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
@@ -247,11 +249,58 @@ namespace Rsbc.Dmf.Scheduler
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
                     }
+
+                   
                 }
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
-                */
+
+            }
+
+            // Add ICBC Adapter
+            string icbcAdapterURI = Configuration["ICBC_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(icbcAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                if (!string.IsNullOrEmpty(Configuration["ICBC_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    {
+                        Secret = Configuration["ICBC_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+
+
+                }
+
+                var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                services.AddTransient(_ => new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(channel));
+
             }
 
         }
@@ -425,6 +474,11 @@ namespace Rsbc.Dmf.Scheduler
                     {
                         interval = (Configuration["QUEUE_CHECK_INTERVAL"]);
                     }
+
+                    var schedulerJobClient = serviceScope.ServiceProvider.GetService<ScheduledJobs>();
+                    var icbcClient = serviceScope.ServiceProvider.GetService<IcbcAdapterClient>();
+
+
                     /*
                      * REPLACE all of this with GRPC calls to the adapters...
                      * 
@@ -441,7 +495,8 @@ namespace Rsbc.Dmf.Scheduler
                                         RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient, icbcClient).SendMedicalUpdates(null), Cron.Never);
                     */
 
-                    RecurringJob.AddOrUpdate(() => new ScheduledJobs().ExampleJob(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient).CheckForCandidates(null), Cron.Never);
+
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }
