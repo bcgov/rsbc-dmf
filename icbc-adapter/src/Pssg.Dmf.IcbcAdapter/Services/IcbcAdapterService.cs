@@ -8,10 +8,14 @@ using System.Threading.Tasks;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Hangfire;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Pssg.Interfaces;
+using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 
 namespace Rsbc.Dmf.IcbcAdapter.Services
@@ -22,11 +26,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<IcbcAdapterService> _logger;
+        private readonly CaseManager.CaseManagerClient _caseManagerClient;
+        private readonly IIcbcClient _icbcClient;
 
-        public IcbcAdapterService(ILogger<IcbcAdapterService> logger, IConfiguration configuration)
+
+        public IcbcAdapterService(ILogger<IcbcAdapterService> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _logger = logger;
+            _caseManagerClient = caseManagerClient;
+            _icbcClient = icbcClient;
         }
 
         public override Task<DriverInfoReply> GetDriverInfo(DriverInfoRequest request, ServerCallContext context)
@@ -34,6 +43,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             var result = new DriverInfoReply();
             
             // call the client
+
+            return Task.FromResult(result);
+        }
+
+        public override Task<ResultStatusReply> ProcessMedicalStatusUpdates(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            // process medical status updates
+
+            var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
+                enhancedIcbcUtils.SendMedicalUpdates(null).GetAwaiter().GetResult();
 
             return Task.FromResult(result);
         }
@@ -67,6 +88,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
 
             return Task.FromResult(result);
         }
+
 
     }
 }
