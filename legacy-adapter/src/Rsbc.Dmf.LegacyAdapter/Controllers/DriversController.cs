@@ -286,9 +286,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
     /// <param name="comment"></param>
     /// <returns></returns>
     [HttpPost("{licenseNumber}/Comments")]
-        [ProducesResponseType(201)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+    [ProducesResponseType(201)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(500)]
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment )
         {
             // add the comment
