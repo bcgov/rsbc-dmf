@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
     /// </summary>
     [ApiController]
     [Route("[controller]")]
-    [Produces("application/json")] 
+    [Produces("application/json")]
     public class DriversController : Controller
     {
         private readonly IConfiguration _configuration;
@@ -56,7 +56,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             bool result = false;
             // get the case                                                
-            return Json (result);
+            return Json(result);
         }
 
         /// <summary>
@@ -163,13 +163,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{licenseNumber}/AllComments")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]        
+        [ProducesResponseType(500)]
         public ActionResult GetAllComments([FromRoute] string licenseNumber, [FromQuery] string filter, [FromQuery] char sort)
-        
-        {            
+
+        {
             // call the back end
 
-            var reply = _cmsAdapterClient.GetAllDriverComments( new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber } );
+            var reply = _cmsAdapterClient.GetAllDriverComments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -182,16 +182,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ViewModels.Driver driver = new ViewModels.Driver()
                     {
                         LicenseNumber = licenseNumber,
-                        Flag51 = false, 
-                        LastName = item.Driver.Surname, 
-                        LoadedFromICBC = false, 
-                        MedicalIssueDate = DateTimeOffset.Now 
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
                     };
 
                     bool addItem = true;
                     Guid filterValue;
                     Guid caseId;
-                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue ) && Guid.TryParse(item.CaseId, out caseId))
+                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseId))
                     {
                         addItem = filterValue == caseId;
                     }
@@ -229,7 +229,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         case 'C': // - commentText
                             result = result.OrderBy(x => x.CommentText).ToList();
                             break;
-                    }                 
+                    }
                 }
                 return Json(result);
             }
@@ -269,7 +269,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 List<ViewModels.Case> result = new List<ViewModels.Case>();
                 foreach (var item in reply.Items)
                 {
-                    result.Add(new ViewModels.Case() { CaseId = item.CaseId});
+                    result.Add(new ViewModels.Case() { CaseId = item.CaseId });
                 }
                 return Json(result);
             }
@@ -279,29 +279,29 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
         }
 
-    /// <summary>
-    /// Add a comment to a case
-    /// </summary>
-    /// <param name="licenseNumber"></param>
-    /// <param name="comment"></param>
-    /// <returns></returns>
-    [HttpPost("{licenseNumber}/Comments")]
-    [ProducesResponseType(201)]
-    [ProducesResponseType(401)]
-    [ProducesResponseType(500)]
-        public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment )
+        /// <summary>
+        /// Add a comment to a case
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+        /// <param name="comment"></param>
+        /// <returns></returns>
+        [HttpPost("{licenseNumber}/Comments")]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
             // add the comment
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = licenseNumber                
+                DriverLicenseNumber = licenseNumber
             };
 
             if (comment.Driver != null)
-            {                
+            {
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
-            }            
+            }
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
@@ -338,7 +338,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{licenseNumber}/Documents")]
         [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]        
+        [ProducesResponseType(500)]
         public ActionResult GetDocuments([FromRoute] string licenseNumber)
         {
             // call the back end
@@ -369,12 +369,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         isBcMailSent = true;
                     }
-                    
+
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
                         FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
-                        ImportDate = item.ImportDate.ToDateTimeOffset(),                        
+                        ImportDate = item.ImportDate.ToDateTimeOffset(),
                         DocumentId = item.DocumentId,
                         DocumentType = item.DocumentType,
                         DocumentTypeCode = item.DocumentTypeCode,
@@ -384,7 +384,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         UserId = item.UserId,
                         BcMailSent = isBcMailSent
                     });
-                    
+
                 }
 
                 return Json(result);
@@ -419,13 +419,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="document">The document to add</param>
         /// <returns></returns>
         [HttpPost("{licenseNumber}/Documents")]
-        // allow large uploads
-        [DisableRequestSizeLimit]
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]   
+        [ProducesResponseType(500)]
 
-        public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
+        public ActionResult CreateDriverDocument([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
             // first get the driver.
 
@@ -463,11 +461,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     driver.Surname = document.Driver.LastName;
                 }
-                
+
                 var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
                 {
                     CaseId = document.CaseId,
-                    SequenceNumber = document.SequenceNumber,
+                    SequenceNumber = document.SequenceNumber ?? 0,
                     UserId = document.UserId,
                     FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
                     ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
@@ -502,7 +500,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
                 */
 
-                var actionName = nameof(CreateDocumentForDriver);
+                var actionName = nameof(CreateDriverDocument);
                 var routeValues = new
                 {
                     driversLicence = licenseNumber
@@ -519,9 +517,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 return StatusCode(500, driverReply.ErrorDetail);
             }
-            
-            
         }
-
     }
 }
