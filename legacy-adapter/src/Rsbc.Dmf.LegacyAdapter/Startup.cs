@@ -245,7 +245,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("v1/swagger.json", "RSBC DMF Services for DPS, DFWEB and DFCMS"));
                 IdentityModelEventSource.ShowPII = true;
             }
-
+            app.UseHttpLogging();
             app.UseProblemDetails();
             app.UseForwardedHeaders();
             app.UseRouting();
