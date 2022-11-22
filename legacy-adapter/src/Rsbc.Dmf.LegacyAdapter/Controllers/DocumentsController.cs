@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -62,11 +63,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
         /// <summary>
-        /// Get Document Content
+        /// Delete a document
         /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
-        // GET: /Drivers/Exist
+        // DELETE: /Documents/{DocumentId}
         [HttpDelete("{documentId}")]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -88,7 +89,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 else
                 {
                     Serilog.Log.Error($"Unexpected error - unable to remove document {cmsDeleteReply.ErrorDetail}");
-                    return StatusCode(500, "Unexpected error - unable to remove document");
+                    return StatusCode(500, $"Unexpected error - unable to remove document {cmsDeleteReply.ErrorDetail}");
                 }
             }
             else
