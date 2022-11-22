@@ -338,7 +338,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("{licenseNumber}/Documents")]
         [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(500)]        
         public ActionResult GetDocuments([FromRoute] string licenseNumber)
         {
             // call the back end
@@ -423,7 +423,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [DisableRequestSizeLimit]
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(500)]   
+
         public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
             // first get the driver.
