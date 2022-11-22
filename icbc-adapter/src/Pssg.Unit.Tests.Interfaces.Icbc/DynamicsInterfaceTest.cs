@@ -19,10 +19,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var request = new HttpRequestMessage(HttpMethod.Get, "/DriverHistory?driversLicence=" + testDl);
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
 
             // parse as JSON.
             var jsonString = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+
+            
 
             Driver clientResult = JsonConvert.DeserializeObject<Driver>(jsonString);
 

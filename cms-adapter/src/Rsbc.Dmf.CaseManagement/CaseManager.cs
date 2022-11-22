@@ -631,12 +631,17 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public IEnumerable<dfp_driver> GetDriverObjects(string licensenumber)
+        {
+            var result = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();   
+            return result;
+        }
 
         public async Task<IEnumerable<Driver>> GetDriver(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
 
-            var @drivers = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
+            var @drivers = GetDriverObjects(licensenumber);
 
             foreach (var item in @drivers)
             {
@@ -838,6 +843,18 @@ namespace Rsbc.Dmf.CaseManagement
             // create the document.
             incident driverCase = GetIncidentById(request.CaseId);
 
+            // get the driver
+            var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+
+            bool driverMismatch = false;
+
+            if (driverCase != null && driver.dfp_driverid != driverCase._dfp_driverid_value)
+            {
+                // driver mismatch
+                driverMismatch = true;
+            }
+
+
             // document type ID
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
@@ -899,8 +916,6 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
 
-                
-
                 if (found) // update
                 {
                     try
@@ -908,11 +923,9 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
 
                         dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
-
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+                        
                         await dynamicsContext.SaveChangesAsync();
-
-
-
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                         dynamicsContext.DetachAll();
@@ -934,12 +947,11 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                         }
 
-                        if (driverCase != null)
+                        if (!driverMismatch && driverCase != null)
                         {
-                            dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                            dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);                                
                         }
-
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
 
 
                         await dynamicsContext.SaveChangesAsync();

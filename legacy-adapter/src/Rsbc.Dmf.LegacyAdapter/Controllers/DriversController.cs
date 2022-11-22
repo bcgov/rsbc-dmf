@@ -339,6 +339,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
         public ActionResult GetDocuments([FromRoute] string licenseNumber)
         {
             // call the back end
@@ -424,6 +425,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
+        [AllowAnonymous]
+
         public ActionResult CreateDocumentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Document document)
         {
             // first get the driver.
