@@ -988,7 +988,7 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.UpdateObject(document);
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
-
+            result = true;
             return result;
 
         }
