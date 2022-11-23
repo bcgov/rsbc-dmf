@@ -326,7 +326,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                return StatusCode(500);
+                _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+                return StatusCode(500, result.ErrorDetail);
             }
         }
 
