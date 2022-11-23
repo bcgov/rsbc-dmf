@@ -883,6 +883,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 catch (Exception ex)
                 {
+                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error");
                     result.Success = false;
                 }
             }           
@@ -915,9 +916,14 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dfp_apidocumenttype = documentTypeCode,
                     dfp_code = documentTypeCode,
-                    dfp_name = documentType ?? documentTypeCode,
-                    dfp_businessarea = ConvertStringToBusinessArea(businessArea)
+                    dfp_name = documentType ?? documentTypeCode                    
                 };
+
+                if (businessArea != null)
+                {
+                    newRecord.dfp_businessarea = ConvertStringToBusinessArea(businessArea);
+                }
+
 
                 dynamicsContext.AddTodfp_submittaltypes(newRecord);
                 dynamicsContext.SaveChanges();
