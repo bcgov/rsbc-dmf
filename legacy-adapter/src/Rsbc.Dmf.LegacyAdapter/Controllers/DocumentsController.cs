@@ -67,8 +67,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
-        // DELETE: /Documents/{DocumentId}
-        [HttpDelete("{documentId}")]
+        // POST: /Documents/Delete/{DocumentId}
+        [HttpPost("Delete/{documentId}")]
+        [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public ActionResult DeleteDocument([FromRoute] string documentId)
