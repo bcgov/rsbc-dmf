@@ -768,7 +768,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     createdon = DateTimeOffset.Now,
                     dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
-                    dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
+                    //dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText
                 };
