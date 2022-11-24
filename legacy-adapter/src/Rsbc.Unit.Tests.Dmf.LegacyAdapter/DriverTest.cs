@@ -329,8 +329,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 3,                
                 UserId = "IDIR\\TESTUSER",
                 CaseId = caseId,
-                DocumentType = "Test",
-                DocumentTypeCode = "001",
+                DocumentType = "CFSI13 Test",
+                DocumentTypeCode = "CFSI13",
                 BusinessArea = "Driver Fitness"
 
             };
