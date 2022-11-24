@@ -85,7 +85,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 if (cmsDeleteReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {                            
-                    return Ok();
+                    return Ok("Success");
                 }
                 else
                 {
