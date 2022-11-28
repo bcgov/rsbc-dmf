@@ -38,6 +38,7 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Newtonsoft.Json.Serialization;
 using Rsbc.Dmf.CaseManagement.Service;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -477,6 +478,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     var schedulerJobClient = serviceScope.ServiceProvider.GetService<ScheduledJobs>();
                     var icbcClient = serviceScope.ServiceProvider.GetService<IcbcAdapterClient>();
+                    var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
 
 
                     /*
@@ -495,7 +497,9 @@ namespace Rsbc.Dmf.Scheduler
                                         RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient, icbcClient).SendMedicalUpdates(null), Cron.Never);
                     */
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient).CheckForCandidates(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).SendMedicalUpdates(null), Cron.Never);
+
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).ResolveCaseStatus(null), Cron.Never);  
 
 
                     Log.Logger.Information("Hangfire jobs setup.");

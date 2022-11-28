@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -62,7 +63,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task UpdateNonComplyDocuments();
 
-        Task ResolveCaseStatus();
+        Task ResolveCaseStatusUpdates();
+
+        Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
+
+        Task <bool> SetCaseStatus(string caseId , bool caseStatus);  
     }
        
 
@@ -798,7 +803,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private incident GetIncidentById(string id)
+        protected incident GetIncidentById(string id)
         {
             incident result = null;
             if (!string.IsNullOrEmpty(id))
@@ -1631,16 +1636,16 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <returns></returns>
 
-        public async Task ResolveCaseStatus()
+        public async Task ResolveCaseStatusUpdates()
         {
 
            var dpsProcessingDate = GetDpsProcessingDate();
 
-            var resolveCase = dynamicsContext.incidents.Where(
+            var resolveCases = dynamicsContext.incidents.Where(
                  x => x.dfp_caseresolvedate < dpsProcessingDate
                  ) ;
 
-            foreach (var incident in resolveCase)
+            foreach (var incident in resolveCases)
             {
                 // set resolve case status to yes
                 incident.dfp_resolvecase = true;
@@ -1652,7 +1657,73 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+        /// <summary>
+        /// Set Case Resolve Date
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <param name="resolvedDate"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate)
+        {
+            logger.LogInformation($"SetCaseResolveDate - looking for DMER with identifier {caseId} {resolvedDate}");
 
+            // future state - the case name will contain three letters of the name and the driver licence number
+
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+            if (dmerEntity != null && resolvedDate != null)
+            {
+                dmerEntity.dfp_caseresolvedate = resolvedDate;     
+                
+                try
+                {
+                    dynamicsContext.UpdateObject(dmerEntity);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, $"SetCaseResolveDate - Error updating");
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Set Case Status
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public async Task<bool> SetCaseStatus(string caseId, bool caseStatus)
+        {
+            // get the case
+            incident @case = GetIncidentById(caseId);
+
+            @case.dfp_resolvecase = caseStatus;
+
+            try
+            {
+                dynamicsContext.UpdateObject(@case);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"SetCaseStatus - Error updating");
+            }
+           
+            return true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         public async Task MarkMedicalUpdatesSent(List<string> ids)
         {
             DateTimeOffset dateSent = DateTimeOffset.UtcNow;
@@ -2006,7 +2077,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
             return result;
         }
-
 
        
     }

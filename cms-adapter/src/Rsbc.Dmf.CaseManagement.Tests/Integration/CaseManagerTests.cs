@@ -3,6 +3,8 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
@@ -14,10 +16,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
     public class CaseManagerTests : WebAppTestBase
     {
         private readonly ICaseManager caseManager;
-       
 
-        public CaseManagerTests(ITestOutputHelper output) : base(output)
+          public CaseManagerTests(ITestOutputHelper output) : base(output)
         {
+           
             caseManager = services.GetRequiredService<ICaseManager>();
         }
 
@@ -144,7 +146,30 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateResolveCaseStatus()
         {
-            await caseManager.ResolveCaseStatus();
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            // set the Case Resolve Date to get past date
+            DateTimeOffset caseResolveDate = DateTimeOffset.UtcNow.AddDays(-500);     
+
+            // Get the case and Set the dfp_caseresolvedate to date in past
+
+            await caseManager.SetCaseResolveDate(caseId, caseResolveDate);
+
+            // Set the case status to false
+            
+            await caseManager.SetCaseStatus(caseId, false);
+
+            // Act
+            await caseManager.ResolveCaseStatusUpdates();
+
+            // Assert
+
+           // Manually verify the case status is set
         }
 
 
