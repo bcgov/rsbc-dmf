@@ -10,32 +10,27 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
     {
         /// <summary>
         /// The file contents
-        /// </summary>
-        [Required]
+        /// </summary>        
         public byte[] FileContents { get; set; }
         /// <summary>
         /// The Driver object
-        /// </summary>
-        [Required]
+        /// </summary>        
 
         public ViewModels.Driver Driver { get; set; }
 
         /// <summary>
         /// Sequence Number - DFCMS primary key for the case
-        /// </summary>
-        [Required]
-        public long SequenceNumber { get; set;}        
+        /// </summary>        
+        public long? SequenceNumber { get; set;}        
 
         /// <summary>
         /// The User ID for the user making the comment
-        /// </summary>
-        [Required]
+        /// </summary> 
         public string UserId { get; set; }
 
         /// <summary>
         /// GUID Case Id from the Case Management System
         /// </summary>
-        [Required]
         public string CaseId { get; set; }
 
         /// <summary>
