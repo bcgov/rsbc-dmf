@@ -24,7 +24,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                 {
                     config.AddUserSecrets(Assembly.GetExecutingAssembly());
                     config.AddEnvironmentVariables();
-                })
+                })                
                 .ConfigureLogging((hostingContext, logging) =>
                 {
                     logging.ClearProviders();
