@@ -53,7 +53,12 @@ service CaseManager {
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
+  // Resolve a case
+   rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
+
 }
+
+
 
 message DriverLicenseRequest {
 	string driverLicenseNumber= 1;

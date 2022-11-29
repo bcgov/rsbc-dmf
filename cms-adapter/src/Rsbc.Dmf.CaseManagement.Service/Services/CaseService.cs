@@ -462,6 +462,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
+        public async override Task<ResultStatusReply> ResolveCaseStatusUpdates(EmptyRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                // call case manager
+                await _caseManager.ResolveCaseStatusUpdates();
+            }
+
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+            
+        }
+
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
             var reply = new SearchReply();

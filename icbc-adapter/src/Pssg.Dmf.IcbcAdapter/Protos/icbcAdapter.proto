@@ -15,6 +15,14 @@ service IcbcAdapter {
     // Get a token given a secret.
   rpc GetToken (TokenRequest) returns (TokenReply);
 
+   // process Medical Status Updates
+
+   rpc ProcessMedicalStatusUpdates(EmptyRequest) returns (ResultStatusReply); 
+
+}
+
+message EmptyRequest {
+   
 }
 
 message DriverInfoRequest {
@@ -48,4 +56,9 @@ message TokenReply {
     ResultStatus resultStatus = 1;
     string token = 2;
     string errorDetail = 3;
+}
+
+message ResultStatusReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
 }
