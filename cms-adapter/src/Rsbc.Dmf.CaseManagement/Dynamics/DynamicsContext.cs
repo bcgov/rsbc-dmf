@@ -26,8 +26,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             };
 
             Configurations.RequestPipeline.OnEntryStarting((arg) =>
-            {
-                
+            {                
                 // do not send reference properties and null values to Dynamics
                 arg.Entry.Properties = arg.Entry.Properties.Where((prop) => !prop.Name.StartsWith('_') && prop.Value != null);
             });
@@ -57,12 +56,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         private static void ModifyEntityStatus(DynamicsContext context, object entity, int state, int status)
         {
             var entityType = entity.GetType();
-            if (!typeof(crmbaseentity).IsAssignableFrom(entityType)) throw new InvalidOperationException($"entity {entityType.FullName} is not a valid {typeof(crmbaseentity).FullName}");
-            var statusProp = entity.GetType().GetProperty("statuscode");
-            var stateProp = entity.GetType().GetProperty("statecode");
+            var statusProp = entityType.GetProperty("statuscode");
+            var stateProp = entityType.GetProperty("statecode");
+
+            if (statusProp == null) throw new InvalidOperationException($"statuscode property not found in type {entityType.FullName}");
+            if (stateProp == null) throw new InvalidOperationException($"stateProp property not found in type {entityType.FullName}");
 
             statusProp.SetValue(entity, status);
-            stateProp.SetValue(entity, state);
+            if (state >= 0) stateProp.SetValue(entity, state);
 
             context.UpdateObject(entity);
         }

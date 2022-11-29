@@ -131,6 +131,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         reply.ResultStatus = ResultStatus.Success;
                     }
                 }
+                else
+                {
+                    reply.ErrorDetail = "Document ID not found";
+                }
             }
             catch (Exception e)
             {
