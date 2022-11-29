@@ -997,7 +997,9 @@ namespace Rsbc.Dmf.CaseManagement
                 foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
                 {
                     await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
-                    if (doc.dfp_submittalstatus == 100000000 && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
+                    if (doc.statecode == 0 // active
+                        && doc.dfp_submittalstatus == 100000000 
+                        && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
                     {
                         bcgovDocumentUrl = doc;
                         found = true;
@@ -1033,7 +1035,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     try
                     {
-                        dynamicsContext.UpdateObject(bcgovDocumentUrl);
+                        dynamicsContext.UpdateObject(bcgovDocumentUrl);                        
 
                         dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
