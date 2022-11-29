@@ -3,10 +3,13 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
 using System;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -14,8 +17,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
     {
         private readonly ICaseManager caseManager;
 
-        public CaseManagerTests(ITestOutputHelper output) : base(output)
+          public CaseManagerTests(ITestOutputHelper output) : base(output)
         {
+           
             caseManager = services.GetRequiredService<ICaseManager>();
         }
 
@@ -139,8 +143,60 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             await caseManager.UpdateNonComplyDocuments();
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateResolveCaseStatus()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
-        
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            // set the Case Resolve Date to get past date
+            DateTimeOffset caseResolveDate = DateTimeOffset.UtcNow.AddDays(-500);     
+
+            // Get the case and Set the dfp_caseresolvedate to date in past
+
+            await caseManager.SetCaseResolveDate(caseId, caseResolveDate);
+
+            // Set the case status to false
+            
+            await caseManager.SetCaseStatus(caseId, false);
+
+            // Act
+            await caseManager.ResolveCaseStatusUpdates();
+
+            // Assert
+
+           // Manually verify the case status is set
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateBringForward()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            // We need to get a valid case Id to test
+
+            var bringForwardRequest = new CaseManagement.BringForwardRequest()
+            {
+                CaseId = caseId,
+                Assignee = string.Empty,
+                Description = "Test Description1",
+                Subject = "ICBC Error",
+                Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+            };
+            var result = await caseManager.CreateBringForward(bringForwardRequest);
+            result.ShouldNotBeNull();
+            Assert.True(result.Success);
+        }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
