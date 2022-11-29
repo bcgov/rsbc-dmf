@@ -2,10 +2,12 @@
 using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -30,6 +32,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<LegacyDocument> GetLegacyDocument(string documentId);
 
+        Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
+
         Task<IEnumerable<Driver>> GetDriver(string licensenumber);
 
         Task<IEnumerable<Driver>> GetDrivers();
@@ -45,7 +49,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null);
 
         Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
 
@@ -58,6 +62,12 @@ namespace Rsbc.Dmf.CaseManagement
         DateTimeOffset GetDpsProcessingDate();
 
         Task UpdateNonComplyDocuments();
+
+        Task ResolveCaseStatusUpdates();
+
+        Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
+
+        Task <bool> SetCaseStatus(string caseId , bool caseStatus);  
     }
        
 
@@ -225,6 +235,30 @@ namespace Rsbc.Dmf.CaseManagement
         public DecisionOutcome? Outcome { get; set; }
     }
 
+    public class BringForwardRequest
+    {
+        public string CaseId { get; set; }
+        public string Assignee{ get; set; }
+        public string Subject { get; set; }
+        public string Description { get; set; }
+        public BringForwardPriority? Priority { get; set; }
+        
+    }
+
+    public enum BringForwardPriority
+    {
+        Low = 0,
+        Normal = 1,
+        High = 2
+
+    }
+
+    public class ResultStatusReply
+    {
+        public string Id;
+        public bool Success { get; set; }
+    }
+
     internal class CaseManager : ICaseManager
     {
         private readonly DynamicsContext dynamicsContext;
@@ -270,6 +304,13 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                 if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
             }
+
+            // load owner
+           /* if (@case._ownerid_value.HasValue)
+            {
+                //load driver info
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
+            }*/
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
@@ -707,7 +748,67 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-        private incident GetIncidentById(string id)
+        /// <summary>
+        /// Add BringForward to Task Entity
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> CreateBringForward(BringForwardRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            string caseId = request.CaseId;
+
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                task newTask = new task()
+                {
+                    
+                    description = request.Description,
+                    subject = request.Subject,
+                    
+                   
+                };
+                // Get the case
+                var @case = GetIncidentById(caseId);
+
+                // Create a bring Forward
+                try
+                {
+                    dynamicsContext.AddTotasks(newTask);
+                    // set Case Id
+                    dynamicsContext.SetLink(newTask, nameof(task.regardingobjectid_incident), @case);
+                    // set the Assignee
+                    if (string.IsNullOrEmpty(request.Assignee) && @case.ownerid != null) 
+                    {
+                        
+                        // set the assignee to case owner
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid),@case.ownerid );
+
+                    };
+                   // TODO # Handle Assignee parameter in future
+ 
+
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    //result.Id = newTask.regardingobjectid_incident.ToString();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                    Log.Logger.Error(ex.Message);
+                }
+
+
+            }
+            return result;
+        }
+
+        protected incident GetIncidentById(string id)
         {
             incident result = null;
             if (!string.IsNullOrEmpty(id))
@@ -1387,6 +1488,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
+                .Expand(i => i.ownerid)
                 .Where(i => i.statecode == 1);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) 
@@ -1553,8 +1655,99 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+        /// <summary>
+        /// Method to set the resolve case status
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task ResolveCaseStatusUpdates()
+        {
+
+           var dpsProcessingDate = GetDpsProcessingDate();
+
+            var resolveCases = dynamicsContext.incidents.Where(
+                 x => x.dfp_caseresolvedate < dpsProcessingDate
+                 ) ;
+
+            foreach (var incident in resolveCases)
+            {
+                // set resolve case status to yes
+                incident.dfp_resolvecase = true;
+
+                dynamicsContext.UpdateObject(incident);
+            }
+
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
+        }
+
+        /// <summary>
+        /// Set Case Resolve Date
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <param name="resolvedDate"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public async Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate)
+        {
+            logger.LogInformation($"SetCaseResolveDate - looking for DMER with identifier {caseId} {resolvedDate}");
+
+            // future state - the case name will contain three letters of the name and the driver licence number
+
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+            if (dmerEntity != null && resolvedDate != null)
+            {
+                dmerEntity.dfp_caseresolvedate = resolvedDate;     
+                
+                try
+                {
+                    dynamicsContext.UpdateObject(dmerEntity);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception e)
+                {
+                    logger.LogError(e, $"SetCaseResolveDate - Error updating");
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Set Case Status
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public async Task<bool> SetCaseStatus(string caseId, bool caseStatus)
+        {
+            // get the case
+            incident @case = GetIncidentById(caseId);
+
+            @case.dfp_resolvecase = caseStatus;
+
+            try
+            {
+                dynamicsContext.UpdateObject(@case);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"SetCaseStatus - Error updating");
+            }
+           
+            return true;
+        }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
         public async Task MarkMedicalUpdatesSent(List<string> ids)
         {
             DateTimeOffset dateSent = DateTimeOffset.UtcNow;
@@ -1571,6 +1764,8 @@ namespace Rsbc.Dmf.CaseManagement
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
         }
+
+     
 
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
         {
@@ -1661,7 +1856,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, ILogger logger = null)
+        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
             /* The structure for cases is
@@ -1907,6 +2102,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+       
     }
 
     internal enum CaseTypeOptionSet

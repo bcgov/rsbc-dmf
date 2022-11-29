@@ -9,6 +9,7 @@
 
 
   <ItemGroup>
+	  <PackageReference Include="FileHelpers" Version="3.5.2" />
 	  <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.4.2" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.7" />
@@ -39,9 +40,10 @@
 		<Protobuf Include="../../../icbc-adapter/src/Pssg.Dmf.IcbcAdapter/Protos/icbcAdapter.proto" GrpcServices="Client">
 			<Link>gRPC Prototypes\icbcAdapter.proto</Link>
 		</Protobuf>
-
-		
-    </ItemGroup>
+		<Protobuf Include="../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
+		</Protobuf>
+	</ItemGroup>
 
 
 </Project>
