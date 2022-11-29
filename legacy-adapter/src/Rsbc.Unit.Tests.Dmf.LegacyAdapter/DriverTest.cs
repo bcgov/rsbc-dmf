@@ -346,7 +346,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-
+        /*
         [Fact]
         public async void DfcmsAddRemoveDocument()
         {
@@ -391,7 +391,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         }
 
-
+        */
 
         [Fact]
         public async void DfcmsGetDocuments()
