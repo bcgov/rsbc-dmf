@@ -809,6 +809,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 catch (Exception ex)
                 {
+                    Serilog.Log.Error(ex,"Error searching for document Type Code");
                     result = null;
                 }
             }
@@ -914,8 +915,8 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious;
-                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
-            
+                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received                                                       
+
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
                     bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
@@ -990,8 +991,13 @@ namespace Rsbc.Dmf.CaseManagement
                 document.statecode = 1;
                 document.statuscode = 2;
             }
+            else
+            {
+                Serilog.Log.Error($"Could not find document {documentId}");                
+            }
 
             dynamicsContext.UpdateObject(document);
+            
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
             result = true;
