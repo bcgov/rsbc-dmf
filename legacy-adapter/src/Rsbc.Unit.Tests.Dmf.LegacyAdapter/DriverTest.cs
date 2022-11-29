@@ -330,8 +330,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 3,                
                 UserId = "IDIR\\TESTUSER",
                 CaseId = caseId,
-                DocumentType = "CFSI13 Test",
-                DocumentTypeCode = "CFSI13",
+                DocumentType = "CSFI15 – CS Vision RDR ",
+                DocumentTypeCode = "CSFI15",
                 BusinessArea = "Driver Fitness"
 
             };
@@ -346,7 +346,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-        /*
+        
         [Fact]
         public async void DfcmsAddRemoveDocument()
         {
@@ -391,7 +391,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         }
 
-        */
+        
 
         [Fact]
         public async void DfcmsGetDocuments()
