@@ -98,7 +98,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         {
             int counter = recordLimit;
 
-            var reply = CaseManagerClient.GetDrivers(new EmptyRequest());
+            var reply = CaseManagerClient.GetDrivers(new CaseManagement.Service.EmptyRequest());
 
             int passed = 0;
             int errors = 0;

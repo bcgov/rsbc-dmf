@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             LogStatement(hangfireContext, "Starting SendMedicalUpdates");
 
-            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new EmptyRequest());
+            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
 
             
 
