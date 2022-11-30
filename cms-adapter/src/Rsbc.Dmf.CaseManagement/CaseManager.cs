@@ -1608,25 +1608,42 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
         {
             var caseQuery = dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
-                .Expand(i => i.customerid_contact)
-                .Expand(i => i.dfp_ClinicId)
-                .Expand(i => i.dfp_MedicalPractitionerId)
-                .Expand(i => i.dfp_incident_dfp_dmerflag)
+                .Expand(i => i.dfp_DriverId)                
                 .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null);
             var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
-            var caseArray = cases.ToArray();
+    
+            var outputArray = new List<incident>();
 
-            foreach (var @case in caseArray)
+            foreach (var @case in cases)
             {
-                await LazyLoadProperties(@case);
+                if (@case._dfp_driverid_value.HasValue)
+                {
+                    //load driver info
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
+                    if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                }
+
+                //load decisions
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
+                if (@case.dfp_incident_dfp_decision.Count > 0)
+                {
+                    foreach (var decision in @case.dfp_incident_dfp_decision)
+                    {
+                        await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
+                        if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+                    }
+                    outputArray.Add(@case);
+
+                }
+                
+                
             }
 
             dynamicsContext.DetachAll();
 
-            return MapCases(caseArray);            
+            return MapCases(outputArray);            
         }
 
 
