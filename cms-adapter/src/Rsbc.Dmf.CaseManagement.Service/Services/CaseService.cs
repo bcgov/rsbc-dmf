@@ -131,6 +131,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         reply.ResultStatus = ResultStatus.Success;
                     }
                 }
+                else
+                {
+                    reply.ErrorDetail = "Document ID not found";
+                }
             }
             catch (Exception e)
             {
@@ -723,38 +727,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 
             var cases = data.Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
 
-            SearchReply reply = new SearchReply(); 
+            SearchReply reply = new(); 
 
             reply.Items.Add(cases.Select(c =>
             {
-                Provider provider = null;
-                if (c.Provider != null)
-                {
-                    provider = new Provider()
-                    {
-                        Id = c.Provider.Id,
-                        Address = new Address()
-                        {
-                            City = c.Provider.Address.City ?? string.Empty,
-                            Postal = c.Provider.Address.Postal ?? string.Empty,
-                            Line1 = c.Provider.Address.Line1 ?? string.Empty,
-                            Line2 = c.Provider.Address.Line2 ?? string.Empty,
-                        },
-                        FaxNumber = c.Provider.FaxNumber ?? string.Empty,
-                        FaxUseType = c.Provider.FaxUseType ?? string.Empty,
-                        GivenName = c.Provider.GivenName ?? string.Empty,
-                        Surname = c.Provider.Surname ?? string.Empty,
-                        Name = c.Provider.Name ?? string.Empty,
-                        PhoneExtension = c.Provider.PhoneExtension ?? string.Empty,
-                        PhoneNumber = c.Provider.PhoneNumber ?? string.Empty,
-                        PhoneUseType = c.Provider.PhoneUseType ?? string.Empty,
-                        ProviderDisplayId = c.Provider.ProviderDisplayId ?? string.Empty,
-                        ProviderDisplayIdType = c.Provider.ProviderDisplayIdType ?? string.Empty,
-                        ProviderRole = c.Provider.ProviderRole ?? string.Empty,
-                        ProviderSpecialty = c.Provider.ProviderSpecialty ?? string.Empty
-                    };
-                }
-
+                
                 Driver driver = null;
                 if (c.Driver != null && c.Driver.Id != null)
                 {
@@ -785,17 +762,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     ModifiedBy = c.CreatedBy ?? string.Empty,
                     ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
                     Driver = driver,
-                    Provider = provider,
                     IsCommercial = c.IsCommercial,
                     ClinicName = c.ClinicName ?? string.Empty,
                     Status = c.Status
-                };
-                newCase.Flags.Add(c.Flags.Select(f => new FlagItem
-                {
-                    Identifier = f.Id,
-                    Question = f.Description ?? "Unknown",
-                    FlagType = ConvertFlagType(f.FlagType)
-                }));
+                };                
 
                 newCase.Decisions.Add(c.Decisions.Select(d => new DecisionItem
                 {

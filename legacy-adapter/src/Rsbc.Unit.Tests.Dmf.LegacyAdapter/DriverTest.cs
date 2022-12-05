@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using System.Web;
 using System.Net;
+using Rsbc.Dmf.LegacyAdapter.ViewModels;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
@@ -309,7 +310,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {
             Login();
 
-            var caseId = GetCaseId();
+            var caseId = GetCaseIdByDl();
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Documents");
 
@@ -329,8 +330,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 3,                
                 UserId = "IDIR\\TESTUSER",
                 CaseId = caseId,
-                DocumentType = "CFSI13 Test",
-                DocumentTypeCode = "CFSI13",
+                DocumentType = "CSFI15 – CS Vision RDR ",
+                DocumentTypeCode = "CSFI15",
                 BusinessArea = "Driver Fitness"
 
             };
@@ -344,6 +345,50 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
+        }
+        
+        [Fact]
+        public async void DfcmsAddRemoveDocument()
+        {
+            DfcmsAddDocument();
+
+            // now check for the comment to be in the response.
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+
+            List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document> documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
+
+            foreach (var document in documents)
+            {
+                request = new HttpRequestMessage(HttpMethod.Post, $"/Documents/Delete/{document.DocumentId}");
+
+                response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+            }
+
+            // confirm that the files are gone.
+
+            request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
+
+            response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+
+            documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
+
+            Assert.Equal(documents.Count,0);
+
         }
 
         
