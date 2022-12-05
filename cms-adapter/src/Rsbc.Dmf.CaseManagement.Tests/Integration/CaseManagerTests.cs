@@ -174,6 +174,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
 
         [Fact(Skip = RequiresDynamics)]
+        public async Task CanResolveCaseStatusUpdates()
+        {
+            await caseManager.ResolveCaseStatusUpdates();
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateBringForward()
         {
             var driverLicenseNumber = configuration["ICBC_TEST_DL"];
