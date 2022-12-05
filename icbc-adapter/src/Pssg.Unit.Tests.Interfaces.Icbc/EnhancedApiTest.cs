@@ -140,12 +140,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             CaseManagerClient.ProcessLegacyCandidate(lcr);
         }
 
-        [Fact]
+       /* [Fact]
         public void TestGetDriverHistory()
         {
             CLNT client = enhancedIcbcApiUtils.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
             Assert.NotNull(client);
-        }
+        }*/
 
         [Fact]
         public async void TestSendUpdates()
