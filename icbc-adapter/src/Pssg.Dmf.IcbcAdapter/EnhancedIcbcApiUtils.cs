@@ -60,8 +60,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
 
-            
-
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(_configuration["ICBC_API_URI"]);
 
@@ -146,7 +144,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null && driver.INAM.SURN != null)
+                    if (driver != null && driver.INAM?.SURN != null)
                     {
                         var newUpdate = new IcbcMedicalUpdate()
                         {
