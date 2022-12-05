@@ -789,9 +789,7 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid),@case.ownerid );
 
                     };
-                   // TODO # Handle Assignee parameter in future
- 
-
+                   
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
                     //result.Id = newTask.regardingobjectid_incident.ToString();

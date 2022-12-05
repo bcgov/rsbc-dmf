@@ -1,0 +1,14 @@
+﻿using System;
+
+namespace Rsbc.Dmf.IcbcAdapter.IcbcModels
+{
+    public class ExpandedStatuses
+    {
+        public string StatusSection { get; set; }
+        public string MasterStatus { get; set; }
+        public string ExpandedStatus { get; set; }
+        public DateTime EffectiveDate { get; set; }
+        public DateTime ReviewDate { get; set; }
+        public string StatusDescription { get; set; }
+    }
+}
