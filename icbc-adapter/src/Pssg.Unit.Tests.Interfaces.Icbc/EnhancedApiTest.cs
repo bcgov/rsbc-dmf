@@ -17,6 +17,7 @@ using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
 using Pssg.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Helpers;
+using static Rsbc.Dmf.IcbcAdapter.EnhancedIcbcApiUtils;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -27,6 +28,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         FlatFileUtils flatFileUtils;
         private IIcbcClient IcbcClient { get; set; }
         CaseManager.CaseManagerClient CaseManagerClient { get; set; }
+        EnhancedIcbcApiUtils enhancedIcbcApiUtils;
 
         /// <summary>
         /// Setup the test
@@ -137,6 +139,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             };
             CaseManagerClient.ProcessLegacyCandidate(lcr);
         }
+
+       /* [Fact]
+        public void TestGetDriverHistory()
+        {
+            CLNT client = enhancedIcbcApiUtils.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+            Assert.NotNull(client);
+        }*/
 
         [Fact]
         public async void TestSendUpdates()

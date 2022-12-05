@@ -25,6 +25,10 @@ using Google.Protobuf.WellKnownTypes;
 using Pssg.Interfaces;
 using Newtonsoft.Json.Serialization;
 using Pssg.Interfaces.Icbc.Models;
+using System.Net.Http.Json;
+using Newtonsoft.Json.Linq;
+using Rsbc.Dmf.IcbcAdapter.IcbcModels;
+using IcbcClient = Rsbc.Dmf.IcbcAdapter.IcbcModels.IcbcClient;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -34,12 +38,14 @@ namespace Rsbc.Dmf.IcbcAdapter
         private IConfiguration _configuration { get; }
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
         private readonly IIcbcClient _icbcClient;
+       
 
         public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
             _icbcClient = icbcClient;
+ 
         }
 
 
@@ -192,6 +198,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             return null;
         }
 
+
         private DateTime GetMedicalIssueDate(CLNT driver)
         {
             DateTime result = DateTime.MinValue;
@@ -208,6 +215,115 @@ namespace Rsbc.Dmf.IcbcAdapter
             
 
             return result;
+        }
+
+        public CLNT GetDriverHistory(string dlNumber)
+        {
+            // Get base URL
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(_configuration["ICBC_API_URI"]);
+
+            // do a basic HTTP request
+            var request = new HttpRequestMessage(HttpMethod.Get, "tombstone/"+dlNumber);
+
+            // Get the JSON ICBC Response
+            request.Headers.TryAddWithoutValidation("Accept", "application/json");
+            var response = client.SendAsync(request).GetAwaiter().GetResult();
+            IcbcClient icbcClient = response.Content.ReadFromJsonAsync<IcbcClient>().GetAwaiter().GetResult();
+
+            ClientResult result = null;
+            if (icbcClient == null)
+            {
+                // Setup List for expanded Status records
+               
+                List<Restrictions> restrictions = new List<Restrictions>();
+
+                result = new ClientResult()
+                {
+                    CLNT = new CLNT()
+                    {
+
+                        SEX = icbcClient.ClientDetails?.Gender,
+                        SECK = icbcClient.ClientDetails?.SecurityKeyword,
+                        BIDT = icbcClient.ClientDetails?.Birthdate,
+                        WGHT = icbcClient.ClientDetails?.Weight,
+                        HGHT = icbcClient.ClientDetails?.Height,
+                
+                        INAM = new INAM()
+                        {
+                            SURN = icbcClient.ClientDetails.Name?.Surname,
+                            GIV1 = icbcClient.ClientDetails.Name?.GivenName1,
+                            GIV2 = icbcClient.ClientDetails.Name?.GivenName2,
+                            GIV3 = icbcClient.ClientDetails.Name?.GivenName3,
+                        },
+                        ADDR = new ADDR()
+                        {
+                            BUNO = icbcClient.ClientDetails.Address?.BuildingUnitNumber,
+                            STNM = icbcClient.ClientDetails.Address?.StreetName,
+                            STNO = icbcClient.ClientDetails.Address?.StreetNumber,
+                            STDI = icbcClient.ClientDetails.Address?.StreetDirection,
+                            SITE = icbcClient.ClientDetails.Address?.Site,
+                            COMP = icbcClient.ClientDetails.Address?.Comp,
+                            RURR = icbcClient.ClientDetails.Address?.RuralRoute,
+                            CITY = icbcClient.ClientDetails.Address?.City,
+                            PROV = icbcClient.ClientDetails.Address?.ProvinceOrState,
+                            CNTY = icbcClient.ClientDetails.Address?.Country,
+                            POBX = icbcClient.ClientDetails.Address?.PostalCode,
+                            APR1 = icbcClient.ClientDetails.Address?.AddressPrefix1,
+                            APR2 = icbcClient.ClientDetails.Address?.AddressPrefix2,
+                            EFDT = icbcClient.ClientDetails.Address?.EffectiveDate
+
+                        },
+                        DR1MST = new DR1MST()
+                        {
+                            LNUM = icbcClient.DriverDetails?.LicenceNumber,
+                            LCLS = icbcClient.DriverDetails?.LicenceClass,
+                            MSCD = icbcClient.DriverDetails?.MasterStatusCode,
+                            RSCD = (List<int>)icbcClient.DriverDetails.Restrictions.Select(restriction => restriction.RestrictionCode),
+                            
+                            DR1STAT = (List <DR1STAT>) icbcClient.DriverDetails.ExpandedStatuses.Select(status =>
+                            {
+                                return new DR1STAT()
+                                {
+                                   // SECT = status.StatusSection,
+                                   EXDS = status?.ExpandedStatus,
+                                   SRDT = status?.ReviewDate,                               
+                                    
+                                    EFDT = status?.EffectiveDate,
+                                };
+                            }),
+                                
+                           
+                            DR1MEDN = (IList<DR1MEDNITEM>)icbcClient.Medicals.MedicalDetails.Select(medicals =>
+                            {
+                                return new DR1MEDNITEM()
+                                {
+                                    MIDT = medicals?.IssueDate,
+                                    ISOF = medicals?.IssuingOffice,
+                                    ISOFDESC = medicals?.IssuingOfficeDescription,
+                                    PGN1= medicals?.PhysiciansGuide1,
+                                    PGN2 = medicals?.PhysiciansGuide2,
+                                    MEDT = medicals?.ExamDate,
+                                    MDSP= medicals?.MedicalDisposition,
+                                    MDSPDESC = medicals?.DispositionDescription,
+
+                                };
+                            })
+                        
+
+                        },
+                    }
+                };
+            }
+
+            return result?.CLNT;
+
+
+        }
+
+        public class ClientResult
+        {
+            public CLNT CLNT { get; set; }
         }
 
         private void LogStatement(PerformContext hangfireContext, string message)
