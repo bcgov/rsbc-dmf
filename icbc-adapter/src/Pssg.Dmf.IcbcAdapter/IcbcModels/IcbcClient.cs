@@ -4,9 +4,7 @@
     {
         public ClientDetails ClientDetails { get; set; }
         
-        public DriverDetails DriverDetails { get; set; }
-
-        public Medicals Medicals { get; set; }
+        public DriverDetails DriversDetails { get; set; }
 
     }
 }
