@@ -29,6 +29,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json.Linq;
 using Rsbc.Dmf.IcbcAdapter.IcbcModels;
 using IcbcClient = Rsbc.Dmf.IcbcAdapter.IcbcModels.IcbcClient;
+using Grpc.Core;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -229,14 +230,17 @@ namespace Rsbc.Dmf.IcbcAdapter
             // Get the JSON ICBC Response
             request.Headers.TryAddWithoutValidation("Accept", "application/json");
             var response = client.SendAsync(request).GetAwaiter().GetResult();
-            IcbcClient icbcClient = response.Content.ReadFromJsonAsync<IcbcClient>().GetAwaiter().GetResult();
+
+            string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            IcbcClient icbcClient = JsonConvert.DeserializeObject<IcbcClient>(rawData);
+
+           
 
             ClientResult result = null;
-            if (icbcClient == null)
+            if (icbcClient != null)
             {
-                // Setup List for expanded Status records
-               
-                List<Restrictions> restrictions = new List<Restrictions>();
+
 
                 result = new ClientResult()
                 {
@@ -248,7 +252,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                         BIDT = icbcClient.ClientDetails?.Birthdate,
                         WGHT = icbcClient.ClientDetails?.Weight,
                         HGHT = icbcClient.ClientDetails?.Height,
-                
+
                         INAM = new INAM()
                         {
                             SURN = icbcClient.ClientDetails.Name?.Surname,
@@ -274,49 +278,47 @@ namespace Rsbc.Dmf.IcbcAdapter
                             EFDT = icbcClient.ClientDetails.Address?.EffectiveDate
 
                         },
+
                         DR1MST = new DR1MST()
                         {
-                            LNUM = icbcClient.DriverDetails?.LicenceNumber,
-                            LCLS = icbcClient.DriverDetails?.LicenceClass,
-                            MSCD = icbcClient.DriverDetails?.MasterStatusCode,
-                            RSCD = (List<int>)icbcClient.DriverDetails.Restrictions.Select(restriction => restriction.RestrictionCode),
-                            
-                            DR1STAT = (List <DR1STAT>) icbcClient.DriverDetails.ExpandedStatuses.Select(status =>
+                            LNUM = icbcClient.DriversDetails?.LicenceNumber,
+                            LCLS = icbcClient.DriversDetails?.LicenceClass,
+                            RRDT = icbcClient.DriversDetails?.LicenceExpiryDate,
+                            // MSCD = icbcClient.DriversDetails?.MasterStatusCode,
+
+                            DR1STAT = icbcClient.DriversDetails.ExpandedStatuses?.Count > 0 ? icbcClient.DriversDetails.ExpandedStatuses
+                            //.Where(status => status.StatusSection != null)
+                            .Select(status => new DR1STAT()
                             {
-                                return new DR1STAT()
-                                {
-                                   // SECT = status.StatusSection,
-                                   EXDS = status?.ExpandedStatus,
-                                   SRDT = status?.ReviewDate,                               
-                                    
-                                    EFDT = status?.EffectiveDate,
-                                };
-                            }),
-                                
-                           
-                            DR1MEDN = (IList<DR1MEDNITEM>)icbcClient.Medicals.MedicalDetails.Select(medicals =>
+                                //SECT = status?.StatusSection,
+                                EFDT = status?.EffectiveDate,
+                                EXDS = status?.ExpandedStatus,
+                                SRDT = status?.ReviewDate,
+                                NECD = status?.MasterStatus,
+                                // NMCD = status?.
+
+                            }).ToList() : null,
+
+                            DR1MEDN = icbcClient.DriversDetails.Medicals?.Count > 0 ? icbcClient.DriversDetails.Medicals
+                            .Select(medicals => new DR1MEDNITEM()
                             {
-                                return new DR1MEDNITEM()
-                                {
-                                    MIDT = medicals?.IssueDate,
+                                  MIDT = medicals?.IssueDate,
                                     ISOF = medicals?.IssuingOffice,
                                     ISOFDESC = medicals?.IssuingOfficeDescription,
-                                    PGN1= medicals?.PhysiciansGuide1,
+                                    PGN1 = medicals?.PhysiciansGuide1,
                                     PGN2 = medicals?.PhysiciansGuide2,
                                     MEDT = medicals?.ExamDate,
-                                    MDSP= medicals?.MedicalDisposition,
+                                    MDSP = medicals?.MedicalDisposition,
                                     MDSPDESC = medicals?.DispositionDescription,
 
-                                };
-                            })
-                        
-
-                        },
+                             
+                            }).ToList() : null
+                        }
                     }
                 };
             }
 
-            return result?.CLNT;
+            return result.CLNT;
 
 
         }
