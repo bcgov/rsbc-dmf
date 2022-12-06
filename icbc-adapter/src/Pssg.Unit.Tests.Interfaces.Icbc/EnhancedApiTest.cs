@@ -92,8 +92,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 CaseManagerClient = new CaseManager.CaseManagerClient(channel);
             }
-             
-            flatFileUtils = new FlatFileUtils(Configuration,CaseManagerClient);
+
+            enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient,null);
+
+            
         }
 
         [Fact]
@@ -140,12 +142,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             CaseManagerClient.ProcessLegacyCandidate(lcr);
         }
 
-       /* [Fact]
+        [Fact]
         public void TestGetDriverHistory()
         {
             CLNT client = enhancedIcbcApiUtils.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
             Assert.NotNull(client);
-        }*/
+        }
 
         [Fact]
         public async void TestSendUpdates()
