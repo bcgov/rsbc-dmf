@@ -12,6 +12,7 @@ using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using Microsoft.AspNetCore.Authorization;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -26,12 +27,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly IIcbcClient _icbcClient;
         private readonly EnhancedIcbcApiUtils _enhancedIcbcUtils;
 
-        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, EnhancedIcbcApiUtils enhancedIcbcUtils)
+        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient)
         {
             _configuration = configuration;
             _logger = logger;
             _icbcClient = icbcClient;
-            _enhancedIcbcUtils = enhancedIcbcUtils;
+            _enhancedIcbcUtils = new EnhancedIcbcApiUtils(configuration, caseManagerClient, icbcClient);
         }
 
         // GET: /DriverHistory
