@@ -20,7 +20,7 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public DriverMasterStatus(int? mSCD = default(int?),
+        public DriverMasterStatus(string mSCD = default(string),
             List<int> restrictionCodes = default(List<int>),
             System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), int? lCLS = default(int?), List<DriverMedical> dR1MEDN = default(List<DriverMedical>))
         {
@@ -40,7 +40,7 @@ namespace Pssg.Interfaces.Icbc.ViewModels
 
         /// <summary>
         /// </summary>        
-        public int? MasterStatusCode { get; set; }
+        public string MasterStatusCode { get; set; }
 
         /// <summary>
         /// </summary>        
