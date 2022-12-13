@@ -246,7 +246,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     CLNT = new CLNT()
                     {
+                        // Client Details
 
+                        // Add Client Number
                         SEX = icbcClient.ClientDetails?.Gender,
                         SECK = icbcClient.ClientDetails?.SecurityKeyword,
                         BIDT = icbcClient.ClientDetails?.Birthdate,
@@ -266,6 +268,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             STNM = icbcClient.ClientDetails.Address?.StreetName,
                             STNO = icbcClient.ClientDetails.Address?.StreetNumber,
                             STDI = icbcClient.ClientDetails.Address?.StreetDirection,
+                            STTY = icbcClient.ClientDetails.Address?.StreetType,
                             SITE = icbcClient.ClientDetails.Address?.Site,
                             COMP = icbcClient.ClientDetails.Address?.Comp,
                             RURR = icbcClient.ClientDetails.Address?.RuralRoute,
@@ -275,42 +278,52 @@ namespace Rsbc.Dmf.IcbcAdapter
                             POBX = icbcClient.ClientDetails.Address?.PostalCode,
                             APR1 = icbcClient.ClientDetails.Address?.AddressPrefix1,
                             APR2 = icbcClient.ClientDetails.Address?.AddressPrefix2,
-                            EFDT = icbcClient.ClientDetails.Address?.EffectiveDate
+                            EFDT = icbcClient.ClientDetails.Address?.EffectiveDate                            
 
                         },
+
+                        // Driver Details
 
                         DR1MST = new DR1MST()
                         {
                             LNUM = icbcClient.DriversDetails?.LicenceNumber,
                             LCLS = icbcClient.DriversDetails?.LicenceClass,
                             RRDT = icbcClient.DriversDetails?.LicenceExpiryDate,
-                            // MSCD = icbcClient.DriversDetails?.MasterStatusCode,
+                            MSCD = icbcClient.DriversDetails?.MasterStatusCode,
 
+                            // Restrictions need to add discription
+                            
+                            RSCD = icbcClient.DriversDetails.Restrictions?.Count >0 ? icbcClient.DriversDetails.Restrictions
+                            .Select( restriction => restriction.RestrictionCode)
+                            .ToList(): null,
+
+                            
+                            // Expanded Status
                             DR1STAT = icbcClient.DriversDetails.ExpandedStatuses?.Count > 0 ? icbcClient.DriversDetails.ExpandedStatuses
-                            //.Where(status => status.StatusSection != null)
                             .Select(status => new DR1STAT()
                             {
-                                //SECT = status?.StatusSection,
+                                SECT = status?.StatusSection,
                                 EFDT = status?.EffectiveDate,
                                 EXDS = status?.ExpandedStatus,
                                 SRDT = status?.ReviewDate,
-                                NECD = status?.MasterStatus,
-                                // NMCD = status?.
+                                NECD = status?.StatusDescription,
+                                NMCD = status?.MasterStatus
+                                
 
                             }).ToList() : null,
 
+                            // Medicals
                             DR1MEDN = icbcClient.DriversDetails.Medicals?.Count > 0 ? icbcClient.DriversDetails.Medicals
                             .Select(medicals => new DR1MEDNITEM()
                             {
                                   MIDT = medicals?.IssueDate,
-                                    ISOF = medicals?.IssuingOffice,
-                                    ISOFDESC = medicals?.IssuingOfficeDescription,
-                                    PGN1 = medicals?.PhysiciansGuide1,
-                                    PGN2 = medicals?.PhysiciansGuide2,
-                                    MEDT = medicals?.ExamDate,
-                                    MDSP = medicals?.MedicalDisposition,
-                                    MDSPDESC = medicals?.DispositionDescription,
-
+                                  ISOF = medicals?.IssuingOffice,
+                                  ISOFDESC = medicals?.IssuingOfficeDescription,
+                                  PGN1 = medicals?.PhysiciansGuide1,
+                                  PGN2 = medicals?.PhysiciansGuide2,
+                                  MEDT = medicals?.ExamDate,
+                                  MDSP = medicals?.MedicalDisposition,
+                                  MDSPDESC = medicals?.DispositionDescription,
                              
                             }).ToList() : null
                         }
