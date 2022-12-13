@@ -24,7 +24,7 @@ namespace Pssg.Interfaces.Icbc.Models
         /// <summary>
         /// Initializes a new instance of the DR1STAT class.
         /// </summary>
-        public DR1STAT(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), int? nMCD = default(int?), int? sECT = default(int?), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
+        public DR1STAT(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), string nMCD = default(string), string sECT = default(string), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
         {
             EFDT = eFDT;
             EXDS = eXDS;
@@ -54,12 +54,12 @@ namespace Pssg.Interfaces.Icbc.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "NMCD")]
-        public int? NMCD { get; set; }
+        public string NMCD { get; set; }
 
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "SECT")]
-        public int? SECT { get; set; }
+        public string SECT { get; set; }
 
         /// <summary>
         /// </summary>

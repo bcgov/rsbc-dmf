@@ -24,7 +24,7 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// <summary>
         /// Initializes a new instance of the DR1STAT class.
         /// </summary>
-        public DriverStatus(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), int? nMCD = default(int?), int? sECT = default(int?), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
+        public DriverStatus(System.DateTime? eFDT = default(System.DateTime?), string eXDS = default(string), string nMCD = default(string), string sECT = default(string), System.DateTime? sRDT = default(System.DateTime?), string nECD = default(string))
         {
             EffectiveDate = eFDT;            
             NewMasterStatusCode = nMCD;
@@ -51,12 +51,12 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// <summary>
         /// The new master status code that the expanded status is adding to the root segment
         /// </summary>        
-        public int? NewMasterStatusCode { get; set; }
+        public string NewMasterStatusCode { get; set; }
 
         /// <summary>
         /// The message table, which the expanded status code originates from 
         /// </summary>        
-        public int? Section { get; set; }
+        public string Section { get; set; }
 
         /// <summary>
         /// The date on which the status will expire

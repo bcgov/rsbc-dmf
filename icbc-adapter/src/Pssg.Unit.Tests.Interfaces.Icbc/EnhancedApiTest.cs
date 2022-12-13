@@ -18,6 +18,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Pssg.Interfaces.Icbc.Helpers;
 using Rsbc.Dmf.CaseManagement.Helpers;
 using static Rsbc.Dmf.IcbcAdapter.EnhancedIcbcApiUtils;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -92,6 +93,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 CaseManagerClient = new CaseManager.CaseManagerClient(channel);
             }
+
+            flatFileUtils = new FlatFileUtils(Configuration, CaseManagerClient);
 
             enhancedIcbcApiUtils = new EnhancedIcbcApiUtils(Configuration, CaseManagerClient,null);
 
