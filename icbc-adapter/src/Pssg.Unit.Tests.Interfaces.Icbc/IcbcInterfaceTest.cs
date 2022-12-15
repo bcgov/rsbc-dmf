@@ -4,6 +4,9 @@ using Newtonsoft.Json;
 using Xunit;
 using Pssg.Interfaces.Icbc.ViewModels;
 using System.Net;
+using Rsbc.Dmf.IcbcAdapter.Controllers;
+using System.Collections.Generic;
+using System;
 
 namespace Rsbc.Dmf.IcbcAdapter.Tests
 {
@@ -130,7 +133,38 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             response.EnsureSuccessStatusCode();
         }
 
-       
+        /// <summary>
+        /// Test zulu time
+        /// </summary>
+        [Fact]
+        public async void TestLargeBatchSameDl()
+        {
+            string testDl = Configuration["ICBC_TEST_DL"];
+
+            Login();
+
+            // start by constructing the array of items to send.
+
+            List<NewCandidate> data = new List<NewCandidate>();
+
+            for (int i = 0; i < 500; i++)
+            {
+                data.Add (new NewCandidate() {  BirthDate = DateTime.Now, DlNumber = testDl , EffectiveDate = DateTime.Now});
+            }
+
+
+            var request = new HttpRequestMessage(HttpMethod.Post, "/Icbc/Candidates");
+
+            request.Content = new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json");
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+
+            // parse as JSON.
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            response.EnsureSuccessStatusCode();
+        }
+
 
     }
 }
