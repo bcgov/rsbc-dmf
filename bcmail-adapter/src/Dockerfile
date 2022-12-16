@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY . .
-RUN dotnet restore ./legacy-adapter/src/Rsbc.Dmf.BcMailAdapter 
+RUN dotnet restore ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./legacy-adapter/src/Rsbc.Dmf.BcMailAdapter -c Release -o /app/publish
+RUN dotnet publish ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
