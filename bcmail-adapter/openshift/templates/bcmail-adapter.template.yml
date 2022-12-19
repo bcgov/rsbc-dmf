@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: legacy-adapter-template
+  name: bcmail-adapter-template
 
 parameters:
   - description: openshift namespace prefix
@@ -15,7 +15,7 @@ parameters:
     required: true
   - description: image name
     name: IMAGENAME
-    value: legacy-adapter
+    value: bcmail-adapter
     
   - description: image tag for deployments
     name: TAG
@@ -26,24 +26,8 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
-  - description: Password used for authentication
-    from: "[A-Z0-9]{8}"
-    generate: expression
-    name: PASSWORD
   - description: CORS_ORIGINS
     name: CORS_ORIGINS
-    required: true
-  - description: DOCUMENT_STORAGE_ADAPTER_URI
-    name: DOCUMENT_STORAGE_ADAPTER_URI
-    required: true
-  - description: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
-    name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
-    required: true
-  - description: CMS_ADAPTER_URI
-    name: CMS_ADAPTER_URI
-    required: true
-  - description: CMS_ADAPTER_JWT_SECRET
-    name: CMS_ADAPTER_SECRET
     required: true
   - description: JWT_TOKEN_KEY
     name: JWT_TOKEN_KEY
@@ -77,12 +61,7 @@ objects:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:
-      USERNAME: "legacy"
-      PASSWORD: "${PASSWORD}"
-      CORS_ORIGINS: ${CORS_ORIGINS}
-      DOCUMENT_STORAGE_ADAPTER_URI: ${DOCUMENT_STORAGE_ADAPTER_URI}
-      DOCUMENT_STORAGE_ADAPTER_JWT_SECRET: ${DOCUMENT_STORAGE_ADAPTER_JWT_SECRET}
-      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}      
+      CORS_ORIGINS: ${CORS_ORIGINS}     
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
