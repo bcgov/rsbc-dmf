@@ -166,12 +166,7 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: splunk
-                      key: token
-                - name: CMS_ADAPTER_JWT_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${CMS_ADAPTER_SECRET}
-                      key: JWT_TOKEN_KEY
+                      key: token                
               envFrom:                
                 - configMapRef:
                     name: ${APP_NAME}-config
