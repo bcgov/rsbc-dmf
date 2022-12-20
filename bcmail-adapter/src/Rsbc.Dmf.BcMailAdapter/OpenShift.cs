@@ -22,11 +22,20 @@ using RedHat.OpenShift.Utils;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
+    /// <summary>
+    /// PlatformEnvironment
+    /// </summary>
     public static class PlatformEnvironment
     {
+        /// <summary>
+        /// Check for environment Variable
+        /// </summary>
         public static bool IsOpenShift => !string.IsNullOrEmpty(OpenShiftEnvironment.BuildName);
     }
 
+    /// <summary>
+    /// Open Shift Environment
+    /// </summary>
     public static class OpenShiftEnvironment
     {
         private static string _buildCommit;
@@ -35,13 +44,30 @@ namespace Rsbc.Dmf.BcMailAdapter
         private static string _buildNamespace;
         private static string _buildReference;
 
+        /// <summary>
+        /// Openshift Build Commit
+        /// </summary>
         public static string BuildCommit => GetFromEnvironmentVariable("OPENSHIFT_BUILD_COMMIT", ref _buildCommit);
+
+        /// <summary>
+        /// Openshift Build Name
+        /// </summary>
         public static string BuildName => GetFromEnvironmentVariable("OPENSHIFT_BUILD_NAME", ref _buildName);
+
+        /// <summary>
+        /// Openshift Build Source
+        /// </summary>
         public static string BuildSource => GetFromEnvironmentVariable("OPENSHIFT_BUILD_SOURCE", ref _buildSource);
 
+        /// <summary>
+        /// Openshift Build Namespace
+        /// </summary>
         public static string BuildNamespace =>
             GetFromEnvironmentVariable("OPENSHIFT_BUILD_NAMESPACE", ref _buildNamespace);
 
+        /// <summary>
+        /// Openshift Build Reference
+        /// </summary>
         public static string BuildReference =>
             GetFromEnvironmentVariable("OPENSHIFT_BUILD_REFERENCE", ref _buildReference);
 
@@ -52,8 +78,14 @@ namespace Rsbc.Dmf.BcMailAdapter
         }
     }
 
+    /// <summary>
+    /// OpenShift Integration Options
+    /// </summary>
     public class OpenShiftIntegrationOptions
     {
+        /// <summary>
+        /// Certificate Mount Point
+        /// </summary>
         public string CertificateMountPoint { get; set; }
 
         internal bool UseHttps => !string.IsNullOrEmpty(CertificateMountPoint);
@@ -192,8 +224,17 @@ namespace Rsbc.Dmf.BcMailAdapter
 
 namespace RedHat.OpenShift.Utils
 {
+    /// <summary>
+    /// Certificate Loader
+    /// </summary>
     public static class CertificateLoader
     {
+        /// <summary>
+        /// Load Certificate With Key
+        /// </summary>
+        /// <param name="certificateFile"></param>
+        /// <param name="keyFile"></param>
+        /// <returns></returns>
         public static X509Certificate2 LoadCertificateWithKey(string certificateFile, string keyFile)
         {
             var certificate = new X509Certificate2(certificateFile);
@@ -267,8 +308,18 @@ namespace RedHat.OpenShift.Utils
 
 namespace Microsoft.AspNetCore.Hosting
 {
+    /// <summary>
+    /// OpenShift WebHost Builder Extensions
+    /// </summary>
     public static class OpenShiftWebHostBuilderExtensions
     {
+        /// <summary>
+        /// UseOpenShiftIntegration
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <param name="configureOptions"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public static IWebHostBuilder UseOpenShiftIntegration(this IWebHostBuilder builder,
             Action<OpenShiftIntegrationOptions> configureOptions)
         {

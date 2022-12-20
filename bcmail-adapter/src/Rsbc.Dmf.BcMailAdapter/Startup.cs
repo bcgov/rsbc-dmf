@@ -34,11 +34,21 @@ using Invio.Extensions.Authentication.JwtBearer;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
+    /// <summary>
+    /// Start Up File
+    /// </summary>
     public class Startup
     {
-
+        /// <summary>
+        /// Autentication Handler
+        /// </summary>
         public class AllowAnonymous : IAuthorizationHandler
         {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="context"></param>
+            /// <returns></returns>
             public Task HandleAsync(AuthorizationHandlerContext context)
             {
                 foreach (IAuthorizationRequirement requirement in context.PendingRequirements.ToList())
@@ -47,17 +57,32 @@ namespace Rsbc.Dmf.BcMailAdapter
                 return Task.CompletedTask;
             }
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="env"></param>
         public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             _env = env;
         }
-
+        /// <summary>
+        /// Configuration
+        /// </summary>
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// Web Host Environment
+        /// </summary>
         public IWebHostEnvironment _env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
+        /// <summary>
+        /// Configure Services
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<ForwardedHeadersOptions>(options =>
@@ -143,6 +168,11 @@ namespace Rsbc.Dmf.BcMailAdapter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// Configuration
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (!env.IsProduction())

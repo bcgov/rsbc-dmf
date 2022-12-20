@@ -8,11 +8,18 @@ using System.Text;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
+    /// <summary>
+    /// Authentication Controller
+    /// </summary>
     [Route("[controller]")]
     public class AuthenticationController : Controller
     {
         private readonly IConfiguration Configuration;
 
+        /// <summary>
+        /// Authentication Controller
+        /// </summary>
+        /// <param name="configuration"></param>
         public AuthenticationController(IConfiguration configuration)
         {
             Configuration = configuration;
