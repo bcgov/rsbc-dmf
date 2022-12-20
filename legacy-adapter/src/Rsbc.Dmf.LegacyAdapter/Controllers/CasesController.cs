@@ -312,6 +312,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] IFormFile file,
             [FromForm] string priority = "Regular",
             [FromForm] string assign = null,
+            [FromForm] string submittalStatus = null,
             [FromForm] string surcode = null         // Driver -> Lastname
             )
         {
