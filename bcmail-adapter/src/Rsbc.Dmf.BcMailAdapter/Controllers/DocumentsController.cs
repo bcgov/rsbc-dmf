@@ -25,7 +25,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<DocumentsController> _logger;
 
-
+        /// <summary>
+        ///  Documents Controller
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configuration"></param>
         public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration)
         {
             _configuration = configuration;
@@ -35,11 +39,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
 
         
-        /// <summary>
-        /// Mail a document
-        /// </summary>
-        /// <param name="documentId"></param>
-        /// <returns></returns>
+       /// <summary>
+       /// Mail a document
+       /// </summary>
+       /// <returns></returns>
+        
         // POST: /Documents/BcMail}
         [HttpPost("BcMail")]
         [ProducesResponseType(200)]

@@ -42,13 +42,25 @@ namespace Rsbc.Dmf.BcMailAdapter.ViewModels
         /// Document Type Code
         /// </summary>
         public string DocumentTypeCode { get; set; }
+
+        /// <summary>
+        /// Document Type
+        /// </summary>
         public string DocumentType { get; set; }
+
+        /// <summary>
+        /// Business Area
+        /// </summary>
         public string BusinessArea { get; set; }
 
         /// <summary>
         /// Date the document was made
         /// </summary>
         public DateTimeOffset? FaxReceivedDate { get; set; }
+
+        /// <summary>
+        /// Import Data
+        /// </summary>
         public DateTimeOffset? ImportDate { get; set; }
 
         /// <summary>

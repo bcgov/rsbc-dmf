@@ -2,8 +2,14 @@
 
 namespace Rsbc.Dmf.BcMailAdapter.ViewModels
 {
+    /// <summary>
+    /// Driver
+    /// </summary>
     public class Driver
     {
+        /// <summary>
+        /// Flag 51
+        /// </summary>
         public bool? Flag51 { get; set; }
 
         /// <summary>

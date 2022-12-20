@@ -8,8 +8,15 @@ using Serilog;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
+    /// <summary>
+    /// Program
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// Main block
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             CreateWebHostBuilder(args)
@@ -17,6 +24,11 @@ namespace Rsbc.Dmf.BcMailAdapter
                 .Run();
         }
 
+        /// <summary>
+        /// Create WebHost Builder
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
