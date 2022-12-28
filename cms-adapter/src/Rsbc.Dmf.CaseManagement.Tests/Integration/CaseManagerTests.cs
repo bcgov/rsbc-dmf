@@ -148,7 +148,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             var driverLicenseNumber = configuration["ICBC_TEST_DL"];
             // first do a search to get this case by title.
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+            var queryResults1 = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+                
+            var queryResults = queryResults1.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
             var caseId = dmerCase.Id;
