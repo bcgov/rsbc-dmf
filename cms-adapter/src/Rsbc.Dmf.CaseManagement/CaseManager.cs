@@ -1694,7 +1694,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var resolveCases = dynamicsContext.incidents.Where(
                  x => x.dfp_caseresolvedate < dpsProcessingDate
-                 ) ;
+                 && x.statecode == 0 // ensure that we only get active records
+                 );
 
             foreach (var incident in resolveCases)
             {
