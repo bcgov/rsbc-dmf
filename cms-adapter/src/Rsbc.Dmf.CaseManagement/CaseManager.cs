@@ -45,7 +45,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Guid of the created case</returns>
-        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? effectiveDate);
+        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
@@ -849,7 +849,7 @@ namespace Rsbc.Dmf.CaseManagement
                      Surname = request.Driver.Surname
                 };
 
-                await LegacyCandidateCreate(newCandidate, DateTimeOffset.MinValue);
+                await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
                 
                 // now do a search to get the case.
                 var searchResult = await LegacyCandidateSearch(newCandidate);
@@ -974,7 +974,7 @@ namespace Rsbc.Dmf.CaseManagement
             {                
                 // create it.
                 var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, DateTime.MinValue);
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.MinValue);
                 var newDriverResult = await LegacyCandidateSearch(newDriver);
 
                 var firstCase = newDriverResult.Items.FirstOrDefault();
@@ -1278,7 +1278,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? effectiveDate)
+        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
         {
             Guid? result = null;
 
@@ -1312,8 +1312,15 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driverContact = new contact()
                     {
-                        lastname = request.Surname                         
+                        lastname = request.Surname                                                
                     };
+
+                    if (birthDate != null)
+                    {
+                        driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
+                            birthDate.Value.Month, birthDate.Value.Day);
+                    }
+
                     dynamicsContext.AddTocontacts(driverContact);
                     driver.dfp_PersonId = driverContact;
                     dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
@@ -1326,14 +1333,25 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     lastname = request.Surname
                 };
+                if (birthDate != null)
+                {
+                    driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
+                        birthDate.Value.Month, birthDate.Value.Day);
+                }
+
                 dynamicsContext.AddTocontacts(driverContact);
 
                 driver = new dfp_driver()
                 {
                     dfp_licensenumber = request.DriverLicenseNumber,
                     dfp_PersonId = driverContact,
-                    statuscode = 1
+                    statuscode = 1,                    
                 };
+                if (birthDate != null)
+                {
+                    driver.dfp_dob = birthDate.Value;
+                }
+
                 dynamicsContext.AddTodfp_drivers(driver);
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
             }
