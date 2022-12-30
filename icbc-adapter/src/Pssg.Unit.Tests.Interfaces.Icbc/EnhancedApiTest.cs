@@ -148,8 +148,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public void TestGetDriverHistory()
         {
-            CLNT client = enhancedIcbcApiUtils.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
-            Assert.NotNull(client);
+            
+            if(Configuration["ICBC_TEST_DL"] != null)
+            {
+                CLNT client = enhancedIcbcApiUtils.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+                Assert.NotNull(client);
+            }
+           
         }
 
         [Fact]
