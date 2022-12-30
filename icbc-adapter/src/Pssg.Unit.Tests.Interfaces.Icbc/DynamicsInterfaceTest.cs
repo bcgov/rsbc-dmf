@@ -44,14 +44,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         {
             string testDl = Configuration["ICBC_TEST_DL"];
 
-            Login();
+            if (testDl != null)
+            {
 
-            TestDl(testDl);
 
-            testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];            
+                Login();
 
-            TestDl(testDl);
+                TestDl(testDl);
 
+                testDl = Configuration["ICBC_ALTERNATE_TEST_DL"];
+
+                TestDl(testDl);
+            }
         }
     }
 }
