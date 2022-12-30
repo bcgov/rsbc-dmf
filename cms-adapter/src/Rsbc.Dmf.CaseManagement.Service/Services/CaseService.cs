@@ -451,7 +451,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         dto = request.EffectiveDate.ToDateTimeOffset();
                     }
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest, dto);
+                    await _caseManager.LegacyCandidateCreate(searchRequest, request.BirthDate.ToDateTimeOffset(), dto);
 
                     reply.ResultStatus = ResultStatus.Success;
                 }
