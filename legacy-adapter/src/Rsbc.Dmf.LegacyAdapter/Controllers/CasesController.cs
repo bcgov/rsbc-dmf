@@ -20,6 +20,9 @@ using System.Threading.Tasks;
 namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
 
+    /// <summary>
+    /// Case Controller
+    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [Produces("application/json")]
@@ -33,6 +36,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IIcbcClient _icbcClient;
 
+        /// <summary>
+        /// Cases Controller
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configuration"></param>
+        /// <param name="cmsAdapterClient"></param>
+        /// <param name="documentStorageAdapterClient"></param>
+        /// <param name="icbcClient"></param>
         public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
@@ -84,7 +95,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// DoesCaseExist
         /// </summary>
         /// <param name="licenseNumber"></param>
-        /// <param name="surcode"></param>
         /// <returns>The Case Id or Null</returns>
         // GET: /Cases/ExistByDl
         [HttpGet("ExistByDl")]
@@ -226,6 +236,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return CreatedAtAction("Comments", comment);
         }
 
+        /// <summary>
+        /// Get Documents
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
         [HttpGet("{caseId}/Documents")]
         [ProducesResponseType(typeof(List<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
@@ -278,11 +293,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         }
 
         /// <summary>
-        /// Add a document to a case
+        /// Add Case Document
         /// </summary>
         /// <param name="caseId"></param>
+        /// <param name="skipDpsProcessing"></param>
         /// <param name="driversLicense"></param>
-        /// <param name="surcode"></param>
         /// <param name="batchId"></param>
         /// <param name="faxReceivedDate"></param>
         /// <param name="importDate"></param>
@@ -294,6 +309,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="validationPrevious"></param>
         /// <param name="file"></param>
         /// <param name="priority"></param>
+        /// <param name="assign"></param>
+        /// <param name="submittalStatus"></param>
+        /// <param name="surcode"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
@@ -313,7 +331,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string priority = "Regular",
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
-            [FromForm] string surcode = null         // Driver -> Lastname
+            [FromForm] string surcode = null         // Driver -> Lastname   
             )
         {
             var driver = new CaseManagement.Service.Driver()
@@ -400,6 +418,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ValidationMethod = validationMethod ?? string.Empty,
                     ValidationPrevious = validationPrevious ?? string.Empty
                 };
+
+                if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
+                    {
+                    var actionName = nameof(AddCaseDocument);
+                    var routeValues = new
+                    {
+                        driversLicence = driversLicense
+                    };
+                    return CreatedAtAction(actionName, routeValues, document);
+                }
 
                 var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
 
