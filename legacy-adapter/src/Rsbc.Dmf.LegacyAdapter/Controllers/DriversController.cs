@@ -388,7 +388,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 }
 
-                return Json(result);
+                // sort the result by date.
+
+                var sortedResult = result.OrderByDescending(x => x.ImportDate);
+
+                return Json(sortedResult);
             }
             else
             {
