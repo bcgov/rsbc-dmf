@@ -437,21 +437,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 var driverId = driverReply.Items.FirstOrDefault()?.Id;
 
-                // add the document
-                UploadFileRequest pdfData = new UploadFileRequest()
-                {
-                    ContentType = "application/pdf",
-                    Data = ByteString.CopyFrom(document.FileContents),
-                    EntityName = "dfp_driver",
-                    FileName = $"{filename}.pdf",
-                    FolderName = driverId,
-                };
-                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
-
-                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
-                {
-                    return StatusCode(500, fileReply.ErrorDetail);
-                }
 
                 var driver = new Driver()
                 {
@@ -462,21 +447,46 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     driver.Surname = document.Driver.LastName;
                 }
-
-                var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
+                DateTimeOffset importDate = document.ImportDate ?? DateTimeOffset.Now;
+                long sequenceNumber = document.SequenceNumber ?? 0;
+                var newDocument = new LegacyDocument()
                 {
                     CaseId = document.CaseId,
-                    SequenceNumber = document.SequenceNumber ?? 0,
+                    SequenceNumber = sequenceNumber,
                     UserId = document.UserId,
                     FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
-                    ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
+                    ImportDate = Timestamp.FromDateTimeOffset(importDate),
                     Driver = driver,
                     DocumentTypeCode = document.DocumentTypeCode,
                     DocumentType = document.DocumentType,
-                    BusinessArea = document.BusinessArea,
-                    DocumentUrl = fileReply.FileName,
+                    BusinessArea = document.BusinessArea
+                    
 
-                });
+                };
+
+                string importDateString = importDate.ToString("yyyyMMddHHmmss");
+                string fileKey = $"{filename}-{importDateString}-{sequenceNumber}";
+
+                // add the document
+                UploadFileRequest pdfData = new UploadFileRequest()
+                {
+                    ContentType = "application/pdf",
+                    Data = ByteString.CopyFrom(document.FileContents),
+                    EntityName = "dfp_driver",
+                    FileName = $"{fileKey}.pdf",
+                    FolderName = driverId,
+                };
+
+                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    return StatusCode(500, fileReply.ErrorDetail);
+                }
+
+                newDocument.DocumentUrl = fileReply.FileName;
+
+                var result = _cmsAdapterClient.CreateLegacyCaseDocument(newDocument);
 
                 if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
                 {
