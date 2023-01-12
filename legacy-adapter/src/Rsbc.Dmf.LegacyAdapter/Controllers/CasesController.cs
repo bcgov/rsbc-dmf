@@ -339,7 +339,20 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 DriverLicenseNumber = driversLicense
             };
 
-            if (faxReceivedDate == null)
+
+            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = driversLicense };
+            var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
+
+            string driverId = "";
+
+            if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
+            {
+                driverId = driverReply.Items.FirstOrDefault()?.Id;
+            }
+
+
+
+                if (faxReceivedDate == null)
             {
                 faxReceivedDate = DateTimeOffset.Now;
             }
@@ -348,9 +361,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 importDate = DateTimeOffset.Now;
             }
-
-            // get the case data
-            string driverId = null;
+            
 
             SearchReply reply;
             if (caseId != null)
@@ -367,7 +378,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 foreach (var item in reply.Items)
                 {
-                    driverId = item.Driver?.Id;
+                    driverId = driverId;
                     break;
                 }
 
