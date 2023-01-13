@@ -378,10 +378,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         isBcMailSent = true;
                     }
 
-                    result.Add(new ViewModels.Document
+                    var newDocument = new ViewModels.Document
                     {
-                        CaseId = item.CaseId,
-                        FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
+                        CaseId = item.CaseId,                        
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
                         DocumentId = item.DocumentId,
                         DocumentType = item.DocumentType,
@@ -391,7 +390,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId,
                         BcMailSent = isBcMailSent
-                    });
+                    };
+
+                    if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
+                    {
+                        newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                    }
+
+                    result.Add(newDocument);
 
                 }
 
