@@ -303,6 +303,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
             }
 
+            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now;
+            // Dynamics has a minimum value for a date.
+            if (commentDate < new DateTimeOffset (1753, 1, 1, 0, 0, 0, TimeSpan.Zero))
+            {
+                commentDate = DateTimeOffset.Now;
+            }
+
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
                 CaseId = comment.CaseId ?? String.Empty,
@@ -310,7 +317,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
                 SequenceNumber = comment.SequenceNumber ?? -1,
                 UserId = comment.UserId ?? String.Empty,
-                CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate ?? DateTimeOffset.Now),
+                CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                 Driver = driver
             });
 
