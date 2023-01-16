@@ -35,6 +35,7 @@ using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
 using Invio.Extensions.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -112,7 +113,12 @@ namespace Rsbc.Dmf.LegacyAdapter
                 
                 .AddProblemDetails(opts => {
                     opts.ValidationProblemStatusCode = StatusCodes.Status400BadRequest;
+                    opts.OnBeforeWriteDetails = (ctx, pr) =>
+                    {
+                        // Log the problem
+                        Log.Logger.Error($"Unexpected Exception {pr.Title} {pr.Detail} {pr.Instance}");
 
+                    };
                 })
                 
                 .AddControllers(options => {
