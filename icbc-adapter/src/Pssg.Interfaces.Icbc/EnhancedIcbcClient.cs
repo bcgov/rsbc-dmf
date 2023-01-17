@@ -12,6 +12,7 @@ using Newtonsoft.Json.Serialization;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.IcbcModels;
 using System.Net.Http.Headers;
+using Castle.Core.Logging;
 
 namespace Pssg.Interfaces
 {
@@ -81,8 +82,17 @@ namespace Pssg.Interfaces
             var response = _Client.SendAsync(request).GetAwaiter().GetResult();
 
             string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            IcbcModels.IcbcClient icbcClient  = null;
 
-            IcbcModels.IcbcClient icbcClient = JsonConvert.DeserializeObject<IcbcModels.IcbcClient>(rawData);
+            try
+            {
+                icbcClient = JsonConvert.DeserializeObject<IcbcModels.IcbcClient>(rawData);
+            }
+            catch (Exception e)
+            {
+                icbcClient = null;
+            }
+            
 
             ClientResult result = null;
             if (icbcClient != null)
