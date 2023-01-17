@@ -148,13 +148,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
         [Fact]
         public void TestGetDriverHistory()
         {
- 
             if(Configuration["ICBC_TEST_DL"] != null)
             {
                 CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
                 Assert.NotNull(client);
-            }
-           
+            }           
         }
 
         [Fact]
@@ -163,13 +161,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             if (Configuration["ICBC_TEST_DL"] != null)
             {
-                CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+                //CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
                 var update = new Pssg.Interfaces.IcbcModels.IcbcMedicalUpdate()
                 {
                     DlNumber = Configuration["ICBC_TEST_DL"],
-                    LastName = client.INAM.SURN ?? string.Empty,
+                    LastName = "EXP", //client.INAM.SURN ?? string.Empty,
                     MedicalDisposition = "P",
-                    MedicalIssueDate = enhancedIcbcApiUtils.GetMedicalIssueDate(client)
+                    MedicalIssueDate = new DateTimeOffset (2023, 1, 13, 0,0,0, TimeSpan.Zero ) //enhancedIcbcApiUtils.GetMedicalIssueDate(client)
                 };
                 string result = IcbcClient.SendMedicalUpdate(update);
                 
@@ -184,7 +182,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             if (Configuration["ICBC_TEST_DL"] != null)
             {
-                CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
+               CLNT client = IcbcClient.GetDriverHistory(Configuration["ICBC_TEST_DL"]);
 
                 var update = new Pssg.Interfaces.IcbcModels.IcbcMedicalUpdate()
                 {
@@ -192,6 +190,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                     LastName = client.INAM.SURN ?? string.Empty,
                     MedicalDisposition = "J",
                     MedicalIssueDate = enhancedIcbcApiUtils.GetMedicalIssueDate(client)
+                };
+
+                update = new Pssg.Interfaces.IcbcModels.IcbcMedicalUpdate()
+                {
+                    DlNumber = Configuration["ICBC_TEST_DL"],
+                    LastName = "EXP", //client.INAM.SURN ?? string.Empty,
+                    MedicalDisposition = "J",
+                    MedicalIssueDate = new DateTimeOffset(2023, 1, 13, 0, 0, 0, TimeSpan.Zero) //enhancedIcbcApiUtils.GetMedicalIssueDate(client)
                 };
 
                 string result = IcbcClient.SendMedicalUpdate(update);
