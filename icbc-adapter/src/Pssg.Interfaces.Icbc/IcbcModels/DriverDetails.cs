@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rsbc.Dmf.IcbcAdapter.IcbcModels
+namespace Pssg.Interfaces.IcbcModels
 {
     public class DriverDetails
     {

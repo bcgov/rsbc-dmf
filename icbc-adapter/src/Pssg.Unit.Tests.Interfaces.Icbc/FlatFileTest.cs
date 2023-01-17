@@ -40,7 +40,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddEnvironmentVariables()
                 .Build();
             // create a new case manager client.
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
                 IcbcClient = new IcbcClient(Configuration);
             }
