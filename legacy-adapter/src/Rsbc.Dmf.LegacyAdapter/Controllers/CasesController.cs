@@ -317,7 +317,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         // allow large uploads
         [DisableRequestSizeLimit]
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
-            [FromForm] string driversLicense,  // Driver -> DL            
+            [FromForm] [Required] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
             [FromForm] DateTimeOffset? faxReceivedDate,  // dfp_faxreceivedate
             [FromForm] DateTimeOffset? importDate,  // dfp_dpsprocessingdate
@@ -336,10 +336,40 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = driversLicense
+                DriverLicenseNumber = driversLicense,
+                Address = new Address()
+                {
+                     City = String.Empty,
+                      Line1 = String.Empty,
+                       Line2 = String.Empty,
+                        Postal =String.Empty
+                },
+                BirthDate = Timestamp.FromDateTimeOffset(new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero)),
+                GivenName = String.Empty,
+                Height = 0.0,
+                Id = String.Empty,
+                Middlename = String.Empty,
+                Name = String.Empty,
+                Seck = String.Empty ,
+                Sex = String.Empty ,
+                Surname = String.Empty ,
+                Weight = 0.0
             };
 
-            if (faxReceivedDate == null)
+
+            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = driversLicense };
+            var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
+
+            string driverId = "";
+
+            if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
+            {
+                driverId = driverReply.Items.FirstOrDefault()?.Id;
+            }
+
+
+
+                if (faxReceivedDate == null)
             {
                 faxReceivedDate = DateTimeOffset.Now;
             }
@@ -348,9 +378,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 importDate = DateTimeOffset.Now;
             }
-
-            // get the case data
-            string driverId = null;
+            
 
             SearchReply reply;
             if (caseId != null)
@@ -367,7 +395,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 foreach (var item in reply.Items)
                 {
-                    driverId = item.Driver?.Id;
+                    driverId = driverId;
                     break;
                 }
 

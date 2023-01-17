@@ -277,36 +277,36 @@ namespace Rsbc.Dmf.IcbcAdapter
                         // Client Details
 
                         // Add Client Number
-                        SEX = icbcClient.ClientDetails?.Gender,
-                        SECK = icbcClient.ClientDetails?.SecurityKeyword,
+                        SEX = icbcClient.ClientDetails?.Gender ?? string.Empty,
+                        SECK = icbcClient.ClientDetails?.SecurityKeyword ?? string.Empty,
                         BIDT = icbcClient.ClientDetails?.Birthdate,
                         WGHT = icbcClient.ClientDetails?.Weight,
                         HGHT = icbcClient.ClientDetails?.Height,
 
                         INAM = new INAM()
                         {
-                            SURN = icbcClient.ClientDetails.Name?.Surname,
-                            GIV1 = icbcClient.ClientDetails.Name?.GivenName1,
-                            GIV2 = icbcClient.ClientDetails.Name?.GivenName2,
-                            GIV3 = icbcClient.ClientDetails.Name?.GivenName3,
+                            SURN = icbcClient.ClientDetails?.Name?.Surname,
+                            GIV1 = icbcClient.ClientDetails?.Name?.GivenName1,
+                            GIV2 = icbcClient.ClientDetails?.Name?.GivenName2,
+                            GIV3 = icbcClient.ClientDetails?.Name?.GivenName3,
                         },
                         ADDR = new ADDR()
                         {
-                            BUNO = icbcClient.ClientDetails.Address?.BuildingUnitNumber,
-                            STNM = icbcClient.ClientDetails.Address?.StreetName,
-                            STNO = icbcClient.ClientDetails.Address?.StreetNumber,
-                            STDI = icbcClient.ClientDetails.Address?.StreetDirection,
-                            STTY = icbcClient.ClientDetails.Address?.StreetType,
-                            SITE = icbcClient.ClientDetails.Address?.Site,
-                            COMP = icbcClient.ClientDetails.Address?.Comp,
-                            RURR = icbcClient.ClientDetails.Address?.RuralRoute,
-                            CITY = icbcClient.ClientDetails.Address?.City,
-                            PROV = icbcClient.ClientDetails.Address?.ProvinceOrState,
-                            CNTY = icbcClient.ClientDetails.Address?.Country,
-                            POBX = icbcClient.ClientDetails.Address?.PostalCode,
-                            APR1 = icbcClient.ClientDetails.Address?.AddressPrefix1,
-                            APR2 = icbcClient.ClientDetails.Address?.AddressPrefix2,
-                            EFDT = icbcClient.ClientDetails.Address?.EffectiveDate                            
+                            BUNO = icbcClient.ClientDetails?.Address?.BuildingUnitNumber,
+                            STNM = icbcClient.ClientDetails?.Address?.StreetName,
+                            STNO = icbcClient.ClientDetails?.Address?.StreetNumber,
+                            STDI = icbcClient.ClientDetails?.Address?.StreetDirection,
+                            STTY = icbcClient.ClientDetails?.Address?.StreetType,
+                            SITE = icbcClient.ClientDetails?.Address?.Site,
+                            COMP = icbcClient.ClientDetails?.Address?.Comp,
+                            RURR = icbcClient.ClientDetails?.Address?.RuralRoute,
+                            CITY = icbcClient.ClientDetails?.Address?.City,
+                            PROV = icbcClient.ClientDetails?.Address?.ProvinceOrState,
+                            CNTY = icbcClient.ClientDetails?.Address?.Country,
+                            POBX = icbcClient.ClientDetails?.Address?.PostalCode,
+                            APR1 = icbcClient.ClientDetails?.Address?.AddressPrefix1,
+                            APR2 = icbcClient.ClientDetails?.Address?.AddressPrefix2,
+                            EFDT = icbcClient.ClientDetails?.Address?.EffectiveDate                            
 
                         },
 
@@ -321,13 +321,13 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                             // Restrictions need to add discription
                             
-                            RSCD = icbcClient.DriversDetails.Restrictions?.Count >0 ? icbcClient.DriversDetails.Restrictions
+                            RSCD = icbcClient.DriversDetails?.Restrictions != null ? icbcClient.DriversDetails.Restrictions
                             .Select( restriction => restriction.RestrictionCode)
                             .ToList(): null,
 
                             
                             // Expanded Status
-                            DR1STAT = icbcClient.DriversDetails.ExpandedStatuses?.Count > 0 ? icbcClient.DriversDetails.ExpandedStatuses
+                            DR1STAT = icbcClient.DriversDetails?.ExpandedStatuses != null ? icbcClient.DriversDetails.ExpandedStatuses
                             .Select(status => new DR1STAT()
                             {
                                 SECT = status?.StatusSection,
@@ -341,7 +341,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             }).ToList() : null,
 
                             // Medicals
-                            DR1MEDN = icbcClient.DriversDetails.Medicals?.Count > 0 ? icbcClient.DriversDetails.Medicals
+                            DR1MEDN = icbcClient.DriversDetails?.Medicals != null ? icbcClient.DriversDetails.Medicals
                             .Select(medicals => new DR1MEDNITEM()
                             {
                                   MIDT = medicals?.IssueDate,

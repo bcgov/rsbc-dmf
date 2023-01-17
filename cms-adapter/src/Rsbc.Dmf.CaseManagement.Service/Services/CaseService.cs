@@ -508,8 +508,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         dto = request.EffectiveDate.ToDateTimeOffset();
                     }
+
+                    DateTimeOffset? birthdate = null;
+
+                    if (request.BirthDate != null)
+                    {
+                        birthdate = request.BirthDate.ToDateTimeOffset();
+                    }
+
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest, request.BirthDate.ToDateTimeOffset(), dto);
+                    await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto);
 
                     reply.ResultStatus = ResultStatus.Success;
                 }
