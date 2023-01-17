@@ -215,7 +215,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             // add ICBC client
             if (Configuration["ICBC_SERVICE_URI"] != null)
             {
-                IIcbcClient icbcClient = new IcbcClient(Configuration);
+                IIcbcClient icbcClient = new EnhancedIcbcClient(Configuration);
                 services.AddTransient(_ => icbcClient);
             }
 
