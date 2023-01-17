@@ -1,4 +1,4 @@
-﻿namespace Rsbc.Dmf.IcbcAdapter.IcbcModels
+﻿namespace Pssg.Interfaces.IcbcModels
 {
     public class IcbcClient
     {

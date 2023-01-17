@@ -1,4 +1,5 @@
 ﻿using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.IcbcModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace Pssg.Interfaces
     public interface IIcbcClient
     {
         public CLNT GetDriverHistory(string dlNumber);
+
+        public string SendMedicalUpdate(IcbcMedicalUpdate item);
     }
 }
