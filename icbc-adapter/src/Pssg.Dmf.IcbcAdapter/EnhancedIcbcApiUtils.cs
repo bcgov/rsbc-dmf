@@ -89,7 +89,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                         if (responseContent.Contains("SUCCESS"))
                         {
                             // mark it as sent
-                            MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);                             
+                            MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);
+
                         }
                         else
                         {
@@ -104,7 +105,15 @@ namespace Rsbc.Dmf.IcbcAdapter
                             };
                             
                             _caseManagerClient.CreateBringForward(bringForwardRequest);
-                            
+
+                            // Mark ICBC error 
+
+                            var icbcError = new IcbcErrorRequest
+                            {
+                                ErrorMessage = "ICBC Error"
+                            };
+
+                            _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
                             LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
                         }
@@ -125,6 +134,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             LogStatement(hangfireContext, "End of SendMedicalUpdates.");
         }
 
+        /// <summary>
+        ///  Mark Medical Update Sent
+        /// </summary>
+        /// <param name="hangfireContext"></param>
+        /// <param name="caseId"></param>
         private void MarkMedicalUpdateSent (PerformContext hangfireContext, string caseId)
         {            
             var idListRequest = new IdListRequest();
@@ -134,6 +148,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             LogStatement(hangfireContext, $"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
+        /// <summary>
+        /// Get Medical Update Data
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public IcbcMedicalUpdate GetMedicalUpdateData (DmerCase item)
         {
 
@@ -199,7 +218,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             return null;
         }
 
-
+        /// <summary>
+        /// Get Medical IssueDate
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         private DateTime GetMedicalIssueDate(CLNT driver)
         {
             DateTime result = DateTime.MinValue;
@@ -218,6 +241,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             return result;
         }
 
+        /// <summary>
+        /// Get Driver History
+        /// </summary>
+        /// <param name="dlNumber"></param>
+        /// <returns></returns>
         public CLNT GetDriverHistory(string dlNumber)
         {
             // Get base URL
@@ -336,11 +364,19 @@ namespace Rsbc.Dmf.IcbcAdapter
 
         }
 
+        /// <summary>
+        /// Client Result
+        /// </summary>
         public class ClientResult
         {
             public CLNT CLNT { get; set; }
         }
 
+        /// <summary>
+        /// Log Statement
+        /// </summary>
+        /// <param name="hangfireContext"></param>
+        /// <param name="message"></param>
         private void LogStatement(PerformContext hangfireContext, string message)
         {
             if (hangfireContext != null)
