@@ -1069,18 +1069,24 @@ namespace Rsbc.Dmf.CaseManagement
                 // ensure we have the documents.
                 await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
                 bcgov_documenturl bcgovDocumentUrl = null;
-                foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
+
+                if (documentTypeId != null)
                 {
-                    await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
-                    if (doc.statecode == 0 // active
-                        && doc.dfp_submittalstatus == 100000000 
-                        && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
+                    foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
                     {
-                        bcgovDocumentUrl = doc;
-                        found = true;
-                        break;
+                        await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
+                        if (doc.statecode == 0 // active
+                            && doc.dfp_submittalstatus == 100000000
+                            && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
+                        {
+                            bcgovDocumentUrl = doc;
+                            found = true;
+                            break;
+                        }
                     }
                 }
+
+                
 
                 if (bcgovDocumentUrl == null)
                 {

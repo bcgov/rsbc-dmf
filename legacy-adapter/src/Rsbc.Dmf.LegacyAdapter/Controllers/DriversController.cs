@@ -303,6 +303,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
             }
 
+            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now;
+            // Dynamics has a minimum value for a date.
+            if (commentDate < new DateTimeOffset (1753, 1, 1, 0, 0, 0, TimeSpan.Zero))
+            {
+                commentDate = DateTimeOffset.Now;
+            }
+
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {
                 CaseId = comment.CaseId ?? String.Empty,
@@ -310,7 +317,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
                 SequenceNumber = comment.SequenceNumber ?? -1,
                 UserId = comment.UserId ?? String.Empty,
-                CommentDate = Timestamp.FromDateTimeOffset(comment.CommentDate ?? DateTimeOffset.Now),
+                CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                 Driver = driver
             });
 
@@ -371,10 +378,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         isBcMailSent = true;
                     }
 
-                    result.Add(new ViewModels.Document
+                    var newDocument = new ViewModels.Document
                     {
-                        CaseId = item.CaseId,
-                        FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
+                        CaseId = item.CaseId,                        
                         ImportDate = item.ImportDate.ToDateTimeOffset(),
                         DocumentId = item.DocumentId,
                         DocumentType = item.DocumentType,
@@ -384,11 +390,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId,
                         BcMailSent = isBcMailSent
-                    });
+                    };
+
+                    if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
+                    {
+                        newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                    }
+
+                    result.Add(newDocument);
 
                 }
 
-                return Json(result);
+                // sort the result by date.
+
+                var sortedResult = result.OrderByDescending(x => x.ImportDate);
+
+                return Json(sortedResult);
             }
             else
             {
@@ -437,21 +454,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 var driverId = driverReply.Items.FirstOrDefault()?.Id;
 
-                // add the document
-                UploadFileRequest pdfData = new UploadFileRequest()
-                {
-                    ContentType = "application/pdf",
-                    Data = ByteString.CopyFrom(document.FileContents),
-                    EntityName = "dfp_driver",
-                    FileName = $"{filename}.pdf",
-                    FolderName = driverId,
-                };
-                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
-
-                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
-                {
-                    return StatusCode(500, fileReply.ErrorDetail);
-                }
 
                 var driver = new Driver()
                 {
@@ -462,21 +464,46 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     driver.Surname = document.Driver.LastName;
                 }
-
-                var result = _cmsAdapterClient.CreateLegacyCaseDocument(new LegacyDocument()
+                DateTimeOffset importDate = document.ImportDate ?? DateTimeOffset.Now;
+                long sequenceNumber = document.SequenceNumber ?? 0;
+                var newDocument = new LegacyDocument()
                 {
                     CaseId = document.CaseId,
-                    SequenceNumber = document.SequenceNumber ?? 0,
+                    SequenceNumber = sequenceNumber,
                     UserId = document.UserId,
                     FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
-                    ImportDate = Timestamp.FromDateTimeOffset(document.ImportDate ?? DateTimeOffset.Now),
+                    ImportDate = Timestamp.FromDateTimeOffset(importDate),
                     Driver = driver,
                     DocumentTypeCode = document.DocumentTypeCode,
                     DocumentType = document.DocumentType,
-                    BusinessArea = document.BusinessArea,
-                    DocumentUrl = fileReply.FileName,
+                    BusinessArea = document.BusinessArea
+                    
 
-                });
+                };
+
+                string importDateString = importDate.ToString("yyyyMMddHHmmss");
+                string fileKey = $"{filename}-{importDateString}-{sequenceNumber}";
+
+                // add the document
+                UploadFileRequest pdfData = new UploadFileRequest()
+                {
+                    ContentType = "application/pdf",
+                    Data = ByteString.CopyFrom(document.FileContents),
+                    EntityName = "dfp_driver",
+                    FileName = $"{fileKey}.pdf",
+                    FolderName = driverId,
+                };
+
+                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    return StatusCode(500, fileReply.ErrorDetail);
+                }
+
+                newDocument.DocumentUrl = fileReply.FileName;
+
+                var result = _cmsAdapterClient.CreateLegacyCaseDocument(newDocument);
 
                 if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
                 {

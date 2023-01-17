@@ -36,7 +36,10 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                 .Setup(m => m.GetDrivers(
                     It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
                 .Returns(mockDriverResult);
-
+            mockClient
+                .Setup(m => m.GetDriver(
+                    It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
+                .Returns(mockDriverResult);
             mockClient
                 .Setup(m => m.GetUnsentMedicalUpdates(
                     It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
@@ -191,7 +194,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
 
             mockClient
                .Setup(m => m.DeleteLegacyCaseDocument(It.IsAny<LegacyDocumentRequest>(), null, null, CancellationToken.None))
-               .Returns<ResultStatusReply, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+               .Returns<LegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
                {                   
                    ResultStatusReply reply = new() { ResultStatus = ResultStatus.Success };
                    return reply;
