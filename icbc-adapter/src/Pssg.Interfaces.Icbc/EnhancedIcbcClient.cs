@@ -71,21 +71,18 @@ namespace Pssg.Interfaces
         public CLNT GetDriverHistory(string dlNumber)
         {
             // Get base URL
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(Configuration["ICBC_API_URI"]);
+
 
             // do a basic HTTP request
             var request = new HttpRequestMessage(HttpMethod.Get, "tombstone/" + dlNumber);
 
             // Get the JSON ICBC Response
             request.Headers.TryAddWithoutValidation("Accept", "application/json");
-            var response = client.SendAsync(request).GetAwaiter().GetResult();
+            var response = _Client.SendAsync(request).GetAwaiter().GetResult();
 
             string rawData = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             IcbcModels.IcbcClient icbcClient = JsonConvert.DeserializeObject<IcbcModels.IcbcClient>(rawData);
-
-
 
             ClientResult result = null;
             if (icbcClient != null)
