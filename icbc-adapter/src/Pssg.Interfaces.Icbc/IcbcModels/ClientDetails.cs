@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Rsbc.Dmf.IcbcAdapter.IcbcModels
+namespace Pssg.Interfaces.IcbcModels
 {
     public class ClientDetails
     {

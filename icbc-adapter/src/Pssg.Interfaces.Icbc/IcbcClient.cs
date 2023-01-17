@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.IcbcModels;
 
 namespace Pssg.Interfaces
 {
@@ -19,6 +20,11 @@ namespace Pssg.Interfaces
         private string IcbcLookupServiceUsername { get; set; }
         private string IcbcLookupServicePassword { get; set; }
 
+        public string SendMedicalUpdate(IcbcMedicalUpdate item)
+        {
+            throw new NotImplementedException();
+        }
+
         public IcbcClient(IConfiguration configuration)
         {
 
@@ -26,10 +32,10 @@ namespace Pssg.Interfaces
             _Client = new HttpClient();
 
             // check that we have the right settings.
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
                 // ICBC configuration settings.
-                IcbcLookupServiceUri = Configuration["ICBC_LOOKUP_SERVICE_URI"];
+                IcbcLookupServiceUri = Configuration["ICBC_SERVICE_URI"];
                 IcbcLookupServiceUsername = Configuration["ICBC_LOOKUP_SERVICE_USERNAME"];
                 IcbcLookupServicePassword = Configuration["ICBC_LOOKUP_SERVICE_PASSWORD"];                
             }            
