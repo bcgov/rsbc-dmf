@@ -42,6 +42,9 @@ service CaseManager {
 
   rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 
+  // Logs error when the icbc update fails
+  rpc MarkMedicalUpdateError (IcbcErrorRequest) returns (ResultStatusReply);
+
   // process a line item from the legacy candidate list
   rpc ProcessLegacyCandidate (LegacyCandidateRequest) returns (LegacyCandidateReply);
 
@@ -55,6 +58,8 @@ service CaseManager {
 
   // Resolve a case
    rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
+
+  
 
 }
 
@@ -380,6 +385,12 @@ enum UserType {
 
 message IdListRequest {
 	repeated string idList = 1;
+}
+
+message IcbcErrorRequest{
+	// string caseId = 1
+	string caseId = 1;
+	string errorMessage = 2;
 }
 
 message ResultStatusReply {	

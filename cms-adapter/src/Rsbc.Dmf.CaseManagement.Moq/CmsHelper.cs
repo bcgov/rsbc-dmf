@@ -4,8 +4,6 @@ using Moq;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
 using System.Threading;
-using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
 using Microsoft.Extensions.Configuration;
 
 namespace Rsbc.Dmf.CaseManagement.Helpers
