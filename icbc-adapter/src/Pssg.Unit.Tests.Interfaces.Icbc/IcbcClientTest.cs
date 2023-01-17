@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                 .AddUserSecrets<Startup>() // Add secrets from the service.
                 .AddEnvironmentVariables()
                 .Build();
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
                 IcbcClient = new IcbcClient(Configuration);
             }

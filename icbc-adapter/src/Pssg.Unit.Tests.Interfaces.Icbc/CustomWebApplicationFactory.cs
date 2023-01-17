@@ -27,7 +27,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                     .AddEnvironmentVariables()
                     .Build();
 
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
                 icbcClient = new IcbcClient(Configuration);
             }

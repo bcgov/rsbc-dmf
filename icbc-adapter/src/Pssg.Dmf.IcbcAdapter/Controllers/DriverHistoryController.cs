@@ -13,6 +13,7 @@ using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
 using Microsoft.AspNetCore.Authorization;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using Pssg.Interfaces.IcbcModels;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -40,7 +41,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult GetHistory(string driversLicence)
         {
             // get the history from ICBC
-            CLNT data = _enhancedIcbcUtils.GetDriverHistory(driversLicence);
+            CLNT data = _icbcClient.GetDriverHistory(driversLicence);
 
             if (data != null)
             {

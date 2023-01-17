@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Rsbc.Dmf.IcbcAdapter.ViewModels
+namespace Pssg.Interfaces.IcbcModels
 {
     public class IcbcMedicalUpdate
     {
