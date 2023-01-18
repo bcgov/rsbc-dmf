@@ -899,10 +899,23 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private dfp_submittaltype GetDocumentType(string documentTypeCode, string documentType, string businessArea)
+        private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
         {
-            // lookup the document Type Code
             dfp_submittaltype result = null;
+            string documentTypeCode = null;
+            if (!string.IsNullOrEmpty(documentTypeCodeInput))
+            {
+                documentTypeCode = documentTypeCodeInput;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(documentType))
+                {
+                    documentTypeCode = documentType.Replace(" ","");
+                }
+            }
+            // lookup the document Type Code
+            
             if (!string.IsNullOrEmpty(documentTypeCode))
             {
                 try
@@ -913,7 +926,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 catch (Exception ex)
                 {
-                    Serilog.Log.Error(ex,"Error searching for document Type Code");
+                    Serilog.Log.Error(ex, $"Error searching for document Type Code {documentTypeCode}");
                     result = null;
                 }
             }
@@ -933,14 +946,11 @@ namespace Rsbc.Dmf.CaseManagement
                     newRecord.dfp_businessarea = ConvertStringToBusinessArea(businessArea);
                 }
 
-
                 dynamicsContext.AddTodfp_submittaltypes(newRecord);
                 dynamicsContext.SaveChanges();
 
                 result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
-
             }
-
 
             return result;
         }

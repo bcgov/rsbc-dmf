@@ -334,15 +334,26 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string surcode = null         // Driver -> Lastname   
             )
         {
+
+            if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
+            {
+                var actionName = nameof(AddCaseDocument);
+                var routeValues = new
+                {
+                    driversLicence = driversLicense
+                };
+                return CreatedAtAction(actionName, routeValues, null);
+            }
+
             var driver = new CaseManagement.Service.Driver()
             {
                 DriverLicenseNumber = driversLicense,
                 Address = new Address()
                 {
-                     City = String.Empty,
-                      Line1 = String.Empty,
-                       Line2 = String.Empty,
-                        Postal =String.Empty
+                    City = String.Empty,
+                    Line1 = String.Empty,
+                    Line2 = String.Empty,
+                    Postal =String.Empty
                 },
                 BirthDate = Timestamp.FromDateTimeOffset(new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero)),
                 GivenName = String.Empty,
@@ -369,7 +380,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
 
-                if (faxReceivedDate == null)
+            if (faxReceivedDate == null)
             {
                 faxReceivedDate = DateTimeOffset.Now;
             }
@@ -392,13 +403,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
              
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                foreach (var item in reply.Items)
-                {
-                    driverId = driverId;
-                    break;
-                }
-
+            {                
                 // add the document
                 var ms = new MemoryStream();
                 if (file != null)
@@ -415,9 +420,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 var data = ms.ToArray();
                 string fileName = file?.FileName ?? "UnknownFile.pdf";
+
+                // ensure there are no invalid characters.
+
+                fileName = DocumentUtils.SanitizeKeyFilename(fileName);
+
                 UploadFileRequest pdfData = new UploadFileRequest()
                 {
-                    ContentType = MimeUtils.GetMimeType(fileName),
+                    ContentType = DocumentUtils.GetMimeType(fileName),
                     Data = ByteString.CopyFrom(data),
                     EntityName = "dfp_driver",
                     FileName = fileName,
@@ -425,9 +435,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 };
                 var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
 
-                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+
+                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
+                    || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
                 {
-                    return StatusCode(500, fileReply.ErrorDetail);
+                    return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
                 }
 
                 var document = new LegacyDocument()
@@ -446,16 +458,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ValidationMethod = validationMethod ?? string.Empty,
                     ValidationPrevious = validationPrevious ?? string.Empty
                 };
-
-                if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
-                    {
-                    var actionName = nameof(AddCaseDocument);
-                    var routeValues = new
-                    {
-                        driversLicence = driversLicense
-                    };
-                    return CreatedAtAction(actionName, routeValues, document);
-                }
 
                 var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
 
