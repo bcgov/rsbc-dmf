@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Rsbc.Dmf.CaseManagement.Service;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -337,6 +338,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
             {
+                
                 var actionName = nameof(AddCaseDocument);
                 var routeValues = new
                 {
@@ -344,6 +346,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 };
                 return CreatedAtAction(actionName, routeValues, null);
             }
+
+            Log.Logger.Information($"Document received from DPS {documentType}, {driversLicense}");
 
             var driver = new CaseManagement.Service.Driver()
             {
