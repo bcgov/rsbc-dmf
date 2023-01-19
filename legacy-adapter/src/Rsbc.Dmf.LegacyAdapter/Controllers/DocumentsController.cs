@@ -53,7 +53,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 string filename = Path.GetFileName(reply.Document.DocumentUrl);
-                string mimetype = MimeUtils.GetMimeType(filename);
+                string mimetype = DocumentUtils.GetMimeType(filename);
                 return Json(mimetype);
             }
             else
@@ -129,7 +129,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         byte[] fileContents = documentReply.Data.ToByteArray();
                         string fileName = Path.GetFileName(reply.Document.DocumentUrl);
-                        string mimetype = MimeUtils.GetMimeType(fileName);
+                        string mimetype = DocumentUtils.GetMimeType(fileName);
                         Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
                         Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                         return new FileContentResult(fileContents, mimetype)
