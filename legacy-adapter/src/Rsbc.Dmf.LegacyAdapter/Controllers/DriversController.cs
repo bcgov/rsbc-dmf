@@ -482,7 +482,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 };
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
-                string fileKey = $"{filename}-{importDateString}-{sequenceNumber}";
+                string fileKey = DocumentUtils.SanitizeKeyFilename ($"{filename}-{importDateString}-{sequenceNumber}");
+
+                
 
                 // add the document
                 UploadFileRequest pdfData = new UploadFileRequest()
