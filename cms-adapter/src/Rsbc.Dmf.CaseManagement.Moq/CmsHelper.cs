@@ -205,13 +205,16 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
                 .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
 
+
+            mockClient
+                .Setup(m => m.MarkMedicalUpdateError(
+                    It.IsAny<IcbcErrorRequest>(), null, null, CancellationToken.None))
+                .Returns(new ResultStatusReply { ResultStatus = ResultStatus.Success });
+
             mockClient
                 .Setup(m => m.ProcessLegacyCandidate(
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
                 .Returns(new LegacyCandidateReply { ResultStatus = ResultStatus.Success });
-
-
-
 
             return mockClient.Object;
         }
