@@ -207,6 +207,30 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.True(result.Success);
         }
 
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateIcbcError()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            // We need to get a valid case Id to test
+            var icbcErrorRequest = new IcbcErrorRequest()
+            {
+                CaseId = caseId,
+                ErrorMessage = "Icbc Error Testing"
+
+            };
+            var result = await caseManager.MarkMedicalUpdateError(icbcErrorRequest);
+            result.ShouldNotBeNull();
+            Assert.True(result.Success);
+        }
+
+
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
         {

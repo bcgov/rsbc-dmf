@@ -89,7 +89,15 @@ namespace Rsbc.Dmf.IcbcAdapter
                         };
                             
                         _caseManagerClient.CreateBringForward(bringForwardRequest);
-                            
+
+                         // Mark ICBC error 
+
+                        var icbcError = new IcbcErrorRequest
+                        {
+                            ErrorMessage = "ICBC Error"
+                        };
+
+                        _caseManagerClient.MarkMedicalUpdateError(icbcError);    
 
                         LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
                     }                                            
@@ -215,4 +223,3 @@ namespace Rsbc.Dmf.IcbcAdapter
 
     }
 }
-

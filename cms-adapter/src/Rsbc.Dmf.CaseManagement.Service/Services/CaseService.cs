@@ -29,6 +29,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _caseManager = caseManager;
         }
 
+        /// <summary>
+        /// Create Legacy Case Comment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request, ServerCallContext context)
         {
             var reply = new CreateStatusReply();
@@ -65,7 +71,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Create Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request, ServerCallContext context)
         {
             var reply = new CreateStatusReply();
@@ -115,7 +126,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Delete Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<ResultStatusReply> DeleteLegacyCaseDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
@@ -145,6 +161,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
+
+        /// <summary>
+        /// Get Case Comments
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -185,7 +208,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get Case Documents
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDocumentsReply> GetCaseDocuments(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
@@ -238,7 +266,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get Driver Comments
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -277,7 +310,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get All Driver Comments
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetCommentsReply> GetAllDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
@@ -316,7 +354,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get Driver Documents
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
@@ -363,7 +406,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get Drivers
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDriversReply> GetDrivers(EmptyRequest request, ServerCallContext context)
         {
             var reply = new GetDriversReply();
@@ -392,7 +440,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-
+        /// <summary>
+        /// Get Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDriversReply> GetDriver(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDriversReply();
@@ -422,7 +475,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
 
-
+        /// <summary>
+        /// Process Legacy Candidate
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<LegacyCandidateReply> ProcessLegacyCandidate(LegacyCandidateRequest request, ServerCallContext context)
         {
             var reply = new LegacyCandidateReply();
@@ -473,7 +531,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Resolve Case Status Updates
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<ResultStatusReply> ResolveCaseStatusUpdates(EmptyRequest request, ServerCallContext context)
         {
             var reply = new ResultStatusReply();
@@ -494,6 +557,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             
         }
 
+        /// <summary>
+        /// Case Search
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<SearchReply> Search(SearchRequest request, ServerCallContext context)
         {
             var reply = new SearchReply();
@@ -593,7 +662,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Update Case
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
             var reply = new UpdateCaseReply();
@@ -670,6 +744,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        /// <summary>
+        /// Set Case Practitioner Clinic
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<SetCasePractitionerClinicReply> SetCasePractitionerClinic(SetCasePractitionerClinicRequest request, ServerCallContext context)
         {
             var reply = new SetCasePractitionerClinicReply();
@@ -709,7 +789,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-
+        /// <summary>
+        /// Get All Flags
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetAllFlagsReply> GetAllFlags(EmptyRequest request, ServerCallContext context)
         {
             var reply = new GetAllFlagsReply();
@@ -728,7 +813,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Get Unsent Medical Updates
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<SearchReply> GetUnsentMedicalUpdates(EmptyRequest request, ServerCallContext context)
         {
             var data = await _caseManager.GetUnsentMedicalUpdates();
@@ -788,6 +878,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        /// <summary>
+        /// Mark Medical Updates Sent
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<ResultStatusReply> MarkMedicalUpdatesSent(IdListRequest request, ServerCallContext context)
         {
             ResultStatusReply result = new ResultStatusReply();
@@ -806,8 +902,42 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        
+        /// <summary>
+        /// Mark Medical Update Error when ICBC fails to update
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply();
+            try
+            {
+                var icbcErrorRequest = new CaseManagement.IcbcErrorRequest()
+                {
+                    CaseId = request.CaseId,
+                    ErrorMessage = request.ErrorMessage
+                };
 
+                await _caseManager.MarkMedicalUpdateError(icbcErrorRequest);
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+            
+            return reply;
+        }
+
+
+        /// <summary>
+        /// Get Token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
         {
@@ -837,7 +967,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return Task.FromResult(result);
         }
 
-
+        /// <summary>
+        /// Get Legacy Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetLegacyDocumentReply> GetLegacyDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             GetLegacyDocumentReply reply = new GetLegacyDocumentReply();
@@ -876,7 +1011,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
+        /// <summary>
+        /// Create Bring Forwards
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();

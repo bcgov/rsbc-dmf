@@ -49,6 +49,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
+        Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request);
+
         Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null);
 
         Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
@@ -245,6 +247,12 @@ namespace Rsbc.Dmf.CaseManagement
         
     }
 
+    public class IcbcErrorRequest
+    {
+        public string CaseId { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+
     public enum BringForwardPriority
     {
         Low = 0,
@@ -270,7 +278,11 @@ namespace Rsbc.Dmf.CaseManagement
             this.logger = logger;
         }
 
-
+        /// <summary>
+        /// Lazy Load Properties
+        /// </summary>
+        /// <param name="case"></param>
+        /// <returns></returns>
         private async Task LazyLoadProperties(incident @case)
         {
             //load clinic details (assuming customer as clinic for now)
@@ -330,7 +342,12 @@ namespace Rsbc.Dmf.CaseManagement
             return MapCases(cases);            
         }
 
-
+        /// <summary>
+        /// Get Case Legacy Comments
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <param name="allComments"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments)
         {
             List<LegacyComment> result = new List<LegacyComment>();
@@ -369,7 +386,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Get Case Legacy Documents
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId)
         {
             List<LegacyDocument> result = new List<LegacyDocument>();
@@ -427,6 +448,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Convert Pages To Int
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private int ConvertPagesToInt (string data)
         {
             int result = 0;
@@ -438,6 +464,12 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
+        /// <summary>
+        /// Get Driver Legacy Comments
+        /// </summary>
+        /// <param name="driverLicenceNumber"></param>
+        /// <param name="allComments"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments )
         {
             List<LegacyComment> result = new List<LegacyComment>();
@@ -493,7 +525,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Get Driver Legacy Documents
+        /// </summary>
+        /// <param name="driverLicenceNumber"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber)
         {
             List<LegacyDocument> result = new List<LegacyDocument>();
@@ -633,7 +669,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Convert String To Business Area
+        /// </summary>
+        /// <param name="businessArea"></param>
+        /// <returns></returns>
         private int? ConvertStringToBusinessArea(string businessArea)
         {
             int? result = null;
@@ -655,7 +695,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Convert Business Area To String
+        /// </summary>
+        /// <param name="businessArea"></param>
+        /// <returns></returns>
         private string ConvertBusinessAreaToString(int? businessArea)
         {
             string result = "";
@@ -683,6 +727,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Driver
+        /// </summary>
+        /// <param name="licensenumber"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDriver(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
@@ -703,7 +752,10 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Get Drivers
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDrivers()
         {
             List<Driver> result = new List<Driver>();
@@ -723,6 +775,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Legacy Document
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
         public async Task<LegacyDocument> GetLegacyDocument(string documentId)
         {
             LegacyDocument legacyDocument  = null;
@@ -811,6 +868,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Incident By Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         protected incident GetIncidentById(string id)
         {
             incident result = null;
@@ -831,7 +893,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Create Legacy Case Comment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request)
         {
             CreateStatusReply result = new CreateStatusReply()
@@ -899,6 +965,13 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Document Type
+        /// </summary>
+        /// <param name="documentTypeCode"></param>
+        /// <param name="documentType"></param>
+        /// <param name="businessArea"></param>
+        /// <returns></returns>
         private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
         {
             dfp_submittaltype result = null;
@@ -956,7 +1029,11 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
+        /// <summary>
+        /// Create Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
@@ -1099,8 +1176,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
-
+        /// <summary>
+        /// Delete Legacy Document
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
         public async Task<bool> DeleteLegacyDocument(string documentId)
         {
             bool result = false;
@@ -1131,6 +1211,12 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
 
         }
+
+        /// <summary>
+        /// Translate Decision Outcome
+        /// </summary>
+        /// <param name="decisionId"></param>
+        /// <returns></returns>
         private DecisionOutcome? TranslateDecisionOutcome(Guid? decisionId)
         {
             DecisionOutcome? result = null;
@@ -1160,8 +1246,14 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        //map cases from query results (TODO: consider replacing with AutoMapper)
 
+        /// <summary>
+        ///  Combine First Name and Last Name
+        /// //map cases from query results (TODO: consider replacing with AutoMapper)
+        /// </summary>
+        /// <param name="firstname"></param>
+        /// <param name="lastname"></param>
+        /// <returns></returns>
         private string CombineName (string firstname, string lastname)
         {
             string result = string.Empty;
@@ -1182,6 +1274,12 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
+
+        /// <summary>
+        /// Map Cases
+        /// </summary>
+        /// <param name="cases"></param>
+        /// <returns></returns>
         private CaseSearchReply MapCases(IEnumerable<incident> cases)
         {               
             return new CaseSearchReply
@@ -1280,8 +1378,15 @@ namespace Rsbc.Dmf.CaseManagement
 
        }
 
+
+        /// <summary>
+        /// Filter Last Case Modified
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="created"></param>
+        /// <returns></returns>
         private DateTime FilterLastCaseModified (DateTimeOffset? value, DateTime created)
-        {
+       {
             DateTime result;
             if (value == null)
             {
@@ -1294,6 +1399,13 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Legacy Candidate Create
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="birthDate"></param>
+        /// <param name="effectiveDate"></param>
+        /// <returns></returns>
         public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
         {
             Guid? result = null;
@@ -1415,9 +1527,13 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
-            public async Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request)
-            {
+        /// <summary>
+        /// Legacy Candidate Search
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request)
+        {
             //search matching cases
             var cases = await SearchLegacyCandidate(dynamicsContext, request);
 
@@ -1500,6 +1616,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        /// <summary>
+        /// Search Cases
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
             bool notJustDriverLicenseSearch = !string.IsNullOrEmpty(criteria.CaseId) || !string.IsNullOrEmpty(criteria.Title) || !string.IsNullOrEmpty(criteria.ClinicId);
@@ -1563,7 +1685,12 @@ namespace Rsbc.Dmf.CaseManagement
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
         }
 
-
+        /// <summary>
+        /// Search Legacy Candidate
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
         private static async Task<IEnumerable<incident>> SearchLegacyCandidate(DynamicsContext ctx, LegacyCandidateSearchRequest criteria)
         {
             var shouldSearchCases =
@@ -1597,6 +1724,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        /// <summary>
+        /// Search Driver Cases
+        /// </summary>
+        /// <param name="ctx"></param>
+        /// <param name="criteria"></param>
+        /// <returns></returns>
         private static async Task<IEnumerable<incident>> SearchDriverCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
             var shouldSearchDrivers = !string.IsNullOrEmpty(criteria.DriverLicenseNumber);
@@ -1614,6 +1747,10 @@ namespace Rsbc.Dmf.CaseManagement
             return drivers.SelectMany(d => d.dfp_driver_incident_DriverId).ToArray();
         }
 
+        /// <summary>
+        /// Get All Flags
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Flag>> GetAllFlags()
         {
             List<Flag> result = new List<Flag>();
@@ -1637,6 +1774,10 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Unsent Medical Updates
+        /// </summary>
+        /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
         {
             var caseQuery = dynamicsContext.incidents
@@ -1678,7 +1819,10 @@ namespace Rsbc.Dmf.CaseManagement
             return MapCases(outputArray);            
         }
 
-
+        /// <summary>
+        /// Get Dps Processing Date
+        /// </summary>
+        /// <returns></returns>
         public DateTimeOffset GetDpsProcessingDate()
         {
             var mostRecentRecord = dynamicsContext.bcgov_documenturls
@@ -1696,6 +1840,10 @@ namespace Rsbc.Dmf.CaseManagement
             }            
         }
 
+        /// <summary>
+        /// Update NonComply Documents
+        /// </summary>
+        /// <returns></returns>
         public async Task UpdateNonComplyDocuments()
         {
 
@@ -1806,7 +1954,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
         /// <summary>
-        /// 
+        /// Mark Medical Updates Sent
         /// </summary>
         /// <param name="ids"></param>
         /// <returns></returns>
@@ -1827,8 +1975,54 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
-     
 
+        /// <summary>
+        /// Mark Medical Update Error
+        /// </summary>
+        /// <param name="ids"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            string caseId = request.CaseId;
+            string errorMessage = request.ErrorMessage;
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                try
+                {
+                    var dmerEntity = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(caseId)).FirstOrDefault();
+                    if (dmerEntity != null)
+                    {
+                        // Update the error message in CMS
+                        dmerEntity.dfp_icbcerrorlog = errorMessage;
+                        
+                    }
+                    dynamicsContext.UpdateObject(dmerEntity);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                    Log.Logger.Error(ex.Message);
+                }
+            }
+            return result;
+
+        }
+
+        /// <summary>
+        /// Add Document Url To Case If Not Exist
+        /// </summary>
+        /// <param name="dmerIdentifier"></param>
+        /// <param name="fileKey"></param>
+        /// <param name="fileSize"></param>
+        /// <returns></returns>
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
         {
             // add links to documents.
@@ -1898,6 +2092,11 @@ namespace Rsbc.Dmf.CaseManagement
             return Math.Sign(byteCount) * num + " " + suffix[place];
         }
 
+        /// <summary>
+        /// Sanitize Label
+        /// </summary>
+        /// <param name="label"></param>
+        /// <returns></returns>
         private string SanitizeLabel(string label)
         {
             const int maxFieldLength = 200;
@@ -1918,6 +2117,14 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Set Case Flags
+        /// </summary>
+        /// <param name="dmerIdentifier"></param>
+        /// <param name="isCleanPass"></param>
+        /// <param name="flags"></param>
+        /// <param name="logger"></param>
+        /// <returns></returns>
         public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
@@ -2040,6 +2247,13 @@ namespace Rsbc.Dmf.CaseManagement
             return new SetCaseFlagsReply { Success = false };
         }
 
+        /// <summary>
+        /// Set Case Practitioner Clinic
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <param name="practitionerId"></param>
+        /// <param name="clinicId"></param>
+        /// <returns></returns>
         public async Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId)
         {
             logger.LogInformation($"SetCasePractitionerClinic - looking for DMER with identifier {caseId} {practitionerId} {clinicId}");
@@ -2084,8 +2298,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-        ///
-        /// translate a gendercode into a common string.
+        /// <summary>
+        /// Translate Gender Code to string
+        /// </summary>
+        /// <param name="gendercode"></param>
+        /// <returns></returns>
         private string TranslateGenderCode(int? gendercode)
         {
             string result = string.Empty;
@@ -2103,7 +2320,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
+        /// <summary>
+        /// Translate Comment Type Code FromInt
+        /// </summary>
+        /// <param name="commentTypeCode"></param>
+        /// <returns></returns>
         private string TranslateCommentTypeCodeFromInt(int? commentTypeCode)
         {
             string result;
@@ -2134,6 +2355,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Translate CommentTypeCode To Int
+        /// </summary>
+        /// <param name="commentTypeCode"></param>
+        /// <returns></returns>
         private int TranslateCommentTypeCodeToInt(string commentTypeCode)
         {
             int result;
@@ -2167,11 +2393,17 @@ namespace Rsbc.Dmf.CaseManagement
        
     }
 
+    /// <summary>
+    /// Enum for Case Type Option set
+    /// </summary>
     internal enum CaseTypeOptionSet
     {
         DMER = 2
     }
 
+    /// <summary>
+    /// Enum for Flag Type Option Set
+    /// </summary>
     public enum FlagTypeOptionSet
     {
         Submittal = 100000000,
