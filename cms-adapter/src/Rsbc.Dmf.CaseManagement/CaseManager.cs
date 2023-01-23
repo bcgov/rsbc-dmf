@@ -1184,30 +1184,20 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<bool> DeleteLegacyDocument(string documentId)
         {
             bool result = false;
-            LegacyDocument legacyDocument = null;
 
-            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            var document = dynamicsContext.bcgov_documenturls.ByKey(Guid.Parse(documentId)).GetValue(); 
             if (document != null)
             {
-                dynamicsContext.DeactivateObject(document, 2);
-                /*
-                // set to inactive.
-                document.statecode = 1;
-                document.statuscode = 2;*/
+                dynamicsContext.DeactivateObject(document, 2);                
+                // set to inactive.                
                 await dynamicsContext.SaveChangesAsync();
                 dynamicsContext.DetachAll();
                 result = true;
             }
             else
             {
-                Serilog.Log.Error($"Could not find document {documentId}");                
-            }
-            /*
-            dynamicsContext.DeactivateObject(document,2);
-
-            dynamicsContext.UpdateObject(document);
-            */
-            
+                Log.Error($"Could not find document {documentId}");                
+            }            
             return result;
 
         }
