@@ -181,6 +181,78 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             await caseManager.ResolveCaseStatusUpdates();
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanDeleteLegacyDocument()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // get the case
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            string documentUrl = $"TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
+
+            // add a document
+
+            LegacyDocument legacyDocumentRequest = new LegacyDocument { BatchId = "1", 
+                CaseId = caseId,
+                DocumentType = "Legacy Review",
+                DocumentTypeCode = "LegacyReview",
+                Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
+                FaxReceivedDate = DateTimeOffset.UtcNow,
+                ImportDate = DateTimeOffset.UtcNow,
+                FileSize = 10,
+                DocumentPages = 1,
+                OriginatingNumber = "1",
+                SequenceNumber = 1,
+                DocumentUrl = documentUrl                
+            };
+
+            await caseManager.CreateLegacyCaseDocument(legacyDocumentRequest);
+
+            // confirm it is present
+
+            var docs = await caseManager.GetCaseLegacyDocuments(caseId);
+
+            bool found = false;
+
+            string documentId = null;
+
+            foreach (var doc in docs)
+            {
+                if (doc.DocumentUrl == documentUrl)
+                {
+                    found = true;
+                    documentId = doc.DocumentId;
+                    break;
+                }
+            }
+
+            Assert.True(found);
+
+            // delete it
+
+            await caseManager.DeleteLegacyDocument(documentId);
+
+            // confirm that it is deleted
+
+            found = false;
+
+            docs = await caseManager.GetCaseLegacyDocuments(caseId);
+
+            foreach (var doc in docs)
+            {
+                if (doc.DocumentUrl == documentUrl)
+                {
+                    found = true;                    
+                    break;
+                }
+            }
+
+            Assert.False(found);
+        }
+
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateBringForward()
