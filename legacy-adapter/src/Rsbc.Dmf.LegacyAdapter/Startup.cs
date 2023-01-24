@@ -145,9 +145,9 @@ namespace Rsbc.Dmf.LegacyAdapter
 
             // Add ICBC Client
 
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
-                services.AddTransient<IIcbcClient>(_ => new IcbcClient(Configuration));
+                services.AddTransient<IIcbcClient>(_ => new EnhancedIcbcClient(Configuration));
             }
 
             // Add Document Storage Adapter
