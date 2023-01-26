@@ -311,7 +311,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
-            {
+            {           
                 CaseId = comment.CaseId ?? String.Empty,
                 CommentText = comment.CommentText ?? String.Empty,
                 CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
