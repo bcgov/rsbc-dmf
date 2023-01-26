@@ -936,12 +936,12 @@ namespace Rsbc.Dmf.CaseManagement
                 // create the comment
                 dfp_comment comment = new dfp_comment()
                 {
-                    createdon = DateTimeOffset.Now,
+                    createdon = request.CommentDate,
                     dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
                     dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText, 
-                    dfp_date = request.CommentDate
+                    dfp_date = request.CommentDate  
                 };
 
                 try
