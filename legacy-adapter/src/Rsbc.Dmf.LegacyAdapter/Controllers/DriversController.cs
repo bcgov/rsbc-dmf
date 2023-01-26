@@ -305,7 +305,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now;
             // Dynamics has a minimum value for a date.
-            if (commentDate < new DateTimeOffset (1753, 1, 1, 0, 0, 0, TimeSpan.Zero))
+            if (commentDate.Year < 1753)
             {
                 commentDate = DateTimeOffset.Now;
             }

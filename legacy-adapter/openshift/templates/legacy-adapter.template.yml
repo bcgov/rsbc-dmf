@@ -30,19 +30,16 @@ parameters:
     from: "[A-Z0-9]{8}"
     generate: expression
     name: PASSWORD
-  - description: CORS_ORIGINS
-    name: CORS_ORIGINS
-    required: true
   - description: DOCUMENT_STORAGE_ADAPTER_URI
     name: DOCUMENT_STORAGE_ADAPTER_URI
     required: true
-  - description: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
-    name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+  - description: DOCUMENT_STORAGE_ADAPTER_SECRET
+    name: DOCUMENT_STORAGE_ADAPTER_SECRET
     required: true
   - description: CMS_ADAPTER_URI
     name: CMS_ADAPTER_URI
     required: true
-  - description: CMS_ADAPTER_JWT_SECRET
+  - description: CMS_ADAPTER_SECRET
     name: CMS_ADAPTER_SECRET
     required: true
   - description: JWT_TOKEN_KEY
@@ -193,6 +190,11 @@ objects:
                     secretKeyRef:
                       name: ${CMS_ADAPTER_SECRET}
                       key: JWT_TOKEN_KEY
+                - name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${DOCUMENT_STORAGE_ADAPTER_SECRET}
+                      key: JWT_TOKEN_KEY                      
               envFrom:                
                 - configMapRef:
                     name: ${APP_NAME}-config
