@@ -46,6 +46,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 driver.Surname = request.Driver.Surname;
             }
 
+            var commentDate = request.CommentDate.ToDateTimeOffset();
+
+            if (commentDate.Year < 1753)
+            {
+                commentDate = DateTimeOffset.Now;
+            }
+
             var newComment = new CaseManagement.LegacyComment()
             {
                 CaseId = request.CaseId,
@@ -54,7 +61,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SequenceNumber = (int)request.SequenceNumber,
                 UserId = request.UserId,            
                 Driver = driver,
-                CommentDate = request.CommentDate.ToDateTimeOffset()
+                CommentDate = commentDate 
             };
 
             var result = await _caseManager.CreateLegacyCaseComment(newComment);
