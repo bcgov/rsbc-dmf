@@ -53,7 +53,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 CommentTypeCode = request.CommentTypeCode,
                 SequenceNumber = (int)request.SequenceNumber,
                 UserId = request.UserId,            
-                Driver = driver
+                Driver = driver,
+                CommentDate = request.CommentDate.ToDateTimeOffset()
             };
 
             var result = await _caseManager.CreateLegacyCaseComment(newComment);
