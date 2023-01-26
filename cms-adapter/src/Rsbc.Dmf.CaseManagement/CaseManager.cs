@@ -905,7 +905,7 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };            
             string caseId = request.CaseId;
-            if (string.IsNullOrEmpty( request.CaseId))
+            if (string.IsNullOrEmpty(caseId))
             {
                 // create a new case.
                 LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
@@ -934,25 +934,26 @@ namespace Rsbc.Dmf.CaseManagement
                 var driver = @case.dfp_DriverId;
 
                 // create the comment
-                dfp_comment @comment = new dfp_comment()
+                dfp_comment comment = new dfp_comment()
                 {
                     createdon = DateTimeOffset.Now,
                     dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
                     dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
-                    dfp_commentdetails = request.CommentText
+                    dfp_commentdetails = request.CommentText, 
+                    dfp_date = request.CommentDate
                 };
 
                 try
                 {
-                    dynamicsContext.AddTodfp_comments(@comment);
+                    dynamicsContext.AddTodfp_comments(comment);
 
-                    dynamicsContext.SetLink(@comment, nameof(dfp_comment.dfp_DriverId), driver);
-                    dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), @comment);
+                    dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+                    dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), comment);
 
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
-                    result.Id = @comment.dfp_commentid.ToString();
+                    result.Id = comment.dfp_commentid.ToString();
                     dynamicsContext.DetachAll();
                 }
                 catch (Exception ex)
