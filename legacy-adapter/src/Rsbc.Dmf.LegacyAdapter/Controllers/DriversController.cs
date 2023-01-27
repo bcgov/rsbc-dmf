@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -291,6 +292,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(500)]
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
+
+            Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
 
             var driver = new CaseManagement.Service.Driver()
