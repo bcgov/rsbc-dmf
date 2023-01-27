@@ -911,7 +911,7 @@ namespace Rsbc.Dmf.CaseManagement
                 LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
                 {
                      DriverLicenseNumber = request.Driver.DriverLicenseNumber,
-                     SequenceNumber = request.SequenceNumber,
+                     SequenceNumber = null,
                      Surname = request.Driver.Surname
                 };
 
@@ -1407,6 +1407,12 @@ namespace Rsbc.Dmf.CaseManagement
 
             var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+
+            if (birthDate != null && birthDate.Value.Year < 1753)
+            {
+                birthDate = new DateTime(1753,1,1);
+            }
+
 
             dfp_driver[] driverResults;
             
