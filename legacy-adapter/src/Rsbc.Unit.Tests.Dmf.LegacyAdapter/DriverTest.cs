@@ -90,14 +90,14 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             {  
                 CommentText = "This is a test comment",
                 Driver = driver,
-                SequenceNumber = 4,
+                SequenceNumber = 0, //= 4,
                 CommentTypeCode = "W",
                 UserId = "IDIR\\TESTUSER",
                 CaseId = caseId
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);
-
+            
             request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
 
             response = _client.SendAsync(request).GetAwaiter().GetResult();

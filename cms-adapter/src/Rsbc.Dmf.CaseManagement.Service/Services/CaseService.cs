@@ -53,9 +53,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 commentDate = DateTimeOffset.Now;
             }
 
+            string caseIdString = null;
+            Guid caseId;
+
+            if (Guid.TryParse(request.CaseId, out caseId))
+            {
+                caseIdString = caseId.ToString();
+            }
+
             var newComment = new CaseManagement.LegacyComment()
             {
-                CaseId = request.CaseId,
+                CaseId = caseIdString,
                 CommentText = request.CommentText,
                 CommentTypeCode = request.CommentTypeCode,
                 SequenceNumber = (int)request.SequenceNumber,
