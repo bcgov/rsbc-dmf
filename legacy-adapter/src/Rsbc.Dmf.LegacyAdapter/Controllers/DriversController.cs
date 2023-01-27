@@ -318,7 +318,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 SequenceNumber = comment.SequenceNumber ?? -1,
                 UserId = comment.UserId ?? String.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(commentDate),
-                Driver = driver
+                Driver = driver,
+                CommentId = string.Empty
             });
 
             if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
