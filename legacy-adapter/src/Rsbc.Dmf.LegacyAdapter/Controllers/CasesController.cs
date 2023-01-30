@@ -326,6 +326,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string originatingNumber, // dfp_faxnumber
             [FromForm] int? documentPages, // add to document entity
             [FromForm] string documentType, // dfp_documenttypeid
+            [FromForm] string documentTypeCode, // "form type" in DPS; the code that will be used for a lookup.
             [FromForm] string validationMethod, // add to document entity
             [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file,
@@ -446,11 +447,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
                 }
 
+                string legacyDocumentType = documentType ?? String.Empty;
+
                 var document = new LegacyDocument()
                 {
                     BatchId = batchId ?? String.Empty,
                     DocumentPages = documentPages ?? 1,
-                    DocumentTypeCode = documentType ?? String.Empty,
+                    DocumentType = legacyDocumentType,
+                    DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
                     DocumentUrl = fileReply.FileName,
                     CaseId = caseId ?? string.Empty,
                     FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate.Value),
