@@ -16,10 +16,14 @@ service CaseManager {
 
   rpc DeleteLegacyCaseDocument (LegacyDocumentRequest) returns (ResultStatusReply);
 
+  rpc DeleteComment (CommentIdRequest) returns (ResultStatusReply);
+
   rpc GetAllDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   // Get all the flags
   rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
+
+  rpc GetComment (CommentIdRequest) returns (GetCommentReply);
 
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
@@ -59,11 +63,7 @@ service CaseManager {
   // Resolve a case
    rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
 
-  
-
 }
-
-
 
 message DriverLicenseRequest {
 	string driverLicenseNumber= 1;
@@ -71,6 +71,10 @@ message DriverLicenseRequest {
 
 message CaseIdRequest {
 	string caseId= 1;
+}
+
+message CommentIdRequest {
+	string commentId= 1;
 }
 
 message LegacyDocumentRequest {
@@ -85,6 +89,13 @@ message GetCommentsReply {
 
 message GetDocumentsReply {
 	repeated LegacyDocument items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+
+message GetCommentReply {
+	LegacyComment item = 1;
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
 }

@@ -282,12 +282,54 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+
+        public async override Task<GetCommentReply> GetComment(CommentIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetCommentReply();
+            try
+            {
+                var item = await _caseManager.GetComment(request.CommentId);
+
+                if (item != null)
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname;
+                    }
+                    reply.Item = new LegacyComment
+                    {
+                        CaseId = item.CaseId ?? string.Empty,
+                        CommentDate = Timestamp.FromDateTimeOffset(item.CommentDate),
+                        CommentTypeCode = item.CommentTypeCode ?? string.Empty,
+                        CommentId = item.CommentId ?? string.Empty,
+                        SequenceNumber = (long)(item.SequenceNumber ?? 0),
+                        UserId = item.UserId ?? string.Empty,
+                        Driver = driver,
+                        CommentText = item.CommentText ?? string.Empty
+                    };
+                }
+                reply.ResultStatus = ResultStatus.Success;
+
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
         /// <summary>
         /// Get Driver Comments
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
+        /// 
+
+
         public async override Task<GetCommentsReply> GetDriverComments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
