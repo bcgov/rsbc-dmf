@@ -20,9 +20,13 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);
 
+        Task<bool> DeleteComment(string commentId);
+
         Task<bool> DeleteLegacyDocument(string documentId);
         
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
+
+        Task<LegacyComment> GetComment(string commentId);
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
 
@@ -778,6 +782,35 @@ namespace Rsbc.Dmf.CaseManagement
         /// <summary>
         /// Get Legacy Document
         /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        public async Task<LegacyComment> GetComment(string commentId)
+        {
+            LegacyComment legacyComment = null;
+
+            var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
+            if (comment != null)
+            {
+                legacyComment = new LegacyComment
+                {
+                    CaseId = comment._dfp_caseid_value.ToString(),
+                    CommentDate = comment.createdon.GetValueOrDefault(),
+                    CommentId = comment.dfp_commentid.ToString(),
+                    CommentText = comment.dfp_commentdetails,
+                    CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                    SequenceNumber = null,
+                    UserId = comment.dfp_userid,
+                    Driver = new Driver() // TODO - fetch driver
+                };
+            }
+
+            return legacyComment;
+
+        }
+
+        /// <summary>
+        /// Get Legacy Document
+        /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
         public async Task<LegacyDocument> GetLegacyDocument(string documentId)
@@ -1097,8 +1130,6 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
-                
-
                 if (bcgovDocumentUrl == null)
                 {
                     bcgovDocumentUrl = new bcgov_documenturl() ;                   
@@ -1175,6 +1206,32 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Delete Comment
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteComment(string documentId)
+        {
+            bool result = false;
+
+            var comment = dynamicsContext.dfp_comments.ByKey(Guid.Parse(documentId)).GetValue();
+            if (comment != null)
+            {
+                dynamicsContext.DeactivateObject(comment, 2);
+                // set to inactive.                
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+                result = true;
+            }
+            else
+            {
+                Log.Error($"Could not find comment {comment}");
+            }
+            return result;
+
         }
 
         /// <summary>
