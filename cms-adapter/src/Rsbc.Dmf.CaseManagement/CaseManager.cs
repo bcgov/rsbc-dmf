@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -369,21 +370,26 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
-                    await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
-                    if (allComments || comment.dfp_icbc.GetValueOrDefault())
+                    // ignore inactive.
+                    if (comment.statecode != null && comment.statecode == 0)
                     {
-                        LegacyComment legacyComment = new LegacyComment
+                        await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                        if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
-                            CaseId = @case.incidentid.ToString(),
-                            CommentDate = comment.createdon.GetValueOrDefault(),
-                            CommentId = comment.dfp_commentid.ToString(),
-                            CommentText = comment.dfp_commentdetails,
-                            CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                            SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                            UserId = comment.dfp_userid
-                        };
-                        result.Add(legacyComment);
+                            LegacyComment legacyComment = new LegacyComment
+                            {
+                                CaseId = @case.incidentid.ToString(),
+                                CommentDate = comment.createdon.GetValueOrDefault(),
+                                CommentId = comment.dfp_commentid.ToString(),
+                                CommentText = comment.dfp_commentdetails,
+                                CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                UserId = comment.dfp_userid
+                            };
+                            result.Add(legacyComment);
+                        }
                     }
+                        
                 }
             }
                
