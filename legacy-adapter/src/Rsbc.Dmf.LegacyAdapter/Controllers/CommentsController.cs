@@ -45,6 +45,39 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json (result);
         }
 
+        // POST: /Comments/Delete/{CommentId}
+        [HttpPost("Delete/{commentId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult DeleteComment([FromRoute] string commentId)
+
+        {
+            // call the back end
+            var reply = _cmsAdapterClient.GetComment(new CommentIdRequest() { CommentId = commentId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // remove it from Dynamics.
+                var cmsDeleteReply = _cmsAdapterClient.DeleteComment(new CommentIdRequest() { CommentId = commentId });
+
+                if (cmsDeleteReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    return Ok("Success");
+                }
+                else
+                {
+                    Serilog.Log.Error($"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail}");
+                    return StatusCode(500, $"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail}");
+                }
+            }
+            else
+            {
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
         /// <summary>
         /// Get Comments for a case
         /// </summary>
