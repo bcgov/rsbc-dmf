@@ -67,13 +67,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
                 else
                 {
-                    Serilog.Log.Error($"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail}");
-                    return StatusCode(500, $"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail}");
+                    Serilog.Log.Error($"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail} comment ID - {commentId}");
+                    return StatusCode(500, $"Unexpected error - unable to remove comment {cmsDeleteReply.ErrorDetail} comment ID - {commentId}");
                 }
             }
             else
             {
-                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                Serilog.Log.Error($"Unexpected error - unable to get comment - {reply.ErrorDetail} comment ID - {commentId}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
