@@ -793,22 +793,29 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<LegacyComment> GetComment(string commentId)
         {
             LegacyComment legacyComment = null;
-
-            var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
-            if (comment != null)
+            try
             {
-                legacyComment = new LegacyComment
+                var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
+                if (comment != null)
                 {
-                    CaseId = comment._dfp_caseid_value.ToString(),
-                    CommentDate = comment.createdon.GetValueOrDefault(),
-                    CommentId = comment.dfp_commentid.ToString(),
-                    CommentText = comment.dfp_commentdetails,
-                    CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                    SequenceNumber = null,
-                    UserId = comment.dfp_userid,
-                    Driver = new Driver() // TODO - fetch driver
-                };
+                    legacyComment = new LegacyComment
+                    {
+                        CaseId = comment._dfp_caseid_value.ToString(),
+                        CommentDate = comment.createdon.GetValueOrDefault(),
+                        CommentId = comment.dfp_commentid.ToString(),
+                        CommentText = comment.dfp_commentdetails,
+                        CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                        SequenceNumber = null,
+                        UserId = comment.dfp_userid,
+                        Driver = new Driver() // TODO - fetch driver
+                    };
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Logger.Error (ex, $"Error getting comment {commentId}");
+            }
+            
 
             return legacyComment;
 
