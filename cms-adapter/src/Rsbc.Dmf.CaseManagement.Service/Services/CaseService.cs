@@ -148,6 +148,42 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
+        public async override Task<ResultStatusReply> DeleteComment(CommentIdRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+
+            // fetch the document.
+            try
+            {
+                var d = await _caseManager.GetComment(request.CommentId);
+                if (d != null)
+                {
+                    if (await _caseManager.DeleteComment(request.CommentId))
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                }
+                else
+                {
+                    reply.ErrorDetail = "Comment ID not found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Delete Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<ResultStatusReply> DeleteLegacyCaseDocument(LegacyDocumentRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
