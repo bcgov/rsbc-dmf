@@ -376,6 +376,9 @@ namespace Rsbc.Dmf.CaseManagement
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
+                            int sequenceNumber = 0;
+                            int.TryParse(comment.dfp_caseidguid, out sequenceNumber);
+
                             LegacyComment legacyComment = new LegacyComment
                             {
                                 CaseId = @case.incidentid.ToString(),
@@ -383,7 +386,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 CommentId = comment.dfp_commentid.ToString(),
                                 CommentText = comment.dfp_commentdetails,
                                 CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                SequenceNumber = sequenceNumber,
                                 UserId = comment.dfp_userid
                             };
                             result.Add(legacyComment);
@@ -827,6 +830,8 @@ namespace Rsbc.Dmf.CaseManagement
                         GetDriverById(comment._dfp_driverid_value.Value);
                     }
                     
+                    int sequenceNumber = 0;
+                    int.TryParse(comment.dfp_caseidguid, out sequenceNumber);
 
                     legacyComment = new LegacyComment
                     {
@@ -835,9 +840,9 @@ namespace Rsbc.Dmf.CaseManagement
                         CommentId = comment.dfp_commentid.ToString(),
                         CommentText = comment.dfp_commentdetails,
                         CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                        SequenceNumber = null,
+                        SequenceNumber = sequenceNumber,
                         UserId = comment.dfp_userid,
-                        Driver = driver
+                        Driver = driver                         
                     };
                 }
             }
@@ -1017,8 +1022,15 @@ namespace Rsbc.Dmf.CaseManagement
                     dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText, 
-                    dfp_date = request.CommentDate  
+                    dfp_date = request.CommentDate                    
                 };
+                int sequenceNumber = 0;
+                if (request.SequenceNumber != null)
+                {
+                    sequenceNumber = request.SequenceNumber.Value;
+                }
+
+                comment.dfp_caseidguid = sequenceNumber.ToString();
 
                 try
                 {
