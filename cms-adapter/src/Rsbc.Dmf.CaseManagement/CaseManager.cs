@@ -516,19 +516,23 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                             if (allComments || comment.dfp_icbc.GetValueOrDefault())
-                            {                                
-                                LegacyComment legacyComment = new LegacyComment
+                            {       
+                                if (comment.statuscode == 1)
                                 {
-                                    CaseId = @case.incidentid.ToString(),
-                                    CommentDate = comment.createdon.GetValueOrDefault(),
-                                    CommentId = comment.dfp_commentid.ToString(),
-                                    CommentText = comment.dfp_commentdetails,
-                                    CommentTypeCode = TranslateCommentTypeCodeFromInt (comment.dfp_commenttype),
-                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                    UserId = comment.dfp_userid,
-                                    Driver = driver
-                                };
-                                result.Add(legacyComment);
+                                    LegacyComment legacyComment = new LegacyComment
+                                    {
+                                        CaseId = @case.incidentid.ToString(),
+                                        CommentDate = comment.createdon.GetValueOrDefault(),
+                                        CommentId = comment.dfp_commentid.ToString(),
+                                        CommentText = comment.dfp_commentdetails,
+                                        CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                        UserId = comment.dfp_userid,
+                                        Driver = driver
+                                    };
+                                    result.Add(legacyComment);
+                                }
+                                
                             }
                         }
                     }
