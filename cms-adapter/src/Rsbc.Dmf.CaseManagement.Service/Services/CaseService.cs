@@ -314,7 +314,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             }
             catch (Exception ex)
-            {
+            {                
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
