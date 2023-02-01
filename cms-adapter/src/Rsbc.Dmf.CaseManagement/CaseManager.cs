@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -20,9 +21,13 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);
 
+        Task<bool> DeleteComment(string commentId);
+
         Task<bool> DeleteLegacyDocument(string documentId);
         
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
+
+        Task<LegacyComment> GetComment(string commentId);
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
 
@@ -365,21 +370,26 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
-                    await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
-                    if (allComments || comment.dfp_icbc.GetValueOrDefault())
+                    // ignore inactive.
+                    if (comment.statecode != null && comment.statecode == 0)
                     {
-                        LegacyComment legacyComment = new LegacyComment
+                        await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                        if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
-                            CaseId = @case.incidentid.ToString(),
-                            CommentDate = comment.createdon.GetValueOrDefault(),
-                            CommentId = comment.dfp_commentid.ToString(),
-                            CommentText = comment.dfp_commentdetails,
-                            CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                            SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                            UserId = comment.dfp_userid
-                        };
-                        result.Add(legacyComment);
+                            LegacyComment legacyComment = new LegacyComment
+                            {
+                                CaseId = @case.incidentid.ToString(),
+                                CommentDate = comment.createdon.GetValueOrDefault(),
+                                CommentId = comment.dfp_commentid.ToString(),
+                                CommentText = comment.dfp_commentdetails,
+                                CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                                SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                UserId = comment.dfp_userid
+                            };
+                            result.Add(legacyComment);
+                        }
                     }
+                        
                 }
             }
                
@@ -778,6 +788,42 @@ namespace Rsbc.Dmf.CaseManagement
         /// <summary>
         /// Get Legacy Document
         /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        public async Task<LegacyComment> GetComment(string commentId)
+        {
+            LegacyComment legacyComment = null;
+            try
+            {
+                var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
+                if (comment != null)
+                {
+                    legacyComment = new LegacyComment
+                    {
+                        CaseId = comment._dfp_caseid_value.ToString(),
+                        CommentDate = comment.createdon.GetValueOrDefault(),
+                        CommentId = comment.dfp_commentid.ToString(),
+                        CommentText = comment.dfp_commentdetails,
+                        CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                        SequenceNumber = null,
+                        UserId = comment.dfp_userid,
+                        Driver = new Driver() // TODO - fetch driver
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error (ex, $"Error getting comment {commentId}");
+            }
+            
+
+            return legacyComment;
+
+        }
+
+        /// <summary>
+        /// Get Legacy Document
+        /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
         public async Task<LegacyDocument> GetLegacyDocument(string documentId)
@@ -1097,8 +1143,6 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
-                
-
                 if (bcgovDocumentUrl == null)
                 {
                     bcgovDocumentUrl = new bcgov_documenturl() ;                   
@@ -1175,6 +1219,32 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Delete Comment
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteComment(string documentId)
+        {
+            bool result = false;
+
+            var comment = dynamicsContext.dfp_comments.ByKey(Guid.Parse(documentId)).GetValue();
+            if (comment != null)
+            {
+                dynamicsContext.DeactivateObject(comment, 2);
+                // set to inactive.                
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+                result = true;
+            }
+            else
+            {
+                Log.Error($"Could not find comment {comment}");
+            }
+            return result;
+
         }
 
         /// <summary>
