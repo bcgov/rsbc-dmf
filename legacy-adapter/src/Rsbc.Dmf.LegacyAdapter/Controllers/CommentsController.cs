@@ -94,7 +94,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // get the comment
             ViewModels.Comment result = new ViewModels.Comment();
-                        
+            // this could be hooked up to the cms adapter            
             return Json(result);
         }
 
