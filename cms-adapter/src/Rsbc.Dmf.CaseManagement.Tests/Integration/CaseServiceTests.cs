@@ -42,6 +42,19 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             
         }
 
+        /*
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetComment()
+        {
+            var id = "";
+            var request = new CommentIdRequest()
+            {
+                CommentId = id
+            };
+            var queryResults = await caseService.GetComment(request, null);
+        }
+        */
+
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetFlags()
         {

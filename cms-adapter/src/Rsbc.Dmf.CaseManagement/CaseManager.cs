@@ -785,6 +785,28 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        public Driver GetDriverById(Guid id)
+        {
+            Driver result = null;
+
+            var driver = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_driverid == id).FirstOrDefault();
+
+            if (driver != null)
+            {
+                result = new Driver()
+                {
+                    DriverLicenseNumber = driver.dfp_licensenumber,
+                    Surname = driver.dfp_PersonId?.lastname
+                };                
+            }
+
+            return result;
+        }
+
+
+
+
         /// <summary>
         /// Get Legacy Document
         /// </summary>
@@ -798,6 +820,14 @@ namespace Rsbc.Dmf.CaseManagement
                 var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
                 if (comment != null)
                 {
+                    // fetch the driver
+                    Driver driver = null;
+                    if (comment._dfp_driverid_value != null)
+                    {
+                        GetDriverById(comment._dfp_driverid_value.Value);
+                    }
+                    
+
                     legacyComment = new LegacyComment
                     {
                         CaseId = comment._dfp_caseid_value.ToString(),
@@ -807,7 +837,7 @@ namespace Rsbc.Dmf.CaseManagement
                         CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
                         SequenceNumber = null,
                         UserId = comment.dfp_userid,
-                        Driver = new Driver() // TODO - fetch driver
+                        Driver = driver
                     };
                 }
             }
