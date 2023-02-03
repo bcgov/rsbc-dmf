@@ -341,6 +341,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 originatingNumber = originatingNumber,
                 documentPages = documentPages,
                 documentType = documentType,
+                documentTypeCode = documentTypeCode,
                 validationMethod = validationMethod,
                 validationPrevious = validationPrevious,
                 priority = priority,
