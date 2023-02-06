@@ -992,6 +992,7 @@ namespace Rsbc.Dmf.CaseManagement
             string caseId = request.CaseId;
             if (string.IsNullOrEmpty(caseId))
             {
+                Serilog.Log.Information("Case not found, creating");
                 // create a new case.
                 LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
                 {
@@ -999,7 +1000,7 @@ namespace Rsbc.Dmf.CaseManagement
                      SequenceNumber = null,
                      Surname = request.Driver.Surname
                 };
-
+                
                 await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
                 
                 // now do a search to get the case.
@@ -1099,6 +1100,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (result == null)
             {
+                Serilog.Log.Information($"Attempting to add {documentTypeCode} {documentType}");
                 // try to create.
                 var newRecord = new dfp_submittaltype()
                 {
@@ -1113,7 +1115,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 dynamicsContext.AddTodfp_submittaltypes(newRecord);
-                dynamicsContext.SaveChanges();
+                dynamicsContext.SaveChangesAsync().GetAwaiter().GetResult();
 
                 result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
             }
@@ -1199,7 +1201,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
                 bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
                 bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
-                bcgovDocumentUrl.dfp_uploadeddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
                 bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
                 bcgovDocumentUrl.dfp_importid = request.ImportId;
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
