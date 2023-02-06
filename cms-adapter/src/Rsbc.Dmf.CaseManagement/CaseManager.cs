@@ -1769,7 +1769,6 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
-                .Expand(i => i.ownerid)
                 .Where(i => i.statecode == 1);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) 
