@@ -519,6 +519,9 @@ namespace Rsbc.Dmf.CaseManagement
                             {       
                                 if (comment.statuscode == 1)
                                 {
+                                    int sequenceNumber = 0;
+                                    int.TryParse (comment.dfp_caseidguid,out sequenceNumber);
+
                                     LegacyComment legacyComment = new LegacyComment
                                     {
                                         CaseId = @case.incidentid.ToString(),
@@ -526,7 +529,7 @@ namespace Rsbc.Dmf.CaseManagement
                                         CommentId = comment.dfp_commentid.ToString(),
                                         CommentText = comment.dfp_commentdetails,
                                         CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
-                                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                        SequenceNumber = sequenceNumber,
                                         UserId = comment.dfp_userid,
                                         Driver = driver
                                     };
