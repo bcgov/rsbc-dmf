@@ -406,7 +406,25 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             response.EnsureSuccessStatusCode();
         }
-       
+
+
+
+        [Fact]
+        public async void DfcmsGetAllComments()
+        {
+            Login();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/AllComments");
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+
+
 
         [Fact]
         public async void TestLoginRequired()
