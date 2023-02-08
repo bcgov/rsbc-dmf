@@ -502,17 +502,11 @@ namespace Rsbc.Dmf.CaseManagement
                     };
 
                     // get the cases for that driver.
-                    var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid
+                    var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid
                     ).ToList();
 
-                    foreach (var @case in @cases)
-                    {
-                        // ensure related data is loaded.
 
-                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
-                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-
-                        foreach (var comment in @case.dfp_incident_dfp_comment)
+                        foreach (var comment in comments)
                         {
                             await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                             if (allComments || comment.dfp_icbc.GetValueOrDefault())
@@ -522,9 +516,17 @@ namespace Rsbc.Dmf.CaseManagement
                                     int sequenceNumber = 0;
                                     int.TryParse (comment.dfp_caseidguid,out sequenceNumber);
 
+                                    string caseId = null;
+                                    Guid? caseGuid = comment._dfp_caseid_value;
+                                    if (caseGuid != null)
+                                    {
+                                        caseId = caseGuid.ToString();
+                                    }
+        
+
                                     LegacyComment legacyComment = new LegacyComment
                                     {
-                                        CaseId = @case.incidentid.ToString(),
+                                        CaseId = caseId,
                                         CommentDate = comment.createdon.GetValueOrDefault(),
                                         CommentId = comment.dfp_commentid.ToString(),
                                         CommentText = comment.dfp_commentdetails,
@@ -535,9 +537,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     };
                                     result.Add(legacyComment);
                                 }
-                                
-                            }
-                        }
+
+                        }                        
                     }
                 }
             }
@@ -1030,7 +1031,10 @@ namespace Rsbc.Dmf.CaseManagement
                     dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
                     dfp_userid = request.UserId,
                     dfp_commentdetails = request.CommentText, 
-                    dfp_date = request.CommentDate                    
+                    dfp_date = request.CommentDate,
+                    statecode = 0,
+                    statuscode = 1
+
                 };
                 int sequenceNumber = 0;
                 if (request.SequenceNumber != null)
