@@ -10,7 +10,7 @@ namespace Rsbc.Dmf.BcMailAdapter.ViewModels
         /// <summary>
         /// Is Preview
         /// </summary>
-        public bool isPreview { get; set; }
+        public bool? isPreview { get; set; }
 
         /// <summary>
         /// 

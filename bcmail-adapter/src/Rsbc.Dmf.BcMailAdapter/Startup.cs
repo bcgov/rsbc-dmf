@@ -96,6 +96,9 @@ namespace Rsbc.Dmf.BcMailAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
+            // Add CDGS Service
+
+           // services.AddHttpClient<>();
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
@@ -156,6 +159,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                 
               .AddProblemDetailsConventions();
 
+            
 
             services.AddSwaggerGen(c =>
             {               
