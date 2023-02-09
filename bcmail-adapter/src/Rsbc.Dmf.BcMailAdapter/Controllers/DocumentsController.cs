@@ -20,6 +20,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Reflection.Metadata.Ecma335;
 using System.Net.Http.Headers;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Newtonsoft.Json.Serialization;
+using Serilog.Core;
+using System.Net;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -33,6 +37,9 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
     {
         private readonly IConfiguration Configuration;
         private readonly ILogger<DocumentsController> Logger;
+        private readonly HttpClient _Client;
+
+        private string CdgsServiceUri { get; set; }
 
 
         /// <summary>
@@ -44,6 +51,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         {
             Configuration = configuration;
             Logger = logger;
+
+            //Set up the client
+            _Client = new HttpClient();
+
+            CdgsServiceUri = Configuration["CDGS_SERVICE_URI"];
+
+            _Client.BaseAddress = new Uri(CdgsServiceUri);
+
         }
 
 
@@ -79,7 +94,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
+        public async Task<FileResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
 
         {
             //Step 1: Read JSon payload data
@@ -89,26 +104,55 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             string token = await GetCdgsToken();
 
             // Step 3: call cdogs service using paylod json data
-            List<BcMail> bcmaildocument = new List<BcMail>();
+
             using (var httpClient = new HttpClient())
+
             {
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                using (var response = await httpClient.GetAsync(Configuration["CDGS_SERVICE"]))
+
+                httpClient.BaseAddress = new Uri(CdgsServiceUri);
+
+                LetterGenerationRequestModel letterGenerationRequest = new LetterGenerationRequestModel
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
-                    // bcmaildocument = JsonConvert.DeserializeObject<List<BcMail>>(apiResponse);
-                }
+                    Data = new Data
+                    {
+                        /*FirstName = "Test1",
+                        LastName = "LAstNAme",
+                        Title = "Hello"*/
+                    },
+                    /* Formatters = "",*/
+                    Options = new Options
+                    {
+                        ConvertTo = "pdf",
+                        Overwrite = true,
+                        ReportName = bcmail.Attachments[0].FileName
+                    },
+                    Template = new Template()
+                    {
+                        Content = bcmail.Attachments[0].Body,
+                        EncodingType = "base64",
+                        FileType = bcmail.Attachments[0].ContentType
+                    }
+
+                };
+
+                var payload = JsonConvert.SerializeObject(letterGenerationRequest, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+
+                HttpContent body = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var responseContent = await httpClient.PostAsync("template/render", body);
+
+                var responseStream = await responseContent.Content.ReadAsStreamAsync();
+
+                return File(responseStream, "application/pdf", fileDownloadName: bcmail.Attachments[0].FileName);
+
+
             }
-
-            // step 4: preview PDF 
-
-            // step 5 : send the response to dynamics
-
-
-
-
-            return Ok(bcmail);
         }
+           
 
         /// <summary>
         /// Get CDGS Token
