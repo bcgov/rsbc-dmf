@@ -336,6 +336,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string surcode = null         // Driver -> Lastname   
             )
         {
+            var debugObject = new { driversLicense = driversLicense, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
+                importID = importID,
+                originatingNumber = originatingNumber,
+                documentPages = documentPages,
+                documentType = documentType,
+                documentTypeCode = documentTypeCode,
+                validationMethod = validationMethod,
+                validationPrevious = validationPrevious,
+                priority = priority,
+                assign = assign,
+                submittalStatus = submittalStatus,
+                surcode = surcode
+            };
+
+            Log.Logger.Information(JsonConvert.SerializeObject(debugObject));
 
             if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
             {
