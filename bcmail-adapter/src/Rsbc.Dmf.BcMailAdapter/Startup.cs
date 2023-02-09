@@ -31,6 +31,11 @@ using System.Linq;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Invio.Extensions.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using System.IdentityModel.Tokens.Jwt;
+using IdentityModel.Client;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.Extensions.Logging;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -91,13 +96,16 @@ namespace Rsbc.Dmf.BcMailAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
+            // Add CDGS Service
+
+           // services.AddHttpClient<>();
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
                 services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 
-                // Configure JWT authentication
+                //Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
                     o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -118,8 +126,10 @@ namespace Rsbc.Dmf.BcMailAdapter
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
                 {
                     options.QueryStringParameterName = "access_token";
-                    //options.QueryStringBehavior = QueryStringBehaviors.Redact;
+                    options.QueryStringBehavior = QueryStringBehaviors.Redact;
                 });
+
+
 
             }
             else
@@ -149,6 +159,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                 
               .AddProblemDetailsConventions();
 
+            
 
             services.AddSwaggerGen(c =>
             {               
@@ -163,6 +174,8 @@ namespace Rsbc.Dmf.BcMailAdapter
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("bcmail-adapter", () => HealthCheckResult.Healthy("OK"));
+
+
 
 
         }
@@ -279,6 +292,10 @@ namespace Rsbc.Dmf.BcMailAdapter
             // If an exception other than NotImplementedException and HttpRequestException is thrown, this will handle it.
             //options.MapToStatusCode<Exception>(StatusCodes.Status500InternalServerError);
         }
+
+
+       
+        
     }
 
 
