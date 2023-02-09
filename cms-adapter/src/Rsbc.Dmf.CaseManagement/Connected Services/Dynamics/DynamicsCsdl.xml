@@ -7504,6 +7504,7 @@
         <Property Name="dfp_iscommercialclass" Type="Edm.Int32" />
         <Property Name="dfp_outstandingnondmf" Type="Edm.Int32" />
         <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_count" Type="Edm.Int32" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="dfp_dlstatus" Type="Edm.Int32" />
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />

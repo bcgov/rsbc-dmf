@@ -46,7 +46,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Login();
 
             // start by getting the case.
-            var caseId = GetCaseId();
+            var caseId = GetCaseIdByDl();
             Assert.True(caseId != null);
 
             string testData = "This is just a test.";
@@ -67,16 +67,16 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             // add the various string parameters.
             string driversLicense = testDl;
             string surcode = testSurcode;
-            string batchId = "2707532";
+            string batchId = "1002222";
             string faxReceivedDate = "2022-05-19T23:11:53Z";
             string importDate = "2022-05-19";
             string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
-            string originatingNumber = "BCGovtFax";
+            string originatingNumber = "";
             int documentPages = 1;
-            string documentType = "002";
-            documentType = "Clean Pass";
+            string documentType = "DiabeticDriverReport2-C5-8";
+            string documentTypeCode = "12321";
             string validationMethod = "Single User";
-            string validationPrevious = "TESTUSER";
+            string validationPrevious = "BHAMMED";
 
             multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
             multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -84,9 +84,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
             multiPartContent.Add(new StringContent(importDate), "importDate");
             multiPartContent.Add(new StringContent(importID), "importID");
+
             multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
             multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
             multiPartContent.Add(new StringContent(documentType), "documentType");
+            multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
             multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
             multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
 

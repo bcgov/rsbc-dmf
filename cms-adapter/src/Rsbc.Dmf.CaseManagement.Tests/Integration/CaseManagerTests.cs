@@ -10,6 +10,7 @@ using Xunit;
 using Xunit.Abstractions;
 using System;
 using Org.BouncyCastle.Asn1.Ocsp;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -179,6 +180,78 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanResolveCaseStatusUpdates()
         {
             await caseManager.ResolveCaseStatusUpdates();
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanDeleteComment()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // get the case
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            string documentUrl = $"TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
+
+            // add a document
+
+            LegacyComment legacyCommentRequest = new LegacyComment
+            {
+                CaseId = caseId,
+                Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
+                SequenceNumber = 1,
+                CommentDate = DateTimeOffset.UtcNow,
+                CommentText = "AUTOMATED TEST COMMENT",
+                CommentTypeCode = "W",
+                UserId = "TEST"                
+            };
+
+            await caseManager.CreateLegacyCaseComment(legacyCommentRequest);
+
+            // confirm it is present
+
+            var comments = await caseManager.GetCaseLegacyComments(caseId, true);
+
+            bool found = false;
+
+            string commentId = null;
+
+            foreach (var comment in comments)
+            {
+                if (comment.CommentText == legacyCommentRequest.CommentText)
+                {
+                    found = true;
+                    commentId = comment.CommentId;
+                    break;
+                }
+            }
+
+            Assert.True(found);
+
+            // test the get
+            var c = await caseManager.GetComment(commentId);
+            // delete it            
+
+            await caseManager.DeleteComment(commentId);
+
+            // confirm that it is deleted
+
+            found = false;
+
+            comments = await caseManager.GetCaseLegacyComments(caseId, true);
+
+            foreach (var comment in comments)
+            {
+                if (comment.CommentText == legacyCommentRequest.CommentText)
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            Assert.False(found);
         }
 
         [Fact(Skip = RequiresDynamics)]
