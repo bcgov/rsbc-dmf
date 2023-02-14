@@ -43,8 +43,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     Configuration["JWT_VALID_ISSUER"],
-                    Configuration["JWT_VALID_ISSUER"],
-                    expires: DateTime.UtcNow.AddYears(5),
+                    Configuration["JWT_VALID_AUDIENCE"],
+                    expires: DateTime.UtcNow.AddYears(1),
                     signingCredentials: creds
                     );
                 result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken); 
