@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.BcMailAdapter", "Rsbc.Dmf.BcMailAdapter\Rsbc.Dmf.BcMailAdapter.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Unit.Tests.Dmf.BcMailAdapter", "Rsbc.Unit.Tests.Dmf.BcMailAdapter\Rsbc.Unit.Tests.Dmf.BcMailAdapter.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.BcMailAdapter.Tests", "Rsbc.Unit.Tests.Dmf.BcMailAdapter\Rsbc.Dmf.BcMailAdapter.Tests.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CdgsServiceClient", "Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj", "{9A5A9E32-7BB4-4FFB-A99D-F1F096AB4AAC}"
 EndProject
