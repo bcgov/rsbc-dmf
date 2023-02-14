@@ -36,6 +36,8 @@ using System.IdentityModel.Tokens.Jwt;
 using IdentityModel.Client;
 using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.Extensions.Logging;
+using Rsbc.Interfaces;
+using Serilog.Core;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -165,7 +167,12 @@ namespace Rsbc.Dmf.BcMailAdapter
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
-            
+
+            if (Configuration["CDGS_SERVICE_URI"] != null)
+            {
+                ICdgsClient cdgsClient = new CdgsClient(Configuration);
+                services.AddTransient(_ => cdgsClient);
+            }
 
             // health checks. 
             services.AddHealthChecks()

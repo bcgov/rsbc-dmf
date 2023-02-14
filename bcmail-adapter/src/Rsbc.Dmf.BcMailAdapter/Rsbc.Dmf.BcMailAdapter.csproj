@@ -35,5 +35,9 @@
 		<Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj" />
+	</ItemGroup>
+
 
 </Project>
