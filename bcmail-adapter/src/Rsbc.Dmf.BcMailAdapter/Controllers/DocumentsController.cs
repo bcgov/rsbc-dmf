@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
+using System.IO;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -66,7 +67,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public async Task<FileResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
+        public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
 
             LetterGenerationRequest letterGenerationRequest = new LetterGenerationRequest
@@ -94,7 +95,19 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             };
 
             var responseStream = await _cdgsClient.PreviewBcMailDocument(letterGenerationRequest);
-            return File(responseStream, "application/pdf", fileDownloadName: bcmail.Attachments[0].FileName);
+            byte[] filebytes = responseStream.ReadAllBytes();
+            //return File(bytes, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
+            string contentType = "application/octet-stream";
+            string body = filebytes.Length > 0 ? Convert.ToBase64String(filebytes) : String.Empty;
+
+            var result = new PdfResponse()
+            {
+                FileName = bcmail.Attachments[0].FileName,
+                ContentType = contentType,
+                Body = body,
+            };
+
+            return new JsonResult(result);
 
         }
 
