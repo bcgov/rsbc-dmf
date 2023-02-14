@@ -8,7 +8,7 @@ using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using Rsbc.Interfaces;
 using Xunit;
 
-namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
+namespace Rsbc.Dmf.BcMailAdapter.Tests
 {
     [Collection(nameof(HttpClientCollection))]
     public class CdgsClientTest : ApiIntegrationTestBase
@@ -25,11 +25,8 @@ namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
             if (!string.IsNullOrEmpty(_cdgsServiceUri))
             {
                 _client.BaseAddress = new Uri(_cdgsServiceUri);
-            }
-            
+            }            
         }
-
-
 
         /// <summary>
         /// Test the CDGS Client

@@ -69,40 +69,54 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
-
-            LetterGenerationRequest letterGenerationRequest = new LetterGenerationRequest
+            string fileName;
+            LetterGenerationRequest letterGenerationRequest;
+            if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
             {
-                Data = new Data
+                fileName = bcmail.Attachments[0].FileName;
+                letterGenerationRequest = new LetterGenerationRequest
                 {
-                    /*FirstName = "Test1",
-                    LastName = "LAstNAme",
-                    Title = "Hello"*/
-                },
-                /* Formatters = "",*/
-                Options = new Options
-                {
-                    ConvertTo = "pdf",
-                    Overwrite = true,
-                    ReportName = bcmail.Attachments[0].FileName
-                },
-                Template = new Template()
-                {
-                    Content = bcmail.Attachments[0].Body,
-                    EncodingType = "base64",
-                    FileType = bcmail.Attachments[0].ContentType
-                }
+                    Data = new Data
+                    {
+                        /*FirstName = "Test1",
+                        LastName = "LAstNAme",
+                        Title = "Hello"*/
+                    },
+                    /* Formatters = "",*/
+                    Options = new Options
+                    {
+                        ConvertTo = "pdf",
+                        Overwrite = true,
+                        ReportName = bcmail.Attachments[0].FileName ?? string.Empty
+                    },
+                    Template = new Template()
+                    {
+                        Content = bcmail?.Attachments[0].Body ?? string.Empty,
+                        EncodingType = "base64",
+                        FileType = bcmail.Attachments[0].ContentType ?? string.Empty
+                    }
 
-            };
+                };
+            }
+            else
+            {
+                fileName = string.Empty;
+                letterGenerationRequest = new LetterGenerationRequest();
+            }
+
+            
 
             var responseStream = await _cdgsClient.PreviewBcMailDocument(letterGenerationRequest);
             byte[] filebytes = responseStream.ReadAllBytes();
             //return File(bytes, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
             string contentType = "application/octet-stream";
             string body = filebytes.Length > 0 ? Convert.ToBase64String(filebytes) : String.Empty;
+            
+
 
             var result = new PdfResponse()
             {
-                FileName = bcmail.Attachments[0].FileName,
+                FileName = fileName,
                 ContentType = contentType,
                 Body = body,
             };
