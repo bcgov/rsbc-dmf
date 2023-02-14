@@ -36,46 +36,6 @@ namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
         }
 
 
-        protected string GetCaseId()
-        {
-            string result = null;
-            if (!string.IsNullOrEmpty(testDl))
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/Exist?licenseNumber=" + testDl + "&surcode=" + testSurcode);
-
-                var response = _client.SendAsync(request).GetAwaiter().GetResult();
-                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                response.EnsureSuccessStatusCode();
-
-                
-
-                result = JsonConvert.DeserializeObject<string>(responseContent);
-            }
-
-            return result;
-        }
-
-        protected string GetCaseIdByDl()
-        {
-            string result = null;
-            if (!string.IsNullOrEmpty(testDl))
-            {
-                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/ExistByDl?licenseNumber=" + testDl);
-
-                var response = _client.SendAsync(request).GetAwaiter().GetResult();
-                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-                response.EnsureSuccessStatusCode();
-
-
-
-                result = JsonConvert.DeserializeObject<string>(responseContent);
-            }
-
-            return result;
-        }
-
 
         
 
