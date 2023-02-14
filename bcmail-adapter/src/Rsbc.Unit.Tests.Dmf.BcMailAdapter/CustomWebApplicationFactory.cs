@@ -6,10 +6,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 using Rsbc.Dmf.BcMailAdapter;
+using Rsbc.Dmf.BcMailAdapter.Tests.Helpers;
+using Rsbc.Interfaces;
 using System.Net;
 using System.Net.Http;
 
-namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
+namespace Rsbc.Dmf.BcMailAdapter.Tests
 {
     public class CustomWebApplicationFactory<TStartup>
         : WebApplicationFactory<Startup>
@@ -18,15 +20,14 @@ namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            
-            
-
+           
             Configuration = new ConfigurationBuilder()
                     .AddUserSecrets<Startup>()
                     .AddEnvironmentVariables()
                     .Build();
 
-            
+            // you could also create a real CdgsClient here if there was a valid URI.
+            ICdgsClient cdgsClient = CdgsClientHelper.CreateMock(Configuration);
 
             builder
                 .UseSolutionRelativeContentRoot("")
@@ -35,9 +36,8 @@ namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
                 //.UseStartup<Startup>()
                 .ConfigureTestServices(
                
-                    services => {                         
-                        
-                        
+                    services => {
+                        services.AddTransient(_ => cdgsClient);
                     });
         }
     }

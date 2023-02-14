@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.TestHost;
 
 using System.Web;
 
-namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
+namespace Rsbc.Dmf.BcMailAdapter.Tests
 {   
     public abstract class ApiIntegrationTestBase 
     {

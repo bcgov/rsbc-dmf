@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace Rsbc.Dmf.BcMailAdapter
+namespace Rsbc.Dmf.BcMailAdapter.Tests
 {
     /// <summary>
     ///     Helper methods for working with <see cref="Guid" />.
