@@ -38,6 +38,18 @@ parameters:
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
     required: true
+  - description: CDGS_SERVICE_URI
+    name: CDGS_SERVICE_URI
+    required: true
+  - description: CDGS_OAUTH_CLIENT_ID
+    name: CDGS_OAUTH_CLIENT_ID
+    required: true
+  - description: CDGS_TOKEN_ENDPOINT
+    name: CDGS_TOKEN_ENDPOINT
+    required: true
+  - description: CDGS_OAUTH_CLIENT_SECRET
+    name: CDGS_OAUTH_CLIENT_SECRET
+    required: true
 
 objects:
   - kind: ConfigMap
@@ -50,7 +62,9 @@ objects:
         app.kubernetes.io/part-of: ${APP_NAME}
     data:
       ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
-      KEY_RING_PATH: "/dpkeys"      
+      KEY_RING_PATH: "/dpkeys"  
+      DOTNET_SSL_DIRS: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
+      OPENSHIFT_BUILD_NAME: "1"    
   - kind: Secret
     apiVersion: v1
     type: Opaque
@@ -65,7 +79,10 @@ objects:
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
-
+      CDGS_SERVICE_URI: ${CDGS_SERVICE_URI}
+      CDGS_OAUTH_CLIENT_ID: ${CDGS_OAUTH_CLIENT_ID}
+      CDGS_TOKEN_ENDPOINT: ${CDGS_TOKEN_ENDPOINT}
+      CDGS_OAUTH_CLIENT_SECRET: ${CDGS_OAUTH_CLIENT_SECRET}
   - kind: Service
     apiVersion: v1
     metadata:
@@ -177,6 +194,8 @@ objects:
               volumeMounts:
                 - mountPath: /dpkeys
                   name: dp-keys
+                - name: service-cert
+                  mountPath: /var/run/secrets/service-cert
               livenessProbe:
                 httpGet:
                   path: /hc/live
@@ -197,7 +216,11 @@ objects:
           volumes:
             - name: dp-keys
               persistentVolumeClaim:
-                claimName: ${APP_NAME}-key-ring
+              claimName: ${APP_NAME}-key-ring
+            - name: service-cert
+              secret:
+              secretName: ${APP_NAME}-cert
+              defaultMode: 420
       test: false
       triggers:
         - type: ConfigChange
