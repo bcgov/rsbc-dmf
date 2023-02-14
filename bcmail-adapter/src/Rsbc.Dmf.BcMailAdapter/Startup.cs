@@ -98,14 +98,13 @@ namespace Rsbc.Dmf.BcMailAdapter
 
             // Add CDGS Service
 
-           // services.AddHttpClient<>();
-
+            // services.AddHttpClient<>();
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
                 services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 
-                //Configure JWT authentication
+                // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
                     o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -125,11 +124,8 @@ namespace Rsbc.Dmf.BcMailAdapter
                 })
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
                 {
-                    options.QueryStringParameterName = "access_token";
-                    options.QueryStringBehavior = QueryStringBehaviors.Redact;
+                    options.QueryStringParameterName = "access_token";   
                 });
-
-
 
             }
             else
