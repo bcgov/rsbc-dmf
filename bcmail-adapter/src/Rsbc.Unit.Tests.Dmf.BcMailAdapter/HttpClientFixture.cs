@@ -3,7 +3,7 @@ using Rsbc.Dmf.BcMailAdapter;
 using System;
 using System.Net.Http;
 
-namespace Rsbc.Unit.Tests.Dmf.BcMailAdapter
+namespace Rsbc.Dmf.BcMailAdapter.Tests
 {
     public class HttpClientFixture : IDisposable
     {
