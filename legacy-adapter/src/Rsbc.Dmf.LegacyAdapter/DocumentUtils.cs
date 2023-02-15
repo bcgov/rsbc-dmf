@@ -1,10 +1,33 @@
-﻿using System.IO;
+﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
     public static class DocumentUtils
     {
+
+        static public DateTimeOffset ParseDpsDate(string data)
+        {
+            DateTimeOffset result;
+            if (!DateTimeOffset.TryParse(data, out result))
+            {
+                // try an alternate format
+                int tPos = data.IndexOf("T");
+
+                data = data.Substring(0,tPos) + "T0" + data.Substring(tPos+1);
+                
+                if (!DateTimeOffset.TryParse(data, out result))
+                {
+                    result = DateTimeOffset.Now;
+                }
+
+            }
+
+
+            return result;
+        }
 
         /// <summary>
         /// SanitizeKeyFilename
