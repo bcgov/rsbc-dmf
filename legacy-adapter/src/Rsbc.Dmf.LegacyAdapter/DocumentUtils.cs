@@ -10,22 +10,33 @@ namespace Rsbc.Dmf.LegacyAdapter
 
         static public DateTimeOffset ParseDpsDate(string data)
         {
-            DateTimeOffset result;
-            if (!DateTimeOffset.TryParse(data, out result))
-            {
-                // try an alternate format
-                int tPos = data.IndexOf("T");
 
-                data = data.Substring(0,tPos) + "T0" + data.Substring(tPos+1);
-                
+            DateTimeOffset result;
+
+            if (!string.IsNullOrEmpty(data))
+            {
                 if (!DateTimeOffset.TryParse(data, out result))
                 {
-                    result = DateTimeOffset.Now;
+                    // try an alternate format
+                    int tPos = data.ToUpper().IndexOf("T");
+                    if (tPos != -1)
+                    {
+                        data = data.Substring(0, tPos) + "T0" + data.Substring(tPos + 1);
+                    }
+                    
+
+                    if (!DateTimeOffset.TryParse(data, out result))
+                    {
+                        result = DateTimeOffset.Now;
+                    }
+
                 }
-
             }
-
-
+            else
+            {
+                result = DateTimeOffset.Now;
+            }
+            
             return result;
         }
 
