@@ -320,8 +320,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
             [FromForm] [Required] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
-            [FromForm] DateTimeOffset? faxReceivedDate,  // dfp_faxreceivedate
-            [FromForm] DateTimeOffset? importDate,  // dfp_dpsprocessingdate
+            [FromForm] string faxReceivedDateString,  // dfp_faxreceivedate
+            [FromForm] string importDateString,  // dfp_dpsprocessingdate
             [FromForm] string importID, // add to document entity
             [FromForm] string originatingNumber, // dfp_faxnumber
             [FromForm] int? documentPages, // add to document entity
@@ -336,6 +336,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string surcode = null         // Driver -> Lastname   
             )
         {
+            DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
+            DateTimeOffset importDate= DocumentUtils.ParseDpsDate(importDateString);
+
             var debugObject = new { driversLicense = driversLicense, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
                 importID = importID,
                 originatingNumber = originatingNumber,
@@ -472,8 +475,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
                     DocumentUrl = fileReply.FileName,
                     CaseId = caseId ?? string.Empty,
-                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate.Value),
-                    ImportDate = Timestamp.FromDateTimeOffset(importDate.Value),
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
+                    ImportDate = Timestamp.FromDateTimeOffset(importDate),
                     ImportId = importID ?? string.Empty,
 
                     OriginatingNumber = originatingNumber ?? string.Empty,
