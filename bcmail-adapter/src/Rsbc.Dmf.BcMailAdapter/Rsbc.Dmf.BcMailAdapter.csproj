@@ -17,6 +17,7 @@
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
     <PackageReference Include="Invio.Extensions.Authentication.JwtBearer" Version="2.0.1" />
+    <PackageReference Include="MariGold.OpenXHTML" Version="3.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="PdfSharp" Version="1.50.5147" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
