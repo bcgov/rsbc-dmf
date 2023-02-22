@@ -94,7 +94,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.ContentType == "html")
                         {
-                           var docx = this.CreateDocument(attachment.Body, attachment.Header, attachment.Footer);
+                           var docx = CreateDocumentUtils.CreateDocument(attachment.Body, attachment.Header, attachment.Footer);
 
                             letterGenerationRequest = new LetterGenerationRequest
                             {
@@ -138,7 +138,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     // Merge into one PDF 
                     byte[] mergedFiles = this.CombinePDFs(srcPdfs);
 
-                   // return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
+                   return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
                     string content = "application/octet-stream";
                     string body = mergedFiles.Length > 0 ? Convert.ToBase64String(mergedFiles) : String.Empty;
@@ -196,56 +196,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="body"></param>
-        /// <param name="header"></param>
-        /// <param name="footer"></param>
-
-        public byte[] CreateDocument(string body, string header, string footer)
-        {
-            byte[] result;
-
-
-            using (MemoryStream mem = new MemoryStream())
-            {
-                WordDocument doc = new WordDocument(mem);
-                // decode body
-                byte[] bodyData = Convert.FromBase64String(body);
-                string decodedbody = Encoding.UTF8.GetString(bodyData);
-
-                // Decode Header
-                byte[] headerData = Convert.FromBase64String(header);
-                string decodedHeader = Encoding.UTF8.GetString(headerData);
-
-                // Decode Footer
-                byte[] footerData = Convert.FromBase64String(footer);
-                string decodedFooter = Encoding.UTF8.GetString(footerData);
-
-                doc.Process(new HtmlParser(decodedbody));
-                doc.Process(new HtmlParser(decodedFooter));
-                doc.Process(new HtmlParser(decodedHeader));
-
-
-
-                /*doc.Document.Body.PrependChild(new Footer(decoded));
-                doc.Document.Body.AppendChild(new Header(decodedFooter));*/
-
-                doc.Save();
-                result = mem.ToArray();
-
-
-            }
-
-            return result;
-
-
-        }
-
-
-
-
+      
 
     }
 }
