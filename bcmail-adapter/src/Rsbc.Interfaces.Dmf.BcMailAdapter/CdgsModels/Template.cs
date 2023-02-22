@@ -19,5 +19,7 @@
         /// Encoding Type
         /// </summary>
         public string? EncodingType { get; set; }
+
+       
     }
 }
