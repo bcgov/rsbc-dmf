@@ -11,6 +11,13 @@ using PdfSharp.Pdf.IO;
 using PdfSharp.Pdf;
 using System.Collections.Generic;
 using Org.BouncyCastle.Utilities.Zlib;
+using System.Xml.Linq;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml;
+using System.Text;
+using MariGold.OpenXHTML;
+using Rsbc.Dmf.BcMailAdapter.ViewModels;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -87,6 +94,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.ContentType == "html")
                         {
+                           var docx = CreateDocumentUtils.CreateDocument(attachment.Body, attachment.Header, attachment.Footer);
+
                             letterGenerationRequest = new LetterGenerationRequest
                             {
                                 Data = new Data
@@ -103,10 +112,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     ReportName = attachment.FileName ?? string.Empty
                                 },
                                 Template = new Template()
+
                                 {
-                                    Content = attachment.Body ?? string.Empty,
+                                    //Content = attachment.Body ?? string.Empty,
+                                   // Content = new String(Encoding.UTF8.GetString(docx)),
+                                    Content = Convert.ToBase64String(docx),
                                     EncodingType = "base64",
                                     FileType = attachment.ContentType ?? string.Empty
+                                 
                                 }
                             };
                             var responsestream = await _cdgsClient.PreviewBcMailDocument(letterGenerationRequest);
@@ -125,10 +138,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     // Merge into one PDF 
                     byte[] mergedFiles = this.CombinePDFs(srcPdfs);
 
-                    // return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
+                   return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
                     string content = "application/octet-stream";
                     string body = mergedFiles.Length > 0 ? Convert.ToBase64String(mergedFiles) : String.Empty;
+                    
 
                     var res = new PdfResponse()
                     {
@@ -152,7 +166,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Combine PDF's
         /// </summary>
         /// <param name="srcPDFs"></param>
         /// <returns></returns>
@@ -181,6 +195,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 }
             
         }
+
+      
 
     }
 }
