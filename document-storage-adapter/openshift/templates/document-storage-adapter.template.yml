@@ -60,6 +60,7 @@ objects:
       KEY_RING_PATH: "/dpkeys"
       DOTNET_SSL_DIRS: "/var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt"
       OPENSHIFT_BUILD_NAME: "1"
+      CONVERT_TIFF_PDF: "1"
   - kind: Secret
     apiVersion: v1
     type: Opaque

@@ -106,7 +106,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                         ? metaData[S3.METADATA_KEY_TAG3]
                         : String.Empty;
 
-                if (!String.IsNullOrEmpty(_configuration["CHECK_DOCUMENT_TYPE"]))
+                if (!String.IsNullOrEmpty(_configuration["CONVERT_TIFF_PDF"]))
                 {
                     // Check the file type is .tiff by filename
 
