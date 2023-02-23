@@ -50,7 +50,9 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Guid of the created case</returns>
-        Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
+        /// 
+        Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 
@@ -1163,16 +1165,14 @@ namespace Rsbc.Dmf.CaseManagement
             {                
                 // create it.
                 var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.MinValue);
-                var newDriverResult = await LegacyCandidateSearch(newDriver);
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
 
-                var firstCase = newDriverResult.Items.FirstOrDefault();
+                var newCaseId = await GetNewestCaseIdForDriver(newDriver);
 
-                if (firstCase != null)
+                if (newCaseId != null)
                 {
-                    driverCase = GetIncidentById(firstCase.Id);
-                }
-
+                    driverCase = GetIncidentById(newCaseId.Value.ToString()); 
+                }                
             }
 
             if (driverCase != null)
@@ -1515,6 +1515,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
         /// <summary>
         /// Legacy Candidate Create
         /// </summary>
@@ -1522,9 +1523,42 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="birthDate"></param>
         /// <param name="effectiveDate"></param>
         /// <returns></returns>
-        public async Task<Guid?> LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        public async Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request)
         {
             Guid? result = null;
+
+            dfp_driver driver;
+            contact driverContact;
+            Guid? driverContactId;
+
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
+            var driverList = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+
+            driver = driverList.FirstOrDefault();
+
+            if (driver != null)
+            {
+                var driverCase = dynamicsContext.incidents.OrderByDescending(x => x.createdon).Where(x => x._dfp_driverid_value == driver.dfp_driverid).FirstOrDefault();
+                if (driverCase != null)
+                {
+                    result = driverCase.incidentid;
+                }
+            }
+
+            return result;
+
+        }
+
+            /// <summary>
+            /// Legacy Candidate Create
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="birthDate"></param>
+            /// <param name="effectiveDate"></param>
+            /// <returns></returns>
+            public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        {
+
 
             dfp_driver driver;
             contact driverContact;
@@ -1603,13 +1637,16 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 dynamicsContext.AddTodfp_drivers(driver);
-                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);                
+                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+
+                // this save is necessary so that the create incident will work.
+                await dynamicsContext.SaveChangesAsync();
             }
 
 
             // create the case.
             incident @case = new incident()
-            {
+            {               
                 customerid_contact = driverContact,
                 // set status to Open Pending for Submission
                 statuscode = 100000000,                
@@ -1621,11 +1658,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             };
 
-            if (effectiveDate != null && effectiveDate != DateTimeOffset.MinValue)
-            {
-                //@case.dfp_datesenttoicbc = effectiveDate;
-            }
-
             dynamicsContext.AddToincidents(@case);
 
             if (driverContact != null)
@@ -1635,17 +1667,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
 
-            // temporarily turn off batch so that incident will create properly
-            dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.None;
             await dynamicsContext.SaveChangesAsync();
-
-            result = @case.incidentid;
-
-            dynamicsContext.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;
-
+            
             dynamicsContext.DetachAll();
-
-            return result;
+   
         }
 
 
@@ -2116,6 +2141,15 @@ namespace Rsbc.Dmf.CaseManagement
                 try
                 {
                     var dmerEntity = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(caseId)).FirstOrDefault();
+                    bool reOpenIncident = dmerEntity.statecode == 1; // inactive
+                    int? currentStatus = dmerEntity.statuscode;
+                    if (reOpenIncident)
+                    {
+                        dynamicsContext.ActivateObject(dmerEntity, 2);
+                        await dynamicsContext.SaveChangesAsync();
+                    }
+
+
                     if (dmerEntity != null)
                     {
                         // Update the error message in CMS
@@ -2124,6 +2158,13 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                     dynamicsContext.UpdateObject(dmerEntity);
                     await dynamicsContext.SaveChangesAsync();
+
+                    if (reOpenIncident)
+                    {
+                        dynamicsContext.DeactivateObject(dmerEntity, currentStatus.Value);
+                        await dynamicsContext.SaveChangesAsync();
+                    }
+
                     dynamicsContext.DetachAll();
                     result.Success = true;
                 }
