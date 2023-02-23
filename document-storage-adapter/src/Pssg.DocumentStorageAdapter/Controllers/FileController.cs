@@ -110,7 +110,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 {
                     // Check the file type is .tiff by filename
 
-                    if (fileName.ToLower().Contains(".tiff") || fileName.ToLower().Contains(".tif"))
+                    if (fileName.ToLower().Contains(".tif"))
                     {
                         var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
                         fileName = fileName.Substring('.')[0] + ".pdf";
