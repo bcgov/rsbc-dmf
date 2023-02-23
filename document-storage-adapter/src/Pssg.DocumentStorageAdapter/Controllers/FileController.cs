@@ -106,6 +106,20 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                         ? metaData[S3.METADATA_KEY_TAG3]
                         : String.Empty;
 
+                if (!String.IsNullOrEmpty(_configuration["CHECK_DOCUMENT_TYPE"]))
+                {
+                    // Check the file type is .tiff by filename
+
+                    if (fileName.Contains(".tiff"))
+                    {
+                        var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
+                        fileName = fileName.Substring('.')[0] + ".pdf";
+                        contentType = "application/pdf";
+                        body = Convert.ToBase64String(pdfBytes);
+                    }
+
+                }
+
                 var result = new Upload()
                 {
                     FileName = fileName,

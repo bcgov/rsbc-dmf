@@ -173,7 +173,7 @@ namespace Pssg.DocumentStorageAdapter.Tests
         /// Test the MS Dynamics interface
         /// </summary>
         [Fact]
-        public async void UploadDownloadTest()
+        public async void UploadDownloadTest1()
         {
             S3 s3 = new S3(Configuration);
 
