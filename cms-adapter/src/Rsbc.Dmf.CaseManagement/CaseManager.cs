@@ -1141,12 +1141,17 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
-
-            // create the document.
-            incident driverCase = GetIncidentById(request.CaseId);
-
             // get the driver
+
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            if (driver == null)
+            {
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
+                driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
+
+            incident driverCase = GetIncidentById(request.CaseId);
 
             bool driverMismatch = false;
 
@@ -1174,8 +1179,7 @@ namespace Rsbc.Dmf.CaseManagement
                     driverCase = GetIncidentById(newCaseId.Value.ToString()); 
                 }                
             }
-
-            if (driverCase != null)
+            else
             {
                 bool found = false;
                 // ensure we have the documents.
