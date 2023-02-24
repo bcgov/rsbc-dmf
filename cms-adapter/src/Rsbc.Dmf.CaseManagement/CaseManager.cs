@@ -505,7 +505,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                     // get the cases for that driver.
                     var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid
-                    ).ToList();
+                    ).OrderByDescending(x=> x.dfp_legacyid).OrderByDescending(x => x.createdon).ToList();
 
 
                         foreach (var comment in comments)
