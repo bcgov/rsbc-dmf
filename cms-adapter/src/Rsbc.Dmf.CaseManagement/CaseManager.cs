@@ -1193,7 +1193,7 @@ namespace Rsbc.Dmf.CaseManagement
                         await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
                         if (doc.statecode == 0 // active
                             && doc.dfp_submittalstatus == 100000000
-                            && doc.dfp_DocumentTypeID.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
+                            && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
                         {
                             bcgovDocumentUrl = doc;
                             found = true;
