@@ -1,9 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
+﻿using System.IO;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Drawing;
 
 
 namespace Pssg.DocumentStorageAdapter
@@ -18,84 +15,33 @@ namespace Pssg.DocumentStorageAdapter
         public static byte[] convertTiff2Pdf(byte[] tiffBytes)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            
+
+            // Create Image Stream
             MemoryStream imageStream = new MemoryStream(tiffBytes);
+            imageStream.Position = 0;
 
             PdfDocument pdfDocument = new PdfDocument();
+            PdfPage page = new PdfPage();  
+            XImage imgFrame = XImage.FromStream(() => imageStream);
 
-            int pageCount = getPageCount(imageStream);
+            page.Width = imgFrame.PointWidth;
+            page.Height = imgFrame.PointHeight;
+            pdfDocument.Pages.Add(page);
+            var newPage = pdfDocument.Pages[0];
 
-            for (int i = 0; i < pageCount; i++)
-            {
-                PdfPage page = new PdfPage();
-                Image img = getTiffImage(imageStream, i);
-                XImage imgFrame = XImage.FromGdiPlusImage(img);
+            XGraphics xgr = XGraphics.FromPdfPage(newPage);
 
-                page.Width = imgFrame.PointWidth;
-                page.Height = imgFrame.PointHeight;
-                pdfDocument.Pages.Add(page);
-
-                var newPage = pdfDocument.Pages[i];
-
-                XGraphics xgr = XGraphics.FromPdfPage(newPage);
-
-                xgr.DrawImage(img, 0, 0);
-            }
-
+                xgr.DrawImage(imgFrame, 0, 0);
+            
             // Convert doc to stream or bytes 
             var pdfMemoryStream = new MemoryStream();
-            pdfDocument.Save(pdfMemoryStream);
-
-            return pdfMemoryStream.ToArray();
-
-        }
-
-        /// <summary>
-        /// Get Tiff Image
-        /// </summary>
-        /// <param name="imageStream"></param>
-        /// <param name="pageNumber"></param>
-        /// <returns></returns>
-        public static Image getTiffImage(Stream imageStream, int pageNumber)
-        {
-
-            MemoryStream ms = new MemoryStream();
-            Image sourceImage = Image.FromStream(imageStream, true, true);
-
-            Guid objGuid = sourceImage.FrameDimensionsList[0];
-
-            FrameDimension objDimension = new FrameDimension(objGuid);
-
-            sourceImage.SelectActiveFrame(objDimension, pageNumber);
-
-            sourceImage.Save(ms, ImageFormat.Tiff);
-
-            return Image.FromStream(ms);
+           // pdfDocument.Save("../../../TestFiles/test_file_2.pdf");
+           // pdfDocument.Close();
+           pdfDocument.Save(pdfMemoryStream);
+           return pdfMemoryStream.ToArray();
 
         }
 
-        /// <summary>
-        /// Get Page Count
-        /// </summary>
-        /// <param name="imageStream"></param>
-        /// <returns></returns>
-        public static int getPageCount(Stream imageStream)
-        {
-            int pageCount = -1;
-            try
-            {
-                Image img = Image.FromStream(imageStream, true, true);
-                pageCount = img.GetFrameCount(FrameDimension.Page);
-                img.Dispose();
-
-            }
-            catch (Exception ex)
-            {
-                pageCount = 0;
-            }
-
-            return pageCount;
-        }
     }
 
 }
