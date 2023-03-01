@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using System;
+using System.IO;
+using System.Text;
 using Xunit;
 
 namespace Rsbc.Dmf.BcMailAdapter.Tests
@@ -17,11 +19,22 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             var header = "PGhlYWRlcj4KICA8aDE+TWFpbiBwYWdlIGhlYWRpbmcgaGVyZTwvaDE+CiAgPHA+UG9zdGVkIGJ5IEpvaG4gRG9lPC9wPgo8L2hlYWRlcj4=";
             var footer = "PGZvb3Rlcj4KICA8cD5UaGlzIGlzIGZvb3RlcjwvcD4KPC9mb290ZXI+";
 
-            // Act
-            var createDocument = CreateDocumentUtils.CreateDocument(body, header, footer);
+            byte[] bodyData = Convert.FromBase64String(body);
+            string decodedbody = Encoding.UTF8.GetString(bodyData);
 
+            // Decode Header
+            byte[] headerData = Convert.FromBase64String(header);
+            string decodedHeader = Encoding.UTF8.GetString(headerData);
+
+            // Decode Footer
+            byte[] footerData = Convert.FromBase64String(footer);
+            string decodedFooter = Encoding.UTF8.GetString(footerData);
+
+            // Act
+            var data = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
+            File.WriteAllBytes("test.docx", data);
             // Assert
-           Assert.True(createDocument.Length > 0);
+           Assert.True(data.Length > 0);
             
         }
     }
