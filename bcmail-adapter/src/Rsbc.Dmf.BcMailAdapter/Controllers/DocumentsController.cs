@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
 using System.IO;
-using PdfSharp.Pdf.IO;
-using PdfSharp.Pdf;
+using PdfSharpCore.Pdf.IO;
+using PdfSharpCore.Pdf;
 using System.Collections.Generic;
 using Org.BouncyCastle.Utilities.Zlib;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml;
 using System.Text;
-using MariGold.OpenXHTML;
 using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -82,6 +82,9 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         {
             try
             {
+
+                
+
                 string fileName;
                 LetterGenerationRequest letterGenerationRequest;
                 if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
@@ -94,7 +97,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.ContentType == "html")
                         {
-                           var docx = CreateDocumentUtils.CreateDocument(attachment.Body, attachment.Header, attachment.Footer);
+                            string decodedbody = Encoding.UTF8.GetString(attachment.Body);
+                            string decodedHeader = Encoding.UTF8.GetString(attachment.Header);
+                            string decodedFooter = Encoding.UTF8.GetString(attachment.Footer);
+
+
+                            var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
 
                             letterGenerationRequest = new LetterGenerationRequest
                             {
@@ -128,8 +136,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         // Checks wether it is PDF file
                         else
                         {
-                            byte[] byteArray = Convert.FromBase64String(attachment.Body);
-                            srcPdfs.Add(byteArray);
+                            srcPdfs.Add(attachment.Body);
                         }
                     };
 
@@ -141,7 +148,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                    return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
                     string content = "application/octet-stream";
-                    string body = mergedFiles.Length > 0 ? Convert.ToBase64String(mergedFiles) : String.Empty;
+                    byte[] body = mergedFiles.Length > 0 ? mergedFiles : new byte[0]; 
                     
 
                     var res = new PdfResponse()
