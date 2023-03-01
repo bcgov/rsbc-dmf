@@ -15,7 +15,7 @@ namespace Rsbc.Interfaces
         /// <summary>
         /// Base 64 encoded string
         /// </summary>
-        public string Body { get; set; }
+        public byte[] Body { get; set; }
 
         /// <summary>
         /// ContentType of the file

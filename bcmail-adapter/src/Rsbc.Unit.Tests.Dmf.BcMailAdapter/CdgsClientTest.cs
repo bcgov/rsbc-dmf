@@ -44,7 +44,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                 {
                     FileName = "Test BC mail Preview",
                     ContentType = "text/plain",
-                    Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(testString)),
+                    Body = Encoding.ASCII.GetBytes(testString),
                 };
 
                 string jsonString = JsonConvert.SerializeObject(result);
@@ -57,7 +57,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                 jsonString = await response.Content.ReadAsStringAsync();
                 BcMail bcMail = JsonConvert.DeserializeObject<BcMail>(jsonString);
 
-                Assert.Equal(Convert.FromBase64String(bcMail.Attachments[0].Body), Encoding.ASCII.GetBytes(testString));
+                Assert.Equal(bcMail.Attachments[0].Body, Encoding.ASCII.GetBytes(testString));
             }
             
         }
@@ -83,7 +83,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                     FileName = "Test BC mail Preview",
                     ContentType = "text/plain",
                     // 
-                    Body = Convert.ToBase64String(Encoding.ASCII.GetBytes(testString)),
+                    Body = Encoding.ASCII.GetBytes(testString),
                 };
 
                 string jsonString = JsonConvert.SerializeObject(result);
@@ -96,7 +96,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                 jsonString = await response.Content.ReadAsStringAsync();
                 BcMail bcMail = JsonConvert.DeserializeObject<BcMail>(jsonString);
 
-                Assert.Equal(Convert.FromBase64String(bcMail.Attachments[0].Body), Encoding.ASCII.GetBytes(testString));
+                Assert.Equal(bcMail.Attachments[0].Body, Encoding.ASCII.GetBytes(testString));
             }
 
         }
