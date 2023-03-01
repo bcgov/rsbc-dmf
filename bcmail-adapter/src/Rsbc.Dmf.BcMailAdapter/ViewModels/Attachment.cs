@@ -8,26 +8,26 @@
         /// <summary>
         /// Body
         /// </summary>
-        public string? Body { get; set; }
+        public byte[] Body { get; set; }
 
         /// <summary>
         /// Header
         /// </summary>
-        public string? Header { get; set; }
+        public byte[] Header { get; set; }
 
         /// <summary>
         /// Footer
         /// </summary>
-        public string? Footer { get; set; }
+        public byte[] Footer { get; set; }
 
         /// <summary>
         /// Content Type
         /// </summary>
-        public string? ContentType { get; set; }
+        public string ContentType { get; set; }
 
         /// <summary>
         /// File Name
         /// </summary>
-        public string? FileName { get; set; }
+        public string FileName { get; set; }
     }
 }
