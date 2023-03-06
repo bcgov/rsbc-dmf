@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
 USER 0
 
-RUN apt install curl
+RUN apt-get -y update && apt install curl
 
 RUN \
   echo "**** install packages ****" && \
