@@ -9,17 +9,21 @@
         /// <summary>
         /// Conver To
         /// </summary>
-        public string? ConvertTo { get; set; }
+        /// 
+
+        public bool CacheReport { get; set; }
+
+        public string ConvertTo { get; set; }
 
         /// <summary>
         /// Overwrite
         /// </summary>
-        public bool? Overwrite { get; set; }
+        public bool Overwrite { get; set; }
 
         /// <summary>
         /// ReportName
         /// </summary>
-        public string? ReportName { get; set; }
+        public string ReportName { get; set; }
 
     }
 }
