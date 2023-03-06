@@ -19,6 +19,7 @@ using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LibreOfficeLibrary;
+using System.Net.Mail;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -68,6 +69,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             return Ok("Success");
         }
 
+
+        private string ParseByteArrayToString(byte[] data)
+        {
+            string result = string.Empty;
+            if (data != null && data.Length > 0)
+            {
+                Encoding.UTF8.GetString(data);
+            }
+            return result;
+        }
+
         /// <summary>
         /// Bc Mail Document Preview
         /// </summary>
@@ -97,9 +109,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment?.ContentType == "html")
                         {
-                            string decodedbody = Encoding.UTF8.GetString(attachment.Body);
-                            string decodedHeader = Encoding.UTF8.GetString(attachment.Header);
-                            string decodedFooter = Encoding.UTF8.GetString(attachment.Footer);
+                          
+                            string decodedbody = ParseByteArrayToString(attachment.Body);
+                            string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
 
                             var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
