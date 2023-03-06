@@ -77,6 +77,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             {
                 Encoding.UTF8.GetString(data);
             }
+            return result;
         }
 
         /// <summary>
