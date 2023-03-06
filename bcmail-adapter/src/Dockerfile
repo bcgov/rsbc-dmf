@@ -2,7 +2,9 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
-RUN apk --no-cache add curl
+USER 0
+
+RUN apt install curl
 
 RUN \
   echo "**** install packages ****" && \
@@ -39,6 +41,8 @@ COPY --from=publish /app/publish .
 # RUN apt-get update -yq \
 #    && apt-get install curl -yq \
 #	&& curl -sSL https://aka.ms/getvsdbgsh | bash /dev/stdin -v vs2019 -l /app/vsdbg
+
+USER 1001
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
