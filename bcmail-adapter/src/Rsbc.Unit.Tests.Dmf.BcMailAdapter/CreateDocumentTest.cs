@@ -32,7 +32,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
 
             // Act
             var data = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
-            File.WriteAllBytes("test.docx", data);
+            File.WriteAllBytes("test2.docx", data);
             // Assert
            Assert.True(data.Length > 0);
             
