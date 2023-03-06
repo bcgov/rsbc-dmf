@@ -2,6 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
+RUN apk --no-cache add curl
+
 RUN \
   echo "**** install packages ****" && \
   if [ -z ${LIBREOFFICE_VERSION+x} ]; then \
