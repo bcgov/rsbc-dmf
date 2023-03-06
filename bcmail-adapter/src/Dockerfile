@@ -2,6 +2,24 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
+RUN \
+  echo "**** install packages ****" && \
+  if [ -z ${LIBREOFFICE_VERSION+x} ]; then \
+    LIBREOFFICE_VERSION=$(curl -sL "http://dl-cdn.alpinelinux.org/alpine/v3.16/community/x86_64/APKINDEX.tar.gz" | tar -xz -C /tmp \
+    && awk '/^P:libreoffice$/,/V:/' /tmp/APKINDEX | sed -n 2p | sed 's/^V://'); \
+  fi && \
+  apk add --no-cache \
+    libreoffice==${LIBREOFFICE_VERSION} \
+    openjdk8-jre \
+    tint2 && \
+  echo "**** openbox tweaks ****" && \
+  sed -i \
+    's/NLMC/NLIMC/g' \
+    /etc/xdg/openbox/rc.xml && \
+  echo "**** cleanup ****" && \
+  rm -rf \
+    /tmp/*
+
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
