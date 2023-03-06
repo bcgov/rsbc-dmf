@@ -18,6 +18,7 @@ using System.Text;
 using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Spreadsheet;
+using LibreOfficeLibrary;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -83,10 +84,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             try
             {
 
-                
-
                 string fileName;
-                LetterGenerationRequest letterGenerationRequest;
+                CdgsRequest cdgsRequest;
                 if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
                 {
 
@@ -104,15 +103,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
 
-                            letterGenerationRequest = new LetterGenerationRequest
+                            /*
+
+                            cdgsRequest = new CdgsRequest
                             {
                                 Data = new Data
-                                {
-                                    /*FirstName = "Test1",
-                                    LastName = "LAstNAme",
-                                    Title = "Hello"*/
+                                {                                    
                                 },
-                                /* Formatters = "",*/
+                                // Formatters = "",
                                 Options = new Options
                                 {
                                     ConvertTo = "pdf",
@@ -130,8 +128,27 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                  
                                 }
                             };
-                            var responsestream = await _cdgsClient.PreviewBcMailDocument(letterGenerationRequest);
+                            var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
+                            
                             srcPdfs.Add(responsestream.ReadAllBytes());
+                            */
+
+                            // convert the docx to pdf.
+
+                            String tempPrefix = System.IO.Path.GetTempPath() + Guid.NewGuid().ToString();
+                            string docxFilename = tempPrefix + ".docx";
+                            string pdfFilename = tempPrefix + ".pdf";
+
+                            System.IO.File.WriteAllBytes(docxFilename, docx);
+
+                            // now convert it to PDF.
+                            DocumentConverter d = new DocumentConverter();
+                            d.ConvertToPdf(docxFilename, pdfFilename);
+
+                            byte[] pdfData = System.IO.File.ReadAllBytes(pdfFilename);
+
+                            srcPdfs.Add(pdfData);
+
                         }
                         // Checks wether it is PDF file
                         else

@@ -1,3 +1,4 @@
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Grpc.Net.Client;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -27,7 +28,16 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                     .Build();
 
             // you could also create a real CdgsClient here if there was a valid URI.
-            ICdgsClient cdgsClient = CdgsClientHelper.CreateMock(Configuration);
+            ICdgsClient cdgsClient;
+
+            if (Configuration["CDGS_SERVICE_URI"] != null)
+            {
+                cdgsClient = new CdgsClient(Configuration);                
+            }
+            else
+            {
+                cdgsClient = CdgsClientHelper.CreateMock(Configuration);
+            }
 
             builder
                 .UseSolutionRelativeContentRoot("")

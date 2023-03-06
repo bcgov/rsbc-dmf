@@ -46,11 +46,11 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                     HtmlConverter converter = new HtmlConverter(mainPart);
                     converter.ParseHtml(body);
-
-                    ApplyFooter(package, footer);
                     ApplyHeader(package, header);
+                    ApplyFooter(package, footer);
 
-                    mainPart.Document.Save();
+                    package.ChangeDocumentType(WordprocessingDocumentType.Document);
+                    package.Save();
                 }
 
                 return generatedDocument.ToArray();

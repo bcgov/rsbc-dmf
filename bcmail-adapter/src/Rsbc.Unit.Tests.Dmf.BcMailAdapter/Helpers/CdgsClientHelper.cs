@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests.Helpers
             var theStream = new MemoryStream(Encoding.UTF8.GetBytes(""));
 
             mockClient
-                .Setup(m => m.PreviewBcMailDocument(It.IsAny<LetterGenerationRequest>()))
+                .Setup(m => m.TemplateRender(It.IsAny<CdgsRequest>()))
                 .Returns(Task.FromResult<Stream>((Stream)theStream));                           
 
             return mockClient.Object;
