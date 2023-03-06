@@ -43,7 +43,7 @@ namespace Rsbc.Interfaces
         }
 
 
-        public async Task<Stream> PreviewBcMailDocument(LetterGenerationRequest request)
+        public async Task<Stream> TemplateRender(CdgsRequest request)
         {
             // Step 1 : Get the token and do communication with cdgs service 
 
