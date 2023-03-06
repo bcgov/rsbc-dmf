@@ -46,8 +46,14 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                     HtmlConverter converter = new HtmlConverter(mainPart);
                     converter.ParseHtml(body);
-                    ApplyHeader(package, header);
-                    ApplyFooter(package, footer);
+                    if (!string.IsNullOrEmpty(header))
+                    {
+                        ApplyHeader(package, header);
+                    }
+                    if (!string.IsNullOrEmpty(footer))
+                    {
+                        ApplyFooter(package, footer);
+                    }
 
                     package.ChangeDocumentType(WordprocessingDocumentType.Document);
                     package.Save();

@@ -95,7 +95,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     foreach (var attachment in bcmail.Attachments)
                     {
 
-                        if (attachment.ContentType == "html")
+                        if (attachment?.ContentType == "html")
                         {
                             string decodedbody = Encoding.UTF8.GetString(attachment.Body);
                             string decodedHeader = Encoding.UTF8.GetString(attachment.Header);
