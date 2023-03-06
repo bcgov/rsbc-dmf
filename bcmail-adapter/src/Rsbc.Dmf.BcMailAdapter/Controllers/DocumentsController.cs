@@ -81,9 +81,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
+            /*
             try
             {
-
+            */
                 string fileName;
                 CdgsRequest cdgsRequest;
                 if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
@@ -178,13 +179,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     return new JsonResult(res);
 
                 }
+/*
             }
             catch(Exception ex)
             {
 
                 return StatusCode(500, ex.Message);
             }
-
+*/
             return new JsonResult(new PdfResponse());
 
         }
