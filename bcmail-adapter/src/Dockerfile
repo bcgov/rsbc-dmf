@@ -51,4 +51,5 @@ USER 1001
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
+ENV HOME=/tmp/
 ENTRYPOINT ["dotnet", "Rsbc.Dmf.BcMailAdapter.dll"]
