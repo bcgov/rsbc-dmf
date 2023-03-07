@@ -132,24 +132,18 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
-                            //System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
-                            //var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
-                            string decodedHeader = ParseByteArrayToString(attachment.Header);
-
-
-                            doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedHeader };
+                            System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
+                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
+                            
+                            doc.Objects[0].HeaderSettings = headerSettings;
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
-                            //var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
-                            //doc.Objects[0].FooterSettings = footerSettings;
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
+                            doc.Objects[0].FooterSettings = footerSettings;
 
-                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
-
-
-                            doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedFooter };
                         }
 
                         byte[] pdfData = Converter.Convert(doc);
@@ -157,77 +151,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
                         {
-                            //System.IO.File.Delete(headerFilename);
+                            System.IO.File.Delete(headerFilename);
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
                         {
-                            //System.IO.File.Delete(footerFilename);
+                            System.IO.File.Delete(footerFilename);
                         }
 
 
-
-                        /*
-                        var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
-
-                        /*
-
-                        cdgsRequest = new CdgsRequest
-                        {
-                            Data = new Data
-                            {                                    
-                            },
-                            // Formatters = "",
-                            Options = new Options
-                            {
-                                ConvertTo = "pdf",
-                                Overwrite = true,
-                                ReportName = attachment.FileName ?? string.Empty
-                            },
-                            Template = new Template()
-
-                            {
-                                //Content = attachment.Body ?? string.Empty,
-                               // Content = new String(Encoding.UTF8.GetString(docx)),
-                                Content = Convert.ToBase64String(docx),
-                                EncodingType = "base64",
-                                FileType = attachment.ContentType ?? string.Empty
-
-                            }
-                        };
-                        var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
-
-                        srcPdfs.Add(responsestream.ReadAllBytes());
-                        */
-
-                        // convert the docx to pdf.
-
-
-
-                        //string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
-
-                            //System.IO.File.WriteAllBytes(docxFilename, docx);
-
-                            // now convert it to PDF.
-                            //DocumentConverter d = new DocumentConverter();
-                            //writer_pdf_Export
-                            //var l = new LibreOfficeWorker();
-
-                            //string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
-                            //Serilog.Log.Logger.Information(theCommand);
-
-                            //l.DoWork(theCommand, null);
-
-
-                            /*
-                            if (System.IO.File.Exists(pdfFilename))
-                            {
-                                byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
-
-                                srcPdfs.Add(pdfData);
-                            }
-                            */
-                            
 
                         }
                         // add a PDF file
