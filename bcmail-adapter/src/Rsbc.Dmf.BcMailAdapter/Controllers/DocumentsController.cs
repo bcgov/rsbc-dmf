@@ -157,7 +157,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             // now convert it to PDF.
                             DocumentConverter d = new DocumentConverter();
-                            d.ConvertToPdf(docxFilename, pdfFilename);
+                            d.ConvertToPdf(docxFilename, pdfFilename, Configuration["LIBRE_OFFICE_LOCATION"] ?? string.Empty);
 
                             byte[] pdfData = System.IO.File.ReadAllBytes(pdfFilename);
 
