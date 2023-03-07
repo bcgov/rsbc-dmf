@@ -31,8 +31,6 @@ namespace Rsbc.Dmf.BcMailAdapter
         static public byte[] CreateDocument(string body, string header, string footer)
         {
             byte[] result;
-
-
             using (MemoryStream generatedDocument = new MemoryStream())
             {
                 using (WordprocessingDocument package = WordprocessingDocument.Create(generatedDocument, WordprocessingDocumentType.Document))
@@ -55,12 +53,12 @@ namespace Rsbc.Dmf.BcMailAdapter
                         ApplyFooter(package, footer);
                     }
 
-                    package.ChangeDocumentType(WordprocessingDocumentType.Document);
                     package.Save();
                 }
 
-                return generatedDocument.ToArray();
+                result = generatedDocument.ToArray();
             }
+            return result;
         }
 
 
