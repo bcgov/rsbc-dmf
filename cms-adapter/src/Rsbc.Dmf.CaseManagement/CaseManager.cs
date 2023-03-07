@@ -2100,6 +2100,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
+
                 if (driverResults.Length > 0)
                 {
                     dfp_driver driver;
@@ -2120,7 +2121,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                 dynamicsContext.DetachAll();
             }
-
             catch (Exception e)
             {
                 logger.LogError(e, $"UpdateBirthdate - Error updating");
