@@ -20,6 +20,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using LibreOfficeLibrary;
 using System.Net.Mail;
+using Newtonsoft.Json;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -75,7 +76,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             string result = string.Empty;
             if (data != null && data.Length > 0)
             {
-                Encoding.UTF8.GetString(data);
+                result = Encoding.UTF8.GetString(data);
             }
             return result;
         }
@@ -93,6 +94,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
+            Serilog.Log.Information (JsonConvert.SerializeObject(bcmail));
             /*
             try
             {
@@ -169,7 +171,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             srcPdfs.Add(pdfData);
 
                         }
-                        // Checks wether it is PDF file
+                        // add a PDF file
                         else
                         {
                             srcPdfs.Add(attachment.Body);
