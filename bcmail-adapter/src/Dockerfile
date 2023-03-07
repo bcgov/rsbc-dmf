@@ -4,30 +4,13 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
 USER 0
 
-RUN apt-get -y update && apt install -y -q \
-		libreoffice \
-        default-jre-headless \
-		libreoffice-writer \
-		ure \
-		libreoffice-java-common \
-		libreoffice-core \
-		libreoffice-common \
-		fonts-opensymbol \
-		hyphen-en-us \
-		fonts-dejavu \
-		fonts-dejavu-core \
-		fonts-dejavu-extra \
-		fonts-droid-fallback \
-		fonts-dustin \
-		fonts-f500 \
-		fonts-fanwood \
-		fonts-freefont-ttf \
-		fonts-liberation \
-		fonts-lmodern \
-		fonts-lyx \
-		fonts-sil-gentium \
-		fonts-texgyre \
-		fonts-tlwg-purisa 
+RUN apt-get -y update && apt install -y libgdiplus
+RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
+RUN apt-get install -y --no-install-recommends zlib1g fontconfig libfreetype6 libx11-6 libxext6 libxrender1 wget gdebi
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb
+RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
+RUN apt install -y libssl1.1
+RUN ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so
 
 WORKDIR /app
 

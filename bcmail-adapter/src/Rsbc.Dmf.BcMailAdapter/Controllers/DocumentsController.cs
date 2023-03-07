@@ -1,26 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Pdf.IO;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
-using System.IO;
-using PdfSharpCore.Pdf.IO;
-using PdfSharpCore.Pdf;
+using System;
 using System.Collections.Generic;
-using Org.BouncyCastle.Utilities.Zlib;
-using System.Xml.Linq;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml;
+using System.IO;
 using System.Text;
-using Rsbc.Dmf.BcMailAdapter.ViewModels;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocumentFormat.OpenXml.Spreadsheet;
-using LibreOfficeLibrary;
-using System.Net.Mail;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using WkHtmlToPdfDotNet;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -35,6 +26,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         private readonly IConfiguration Configuration;
         private readonly ILogger<DocumentsController> Logger;
         private readonly ICdgsClient _cdgsClient;
+        private static SynchronizedConverter Converter;
 
         /// <summary>
         /// 
@@ -42,12 +34,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         /// <param name="cdgsClient"></param>
-        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient)
+        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, PdfTools pdfTools)
         {
             Configuration = configuration;
             Logger = logger;
             _cdgsClient = cdgsClient;
-
+            Converter = new SynchronizedConverter(pdfTools); ;
         }
 
 
@@ -113,65 +105,119 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         {
                           
                             string decodedbody = ParseByteArrayToString(attachment.Body);
-                            string decodedHeader = ParseByteArrayToString(attachment.Header);
-                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
+                            //string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            //string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
-                            var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
+                        string tempPrefix = Guid.NewGuid().ToString();
+                        string headerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-header.html";
+                        string footerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-footer.html";
 
-                            /*
-
-                            cdgsRequest = new CdgsRequest
-                            {
-                                Data = new Data
-                                {                                    
-                                },
-                                // Formatters = "",
-                                Options = new Options
-                                {
-                                    ConvertTo = "pdf",
-                                    Overwrite = true,
-                                    ReportName = attachment.FileName ?? string.Empty
-                                },
-                                Template = new Template()
-
-                                {
-                                    //Content = attachment.Body ?? string.Empty,
-                                   // Content = new String(Encoding.UTF8.GetString(docx)),
-                                    Content = Convert.ToBase64String(docx),
-                                    EncodingType = "base64",
-                                    FileType = attachment.ContentType ?? string.Empty
-                                 
-                                }
-                            };
-                            var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
+                        var doc = new HtmlToPdfDocument()
+                        {
+                            GlobalSettings = {
+                            ColorMode = ColorMode.Color,
+                            Orientation = Orientation.Portrait,
+                            PaperSize = PaperKind.Letter,
+                        },
+                            Objects = {
+                        new ObjectSettings() {
+                            PagesCount = true,
+                            HtmlContent = decodedbody,
+                            WebSettings = { DefaultEncoding = "utf-8" },
                             
-                            srcPdfs.Add(responsestream.ReadAllBytes());
-                            */
+                        }
+                        }
+                        };
 
-                            // convert the docx to pdf.
+                        if (attachment.Header != null && attachment.Header.Length > 0)
+                        {
+                            System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
+                            var headerSettings = new HeaderSettings() { HtmlUrl = $"file://{headerFilename}" };
+                            doc.Objects[0].HeaderSettings = headerSettings;
+                        }
 
-                            String tempPrefix =  Guid.NewGuid().ToString();
-                            string docxFilename = System.IO.Path.GetTempPath() + tempPrefix + ".docx";
-                            string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
+                        if (attachment.Footer != null && attachment.Footer.Length > 0)
+                        {
+                            System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file://{footerFilename}" };
+                            doc.Objects[0].FooterSettings = footerSettings;
+                        }
 
-                            System.IO.File.WriteAllBytes(docxFilename, docx);
+                        byte[] pdfData = Converter.Convert(doc);
+                        srcPdfs.Add(pdfData);
+
+                        if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
+                        {
+                            System.IO.File.Delete(headerFilename);
+                        }
+
+                        if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
+                        {
+                            System.IO.File.Delete(footerFilename);
+                        }
+
+
+
+                        /*
+                        var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
+
+                        /*
+
+                        cdgsRequest = new CdgsRequest
+                        {
+                            Data = new Data
+                            {                                    
+                            },
+                            // Formatters = "",
+                            Options = new Options
+                            {
+                                ConvertTo = "pdf",
+                                Overwrite = true,
+                                ReportName = attachment.FileName ?? string.Empty
+                            },
+                            Template = new Template()
+
+                            {
+                                //Content = attachment.Body ?? string.Empty,
+                               // Content = new String(Encoding.UTF8.GetString(docx)),
+                                Content = Convert.ToBase64String(docx),
+                                EncodingType = "base64",
+                                FileType = attachment.ContentType ?? string.Empty
+
+                            }
+                        };
+                        var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
+
+                        srcPdfs.Add(responsestream.ReadAllBytes());
+                        */
+
+                        // convert the docx to pdf.
+
+
+
+                        //string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
+
+                            //System.IO.File.WriteAllBytes(docxFilename, docx);
 
                             // now convert it to PDF.
                             //DocumentConverter d = new DocumentConverter();
                             //writer_pdf_Export
-                            var l = new LibreOfficeWorker();
+                            //var l = new LibreOfficeWorker();
 
-                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
-                            Serilog.Log.Logger.Information(theCommand);
+                            //string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
+                            //Serilog.Log.Logger.Information(theCommand);
 
-                            l.DoWork(theCommand, null);
+                            //l.DoWork(theCommand, null);
 
+
+                            /*
                             if (System.IO.File.Exists(pdfFilename))
                             {
                                 byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
 
                                 srcPdfs.Add(pdfData);
                             }
+                            */
                             
 
                         }

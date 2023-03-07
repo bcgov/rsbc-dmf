@@ -38,6 +38,8 @@ using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.Extensions.Logging;
 using Rsbc.Interfaces;
 using Serilog.Core;
+using WkHtmlToPdfDotNet;
+using FileHelpers.Converters;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -167,6 +169,8 @@ namespace Rsbc.Dmf.BcMailAdapter
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
+
+            services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
             if (Configuration["CDGS_SERVICE_URI"] != null)
             {
