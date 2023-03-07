@@ -157,13 +157,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             System.IO.File.WriteAllBytes(docxFilename, docx);
 
                             // now convert it to PDF.
-                            DocumentConverter d = new DocumentConverter();
-                            
-                           new LibreOfficeWorker().DoWork("/C --headless --writer --convert-to pdf:writer_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + System.IO.Path.GetTempPath() + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + "/\"", null);
+                            //DocumentConverter d = new DocumentConverter();
+                            //writer_pdf_Export
+                            var l = new LibreOfficeWorker();
 
+                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + System.IO.Path.GetTempPath() + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + tempPrefix + "/\"";
+                            Serilog.Log.Logger.Information(theCommand);
 
+                            l.DoWork(theCommand, null);
 
-                        
 
                             byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
 
