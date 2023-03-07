@@ -424,5 +424,24 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
 
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateDriverBirthDate()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+             var request = new UpdateDriverRequest()
+            {
+                BirthDate = new DateTime(1994,02,16),
+                DriverLicenseNumber = driverLicenseNumber
+            };
+            // Get the driver
+
+           var result = await caseManager.UpdateBirthDate(request);
+            result.ShouldNotBeNull();
+            Assert.True(result.Success);
+        }
+
+
     }
 }

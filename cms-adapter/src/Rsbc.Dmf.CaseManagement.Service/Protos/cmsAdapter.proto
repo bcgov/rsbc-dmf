@@ -63,6 +63,13 @@ service CaseManager {
   // Resolve a case
    rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
 
+   // Update Birth Date
+   rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
+}
+
+message UpdateDriverRequest{
+	string driverLicenseNumber=1;
+	google.protobuf.Timestamp birthDate = 2;
 }
 
 message DriverLicenseRequest {

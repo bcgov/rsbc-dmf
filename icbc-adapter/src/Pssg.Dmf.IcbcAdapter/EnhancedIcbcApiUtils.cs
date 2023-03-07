@@ -29,6 +29,7 @@ using System.Net.Http.Json;
 using Newtonsoft.Json.Linq;
 using Grpc.Core;
 using Pssg.Interfaces.IcbcModels;
+using Org.BouncyCastle.Asn1.X509;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -39,12 +40,14 @@ namespace Rsbc.Dmf.IcbcAdapter
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
         private readonly IIcbcClient _icbcClient;
        
+       
 
-        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
+        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient )
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
             _icbcClient = icbcClient;
+            
  
         }
 
@@ -184,6 +187,42 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
              
             return null;
+        }
+
+        /// <summary>
+        /// UpdateBirthdateFromIcbc
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task UpdateBirthdateFromIcbc()
+        {
+
+            // Get List of  drivers from dynamics
+
+            var driversReply = _caseManagerClient.GetDrivers(new CaseManagement.Service.EmptyRequest());
+                
+            foreach(var driver in driversReply.Items)
+            {
+                var dlNumber = driver.DriverLicenseNumber;
+
+                // Call the tombstone endpoint
+                var response = _icbcClient.GetDriverHistory(dlNumber);
+                if (response != null && response.BIDT != null)
+                {
+                    // Compare Dynamics DOB and ICBC DOB
+                    if (driver.BirthDate != Timestamp.FromDateTime((DateTime)response.BIDT))
+                    {
+                        var driverRequest = new UpdateDriverRequest()
+                        {
+                            DriverLicenseNumber = dlNumber,
+                            BirthDate = Timestamp.FromDateTime((DateTime)response.BIDT)
+                        };
+
+                        _caseManagerClient.UpdateBirthDate(driverRequest);
+                    }
+                  
+                }
+            }        
         }
 
 
