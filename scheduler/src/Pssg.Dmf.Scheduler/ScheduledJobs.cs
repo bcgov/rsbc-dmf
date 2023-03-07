@@ -63,6 +63,20 @@ namespace Rsbc.Dmf.Scheduler
             LogStatement(hangfireContext, "End of checks case resolve status.");
         }
 
+        /// <summary>
+        /// Hangfire job fix Birth dates
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task UpdateBirthdate(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting to check the Date Of Birth");
+
+            // Call ICBC Adapter to do the check for Date of birth
+            _icbcAdapterClient.UpdateBirthdate(new IcbcAdapter.EmptyRequest());
+
+
+            LogStatement(hangfireContext, "End of checks case resolve status.");
+        }
 
         /// <summary>
         /// Log Statement
