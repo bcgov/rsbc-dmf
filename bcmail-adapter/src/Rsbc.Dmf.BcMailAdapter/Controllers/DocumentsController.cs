@@ -161,11 +161,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             //writer_pdf_Export
                             var l = new LibreOfficeWorker();
 
-                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"--env:UserInstallation=file://" + System.IO.Path.GetTempPath() + "\"";
+                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"-env:UserInstallation=file://" + System.IO.Path.GetTempPath() + "\"";
                             Serilog.Log.Logger.Information(theCommand);
 
                             l.DoWork(theCommand, null);
-
 
                             byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
 
