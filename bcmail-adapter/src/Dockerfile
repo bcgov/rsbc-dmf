@@ -11,13 +11,8 @@ RUN apt-get -y update && apt install -y -q \
 		libreoffice-java-common \
 		libreoffice-core \
 		libreoffice-common \
-		openjdk-8-jre \
 		fonts-opensymbol \
-		hyphen-fr \
-		hyphen-de \
 		hyphen-en-us \
-		hyphen-it \
-		hyphen-ru \
 		fonts-dejavu \
 		fonts-dejavu-core \
 		fonts-dejavu-extra \
