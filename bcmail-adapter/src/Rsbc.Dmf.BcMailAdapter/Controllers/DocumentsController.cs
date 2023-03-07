@@ -158,7 +158,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             // now convert it to PDF.
                             DocumentConverter d = new DocumentConverter();
                             
-                        new LibreOfficeWorker().DoWork("/C --headless --writer --convert-to pdf:writer_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + "/\"", null);
+                           new LibreOfficeWorker().DoWork("/C --headless --writer --convert-to pdf:writer_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + "/\"", null);
 
 
 
@@ -181,7 +181,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     // Merge into one PDF 
                     byte[] mergedFiles = this.CombinePDFs(srcPdfs);
 
-                   return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
+                   //return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
                     string content = "application/octet-stream";
                     byte[] body = mergedFiles.Length > 0 ? mergedFiles : new byte[0]; 
