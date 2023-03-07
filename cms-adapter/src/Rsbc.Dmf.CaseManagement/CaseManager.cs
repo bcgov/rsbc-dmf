@@ -74,6 +74,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task ResolveCaseStatusUpdates();
 
+        Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest);
+
         Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
 
         Task <bool> SetCaseStatus(string caseId , bool caseStatus);  
@@ -272,6 +274,12 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Id;
         public bool Success { get; set; }
+    }
+
+    public class UpdateDriverRequest
+    {
+        public string DriverLicenseNumber { get; set; }
+        public DateTime BirthDate { get; set; }
     }
 
     internal class CaseManager : ICaseManager
@@ -790,7 +798,7 @@ namespace Rsbc.Dmf.CaseManagement
                 Driver d = new Driver ()
                 {
                     DriverLicenseNumber = item.dfp_licensenumber,
-                    Surname = item.dfp_PersonId?.lastname
+                    Surname = item.dfp_PersonId?.lastname,
                 };
                 result.Add(d);
             }
@@ -2072,6 +2080,52 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };          
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(x => x.dfp_licensenumber == driverRequest.DriverLicenseNumber);
+
+            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+            dfp_driver[] driverResults = data.ToArray();
+
+            try
+            {
+
+                if (driverResults.Length > 0)
+                {
+                    dfp_driver driver;
+                    contact driverContact;
+
+                    driver = driverResults[0];
+                    if (driver.dfp_PersonId != null)
+                    {
+                        driverContact = driver.dfp_PersonId;
+                        driverContact.birthdate = driverRequest.BirthDate;
+                        dynamicsContext.UpdateObject(driverContact);
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                    }
+
+
+                }
+
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"UpdateBirthdate - Error updating");
+            }
+            return result;
         }
 
         /// <summary>
