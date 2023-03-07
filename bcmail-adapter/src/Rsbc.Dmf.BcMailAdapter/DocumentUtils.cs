@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                     {
                         ApplyFooter(package, footer);
                     }
-
+                    package.ChangeDocumentType(WordprocessingDocumentType.Document);
                     package.Save();
                 }
 
