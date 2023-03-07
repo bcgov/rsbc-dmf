@@ -18,6 +18,9 @@ using System.Text;
 using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml.Spreadsheet;
+using LibreOfficeLibrary;
+using System.Net.Mail;
+using Newtonsoft.Json;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -67,6 +70,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             return Ok("Success");
         }
 
+
+        private string ParseByteArrayToString(byte[] data)
+        {
+            string result = string.Empty;
+            if (data != null && data.Length > 0)
+            {
+                result = Encoding.UTF8.GetString(data);
+            }
+            return result;
+        }
+
         /// <summary>
         /// Bc Mail Document Preview
         /// </summary>
@@ -80,13 +94,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
+            Serilog.Log.Information (JsonConvert.SerializeObject(bcmail));
+            /*
             try
             {
-
-                
-
+            */
                 string fileName;
-                LetterGenerationRequest letterGenerationRequest;
+                CdgsRequest cdgsRequest;
                 if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
                 {
 
@@ -95,24 +109,23 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     foreach (var attachment in bcmail.Attachments)
                     {
 
-                        if (attachment.ContentType == "html")
+                        if (attachment?.ContentType == "html")
                         {
-                            string decodedbody = Encoding.UTF8.GetString(attachment.Body);
-                            string decodedHeader = Encoding.UTF8.GetString(attachment.Header);
-                            string decodedFooter = Encoding.UTF8.GetString(attachment.Footer);
-
+                          
+                            string decodedbody = ParseByteArrayToString(attachment.Body);
+                            string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
                             var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
 
-                            letterGenerationRequest = new LetterGenerationRequest
+                            /*
+
+                            cdgsRequest = new CdgsRequest
                             {
                                 Data = new Data
-                                {
-                                    /*FirstName = "Test1",
-                                    LastName = "LAstNAme",
-                                    Title = "Hello"*/
+                                {                                    
                                 },
-                                /* Formatters = "",*/
+                                // Formatters = "",
                                 Options = new Options
                                 {
                                     ConvertTo = "pdf",
@@ -130,10 +143,39 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                  
                                 }
                             };
-                            var responsestream = await _cdgsClient.PreviewBcMailDocument(letterGenerationRequest);
+                            var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
+                            
                             srcPdfs.Add(responsestream.ReadAllBytes());
+                            */
+
+                            // convert the docx to pdf.
+
+                            String tempPrefix =  Guid.NewGuid().ToString();
+                            string docxFilename = System.IO.Path.GetTempPath() + tempPrefix + ".docx";
+                            string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
+
+                            System.IO.File.WriteAllBytes(docxFilename, docx);
+
+                            // now convert it to PDF.
+                            //DocumentConverter d = new DocumentConverter();
+                            //writer_pdf_Export
+                            var l = new LibreOfficeWorker();
+
+                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
+                            Serilog.Log.Logger.Information(theCommand);
+
+                            l.DoWork(theCommand, null);
+
+                            if (System.IO.File.Exists(pdfFilename))
+                            {
+                                byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
+
+                                srcPdfs.Add(pdfData);
+                            }
+                            
+
                         }
-                        // Checks wether it is PDF file
+                        // add a PDF file
                         else
                         {
                             srcPdfs.Add(attachment.Body);
@@ -145,7 +187,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     // Merge into one PDF 
                     byte[] mergedFiles = this.CombinePDFs(srcPdfs);
 
-                   return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
+                   //return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
                     string content = "application/octet-stream";
                     byte[] body = mergedFiles.Length > 0 ? mergedFiles : new byte[0]; 
@@ -161,13 +203,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     return new JsonResult(res);
 
                 }
+/*
             }
             catch(Exception ex)
             {
 
                 return StatusCode(500, ex.Message);
             }
-
+*/
             return new JsonResult(new PdfResponse());
 
         }

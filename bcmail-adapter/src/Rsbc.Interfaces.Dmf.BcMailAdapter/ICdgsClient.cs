@@ -10,6 +10,6 @@ namespace Rsbc.Interfaces
 
         public string SendMedicalUpdate(IcbcMedicalUpdate item);*/
 
-        public Task<Stream> PreviewBcMailDocument(LetterGenerationRequest request);
+        public Task<Stream> TemplateRender(CdgsRequest request);
     }
 }
