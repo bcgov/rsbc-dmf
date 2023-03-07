@@ -1,6 +1,6 @@
 ﻿namespace Rsbc.Interfaces.CdgsModels
 {
-    public class LetterGenerationRequest
+    public class CdgsRequest
     {
         /// <summary>
         /// Data

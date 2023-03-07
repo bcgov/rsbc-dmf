@@ -41,8 +41,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
 
 
             ViewModels.BcMail bcmail = new ViewModels.BcMail()
-            {
-                  Attachments = new List<Attachment> (),
+            {                   
+                  Attachments = new List<Attachment> () { new Attachment() { 
+                      ContentType = "html",
+                      Body = Encoding.ASCII.GetBytes("BODY"), Header=Encoding.ASCII.GetBytes("HEADER"), Footer=Encoding.ASCII.GetBytes("FOOTER") } },
                   isPreview = true
             };
 
