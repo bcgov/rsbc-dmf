@@ -150,7 +150,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             // convert the docx to pdf.
 
                             String tempPrefix =  Guid.NewGuid().ToString();
-                            string docxFilename = tempPrefix + ".docx";
+                            string docxFilename = System.IO.Path.GetTempPath() + tempPrefix + ".docx";
                             string pdfFilename = tempPrefix + ".pdf";
 
                             System.IO.File.WriteAllBytes(docxFilename, docx);
@@ -162,9 +162,9 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
 
 
-                        d.ConvertToPdf(docxFilename, pdfFilename, Configuration["LIBRE_OFFICE_LOCATION"] ?? string.Empty);
+                        
 
-                            byte[] pdfData = System.IO.File.ReadAllBytes(pdfFilename);
+                            byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
 
                             srcPdfs.Add(pdfData);
 
