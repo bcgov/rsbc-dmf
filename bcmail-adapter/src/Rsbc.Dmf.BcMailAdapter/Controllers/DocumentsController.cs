@@ -116,7 +116,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedHeader = ParseByteArrayToString(attachment.Header);
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
-
                             var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
 
                             /*
