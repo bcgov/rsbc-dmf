@@ -133,14 +133,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
-                            var headerSettings = new HeaderSettings() { HtmlUrl = $"file://{headerFilename}" };
+                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
                             doc.Objects[0].HeaderSettings = headerSettings;
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
-                            var footerSettings = new FooterSettings() { HtmlUrl = $"file://{footerFilename}" };
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
                         }
 
