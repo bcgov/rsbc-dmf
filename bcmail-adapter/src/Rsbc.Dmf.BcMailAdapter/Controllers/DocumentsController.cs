@@ -159,7 +159,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             // now convert it to PDF.
                             DocumentConverter d = new DocumentConverter();
                             
-                           new LibreOfficeWorker().DoWork("/C --headless --writer --convert-to pdf:writer_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + "/\"", null);
+                           new LibreOfficeWorker().DoWork("/C --headless --writer --convert-to pdf:writer_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + System.IO.Path.GetTempPath() + docxFilename + "\" \"-env:UserInstallation=file:///" + System.IO.Path.GetTempPath() + "/\"", null);
 
 
 
