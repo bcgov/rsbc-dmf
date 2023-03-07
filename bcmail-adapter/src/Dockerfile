@@ -4,7 +4,34 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 
 USER 0
 
-RUN apt-get -y update && apt install -y libreoffice  
+RUN apt-get -y update && apt install -y -q \
+		libreoffice \
+		libreoffice-writer \
+		ure \
+		libreoffice-java-common \
+		libreoffice-core \
+		libreoffice-common \
+		openjdk-8-jre \
+		fonts-opensymbol \
+		hyphen-fr \
+		hyphen-de \
+		hyphen-en-us \
+		hyphen-it \
+		hyphen-ru \
+		fonts-dejavu \
+		fonts-dejavu-core \
+		fonts-dejavu-extra \
+		fonts-droid-fallback \
+		fonts-dustin \
+		fonts-f500 \
+		fonts-fanwood \
+		fonts-freefont-ttf \
+		fonts-liberation \
+		fonts-lmodern \
+		fonts-lyx \
+		fonts-sil-gentium \
+		fonts-texgyre \
+		fonts-tlwg-purisa 
 
 WORKDIR /app
 
