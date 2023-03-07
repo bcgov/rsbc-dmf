@@ -6,6 +6,7 @@ USER 0
 
 RUN apt-get -y update && apt install -y -q \
 		libreoffice \
+        default-jre-headless \
 		libreoffice-writer \
 		ure \
 		libreoffice-java-common \
