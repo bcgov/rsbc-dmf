@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -19,6 +20,7 @@ namespace Rsbc.Dmf.BcMailAdapter
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             CreateWebHostBuilder(args)
                 .Build()
                 .Run();

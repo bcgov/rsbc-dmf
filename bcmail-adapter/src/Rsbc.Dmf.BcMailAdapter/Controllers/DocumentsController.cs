@@ -132,16 +132,24 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
-                            System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
-                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
-                            doc.Objects[0].HeaderSettings = headerSettings;
+                            //System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
+                            //var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
+                            string decodedHeader = ParseByteArrayToString(attachment.Header);
+
+
+                            doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedHeader };
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
-                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
-                            doc.Objects[0].FooterSettings = footerSettings;
+                            //var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
+                            //doc.Objects[0].FooterSettings = footerSettings;
+
+                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
+
+
+                            doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedFooter };
                         }
 
                         byte[] pdfData = Converter.Convert(doc);
@@ -149,12 +157,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
                         {
-                            System.IO.File.Delete(headerFilename);
+                            //System.IO.File.Delete(headerFilename);
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
                         {
-                            System.IO.File.Delete(footerFilename);
+                            //System.IO.File.Delete(footerFilename);
                         }
 
 
@@ -232,7 +240,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     fileName = bcmail.Attachments[0].FileName;
 
                     // Merge into one PDF 
-                    byte[] mergedFiles = this.CombinePDFs(srcPdfs);
+                    byte[] mergedFiles = CombinePDFs(srcPdfs);
 
                    //return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
@@ -269,6 +277,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <returns></returns>
         public byte[] CombinePDFs(List<byte[]> srcPDFs)
         {
+            byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var resultPDF = new PdfDocument())
                 {
@@ -285,11 +294,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             }
                         }
                     }
-                var resposeStream = new MemoryStream();
-                resultPDF.Save(resposeStream);
-                return resposeStream.ReadAllBytes();
-                
+                using (var resposeStream = new MemoryStream())
+                {
+                    resultPDF.Save(resposeStream, false);
+                    result = resposeStream.ToArray();
                 }
+                
+                
+                return result;
+        }
             
         }
 
