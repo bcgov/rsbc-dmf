@@ -38,6 +38,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             _icbcClient = icbcClient;
         }
 
+        /// <summary>
+        /// Get Driver Info
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<DriverInfoReply> GetDriverInfo(DriverInfoRequest request, ServerCallContext context)
         {
             var result = new DriverInfoReply();
@@ -47,6 +53,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             return Task.FromResult(result);
         }
 
+        /// <summary>
+        /// Process Medical Status Updates
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public override Task<ResultStatusReply> ProcessMedicalStatusUpdates(EmptyRequest request, ServerCallContext context)
         {
             var result = new ResultStatusReply();
@@ -59,7 +71,28 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             return Task.FromResult(result);
         }
 
+        /// <summary>
+        /// Resolve Birth Dates
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<ResultStatusReply> UpdateBirthdate(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
 
+            var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
+            enhancedIcbcUtils.UpdateBirthdateFromIcbc().GetAwaiter().GetResult();
+
+            return Task.FromResult(result);
+        }
+
+        /// <summary>
+        /// Get Token
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
         {

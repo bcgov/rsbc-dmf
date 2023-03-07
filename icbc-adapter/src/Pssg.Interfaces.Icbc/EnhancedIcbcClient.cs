@@ -25,6 +25,10 @@ namespace Pssg.Interfaces
         private string IcbcLookupServiceUsername { get; set; }
         private string IcbcLookupServicePassword { get; set; }
 
+        /// <summary>
+        /// Enhanced Icbc Client
+        /// </summary>
+        /// <param name="configuration"></param>
         public EnhancedIcbcClient(IConfiguration configuration)
         {
 
@@ -54,6 +58,11 @@ namespace Pssg.Interfaces
             }            
         }
 
+        /// <summary>
+        /// Send Medical Update
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         public string SendMedicalUpdate(IcbcMedicalUpdate item)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, "medical-disposition/update");
@@ -69,11 +78,14 @@ namespace Pssg.Interfaces
             return responseContent;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dlNumber"></param>
+        /// <returns></returns>
         public CLNT GetDriverHistory(string dlNumber)
         {
-            // Get base URL
-
-
+            
             // do a basic HTTP request
             var request = new HttpRequestMessage(HttpMethod.Get, "tombstone/" + dlNumber);
 
@@ -189,7 +201,6 @@ namespace Pssg.Interfaces
             }
 
             return result.CLNT;
-
 
         }
 

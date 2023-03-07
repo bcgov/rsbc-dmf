@@ -499,7 +499,9 @@ namespace Rsbc.Dmf.Scheduler
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).SendMedicalUpdates(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).ResolveCaseStatus(null), Cron.Never);  
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).ResolveCaseStatus(null), Cron.Never);
+
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).UpdateBirthdate(null), Cron.Never);        
 
 
                     Log.Logger.Information("Hangfire jobs setup.");

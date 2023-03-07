@@ -1,6 +1,4 @@
 ﻿using Grpc.Net.Client;
-using Hangfire;
-using Hangfire.MemoryStorage;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -166,12 +164,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
             });
 
-            if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
-            {
-                // Hangfire is used for scheduled jobs
-                services.AddHangfire(x => x.UseMemoryStorage());
-                services.AddHangfireServer();
-            }
+            
 
             services.AddEndpointsApiExplorer();
 
@@ -325,21 +318,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
 #endif
 
-            if (startHangfire && !string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
-            {
-                // enable Hangfire, using the default authentication model (local connections only)
-                app.UseHangfireServer();
-
-                DashboardOptions dashboardOptions = new DashboardOptions
-                {
-                    AppPath = null
-                };
-
-                app.UseHangfireDashboard("/hangfire", dashboardOptions);
-
-                SetupHangfireJobs(app);
-            }
-
+      
             
 
             app.UseAuthentication();
@@ -432,49 +411,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             SelfLog.Enable(Console.Error);
         }
 
-        // <summary>
-        /// Setup the Hangfire jobs.
-        /// </summary>
-        /// <param name="app"></param>    
-        private void SetupHangfireJobs(IApplicationBuilder app)
-        {
-
-            Log.Logger.Information("Starting setup of Hangfire job ...");
-
-            try
-            {
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-                {
-                    Log.Logger.Information("Creating Hangfire jobs for check candidates ...");
-
-                    string interval = Cron.Daily();
-                    if (!string.IsNullOrEmpty(Configuration["QUEUE_CHECK_INTERVAL"]))
-                    {
-                        interval = (Configuration["QUEUE_CHECK_INTERVAL"]);
-                    }
-
-                    var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
-
-                    var icbcClient = serviceScope.ServiceProvider.GetService<IIcbcClient>();
-
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), Cron.Never);
-
-                    RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), Cron.Never); 
-
-                    //RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
-
-                    RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient, icbcClient).SendMedicalUpdates(null), Cron.Never);
-
-                    Log.Logger.Information("Hangfire jobs setup.");
-                }
-            }
-            catch (Exception e)
-            {
-                StringBuilder msg = new StringBuilder();
-                msg.AppendLine("Failed to setup Hangfire job.");
-
-                Log.Logger.Error(e, "Hangfire setup failed.");
-            }
+       
         }
     }
 
@@ -496,6 +433,3 @@ namespace Rsbc.Dmf.IcbcAdapter
             });
         }
     }
-
-
-}

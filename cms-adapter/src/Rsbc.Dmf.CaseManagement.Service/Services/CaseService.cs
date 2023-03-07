@@ -520,6 +520,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.DriverLicenseNumber;
                         driver.Surname = item.Surname ?? string.Empty;
+                        driver.BirthDate = Timestamp.FromDateTime(item.BirthDate.ToUniversalTime());
                     }
                     reply.Items.Add(driver);
                 }
@@ -649,6 +650,46 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
             
+        }
+
+        /// <summary>
+        /// Resolve Birthdate
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest request, ServerCallContext context)
+        {
+            
+            var reply = new ResultStatusReply();
+
+            var driverRequest = new CaseManagement.UpdateDriverRequest
+            {
+                BirthDate = request.BirthDate.ToDateTime(),
+                DriverLicenseNumber = request.DriverLicenseNumber,
+            };
+            
+            try
+            {
+                if (request.BirthDate != null)
+                {
+                    // call case manager
+                    await _caseManager.UpdateBirthDate(driverRequest);
+                   
+                    reply.ResultStatus = ResultStatus.Success;
+                   
+                }
+
+            }
+
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+
         }
 
         /// <summary>

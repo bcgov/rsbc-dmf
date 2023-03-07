@@ -19,6 +19,10 @@ service IcbcAdapter {
 
    rpc ProcessMedicalStatusUpdates(EmptyRequest) returns (ResultStatusReply); 
 
+   // Update Date of Birth
+   rpc UpdateBirthdate(EmptyRequest) returns (ResultStatusReply);
+   
+
 }
 
 message EmptyRequest {
