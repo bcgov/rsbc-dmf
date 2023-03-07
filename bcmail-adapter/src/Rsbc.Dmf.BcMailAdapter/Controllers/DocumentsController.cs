@@ -12,6 +12,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using WkHtmlToPdfDotNet;
+using WkHtmlToPdfDotNet.Contracts;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -26,7 +27,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         private readonly IConfiguration Configuration;
         private readonly ILogger<DocumentsController> Logger;
         private readonly ICdgsClient _cdgsClient;
-        private static SynchronizedConverter Converter;
+        private readonly IConverter Converter;
 
         /// <summary>
         /// 
@@ -34,12 +35,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         /// <param name="cdgsClient"></param>
-        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, PdfTools pdfTools)
+        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, IConverter converter)
         {
             Configuration = configuration;
             Logger = logger;
             _cdgsClient = cdgsClient;
-            Converter = new SynchronizedConverter(pdfTools); ;
+            Converter = converter; ;
         }
 
 

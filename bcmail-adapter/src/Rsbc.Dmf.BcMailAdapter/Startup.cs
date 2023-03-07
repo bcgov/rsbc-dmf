@@ -39,7 +39,7 @@ using Microsoft.Extensions.Logging;
 using Rsbc.Interfaces;
 using Serilog.Core;
 using WkHtmlToPdfDotNet;
-using FileHelpers.Converters;
+using WkHtmlToPdfDotNet.Contracts;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
