@@ -152,7 +152,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             String tempPrefix =  Guid.NewGuid().ToString();
                             string docxFilename = System.IO.Path.GetTempPath() + tempPrefix + ".docx";
-                            string pdfFilename = tempPrefix + ".pdf";
+                            string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
 
                             System.IO.File.WriteAllBytes(docxFilename, docx);
 
@@ -161,14 +161,18 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             //writer_pdf_Export
                             var l = new LibreOfficeWorker();
 
-                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir \"" + System.IO.Path.GetTempPath() + "\" \"" + docxFilename + "\" \"-env:UserInstallation=file://" + System.IO.Path.GetTempPath() + "\"";
+                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
                             Serilog.Log.Logger.Information(theCommand);
 
                             l.DoWork(theCommand, null);
 
-                            byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
+                            if (System.IO.File.Exists(pdfFilename))
+                            {
+                                byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
 
-                            srcPdfs.Add(pdfData);
+                                srcPdfs.Add(pdfData);
+                            }
+                            
 
                         }
                         // add a PDF file
