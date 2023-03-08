@@ -133,18 +133,38 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
-                            System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
-                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file://{headerFilename}" };
+                            string decodedHeader = ParseByteArrayToString(attachment.Header);
+
+                            if (! decodedHeader.ToLower().StartsWith("<!doctype html>"))
+                            {
+                                decodedHeader = "<!doctype html>\n" + decodedHeader;
+                            }
+
+                            System.IO.File.WriteAllText(headerFilename, decodedHeader);
+                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
                             Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
+                            
+                            //string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            //doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedHeader };
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
-                            System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
-                            var footerSettings = new FooterSettings() { HtmlUrl = $"file://{footerFilename}" };
-                            doc.Objects[0].FooterSettings = footerSettings;
 
+                            //System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
+                            string decodedFooter = ParseByteArrayToString(attachment.Footer);
+                            if (!decodedFooter.ToLower().StartsWith("<!doctype html>"))
+                            {
+                                decodedFooter = "<!doctype html>\n" + decodedFooter;
+                            }
+
+                            System.IO.File.WriteAllText(headerFilename, decodedFooter);
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
+                            doc.Objects[0].FooterSettings = footerSettings;
+                            
+                            //string decodedFooter = ParseByteArrayToString(attachment.Footer);
+                            //doc.Objects[0].FooterSettings = new FooterSettings() { Center = decodedFooter };
                         }
 
                         byte[] pdfData = Converter.Convert(doc);
