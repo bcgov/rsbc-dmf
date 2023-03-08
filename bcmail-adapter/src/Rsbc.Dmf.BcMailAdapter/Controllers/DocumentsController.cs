@@ -134,11 +134,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
                             string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            decodedHeader = "<!doctype html>\n<html><body>\n" + decodedHeader + "\n</body></html>";
 
-                            if (! decodedHeader.ToLower().StartsWith("<!doctype html>"))
-                            {
-                                decodedHeader = "<!doctype html>\n" + decodedHeader;
-                            }
 
                             System.IO.File.WriteAllText(headerFilename, decodedHeader);
                             var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
@@ -154,10 +151,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             //System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
-                            if (!decodedFooter.ToLower().StartsWith("<!doctype html>"))
-                            {
-                                decodedFooter = "<!doctype html>\n" + decodedFooter;
-                            }
+                            decodedFooter = "<!doctype html>\n<html><body>\n" + decodedFooter + "\n</body></html>";
+                            
 
                             System.IO.File.WriteAllText(headerFilename, decodedFooter);
                             var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
