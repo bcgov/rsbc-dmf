@@ -123,7 +123,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         },
                             Objects = {
                         new ObjectSettings() {
-                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Abort },
+                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Skip },
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8" },
@@ -139,7 +139,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
 
                             System.IO.File.WriteAllText(headerFilename, decodedHeader);
-                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
+                            var headerSettings = new HeaderSettings() {   HtmlUrl = $"file:///{headerFilename}"  };
                             Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
                             
