@@ -122,7 +122,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         },
                             Objects = {
                         new ObjectSettings() {
-                            LoadSettings = { BlockLocalFileAccess = false },
+                            LoadSettings = { BlockLocalFileAccess = false , LoadErrorHandling = ContentErrorHandling.Ignore },
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8" },
@@ -134,15 +134,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(headerFilename, attachment.Header);
-                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"{headerFilename}" };
-                            
+                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
+                            Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
                             System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
-                            var footerSettings = new FooterSettings() { HtmlUrl = $"{footerFilename}" };
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
 
                         }
@@ -152,12 +152,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
                         {
-                            System.IO.File.Delete(headerFilename);
+                            //System.IO.File.Delete(headerFilename);
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
                         {
-                            System.IO.File.Delete(footerFilename);
+                            //System.IO.File.Delete(footerFilename);
                         }
 
 
