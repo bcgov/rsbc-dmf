@@ -122,6 +122,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         },
                             Objects = {
                         new ObjectSettings() {
+                            LoadSettings = { BlockLocalFileAccess = false },
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8" },
