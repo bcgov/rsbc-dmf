@@ -111,6 +111,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         string tempPrefix = Guid.NewGuid().ToString();
                         string headerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-header.html";
+                        string pdfFileName = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
                         string footerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-footer.html";
 
                         var doc = new HtmlToPdfDocument()
@@ -161,6 +162,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         }
 
                         byte[] pdfData = Converter.Convert(doc);
+                        System.IO.File.WriteAllBytes(pdfFileName, pdfData);
+
                         srcPdfs.Add(pdfData);
 
                         if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
