@@ -122,7 +122,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         },
                             Objects = {
                         new ObjectSettings() {
-                            LoadSettings = { BlockLocalFileAccess = false , LoadErrorHandling = ContentErrorHandling.Ignore },
+                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Abort },
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8" },
@@ -138,7 +138,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
 
                             System.IO.File.WriteAllText(headerFilename, decodedHeader);
-                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"file:///{headerFilename}" };
+                            var headerSettings = new HeaderSettings() {  HtmlUrl = $"{headerFilename}" };
                             Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
                             
@@ -148,14 +148,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0)
                         {
-
                             //System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
                             decodedFooter = "<!doctype html>\n<html><body>\n" + decodedFooter + "\n</body></html>";
                             
-
                             System.IO.File.WriteAllText(headerFilename, decodedFooter);
-                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
                             
                             //string decodedFooter = ParseByteArrayToString(attachment.Footer);
