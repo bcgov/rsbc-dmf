@@ -155,7 +155,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
                             decodedFooter = "<!doctype html>\n<html><body><footer>\n" + decodedFooter + "\n</footer></body></html>";
                             
-                            System.IO.File.WriteAllText(headerFilename, decodedFooter);
+                            System.IO.File.WriteAllText(footerFilename, decodedFooter);
                             var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
                             
@@ -174,12 +174,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
                         {
-                            //System.IO.File.Delete(headerFilename);
+                            System.IO.File.Delete(headerFilename);
                         }
 
                         if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
                         {
-                            //System.IO.File.Delete(footerFilename);
+                            System.IO.File.Delete(footerFilename);
                         }
 
 
