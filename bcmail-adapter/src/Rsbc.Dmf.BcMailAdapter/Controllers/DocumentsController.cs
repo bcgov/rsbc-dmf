@@ -120,6 +120,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             ColorMode = ColorMode.Color,
                             Orientation = Orientation.Portrait,
                             PaperSize = PaperKind.Letter,
+                            Margins = new MarginSettings() { Top = 5, Bottom = 5, Left = 1, Right = 1  }                             
                         },
                             Objects = {
                         new ObjectSettings() {
@@ -127,6 +128,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8" },
+                            
                             
                         }
                         }
