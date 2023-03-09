@@ -1,26 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Net.Http;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using PdfSharpCore.Pdf;
+using PdfSharpCore.Pdf.IO;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
-using System.IO;
-using PdfSharpCore.Pdf.IO;
-using PdfSharpCore.Pdf;
+using System;
 using System.Collections.Generic;
-using Org.BouncyCastle.Utilities.Zlib;
-using System.Xml.Linq;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml;
+using System.IO;
 using System.Text;
-using Rsbc.Dmf.BcMailAdapter.ViewModels;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocumentFormat.OpenXml.Spreadsheet;
-using LibreOfficeLibrary;
-using System.Net.Mail;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using WkHtmlToPdfDotNet;
+using WkHtmlToPdfDotNet.Contracts;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -35,6 +27,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         private readonly IConfiguration Configuration;
         private readonly ILogger<DocumentsController> Logger;
         private readonly ICdgsClient _cdgsClient;
+        private readonly IConverter Converter;
 
         /// <summary>
         /// 
@@ -42,12 +35,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         /// <param name="cdgsClient"></param>
-        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient)
+        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, IConverter converter)
         {
             Configuration = configuration;
             Logger = logger;
             _cdgsClient = cdgsClient;
-
+            Converter = converter; ;
         }
 
 
@@ -113,66 +106,83 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         {
                           
                             string decodedbody = ParseByteArrayToString(attachment.Body);
+                            //string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            //string decodedFooter = ParseByteArrayToString(attachment.Footer);
+
+                        string tempPrefix = Guid.NewGuid().ToString();
+                        string headerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-header.html";
+                        string pdfFileName = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
+                        string footerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-footer.html";
+
+                        var doc = new HtmlToPdfDocument()
+                        {
+                            GlobalSettings = {
+                            ColorMode = ColorMode.Color,
+                            Orientation = Orientation.Portrait,
+                            PaperSize = PaperKind.Letter,
+                            Margins = new MarginSettings() { Top = 5, Bottom = 5, Left = 1, Right = 1  }                             
+                        },
+                            Objects = {
+                        new ObjectSettings() {
+                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Ignore },
+                            PagesCount = true,
+                            HtmlContent = decodedbody,
+                            WebSettings = { DefaultEncoding = "utf-8" },
+                            
+                            
+                        }
+                        }
+                        };
+
+                        if (attachment.Header != null && attachment.Header.Length > 0)
+                        {
                             string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            decodedHeader = "<!doctype html>\n<html><body><header>\n" + decodedHeader + "\n</header></body></html>";
+
+
+                            System.IO.File.WriteAllText(headerFilename, decodedHeader);
+                            var headerSettings = new HeaderSettings() {   HtmlUrl = $"file:///{headerFilename}"  };
+                            Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
+                            doc.Objects[0].HeaderSettings = headerSettings;
+                            
+                            //string decodedHeader = ParseByteArrayToString(attachment.Header);
+                            //doc.Objects[0].HeaderSettings = new HeaderSettings() { Center = decodedHeader };
+                        }
+
+                        if (attachment.Footer != null && attachment.Footer.Length > 0)
+                        {
+                            //System.IO.File.WriteAllBytes(footerFilename, attachment.Footer);
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
-
-                            var docx = DocumentUtils.CreateDocument(decodedbody, decodedHeader, decodedFooter);
-
-                            /*
-
-                            cdgsRequest = new CdgsRequest
-                            {
-                                Data = new Data
-                                {                                    
-                                },
-                                // Formatters = "",
-                                Options = new Options
-                                {
-                                    ConvertTo = "pdf",
-                                    Overwrite = true,
-                                    ReportName = attachment.FileName ?? string.Empty
-                                },
-                                Template = new Template()
-
-                                {
-                                    //Content = attachment.Body ?? string.Empty,
-                                   // Content = new String(Encoding.UTF8.GetString(docx)),
-                                    Content = Convert.ToBase64String(docx),
-                                    EncodingType = "base64",
-                                    FileType = attachment.ContentType ?? string.Empty
-                                 
-                                }
-                            };
-                            var responsestream = await _cdgsClient.TemplateRender(cdgsRequest);
+                            decodedFooter = "<!doctype html>\n<html><body><footer>\n" + decodedFooter + "\n</footer></body></html>";
                             
-                            srcPdfs.Add(responsestream.ReadAllBytes());
-                            */
-
-                            // convert the docx to pdf.
-
-                            String tempPrefix =  Guid.NewGuid().ToString();
-                            string docxFilename = System.IO.Path.GetTempPath() + tempPrefix + ".docx";
-                            string pdfFilename = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
-
-                            System.IO.File.WriteAllBytes(docxFilename, docx);
-
-                            // now convert it to PDF.
-                            //DocumentConverter d = new DocumentConverter();
-                            //writer_pdf_Export
-                            var l = new LibreOfficeWorker();
-
-                            string theCommand = "/C --headless --writer --convert-to pdf:writer_web_pdf_Export --outdir " + System.IO.Path.GetTempPath() + " " + docxFilename + " -env:UserInstallation=file://" + System.IO.Path.GetTempPath();
-                            Serilog.Log.Logger.Information(theCommand);
-
-                            l.DoWork(theCommand, null);
-
-                            if (System.IO.File.Exists(pdfFilename))
-                            {
-                                byte[] pdfData = System.IO.File.ReadAllBytes(System.IO.Path.GetTempPath() + pdfFilename);
-
-                                srcPdfs.Add(pdfData);
-                            }
+                            System.IO.File.WriteAllText(footerFilename, decodedFooter);
+                            var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
+                            doc.Objects[0].FooterSettings = footerSettings;
                             
+                            //string decodedFooter = ParseByteArrayToString(attachment.Footer);
+                            //doc.Objects[0].FooterSettings = new FooterSettings() { Center = decodedFooter };
+                        }
+
+                        byte[] pdfData = Converter.Convert(doc);
+                        System.IO.File.WriteAllBytes(pdfFileName, pdfData);
+
+                        if (pdfData.Length > 0)
+                        {
+                            srcPdfs.Add(pdfData);
+                        }
+                        
+
+                        if (attachment.Header != null && attachment.Header.Length > 0 && System.IO.File.Exists(headerFilename))
+                        {
+                            System.IO.File.Delete(headerFilename);
+                        }
+
+                        if (attachment.Footer != null && attachment.Footer.Length > 0 && System.IO.File.Exists(footerFilename))
+                        {
+                            System.IO.File.Delete(footerFilename);
+                        }
+
+
 
                         }
                         // add a PDF file
@@ -185,7 +195,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     fileName = bcmail.Attachments[0].FileName;
 
                     // Merge into one PDF 
-                    byte[] mergedFiles = this.CombinePDFs(srcPdfs);
+                    byte[] mergedFiles = CombinePDFs(srcPdfs);
 
                    //return File(mergedFiles, "application/pdf",fileDownloadName: bcmail.Attachments[0].FileName);
 
@@ -222,6 +232,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <returns></returns>
         public byte[] CombinePDFs(List<byte[]> srcPDFs)
         {
+            byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var resultPDF = new PdfDocument())
                 {
@@ -238,11 +249,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             }
                         }
                     }
-                var resposeStream = new MemoryStream();
-                resultPDF.Save(resposeStream);
-                return resposeStream.ReadAllBytes();
-                
+                using (var resposeStream = new MemoryStream())
+                {
+                    resultPDF.Save(resposeStream, false);
+                    result = resposeStream.ToArray();
                 }
+                
+                
+                return result;
+        }
             
         }
 
