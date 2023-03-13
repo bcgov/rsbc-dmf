@@ -3,14 +3,9 @@ using Shouldly;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Rsbc.Dmf.CaseManagement.Dynamics;
-using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using Rsbc.Dmf.CaseManagement.Service;
 using Xunit;
 using Xunit.Abstractions;
 using System;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -53,6 +48,34 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             }
         }
 
+        /// <summary>
+        /// CanSetCleanPassValue
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanSetCleanPassValue()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            if (queryResults.Count() > 0)
+            {
+
+                queryResults.ShouldNotBeEmpty();
+                foreach (var dmerCase in queryResults)
+                {
+                    dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenseNumber.ShouldBe(driverLicenseNumber);
+                    List<Flag> flags = new List<Flag>()
+                {
+                    new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
+                    new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
+                };
+                    await caseManager.SetCaseFlags(dmerCase.Id, true, flags, testLogger);
+                }
+
+            }
+
+        }
 
         /// <summary>
         /// Verify that the Practioner and Clinic set function can be called with the empty string.
@@ -95,7 +118,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByDriverLicense()
         {
-            var driverLicenseNumber = "1000098";
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
 
             var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
 
