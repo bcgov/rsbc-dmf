@@ -26,9 +26,6 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
-  - description: CORS_ORIGINS
-    name: CORS_ORIGINS
-    required: true
   - description: JWT_TOKEN_KEY
     name: JWT_TOKEN_KEY
     required: true
@@ -62,8 +59,7 @@ objects:
       labels:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-    stringData:
-      CORS_ORIGINS: ${CORS_ORIGINS}     
+    stringData:   
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
