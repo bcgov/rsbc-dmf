@@ -481,22 +481,6 @@ namespace Rsbc.Dmf.Scheduler
                     var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
 
 
-                    /*
-                     * REPLACE all of this with GRPC calls to the adapters...
-                     * 
-                                        var caseManagerClient = serviceScope.ServiceProvider.GetService<CaseManager.CaseManagerClient>();
-
-                                        var icbcClient = serviceScope.ServiceProvider.GetService<IIcbcClient>();
-
-                                        RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckForCandidates(null), Cron.Never);
-
-                                        RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).CheckConnection(null), Cron.Never); 
-
-                                        //RecurringJob.AddOrUpdate(() => new FlatFileUtils(Configuration, caseManagerClient).SendMedicalUpdates(null), Cron.Never);
-
-                                        RecurringJob.AddOrUpdate(() => new EnhancedIcbcApiUtils(Configuration, caseManagerClient, icbcClient).SendMedicalUpdates(null), Cron.Never);
-                    */
-
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).SendMedicalUpdates(null), Cron.Never);
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).ResolveCaseStatus(null), Cron.Never);
