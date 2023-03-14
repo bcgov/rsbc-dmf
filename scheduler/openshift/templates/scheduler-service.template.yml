@@ -1,7 +1,7 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: scheduler-adapter-template
+  name: scheduler-service-template
 
 parameters:
   - description: openshift namespace prefix
@@ -15,7 +15,7 @@ parameters:
     required: true
   - description: image name
     name: IMAGENAME
-    value: scheduler-adapter
+    value: scheduler-service
     
   - description: image tag for deployments
     name: TAG

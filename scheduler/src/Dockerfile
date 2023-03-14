@@ -10,7 +10,8 @@ COPY . .
 RUN dotnet restore ./scheduler/src/Pssg.Dmf.Scheduler 
 
 FROM build AS publish
-RUN dotnet publish ./icbc-adapter/src/Pssg.Dmf.Scheduler -c Release -o /app/publish
+RUN dotnet publish ./scheduler/src/Pssg.Dmf.Scheduler -c Release -o /app/publish
+
 
 FROM base AS final
 WORKDIR /app
