@@ -9,7 +9,7 @@ on:
     tags:
       - v*
     paths:    
-      - "scheduler-service/src/**"
+      - "scheduler/src/**"
       - ".github/workflows/cd-scheduler-service.yml"
 
 env:
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     env:
-       working-directory: ./scheduler-service/src
+       working-directory: ./scheduler/src
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        GIT_BRANCH: "${{github.ref}}"
 
@@ -35,7 +35,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./scheduler-service/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
+        run: docker build . --file ./scheduler/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |

@@ -37,3 +37,7 @@ oc process -f ..\landing-page\openshift\templates\landing-page.template.yml --pa
 REM MEDICAL PORTAL
 
 oc process -f ..\doctors-portal\openshift\templates\doctors-portal.template.yml --param-file ..\..\..\params\doctors-portal.dev.params | oc apply -f -
+
+REM Scheduler Adapter 
+
+oc process -f ..\scheduler\openshift\templates\scheduler-service.template.yml --param-file ..\..\..\params\scheduler-service.dev.params | oc apply -f -
