@@ -29,5 +29,31 @@
         /// File Name
         /// </summary>
         public string FileName { get; set; }
+
+        /// <summary>
+        /// Top Margin
+        /// </summary>
+        public double? Top { get; set; }
+
+        /// <summary>
+        /// Bottom Margin
+        /// </summary>
+        public double? Bottom { get; set; }
+
+        /// <summary>
+        /// Left Margin
+        /// </summary>
+        public double? Left { get; set; }
+
+
+        /// <summary>
+        /// Right
+        /// </summary>
+        public double? Right { get; set; }
+
+        /// <summary>
+        /// Unit
+        /// </summary>
+        public Unit? Unit { get; set; }
     }
 }
