@@ -8,11 +8,13 @@ using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using PaperKind = WkHtmlToPdfDotNet.PaperKind;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -133,6 +135,48 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         }
                         }
                         };
+
+                        if (attachment.Top != null || attachment.Bottom != null || attachment.Left != null || attachment.Right != null)
+                        {
+                            MarginSettings margins = new MarginSettings();
+                            if (attachment.Top != null)
+                            {
+                                margins.Top = margins.Top;
+                            }
+                            if (attachment.Bottom != null)
+                            {
+                                margins.Bottom = margins.Bottom;
+                            }
+                            if (attachment.Left != null)
+                            {
+                                margins.Left = margins.Left;
+                            }
+                            if (attachment.Right != null)
+                            {
+                                margins.Right = margins.Right;
+                            }
+                            switch (attachment.Unit)
+                            {
+                                case ViewModels.Unit.Inches:
+                                    margins.Unit = Unit.Inches;
+                                    break;
+                                case ViewModels.Unit.Centimeters:
+                                    margins.Unit = Unit.Centimeters;
+                                    break;
+                                case ViewModels.Unit.Milimeters:
+                                    margins.Unit = Unit.Millimeters;
+                                    break;
+                                default:
+                                    margins.Unit = Unit.Millimeters;
+                                    break;
+                            }
+                            doc.GlobalSettings.Margins = margins;
+                        }
+                        else
+                        {
+                            MarginSettings margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };
+                            doc.GlobalSettings.Margins = margins;
+                        }
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
