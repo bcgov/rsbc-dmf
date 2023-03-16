@@ -63,7 +63,6 @@ objects:
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
-
   - kind: Service
     apiVersion: v1
     metadata:
