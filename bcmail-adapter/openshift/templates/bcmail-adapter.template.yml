@@ -83,6 +83,7 @@ objects:
       CDGS_OAUTH_CLIENT_ID: ${CDGS_OAUTH_CLIENT_ID}
       CDGS_TOKEN_ENDPOINT: ${CDGS_TOKEN_ENDPOINT}
       CDGS_OAUTH_CLIENT_SECRET: ${CDGS_OAUTH_CLIENT_SECRET}
+
   - kind: Service
     apiVersion: v1
     metadata:
@@ -91,6 +92,8 @@ objects:
         app.kubernetes.io/part-of: ${APP_NAME}
       name: ${APP_NAME}
       namespace: ${NAMESPACE_PREFIX}-${ENV}
+      annotations:
+        service.alpha.openshift.io/serving-cert-secret-name: ${APP_NAME}-cert
     spec:
       ports:
         - name: 8080-tcp
