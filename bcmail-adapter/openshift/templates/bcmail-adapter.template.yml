@@ -100,6 +100,10 @@ objects:
           port: 8080
           protocol: TCP
           targetPort: 8080
+        - name: 8088-tcp
+          protocol: TCP
+          port: 8088
+          targetPort: 8088
       selector:
         deploymentconfig: ${APP_NAME}
       type: ClusterIP
@@ -202,15 +206,15 @@ objects:
               livenessProbe:
                 httpGet:
                   path: /hc/live
-                  port: 8080
+                  port: 8088
               startupProbe:
                 httpGet:
                   path: /hc/ready
-                  port: 8080
+                  port: 8088
               readinessProbe:
                 httpGet:
                   path: /hc/ready
-                  port: 8080
+                  port: 8088
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
@@ -219,11 +223,11 @@ objects:
           volumes:
             - name: dp-keys
               persistentVolumeClaim:
-              claimName: ${APP_NAME}-key-ring
+                claimName: ${APP_NAME}-key-ring
             - name: service-cert
               secret:
-              secretName: ${APP_NAME}-cert
-              defaultMode: 420
+                secretName: ${APP_NAME}-cert
+                defaultMode: 420
       test: false
       triggers:
         - type: ConfigChange
