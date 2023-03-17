@@ -16,6 +16,8 @@ namespace Pssg.Interfaces.IcbcModels
         public string ProvinceOrState { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
+        public string PostOfficeBox { get; set;}
+
         public string AddressPrefix1 { get; set; }
         public string AddressPrefix2 { get; set; }
         public DateTime EffectiveDate { get; set; }
