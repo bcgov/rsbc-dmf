@@ -132,11 +132,11 @@ namespace Pssg.Interfaces
                             CITY = icbcClient.ClientDetails?.Address?.City,
                             PROV = icbcClient.ClientDetails?.Address?.ProvinceOrState,
                             CNTY = icbcClient.ClientDetails?.Address?.Country,
-                            POBX = icbcClient.ClientDetails?.Address?.PostalCode,
+                            POST = icbcClient.ClientDetails?.Address?.PostalCode,
+                            POBX = icbcClient.ClientDetails?.Address?.PostOfficeBox,
                             APR1 = icbcClient.ClientDetails?.Address?.AddressPrefix1,
                             APR2 = icbcClient.ClientDetails?.Address?.AddressPrefix2,
                             EFDT = icbcClient.ClientDetails?.Address?.EffectiveDate
-
                         },
 
                         // Driver Details
@@ -189,7 +189,6 @@ namespace Pssg.Interfaces
             }
 
             return result.CLNT;
-
 
         }
 
