@@ -2,12 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
+using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Services
 {
@@ -84,21 +86,26 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             var loginRequest = new UserLoginRequest
             {
                 UserType = UserType.MedicalPractitionerUserType,
-                ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
-                ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
+                Email = user.FindFirstValue(Claims.Email),
+                ExternalSystem = user.GetIdentityProvider(),
+                ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
                 UserProfiles = { new UserProfile
                 {
                     MedicalPractitioner = new MedicalPractitionerProfile
                     {
-                        Role = "Physician",
+                        Role =  user.GetRoles().SingleOrDefault(),//"Physician", Get roles from claims
                         Clinic = new Clinic { Id = clinicId }
                     }
                 }
                 }
             };
+
+            if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
+
             var loginResponse = await userManager.LoginAsync(loginRequest);
+
             if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
             var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
