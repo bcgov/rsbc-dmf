@@ -1,9 +1,11 @@
 ﻿using Microsoft.OData.Client;
+using Microsoft.OData.Edm;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,6 +18,28 @@ namespace Rsbc.Dmf.CaseManagement
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
 
         Task<bool> SetUserEmail(string userId, string email);
+        Task<Model> CreatePractitionerContact(Practitioner practitioner);
+        Task<Practitioner> GetPractitionerContact(string contactId);
+    }
+
+    public class Practitioner
+    {
+        public Guid UserId { get; set; }
+        public string Gender { get; set; } = string.Empty;
+        public string IdpId { get; set; } = string.Empty;
+        public Date? Birthdate { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ClinicName { get; set; } = string.Empty;
+        public string[] Roles { get; set; } = new string[] { };
+        //public List<MedicalPractitioner> MedicalPractitioner { get; set; } = new List<MedicalPractitioner>();
+    }
+
+    public class MedicalPractitioner
+    {
+        public string ClinicName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 
     public class SearchUsersRequest
@@ -46,7 +70,11 @@ namespace Rsbc.Dmf.CaseManagement
         public string Userid { get; set; }
         public string Email { get; set; }
     }
-
+    public class Model
+    {
+        public Guid? ContactId { get; set; }
+        public Guid? MedicalPractictionerId { get; set; }
+    }
     public abstract class User
     {
         public string Id { get; set; }
@@ -57,6 +85,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Email { get; set; }
 
         public string[] Roles { get; set;}
+        public Date? Birthday { get; set; }
     }
 
     public class MedicalPractitionerUser : User
@@ -86,7 +115,6 @@ namespace Rsbc.Dmf.CaseManagement
         {
             this.dynamicsContext = dynamicsContext;
         }
-
         public async Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request)
         {
             IQueryable<dfp_login> query = dynamicsContext.dfp_logins
@@ -229,14 +257,86 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        public async Task<Practitioner> GetPractitionerContact(string contactId)
+        {
+            var contact =  dynamicsContext.contacts
+                .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
+                .Where(contact => contact.contactid == new Guid(contactId)) //contactId is the hpdid from health bcsc idp
+                .SingleOrDefault();
+
+            if (contact != null)
+            {
+                
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.contactid));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.firstname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.lastname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.emailaddress1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.birthdate));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.dfp_contact_dfp_medicalpractitioner));
+                return new Practitioner
+                {
+                    IdpId = contact.contactid.ToString(),
+                    FirstName = contact.firstname,
+                    LastName = contact.lastname,
+                    Birthdate = contact.birthdate,
+                    Email = contact.emailaddress1
+                };
+            }
+
+            return null;
+        }
+        public async Task<Model> CreatePractitionerContact(Practitioner practitioner)
+        {
+
+            if (practitioner == null) throw new InvalidDataException();
+
+            //get default clinic
+
+            var clinic = dynamicsContext.accounts
+                .Where(clinic => clinic.accountid == new Guid("3bec7901-541d-ec11-b82d-00505683fbf4"))
+                .FirstOrDefault();//downtown victoria clinic
+
+            var contact = new contact
+            {
+                firstname = practitioner.FirstName,
+                lastname = practitioner.LastName,
+                contactid = new Guid(practitioner.IdpId),
+                emailaddress1 = practitioner.Email,
+                birthdate = practitioner.Birthdate,
+                gendercode = (int?)ParseExternalGender(practitioner.Gender)
+            };
+            var medPractitioner = new dfp_medicalpractitioner
+            {
+                dfp_fullname = $"{practitioner.FirstName} {practitioner.LastName}",
+                dfp_medicalpractitionerid = new Guid(practitioner.IdpId),
+                dfp_providerrole = practitioner.Roles.Any() ? (int)Enum.Parse<ProviderRole>(practitioner.Roles.FirstOrDefault()) : (int?)null
+            };
+            dynamicsContext.AddTocontacts(contact);
+            dynamicsContext.AddTodfp_medicalpractitioners(medPractitioner);
+
+            dynamicsContext.SetLink(medPractitioner, nameof(dfp_medicalpractitioner.dfp_PersonId), contact);
+            dynamicsContext.SetLink(medPractitioner, nameof(dfp_medicalpractitioner.dfp_ClinicId), clinic);
+
+            await dynamicsContext.SaveChangesAsync();
+
+            dynamicsContext.DetachAll();
+
+            return new Model
+            {
+                ContactId = contact.contactid,
+                MedicalPractictionerId = medPractitioner.dfp_medicalpractitionerid
+            };
+
+        }
         public async Task<LoginUserResponse> LoginUser(LoginUserRequest request)
         {
             var loginType = ParseExternalSystem(request.User.ExternalSystem);
             var loginId = request.User.ExternalSystemUserId;
-            string userEmail = null;
+            string userEmail = request.User.Email ?? null;
 
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
+                .Expand(a => a.dfp_login_dfp_medicalpractitioner)
                 .Where(l => l.dfp_userid == loginId && l.dfp_type == (int)loginType)
                 .SingleOrDefault();
 
@@ -278,9 +378,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
             {
-                //get or create person
+                //get or create person //A person is a contact
 
-                var person = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault();
+                //var person = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault(); //this line does not make any sense. A person is unique and line only returns the first person on the list which might not be the right person
+                var person = login.dfp_login_dfp_medicalpractitioner
+                    .Where(person => person.dfp_PersonId.contactid == new Guid(request.User.ExternalSystemUserId))
+                    .SingleOrDefault();
                 if (person != null)
                 {
                     await dynamicsContext.LoadPropertyAsync(person, nameof(dfp_medicalpractitioner.dfp_PersonId));
@@ -294,9 +397,11 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     personEntity = new contact
                     {
-                        contactid = Guid.NewGuid(),
+                        contactid = new Guid(request.User.ExternalSystemUserId), //using the healthcare hpdid for identification
                         firstname = request.User.FirstName,
-                        lastname = request.User.LastName
+                        lastname = request.User.LastName,
+                        emailaddress1 = request.User.Email,
+                        birthdate = request.User.Birthday
                     };
                     dynamicsContext.AddTocontacts(personEntity);
                 }
@@ -305,7 +410,7 @@ namespace Rsbc.Dmf.CaseManagement
                     personEntity = new contact { contactid = personId };
                 };
 
-                foreach (var cliniceAssignment in medicalPractitioner.ClinicAssignments)
+                foreach (var cliniceAssignment in medicalPractitioner.ClinicAssignments) //there wont be any clinic for first time login. I do not understand this line of code
                 {
                     if (!login.dfp_login_dfp_medicalpractitioner.Any(mp => mp._dfp_clinicid_value == Guid.Parse(cliniceAssignment.Clinic.Id)))
                     {
@@ -330,7 +435,19 @@ namespace Rsbc.Dmf.CaseManagement
             "idir" => LoginType.Idir,
             _ => throw new NotImplementedException(externalSystem)
         };
-
+        private Gender ParseExternalGender(string gender) => gender.ToLowerInvariant() switch
+        {
+            "male" => Gender.male,
+            "female" => Gender.female,
+            "other" => Gender.other,
+            _ => throw new NotImplementedException(gender)
+        };
+        public enum Gender
+        {
+            male = 1,
+            female = 2,
+            other = 3
+        }
         private dfp_driver AddDriver(DriverUser user)
         {
             var driver = new dfp_driver
@@ -370,7 +487,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     internal enum ProviderRole
     {
-        Physician = 100000000,
+        PRACTITIONER = 100000000,
         Dentist = 100000001,
         Optometrist = 100000005,
         Pharmacist = 10000006,
