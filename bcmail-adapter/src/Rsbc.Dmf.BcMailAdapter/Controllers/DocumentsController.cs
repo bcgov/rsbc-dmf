@@ -121,8 +121,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             GlobalSettings = {
                             ColorMode = ColorMode.Color,
                             Orientation = Orientation.Portrait,
-                            PaperSize = PaperKind.Letter,
-                            Margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5 , Unit = Unit.Inches}                             
+                            PaperSize = PaperKind.Letter                                                   
                         },
                             Objects = {
                         new ObjectSettings() {
