@@ -19,7 +19,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<bool> SetUserEmail(string userId, string email);
         Task<Model> CreatePractitionerContact(Practitioner practitioner);
-        Task<Practitioner> GetPractitionerContact(string contactId);
+        Task<Practitioner> GetPractitionerContact(string hpdid);
     }
 
     public class Practitioner
@@ -257,11 +257,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<Practitioner> GetPractitionerContact(string contactId)
+        public async Task<Practitioner> GetPractitionerContact(string hpdid)
         {
             var contact =  dynamicsContext.contacts
                 .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
-                .Where(contact => contact.contactid == new Guid(contactId)) //contactId is the hpdid from health bcsc idp
+                .Where(contact => contact.externaluseridentifier == hpdid) //contactId is the hpdid from health bcsc idp
                 .SingleOrDefault();
 
             if (contact != null)
@@ -300,7 +300,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 firstname = practitioner.FirstName,
                 lastname = practitioner.LastName,
-                contactid = new Guid(practitioner.IdpId),
+                contactid = practitioner.UserId,
+                externaluseridentifier = practitioner.IdpId,
                 emailaddress1 = practitioner.Email,
                 birthdate = practitioner.Birthdate,
                 gendercode = (int?)ParseExternalGender(practitioner.Gender)
@@ -308,7 +309,7 @@ namespace Rsbc.Dmf.CaseManagement
             var medPractitioner = new dfp_medicalpractitioner
             {
                 dfp_fullname = $"{practitioner.FirstName} {practitioner.LastName}",
-                dfp_medicalpractitionerid = new Guid(practitioner.IdpId),
+                dfp_medicalpractitionerid = practitioner.UserId,
                 dfp_providerrole = practitioner.Roles.Any() ? (int)Enum.Parse<ProviderRole>(practitioner.Roles.FirstOrDefault()) : (int?)null
             };
             dynamicsContext.AddTocontacts(contact);
