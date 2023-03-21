@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.Drawing.Printing;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
@@ -89,7 +91,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
-            Serilog.Log.Information (JsonConvert.SerializeObject(bcmail));
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            Serilog.Log.Information (JsonSerializer.Serialize(bcmail, options));
             /*
             try
             {
