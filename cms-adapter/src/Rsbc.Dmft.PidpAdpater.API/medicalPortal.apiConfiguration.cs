@@ -1,5 +1,5 @@
 ﻿namespace pdipadapter.Infrastructure.Auth;
-public class pdipadapterConfiguration
+public class PdipadapterConfiguration
 {
     public static bool IsProduction() => EnvironmentName == Environments.Production;
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
@@ -12,6 +12,7 @@ public class pdipadapterConfiguration
     public KafkaClusterConfiguration KafkaCluster { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
     public MailServerConfiguration MailServer { get; set; } = new();
+    public PidpEndorsementAPIConfiguration PidpEndorsementAPI { get; set; } = new();
 
     // ------- Configuration Objects -------
 
@@ -20,7 +21,13 @@ public class pdipadapterConfiguration
         public string ApiKey { get; set; } = string.Empty;
         public string Url { get; set; } = string.Empty;
     }
-
+    public class PidpEndorsementAPIConfiguration
+    {
+        public string Url { get; set; } = string.Empty;
+        public string ClientId { get; set; } = string.Empty;
+        public string ClientSecret { get; set; } = string.Empty;
+        public string TokenUrl { get; set; } = string.Empty;
+    }
     public class ConnectionStringConfiguration
     {
         public string JumDatabase { get; set; } = string.Empty;

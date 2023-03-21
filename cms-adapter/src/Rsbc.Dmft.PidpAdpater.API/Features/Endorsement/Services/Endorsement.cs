@@ -1,26 +1,20 @@
 ﻿using pdipadapter.Infrastructure.HttpClients;
 using MedicalPortal.API.Features.Endorsement.Model;
 using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication;
 using Rsbc.Dmf.CaseManagement;
 
 namespace MedicalPortal.API.Features.Endorsement.Services;
 public class Endorsement : BaseClient, IEndorsement
 {
     private readonly IUserManager userManager;
-    private readonly IHttpContextAccessor httpContextAccessor;
-    public Endorsement(HttpClient client, ILogger<Endorsement> logger, IUserManager userManager, IHttpContextAccessor httpContextAccessor) : base(client, logger)
+    public Endorsement(HttpClient client, ILogger<Endorsement> logger, IUserManager userManager) : base(client, logger)
     {
         this.userManager = userManager;
-        this.httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<IEnumerable<Model.Endorsement>> GetEndorsement(string hpDid)
     {
-        var httpContext = this.httpContextAccessor.HttpContext;
-        var accessToken = await httpContext!.GetTokenAsync("access_token");
-
-        var result = await this.GetAsync<IEnumerable<EndorsementData.Model>>($"/parties/{hpDid}/endorsement", accessToken!);
+        var result = await this.GetAsync<IEnumerable<EndorsementData.Model>>($"/parties/{hpDid}/endorsement");
 
         if (!result.IsSuccess)
         {

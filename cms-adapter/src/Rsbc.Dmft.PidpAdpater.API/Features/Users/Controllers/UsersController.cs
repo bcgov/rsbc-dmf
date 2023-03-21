@@ -19,8 +19,8 @@ public class UsersController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IKafkaProducer<string, UserModel> _kafkaProducer;
-    private readonly pdipadapterConfiguration _config;
-    public UsersController(IMediator mediator, IKafkaProducer<string, UserModel> kafkaProducer, pdipadapterConfiguration config)
+    private readonly PdipadapterConfiguration _config;
+    public UsersController(IMediator mediator, IKafkaProducer<string, UserModel> kafkaProducer, PdipadapterConfiguration config)
     {
         _mediator = mediator;
         _kafkaProducer = kafkaProducer;

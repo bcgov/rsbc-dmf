@@ -7,10 +7,13 @@ using pdipadapter.Infrastructure.HttpClients.Keycloak;
 using pdipadapter.Infrastructure.HttpClients.Mail;
 using pdipadapter.Extensions;
 using pdipadapter.Infrastructure.HttpClients.JustinParticipant;
+using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
+using MedicalPortal.API.Features.Endorsement.Services;
+using Microsoft.Identity.Client;
 
 public static class HttpClientSetup
 {
-    public static IServiceCollection AddHttpClients(this IServiceCollection services, pdipadapterConfiguration config)
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, PdipadapterConfiguration config)
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
@@ -22,6 +25,14 @@ public static class HttpClientSetup
                 Address = config.ChesClient.TokenUrl,
                 ClientId = config.ChesClient.ClientId,
                 ClientSecret = config.ChesClient.ClientSecret
+            });
+
+        services.AddHttpClientWithBaseAddress<IEndorsement, Endorsement>(config.PidpEndorsementAPI.Url)
+            .WithBearerToken(new PidpEndorsmentClientCredentials
+            {
+                Address = config.PidpEndorsementAPI.TokenUrl,
+                ClientId = config.PidpEndorsementAPI.ClientId,
+                ClientSecret = config.PidpEndorsementAPI.ClientSecret
             });
 
         //services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(config.LdapClient.Url);

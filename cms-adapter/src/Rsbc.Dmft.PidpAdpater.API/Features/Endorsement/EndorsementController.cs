@@ -24,6 +24,7 @@ namespace MedicalPortal.API.Features.Endorsement
 
         #endregion
         [HttpGet("contacts/{hpdid}/endorsements")]
+        [Authorize(Policy = Policies.MedicalPractitioner)]
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
