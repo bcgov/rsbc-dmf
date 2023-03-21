@@ -380,8 +380,8 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
-                    // ignore inactive.
-                    if (comment.statecode != null && comment.statecode == 0)
+                    // ignore inactive and system generated
+                    if (comment.statecode != null && comment.statecode == 0 && comment.dfp_origin == null || comment.dfp_origin == 100000000)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
