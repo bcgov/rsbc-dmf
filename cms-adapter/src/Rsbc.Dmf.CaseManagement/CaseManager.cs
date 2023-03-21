@@ -1225,7 +1225,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_importid = request.ImportId;
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
-                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious;
+                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received                                                       
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
