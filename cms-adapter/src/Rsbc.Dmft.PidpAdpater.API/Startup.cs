@@ -71,6 +71,9 @@ public class Startup
             options.AddPolicy(Infrastructure.Auth.Policies.MedicalPractitioner, policy => policy
             .RequireAuthenticatedUser()
             .RequireRole(Roles.Practitoner, Roles.Moa));
+            options.AddPolicy(Infrastructure.Auth.Policies.DmftEnroledUser, policy => policy
+            .RequireAuthenticatedUser()
+            .RequireRole(Roles.DfmtEnroledRole));
         });
 
 
