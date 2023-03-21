@@ -43,10 +43,11 @@ public static class Roles
     // PIdP Role Placeholders
     public const string Practitoner = "PRACTITIONER";
     public const string Moa = "MOA";
+    public const string ViewEndorsements = "view_endorsement_data";
 }
 public static class Clients
 {
-    public const string PidpApi = "PIDP-SERVICE";
+    public const string PidpApi = "DMFT-WEBAPI";
     public const string PidpExternalApi = "DMFT-WEBAPP";
     public const string LicenceStatus = "LICENCE-STATUS";
 }

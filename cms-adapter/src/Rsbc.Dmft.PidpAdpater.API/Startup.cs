@@ -157,9 +157,9 @@ public class Startup
         services.AddFluentValidationRulesToSwagger();
 
     }
-    private pdipadapterConfiguration InitializeConfiguration(IServiceCollection services)
+    private PdipadapterConfiguration InitializeConfiguration(IServiceCollection services)
     {
-        var config = new pdipadapterConfiguration();
+        var config = new PdipadapterConfiguration();
         this.Configuration.Bind(config);
         services.AddSingleton(config);
 

@@ -9,7 +9,7 @@ public class SmtpEmailClient : ISmtpEmailClient
     private readonly string url;
     private readonly int port;
 
-    public SmtpEmailClient(ILogger<SmtpEmailClient> logger, pdipadapterConfiguration config)
+    public SmtpEmailClient(ILogger<SmtpEmailClient> logger, PdipadapterConfiguration config)
     {
         this.logger = logger;
         this.url = config.MailServer.Url;
