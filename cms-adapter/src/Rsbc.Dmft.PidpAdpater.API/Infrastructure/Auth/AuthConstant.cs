@@ -25,6 +25,7 @@ public static class Policies
     public const string AllDemsIdentityProvider = "dems-idp-policy";
     public const string BcpsAuthentication = "bcps-authentication-policy";
     public const string MedicalPractitioner = "medical-practitioner";
+    public const string DmftEnroledUser = "dfmt-enroled-user";
 }
 public static class Resources
 {
@@ -43,6 +44,7 @@ public static class Roles
     // PIdP Role Placeholders
     public const string Practitoner = "PRACTITIONER";
     public const string Moa = "MOA";
+    public const string DfmtEnroledRole = "ROLE_NAME_TBD";
     public const string ViewEndorsements = "view_endorsement_data";
 }
 public static class Clients

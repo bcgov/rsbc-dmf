@@ -12,7 +12,7 @@ using Rsbc.Dmf.CaseManagement;
 
 namespace pdipadapter.Features.Users.Controllers;
 
-[Authorize(Policy = Infrastructure.Auth.Policies.MedicalPractitioner)] //must have an MOA or Practicitoner role
+[Authorize(Policy = Infrastructure.Auth.Policies.MedicalPractitioner)] //must have an MOA or Practicitoner role in claim
 [Route("api/[controller]")]
 [ApiController]
 public class UsersController : ControllerBase

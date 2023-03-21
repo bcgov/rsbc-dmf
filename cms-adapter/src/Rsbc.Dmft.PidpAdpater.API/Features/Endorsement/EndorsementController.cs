@@ -25,6 +25,7 @@ namespace MedicalPortal.API.Features.Endorsement
         #endregion
         [HttpGet("contacts/{hpdid}/endorsements")]
         [Authorize(Policy = Policies.MedicalPractitioner)]
+        [Authorize(Policy = Policies.DmftEnroledUser)] //must have MOA or PRACTICTIONER claim and Must be enroled to DMFT web app
         [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
