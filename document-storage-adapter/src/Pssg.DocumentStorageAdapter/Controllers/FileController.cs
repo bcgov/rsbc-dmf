@@ -111,10 +111,18 @@ namespace Pssg.DocumentStorageAdapter.Controllers
 
                     if (fileName.ToLower().Contains(".tif"))
                     {
-                        var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
+                        try
+                        {
+                            var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
+                            
+                            body = Convert.ToBase64String(pdfBytes);
+                        }
+                        catch (Exception e)
+                        {
+                            body = Convert.ToBase64String(fileContents);
+                        }
                         fileName = fileName.Substring('.')[0] + ".pdf";
                         contentType = "application/pdf";
-                        body = Convert.ToBase64String(pdfBytes);
                     }
 
                 }
