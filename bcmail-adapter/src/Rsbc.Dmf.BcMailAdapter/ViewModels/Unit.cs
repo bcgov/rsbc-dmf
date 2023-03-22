@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.BcMailAdapter.ViewModels
         /// <summary>
         /// Inches
         /// </summary>
-        [EnumMember(Value = "in")]
+        [EnumMember(Value = "inch")]
         Inches,
 
     }
