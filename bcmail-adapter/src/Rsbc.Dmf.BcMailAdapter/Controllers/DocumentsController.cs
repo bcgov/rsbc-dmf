@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -164,17 +162,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             }
                             switch (attachment.Unit)
                             {
-                                case ViewModels.Unit.Inches:
+                                case "inch":
                                     margins.Unit = Unit.Inches;
                                     break;
-                                case ViewModels.Unit.Centimeters:
+                                case "cm":
                                     margins.Unit = Unit.Centimeters;
                                     break;
-                                case ViewModels.Unit.Milimeters:
+                                case "mm":
                                     margins.Unit = Unit.Millimeters;
                                     break;
                                 default:
-                                    margins.Unit = Unit.Millimeters;
+                                    margins.Unit = Unit.Inches;
                                     break;
                             }
                             doc.GlobalSettings.Margins = margins;
