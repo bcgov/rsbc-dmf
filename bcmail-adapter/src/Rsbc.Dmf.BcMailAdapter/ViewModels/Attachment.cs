@@ -54,6 +54,6 @@
         /// <summary>
         /// Unit
         /// </summary>
-        public Unit? Unit { get; set; }
+        public string Unit { get; set; }
     }
 }
