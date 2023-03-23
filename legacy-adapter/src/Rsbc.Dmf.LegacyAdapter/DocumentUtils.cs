@@ -77,6 +77,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     mimetype = "image/tiff";
                 }
             }
+            mimetype = "application/pdf";
 
             return mimetype;
         }
