@@ -43,6 +43,10 @@
 		<Protobuf Include="../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
 			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
 		</Protobuf>
+
+		<Protobuf Include="../../../bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter/Protos/bcmailAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\bcmailAdapter.proto</Link>
+		</Protobuf>
 	</ItemGroup>
 
 

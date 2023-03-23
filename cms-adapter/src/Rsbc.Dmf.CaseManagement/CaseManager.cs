@@ -74,6 +74,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task ResolveCaseStatusUpdates();
 
+        Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail();
+
+        Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status);
+
         Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest);
 
         Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
@@ -2049,6 +2053,9 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+       
+
+
         /// <summary>
         /// Set Case Resolve Date
         /// </summary>
@@ -2080,6 +2087,66 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
             }
+        }
+
+        /// <summary>
+        /// GetListOfLettersSentToBcMail
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail()
+        {
+            // Call the documents and get the list of documents in "Sent To BC Mail" status
+
+            return dynamicsContext.bcgov_documenturls.
+                Where(d => d.statuscode == 1)
+                .Select(document => new LegacyDocument
+                {
+                    DocumentId = document.bcgov_documenturlid.ToString(),
+                    
+                    DocumentUrl = document.bcgov_url ?? string.Empty,
+                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                    ImportId = document.dfp_importid ?? string.Empty,
+                }).ToList();
+           
+        }
+
+
+        /// <summary>
+        /// Method to set the resolve case status
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try{
+                var documents = dynamicsContext.bcgov_documenturls.
+                Where(d => d.statuscode == 1
+                && d.bcgov_documenturlid.ToString() == documentId
+                ) ; 
+
+                foreach (var doc in documents)
+                {
+                    
+                    // Update Document status to Send or failure
+                    doc.statuscode = status;
+                 
+                    dynamicsContext.UpdateObject(doc);
+                }
+
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+             catch (Exception e)
+            {
+                logger.LogError(e, $"Update Document Status - Error updating");
+            }
+            return result;
         }
 
         /// <summary>

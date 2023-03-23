@@ -33,14 +33,16 @@
 	  </PackageReference>
 	  <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
-
+	
 	<ItemGroup>
-		<Folder Include="gRPC Prototypes\" />
+		
+		<ProjectReference Include="..\Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj" />
+		<ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+		<ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-	  <ProjectReference Include="..\Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj" />
+	  <Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
-
 
 </Project>

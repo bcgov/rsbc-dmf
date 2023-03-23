@@ -65,6 +65,11 @@ service CaseManager {
 
    // Update Birth Date
    rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
+
+   // Send To BC mail
+   rpc GetListOfLettersSentToBcMail(EmptyRequest) returns (GetDocumentsReply);
+
+   rpc UpdateDocumentStatus(LegacyDocumentStatusRequest) returns (ResultStatusReply);
 }
 
 message UpdateDriverRequest{
@@ -88,6 +93,12 @@ message LegacyDocumentRequest {
 	string documentId=1;
 }
 
+message LegacyDocumentStatusRequest{
+	string documentId=1;
+	int64 status = 2;
+}
+
+
 message GetCommentsReply {
 	repeated LegacyComment items = 1;
 	ResultStatus resultStatus = 2;
@@ -106,6 +117,7 @@ message GetCommentReply {
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
 }
+
 
 message LegacyComment {
 	int64 SequenceNumber = 1;
