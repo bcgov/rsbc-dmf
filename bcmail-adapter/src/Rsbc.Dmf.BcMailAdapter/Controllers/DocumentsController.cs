@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
@@ -89,7 +89,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(500)]
         public async Task<ActionResult> BcMailDocumentPreview([FromBody] ViewModels.BcMail bcmail)
         {
-            Serilog.Log.Information (JsonConvert.SerializeObject(bcmail));
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            Serilog.Log.Information (JsonSerializer.Serialize(bcmail, options));
             /*
             try
             {
@@ -121,8 +127,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             GlobalSettings = {
                             ColorMode = ColorMode.Color,
                             Orientation = Orientation.Portrait,
-                            PaperSize = PaperKind.Letter,
-                            Margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5 , Unit = Unit.Inches}                             
+                            PaperSize = PaperKind.Letter                                                   
                         },
                             Objects = {
                         new ObjectSettings() {
@@ -157,17 +162,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             }
                             switch (attachment.Unit)
                             {
-                                case ViewModels.Unit.Inches:
+                                case "inch":
                                     margins.Unit = Unit.Inches;
                                     break;
-                                case ViewModels.Unit.Centimeters:
+                                case "cm":
                                     margins.Unit = Unit.Centimeters;
                                     break;
-                                case ViewModels.Unit.Milimeters:
+                                case "mm":
                                     margins.Unit = Unit.Millimeters;
                                     break;
                                 default:
-                                    margins.Unit = Unit.Millimeters;
+                                    margins.Unit = Unit.Inches;
                                     break;
                             }
                             doc.GlobalSettings.Margins = margins;
