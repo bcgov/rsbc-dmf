@@ -95,7 +95,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data for id {documentId} - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
@@ -139,18 +139,18 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     }
                     else
                     {
-                        Serilog.Log.Error($"Unexpected error - unable to fetch file from storage - {reply.ErrorDetail}");
+                        Serilog.Log.Error($"Unexpected error - unable to fetch file from storage  id - {documentId} - {reply.ErrorDetail}");
                         return StatusCode(500, "Unexpected error - unable to fetch file from storage");
                     }                    
                 }
                 else
                 {
-                    return StatusCode(500, "Unexpected error - document URL is missing from document object");
+                    return StatusCode(500, $"Unexpected error - document id {documentId} URL is missing from document object");
                 }                
             }
             else
             {
-                Serilog.Log.Error($"Unexpected error - unable to get document meta-data - {reply.ErrorDetail}");
+                Serilog.Log.Error($"Unexpected error - unable to get document meta-data for id {documentId} - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
