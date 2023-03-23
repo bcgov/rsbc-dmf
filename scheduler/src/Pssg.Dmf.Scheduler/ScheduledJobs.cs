@@ -12,6 +12,7 @@ using FileHelpers;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Rsbc.Dmf.CaseManagement.Service;
+using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -21,15 +22,17 @@ namespace Rsbc.Dmf.Scheduler
         private readonly ScheduledJobs _scheduledJobs;
         private readonly IcbcAdapterClient _icbcAdapterClient;
         private readonly CaseManagerClient _caseManagerClient;
+        private readonly BcMailAdapterClient _bcMailAdapterClient;
 
 
 
-        public ScheduledJobs(IConfiguration configuration, ScheduledJobs schedulerJobClient, IcbcAdapterClient icbcAdapterClient, CaseManagerClient caseManagerClient)
+        public ScheduledJobs(IConfiguration configuration, ScheduledJobs schedulerJobClient, IcbcAdapterClient icbcAdapterClient, CaseManagerClient caseManagerClient, BcMailAdapterClient bcMailAdapterClient )
         {
             _configuration = configuration;
             _scheduledJobs = schedulerJobClient;
             _icbcAdapterClient = icbcAdapterClient;
             _caseManagerClient = caseManagerClient;
+            _bcMailAdapterClient = bcMailAdapterClient;
         }
 
     
@@ -76,6 +79,22 @@ namespace Rsbc.Dmf.Scheduler
 
 
             LogStatement(hangfireContext, "End of checks case resolve status.");
+        }
+
+        /// <summary>
+        /// Hangfire job fix Birth dates
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task SendToBcMail(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting to check the file status");
+
+            // Call BCMAil Adapter to get the list of files
+
+            _bcMailAdapterClient.SendDocumentsToBcMail(new BcMailAdapter.EmptyRequest());
+
+
+            LogStatement(hangfireContext, "End of check for the file status");
         }
 
         /// <summary>

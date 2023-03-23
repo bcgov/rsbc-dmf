@@ -40,6 +40,10 @@ using Rsbc.Interfaces;
 using Serilog.Core;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using Grpc.Net.Client;
+using Rsbc.Dmf.CaseManagement.Service;
+using System.Net;
+using Pssg.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -178,11 +182,95 @@ namespace Rsbc.Dmf.BcMailAdapter
                 services.AddTransient(_ => cdgsClient);
             }
 
+            // Add Document Storage Adapter
+
+            string documentStorageAdapterURI = Configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(documentStorageAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                {
+                    Secret = Configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
+                }
+            }
+
+            // Add Case Management System (CMS) Adapter 
+
+            string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(cmsAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    {
+                        Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+                }
+
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+            }
+
             // health checks. 
             services.AddHealthChecks()
                 .AddCheck("bcmail-adapter", () => HealthCheckResult.Healthy("OK"));
 
-
+           
 
 
         }

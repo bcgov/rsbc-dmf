@@ -39,6 +39,7 @@ using Newtonsoft.Json.Serialization;
 using Rsbc.Dmf.CaseManagement.Service;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -178,7 +179,7 @@ namespace Rsbc.Dmf.Scheduler
             // Swagger is used for API documentation
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ICBC Adapter", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Scheduler", Version = "v1" });
                 c.EnableAnnotations();
 
                 string baseUri = Configuration["BASE_URI"];
@@ -211,7 +212,7 @@ namespace Rsbc.Dmf.Scheduler
 
             // health checks. 
             services.AddHealthChecks()
-                .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
+                .AddCheck("Scheduler-Service", () => HealthCheckResult.Healthy("OK"));
 
             // Add Case Management System (CMS) Adapter 
 
@@ -304,6 +305,50 @@ namespace Rsbc.Dmf.Scheduler
 
             }
 
+            //Add BC MAil Adapter 
+            string bcmailAdapterURI = Configuration["BCMAIL_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(bcmailAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
+                                          // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                if (!string.IsNullOrEmpty(Configuration["BCMAIL_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new BcMailAdapterClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new BcMailAdapter.TokenRequest
+                    {
+                        Secret = Configuration["BCMAIL_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == BcMailAdapter.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+
+
+                }
+
+                var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                services.AddTransient(_ => new BcMailAdapterClient(channel));
+
+            }
         }
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
@@ -479,13 +524,17 @@ namespace Rsbc.Dmf.Scheduler
                     var schedulerJobClient = serviceScope.ServiceProvider.GetService<ScheduledJobs>();
                     var icbcClient = serviceScope.ServiceProvider.GetService<IcbcAdapterClient>();
                     var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
+                    var bcmailClient = serviceScope.ServiceProvider.GetService<BcMailAdapterClient>();
 
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).SendMedicalUpdates(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).ResolveCaseStatus(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient).UpdateBirthdate(null), Cron.Never);        
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
+
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Never);
+
 
 
                     Log.Logger.Information("Hangfire jobs setup.");

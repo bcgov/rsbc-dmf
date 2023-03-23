@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Rsbc.Dmf.BcMailAdapter";
+
+package dmf;
+
+// The files service definition.
+service BcMailAdapter {
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+
+
+  // Send documents to BCMAil
+  rpc SendDocumentsToBcMail(EmptyRequest) returns (ResultStatusReply);
+   
+}
+
+message EmptyRequest {
+   
+}
+
+
+enum ResultStatus {
+    Fail = 0;
+    Success = 1;
+}
+
+
+message TokenRequest {
+    string secret = 1;
+}
+
+message TokenReply {
+    ResultStatus resultStatus = 1;
+    string token = 2;
+    string errorDetail = 3;
+}
+
+message ResultStatusReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+}
