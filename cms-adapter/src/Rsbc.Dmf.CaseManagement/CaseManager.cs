@@ -384,8 +384,8 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
-                    // ignore inactive.
-                    if (comment.statecode != null && comment.statecode == 0)
+                    // ignore inactive and system generated
+                    if (comment.statecode != null && comment.statecode == 0 && comment.dfp_origin == null || comment.dfp_origin == 100000000)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
@@ -1229,7 +1229,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_importid = request.ImportId;
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
-                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious;
+                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received                                                       
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))

@@ -40,6 +40,7 @@ using Rsbc.Interfaces;
 using Serilog.Core;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using System.Text.Json;
 using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
@@ -160,6 +161,10 @@ namespace Rsbc.Dmf.BcMailAdapter
                 options.EnableEndpointRouting = false;
 
             })
+                .AddJsonOptions(options =>
+                {
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase; }
+                )
                 
               .AddProblemDetailsConventions();
 

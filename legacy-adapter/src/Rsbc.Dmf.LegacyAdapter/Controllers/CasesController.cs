@@ -351,22 +351,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 assign = assign,
                 submittalStatus = submittalStatus,
                 surcode = surcode
-            };
-
-            Log.Logger.Information(JsonConvert.SerializeObject(debugObject));
-
-            if (!String.IsNullOrEmpty(_configuration["SKIP_DPS_PROCESSING"]))
-            {
-                
-                var actionName = nameof(AddCaseDocument);
-                var routeValues = new
-                {
-                    driversLicence = driversLicense
-                };
-                return CreatedAtAction(actionName, routeValues, null);
-            }
-
-            Log.Logger.Information($"Document received from DPS {documentType}, {driversLicense}");
+            };            
 
             var driver = new CaseManagement.Service.Driver()
             {
@@ -400,8 +385,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 driverId = driverReply.Items.FirstOrDefault()?.Id;
             }
-
-
 
             if (faxReceivedDate == null)
             {
