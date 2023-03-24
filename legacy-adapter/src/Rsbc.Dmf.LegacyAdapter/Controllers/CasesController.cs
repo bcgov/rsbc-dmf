@@ -306,6 +306,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="originatingNumber"></param>
         /// <param name="documentPages"></param>
         /// <param name="documentType"></param>
+        /// <param name="documentTypeCode"></param>
         /// <param name="validationMethod"></param>
         /// <param name="validationPrevious"></param>
         /// <param name="file"></param>
@@ -313,6 +314,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="assign"></param>
         /// <param name="submittalStatus"></param>
         /// <param name="surcode"></param>
+        /// <param name="envelopeId"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
@@ -333,7 +335,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string priority = "Regular",
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
-            [FromForm] string surcode = null         // Driver -> Lastname   
+            [FromForm] string surcode = null,         // Driver -> Lastname
+            [FromForm] string envelopeId = null
             )
         {
             DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
