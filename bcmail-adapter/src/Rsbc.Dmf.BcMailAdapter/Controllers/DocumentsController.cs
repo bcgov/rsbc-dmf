@@ -56,13 +56,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult BcMailDocument()  // add a model here for the payload
+        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)  // add a model here for the payload
 
         {
 
             // this could put the HTML file and attachments in a particular location.
 
-            return Ok("Success");
+            return BcMailDocumentPreview(bcmail).GetAwaiter().GetResult();
         }
 
 
