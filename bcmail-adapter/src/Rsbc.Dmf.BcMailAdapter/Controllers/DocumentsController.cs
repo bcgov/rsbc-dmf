@@ -122,43 +122,25 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         string pdfFileName = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
                         string footerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-footer.html";
 
-                        var doc = new HtmlToPdfDocument()
-                        {
-                            GlobalSettings = {
-                            ColorMode = ColorMode.Color,
-                            Orientation = Orientation.Portrait,
-                            PaperSize = PaperKind.Letter                                                   
-                        },
-                            Objects = {
-                        new ObjectSettings() {
-                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Ignore },
-                            PagesCount = true,
-                            HtmlContent = decodedbody,
-                            WebSettings = { DefaultEncoding = "utf-8" },
-                            
-                            
-                        }
-                        }
-                        };
+                        MarginSettings margins = new MarginSettings();
 
                         if (attachment.Top != null || attachment.Bottom != null || attachment.Left != null || attachment.Right != null)
-                        {
-                            MarginSettings margins = new MarginSettings();
+                        {                            
                             if (attachment.Top != null)
                             {
-                                margins.Top = margins.Top;
+                                margins.Top = attachment.Top;
                             }
                             if (attachment.Bottom != null)
                             {
-                                margins.Bottom = margins.Bottom;
+                                margins.Bottom = attachment.Bottom;
                             }
                             if (attachment.Left != null)
                             {
-                                margins.Left = margins.Left;
+                                margins.Left = attachment.Left;
                             }
                             if (attachment.Right != null)
                             {
-                                margins.Right = margins.Right;
+                                margins.Right = attachment.Right;
                             }
                             switch (attachment.Unit)
                             {
@@ -175,13 +157,34 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     margins.Unit = Unit.Inches;
                                     break;
                             }
-                            doc.GlobalSettings.Margins = margins;
+                            
                         }
                         else
                         {
-                            MarginSettings margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };
-                            doc.GlobalSettings.Margins = margins;
+                            margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };                            
                         }
+
+                        var doc = new HtmlToPdfDocument()
+                        {
+                            GlobalSettings = {
+                            ColorMode = ColorMode.Color,
+                            Orientation = Orientation.Portrait,
+                            PaperSize = PaperKind.Letter,
+                            DPI = 72,
+                            Margins = margins
+                        },
+                            Objects = {
+                        new ObjectSettings() {
+                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Ignore },
+                            PagesCount = true,
+                            HtmlContent = decodedbody,
+                            WebSettings = { DefaultEncoding = "utf-8" },
+                            
+                            
+                        }
+                        }
+                        };
+
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {
