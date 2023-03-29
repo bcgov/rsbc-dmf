@@ -157,13 +157,11 @@ namespace Rsbc.Dmf.LegacyAdapter
             if (!string.IsNullOrEmpty(documentStorageAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
-                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
-                                          // This allows you to use OpenShift self-signed certificates for testing.
-                {
-                    // Return `true` to allow certificates that are untrusted/invalid                    
-                    httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                }
+                
+                // Return `true` to allow certificates that are untrusted/invalid                    
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                
 
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
@@ -198,13 +196,11 @@ namespace Rsbc.Dmf.LegacyAdapter
             if (!string.IsNullOrEmpty(cmsAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
-                if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
-                                         // This allows you to use OpenShift self-signed certificates for testing.
-                {
-                    // Return `true` to allow certificates that are untrusted/invalid                    
-                    httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                }
+                
+                // Return `true` to allow certificates that are untrusted/invalid                    
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                
 
                 var httpClient = new HttpClient(httpClientHandler);
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
