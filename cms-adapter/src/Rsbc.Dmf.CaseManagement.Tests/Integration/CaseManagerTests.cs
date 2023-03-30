@@ -144,13 +144,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var newDriver = new LegacyCandidateSearchRequest()
 
             {
-                DriverLicenseNumber = "99" + (DateTime.Now.Year % 10).ToString() 
+                DriverLicenseNumber = "999" + (DateTime.Now.Year % 10).ToString() 
                     + (DateTime.Now.Hour % 10).ToString() + (DateTime.Now.Minute % 10).ToString()
                     + (DateTime.Now.Second % 10).ToString() + (DateTime.Now.Millisecond % 10).ToString(),
                 Surname = "TEST",
                 SequenceNumber = 1
             };
-            await caseManager.LegacyCandidateCreate(newDriver, DateTime.Now, DateTime.Now);
+            DateTime testDate = DateTime.Now;
+
+            await caseManager.LegacyCandidateCreate(newDriver, testDate, testDate);
+            await caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now);
 
             var newCaseId = await caseManager.GetNewestCaseIdForDriver(newDriver);
 
@@ -415,8 +418,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.True(result.Success);
         }
 
-
         [Fact(Skip = RequiresDynamics)]
+        public async Task SwitchTo8Dl()
+        {
+            await caseManager.SwitchTo8Dl();
+        }
+
+
+            [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateIcbcError()
         {
             var driverLicenseNumber = configuration["ICBC_TEST_DL"];
