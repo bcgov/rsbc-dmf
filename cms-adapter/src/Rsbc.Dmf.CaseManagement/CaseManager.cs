@@ -1014,7 +1014,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                      DriverLicenseNumber = request.Driver.DriverLicenseNumber,
                      SequenceNumber = null,
-                     Surname = request.Driver.Surname
+                     Surname = request.Driver.Surname ?? string.Empty
                 };
                 
                 await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
