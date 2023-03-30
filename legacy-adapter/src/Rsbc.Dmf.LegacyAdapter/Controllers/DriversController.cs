@@ -396,9 +396,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         BcMailSent = isBcMailSent
                     };
 
+                    TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                    if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
+                    {                        
+                        newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pacificZone);
+                    }                    
+
                     if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
                     {
                         newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                    }
+
+                    if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
+                    {                        
+                        newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pacificZone);
                     }
 
                     result.Add(newDocument);
