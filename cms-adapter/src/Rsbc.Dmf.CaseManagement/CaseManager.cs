@@ -1014,7 +1014,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                      DriverLicenseNumber = request.Driver.DriverLicenseNumber,
                      SequenceNumber = null,
-                     Surname = request.Driver.Surname
+                     Surname = request.Driver.Surname ?? string.Empty
                 };
                 
                 await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
@@ -1156,7 +1156,7 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
                 await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
@@ -1179,7 +1179,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (driverCase == null)
             {                
                 // create it.
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
                 await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
 
                 var newCaseId = await GetNewestCaseIdForDriver(newDriver);
@@ -1664,7 +1664,15 @@ namespace Rsbc.Dmf.CaseManagement
                                 birthDate.Value.Month, birthDate.Value.Day);
                         }
 
-                        dynamicsContext.AddTocontacts(driverContact);
+                        try
+                        {
+                            dynamicsContext.AddTocontacts(driverContact);
+                            await dynamicsContext.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Driver - " + e.Message);
+                        }
                         driver.dfp_PersonId = driverContact;
                         dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
                     }
@@ -1705,9 +1713,17 @@ namespace Rsbc.Dmf.CaseManagement
                         driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
                             birthDate.Value.Month, birthDate.Value.Day);
                     }
+                    try
+                    {
+                        dynamicsContext.AddTocontacts(driverContact);
+                        await dynamicsContext.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact - " + e.Message);
+                    }
 
-                    dynamicsContext.AddTocontacts(driverContact);
-                    
+
                 }                
 
                 driver = new dfp_driver()
