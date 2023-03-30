@@ -1013,7 +1013,7 @@ namespace Rsbc.Dmf.CaseManagement
                 LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
                 {
                      DriverLicenseNumber = request.Driver.DriverLicenseNumber,
-                     SequenceNumber = null,
+                     SequenceNumber = request.SequenceNumber,
                      Surname = request.Driver.Surname ?? string.Empty
                 };
                 
@@ -1754,25 +1754,44 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                importsequencenumber = request.SequenceNumber,
-                dfp_DriverId = driver
+                importsequencenumber = request.SequenceNumber,                
             };
 
             try
             {
                 dynamicsContext.AddToincidents(@case);
-                if (driverContact != null)
-                {
-                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
-                }
-
-                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
-                await dynamicsContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
                 Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
+
+            try
+            {
+                if (driverContact != null)
+                {
+                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                }
+
+                await dynamicsContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - contact  " + e.Message);
+            }
+
+
+            try
+            {                
+                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+
+                await dynamicsContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
+            }
+
             
                        
             dynamicsContext.DetachAll();
