@@ -82,6 +82,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             else
             {
                 reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = result.ErrorDetail;
             }
 
             return reply;

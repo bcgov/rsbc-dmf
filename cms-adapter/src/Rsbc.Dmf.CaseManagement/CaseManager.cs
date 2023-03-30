@@ -144,6 +144,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Id;
         public bool Success { get; set; }
+        public string ErrorDetail { get; set; }
     }
 
     public class CaseSearchReply
@@ -1003,7 +1004,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply()
             {
-                Success = false
+                Success = false                
             };            
             string caseId = request.CaseId;
             if (string.IsNullOrEmpty(caseId))
@@ -1031,9 +1032,9 @@ namespace Rsbc.Dmf.CaseManagement
             if (!string.IsNullOrEmpty(caseId))
             {
                 // get the case
-                incident @case = GetIncidentById(caseId);
+                incident driverCase = GetIncidentById(caseId);
 
-                var driver = @case.dfp_DriverId;
+                var driver = driverCase.dfp_DriverId;
 
                 // create the comment
                 dfp_comment comment = new dfp_comment()
@@ -1059,20 +1060,37 @@ namespace Rsbc.Dmf.CaseManagement
                 try
                 {
                     dynamicsContext.AddTodfp_comments(comment);
-
-                    dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
-                    dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), comment);
-
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
-                    result.Id = comment.dfp_commentid.ToString();
-                    dynamicsContext.DetachAll();
                 }
                 catch (Exception ex)
                 {
-                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error");
+                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
                     result.Success = false;
+                    result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
+                    
                 }
+
+                if (result.Success == true)
+                {
+                    try
+                    {
+                        dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+                        dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = comment.dfp_commentid.ToString();
+                        dynamicsContext.DetachAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
+                        result.Success = false;
+                        result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
+                    }
+                }
+                
             }           
 
             return result;
