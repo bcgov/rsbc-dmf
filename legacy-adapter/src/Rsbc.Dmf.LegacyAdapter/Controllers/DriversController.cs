@@ -299,7 +299,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = licenseNumber
+                DriverLicenseNumber = licenseNumber,
+                Surname = String.Empty
             };
 
             if (comment.Driver != null)
