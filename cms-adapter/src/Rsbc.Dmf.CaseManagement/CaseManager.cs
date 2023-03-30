@@ -1784,6 +1784,7 @@ namespace Rsbc.Dmf.CaseManagement
                 Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
 
+            /*
             try
             {
                 if (driverContact != null)
@@ -1797,7 +1798,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Log.Error(e, "LegacyCandidateCreate ERROR set link incident - contact  " + e.Message);
             }
-
+            */
 
             try
             {                
