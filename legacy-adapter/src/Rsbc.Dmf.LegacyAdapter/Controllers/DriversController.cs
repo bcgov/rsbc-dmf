@@ -294,7 +294,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
 
-            Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
+            //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
 
             var driver = new CaseManagement.Service.Driver()
