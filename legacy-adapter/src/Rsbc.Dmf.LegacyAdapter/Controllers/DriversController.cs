@@ -400,7 +400,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
                     {                        
-                        newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pacificZone);
+                        newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.ImportDate.Value.DateTime, pacificZone);
                     }                    
 
                     if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
@@ -410,7 +410,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
                     {                        
-                        newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, pacificZone);
+                        newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.FaxReceivedDate.Value.DateTime, pacificZone);
                     }
 
                     result.Add(newDocument);
