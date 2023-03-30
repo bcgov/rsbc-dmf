@@ -357,78 +357,87 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // call the back end
 
-            var reply = _cmsAdapterClient.GetDriverDocuments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
-
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (string.IsNullOrEmpty(licenseNumber))
             {
-                // get the comments
-                List<ViewModels.Document> result = new List<ViewModels.Document>();
-
-                foreach (var item in reply.Items)
-                {
-
-                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
-                    ViewModels.Driver driver = new ViewModels.Driver()
-                    {
-                        LicenseNumber = licenseNumber,
-                        Flag51 = false,
-                        LastName = "LASTNAME",
-                        LoadedFromICBC = false,
-                        MedicalIssueDate = DateTimeOffset.Now
-                    };
-
-                    bool isBcMailSent = false;
-
-                    if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
-                    {
-                        isBcMailSent = true;
-                    }
-
-                    var newDocument = new ViewModels.Document
-                    {
-                        CaseId = item.CaseId,                        
-                        ImportDate = item.ImportDate.ToDateTimeOffset(),
-                        DocumentId = item.DocumentId,
-                        DocumentType = item.DocumentType,
-                        DocumentTypeCode = item.DocumentTypeCode,
-                        BusinessArea = item.BusinessArea,
-                        Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId,
-                        BcMailSent = isBcMailSent
-                    };
-
-                    TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-
-                    if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
-                    {                        
-                        newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.ImportDate.Value.DateTime, pacificZone);
-                    }                    
-
-                    if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
-                    {
-                        newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
-                    }
-
-                    if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
-                    {                        
-                        newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.FaxReceivedDate.Value.DateTime, pacificZone);
-                    }
-
-                    result.Add(newDocument);
-
-                }
-
-                // sort the result by date.
-
-                var sortedResult = result.OrderByDescending(x => x.ImportDate);
-
-                return Json(sortedResult);
+                Serilog.Log.Error ("Request to Driver Get Documents with no DL");
+                return StatusCode(400, "Bad Request");
             }
             else
             {
-                return StatusCode(500, reply.ErrorDetail);
+                var reply = _cmsAdapterClient.GetDriverDocuments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
+
+                if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    // get the comments
+                    List<ViewModels.Document> result = new List<ViewModels.Document>();
+
+                    foreach (var item in reply.Items)
+                    {
+
+                        // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                        ViewModels.Driver driver = new ViewModels.Driver()
+                        {
+                            LicenseNumber = licenseNumber,
+                            Flag51 = false,
+                            LastName = "LASTNAME",
+                            LoadedFromICBC = false,
+                            MedicalIssueDate = DateTimeOffset.Now
+                        };
+
+                        bool isBcMailSent = false;
+
+                        if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
+                        {
+                            isBcMailSent = true;
+                        }
+
+                        var newDocument = new ViewModels.Document
+                        {
+                            CaseId = item.CaseId,
+                            ImportDate = item.ImportDate.ToDateTimeOffset(),
+                            DocumentId = item.DocumentId,
+                            DocumentType = item.DocumentType,
+                            DocumentTypeCode = item.DocumentTypeCode,
+                            BusinessArea = item.BusinessArea,
+                            Driver = driver,
+                            SequenceNumber = item.SequenceNumber,
+                            UserId = item.UserId,
+                            BcMailSent = isBcMailSent
+                        };
+
+                        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                        if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
+                        {
+                            newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.ImportDate.Value.DateTime, pacificZone);
+                        }
+
+                        if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                        {
+                            newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                        }
+
+                        if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
+                        {
+                            newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.FaxReceivedDate.Value.DateTime, pacificZone);
+                        }
+
+                        result.Add(newDocument);
+
+                    }
+
+                    // sort the result by date.
+
+                    var sortedResult = result.OrderByDescending(x => x.ImportDate);
+
+                    return Json(sortedResult);
+                }
+                else
+                {
+                    return StatusCode(500, reply.ErrorDetail);
+                }
             }
+            
         }
 
 
