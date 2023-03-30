@@ -1664,7 +1664,15 @@ namespace Rsbc.Dmf.CaseManagement
                                 birthDate.Value.Month, birthDate.Value.Day);
                         }
 
-                        dynamicsContext.AddTocontacts(driverContact);
+                        try
+                        {
+                            dynamicsContext.AddTocontacts(driverContact);
+                            await dynamicsContext.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Driver - " + e.Message);
+                        }
                         driver.dfp_PersonId = driverContact;
                         dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
                     }
@@ -1705,9 +1713,17 @@ namespace Rsbc.Dmf.CaseManagement
                         driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
                             birthDate.Value.Month, birthDate.Value.Day);
                     }
+                    try
+                    {
+                        dynamicsContext.AddTocontacts(driverContact);
+                        await dynamicsContext.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact - " + e.Message);
+                    }
 
-                    dynamicsContext.AddTocontacts(driverContact);
-                    
+
                 }                
 
                 driver = new dfp_driver()
