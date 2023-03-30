@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Crypto.Operators;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
@@ -481,13 +482,33 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     driver.Surname = document.Driver.LastName;
                 }
                 DateTimeOffset importDate = document.ImportDate ?? DateTimeOffset.Now;
+                DateTimeOffset faxReceivedDate = document.FaxReceivedDate ?? DateTimeOffset.Now;
+
+                Serilog.Log.Information(faxReceivedDate.ToString());
+                Serilog.Log.Information(importDate.ToString());
+
+                TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                if (importDate.Offset == TimeSpan.Zero)
+                {
+                    importDate = TimeZoneInfo.ConvertTimeToUtc(importDate.DateTime, pacificZone);
+                }
+                if (faxReceivedDate.Offset == TimeSpan.Zero)
+                {
+                    faxReceivedDate = TimeZoneInfo.ConvertTimeToUtc(faxReceivedDate.DateTime, pacificZone);
+                }
+
+
+                Serilog.Log.Information(faxReceivedDate.ToString());
+                Serilog.Log.Information(importDate.ToString());
+
                 long sequenceNumber = document.SequenceNumber ?? 0;
                 var newDocument = new LegacyDocument()
                 {
                     CaseId = document.CaseId,
                     SequenceNumber = sequenceNumber,
                     UserId = document.UserId,
-                    FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                     ImportDate = Timestamp.FromDateTimeOffset(importDate),
                     Driver = driver,
                     DocumentTypeCode = document.DocumentTypeCode,
@@ -497,9 +518,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 };
 
-                Serilog.Log.Information (JsonConvert.SerializeObject(newDocument));
-                Serilog.Log.Information(document.FaxReceivedDate.ToString());
-                Serilog.Log.Information(importDate.ToString());
+                
+                
+
+                // Convert the 
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename ($"{filename}-{importDateString}-{sequenceNumber}");
