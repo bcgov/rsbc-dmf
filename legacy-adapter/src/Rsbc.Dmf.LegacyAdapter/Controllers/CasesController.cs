@@ -354,7 +354,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 assign = assign,
                 submittalStatus = submittalStatus,
                 surcode = surcode
-            };            
+            };       
+            
+            Log.Information(JsonConvert.SerializeObject(debugObject));
 
             var driver = new CaseManagement.Service.Driver()
             {
@@ -491,7 +493,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                Serilog.Log.Error(reply.ErrorDetail);
+                Serilog.Log.Error("Unable to fetch Case details " + reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
 
