@@ -587,7 +587,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var searchRequest = new LegacyCandidateSearchRequest()
                 {
                     DriverLicenseNumber = request.LicenseNumber,
-                    Surname = request.Surname
+                    Surname = request.Surname ?? string.Empty
                 };
                 var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
 
