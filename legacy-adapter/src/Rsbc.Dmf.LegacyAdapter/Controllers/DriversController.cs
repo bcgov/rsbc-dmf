@@ -484,8 +484,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 DateTimeOffset importDate = document.ImportDate ?? DateTimeOffset.Now;
                 DateTimeOffset faxReceivedDate = document.FaxReceivedDate ?? DateTimeOffset.Now;
 
-                Serilog.Log.Information(faxReceivedDate.ToString());
-                Serilog.Log.Information(importDate.ToString());
+
 
                 TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
@@ -499,8 +498,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
 
-                Serilog.Log.Information(faxReceivedDate.ToString());
-                Serilog.Log.Information(importDate.ToString());
 
                 long sequenceNumber = document.SequenceNumber ?? 0;
                 var newDocument = new LegacyDocument()
