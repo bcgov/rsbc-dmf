@@ -1755,7 +1755,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
-                Serilog.Log.Error("LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
+                Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
             
                        
