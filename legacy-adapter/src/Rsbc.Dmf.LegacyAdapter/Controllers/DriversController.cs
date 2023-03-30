@@ -497,6 +497,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 };
 
+                Serilog.Log.Information (JsonConvert.SerializeObject(newDocument));
+                Serilog.Log.Information(document.FaxReceivedDate.ToString());
+                Serilog.Log.Information(importDate.ToString());
+
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename ($"{filename}-{importDateString}-{sequenceNumber}");
 
