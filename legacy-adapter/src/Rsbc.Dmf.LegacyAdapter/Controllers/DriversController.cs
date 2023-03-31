@@ -317,11 +317,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {           
-                CaseId = comment.CaseId ?? String.Empty,
-                CommentText = comment.CommentText ?? String.Empty,
-                CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
+                CaseId = comment.CaseId ?? string.Empty,
+                CommentText = comment.CommentText ?? string.Empty,
+                CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
                 SequenceNumber = comment.SequenceNumber ?? -1,
-                UserId = comment.UserId ?? String.Empty,
+                UserId = comment.UserId ?? string.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                 Driver = driver,
                 CommentId = string.Empty
@@ -339,7 +339,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+                _logger.LogError($"Error in create comment - DL {licenseNumber} {result.ErrorDetail}" + JsonConvert.SerializeObject(comment));
+                
                 return StatusCode(500, result.ErrorDetail);
             }
         }
