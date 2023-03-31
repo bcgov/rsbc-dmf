@@ -1798,19 +1798,17 @@ namespace Rsbc.Dmf.CaseManagement
                 Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
 
-            if (@case.dfp_DriverId?.dfp_driverid != null && @case.dfp_DriverId?.dfp_driverid != driver.dfp_driverid)
+            try
             {
-                try
-                {
-                    dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
 
-                    await dynamicsContext.SaveChangesAsync();
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
-                }
+                await dynamicsContext.SaveChangesAsync();
             }
+            catch (Exception e)
+            {
+                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
+            }
+            
                                               
             dynamicsContext.DetachAll();
    
