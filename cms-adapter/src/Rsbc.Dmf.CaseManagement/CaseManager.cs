@@ -1689,10 +1689,19 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         catch (Exception e)
                         {
-                            Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Driver - " + e.Message);
+                            Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Person - " + e.Message);
                         }
                         driver.dfp_PersonId = driverContact;
-                        dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                        try
+                        {
+                            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                            await dynamicsContext.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR Linking Driver Null Person - " + e.Message);
+                        }
+
                     }
 
                 }
@@ -1789,35 +1798,20 @@ namespace Rsbc.Dmf.CaseManagement
                 Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
 
-            /*
-            try
+            if (@case.dfp_DriverId?.dfp_driverid != null && @case.dfp_DriverId?.dfp_driverid != driver.dfp_driverid)
             {
-                if (driverContact != null)
+                try
                 {
-                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                    dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+
+                    await dynamicsContext.SaveChangesAsync();
                 }
-
-                await dynamicsContext.SaveChangesAsync();
+                catch (Exception e)
+                {
+                    Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
+                }
             }
-            catch (Exception e)
-            {
-                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - contact  " + e.Message);
-            }
-            */
-
-            try
-            {                
-                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
-
-                await dynamicsContext.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
-            }
-
-            
-                       
+                                              
             dynamicsContext.DetachAll();
    
         }
