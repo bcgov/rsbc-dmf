@@ -339,7 +339,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                _logger.LogError($"Error in create comment - DL {licenseNumber} {result.ErrorDetail}" + JsonConvert.SerializeObject(comment));
+                _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+
+                DebugUtils.SaveDebug ("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
                 
                 return StatusCode(500, result.ErrorDetail);
             }
