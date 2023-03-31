@@ -1778,6 +1778,11 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 dynamicsContext.AddToincidents(@case);
+                if (driverContact != null)
+                {
+                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                }
+                await dynamicsContext.SaveChangesAsync();
             }
             catch (Exception e)
             {
