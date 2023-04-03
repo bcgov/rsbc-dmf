@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -131,16 +132,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         private string GetCaseId(string licenseNumber, string surcode)
         {
+
+            string trimmedSurcode = surcode;
+            if (trimmedSurcode.Length > 3)
+            {
+                trimmedSurcode = trimmedSurcode.Substring(0, 3);    
+            }
+
             string caseId = null;
             var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 foreach (var item in reply.Items)
                 {
-                    if ((bool)(item.Driver?.Surname.StartsWith(surcode)))
+                    if (item.Status != "Closed/Canceled")
                     {
-                        caseId = item.CaseId;
-                    }
+                        if ((bool)(item.Driver?.Surname.StartsWith(trimmedSurcode)))
+                        {
+                            caseId = item.CaseId;
+                            break;
+                        }
+                    }                    
                 }
             }
             return caseId;
