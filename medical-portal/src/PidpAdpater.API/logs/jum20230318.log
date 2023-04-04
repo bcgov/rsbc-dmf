@@ -1,0 +1,517 @@
+[17:45:10 INF] Starting web host
+[17:45:13 INF] ### App Version:1.0.0.0 ###
+[17:45:13 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[17:47:40 FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: Rsbc.Dmf.CaseManagement.Dynamics.ISecurityTokenProvider Lifetime: Transient ImplementationType: Rsbc.Dmf.CaseManagement.Dynamics.CachedADFSSecurityTokenProvider': Unable to resolve service for type 'Microsoft.Extensions.Caching.Distributed.IDistributedCache' while attempting to activate 'Rsbc.Dmf.CaseManagement.Dynamics.CachedADFSSecurityTokenProvider'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: Rsbc.Dmf.CaseManagement.Dynamics.ISecurityTokenProvider Lifetime: Transient ImplementationType: Rsbc.Dmf.CaseManagement.Dynamics.CachedADFSSecurityTokenProvider': Unable to resolve service for type 'Microsoft.Extensions.Caching.Distributed.IDistributedCache' while attempting to activate 'Rsbc.Dmf.CaseManagement.Dynamics.CachedADFSSecurityTokenProvider'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Microsoft.Extensions.Caching.Distributed.IDistributedCache' while attempting to activate 'Rsbc.Dmf.CaseManagement.Dynamics.CachedADFSSecurityTokenProvider'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Program.cs:line 26
+[17:57:56 INF] Starting web host
+[17:58:24 INF] ### App Version:1.0.0.0 ###
+[17:58:24 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[17:59:13 INF] Now listening on: https://localhost:7215
+[17:59:13 INF] Application started. Press Ctrl+C to shut down.
+[17:59:13 INF] Hosting environment: Development
+[17:59:13 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[17:59:15 ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Ambiguous HTTP method for action - MedicalPortal.API.Features.Endorsement.EndorsementController.Index (MedicalPortal.API). Actions require an explicit HttpMethod binding for Swagger/OpenAPI 3.0
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[17:59:15 INF] HTTP GET /error responded 401 in 361.2529 ms
+[18:19:36 INF] Starting web host
+[18:19:39 INF] ### App Version:1.0.0.0 ###
+[18:19:39 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:19:58 INF] Now listening on: https://localhost:7215
+[18:19:58 INF] Application started. Press Ctrl+C to shut down.
+[18:19:58 INF] Hosting environment: Development
+[18:19:58 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:20:17 ERR] HTTP GET /api/endorsement/12334 responded 500 in 29.0980 ms
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[18:20:17 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[18:20:17 ERR] HTTP GET /error responded 500 in 0.7639 ms
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[18:20:17 ERR] An exception was thrown attempting to execute the error handler.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+[18:20:17 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[18:20:32 ERR] HTTP GET /api/endorsement/abcd responded 500 in 1.7725 ms
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[18:20:32 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[18:20:32 ERR] HTTP GET /error responded 500 in 0.7248 ms
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[18:20:32 ERR] An exception was thrown attempting to execute the error handler.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+[18:20:32 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The constraint reference 'string' could not be resolved to a type. Register the constraint type with 'Microsoft.AspNetCore.Routing.RouteOptions.ConstraintMap'.
+   at Microsoft.AspNetCore.Routing.DefaultParameterPolicyFactory.Create(RoutePatternParameterPart parameter, String inlineText)
+   at Microsoft.AspNetCore.Routing.ParameterPolicyFactory.Create(RoutePatternParameterPart parameter, RoutePatternParameterPolicyReference reference)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidate(Endpoint endpoint, Int32 score)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.CreateCandidates(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.AddNode(DfaNode node, DfaState[] states, Int32 exitDestination)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherBuilder.Build()
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher.CreateMatcher(IReadOnlyList`1 endpoints)
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at System.Threading.LazyInitializer.EnsureInitialized[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|8_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[18:22:50 INF] Starting web host
+[18:22:52 INF] ### App Version:1.0.0.0 ###
+[18:22:52 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:23:04 INF] Now listening on: https://localhost:7215
+[18:23:04 INF] Application started. Press Ctrl+C to shut down.
+[18:23:04 INF] Hosting environment: Development
+[18:23:04 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:23:42 INF] Starting web host
+[18:23:43 INF] ### App Version:1.0.0.0 ###
+[18:23:44 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:23:56 INF] Now listening on: https://localhost:7215
+[18:23:56 INF] Application started. Press Ctrl+C to shut down.
+[18:23:56 INF] Hosting environment: Development
+[18:23:56 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:24:08 INF] HTTP GET /api/endorsement/case-document/werrss responded 401 in 369.4573 ms
+[18:31:27 INF] Starting web host
+[18:31:28 INF] ### App Version:1.0.0.0 ###
+[18:31:28 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:31:36 INF] Now listening on: https://localhost:7215
+[18:31:36 INF] Application started. Press Ctrl+C to shut down.
+[18:31:36 INF] Hosting environment: Development
+[18:31:36 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:31:57 INF] HTTP GET /api/endorsement/case-document/weess responded 401 in 963.5696 ms
+[18:37:16 INF] Starting web host
+[18:37:17 INF] ### App Version:1.0.0.0 ###
+[18:37:17 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:37:25 INF] Now listening on: https://localhost:7215
+[18:37:25 INF] Application started. Press Ctrl+C to shut down.
+[18:37:25 INF] Hosting environment: Development
+[18:37:25 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:38:20 INF] HTTP GET /api/endorsement/case-document/eerrr responded 401 in 952.8576 ms
+[18:41:46 INF] Starting web host
+[18:41:49 INF] ### App Version:1.0.0.0 ###
+[18:41:49 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:42:11 INF] Now listening on: https://localhost:7215
+[18:42:11 INF] Application started. Press Ctrl+C to shut down.
+[18:42:11 INF] Hosting environment: Development
+[18:42:11 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:43:17 INF] HTTP GET /api/endorsement/case-document/dffff responded 401 in 825.4618 ms
+[18:49:31 INF] Starting web host
+[18:49:33 INF] ### App Version:1.0.0.0 ###
+[18:49:33 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:49:40 INF] Now listening on: https://localhost:7215
+[18:49:40 INF] Application started. Press Ctrl+C to shut down.
+[18:49:40 INF] Hosting environment: Development
+[18:49:40 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:50:06 INF] HTTP GET /api/endorsement/case-document/ddfff responded 401 in 793.4911 ms
+[18:51:24 INF] Starting web host
+[18:51:26 INF] ### App Version:1.0.0.0 ###
+[18:51:26 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:51:31 INF] Now listening on: https://localhost:7215
+[18:51:31 INF] Application started. Press Ctrl+C to shut down.
+[18:51:31 INF] Hosting environment: Development
+[18:51:31 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:51:53 INF] HTTP GET /api/endorsement/case-document/ddddd responded 401 in 781.3216 ms
+[18:54:44 INF] Starting web host
+[18:54:46 INF] ### App Version:1.0.0.0 ###
+[18:54:46 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[18:55:04 INF] Now listening on: https://localhost:7215
+[18:55:04 INF] Application started. Press Ctrl+C to shut down.
+[18:55:04 INF] Hosting environment: Development
+[18:55:04 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[18:55:32 INF] HTTP GET /api/endorsement/case-document/dddd responded 401 in 818.2991 ms
+[19:07:45 INF] Starting web host
+[19:07:47 INF] ### App Version:1.0.0.0 ###
+[19:07:47 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:07:48 INF] Now listening on: https://localhost:7215
+[19:07:48 INF] Application started. Press Ctrl+C to shut down.
+[19:07:48 INF] Hosting environment: Development
+[19:07:48 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:08:22 INF] HTTP GET /api/endorsement/case-document/rrrr responded 401 in 799.7936 ms
+[19:13:51 INF] HTTP GET /api/endorsement/case-document/rrrr responded 401 in 21.3653 ms
+[19:17:13 INF] Starting web host
+[19:17:14 INF] ### App Version:1.0.0.0 ###
+[19:17:14 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:17:16 INF] Now listening on: https://localhost:7215
+[19:17:16 INF] Application started. Press Ctrl+C to shut down.
+[19:17:16 INF] Hosting environment: Development
+[19:17:16 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:18:16 INF] HTTP GET /api/endorsement/case-document/werrr responded 401 in 837.0845 ms
+[19:20:47 INF] HTTP GET /api/endorsement/case-document/werrr responded 401 in 26.1877 ms
+[19:21:51 INF] Starting web host
+[19:21:54 INF] ### App Version:1.0.0.0 ###
+[19:21:54 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC","WellKnownConfig":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/.well-known/openid-configuration","TokenUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/realms/DEMSPOC/protocol/openid-connect/token","AdministrationUrl":"https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth/admin/realms/DEMSPOC","AdministrationClientId":"pims-service-account","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:21:56 INF] Now listening on: https://localhost:7215
+[19:21:56 INF] Application started. Press Ctrl+C to shut down.
+[19:21:56 INF] Hosting environment: Development
+[19:21:56 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:23:20 INF] Starting web host
+[19:23:23 INF] ### App Version:1.0.0.0 ###
+[19:23:23 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:23:25 INF] Now listening on: https://localhost:7215
+[19:23:25 INF] Application started. Press Ctrl+C to shut down.
+[19:23:25 INF] Hosting environment: Development
+[19:23:25 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:23:47 INF] HTTP GET /api/endorsement/case-document/ffff responded 401 in 7643.6825 ms
+[19:24:17 INF] HTTP GET /api/endorsement/case-document/ffff responded 401 in 6219.5335 ms
+[19:26:02 ERR] HTTP GET /api/endorsement/case-document/ffff responded 500 in 74323.1165 ms
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.FormatException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.Parse(ReadOnlySpan`1 input)
+   at System.Guid.Parse(String input)
+   at lambda_method119(Closure )
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Delegate.DynamicInvokeImpl(Object[] args)
+   at Microsoft.OData.Client.Evaluator.SubtreeEvaluator.Evaluate(Expression e)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitBinary(BinaryExpression b)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitLambda(LambdaExpression lambda)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitUnary(UnaryExpression u)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitExpressionList(ReadOnlyCollection`1 original)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitMethodCall(MethodCallExpression m)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.DataServiceQueryProvider.Translate(Expression e)
+   at Microsoft.OData.Client.DataServiceQuery`1.Execute()
+   at Microsoft.OData.Client.DataServiceQuery`1.GetEnumerator()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Rsbc.Dmf.CaseManagement.CaseManager.GetCaseLegacyDocuments(String caseId) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\CaseManager.cs:line 424
+   at MedicalPortal.API.Features.Endorsement.EndorsementController.CaseDocuments(String caseId) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Endorsement\EndorsementController.cs:line 32
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+[19:26:03 ERR] An unhandled exception has occurred while executing the request.
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.FormatException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.Parse(ReadOnlySpan`1 input)
+   at System.Guid.Parse(String input)
+   at lambda_method119(Closure )
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Delegate.DynamicInvokeImpl(Object[] args)
+   at Microsoft.OData.Client.Evaluator.SubtreeEvaluator.Evaluate(Expression e)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitBinary(BinaryExpression b)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitLambda(LambdaExpression lambda)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitUnary(UnaryExpression u)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitExpressionList(ReadOnlyCollection`1 original)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.VisitMethodCall(MethodCallExpression m)
+   at Microsoft.OData.Client.ALinqExpressionVisitor.Visit(Expression exp)
+   at Microsoft.OData.Client.DataServiceQueryProvider.Translate(Expression e)
+   at Microsoft.OData.Client.DataServiceQuery`1.Execute()
+   at Microsoft.OData.Client.DataServiceQuery`1.GetEnumerator()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Rsbc.Dmf.CaseManagement.CaseManager.GetCaseLegacyDocuments(String caseId) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\CaseManager.cs:line 424
+   at MedicalPortal.API.Features.Endorsement.EndorsementController.CaseDocuments(String caseId) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Endorsement\EndorsementController.cs:line 32
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[19:26:03 ERR] HTTP GET /error responded 500 in 170.7023 ms
+[19:36:03 INF] HTTP GET /api/endorsement/case-document/407f23fb-5500-ec11-b82b-fbf502000251 responded 401 in 4897.6110 ms
+[19:38:20 INF] HTTP GET /api/endorsement/case-document/407f23fb-5500-ec11-b82b-fbf502000251 responded 200 in 101042.7975 ms
+[19:47:09 INF] HTTP GET /api/endorsement/case-document/407f23fb-5500-ec11-b82b-fbf502000251 responded 200 in 436888.6371 ms
+[19:48:13 INF] Starting web host
+[19:48:16 INF] ### App Version:1.0.0.0 ###
+[19:48:16 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:48:18 INF] Now listening on: https://localhost:7215
+[19:48:18 INF] Application started. Press Ctrl+C to shut down.
+[19:48:18 INF] Hosting environment: Development
+[19:48:18 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:53:31 INF] HTTP GET /api/endorsement/case-document/407f23fb-5500-ec11-b82b-fbf502001011 responded 200 in 104744.6457 ms
+[22:49:27 INF] Starting web host
+[22:49:30 INF] ### App Version:1.0.0.0 ###
+[22:49:31 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[22:49:33 INF] Now listening on: https://localhost:7215
+[22:49:33 INF] Application started. Press Ctrl+C to shut down.
+[22:49:33 INF] Hosting environment: Development
+[22:49:33 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[22:49:34 ERR] An unhandled exception has occurred while executing the request.
+Swashbuckle.AspNetCore.SwaggerGen.SwaggerGeneratorException: Conflicting method/path combination "POST api/users" for actions - pdipadapter.Features.Users.Controllers.UsersController.CreateUser (MedicalPortal.API),pdipadapter.Features.Users.Controllers.UsersController.AddUser (MedicalPortal.API). Actions require a unique method/path combination for Swagger/OpenAPI 3.0. Use ConflictingActionsResolver as a workaround
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GenerateOperations(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GeneratePaths(IEnumerable`1 apiDescriptions, SchemaRepository schemaRepository)
+   at Swashbuckle.AspNetCore.SwaggerGen.SwaggerGenerator.GetSwagger(String documentName, String host, String basePath)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:49:42 INF] HTTP GET /error responded 401 in 7741.5014 ms
+[22:52:02 INF] Starting web host
+[22:52:04 INF] ### App Version:1.0.0.0 ###
+[22:52:04 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[22:52:05 INF] Now listening on: https://localhost:7215
+[22:52:05 INF] Application started. Press Ctrl+C to shut down.
+[22:52:05 INF] Hosting environment: Development
+[22:52:05 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter

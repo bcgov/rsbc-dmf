@@ -1,0 +1,265 @@
+[14:20:46 INF] Starting web host
+[14:20:50 INF] ### App Version:1.0.0.0 ###
+[14:20:50 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[14:20:53 INF] Now listening on: https://localhost:7215
+[14:20:53 INF] Application started. Press Ctrl+C to shut down.
+[14:20:53 INF] Hosting environment: Development
+[14:20:53 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:33:33 INF] Starting web host
+[17:33:33 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '0x0D' is invalid within a JSON string. The string should be correctly escaped. LineNumber: 3 | BytePositionInLine: 95.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeStringAndValidate(ReadOnlySpan`1 data, Int32 idx)
+   at System.Text.Json.Utf8JsonReader.ConsumeString()
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:35:28 INF] Starting web host
+[17:35:28 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '0x0D' is invalid within a JSON string. The string should be correctly escaped. LineNumber: 17 | BytePositionInLine: 95.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeStringAndValidate(ReadOnlySpan`1 data, Int32 idx)
+   at System.Text.Json.Utf8JsonReader.ConsumeString()
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:36:07 INF] Starting web host
+[17:36:07 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '0x0D' is invalid within a JSON string. The string should be correctly escaped. LineNumber: 17 | BytePositionInLine: 95.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeStringAndValidate(ReadOnlySpan`1 data, Int32 idx)
+   at System.Text.Json.Utf8JsonReader.ConsumeString()
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:36:38 INF] Starting web host
+[17:36:38 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '0x0D' is invalid within a JSON string. The string should be correctly escaped. LineNumber: 17 | BytePositionInLine: 95.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeStringAndValidate(ReadOnlySpan`1 data, Int32 idx)
+   at System.Text.Json.Utf8JsonReader.ConsumeString()
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:37:05 INF] Starting web host
+[17:37:06 INF] ### App Version:1.0.0.0 ###
+[17:37:06 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:37:08 INF] Now listening on: https://localhost:7215
+[17:37:08 INF] Application started. Press Ctrl+C to shut down.
+[17:37:08 INF] Hosting environment: Development
+[17:37:08 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:37:46 INF] Starting web host
+[17:37:46 INF] ### App Version:1.0.0.0 ###
+[17:37:46 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:37:46 INF] Now listening on: https://localhost:7215
+[17:37:46 INF] Application started. Press Ctrl+C to shut down.
+[17:37:46 INF] Hosting environment: Development
+[17:37:46 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:39:21 INF] Application is shutting down...
+[17:39:25 INF] Starting web host
+[17:39:25 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 28 | BytePositionInLine: 2.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:40:01 INF] Starting web host
+[17:40:01 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 42 | BytePositionInLine: 2.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:40:19 INF] Starting web host
+[17:40:19 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 42 | BytePositionInLine: 4.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API\Program.cs:line 26
+[17:40:36 INF] Starting web host
+[17:40:36 INF] ### App Version:1.0.0.0 ###
+[17:40:36 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:40:36 INF] Now listening on: https://localhost:7215
+[17:40:36 INF] Application started. Press Ctrl+C to shut down.
+[17:40:36 INF] Hosting environment: Development
+[17:40:36 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:40:43 INF] Application is shutting down...
+[17:41:22 INF] Starting web host
+[17:41:22 INF] ### App Version:1.0.0.0 ###
+[17:41:22 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:41:22 INF] Now listening on: https://localhost:7215
+[17:41:22 INF] Application started. Press Ctrl+C to shut down.
+[17:41:22 INF] Hosting environment: Development
+[17:41:22 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:41:49 INF] Application is shutting down...
+[17:41:52 INF] Starting web host
+[17:41:53 INF] ### App Version:1.0.0.0 ###
+[17:41:53 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:41:53 INF] Now listening on: https://localhost:7215
+[17:41:53 INF] Application started. Press Ctrl+C to shut down.
+[17:41:53 INF] Hosting environment: Development
+[17:41:53 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:41:57 INF] Application is shutting down...
+[17:42:25 INF] Starting web host
+[17:42:25 INF] ### App Version:1.0.0.0 ###
+[17:42:25 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:42:25 INF] Now listening on: https://localhost:7215
+[17:42:25 INF] Application started. Press Ctrl+C to shut down.
+[17:42:25 INF] Hosting environment: Development
+[17:42:25 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:43:27 INF] Application is shutting down...
+[17:43:33 INF] Starting web host
+[17:43:33 INF] ### App Version:1.0.0.0 ###
+[17:43:33 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:43:33 INF] Now listening on: https://localhost:7215
+[17:43:33 INF] Application started. Press Ctrl+C to shut down.
+[17:43:33 INF] Hosting environment: Development
+[17:43:33 INF] Content root path: C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmft.PidpAdpater.API
+[17:43:38 INF] Application is shutting down...
