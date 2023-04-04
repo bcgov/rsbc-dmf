@@ -1,0 +1,734 @@
+[01:58:40 INF] Starting web host
+[01:58:43 INF] ### App Version:1.0.0.0 ###
+[01:58:43 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[01:58:46 INF] Now listening on: https://localhost:7215
+[01:58:46 INF] Application started. Press Ctrl+C to shut down.
+[01:58:46 INF] Hosting environment: Development
+[01:58:46 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[02:07:53 INF] Starting web host
+[02:07:55 INF] ### App Version:1.0.0.0 ###
+[02:07:55 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[02:07:56 INF] Now listening on: https://localhost:7215
+[02:07:56 INF] Application started. Press Ctrl+C to shut down.
+[02:07:56 INF] Hosting environment: Development
+[02:07:56 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[02:09:41 INF] HTTP POST /user/request responded 401 in 9952.5869 ms
+[02:19:07 INF] Starting web host
+[02:19:10 INF] ### App Version:1.0.0.0 ###
+[02:19:10 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[02:19:12 INF] Now listening on: https://localhost:7215
+[02:19:12 INF] Application started. Press Ctrl+C to shut down.
+[02:19:12 INF] Hosting environment: Development
+[02:19:12 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[02:21:48 INF] HTTP POST /user/request responded 403 in 734.6013 ms
+[02:22:37 INF] HTTP POST /user/request responded 403 in 2.7503 ms
+[02:22:40 INF] HTTP POST /user/request responded 403 in 1.4352 ms
+[02:25:18 INF] HTTP POST /user/request responded 403 in 10.6044 ms
+[02:25:54 INF] Starting web host
+[02:25:55 INF] ### App Version:1.0.0.0 ###
+[02:25:55 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[02:26:48 INF] Now listening on: https://localhost:7215
+[02:26:48 INF] Application started. Press Ctrl+C to shut down.
+[02:26:48 INF] Hosting environment: Development
+[02:26:48 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[02:27:12 INF] HTTP POST /user/request responded 403 in 717.3680 ms
+[02:27:27 INF] HTTP POST /user/request responded 403 in 2.9534 ms
+[12:50:40 INF] Starting web host
+[12:50:43 INF] ### App Version:1.0.0.0 ###
+[12:50:43 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[12:50:50 INF] Now listening on: https://localhost:7215
+[12:50:50 INF] Application started. Press Ctrl+C to shut down.
+[12:50:50 INF] Hosting environment: Development
+[12:50:50 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[12:53:47 ERR] HTTP POST /user/request responded 500 in 156696.9234 ms
+[12:54:51 INF] Starting web host
+[12:54:52 INF] ### App Version:1.0.0.0 ###
+[12:54:52 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[12:55:02 INF] Now listening on: https://localhost:7215
+[12:55:02 INF] Application started. Press Ctrl+C to shut down.
+[12:55:02 INF] Hosting environment: Development
+[12:55:02 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[12:57:17 ERR] HTTP POST /user/request responded 500 in 60800.1221 ms
+[13:01:34 INF] Starting web host
+[13:01:37 INF] ### App Version:1.0.0.0 ###
+[13:01:37 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[13:01:42 INF] Now listening on: https://localhost:7215
+[13:01:42 INF] Application started. Press Ctrl+C to shut down.
+[13:01:42 INF] Hosting environment: Development
+[13:01:42 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[13:04:02 ERR] HTTP POST /user/request responded 500 in 112878.2062 ms
+[13:04:59 ERR] HTTP POST /user/request responded 500 in 15158.4703 ms
+[13:06:40 ERR] HTTP POST /user/request responded 500 in 6860.8146 ms
+[13:06:52 INF] Starting web host
+[13:06:53 INF] ### App Version:1.0.0.0 ###
+[13:06:53 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[13:06:56 INF] Now listening on: https://localhost:7215
+[13:06:56 INF] Application started. Press Ctrl+C to shut down.
+[13:06:56 INF] Hosting environment: Development
+[13:06:56 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[13:13:16 INF] Starting web host
+[13:13:17 INF] ### App Version:1.0.0.0 ###
+[13:13:17 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[13:13:19 INF] Now listening on: https://localhost:7215
+[13:13:19 INF] Application started. Press Ctrl+C to shut down.
+[13:13:19 INF] Hosting environment: Development
+[13:13:19 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[13:13:57 ERR] HTTP POST /user/request responded 500 in 25366.7484 ms
+[13:15:35 ERR] HTTP POST /user/request responded 500 in 81259.5484 ms
+[13:17:59 ERR] HTTP POST /user/request responded 500 in 25285.8701 ms
+[13:43:01 INF] Starting web host
+[13:43:03 INF] ### App Version:1.0.0.0 ###
+[13:43:03 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[13:43:05 INF] Now listening on: https://localhost:7215
+[13:43:05 INF] Application started. Press Ctrl+C to shut down.
+[13:43:05 INF] Hosting environment: Development
+[13:43:05 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[13:44:05 INF] Starting web host
+[13:44:06 INF] ### App Version:1.0.0.0 ###
+[13:44:06 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[13:44:08 INF] Now listening on: https://localhost:7215
+[13:44:08 INF] Application started. Press Ctrl+C to shut down.
+[13:44:08 INF] Hosting environment: Development
+[13:44:08 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[13:45:59 ERR] HTTP POST /user/request responded 500 in 98824.4415 ms
+System.FormatException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[13:45:59 ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: Guid should contain 32 digits with 4 dashes (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx).
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[13:45:59 ERR] HTTP POST /error responded 500 in 226.5553 ms
+[14:12:59 INF] Starting web host
+[14:13:02 INF] ### App Version:1.0.0.0 ###
+[14:13:02 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[14:13:04 INF] Now listening on: https://localhost:7215
+[14:13:04 INF] Application started. Press Ctrl+C to shut down.
+[14:13:04 INF] Hosting environment: Development
+[14:13:04 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[14:13:59 ERR] HTTP POST /user/request responded 500 in 37534.2392 ms
+System.FormatException: Guid string should only contain hexadecimal characters.
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[14:13:59 ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: Guid string should only contain hexadecimal characters.
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[14:13:59 ERR] HTTP POST /error responded 500 in 203.9359 ms
+[14:14:53 INF] Starting web host
+[14:14:56 INF] ### App Version:1.0.0.0 ###
+[14:14:56 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[14:14:57 INF] Now listening on: https://localhost:7215
+[14:14:57 INF] Application started. Press Ctrl+C to shut down.
+[14:14:57 INF] Hosting environment: Development
+[14:14:57 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[14:15:14 ERR] HTTP POST /user/request responded 500 in 12281.6385 ms
+System.FormatException: Guid string should only contain hexadecimal characters.
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[14:15:14 ERR] An unhandled exception has occurred while executing the request.
+System.FormatException: Guid string should only contain hexadecimal characters.
+   at System.Guid.GuidResult.SetFailure(Boolean overflow, String failureMessageID)
+   at System.Guid.TryParseExactN(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid.TryParseGuid(ReadOnlySpan`1 guidString, GuidResult& result)
+   at System.Guid..ctor(String g)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 58
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[14:15:14 ERR] HTTP POST /error responded 500 in 116.9496 ms
+[15:04:15 INF] HTTP POST /user/request responded 401 in 6394.8305 ms
+[15:04:37 ERR] HTTP POST /user/request responded 500 in 52.9193 ms
+[15:05:51 ERR] HTTP POST /user/request responded 500 in 13.1901 ms
+[15:06:10 ERR] HTTP POST /user/request responded 500 in 9113.4774 ms
+System.ArgumentException: Byte array for Guid must be exactly 16 bytes long. (Parameter 'b')
+   at System.Guid..ctor(ReadOnlySpan`1 b)
+   at System.Guid..ctor(Byte[] b)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken)
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command)
+   at lambda_method167(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[15:06:10 ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Byte array for Guid must be exactly 16 bytes long. (Parameter 'b')
+   at System.Guid..ctor(ReadOnlySpan`1 b)
+   at System.Guid..ctor(Byte[] b)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken)
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command)
+   at lambda_method167(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[15:06:10 ERR] HTTP POST /error responded 500 in 34.3032 ms
+[16:25:58 INF] Starting web host
+[16:26:02 INF] ### App Version:1.0.0.0 ###
+[16:26:02 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:26:05 INF] Now listening on: https://localhost:7215
+[16:26:05 INF] Application started. Press Ctrl+C to shut down.
+[16:26:05 INF] Hosting environment: Development
+[16:26:05 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[16:26:40 INF] Starting web host
+[16:26:41 INF] ### App Version:1.0.0.0 ###
+[16:26:41 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:26:44 INF] Now listening on: https://localhost:7215
+[16:26:44 INF] Application started. Press Ctrl+C to shut down.
+[16:26:44 INF] Hosting environment: Development
+[16:26:44 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[16:27:38 INF] Starting web host
+[16:27:41 INF] ### App Version:1.0.0.0 ###
+[16:27:41 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:27:43 INF] Now listening on: https://localhost:7215
+[16:27:43 INF] Application started. Press Ctrl+C to shut down.
+[16:27:43 INF] Hosting environment: Development
+[16:27:43 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[16:28:59 INF] Starting web host
+[16:29:01 INF] ### App Version:1.0.0.0 ###
+[16:29:01 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:29:04 INF] Now listening on: https://localhost:7215
+[16:29:04 INF] Application started. Press Ctrl+C to shut down.
+[16:29:04 INF] Hosting environment: Development
+[16:29:04 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[16:30:25 INF] Starting web host
+[16:30:29 INF] ### App Version:1.0.0.0 ###
+[16:30:29 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:30:30 INF] Now listening on: https://localhost:7215
+[16:30:30 INF] Application started. Press Ctrl+C to shut down.
+[16:30:30 INF] Hosting environment: Development
+[16:30:30 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[16:31:24 INF] Starting web host
+[16:31:25 INF] ### App Version:1.0.0.0 ###
+[16:31:25 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[16:31:28 INF] Now listening on: https://localhost:7215
+[16:31:28 INF] Application started. Press Ctrl+C to shut down.
+[16:31:28 INF] Hosting environment: Development
+[16:31:28 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:31:21 INF] Starting web host
+[19:31:24 INF] ### App Version:1.0.0.0 ###
+[19:31:24 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:31:26 INF] Now listening on: https://localhost:7215
+[19:31:26 INF] Application started. Press Ctrl+C to shut down.
+[19:31:26 INF] Hosting environment: Development
+[19:31:26 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:36:04 INF] Starting web host
+[19:36:05 INF] ### App Version:1.0.0.0 ###
+[19:36:05 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:36:08 INF] Now listening on: https://localhost:7215
+[19:36:08 INF] Application started. Press Ctrl+C to shut down.
+[19:36:08 INF] Hosting environment: Development
+[19:36:08 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:37:08 INF] Starting web host
+[19:37:09 INF] ### App Version:1.0.0.0 ###
+[19:37:09 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:37:11 INF] Now listening on: https://localhost:7215
+[19:37:11 INF] Application started. Press Ctrl+C to shut down.
+[19:37:11 INF] Hosting environment: Development
+[19:37:11 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:38:21 INF] HTTP POST /user/request responded 200 in 58602.7348 ms
+[19:48:28 INF] Starting web host
+[19:48:30 INF] ### App Version:1.0.0.0 ###
+[19:48:30 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:48:33 INF] Now listening on: https://localhost:7215
+[19:48:33 INF] Application started. Press Ctrl+C to shut down.
+[19:48:33 INF] Hosting environment: Development
+[19:48:33 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:49:01 ERR] HTTP POST /user/request responded 500 in 22815.2435 ms
+Microsoft.OData.Client.DataServiceRequestException: An error occurred while processing this request.
+ ---> Microsoft.OData.Client.DataServiceClientException: --batchresponse_7202345b-18bc-43fa-864b-3233c2211c8c
+Content-Type: multipart/mixed; boundary=changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01
+
+--changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01
+Content-Type: application/http
+Content-Transfer-Encoding: binary
+Content-ID: 1
+
+HTTP/1.1 412 Precondition Failed
+REQ_ID: fb5d4538-9556-445e-97b3-f7f66c923804
+Content-Type: application/json; odata.metadata=minimal; charset=utf-8
+OData-Version: 4.0
+
+{"error":{"code":"0x80040237","message":"A record with matching key values already exists.","innererror":{"message":"Cannot insert duplicate key.","type":"System.ServiceModel.FaultException`1[[Microsoft.Xrm.Sdk.OrganizationServiceFault, Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]","stacktrace":"   at Microsoft.Crm.Extensibility.OrganizationSdkServiceInternal.CreateInternal(Entity entity, CorrelationToken correlationToken, CallerOriginToken callerOriginToken, WebServiceType serviceType, Boolean checkAdminMode, Dictionary`2 optionalParameters)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataExecutionContext.CreateOrganizationResponse(Entity entity)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataServiceDataProvider.CreateEdmEntity(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySetImplementation(String& entitySetName, EdmEntityObject entityObject)\r\n   at Microsoft.PowerApps.CoreFramework.ActivityLoggerExtensions.Execute[TResult](ILogger logger, EventId eventId, ActivityType activityType, Func`1 func)\r\n   at Microsoft.Xrm.Telemetry.XrmTelemetryExtensions.Execute[TResult](ILogger logger, XrmTelemetryActivityType activityType, Func`1 func)\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass10.<GetExecutor>b__9(Object instance, Object[] methodParameters)\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ExecuteAsync(HttpControllerContext controllerContext, IDictionary`2 arguments, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ApiControllerActionInvoker.<InvokeActionAsyncCore>d__0.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__2.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()"}}}
+--changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01--
+--batchresponse_7202345b-18bc-43fa-864b-3233c2211c8c--
+
+   at Microsoft.OData.Client.BaseSaveResult.HandleResponse(RequestInfo requestInfo, HttpStatusCode statusCode, String responseVersion, Func`1 getResponseStream, Boolean throwOnFailure, Version& parsedResponseVersion)
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   --- End of inner exception stack trace ---
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   at Microsoft.OData.Client.BaseSaveResult.EndRequest()
+   at Microsoft.OData.Client.DataServiceContext.EndSaveChanges(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Rsbc.Dmf.CaseManagement.UserManager.CreatePractitionerContact(Practitioner practitioner) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\UserManager.cs:line 308
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 59
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[19:49:01 ERR] An unhandled exception has occurred while executing the request.
+Microsoft.OData.Client.DataServiceRequestException: An error occurred while processing this request.
+ ---> Microsoft.OData.Client.DataServiceClientException: --batchresponse_7202345b-18bc-43fa-864b-3233c2211c8c
+Content-Type: multipart/mixed; boundary=changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01
+
+--changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01
+Content-Type: application/http
+Content-Transfer-Encoding: binary
+Content-ID: 1
+
+HTTP/1.1 412 Precondition Failed
+REQ_ID: fb5d4538-9556-445e-97b3-f7f66c923804
+Content-Type: application/json; odata.metadata=minimal; charset=utf-8
+OData-Version: 4.0
+
+{"error":{"code":"0x80040237","message":"A record with matching key values already exists.","innererror":{"message":"Cannot insert duplicate key.","type":"System.ServiceModel.FaultException`1[[Microsoft.Xrm.Sdk.OrganizationServiceFault, Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]","stacktrace":"   at Microsoft.Crm.Extensibility.OrganizationSdkServiceInternal.CreateInternal(Entity entity, CorrelationToken correlationToken, CallerOriginToken callerOriginToken, WebServiceType serviceType, Boolean checkAdminMode, Dictionary`2 optionalParameters)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataExecutionContext.CreateOrganizationResponse(Entity entity)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataServiceDataProvider.CreateEdmEntity(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySetImplementation(String& entitySetName, EdmEntityObject entityObject)\r\n   at Microsoft.PowerApps.CoreFramework.ActivityLoggerExtensions.Execute[TResult](ILogger logger, EventId eventId, ActivityType activityType, Func`1 func)\r\n   at Microsoft.Xrm.Telemetry.XrmTelemetryExtensions.Execute[TResult](ILogger logger, XrmTelemetryActivityType activityType, Func`1 func)\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass10.<GetExecutor>b__9(Object instance, Object[] methodParameters)\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ExecuteAsync(HttpControllerContext controllerContext, IDictionary`2 arguments, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ApiControllerActionInvoker.<InvokeActionAsyncCore>d__0.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__2.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()"}}}
+--changesetresponse_6b8a59e5-0cde-48fb-b050-0b27aa4f7f01--
+--batchresponse_7202345b-18bc-43fa-864b-3233c2211c8c--
+
+   at Microsoft.OData.Client.BaseSaveResult.HandleResponse(RequestInfo requestInfo, HttpStatusCode statusCode, String responseVersion, Func`1 getResponseStream, Boolean throwOnFailure, Version& parsedResponseVersion)
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   --- End of inner exception stack trace ---
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   at Microsoft.OData.Client.BaseSaveResult.EndRequest()
+   at Microsoft.OData.Client.DataServiceContext.EndSaveChanges(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Rsbc.Dmf.CaseManagement.UserManager.CreatePractitionerContact(Practitioner practitioner) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\UserManager.cs:line 308
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 59
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[19:49:02 ERR] HTTP POST /error responded 500 in 316.3870 ms
+[19:51:51 INF] Starting web host
+[19:51:55 INF] ### App Version:1.0.0.0 ###
+[19:51:55 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[19:51:57 INF] Now listening on: https://localhost:7215
+[19:51:57 INF] Application started. Press Ctrl+C to shut down.
+[19:51:57 INF] Hosting environment: Development
+[19:51:57 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[19:55:00 INF] HTTP POST /user/request responded 200 in 40520.7898 ms
+[20:53:50 INF] Starting web host
+[20:53:53 INF] ### App Version:1.0.0.0 ###
+[20:53:53 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[20:53:55 INF] Now listening on: https://localhost:7215
+[20:53:55 INF] Application started. Press Ctrl+C to shut down.
+[20:53:55 INF] Hosting environment: Development
+[20:53:55 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[20:55:27 INF] HTTP POST /user/request responded 200 in 26764.1454 ms
+[21:00:05 INF] Starting web host
+[21:00:07 INF] ### App Version:1.0.0.0 ###
+[21:00:07 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:00:09 INF] Now listening on: https://localhost:7215
+[21:00:09 INF] Application started. Press Ctrl+C to shut down.
+[21:00:09 INF] Hosting environment: Development
+[21:00:09 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:00:34 INF] HTTP POST /user/request responded 200 in 21428.3619 ms
+[21:11:05 INF] Starting web host
+[21:11:07 INF] ### App Version:1.0.0.0 ###
+[21:11:07 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:11:09 INF] Now listening on: https://localhost:7215
+[21:11:09 INF] Application started. Press Ctrl+C to shut down.
+[21:11:09 INF] Hosting environment: Development
+[21:11:09 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:11:56 INF] HTTP POST /user/request responded 200 in 29020.6208 ms
+[21:17:40 INF] Starting web host
+[21:17:42 INF] ### App Version:1.0.0.0 ###
+[21:17:42 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:17:44 INF] Now listening on: https://localhost:7215
+[21:17:44 INF] Application started. Press Ctrl+C to shut down.
+[21:17:44 INF] Hosting environment: Development
+[21:17:44 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:18:05 INF] HTTP POST /user/request responded 200 in 15828.7818 ms
+[21:24:26 INF] Starting web host
+[21:24:28 INF] ### App Version:1.0.0.0 ###
+[21:24:28 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:24:29 INF] Now listening on: https://localhost:7215
+[21:24:29 INF] Application started. Press Ctrl+C to shut down.
+[21:24:29 INF] Hosting environment: Development
+[21:24:29 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:24:52 INF] HTTP POST /user/request responded 200 in 16946.0580 ms
+[21:28:30 INF] Starting web host
+[21:28:33 INF] ### App Version:1.0.0.0 ###
+[21:28:33 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:28:34 INF] Now listening on: https://localhost:7215
+[21:28:34 INF] Application started. Press Ctrl+C to shut down.
+[21:28:34 INF] Hosting environment: Development
+[21:28:34 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:41:06 INF] Starting web host
+[21:41:09 INF] ### App Version:1.0.0.0 ###
+[21:41:09 INF] ### JUM Configuration:{"AddressAutocompleteClient":{"ApiKey":"\u003Credacted\u003E","Url":"https://ws1.postescanada-canadapost.ca/AddressComplete/Interactive/"},"ConnectionStrings":{"JumDatabase":"server=localhost\\MSSQLSERVER01;database=JumDB;trusted_connection=true;TrustServerCertificate=True"},"ChesClient":{"Enabled":true,"Url":"https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1","ClientId":"PSP_SERVICE_CLIENT","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect/token"},"JustinParticipantClient":{"Url":"https://dev.jag.gov.bc.ca/ords/devj/justinords/idmng/v1/particDetails??"},"KafkaCluster":{"Url":"","ClientId":"\u003Credacted\u003E","ClientSecret":"\u003Credacted\u003E","BoostrapServers":"dems-kafka-ccaos--etsqvu---m-aa.bf2.kafka.rhcloud.com:443","TopicName":"Justin_User_Provision"},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"localhost","Port":1025}} ###
+[21:41:11 INF] Now listening on: https://localhost:7215
+[21:41:11 INF] Application started. Press Ctrl+C to shut down.
+[21:41:11 INF] Hosting environment: Development
+[21:41:11 INF] Content root path: C:\Users\sookeke\JUM\backend\jum-api\pdipadapter
+[21:41:25 ERR] HTTP POST /user/request responded 500 in 9070.7475 ms
+Microsoft.OData.Client.DataServiceRequestException: An error occurred while processing this request.
+ ---> Microsoft.OData.Client.DataServiceClientException: --batchresponse_c783e543-ba18-4c83-9d9e-60801f670e2b
+Content-Type: multipart/mixed; boundary=changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597
+
+--changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597
+Content-Type: application/http
+Content-Transfer-Encoding: binary
+Content-ID: 2
+
+HTTP/1.1 412 Precondition Failed
+REQ_ID: d1aec602-0481-421d-9ff2-7c3f9547d47c
+Content-Type: application/json; odata.metadata=minimal; charset=utf-8
+OData-Version: 4.0
+
+{"error":{"code":"0x80040237","message":"A record with matching key values already exists.","innererror":{"message":"Cannot insert duplicate key.","type":"System.ServiceModel.FaultException`1[[Microsoft.Xrm.Sdk.OrganizationServiceFault, Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]","stacktrace":"   at Microsoft.Crm.Extensibility.OrganizationSdkServiceInternal.CreateInternal(Entity entity, CorrelationToken correlationToken, CallerOriginToken callerOriginToken, WebServiceType serviceType, Boolean checkAdminMode, Dictionary`2 optionalParameters)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataExecutionContext.CreateOrganizationResponse(Entity entity)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataServiceDataProvider.CreateEdmEntity(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySetImplementation(String& entitySetName, EdmEntityObject entityObject)\r\n   at Microsoft.PowerApps.CoreFramework.ActivityLoggerExtensions.Execute[TResult](ILogger logger, EventId eventId, ActivityType activityType, Func`1 func)\r\n   at Microsoft.Xrm.Telemetry.XrmTelemetryExtensions.Execute[TResult](ILogger logger, XrmTelemetryActivityType activityType, Func`1 func)\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass10.<GetExecutor>b__9(Object instance, Object[] methodParameters)\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ExecuteAsync(HttpControllerContext controllerContext, IDictionary`2 arguments, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ApiControllerActionInvoker.<InvokeActionAsyncCore>d__0.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__2.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()"}}}
+--changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597--
+--batchresponse_c783e543-ba18-4c83-9d9e-60801f670e2b--
+
+   at Microsoft.OData.Client.BaseSaveResult.HandleResponse(RequestInfo requestInfo, HttpStatusCode statusCode, String responseVersion, Func`1 getResponseStream, Boolean throwOnFailure, Version& parsedResponseVersion)
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   --- End of inner exception stack trace ---
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   at Microsoft.OData.Client.BaseSaveResult.EndRequest()
+   at Microsoft.OData.Client.DataServiceContext.EndSaveChanges(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Rsbc.Dmf.CaseManagement.UserManager.CreatePractitionerContact(Practitioner practitioner) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\UserManager.cs:line 320
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 56
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[21:41:26 ERR] An unhandled exception has occurred while executing the request.
+Microsoft.OData.Client.DataServiceRequestException: An error occurred while processing this request.
+ ---> Microsoft.OData.Client.DataServiceClientException: --batchresponse_c783e543-ba18-4c83-9d9e-60801f670e2b
+Content-Type: multipart/mixed; boundary=changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597
+
+--changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597
+Content-Type: application/http
+Content-Transfer-Encoding: binary
+Content-ID: 2
+
+HTTP/1.1 412 Precondition Failed
+REQ_ID: d1aec602-0481-421d-9ff2-7c3f9547d47c
+Content-Type: application/json; odata.metadata=minimal; charset=utf-8
+OData-Version: 4.0
+
+{"error":{"code":"0x80040237","message":"A record with matching key values already exists.","innererror":{"message":"Cannot insert duplicate key.","type":"System.ServiceModel.FaultException`1[[Microsoft.Xrm.Sdk.OrganizationServiceFault, Microsoft.Xrm.Sdk, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35]]","stacktrace":"   at Microsoft.Crm.Extensibility.OrganizationSdkServiceInternal.CreateInternal(Entity entity, CorrelationToken correlationToken, CallerOriginToken callerOriginToken, WebServiceType serviceType, Boolean checkAdminMode, Dictionary`2 optionalParameters)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataExecutionContext.CreateOrganizationResponse(Entity entity)\r\n   at Microsoft.Crm.Extensibility.OData.CrmODataServiceDataProvider.CreateEdmEntity(CrmODataExecutionContext context, String edmEntityName, EdmEntityObject entityObject, Boolean isUpsert)\r\n   at Microsoft.Crm.Extensibility.OData.EntityController.PostEntitySetImplementation(String& entitySetName, EdmEntityObject entityObject)\r\n   at Microsoft.PowerApps.CoreFramework.ActivityLoggerExtensions.Execute[TResult](ILogger logger, EventId eventId, ActivityType activityType, Func`1 func)\r\n   at Microsoft.Xrm.Telemetry.XrmTelemetryExtensions.Execute[TResult](ILogger logger, XrmTelemetryActivityType activityType, Func`1 func)\r\n   at lambda_method(Closure , Object , Object[] )\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ActionExecutor.<>c__DisplayClass10.<GetExecutor>b__9(Object instance, Object[] methodParameters)\r\n   at System.Web.Http.Controllers.ReflectedHttpActionDescriptor.ExecuteAsync(HttpControllerContext controllerContext, IDictionary`2 arguments, CancellationToken cancellationToken)\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ApiControllerActionInvoker.<InvokeActionAsyncCore>d__0.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Controllers.ActionFilterResult.<ExecuteAsync>d__2.MoveNext()\r\n--- End of stack trace from previous location where exception was thrown ---\r\n   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()\r\n   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)\r\n   at System.Web.Http.Dispatcher.HttpControllerDispatcher.<SendAsync>d__1.MoveNext()"}}}
+--changesetresponse_86254ef7-7aa6-4d3a-b542-b94ad65d9597--
+--batchresponse_c783e543-ba18-4c83-9d9e-60801f670e2b--
+
+   at Microsoft.OData.Client.BaseSaveResult.HandleResponse(RequestInfo requestInfo, HttpStatusCode statusCode, String responseVersion, Func`1 getResponseStream, Boolean throwOnFailure, Version& parsedResponseVersion)
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   --- End of inner exception stack trace ---
+   at Microsoft.OData.Client.BatchSaveResult.HandleBatchResponse()
+   at Microsoft.OData.Client.BaseSaveResult.EndRequest()
+   at Microsoft.OData.Client.DataServiceContext.EndSaveChanges(IAsyncResult asyncResult)
+   at System.Threading.Tasks.TaskFactory`1.FromAsyncCoreLogic(IAsyncResult iar, Func`2 endFunction, Action`1 endAction, Task`1 promise, Boolean requiresSynchronization)
+--- End of stack trace from previous location ---
+   at Rsbc.Dmf.CaseManagement.UserManager.CreatePractitionerContact(Practitioner practitioner) in C:\Users\sookeke\rsbc-dmf\cms-adapter\src\Rsbc.Dmf.CaseManagement\UserManager.cs:line 320
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Commands\CreateUser.cs:line 56
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateUser(Command command) in C:\Users\sookeke\JUM\backend\jum-api\pdipadapter\Features\Users\Controllers\UsersController.cs:line 34
+   at lambda_method123(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[21:41:26 ERR] HTTP POST /error responded 500 in 426.3345 ms
+[21:42:00 INF] HTTP POST /user/request responded 200 in 5648.2301 ms
