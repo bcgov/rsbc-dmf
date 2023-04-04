@@ -82,6 +82,21 @@ namespace Rsbc.Dmf.Scheduler
         }
 
         /// <summary>
+        /// Hangfire job Update Clean pass Flag
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task UpdateCleanPassFlag(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting to check the case status");
+
+            // Call ICBC Adapter to do the check for the document type is clean pass
+            _caseManagerClient.UpdateCleanPassFlag(new CleanPassRequest());
+
+
+            LogStatement(hangfireContext, "End of checks case resolve status.");
+        }
+
+        /// <summary>
         /// Hangfire job fix Birth dates
         /// </summary>
         [AutomaticRetry(Attempts = 0)]

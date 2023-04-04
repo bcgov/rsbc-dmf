@@ -66,6 +66,9 @@ service CaseManager {
    // Update Birth Date
    rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
 
+   //Update Clean Pass Flag
+   rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
+
    // Send To BC mail
    rpc GetListOfLettersSentToBcMail(EmptyRequest) returns (GetDocumentsReply);
 
@@ -183,6 +186,11 @@ message SearchReply {
 }
 
 message EmptyRequest {	
+}
+
+message CleanPassRequest{
+	string caseId = 1;
+	bool isCleanPass = 2;
 }
 
 message GetAllFlagsReply {

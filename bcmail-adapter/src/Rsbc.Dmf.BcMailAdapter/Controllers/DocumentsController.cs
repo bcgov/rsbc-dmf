@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Features;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Rsbc.Interfaces;
 using Rsbc.Interfaces.CdgsModels;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,7 +31,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
     public class DocumentsController : Controller
     {
         private readonly IConfiguration Configuration;
-        private readonly ILogger<DocumentsController> Logger;
+        private readonly ILogger<DocumentsController> _logger;
         private readonly ICdgsClient _cdgsClient;
         private readonly IConverter Converter;
 
@@ -40,7 +44,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, IConverter converter)
         {
             Configuration = configuration;
-            Logger = logger;
+            _logger = logger;
             _cdgsClient = cdgsClient;
             Converter = converter; ;
         }
@@ -112,8 +116,15 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         if (attachment?.ContentType == "html")
                         {
-                          
-                            string decodedbody = ParseByteArrayToString(attachment.Body);
+                            
+                         string decodedbody = ParseByteArrayToString(attachment.Body);
+                        if (decodedbody.Contains("<mark>"))
+                        {
+                             //generate pdf with error message content
+                            _logger.LogError("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
+                            return BadRequest("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
+
+                        }
                             //string decodedHeader = ParseByteArrayToString(attachment.Header);
                             //string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
@@ -121,6 +132,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         string headerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-header.html";
                         string pdfFileName = System.IO.Path.GetTempPath() + tempPrefix + ".pdf";
                         string footerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-footer.html";
+                        string stylesheetFileName = System.IO.Path.GetTempPath() + tempPrefix + "-stylesheet.css";
 
                         MarginSettings margins = new MarginSettings();
 
@@ -164,6 +176,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };                            
                         }
 
+                       
+
+                        
+
                         var doc = new HtmlToPdfDocument()
                         {
                             GlobalSettings = {
@@ -178,13 +194,22 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Ignore },
                             PagesCount = true,
                             HtmlContent = decodedbody,
-                            WebSettings = { DefaultEncoding = "utf-8" },
-                            
-                            
+                            WebSettings = { DefaultEncoding = "utf-8",},           
                         }
+                        
                         }
                         };
 
+                        // Set Stylesheets
+
+                        if (attachment.Css != null)
+                        {
+                            string decodedStyle = ParseByteArrayToString(attachment.Css);
+                            System.IO.File.WriteAllText(stylesheetFileName, decodedStyle);
+                            var stylesettings = new WebSettings() { UserStyleSheet = $"file:///{stylesheetFileName}" };
+                            Serilog.Log.Logger.Information(stylesettings.UserStyleSheet);
+                            doc.Objects[0].WebSettings.UserStyleSheet = stylesettings.UserStyleSheet;
+                        }
 
                         if (attachment.Header != null && attachment.Header.Length > 0)
                         {

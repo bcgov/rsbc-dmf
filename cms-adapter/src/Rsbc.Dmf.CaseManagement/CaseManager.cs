@@ -82,7 +82,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
 
-        Task <bool> SetCaseStatus(string caseId , bool caseStatus);  
+        Task <bool> SetCaseStatus(string caseId , bool caseStatus);
+
+        Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
     }
        
 
@@ -264,6 +266,13 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
         public string ErrorMessage { get; set; }
+    }
+
+
+    public class CleanPassRequest
+    {
+        public string CaseId { get; set; }
+        public bool isCleanPass { get; set; }
     }
 
     public enum BringForwardPriority
@@ -2089,6 +2098,58 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+
+        /// <summary>
+        /// Update Clean Pass Flag
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try
+            {
+                string caseId = request.CaseId;
+                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue() ;
+                   
+                if (@case != null)
+                { 
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                        if (@case.bcgov_incident_bcgov_documenturl != null)
+                        {
+                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                            {
+                                if (document.dfp_DocumentTypeID!= null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass" )
+                                {
+                                    @case.dfp_iscleanpass = true;
+                                    dynamicsContext.UpdateObject(@case);
+                                    await dynamicsContext.SaveChangesAsync();
+                                    dynamicsContext.DetachAll();
+                                    break;
+                                }
+  
+                            }
+
+                            
+                        }
+                    
+
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Update Clean Pass Flag - Error updating");
+            }
+
+            return result;
+
+        }
+
         /// <summary>
         /// GetListOfLettersSentToBcMail
         /// </summary>
@@ -2302,6 +2363,9 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
 
         }
+
+       
+
 
         /// <summary>
         /// Add Document Url To Case If Not Exist
