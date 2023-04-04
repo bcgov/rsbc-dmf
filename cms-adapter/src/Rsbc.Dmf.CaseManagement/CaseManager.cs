@@ -85,6 +85,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task <bool> SetCaseStatus(string caseId , bool caseStatus);
 
         Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
+          
+        Task SwitchTo8Dl();
     }
        
 
@@ -148,6 +150,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Id;
         public bool Success { get; set; }
+        public string ErrorDetail { get; set; }
     }
 
     public class CaseSearchReply
@@ -1014,7 +1017,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply()
             {
-                Success = false
+                Success = false                
             };            
             string caseId = request.CaseId;
             if (string.IsNullOrEmpty(caseId))
@@ -1024,8 +1027,8 @@ namespace Rsbc.Dmf.CaseManagement
                 LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
                 {
                      DriverLicenseNumber = request.Driver.DriverLicenseNumber,
-                     SequenceNumber = null,
-                     Surname = request.Driver.Surname
+                     SequenceNumber = request.SequenceNumber,
+                     Surname = request.Driver.Surname ?? string.Empty
                 };
                 
                 await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
@@ -1042,9 +1045,9 @@ namespace Rsbc.Dmf.CaseManagement
             if (!string.IsNullOrEmpty(caseId))
             {
                 // get the case
-                incident @case = GetIncidentById(caseId);
+                incident driverCase = GetIncidentById(caseId);
 
-                var driver = @case.dfp_DriverId;
+                var driver = driverCase.dfp_DriverId;
 
                 // create the comment
                 dfp_comment comment = new dfp_comment()
@@ -1070,20 +1073,37 @@ namespace Rsbc.Dmf.CaseManagement
                 try
                 {
                     dynamicsContext.AddTodfp_comments(comment);
-
-                    dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
-                    dynamicsContext.AddLink(@case, nameof(incident.dfp_incident_dfp_comment), comment);
-
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
-                    result.Id = comment.dfp_commentid.ToString();
-                    dynamicsContext.DetachAll();
                 }
                 catch (Exception ex)
                 {
-                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error");
+                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
                     result.Success = false;
+                    result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
+                    
                 }
+
+                if (result.Success == true)
+                {
+                    try
+                    {
+                        dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+                        dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = comment.dfp_commentid.ToString();
+                        dynamicsContext.DetachAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
+                        result.Success = false;
+                        result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
+                    }
+                }
+                
             }           
 
             return result;
@@ -1167,7 +1187,7 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
                 await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
@@ -1190,7 +1210,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (driverCase == null)
             {                
                 // create it.
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname, SequenceNumber = request.SequenceNumber };
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
                 await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
 
                 var newCaseId = await GetNewestCaseIdForDriver(newDriver);
@@ -1574,44 +1594,67 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-            /// <summary>
-            /// Legacy Candidate Create
-            /// </summary>
-            /// <param name="request"></param>
-            /// <param name="birthDate"></param>
-            /// <param name="effectiveDate"></param>
-            /// <returns></returns>
-            public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        /// <summary>
+        /// Legacy Candidate Create
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="birthDate"></param>
+        /// <param name="effectiveDate"></param>
+        /// <returns></returns>
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
         {
-
-
             dfp_driver driver;
             contact driverContact;
             Guid? driverContactId;
 
-            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
-            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+            string randomDriverId = string.Format("e27d7c69-3913-4116-a360-f5e99972b7e8");
+            string driverSubId = randomDriverId.Substring(0, randomDriverId.Length - request.DriverLicenseNumber.Length);
+            Guid driverId = Guid.Parse(driverSubId + request.DriverLicenseNumber);
 
-            if (birthDate != null && birthDate.Value.Year < 1753)
+            // attempt to get the driver by guid.
+
+            try
             {
-                birthDate = new DateTime(1753,1,1);
+                driver = dynamicsContext.dfp_drivers.ByKey(driverId).GetValue();
+            }
+            catch (Exception)
+            {
+                driver = null;
+            }
+
+            if (driver == null) // get by DL + name
+            {
+                var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
+                var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+
+                if (birthDate != null && birthDate.Value.Year < 1753)
+                {
+                    birthDate = new DateTime(1753, 1, 1);
+                }
+
+
+                dfp_driver[] driverResults;
+
+                if (!string.IsNullOrEmpty(request?.Surname))
+                {
+                    driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
+                }
+                else
+                {
+                    driverResults = data.ToArray();
+                }
+
+                if (driverResults.Length > 0)
+                {
+                    driver = driverResults[0];
+                }
             }
 
 
-            dfp_driver[] driverResults;
-            
-            if (! string.IsNullOrEmpty(request?.Surname))
+            if (driver != null)
             {
-                driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
-            }
-            else
-            {
-                driverResults = data.ToArray();
-            }
-
-            if (driverResults.Length > 0)
-            {
-                driver = driverResults[0];
+                await dynamicsContext.LoadPropertyAsync(driver, nameof(dfp_driver.dfp_PersonId));
+                // check contact
                 if (driver.dfp_PersonId != null)
                 {
                     driverContactId = driver.dfp_PersonId.contactid;
@@ -1619,9 +1662,90 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 else
                 {
+                    string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
+                    string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+
+                    var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
+                    
+                    try
+                    {
+                        driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();
+
+                        if (driverContact != null)
+                        {                            
+                            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        driverContact = null;
+                    }
+
+                    if (driverContact == null)
+                    {
+                        driverContact = new contact()
+                        {
+                            contactid = contactId,
+                            lastname = request.Surname
+                        };
+
+                        if (birthDate != null)
+                        {
+                            driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
+                                birthDate.Value.Month, birthDate.Value.Day);
+                        }
+
+                        try
+                        {
+                            dynamicsContext.AddTocontacts(driverContact);
+                            await dynamicsContext.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Person - " + e.Message);
+                        }
+                        driver.dfp_PersonId = driverContact;
+                        try
+                        {
+                            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                            await dynamicsContext.SaveChangesAsync();
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR Linking Driver Null Person - " + e.Message);
+                        }
+
+                    }
+
+                }
+            }                     
+            else // create the driver.
+            {
+                string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
+                string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+
+                var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
+                
+                try
+                {
+                    driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();
+
+                    if (driverContact != null)
+                    {
+                        dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                    }
+                }
+                catch (Exception)
+                {                    
+                    driverContact = null;
+                }
+
+                if (driverContact == null)
+                {
                     driverContact = new contact()
                     {
-                        lastname = request.Surname                                                
+                        contactid = contactId,
+                        lastname = request.Surname
                     };
 
                     if (birthDate != null)
@@ -1629,29 +1753,22 @@ namespace Rsbc.Dmf.CaseManagement
                         driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
                             birthDate.Value.Month, birthDate.Value.Day);
                     }
+                    try
+                    {
+                        dynamicsContext.AddTocontacts(driverContact);
+                        await dynamicsContext.SaveChangesAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact - " + e.Message);
+                    }
 
-                    dynamicsContext.AddTocontacts(driverContact);
-                    driver.dfp_PersonId = driverContact;
-                    dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
-                }
-                
-            }
-            else // create the driver.
-            {
-                driverContact = new contact()
-                {
-                    lastname = request.Surname
-                };
-                if (birthDate != null)
-                {
-                    driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
-                        birthDate.Value.Month, birthDate.Value.Day);
-                }
 
-                dynamicsContext.AddTocontacts(driverContact);
+                }                
 
                 driver = new dfp_driver()
                 {
+                    dfp_driverid = driverId,
                     dfp_licensenumber = request.DriverLicenseNumber,
                     dfp_PersonId = driverContact,
                     statuscode = 1,                    
@@ -1668,7 +1785,6 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.SaveChangesAsync();
             }
 
-
             // create the case.
             incident @case = new incident()
             {               
@@ -1678,22 +1794,35 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                importsequencenumber = request.SequenceNumber,
-                dfp_DriverId = driver
-
+                importsequencenumber = request.SequenceNumber,                
             };
 
-            dynamicsContext.AddToincidents(@case);
-
-            if (driverContact != null)
+            try
             {
-                dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                dynamicsContext.AddToincidents(@case);
+                if (driverContact != null)
+                {
+                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                }
+                await dynamicsContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
             }
 
-            dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+            try
+            {
+                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
 
-            await dynamicsContext.SaveChangesAsync();
+                await dynamicsContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
+            }
             
+                                              
             dynamicsContext.DetachAll();
    
         }
@@ -2282,6 +2411,26 @@ namespace Rsbc.Dmf.CaseManagement
             }
            
             return true;
+        }
+
+
+        public async Task SwitchTo8Dl()
+        {
+            // get all the drivers.
+
+            var drivers = dynamicsContext.dfp_drivers.Where(x => x.dfp_licensenumber != null).ToList();
+
+            foreach (var driver in drivers)
+            {
+                if (driver.dfp_licensenumber.Length == 7)
+                {
+                    // zero pad
+                    driver.dfp_licensenumber = "0" + driver.dfp_licensenumber;
+                    dynamicsContext.UpdateObject(driver);
+                    await dynamicsContext.SaveChangesAsync();
+                }                
+            }            
+            dynamicsContext.DetachAll();
         }
 
 

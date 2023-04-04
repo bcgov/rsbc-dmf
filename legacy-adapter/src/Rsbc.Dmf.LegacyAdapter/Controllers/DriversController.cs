@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Org.BouncyCastle.Crypto.Operators;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using System;
@@ -293,12 +294,30 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
 
-            Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
+            //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
+
+            if (comment.CommentText.Length > 1900 )
+            {
+                comment.CommentText = comment.CommentText.Substring(0,1900);
+                Serilog.Log.Error("Encountered comment longer than 1900 chars");
+                DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
+            }
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = licenseNumber
+                DriverLicenseNumber = licenseNumber,
+                Surname = string.Empty,
+                Address = new Address { City = string.Empty, Line1 = string.Empty, Line2 = string.Empty, Postal = string.Empty },
+                BirthDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                GivenName = string.Empty,
+                Height = 0.0,
+                Id = string.Empty,
+                Middlename = string.Empty,
+                Name = string.Empty,
+                Seck = string.Empty,
+                Sex = string.Empty,
+                Weight = 0.0
             };
 
             if (comment.Driver != null)
@@ -315,14 +334,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
             {           
-                CaseId = comment.CaseId ?? String.Empty,
-                CommentText = comment.CommentText ?? String.Empty,
-                CommentTypeCode = comment.CommentTypeCode ?? String.Empty,
-                SequenceNumber = comment.SequenceNumber ?? -1,
-                UserId = comment.UserId ?? String.Empty,
+                CaseId = comment.CaseId ?? string.Empty,
+                CommentText = comment.CommentText ?? string.Empty,
+                CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
+                SequenceNumber = comment.SequenceNumber ?? 1,
+                UserId = comment.UserId ?? string.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                 Driver = driver,
-                CommentId = string.Empty
+                CommentId = string.Empty                  
             });
 
             if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
@@ -338,6 +357,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             else
             {
                 _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+
+                DebugUtils.SaveDebug ("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
+                
                 return StatusCode(500, result.ErrorDetail);
             }
         }
@@ -355,66 +377,87 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // call the back end
 
-            var reply = _cmsAdapterClient.GetDriverDocuments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
-
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (string.IsNullOrEmpty(licenseNumber))
             {
-                // get the comments
-                List<ViewModels.Document> result = new List<ViewModels.Document>();
-
-                foreach (var item in reply.Items)
-                {
-
-                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
-                    ViewModels.Driver driver = new ViewModels.Driver()
-                    {
-                        LicenseNumber = licenseNumber,
-                        Flag51 = false,
-                        LastName = "LASTNAME",
-                        LoadedFromICBC = false,
-                        MedicalIssueDate = DateTimeOffset.Now
-                    };
-
-                    bool isBcMailSent = false;
-
-                    if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
-                    {
-                        isBcMailSent = true;
-                    }
-
-                    var newDocument = new ViewModels.Document
-                    {
-                        CaseId = item.CaseId,                        
-                        ImportDate = item.ImportDate.ToDateTimeOffset(),
-                        DocumentId = item.DocumentId,
-                        DocumentType = item.DocumentType,
-                        DocumentTypeCode = item.DocumentTypeCode,
-                        BusinessArea = item.BusinessArea,
-                        Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId,
-                        BcMailSent = isBcMailSent
-                    };
-
-                    if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970,2,1,0,0,0,TimeSpan.Zero))
-                    {
-                        newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
-                    }
-
-                    result.Add(newDocument);
-
-                }
-
-                // sort the result by date.
-
-                var sortedResult = result.OrderByDescending(x => x.ImportDate);
-
-                return Json(sortedResult);
+                Serilog.Log.Error ("Request to Driver Get Documents with no DL");
+                return StatusCode(400, "Bad Request");
             }
             else
             {
-                return StatusCode(500, reply.ErrorDetail);
+                var reply = _cmsAdapterClient.GetDriverDocuments(new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber });
+
+                if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    // get the comments
+                    List<ViewModels.Document> result = new List<ViewModels.Document>();
+
+                    foreach (var item in reply.Items)
+                    {
+
+                        // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                        ViewModels.Driver driver = new ViewModels.Driver()
+                        {
+                            LicenseNumber = licenseNumber,
+                            Flag51 = false,
+                            LastName = "LASTNAME",
+                            LoadedFromICBC = false,
+                            MedicalIssueDate = DateTimeOffset.Now
+                        };
+
+                        bool isBcMailSent = false;
+
+                        if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
+                        {
+                            isBcMailSent = true;
+                        }
+
+                        var newDocument = new ViewModels.Document
+                        {
+                            CaseId = item.CaseId,
+                            ImportDate = item.ImportDate.ToDateTimeOffset(),
+                            DocumentId = item.DocumentId,
+                            DocumentType = item.DocumentType,
+                            DocumentTypeCode = item.DocumentTypeCode,
+                            BusinessArea = item.BusinessArea,
+                            Driver = driver,
+                            SequenceNumber = item.SequenceNumber,
+                            UserId = item.UserId,
+                            BcMailSent = isBcMailSent
+                        };
+
+                        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                        if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
+                        {
+                            newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.ImportDate.Value.DateTime, pacificZone);
+                        }
+
+                        if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                        {
+                            newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                        }
+
+                        if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
+                        {
+                            newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.FaxReceivedDate.Value.DateTime, pacificZone);
+                        }
+
+                        result.Add(newDocument);
+
+                    }
+
+                    // sort the result by date.
+
+                    var sortedResult = result.OrderByDescending(x => x.ImportDate);
+
+                    return Json(sortedResult);
+                }
+                else
+                {
+                    return StatusCode(500, reply.ErrorDetail);
+                }
             }
+            
         }
 
 
@@ -469,13 +512,30 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     driver.Surname = document.Driver.LastName;
                 }
                 DateTimeOffset importDate = document.ImportDate ?? DateTimeOffset.Now;
+                DateTimeOffset faxReceivedDate = document.FaxReceivedDate ?? DateTimeOffset.Now;
+
+
+
+                TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                if (importDate.Offset == TimeSpan.Zero)
+                {
+                    importDate = TimeZoneInfo.ConvertTimeToUtc(importDate.DateTime, pacificZone);
+                }
+                if (faxReceivedDate.Offset == TimeSpan.Zero)
+                {
+                    faxReceivedDate = TimeZoneInfo.ConvertTimeToUtc(faxReceivedDate.DateTime, pacificZone);
+                }
+
+
+
                 long sequenceNumber = document.SequenceNumber ?? 0;
                 var newDocument = new LegacyDocument()
                 {
                     CaseId = document.CaseId,
                     SequenceNumber = sequenceNumber,
                     UserId = document.UserId,
-                    FaxReceivedDate = Timestamp.FromDateTimeOffset(document.FaxReceivedDate ?? DateTimeOffset.Now),
+                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                     ImportDate = Timestamp.FromDateTimeOffset(importDate),
                     Driver = driver,
                     DocumentTypeCode = document.DocumentTypeCode,
@@ -484,6 +544,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     
 
                 };
+
+                
+                
+
+                // Convert the 
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename ($"{filename}-{importDateString}-{sequenceNumber}");

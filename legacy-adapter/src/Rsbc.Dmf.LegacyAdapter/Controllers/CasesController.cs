@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -64,6 +65,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
             string caseId = GetCaseId( licenseNumber, surcode);
             
             if (caseId == null) // create it
@@ -101,6 +103,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("ExistByDl")]
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
+
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
             string caseId = GetCaseIdByDl(licenseNumber);
 
             if (caseId == null) // create it
@@ -131,16 +135,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         private string GetCaseId(string licenseNumber, string surcode)
         {
+
+            string trimmedSurcode = surcode;
+            if (trimmedSurcode.Length > 3)
+            {
+                trimmedSurcode = trimmedSurcode.Substring(0, 3);    
+            }
+
             string caseId = null;
             var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 foreach (var item in reply.Items)
                 {
-                    if ((bool)(item.Driver?.Surname.StartsWith(surcode)))
+                    if (item.Status != "Closed/Canceled")
                     {
-                        caseId = item.CaseId;
-                    }
+                        if ((bool)(item.Driver?.Surname.StartsWith(trimmedSurcode)))
+                        {
+                            caseId = item.CaseId;
+                            break;
+                        }
+                    }                    
                 }
             }
             return caseId;
@@ -155,8 +170,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 foreach (var item in reply.Items)
                 {
-                    caseId = item.CaseId;
-                    break;
+                    if (item.Status != "Closed/Canceled")
+                    {
+                        caseId = item.CaseId;
+                        break;
+                    }                                        
                 }
             }
             return caseId;
@@ -298,7 +316,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// </summary>
         /// <param name="caseId"></param>
         /// <param name="skipDpsProcessing"></param>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="batchId"></param>
         /// <param name="faxReceivedDate"></param>
         /// <param name="importDate"></param>
@@ -339,10 +357,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string envelopeId = null
             )
         {
+
+            string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
+
             DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
             DateTimeOffset importDate= DocumentUtils.ParseDpsDate(importDateString);
 
-            var debugObject = new { driversLicense = driversLicense, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
+
+
+            var debugObject = new { driversLicense = licenseNumber, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
                 importID = importID,
                 originatingNumber = originatingNumber,
                 documentPages = documentPages,
@@ -354,11 +377,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 assign = assign,
                 submittalStatus = submittalStatus,
                 surcode = surcode
-            };            
+            };       
+            
+            //Log.Information(JsonConvert.SerializeObject(debugObject));
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = driversLicense,
+                DriverLicenseNumber = licenseNumber,
                 Address = new Address()
                 {
                     City = String.Empty,
@@ -379,7 +404,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             };
 
 
-            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = driversLicense };
+            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
             var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
 
             string driverId = "";
@@ -407,7 +432,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = driversLicense });
+                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
             }
 
              
@@ -478,7 +503,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     var actionName = nameof(AddCaseDocument);
                     var routeValues = new
                     {
-                        driversLicence = driversLicense
+                        driversLicence = licenseNumber
                     };
 
                     return CreatedAtAction(actionName, routeValues, document);
@@ -491,7 +516,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                Serilog.Log.Error(reply.ErrorDetail);
+                Serilog.Log.Error("Unable to fetch Case details " + reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
 

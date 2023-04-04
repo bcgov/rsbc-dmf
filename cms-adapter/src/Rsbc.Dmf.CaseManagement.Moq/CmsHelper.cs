@@ -132,6 +132,8 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     return reply;
                 });
 
+            
+
             mockClient
                 .Setup(m => m.GetDriverComments(It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
                 .Returns<DriverLicenseRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
@@ -152,7 +154,25 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     return reply;
                 });
 
-            
+            mockClient
+                .Setup(m => m.GetAllDriverComments(It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
+                .Returns<DriverLicenseRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+                {
+                    GetCommentsReply reply = new() { ResultStatus = ResultStatus.Success };
+                    Driver driver = new Driver
+                    {
+                        DriverLicenseNumber = configuration["ICBC_TEST_DL"] ?? DEFAULT_DL,
+                        Surname = configuration["ICBC_TEST_SURCODE"] ?? DEFAULT_SURCODE
+                    };
+                    reply.Items.Add(new LegacyComment()
+                    {
+                        Driver = driver,
+                        CaseId = Guid.NewGuid().ToString(),
+                        CommentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
+                    });
+
+                    return reply;
+                });
 
 
             mockClient

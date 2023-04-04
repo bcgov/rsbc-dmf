@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>6d695abe-4ce7-4ef4-8d39-9a32440be826</UserSecretsId>
+    <RootNamespace>Rsbc.Dmf.CaseManagement.Tools</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj" />
+  </ItemGroup>
+
+</Project>
