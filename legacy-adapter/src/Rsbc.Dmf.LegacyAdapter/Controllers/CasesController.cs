@@ -338,7 +338,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         // allow large uploads
         [DisableRequestSizeLimit]
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
-            [FromForm] [Required] string licenseNumber,  // Driver -> DL            
+            [FromForm] [Required] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
             [FromForm] string faxReceivedDateString,  // dfp_faxreceivedate
             [FromForm] string importDateString,  // dfp_dpsprocessingdate
@@ -358,7 +358,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             )
         {
 
-            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
+            string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
 
             DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
             DateTimeOffset importDate= DocumentUtils.ParseDpsDate(importDateString);
