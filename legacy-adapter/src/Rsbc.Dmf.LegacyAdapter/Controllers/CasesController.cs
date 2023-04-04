@@ -65,6 +65,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
             string caseId = GetCaseId( licenseNumber, surcode);
             
             if (caseId == null) // create it
@@ -102,6 +103,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("ExistByDl")]
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
+
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
             string caseId = GetCaseIdByDl(licenseNumber);
 
             if (caseId == null) // create it
@@ -167,8 +170,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 foreach (var item in reply.Items)
                 {
-                    caseId = item.CaseId;
-                    break;
+                    if (item.Status != "Closed/Canceled")
+                    {
+                        caseId = item.CaseId;
+                        break;
+                    }                                        
                 }
             }
             return caseId;
@@ -310,7 +316,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// </summary>
         /// <param name="caseId"></param>
         /// <param name="skipDpsProcessing"></param>
-        /// <param name="driversLicense"></param>
+        /// <param name="licenseNumber"></param>
         /// <param name="batchId"></param>
         /// <param name="faxReceivedDate"></param>
         /// <param name="importDate"></param>
@@ -332,7 +338,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         // allow large uploads
         [DisableRequestSizeLimit]
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
-            [FromForm] [Required] string driversLicense,  // Driver -> DL            
+            [FromForm] [Required] string licenseNumber,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
             [FromForm] string faxReceivedDateString,  // dfp_faxreceivedate
             [FromForm] string importDateString,  // dfp_dpsprocessingdate
@@ -351,10 +357,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string envelopeId = null
             )
         {
+
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
+
             DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
             DateTimeOffset importDate= DocumentUtils.ParseDpsDate(importDateString);
 
-            var debugObject = new { driversLicense = driversLicense, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
+
+
+            var debugObject = new { driversLicense = licenseNumber, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
                 importID = importID,
                 originatingNumber = originatingNumber,
                 documentPages = documentPages,
@@ -372,7 +383,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             var driver = new CaseManagement.Service.Driver()
             {
-                DriverLicenseNumber = driversLicense,
+                DriverLicenseNumber = licenseNumber,
                 Address = new Address()
                 {
                     City = String.Empty,
@@ -393,7 +404,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             };
 
 
-            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = driversLicense };
+            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
             var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
 
             string driverId = "";
@@ -421,7 +432,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = driversLicense });
+                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
             }
 
              
@@ -492,7 +503,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     var actionName = nameof(AddCaseDocument);
                     var routeValues = new
                     {
-                        driversLicence = driversLicense
+                        driversLicence = licenseNumber
                     };
 
                     return CreatedAtAction(actionName, routeValues, document);

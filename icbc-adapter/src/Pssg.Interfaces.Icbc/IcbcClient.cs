@@ -156,6 +156,11 @@ namespace Pssg.Interfaces
             return result?.CLNT;
         }
 
+        public string NormalizeDl(string dlNumber, IConfiguration configuration)
+        {
+            throw new NotImplementedException();
+        }
+
         private class ClientResult
         {
             public CLNT CLNT { get; set;}
