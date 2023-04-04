@@ -31,14 +31,36 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         /// Test the case exist service - parameters are license number and surcode.
         /// </summary>
         [Fact]
-        public async void DoesCaseExist()
+        public async void DoesCaseExist7Digit()
         {            
+            Login();
+            string sevenDigitTest = "2222222";
+
+            string result = null;
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                var request = new HttpRequestMessage(HttpMethod.Get, "/Cases/ExistByDl?licenseNumber=" + sevenDigitTest );
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+                result = JsonConvert.DeserializeObject<string>(responseContent);
+            }
+
+            var caseId = GetCaseId();
+            Assert.True(caseId != null);
+        }
+
+        [Fact]
+        public async void DoesCaseExist()
+        {
             Login();
 
             var caseId = GetCaseId();
             Assert.True(caseId != null);
         }
-       
+
 
         [Fact]
         public async void AddCaseDocument()

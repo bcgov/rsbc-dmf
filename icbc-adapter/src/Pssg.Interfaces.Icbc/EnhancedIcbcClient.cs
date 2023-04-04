@@ -58,6 +58,20 @@ namespace Pssg.Interfaces
             }            
         }
 
+
+        public string NormalizeDl(string dlNumber, IConfiguration configuration)
+        {
+            string result = dlNumber;
+            if (!string.IsNullOrEmpty(configuration["ICBC_DL_7_TO_8"]) && dlNumber != null)
+            {
+                if (dlNumber.Length == 7)
+                {
+                    result = "0" + dlNumber;
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// Send Medical Update
         /// </summary>

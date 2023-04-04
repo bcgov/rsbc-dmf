@@ -1,4 +1,5 @@
-﻿using Pssg.Interfaces.Icbc.Models;
+﻿using Microsoft.Extensions.Configuration;
+using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.IcbcModels;
 using System;
 using System.Collections.Generic;
@@ -13,5 +14,7 @@ namespace Pssg.Interfaces
         public CLNT GetDriverHistory(string dlNumber);
 
         public string SendMedicalUpdate(IcbcMedicalUpdate item);
+
+        public string NormalizeDl(string dlNumber, IConfiguration configuration);
     }
 }
