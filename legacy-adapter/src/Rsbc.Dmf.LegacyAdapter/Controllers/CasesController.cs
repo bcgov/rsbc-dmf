@@ -445,7 +445,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     file.OpenReadStream().CopyTo(ms);
 
                     string jsonFile = JsonConvert.SerializeObject(file);
-                    DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
+                    //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
                 }
                 else
                 {
