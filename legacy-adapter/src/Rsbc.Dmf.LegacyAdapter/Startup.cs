@@ -113,10 +113,11 @@ namespace Rsbc.Dmf.LegacyAdapter
                 
                 .AddProblemDetails(opts => {
                     opts.ValidationProblemStatusCode = StatusCodes.Status400BadRequest;
+                    opts.IncludeExceptionDetails =  (ctx, env) => true;
                     opts.OnBeforeWriteDetails = (ctx, pr) =>
                     {
                         // Log the problem
-                        Log.Logger.Error($"Unexpected Exception {pr.Title} {pr.Detail} {pr.Instance}");
+                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path}{ctx.Request.Query} {pr.Title} {pr.Detail} {pr.Instance}");
 
                     };
                 })
