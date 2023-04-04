@@ -297,10 +297,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
 
+            
+
             var driver = new CaseManagement.Service.Driver()
             {
                 DriverLicenseNumber = licenseNumber,
-                Surname = String.Empty
+                Surname = string.Empty,
+                Address = new Address { City = string.Empty, Line1 = string.Empty, Line2 = string.Empty, Postal = string.Empty },
+                BirthDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                GivenName = string.Empty,
+                Height = 0.0,
+                Id = string.Empty,
+                Middlename = string.Empty,
+                Name = string.Empty,
+                Seck = string.Empty,
+                Sex = string.Empty,
+                Weight = 0.0
             };
 
             if (comment.Driver != null)
@@ -320,11 +332,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 CaseId = comment.CaseId ?? string.Empty,
                 CommentText = comment.CommentText ?? string.Empty,
                 CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
-                SequenceNumber = comment.SequenceNumber ?? -1,
+                SequenceNumber = comment.SequenceNumber ?? 1,
                 UserId = comment.UserId ?? string.Empty,
                 CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                 Driver = driver,
-                CommentId = string.Empty
+                CommentId = string.Empty                  
             });
 
             if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
