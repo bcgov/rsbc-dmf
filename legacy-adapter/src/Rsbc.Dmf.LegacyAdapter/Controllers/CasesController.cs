@@ -445,11 +445,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     file.OpenReadStream().CopyTo(ms);
 
                     string jsonFile = JsonConvert.SerializeObject(file);
-                    Serilog.Log.Error($"AddCaseDocument - File is {jsonFile}");
+                    //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
                 }
                 else
                 {
-                    Serilog.Log.Error("AddCaseDocument - File is empty");
+                    DebugUtils.SaveDebug("AddCaseDocument", "File is empty");                    
                 }
 
                 var data = ms.ToArray();

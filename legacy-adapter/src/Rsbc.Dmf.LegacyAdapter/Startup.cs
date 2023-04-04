@@ -117,8 +117,13 @@ namespace Rsbc.Dmf.LegacyAdapter
                     opts.OnBeforeWriteDetails = (ctx, pr) =>
                     {
                         // Log the problem
-                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path}{ctx.Request.Query} {pr.Title} {pr.Detail} {pr.Instance}");
-
+                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path} {pr.Title} {pr.Detail} {pr.Instance}");
+                        // attempt to read to string.
+                        using (var reader = new StreamReader(ctx.Request.Body))
+                        {
+                            var json = reader.ReadToEnd();
+                            DebugUtils.SaveDebug (ctx.Request.Path.Value.Replace("/",""), json);
+                        }
                     };
                 })
                 
