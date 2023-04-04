@@ -33,9 +33,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     .AddEnvironmentVariables()
                     .Build();
 
-            if (Configuration["ICBC_LOOKUP_SERVICE_URI"] != null)
+            if (Configuration["ICBC_SERVICE_URI"] != null)
             {
-                icbcClient = new IcbcClient(Configuration);
+                icbcClient = new EnhancedIcbcClient(Configuration);
             }
             else
             {

@@ -82,6 +82,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
         {
 
+
+            return Ok();
+
+            /*
+
             // check for duplicates; if there is an existing case then do not create a new one
             foreach (var item in newCandidates)
             {
@@ -99,6 +104,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
 
             return Ok();
+
+            */
         }
 
         /// <summary>
