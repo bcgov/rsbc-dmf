@@ -297,7 +297,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
 
-            
+            if (comment.CommentText.Length > 1900 )
+            {
+                comment.CommentText = comment.CommentText.Substring(0,1900);
+                Serilog.Log.Error("Encountered comment longer than 1900 chars");
+                DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
+            }
 
             var driver = new CaseManagement.Service.Driver()
             {
