@@ -11,6 +11,9 @@ RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkh
 RUN gdebi --n wkhtmltox_0.12.5-1.stretch_amd64.deb
 RUN apt install -y libssl1.1
 RUN ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so
+RUN ldconfig -p | grep 'libwkhtml' /usr/local/lib/runtimes/libwkhtmltox.so libwkhtmltox.so
+
+
 
 WORKDIR /app
 
