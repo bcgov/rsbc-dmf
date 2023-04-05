@@ -10,8 +10,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
         static public void SaveDebug(string suffix, string data)
         {
-
-            string filename = Path.GetTempPath() + "debug-" + DateTime.Now.Ticks+"-"+suffix;
+            string filename = Path.GetTempPath() + "debug-" + DateTime.Now.Ticks.ToString() +"-" + suffix;
             System.IO.File.WriteAllText(filename, data);
         }
     }
