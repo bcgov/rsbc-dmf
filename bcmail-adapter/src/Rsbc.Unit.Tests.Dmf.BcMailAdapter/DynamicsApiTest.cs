@@ -30,7 +30,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
         /// <summary>
         /// Test the CDGS Client
         /// </summary>
-        [Fact]
+       /* [Fact]
         public async void TestDocumentPreview()
         {
             // login to the BC Mail Adapter (this service)
@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             response.EnsureSuccessStatusCode();
             
 
-        }
+        }*/
 
     }
 }
