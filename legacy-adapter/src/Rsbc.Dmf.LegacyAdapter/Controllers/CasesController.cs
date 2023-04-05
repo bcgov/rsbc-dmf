@@ -103,7 +103,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("ExistByDl")]
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
-            DebugUtils.SaveDebug("DoesCaseExistByDl", licenseNumber);
             licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
             string caseId = GetCaseIdByDl(licenseNumber);
 
