@@ -107,12 +107,17 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
 
-        [Fact(Skip = RequiresDynamics)]
+     /*   [Fact(Skip = RequiresDynamics)]
         public async Task ShouldUpdateCleanPassFlag()
         {
-            await caseManager.UpdateCleanPassFlag();
+            // f
+            var request = new CleanPassRequest
+            {
+                CaseId = caseId
+            };
+            await caseManager.UpdateCleanPassFlag(request);
         }
-
+*/
 
         /// <summary>
         /// Verify that the Practioner and Clinic set function can be called with the empty string.
