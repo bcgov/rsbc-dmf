@@ -77,6 +77,43 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
         }
 
+
+        /// <summary>
+        /// CanSetCleanPassValue
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateCleanPassValue()
+        {
+
+            // Arrange: Get Case Id
+            var caseId = "1234";
+
+            // Act : send case id to cleanpass function
+
+            var request = new CleanPassRequest
+            {
+                CaseId = caseId
+            };
+
+            await caseManager.UpdateCleanPassFlag(request);
+
+
+            // Assert: Get case and Verify clean pass is set
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.FirstOrDefault();
+
+            Assert.True(queryResults.CleanPass);
+            
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task ShouldUpdateCleanPassFlag()
+        {
+            await caseManager.UpdateCleanPassFlag();
+        }
+
+
         /// <summary>
         /// Verify that the Practioner and Clinic set function can be called with the empty string.
         /// </summary>

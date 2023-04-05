@@ -1,0 +1,14 @@
+NAMESPACE_PREFIX=0137d5
+ENV=test
+APP_NAME=test-bcmail-adapter
+IMAGENAME=bcmail-adapter
+TAG=latest
+RUNTIME_ENVIRONMENT=staging
+JWT_TOKEN_KEY='G9QeBrPAAWgp8zf'
+JWT_VALID_AUDIENCE=https://localhost
+JWT_VALID_ISSUER=https://localhost
+HOST=rsbc-dfp-bcmail-test.apps.silver.devops.gov.bc.ca
+CDGS_SERVICE_URI: "https://cdogs-test.api.gov.bc.ca/api/v2/",
+CDGS_OAUTH_CLIENT_ID: "OEAED424-9A5D0095E7B",
+CDGS_TOKEN_ENDPOINT: "https://test.loginproxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token",
+CDGS_OAUTH_CLIENT_SECRET: "e637367b-6344-4368-b430-5e34dd0f3dd2"

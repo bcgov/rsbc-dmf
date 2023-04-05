@@ -181,6 +181,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ModifiedBy { get; set; }
         public bool IsCommercial { get; set; }
         public string Status { get; set; }
+        public bool CleanPass { get; set; }
     }
 
     public class Driver
@@ -2259,15 +2260,12 @@ namespace Rsbc.Dmf.CaseManagement
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
                                     dynamicsContext.DetachAll();
-                                    break;
+                                    result.Success = true;
+                                break;
                                 }
   
-                            }
-
-                            
-                        }
-                    
-
+                            }                          
+                        }                   
                 }
             }
             catch (Exception e)

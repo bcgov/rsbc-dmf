@@ -1,0 +1,14 @@
+NAMESPACE_PREFIX=0137d5
+ENV=dev
+APP_NAME=dev-bcmail-adapter
+IMAGENAME=bcmail-adapter
+TAG=latest
+RUNTIME_ENVIRONMENT=staging
+JWT_TOKEN_KEY='wUJI#PGj4563'
+JWT_VALID_AUDIENCE=https://localhost
+JWT_VALID_ISSUER=https://localhost
+HOST=rsbc-dfp-bcmail-dev.apps.silver.devops.gov.bc.ca
+CDGS_SERVICE_URI: "https://cdogs-dev.api.gov.bc.ca/api/v2/",
+CDGS_OAUTH_CLIENT_ID": "906B4222-9A5D0095E7B",
+CDGS_TOKEN_ENDPOINT: "https://dev.loginproxy.gov.bc.ca/auth/realms/comsvcauth/protocol/openid-connect/token",
+CDGS_OAUTH_CLIENT_SECRET: "0d531e23-fa16-4686-a439-e39477d585e7"
