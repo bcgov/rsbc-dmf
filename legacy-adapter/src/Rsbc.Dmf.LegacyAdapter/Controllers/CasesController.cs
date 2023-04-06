@@ -145,7 +145,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                foreach (var item in reply.Items)
+                // ensure newest first.
+                var sorted = reply.Items.OrderByDescending(x => x.CreatedOn);
+
+                foreach (var item in sorted)
                 {
                     if (item.Status != "Closed/Canceled")
                     {
@@ -167,7 +170,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                foreach (var item in reply.Items)
+                // ensure newest first.
+                var sorted = reply.Items.OrderByDescending( x=> x.CreatedOn);
+
+                foreach (var item in sorted)
                 {
                     if (item.Status != "Closed/Canceled")
                     {
