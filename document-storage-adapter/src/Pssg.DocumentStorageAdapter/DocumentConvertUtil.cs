@@ -1,7 +1,10 @@
 ﻿using System.IO;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Drawing;
-
+using TiffLibrary;
+using TiffLibrary.ImageSharpAdapter;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace Pssg.DocumentStorageAdapter
 {
@@ -41,6 +44,43 @@ namespace Pssg.DocumentStorageAdapter
            return pdfMemoryStream.ToArray();
 
         }
+/*
+        public static byte[] ConvertTiffToPdf(byte[] tiffBytes)
+        {
+            using (var tiffStream = new MemoryStream(tiffBytes))
+            using (var pdfStream = new MemoryStream())
+            using (var tiff = TiffFile.Open(tiffStream))
+            using (var pdf = new PdfEncoder(pdfStream))
+            {
+                // Set the DPI of the PDF file to match the TIFF file
+                var tiffImageFileDirectory = tiff.ImageFileDirectories[0];
+                var dpiX = tiffImageFileDirectory.XResolution?.ToDouble() ?? 96;
+                var dpiY = tiffImageFileDirectory.YResolution?.ToDouble() ?? 96;
+                pdf.SetDpi((int)dpiX, (int)dpiY);
+
+                // Iterate over each page in the TIFF file and add it to the PDF file
+                foreach (var entry in tiffImageFileDirectory.Entries)
+                {
+                    if (entry.Tag == TiffTag.Compression || entry.Tag == TiffTag.StripOffsets || entry.Tag == TiffTag.StripByteCounts)
+                    {
+                        // Skip tags related to image compression and data organization
+                        continue;
+                    }
+
+                    // Load the page image from the TIFF file
+                    using (var decompressed = TiffFieldDataReader.Create(entry).Decode())
+                    using (var image = decompressed.AsImageSharp<Rgba32>())
+                    {
+                        // Add the page image to the PDF file
+                        pdf.AddImage(image);
+                    }
+                }
+
+                // Return the PDF file bytes
+                return pdfStream.ToArray();
+            }
+        }*/
+
 
     }
 

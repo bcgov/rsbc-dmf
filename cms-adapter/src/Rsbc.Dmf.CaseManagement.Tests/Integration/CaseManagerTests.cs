@@ -77,6 +77,55 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
         }
 
+
+        /// <summary>
+        /// CanSetCleanPassValue
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateCleanPassValue()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            if (queryResults.Count() > 0)
+            {
+                queryResults.ShouldNotBeEmpty();
+                foreach (var dmerCase in queryResults)
+                {
+                    var caseId = dmerCase.Id;
+                    // set the value to true
+                    await caseManager.SetCleanPassFlag(caseId, false);
+
+                    //dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenseNumber.ShouldBe(driverLicenseNumber);
+
+                    var request = new CleanPassRequest
+                    {
+                        CaseId = caseId,
+                    };
+
+                    await caseManager.UpdateCleanPassFlag(request);
+
+
+                }
+
+                // verify in dynamics wether this is updated
+
+            }
+
+           
+
+
+            // Assert: Get case and Verify clean pass is set
+           /* var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.FirstOrDefault();
+
+            Assert.True(queryResults.CleanPass);*/
+            
+        }
+
+
+
+
         /// <summary>
         /// Verify that the Practioner and Clinic set function can be called with the empty string.
         /// </summary>
