@@ -54,6 +54,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
         Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
 
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source);
+
         Task MarkMedicalUpdatesSent(List<string> ids);
 
         Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request);
@@ -1034,7 +1036,7 @@ namespace Rsbc.Dmf.CaseManagement
                      Surname = request.Driver.Surname ?? string.Empty
                 };
                 
-                await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue);
+                await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue, "CreateLegacyCaseComment");
                 
                 // now do a search to get the case.
                 var searchResult = await LegacyCandidateSearch(newCandidate);
@@ -1186,12 +1188,14 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply();
             // get the driver
+            bool secondCandidateCreate = true;
 
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
                 var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-1");
+                secondCandidateCreate = false;
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
 
@@ -1211,10 +1215,14 @@ namespace Rsbc.Dmf.CaseManagement
 
 
             if (driverCase == null)
-            {                
-                // create it.
+            {
                 var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now);
+                if (secondCandidateCreate)
+                {
+                    // create it.                    
+                    await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-2");
+
+                }
 
                 var newCaseId = await GetNewestCaseIdForDriver(newDriver);
 
@@ -1223,7 +1231,8 @@ namespace Rsbc.Dmf.CaseManagement
                     driverCase = GetIncidentById(newCaseId.Value.ToString()); 
                 }                
             }
-            else
+            
+            if (driverCase != null)
             {
                 bool found = false;
                 // ensure we have the documents.
@@ -1597,6 +1606,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        {
+            await LegacyCandidateCreate(request,  birthDate, effectiveDate, "Unknown");
+        }
+
         /// <summary>
         /// Legacy Candidate Create
         /// </summary>
@@ -1604,7 +1618,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="birthDate"></param>
         /// <param name="effectiveDate"></param>
         /// <returns></returns>
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source)
         {
             dfp_driver driver;
             contact driverContact;
@@ -1635,22 +1649,24 @@ namespace Rsbc.Dmf.CaseManagement
                     birthDate = new DateTime(1753, 1, 1);
                 }
 
-
-                dfp_driver[] driverResults;
-
-                if (!string.IsNullOrEmpty(request?.Surname))
+                if (data != null && data.Count > 0)
                 {
-                    driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
-                }
-                else
-                {
-                    driverResults = data.ToArray();
-                }
+                    dfp_driver[] driverResults;
 
-                if (driverResults.Length > 0)
-                {
-                    driver = driverResults[0];
-                }
+                    if (!string.IsNullOrEmpty(request?.Surname))
+                    {
+                        driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
+                    }
+                    else
+                    {
+                        driverResults = data.ToArray();
+                    }
+
+                    if (driverResults.Length > 0)
+                    {
+                        driver = driverResults[0];
+                    }
+                }                
             }
 
 
@@ -1811,7 +1827,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
-                Log.Error(e, "LegacyCandidateCreate ERROR CREATING INCIDENT - " + e.Message);
+                Log.Error(e, $"LegacyCandidateCreate {source} ERROR CREATING INCIDENT - " + e.Message);
             }
 
             try
@@ -1822,7 +1838,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
-                Log.Error(e, "LegacyCandidateCreate ERROR set link incident - driver  " + e.Message);
+                Log.Error(e, "LegacyCandidateCreate  {source} ERROR set link incident - driver  " + e.Message);
             }
             
                                               
