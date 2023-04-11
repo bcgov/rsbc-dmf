@@ -202,7 +202,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                         // Set Stylesheets
 
-                        if (attachment.Css != null)
+                        if (attachment.Css != null && attachment.Css.Length > 0)
                         {
                             string decodedStyle = ParseByteArrayToString(attachment.Css);
                             System.IO.File.WriteAllText(stylesheetFileName, decodedStyle);
@@ -317,12 +317,19 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     {
                         using (var src = new MemoryStream(pdf))
                         {
-                            using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
+                            try
                             {
-                                for (var i = 0; i < srcPDF.PageCount; i++)
+                                using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                                 {
-                                    resultPDF.AddPage(srcPDF.Pages[i]);
+                                    for (var i = 0; i < srcPDF.PageCount; i++)
+                                    {
+                                        resultPDF.AddPage(srcPDF.Pages[i]);
+                                    }
                                 }
+                            }
+                            catch (Exception e)
+                            {
+                                _logger.LogError(e,"Error reading from PDF stream");
                             }
                         }
                     }
