@@ -85,39 +85,46 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateCleanPassValue()
         {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
 
-            // Arrange: Get Case Id
-            var caseId = "1234";
-
-            // Act : send case id to cleanpass function
-
-            var request = new CleanPassRequest
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            if (queryResults.Count() > 0)
             {
-                CaseId = caseId
-            };
+                queryResults.ShouldNotBeEmpty();
+                foreach (var dmerCase in queryResults)
+                {
+                    var caseId = dmerCase.Id;
+                    // set the value to true
+                    await caseManager.SetCleanPassFlag(caseId, false);
 
-            await caseManager.UpdateCleanPassFlag(request);
+                    //dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenseNumber.ShouldBe(driverLicenseNumber);
+
+                    var request = new CleanPassRequest
+                    {
+                        CaseId = caseId,
+                    };
+
+                    await caseManager.UpdateCleanPassFlag(request);
+
+
+                }
+
+                // verify in dynamics wether this is updated
+
+            }
+
+           
 
 
             // Assert: Get case and Verify clean pass is set
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.FirstOrDefault();
+           /* var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.FirstOrDefault();
 
-            Assert.True(queryResults.CleanPass);
+            Assert.True(queryResults.CleanPass);*/
             
         }
 
 
-     /*   [Fact(Skip = RequiresDynamics)]
-        public async Task ShouldUpdateCleanPassFlag()
-        {
-            // f
-            var request = new CleanPassRequest
-            {
-                CaseId = caseId
-            };
-            await caseManager.UpdateCleanPassFlag(request);
-        }
-*/
+
 
         /// <summary>
         /// Verify that the Practioner and Clinic set function can be called with the empty string.

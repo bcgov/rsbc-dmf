@@ -84,6 +84,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task <bool> SetCaseStatus(string caseId , bool caseStatus);
 
+        Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus);
+
         Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
           
         Task SwitchTo8Dl();
@@ -2244,28 +2246,33 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 string caseId = request.CaseId;
-                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue() ;
-                   
-                if (@case != null)
-                { 
-                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
 
-                        if (@case.bcgov_incident_bcgov_documenturl != null)
+                if (@case != null)
+                {
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                    if (@case.bcgov_incident_bcgov_documenturl != null)
+                    {
+                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                         {
-                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                            if (document.dfp_DocumentTypeID != null)
                             {
-                                if (document.dfp_DocumentTypeID!= null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass" )
+                                if (document.dfp_DocumentTypeID != null && document.dfp_DocumentTypeID.dfp_name != null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass")
                                 {
                                     @case.dfp_iscleanpass = true;
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
                                     dynamicsContext.DetachAll();
                                     result.Success = true;
-                                break;
+                                    break;
                                 }
-  
-                            }                          
-                        }                   
+                            }
+
+                        }
+                    }
                 }
             }
             catch (Exception e)
@@ -2275,6 +2282,34 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
 
+        }
+
+        /// <summary>
+        /// Set Case Status
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public async Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus)
+        {
+            // get the case
+            incident @case = GetIncidentById(caseId);
+
+            @case.dfp_iscleanpass = cleanPassStatus;
+
+            try
+            {
+                dynamicsContext.UpdateObject(@case);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"SetCleanPassStatus - Error updating");
+            }
+
+            return true;
         }
 
         /// <summary>
