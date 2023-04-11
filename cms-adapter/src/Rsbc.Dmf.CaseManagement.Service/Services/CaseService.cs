@@ -614,7 +614,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }
 
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto);
+                    await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto, "ProcessLegacyCandidate");
 
                     reply.ResultStatus = ResultStatus.Success;
                 }

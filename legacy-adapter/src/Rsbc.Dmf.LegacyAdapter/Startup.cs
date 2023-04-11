@@ -36,6 +36,10 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
 using Invio.Extensions.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.IO.Pipelines;
+using System.Buffers;
+using System.Collections;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -117,13 +121,15 @@ namespace Rsbc.Dmf.LegacyAdapter
                     opts.OnBeforeWriteDetails = (ctx, pr) =>
                     {
                         // Log the problem
-                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path} {pr.Title} {pr.Detail} {pr.Instance}");
+                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path}  {ctx.Request.Scheme}  {pr.Title} {pr.Detail} {pr.Instance}");
                         // attempt to read to string.
-                        using (var reader = new StreamReader(ctx.Request.Body))
-                        {
-                            var json = reader.ReadToEnd();
-                            DebugUtils.SaveDebug (ctx.Request.Path.Value.Replace("/",""), json);
-                        }
+
+                        var pipeReadResult = ctx.Request.BodyReader.ReadAsync().GetAwaiter().GetResult();   
+                        var buffer = pipeReadResult.Buffer.ToArray();
+                        string json = System.Text.Encoding.UTF8.GetString(buffer);
+
+                        DebugUtils.SaveDebug (ctx.Request.Path.Value.Replace("/","-"), json);
+                        
                     };
                 })
                 
