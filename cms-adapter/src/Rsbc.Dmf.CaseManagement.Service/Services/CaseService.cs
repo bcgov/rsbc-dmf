@@ -1168,7 +1168,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var cleanPassRequest = new CaseManagement.CleanPassRequest()
                 {
                     CaseId = request.CaseId,
-                    isCleanPass = true
+                    //isCleanPass = true
                 };
 
                 await _caseManager.UpdateCleanPassFlag(cleanPassRequest);
