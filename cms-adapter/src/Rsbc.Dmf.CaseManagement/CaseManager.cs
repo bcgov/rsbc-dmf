@@ -76,12 +76,20 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task ResolveCaseStatusUpdates();
 
+        Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail();
+
+        Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status);
+
         Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest);
 
         Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
 
-        Task <bool> SetCaseStatus(string caseId , bool caseStatus);  
+        Task <bool> SetCaseStatus(string caseId , bool caseStatus);
 
+        Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus);
+
+        Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
+          
         Task SwitchTo8Dl();
     }
        
@@ -177,6 +185,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ModifiedBy { get; set; }
         public bool IsCommercial { get; set; }
         public string Status { get; set; }
+        public bool CleanPass { get; set; }
     }
 
     public class Driver
@@ -265,6 +274,13 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
         public string ErrorMessage { get; set; }
+    }
+
+
+    public class CleanPassRequest
+    {
+        public string CaseId { get; set; }
+        public bool isCleanPass { get; set; }
     }
 
     public enum BringForwardPriority
@@ -2194,6 +2210,9 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
         }
 
+       
+
+
         /// <summary>
         /// Set Case Resolve Date
         /// </summary>
@@ -2225,6 +2244,148 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
             }
+        }
+
+
+        /// <summary>
+        /// Update Clean Pass Flag
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try
+            {
+                string caseId = request.CaseId;
+                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+                if (@case != null)
+                {
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                    if (@case.bcgov_incident_bcgov_documenturl != null)
+                    {
+                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                            if (document.dfp_DocumentTypeID != null)
+                            {
+                                if (document.dfp_DocumentTypeID != null && document.dfp_DocumentTypeID.dfp_name != null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass")
+                                {
+                                    @case.dfp_iscleanpass = true;
+                                    dynamicsContext.UpdateObject(@case);
+                                    await dynamicsContext.SaveChangesAsync();
+                                    dynamicsContext.DetachAll();
+                                    result.Success = true;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Update Clean Pass Flag - Error updating");
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// Set Case Status
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public async Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus)
+        {
+            // get the case
+            incident @case = GetIncidentById(caseId);
+
+            @case.dfp_iscleanpass = cleanPassStatus;
+
+            try
+            {
+                dynamicsContext.UpdateObject(@case);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"SetCleanPassStatus - Error updating");
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// GetListOfLettersSentToBcMail
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail()
+        {
+            // Call the documents and get the list of documents in "Sent To BC Mail" status
+
+            return dynamicsContext.bcgov_documenturls.
+                Where(d => d.statuscode == 1)
+                .Select(document => new LegacyDocument
+                {
+                    DocumentId = document.bcgov_documenturlid.ToString(),
+                    
+                    DocumentUrl = document.bcgov_url ?? string.Empty,
+                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                    ImportId = document.dfp_importid ?? string.Empty,
+                }).ToList();
+           
+        }
+
+
+        /// <summary>
+        /// Method to set the resolve case status
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try{
+                var documents = dynamicsContext.bcgov_documenturls.
+                Where(d => d.statuscode == 1
+                && d.bcgov_documenturlid.ToString() == documentId
+                ) ; 
+
+                foreach (var doc in documents)
+                {
+                    
+                    // Update Document status to Send or failure
+                    doc.statuscode = status;
+                 
+                    dynamicsContext.UpdateObject(doc);
+                }
+
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
+            }
+             catch (Exception e)
+            {
+                logger.LogError(e, $"Update Document Status - Error updating");
+            }
+            return result;
         }
 
         /// <summary>
@@ -2400,6 +2561,9 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
 
         }
+
+       
+
 
         /// <summary>
         /// Add Document Url To Case If Not Exist

@@ -55,5 +55,10 @@
         /// Unit
         /// </summary>
         public string Unit { get; set; }
+
+        /// <summary>
+        /// Unit
+        /// </summary>
+        public byte[] Css { get; set; }
     }
 }
