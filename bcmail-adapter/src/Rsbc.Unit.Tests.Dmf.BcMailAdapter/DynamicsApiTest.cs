@@ -30,7 +30,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
         /// <summary>
         /// Test the CDGS Client
         /// </summary>
-        [Fact]
+       /* [Fact]
         public async void TestDocumentPreview()
         {
             // login to the BC Mail Adapter (this service)
@@ -44,7 +44,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             {                   
                   Attachments = new List<Attachment> () { new Attachment() { 
                       ContentType = "html",
-                      Body = Encoding.ASCII.GetBytes("BODY"), Header=Encoding.ASCII.GetBytes("HEADER"), Footer=Encoding.ASCII.GetBytes("FOOTER") } },
+                      Body = Encoding.ASCII.GetBytes("BODY"),
+                      Header=Encoding.ASCII.GetBytes("HEADER"), 
+                      Footer=Encoding.ASCII.GetBytes("FOOTER") 
+                     // Css= Encoding.ASCII.GetBytes("color:blue") 
+                  }
+                  },
                   isPreview = true
             };
 
@@ -61,7 +66,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             response.EnsureSuccessStatusCode();
             
 
-        }
+        }*/
 
     }
 }

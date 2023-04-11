@@ -14,12 +14,14 @@
 
 	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
     <PackageReference Include="Grpc.Net.Client" Version="2.51.0" />
+    <PackageReference Include="Hangfire.Core" Version="1.7.33" />
     <PackageReference Include="Haukcode.WkHtmlToPdfDotNet" Version="1.5.86" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.1.0" />
     <PackageReference Include="Invio.Extensions.Authentication.JwtBearer" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     <PackageReference Include="PdfSharpCore" Version="1.3.47" />
+    <PackageReference Include="Renci.SshNet.Async" Version="1.4.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
@@ -33,14 +35,16 @@
 	  </PackageReference>
 	  <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
-
+	
 	<ItemGroup>
-		<Folder Include="gRPC Prototypes\" />
+		
+		<ProjectReference Include="..\Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj" />
+		<ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+		<ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
-	  <ProjectReference Include="..\Rsbc.Interfaces.Dmf.BcMailAdapter\CdgsServiceClient.csproj" />
+	  <Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
-
 
 </Project>
