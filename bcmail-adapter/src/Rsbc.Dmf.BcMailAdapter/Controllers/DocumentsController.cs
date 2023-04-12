@@ -46,7 +46,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             Configuration = configuration;
             _logger = logger;
             _cdgsClient = cdgsClient;
-            Converter = converter; ;
+            Converter = converter;
+            Converter.Error += Converter_Error;
         }
 
 
@@ -80,6 +81,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             return result;
         }
 
+        private static void Converter_Error(object sender, WkHtmlToPdfDotNet.EventDefinitions.ErrorArgs e)
+        {
+            Serilog.Log.Error("[WKHTML ERROR] {0}", e.Message);
+        }
+
         /// <summary>
         /// Bc Mail Document Preview
         /// </summary>
@@ -105,7 +111,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             {
             */
                 string fileName;
-                CdgsRequest cdgsRequest;
+                //CdgsRequest cdgsRequest;
                 if (bcmail?.Attachments != null && bcmail.Attachments.Count > 0)
                 {
 
@@ -191,7 +197,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         },
                             Objects = {
                         new ObjectSettings() {
-                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Ignore },
+                            LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Abort },
                             PagesCount = true,
                             HtmlContent = decodedbody,
                             WebSettings = { DefaultEncoding = "utf-8",},           
@@ -241,11 +247,16 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         }
 
                         byte[] pdfData = Converter.Convert(doc);
+                        
                         System.IO.File.WriteAllBytes(pdfFileName, pdfData);
 
                         if (pdfData.Length > 0)
                         {
                             srcPdfs.Add(pdfData);
+                        }
+                        else
+                        {
+                            _logger.LogError("Rendered PDF is empty");
                         }
                         
 
