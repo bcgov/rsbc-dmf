@@ -151,6 +151,7 @@ message LegacyDocument {
 	int64 DocumentPages = 15;
 	string ValidationMethod = 16;
 	string ValidationPrevious = 17;
+	string Priority = 18;
 }
 
 message GetDocumentRequest {	
