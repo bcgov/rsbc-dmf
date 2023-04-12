@@ -45,6 +45,7 @@ using Grpc.Net.Client;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using Pssg.DocumentStorageAdapter;
+using System.Buffers;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -145,12 +146,18 @@ namespace Rsbc.Dmf.BcMailAdapter
 
             // basic REST controller 
             services
-                
                 .AddProblemDetails(opts => {
                     opts.ValidationProblemStatusCode = StatusCodes.Status400BadRequest;
+                    opts.IncludeExceptionDetails = (ctx, env) => true;
+                    opts.OnBeforeWriteDetails = (ctx, pr) =>
+                    {
+                        // Log the problem
+                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path}  {ctx.Request.Method}   {pr.Title} {pr.Detail} {pr.Instance}");
+                        
 
+                    };
                 })
-                
+
                 .AddControllers(options => {
 
                 // only allow anonymous access if there is no JWT secret...
