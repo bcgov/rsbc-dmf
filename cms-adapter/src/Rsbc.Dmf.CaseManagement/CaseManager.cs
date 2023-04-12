@@ -148,6 +148,7 @@ namespace Rsbc.Dmf.CaseManagement
         public int DocumentPages { get; set; }
         public string ValidationMethod { get; set; }
         public string ValidationPrevious { get; set; }
+        public string Priority { get; set; }
     }
 
     public class CreateStatusReply
@@ -1271,7 +1272,9 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received                                                       
+                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
@@ -1933,6 +1936,31 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private int TranslatePriorityCode(string? priorityCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                {  "Regular", 100000000 },
+                { "Urgent / Immediate",  100000001 },
+                { "Expedited" ,  100000002},
+                { "Critical Review" , 100000003},
+            };
+
+            if (priorityCode != null && statusMap.ContainsKey(priorityCode))
+            {
+                return statusMap[priorityCode];
+            }
+            else
+            {
+                return 1000000;
             }
         }
 
@@ -2904,6 +2932,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
         /// <summary>
         /// Translate CommentTypeCode To Int
         /// </summary>
@@ -2939,7 +2968,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-       
     }
 
     /// <summary>
@@ -2960,5 +2988,7 @@ namespace Rsbc.Dmf.CaseManagement
         FollowUp = 100000002,
         Message = 100000003
     }
+
+  
 
 }
