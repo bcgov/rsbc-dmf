@@ -331,37 +331,48 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 commentDate = DateTimeOffset.Now;
             }
-
-            var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
-            {           
-                CaseId = comment.CaseId ?? string.Empty,
-                CommentText = comment.CommentText ?? string.Empty,
-                CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
-                SequenceNumber = comment.SequenceNumber ?? 1,
-                UserId = comment.UserId ?? string.Empty,
-                CommentDate = Timestamp.FromDateTimeOffset(commentDate),
-                Driver = driver,
-                CommentId = string.Empty                  
-            });
-
-            if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            try
             {
-                var actionName = nameof(CreateCommentForDriver);
-                var routeValues = new
+                var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
                 {
-                    driversLicence = licenseNumber
-                };
+                    CaseId = comment.CaseId ?? string.Empty,
+                    CommentText = comment.CommentText ?? string.Empty,
+                    CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
+                    SequenceNumber = comment.SequenceNumber ?? 1,
+                    UserId = comment.UserId ?? string.Empty,
+                    CommentDate = Timestamp.FromDateTimeOffset(commentDate),
+                    Driver = driver,
+                    CommentId = string.Empty
+                });
 
-                return CreatedAtAction(actionName, routeValues, comment);
+                if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {
+                    var actionName = nameof(CreateCommentForDriver);
+                    var routeValues = new
+                    {
+                        driversLicence = licenseNumber
+                    };
+
+                    return CreatedAtAction(actionName, routeValues, comment);
+                }
+                else
+                {
+                    _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+
+                    DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
+
+                    return StatusCode(500, result.ErrorDetail);
+                }
             }
-            else
+            catch (Exception e)
             {
-                _logger.LogError($"Error in create comment - {result.ErrorDetail}");
+                _logger.LogError(e, $"Error in create comment");
 
-                DebugUtils.SaveDebug ("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
-                
-                return StatusCode(500, result.ErrorDetail);
+                DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
+
+                return StatusCode(500, "Error in create comment");
             }
+            
         }
 
         /// <summary>
