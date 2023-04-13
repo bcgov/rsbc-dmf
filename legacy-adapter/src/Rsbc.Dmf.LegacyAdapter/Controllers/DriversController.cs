@@ -540,9 +540,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     Driver = driver,
                     DocumentTypeCode = document.DocumentTypeCode,
                     DocumentType = document.DocumentType,
-                    BusinessArea = document.BusinessArea
-                    
-
+                    BusinessArea = document.BusinessArea,
+                    Priority = string.Empty,
+                    Owner = string.Empty,
+                    BatchId = string.Empty,
+                    ValidationMethod = string.Empty,
+                    ValidationPrevious = string.Empty,
+                    ImportId = string.Empty,
+                    OriginatingNumber = string.Empty
                 };
 
                 
