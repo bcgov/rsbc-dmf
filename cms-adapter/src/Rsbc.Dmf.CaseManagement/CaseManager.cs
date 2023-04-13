@@ -1285,7 +1285,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
-                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
+                //bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
                
 
  
