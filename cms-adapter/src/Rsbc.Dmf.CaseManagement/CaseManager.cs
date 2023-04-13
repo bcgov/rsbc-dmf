@@ -1259,14 +1259,12 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
-                BringForwardRequest bringforwardrequest = new BringForwardRequest()
-                {
-                    Assignee = request.Owner
-                };
+                
 
-                var owner = await CreateBringForward(bringforwardrequest);
+                // find the owner.
 
-               
+                var newOwner = LookupTeam(TranslateOwner(request.Owner));
+                
 
                 if (bcgovDocumentUrl == null)
                 {
@@ -1285,7 +1283,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
-                //bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
                
 
  
@@ -1305,10 +1303,12 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
 
+
+                        if (newOwner != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                        }
                         
-                        /* not currently working
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), owner );
-                        */
                         
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
@@ -1338,12 +1338,12 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
 
-                        /*
-                        if(bcgovDocumentUrl.ownerid != null)
+                        
+                        if(newOwner != null)
                         {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),owner);
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),newOwner);
                         }
-                        */
+                        
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
@@ -1896,6 +1896,36 @@ namespace Rsbc.Dmf.CaseManagement
             return MapCases(cases);
         }
 
+        /// <summary>
+        /// Returns a Dynamics Principal that can be used in a set Owner call.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public principal LookupTeam(string name)
+        {
+            // this would need to check team first and then the systemuser entity
+            principal result = null;
+            
+            try
+            {
+                team lookupTeam = dynamicsContext.teams.Where(x => x.name == name).FirstOrDefault();
+
+                if (lookupTeam != null)
+                {
+                    result = lookupTeam;
+                }
+                
+            }
+            catch (Exception e)
+            {
+                Log.Error (e, $"LookupOwner {name}");
+                result = null;
+            }
+
+            return result;
+
+        }
+
 
         /// <summary>
         /// Translate the Dynamics statuscode (status reason) field to text
@@ -1969,10 +1999,10 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        private int TranslatePriorityCode(string? priorityCode)
+        private int TranslatePriorityCode(string priorityCode)
         {
             var statusMap = new Dictionary<string, int>()
-            {
+            {  
                 {  "Regular", 100000000 },
                 { "Urgent / Immediate",  100000001 },
                 { "Expedited" ,  100000002},
@@ -1985,7 +2015,25 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else
             {
-                return 1000000;
+                return 100000000;
+            }
+        }
+
+        // convert the owner from the value provided by the legacy system to Dynamics CRM
+        private string TranslateOwner(string owner)
+        {
+            var statusMap = new Dictionary<string, string>()
+            {
+                {  "Adjudicators", "Team - Adjudicator" }               
+            };
+
+            if (owner != null && statusMap.ContainsKey(owner))
+            {
+                return statusMap[owner];
+            }
+            else
+            {
+                return null;
             }
         }
 
