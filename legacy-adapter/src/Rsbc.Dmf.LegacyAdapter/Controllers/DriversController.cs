@@ -10,6 +10,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Crypto.Operators;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
@@ -17,8 +18,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
 
 namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
@@ -99,18 +99,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     bool addItem = true;
                     Guid filterValue;
-                    Guid caseId;
-                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseId))
+                    Guid caseIdGuid;
+                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseIdGuid))
                     {
-                        addItem = filterValue == caseId;
+                        addItem = filterValue == caseIdGuid;
                     }
 
                     if (addItem)
                     {
-
+                        string caseId = string.Empty;
+                        if (item.CaseId != null && item.CaseId != "none")
+                        {
+                            caseId = item.CaseId;
+                        }
                         result.Add(new ViewModels.Comment
                         {
-                            CaseId = item.CaseId,
+                            CaseId = caseId,
                             CommentDate = item.CommentDate.ToDateTimeOffset(),
                             CommentId = item.CommentId,
                             CommentText = item.CommentText,
@@ -192,15 +196,19 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     bool addItem = true;
                     Guid filterValue;
-                    Guid caseId;
-                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseId))
+                    Guid caseIdGuid;
+                    if (!string.IsNullOrEmpty(filter) && Guid.TryParse(filter, out filterValue) && Guid.TryParse(item.CaseId, out caseIdGuid))
                     {
-                        addItem = filterValue == caseId;
+                        addItem = filterValue == caseIdGuid;
                     }
 
                     if (addItem)
                     {
-
+                        string caseId = string.Empty;
+                        if (item.CaseId != null && item.CaseId != "none")
+                        {
+                            caseId = item.CaseId;
+                        }
                         result.Add(new ViewModels.Comment
                         {
                             CaseId = item.CaseId,
@@ -333,9 +341,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             try
             {
+
+                string caseId = string.Empty;
+                if (comment.CaseId != null && comment.CaseId != "none")
+                {
+                    caseId = comment.CaseId;
+                }
+
                 var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
                 {
-                    CaseId = comment.CaseId ?? string.Empty,
+                    CaseId = caseId,
                     CommentText = comment.CommentText ?? string.Empty,
                     CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
                     SequenceNumber = comment.SequenceNumber ?? 1,
@@ -422,9 +437,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             isBcMailSent = true;
                         }
 
+                        string caseId = string.Empty;
+                        if (item.CaseId != null && item.CaseId != "none")
+                        {
+                            caseId = item.CaseId;
+                        }
+
                         var newDocument = new ViewModels.Document
                         {
-                            CaseId = item.CaseId,
+                            CaseId = caseId,
                             ImportDate = item.ImportDate.ToDateTimeOffset(),
                             DocumentId = item.DocumentId,
                             DocumentType = item.DocumentType,
@@ -541,9 +562,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
                 long sequenceNumber = document.SequenceNumber ?? 0;
+                string caseId = string.Empty;
+                if (document.CaseId != null && document.CaseId != "none")
+                {
+                    caseId = document.CaseId;
+                }
                 var newDocument = new LegacyDocument()
                 {
-                    CaseId = document.CaseId,
+                    CaseId = caseId,
                     SequenceNumber = sequenceNumber,
                     UserId = document.UserId,
                     FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
