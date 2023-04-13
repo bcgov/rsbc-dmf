@@ -126,7 +126,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SequenceNumber = (int)request.SequenceNumber,
                 UserId = request.UserId ?? string.Empty,
                 Driver = driver,
-                Priority = request.Priority ?? string.Empty
+                Priority = request.Priority ?? string.Empty,
+                Owner = request.Owner ?? string.Empty,
             };
 
             var result = await _caseManager.CreateLegacyCaseDocument(newDocument);

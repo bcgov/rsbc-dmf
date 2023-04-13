@@ -149,6 +149,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ValidationMethod { get; set; }
         public string ValidationPrevious { get; set; }
         public string Priority { get; set; }
+        public string Owner { get; set; }
     }
 
     public class CreateStatusReply
@@ -1179,6 +1180,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        
 
         /// <summary>
         /// Create Legacy Case Document
@@ -1253,8 +1255,18 @@ namespace Rsbc.Dmf.CaseManagement
                             found = true;
                             break;
                         }
+                        
                     }
                 }
+
+                BringForwardRequest bringforwardrequest = new BringForwardRequest()
+                {
+                    Assignee = request.Owner
+                };
+
+                var owner = CreateBringForward(bringforwardrequest);
+
+               
 
                 if (bcgovDocumentUrl == null)
                 {
@@ -1273,8 +1285,10 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
-                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
+               
 
+ 
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
@@ -1290,6 +1304,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), owner );
                         
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
@@ -1319,7 +1334,10 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
 
-
+                        if(bcgovDocumentUrl.ownerid != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),owner);
+                        }
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
@@ -1336,6 +1354,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+       
         /// <summary>
         /// Delete Comment
         /// </summary>
@@ -2301,7 +2320,7 @@ namespace Rsbc.Dmf.CaseManagement
                         foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-
+                   
                             if (document.dfp_DocumentTypeID != null)
                             {
                                 if (document.dfp_DocumentTypeID != null && document.dfp_DocumentTypeID.dfp_name != null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass")
