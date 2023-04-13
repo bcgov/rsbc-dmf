@@ -1264,7 +1264,7 @@ namespace Rsbc.Dmf.CaseManagement
                     Assignee = request.Owner
                 };
 
-                var owner = CreateBringForward(bringforwardrequest);
+                var owner = await CreateBringForward(bringforwardrequest);
 
                
 
@@ -1304,7 +1304,11 @@ namespace Rsbc.Dmf.CaseManagement
 
                         dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+
+                        
+                        /* not currently working
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), owner );
+                        */
                         
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
@@ -1334,10 +1338,12 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
 
+                        /*
                         if(bcgovDocumentUrl.ownerid != null)
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),owner);
                         }
+                        */
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
