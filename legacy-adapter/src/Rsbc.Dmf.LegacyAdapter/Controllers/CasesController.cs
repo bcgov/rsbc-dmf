@@ -152,7 +152,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     if (item.Status != "Closed/Canceled")
                     {
-                        if ((bool)(item.Driver?.Surname.StartsWith(trimmedSurcode)))
+                        if ((bool)(item.Driver?.Surname.ToUpper().StartsWith(trimmedSurcode.ToUpper())))
                         {
                             caseId = item.CaseId;
                             break;
