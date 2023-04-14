@@ -66,9 +66,10 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public async void AddCaseDocument()
         {
             Login();
-
-            // start by getting the case.
-            var caseId = GetCaseIdByDl();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseIdByDl();
             Assert.True(caseId != null);
 
             string testData = "This is just a test.";
@@ -127,6 +128,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
+            }
         }
 
 
@@ -134,9 +136,10 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public async void AddCaseDocumentNoOriginatingNumber()
         {
             Login();
-
-            // start by getting the case.
-            var caseId = GetCaseId();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseId();
             Assert.True(caseId != null);
 
             string testData = "This is just a test.";
@@ -188,13 +191,16 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
+            }
         }
 
 
         [Fact]
         public async void AddCaseDocumentSparse()
         {
-            Login();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                Login();
 
             // start by getting the case.
             var caseId = GetCaseId();
@@ -249,6 +255,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
             response.EnsureSuccessStatusCode();
+            }
         }
 
 
