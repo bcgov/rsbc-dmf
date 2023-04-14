@@ -1024,7 +1024,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply()
             {
-                Success = false                
+                Success = false, ErrorDetail = "unknown error - CreateLegacyCaseComment"                
             };            
             string caseId = request.CaseId;
             if (string.IsNullOrEmpty(caseId))
@@ -1037,19 +1037,33 @@ namespace Rsbc.Dmf.CaseManagement
                      SequenceNumber = request.SequenceNumber,
                      Surname = request.Driver.Surname ?? string.Empty
                 };
-                
-                await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue, "CreateLegacyCaseComment");
-                
-                // now do a search to get the case.
+
                 var searchResult = await LegacyCandidateSearch(newCandidate);
                 var firstCase = searchResult.Items.FirstOrDefault();
                 if (firstCase != null)
                 {
                     caseId = firstCase.Id;
                 }
+                else
+                {
+                    await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue, "CreateLegacyCaseComment");
+
+                    // now do a search to get the case.
+                    searchResult = await LegacyCandidateSearch(newCandidate);
+                    firstCase = searchResult.Items.FirstOrDefault();
+                    if (firstCase != null)
+                    {
+                        caseId = firstCase.Id;
+                    }
+
+                }
 
             }
-            if (!string.IsNullOrEmpty(caseId))
+            if (string.IsNullOrEmpty(caseId))
+            {
+                result.ErrorDetail = "Unable to create a candidate.";
+            }
+            else
             {
                 // get the case
                 incident driverCase = GetIncidentById(caseId);
@@ -1683,7 +1697,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (!string.IsNullOrEmpty(request?.Surname))
                     {
-                        driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith(request?.Surname))).ToArray();
+                        driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.ToUpper().StartsWith(request?.Surname.ToUpper()))).ToArray();
                     }
                     else
                     {
@@ -1775,12 +1789,7 @@ namespace Rsbc.Dmf.CaseManagement
                 
                 try
                 {
-                    driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();
-
-                    if (driverContact != null)
-                    {
-                        dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
-                    }
+                    driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();                    
                 }
                 catch (Exception)
                 {                    
@@ -1809,7 +1818,6 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact - " + e.Message);
                     }
-
 
                 }                
 
@@ -2120,14 +2128,25 @@ namespace Rsbc.Dmf.CaseManagement
             if (!shouldSearchCases) return Array.Empty<incident>();
 
             Guid? driverId = Guid.Empty;            
-            var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber );
-            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+            var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber ).ToList();
+            
+            dfp_driver driver = null;
 
-            var driverResults = data.Where (x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.StartsWith( criteria?.Surname))).ToArray();
-
-            if (driverResults.Length > 0)
+            foreach (var item in driverQuery)
             {
-                driverId = driverResults[0].dfp_driverid;
+                // ensure the person is loaded.
+                await ctx.LoadPropertyAsync(item, nameof(dfp_driver.dfp_PersonId));
+                if (item.dfp_PersonId?.lastname != null && (bool)(item.dfp_PersonId?.lastname.ToUpper().StartsWith(criteria?.Surname.ToUpper())))
+                {
+                    driver = item;
+                    break;
+                }
+            }
+
+            
+            if (driver != null)
+            {
+                driverId = driver.dfp_driverid;
                 var caseQuery = ctx.incidents
                 .Expand(i => i.dfp_DriverId)
                 .Expand(i => i.customerid_contact)
