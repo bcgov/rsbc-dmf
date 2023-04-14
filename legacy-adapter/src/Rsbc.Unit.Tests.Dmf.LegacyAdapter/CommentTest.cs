@@ -18,28 +18,7 @@ using Rsbc.Dmf.LegacyAdapter.ViewModels;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
-    /*
-    public class CustomWebApplicationFactory<TStartup>
-        : WebApplicationFactory<Startup>
-    {
-        public IConfiguration Configuration;
-
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
-        {
-            Configuration = new ConfigurationBuilder()
-                .AddUserSecrets<Startup>()
-                .AddEnvironmentVariables()
-                .Build();
-
-            builder
-                .UseSolutionRelativeContentRoot("")
-                .UseEnvironment("Staging")
-                .UseConfiguration(Configuration)
-                .UseStartup<Startup>();
-        }
     
-    */
-
     [Collection(nameof(HttpClientCollection))]
 
     public class CommentTest : ApiIntegrationTestBase
@@ -50,13 +29,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {
             
         }
-
-
-
-        
-
-
-        
 
 
             [Fact]
@@ -148,8 +120,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             
         }
 
-       // {"userId":"IDIR\\SMILLAR","driver":\{"licenseNumber":"0200103","lastName":"KNI","loadedFromICBC":false,"flag51":false} 
-// ,"sequenceNumber":4,"commentTypeCode":"W","commentText":"test new one"}
 
 
 

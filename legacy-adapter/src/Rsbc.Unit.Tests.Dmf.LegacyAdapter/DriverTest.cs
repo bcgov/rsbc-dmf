@@ -136,8 +136,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             
         }
 
-       // {"userId":"IDIR\\SMILLAR","driver":\{"licenseNumber":"0200103","lastName":"KNI","loadedFromICBC":false,"flag51":false} 
-// ,"sequenceNumber":4,"commentTypeCode":"W","commentText":"test new one"}
 
 
     private void SubmitCommentNoCase(string commentText, string commentTypeCode)
@@ -155,7 +153,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 4,
                 CommentTypeCode = commentTypeCode,
                 UserId = "IDIR\\TESTUSER",
-                CaseId = null
+                CaseId = "none"
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);
