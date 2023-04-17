@@ -1070,48 +1070,82 @@ namespace Rsbc.Dmf.CaseManagement
 
                 var driver = driverCase.dfp_DriverId;
 
-                // create the comment
-                dfp_comment comment = new dfp_comment()
-                {
-                    createdon = request.CommentDate,
-                    dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
-                    dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
-                    dfp_userid = request.UserId,
-                    dfp_commentdetails = request.CommentText, 
-                    dfp_date = request.CommentDate,
-                    statecode = 0,
-                    statuscode = 1, overriddencreatedon = request.CommentDate
 
-                };
-                int sequenceNumber = 0;
-                if (request.SequenceNumber != null)
+                // determine if it is an update or create
+
+                if (string.IsNullOrEmpty(request.CommentId)) // create
                 {
-                    sequenceNumber = request.SequenceNumber.Value;
+                    // create the comment
+                    dfp_comment comment = new dfp_comment()
+                    {
+                        createdon = request.CommentDate,
+                        dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
+                        dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
+                        dfp_userid = request.UserId,
+                        dfp_commentdetails = request.CommentText,
+                        dfp_date = request.CommentDate,
+                        statecode = 0,
+                        statuscode = 1,
+                        overriddencreatedon = request.CommentDate
+
+                    };
+                    int sequenceNumber = 0;
+                    if (request.SequenceNumber != null)
+                    {
+                        sequenceNumber = request.SequenceNumber.Value;
+                    }
+
+                    comment.dfp_caseidguid = sequenceNumber.ToString();
+
+                    try
+                    {
+                        dynamicsContext.AddTodfp_comments(comment);
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
+                        result.Success = false;
+                        result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
+
+                    }
+
+                    if (result.Success == true)
+                    {
+                        try
+                        {
+                            dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+                            dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                            result.Id = comment.dfp_commentid.ToString();
+                            dynamicsContext.DetachAll();
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
+                            result.Success = false;
+                            result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
+                        }
+                    }
                 }
-
-                comment.dfp_caseidguid = sequenceNumber.ToString();
-
-                try
-                {
-                    dynamicsContext.AddTodfp_comments(comment);
-                    await dynamicsContext.SaveChangesAsync();
-                    result.Success = true;
-                }
-                catch (Exception ex)
-                {
-                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
-                    result.Success = false;
-                    result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
                     
-                }
-
-                if (result.Success == true)
+                else // update
                 {
                     try
                     {
-                        dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
-                        dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+                        Guid key = Guid.Parse(request.CommentId);
+                        var comment = dynamicsContext.dfp_comments.ByKey(key).GetValue();
+                        comment.dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode);
+                        comment.dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I";
+                        comment.dfp_userid = request.UserId;
+                        comment.dfp_commentdetails = request.CommentText;
+                        comment.dfp_date = request.CommentDate;                    
+                        comment.overriddencreatedon = request.CommentDate;
 
+                        dynamicsContext.UpdateObject (comment);
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = comment.dfp_commentid.ToString();
@@ -1119,13 +1153,13 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                     catch (Exception ex)
                     {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
+                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Update Comment Error");
                         result.Success = false;
-                        result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
+                        result.ErrorDetail = "CreateLegacyCaseComment Update Comment Error " + ex.Message;
                     }
                 }
-                
-            }           
+
+            }
 
             return result;
         }

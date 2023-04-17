@@ -357,7 +357,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     UserId = comment.UserId ?? string.Empty,
                     CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                     Driver = driver,
-                    CommentId = string.Empty
+                    CommentId = comment.CommentId ?? string.Empty
                 });
 
                 if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
