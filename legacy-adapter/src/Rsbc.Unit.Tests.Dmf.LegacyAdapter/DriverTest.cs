@@ -81,7 +81,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 caseId = cases[0].CaseId;
             }
 
-            request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/2100110/Comments");
+            request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
 
             var driver = new Rsbc.Dmf.LegacyAdapter.ViewModels.Driver()
             { LicenseNumber = testDl, LastName = testSurcode };
@@ -108,7 +108,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             // now check for the comment to be in the response.
 
-            request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/0904498/Comments");
+            request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Comments");
 
             response = _client.SendAsync(request).GetAwaiter().GetResult();
 
