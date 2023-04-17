@@ -70,7 +70,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SequenceNumber = (int)request.SequenceNumber,
                 UserId = request.UserId,            
                 Driver = driver,
-                CommentDate = commentDate 
+                CommentDate = commentDate,
+                CommentId = request.CommentId
             };
 
             var result = await _caseManager.CreateLegacyCaseComment(newComment);
