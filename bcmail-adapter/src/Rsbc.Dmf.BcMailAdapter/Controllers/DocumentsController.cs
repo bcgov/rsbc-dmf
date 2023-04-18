@@ -124,15 +124,16 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         {
                             
                          string decodedbody = ParseByteArrayToString(attachment.Body);
-                       /* if (decodedbody.Contains("<mark>"))
+                        
+                        if (decodedbody.Contains("<mark>"))
                         {
-                             //generate pdf with error message content
+                            //generate pdf with error message content
                             _logger.LogError("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
                             return BadRequest("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
 
-                        }*/
-                            //string decodedHeader = ParseByteArrayToString(attachment.Header);
-                            //string decodedFooter = ParseByteArrayToString(attachment.Footer);
+                        }
+                        //string decodedHeader = ParseByteArrayToString(attachment.Header);
+                        //string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
                         string tempPrefix = Guid.NewGuid().ToString();
                         string headerFilename = System.IO.Path.GetTempPath() + tempPrefix + "-header.html";
