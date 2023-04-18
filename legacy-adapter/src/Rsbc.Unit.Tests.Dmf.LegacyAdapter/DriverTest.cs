@@ -88,7 +88,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             var comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment()
             {
-                CommentText = "This is a test comment",
+                CommentText = "This is a test comment new 1",
                 Driver = driver,
                 SequenceNumber = 0, //= 4,
                 CommentTypeCode = "W",
@@ -118,6 +118,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment> comments = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Comment>>(responseContent);
 
+            string commentId = null;
+
             if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_URI"]))
             {
                 bool found = false;
@@ -127,8 +129,31 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     if (item.CommentText == comment.CommentText)
                     {
                         found = true;
+                        commentId = item.CommentId;
                     }
                 }
+
+                // test comment revision
+
+                request = new HttpRequestMessage(HttpMethod.Post, $"/Drivers/{testDl}/Comments");
+
+                
+                comment = new Rsbc.Dmf.LegacyAdapter.ViewModels.Comment()
+                {
+                    CommentText = "This is a test comment new 1 revised",
+                    Driver = driver,
+                    SequenceNumber = 0, //= 4,
+                    CommentTypeCode = "W",
+                    UserId = "IDIR\\TESTUSER",
+                    CaseId = caseId,
+                    CommentId = commentId,
+                };
+
+                stringContent = JsonConvert.SerializeObject(comment);
+
+                request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
+
+                response = _client.SendAsync(request).GetAwaiter().GetResult();
 
                 Assert.True(found);
             }
