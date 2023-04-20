@@ -2,14 +2,11 @@
 using System.Text;
 using System.Threading.Tasks;
 using Rsbc.Dmf.CaseManagement.Service;
-using Pssg.DocumentStorageAdapter;
 using System.IO;
 using Renci.SshNet;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using Hangfire.Server;
-using Hangfire;
-using Hangfire.Console;
+
 
 
 
@@ -137,120 +134,6 @@ namespace Rsbc.Interfaces
             return result;
         }
 
-        /// <summary>
-        /// Check SCP Settings
-        /// </summary>
-        /// <param name="host"></param>
-        /// <param name="username"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private bool CheckScpSettings(string host, string username, string key)
-        {
-            return string.IsNullOrEmpty(host) ||
-                string.IsNullOrEmpty(username) ||
-                string.IsNullOrEmpty(key);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="host"></param>
-        /// <param name="username"></param>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        private ConnectionInfo GetConnectionInfo(string host, string username, string key)
-        {
-            // note - key must be in RSA format.  If your key is in OpenSSH format, use this to convert it:
-            // ssh-keygen -p -P "" -N "" -m pem -f \path\to\key\file
-            // (above command will overwrite your key file)
-
-            byte[] keyData = Encoding.UTF8.GetBytes(key);
-
-            PrivateKeyFile pkf = null;
-
-            using (var privateKeyStream = new MemoryStream(keyData))
-            {
-                pkf = new PrivateKeyFile(privateKeyStream);
-            }
-
-            var connectionInfo = new ConnectionInfo(host,
-                                    username,
-                                    new PrivateKeyAuthenticationMethod(username, pkf));
-
-            return connectionInfo;
-        }
-
-        /// <summary>
-        /// Hangfire job to check for and send recent items in the queue
-        /// </summary>
-        [AutomaticRetry(Attempts = 0)]
-        public async Task CheckConnection(PerformContext hangfireContext)
-        {
-            LogStatement(hangfireContext, "Starting CheckConnection.");
-
-            // Attempt to connect to a SCP server.
-
-            string username = _configuration["SCP_USER"];
-            string host = _configuration["SCP_HOST"];
-            string key = _configuration["SCP_KEY"];
-
-            if (CheckScpSettings(host, username, key))
-            {
-                LogStatement(hangfireContext, "No SCP configuration, skipping operation.");
-            }
-            else
-            {
-                var connectionInfo = GetConnectionInfo(host, username, key);
-
-                using (var client = new SftpClient(connectionInfo))
-                {
-                    client.Connect();
-                    LogStatement(hangfireContext, "Connected.");
-
-                    string folder = _configuration["SCP_FOLDER"];
-
-                    if (string.IsNullOrEmpty(folder))
-                    {
-                        folder = client.WorkingDirectory;
-                    }
-
-                    SpiderFolder(client, hangfireContext, folder);
-
-                }
-
-            }
-            LogStatement(hangfireContext, "End of CheckConnection.");
-
-        }
-
-        private void SpiderFolder(SftpClient client, PerformContext hangfireContext, string folder)
-        {
-            var files = client.ListDirectory(folder);
-
-            foreach (var file in files)
-            {
-                LogStatement(hangfireContext, folder + "/" + file.Name);
-
-                if (file.Attributes.IsDirectory && !file.Name.StartsWith("."))
-                {
-                    SpiderFolder(client, hangfireContext, folder + "/" + file.Name);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Log Statement
-        /// </summary>
-        /// <param name="hangfireContext"></param>
-        /// <param name="message"></param>
-        private void LogStatement(PerformContext hangfireContext, string message)
-        {
-            if (hangfireContext != null)
-            {
-                hangfireContext.WriteLine(message);
-            }
-            // emit to Serilog.
-            Log.Logger.Information(message);
-        }
+     
     }
 }

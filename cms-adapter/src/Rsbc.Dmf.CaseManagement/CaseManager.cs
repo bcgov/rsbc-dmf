@@ -2468,8 +2468,8 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 if (document.dfp_DocumentTypeID != null && 
                                     document.dfp_DocumentTypeID.dfp_name != null && 
-                                    document.dfp_DocumentTypeID.dfp_name == "Clean Pass" && 
-                                    document.dfp_DocumentTypeID?.dfp_apidocumenttype == "002")
+                                    document.dfp_DocumentTypeID.dfp_name == "Clean Pass"
+                                    )
                                 {
                                     
                                     @case.dfp_iscleanpass = true;
