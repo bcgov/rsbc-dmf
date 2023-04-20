@@ -13,6 +13,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
@@ -61,15 +62,14 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Assert.True(caseId != null);
         }
 
-
         [Fact]
-        public async void AddCaseDocument()
+        public async Task AddCaseDocument()
         {
             Login();
             if (!string.IsNullOrEmpty(testDl))
             {
                 // start by getting the case.
-                var caseId = GetCaseIdByDl();
+             var caseId = GetCaseIdByDl();
             Assert.True(caseId != null);
 
             string testData = "This is just a test.";
@@ -90,7 +90,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             // add the various string parameters.
             string driversLicense = testDl;
             string surcode = testSurcode;
-            string batchId = "1002222";
+            string batchId = "1001111";
             string faxReceivedDate = "2022-05-19T23:11:53Z";
             string importDate = "2022-05-19";
             string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
@@ -101,7 +101,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             string validationMethod = "Single User";
             string validationPrevious = "BHAMMED";
             string priority = "Expedited";
-            string owner = "Adjudicators";
+            string owner = "Team - Adjudicator";
 
             multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
             multiPartContent.Add(new StringContent(surcode), "surcode");

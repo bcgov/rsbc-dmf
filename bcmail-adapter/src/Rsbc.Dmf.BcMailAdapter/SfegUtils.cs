@@ -1,21 +1,17 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Text;
 using System.Threading.Tasks;
 using Rsbc.Dmf.CaseManagement.Service;
 using Pssg.DocumentStorageAdapter;
-using DocumentFormat.OpenXml.InkML;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.IO;
 using Renci.SshNet;
-using SixLabors.ImageSharp;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Hangfire.Server;
 using Hangfire;
-using System.Collections;
+using Hangfire.Console;
+
+
 
 namespace Rsbc.Interfaces
 {
@@ -26,7 +22,7 @@ namespace Rsbc.Interfaces
     {
        
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
-        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        //private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private IConfiguration _configuration { get; }
 
         /// <summary>
@@ -34,11 +30,11 @@ namespace Rsbc.Interfaces
         /// </summary>
         /// <param name="caseManagerClient"></param>
         /// <param name="documentStorageAdapterClient"></param>
-        public SfegUtils(IConfiguration configuration , CaseManager.CaseManagerClient caseManagerClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public SfegUtils(IConfiguration configuration , CaseManager.CaseManagerClient caseManagerClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
-            _documentStorageAdapterClient = documentStorageAdapterClient;
+           // _documentStorageAdapterClient = documentStorageAdapterClient;
         }
 
        
@@ -48,25 +44,27 @@ namespace Rsbc.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> SendDocumentsToBcMail(PerformContext hangfireContext)
+        public async Task<ResultStatusReply> SendDocumentsToBcMail()
         {
             var result = new ResultStatusReply();
             //Step 1: 
             // call cms adpter to get the list of documents in "Send to BC Mail " Status
-            var documentsResponse = _caseManagerClient.GetListOfLettersSentToBcMail(new EmptyRequest());
-
+           
+            var documentsResponse = _caseManagerClient.GetPdfDocuments(new EmptyRequest());
 
             // Step 2:
             //Is the fileurl is same as the document url?
             //Get the actual pdf documents for the above list from document storage adapter
 
-            foreach (var doc in documentsResponse.Items )
+            foreach (var doc in documentsResponse.PdfDocuments )
             {
-                // get document from s3
+               /* // get document from s3
                 var fileResult = _documentStorageAdapterClient.DownloadFile(new DownloadFileRequest()
                 {
-                   ServerRelativeUrl = doc.DocumentUrl
-        
+                  // ServerRelativeUrl = doc.PdfDocumentId
+                  // Are we storing the document url in pdfDocument 
+                    ServerRelativeUrl = doc.PdfDocumentId,
+
                 });
 
                 // Step 3
@@ -81,7 +79,8 @@ namespace Rsbc.Interfaces
                  // Check the folder and file name and confirm
                 string folder = _configuration["SCP_FOLDER_DOCUMENTS"];
 
-                var filename = doc.DocumentUrl + doc.DocumentId;
+                // verify file name
+                var filename = doc.PdfDocumentId;
 
                 if (CheckScpSettings(host, username, key))
                 {
@@ -103,34 +102,36 @@ namespace Rsbc.Interfaces
 
                         var stream = new MemoryStream(fileResult.Data.ToByteArray());
 
-                        var filePath = Path.Combine(folder, filename);
+                        var filePath = Path.Combine(folder, filename);*/
 
                         try
                         {
-                            client.UploadFile(stream, filePath);
+                           // client.UploadFile(stream, filePath);
                             // Update the status to SEND and attach the document
-                            _caseManagerClient.UpdateDocumentStatus(new LegacyDocumentStatusRequest());
+
+                            PdfDocumentRequest pdfDocument1 = new PdfDocumentRequest()
+                            {
+                                PdfDoumentId = doc.PdfDocumentId,
+                                StatusCode = 100000003
+
+                            };
+                            
+                            _caseManagerClient.UpdateDocumentStatus(pdfDocument1);
                         }
 
                         catch(Exception ex)
+
                         {
-                            // Create a bring forward and update the status to Fail
-                            var bringForwardRequest = new BringForwardRequest
+                            // set the status to Fail To 
+
+                            PdfDocumentRequest pdfDocument2 = new PdfDocumentRequest()
                             {
-                                // CaseId = unsentItem.CaseId,
-                                Subject = "Failed to Send the document to SFEG",
-                                //Description = responseContent,
-                                Assignee = string.Empty,
-                                Priority = BringForwardPriority.Normal
+                                PdfDoumentId = doc.PdfDocumentId,
+                                StatusCode = 100000004
 
                             };
-                            _caseManagerClient.CreateBringForward(bringForwardRequest);
+                            _caseManagerClient.UpdateDocumentStatus(pdfDocument2);
                         }
-
-                        
-                    }
-                }
-   
 
             }
             return result;
@@ -238,7 +239,7 @@ namespace Rsbc.Interfaces
         }
 
         /// <summary>
-        /// 
+        /// Log Statement
         /// </summary>
         /// <param name="hangfireContext"></param>
         /// <param name="message"></param>
@@ -246,7 +247,7 @@ namespace Rsbc.Interfaces
         {
             if (hangfireContext != null)
             {
-               // hangfireContext.WriteLine(message);
+                hangfireContext.WriteLine(message);
             }
             // emit to Serilog.
             Log.Logger.Information(message);
