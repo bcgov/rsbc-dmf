@@ -101,7 +101,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             string validationMethod = "Single User";
             string validationPrevious = "BHAMMED";
             string priority = "Expedited";
-            string owner = "Team - Adjudicator";
+            string assign = "Adjudicators";
 
             multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
             multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -118,7 +118,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
 
             multiPartContent.Add(new StringContent(priority), "priority");
-            multiPartContent.Add(new StringContent(owner), "owner");
+            multiPartContent.Add(new StringContent(assign), "assign");
 
             // create a new request object for the upload, as we will be using multipart form submission.
             request.Content = multiPartContent;

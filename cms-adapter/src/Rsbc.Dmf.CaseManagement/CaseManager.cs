@@ -1332,7 +1332,9 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // find the owner.
 
-                var newOwner = LookupTeam(TranslateOwner(request.Owner));
+                var newOwner = LookupTeam(request.Owner);
+
+
                 
 
                 if (bcgovDocumentUrl == null)
@@ -1410,7 +1412,7 @@ namespace Rsbc.Dmf.CaseManagement
                         
                         if(newOwner != null)
                         {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(task.ownerid),newOwner);
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),newOwner);
                         }
                         
                         await dynamicsContext.SaveChangesAsync();
@@ -1972,7 +1974,9 @@ namespace Rsbc.Dmf.CaseManagement
             
             try
             {
-                team lookupTeam = dynamicsContext.teams.Where(x => x.name == TranslateOwner(name)).FirstOrDefault();
+                string translatedOwner = TranslateOwner(name);
+                
+                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner).FirstOrDefault();
 
                 if (lookupTeam != null)
                 {
