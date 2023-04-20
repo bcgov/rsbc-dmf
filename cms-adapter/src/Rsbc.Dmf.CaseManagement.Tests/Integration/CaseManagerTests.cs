@@ -524,5 +524,29 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         }
 
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetListOfPdfDocuments()
+        {
+            
+            var docs = await caseManager.GetPdfDocuments();
+
+        }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdatePdfDocumentStatus()
+        {
+            var pdfDocumentId = "c28a6d49-77dd-ed11-b841-00505683fbf4";
+            var request = new PdfDocumentRequest()
+            {
+                PdfDocumentId = pdfDocumentId,
+                StatusCode = 100000004,
+
+            };
+            var result = await caseManager.UpdateDocumentStatus(request);
+            result.ShouldNotBeNull();
+            Assert.True(result.Success);
+        }
+
     }
 }

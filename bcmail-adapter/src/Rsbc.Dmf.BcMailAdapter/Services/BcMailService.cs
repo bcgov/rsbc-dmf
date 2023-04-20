@@ -7,7 +7,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Pssg.DocumentStorageAdapter;
-using Hangfire.Server;
+
 
 namespace Rsbc.Dmf.BcMailAdapter.Services
 {
@@ -41,12 +41,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Services
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> SendDocumentsToBcMail(EmptyRequest request, PerformContext hangfireContext)
+        public async Task<ResultStatusReply> SendDocumentsToBcMail()
         {
             var result = new ResultStatusReply();
 
-            var sfegUtils = new SfegUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
-            sfegUtils.SendDocumentsToBcMail(hangfireContext).GetAwaiter().GetResult();
+            var sfegUtils = new SfegUtils(_configuration, _caseManagerClient);
+            sfegUtils.SendDocumentsToBcMail().GetAwaiter().GetResult();
             return result; 
 
         }

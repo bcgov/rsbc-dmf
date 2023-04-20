@@ -663,54 +663,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetDocumentsReply> GetListOfLettersSentToBcMail(EmptyRequest request, ServerCallContext context)
+        public async override Task<PdfDocumentReply> GetPdfDocuments(EmptyRequest request, ServerCallContext context)
         {
-            var reply = new GetDocumentsReply();
+            var reply = new PdfDocumentReply();
 
             try
             {
-                // call case manager
-                var result = await _caseManager.GetListOfLettersSentToBcMail();
-                foreach (var item in result)
+                var result = await _caseManager.GetPdfDocuments();
+
+               /* foreach (var item in result)
                 {
-                    var driver = new Driver();
-                    if (item.Driver != null)
+                    var pdfDocument = new PdfDocument();
+                    if (item != null)
                     {
-                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber ?? string.Empty;
-                        driver.Surname = item.Driver.Surname ?? string.Empty;
+                        pdfDocument.PdfDocumentId = item.PdfDocumentId;
+                        pdfDocument.StatusCode = (long)item.StatusCode;
+                        pdfDocument.StateCode = (long)item.StateCode;
                     }
-                    reply.Items.Add(new LegacyDocument
-                    {
-                        BatchId = item.BatchId ?? string.Empty,
-                        DocumentPages = item.DocumentPages,
-                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
-
-                        CaseId = item.CaseId ?? string.Empty,
-                        FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
-                        ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
-                        ImportId = item.ImportId ?? string.Empty,
-
-                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
-
-                        DocumentId = item.DocumentId ?? string.Empty,
-                        SequenceNumber = (long)(item.SequenceNumber ?? -1),
-                        UserId = item.UserId ?? string.Empty,
-                        Driver = driver,
-                        DocumentUrl = item.DocumentUrl ?? string.Empty,
-                        ValidationMethod = item.ValidationMethod ?? string.Empty,
-                        ValidationPrevious = item.ValidationPrevious ?? string.Empty
-
-                    });
+                    reply.PdfDocuments.Add(pdfDocument);
                 }
-                reply.ResultStatus = ResultStatus.Success;
+                reply.ResultStatus = ResultStatus.Success;*/
             }
-
-            catch (Exception e)
+            catch (Exception ex)
             {
+                reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
-                reply.ErrorDetail = e.Message;
             }
-
             return reply;
 
         }
@@ -721,14 +699,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<ResultStatusReply> UpdateDocumentStatus(LegacyDocumentStatusRequest request, ServerCallContext context)
+        public async override Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest request, ServerCallContext context)
         {
-            var reply = new ResultStatusReply();
+            var reply = new PdfDocumentReply();
+            var pdfDocument = new CaseManagement.PdfDocumentRequest()
+            {
+                PdfDocumentId = request.PdfDoumentId,
+                StatusCode = (int)request.StatusCode
+            };
 
             try
             {
-                // call case manager
-                await _caseManager.UpdateDocumentStatus(request.DocumentId, (int)request.Status);
+                if(pdfDocument != null)
+                {
+                    await _caseManager.UpdateDocumentStatus(pdfDocument);
+                    reply.ResultStatus = ResultStatus.Success;
+                }               
             }
 
             catch (Exception e)

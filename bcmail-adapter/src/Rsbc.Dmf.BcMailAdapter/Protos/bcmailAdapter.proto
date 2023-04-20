@@ -21,7 +21,6 @@ message EmptyRequest {
    
 }
 
-
 enum ResultStatus {
     Fail = 0;
     Success = 1;
