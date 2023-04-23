@@ -1,6 +1,6 @@
 import {
   AbstractControl,
-  FormArray,
+  UntypedFormArray,
   ValidationErrors,
   ValidatorFn,
 } from '@angular/forms';
@@ -19,7 +19,7 @@ export class FormArrayValidators {
     ): boolean => !!control
   ): ValidatorFn {
     return (array: AbstractControl): ValidationErrors | null => {
-      if (!(array instanceof FormArray)) {
+      if (!(array instanceof UntypedFormArray)) {
         throw Error('Invalid AbstractControl expect FormArray');
       }
 

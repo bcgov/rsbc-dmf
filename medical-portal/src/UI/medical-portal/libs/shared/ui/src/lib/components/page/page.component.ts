@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Component({
   selector: 'ui-page',
@@ -29,7 +29,7 @@ export class PageComponent {
    * @description
    * Instance of a form.
    */
-  @Input() public form?: FormGroup;
+  @Input() public form?: UntypedFormGroup;
   @Input() public autocomplete: 'on' | 'off';
   /**
    * @description

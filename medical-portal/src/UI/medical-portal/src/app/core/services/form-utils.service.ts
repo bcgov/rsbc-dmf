@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import {
   AbstractControl,
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormArray,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
@@ -22,14 +22,14 @@ import { LoggerService } from './logger.service';
   providedIn: 'root',
 })
 export class FormUtilsService {
-  public constructor(private fb: FormBuilder, private logger: LoggerService) {}
+  public constructor(private fb: UntypedFormBuilder, private logger: LoggerService) {}
 
   /**
    * @description
    * Checks the validity of a form, and triggers validation
    * messages when invalid.
    */
-  public checkValidity(form: FormGroup | FormArray): boolean {
+  public checkValidity(form: UntypedFormGroup | UntypedFormArray): boolean {
     if (form.valid) {
       return true;
     } else {
@@ -44,7 +44,7 @@ export class FormUtilsService {
    * @description
    * Helper for quickly logging form errors.
    */
-  public logFormErrors(form: FormGroup | FormArray): void {
+  public logFormErrors(form: UntypedFormGroup | UntypedFormArray): void {
     const formErrors = this.getFormErrors(form);
     if (formErrors) {
       this.logger.error('FORM_INVALID', formErrors);
@@ -56,7 +56,7 @@ export class FormUtilsService {
    * Get all the errors contained within a form.
    */
   public getFormErrors(
-    form: FormGroup | FormArray
+    form: UntypedFormGroup | UntypedFormArray
   ): { [key: string]: unknown } | null {
     if (!form) {
       return null;
@@ -67,7 +67,7 @@ export class FormUtilsService {
       const control = form.get(key);
 
       const errors =
-        control instanceof FormGroup || control instanceof FormArray
+        control instanceof UntypedFormGroup || control instanceof UntypedFormArray
           ? this.getFormErrors(control)
           : control?.errors;
 
@@ -86,16 +86,16 @@ export class FormUtilsService {
    * Sets control(s) validators.
    */
   public setValidators(
-    control: FormControl | FormGroup,
+    control: UntypedFormControl | UntypedFormGroup,
     validators: ValidatorFn | ValidatorFn[] = [Validators.required],
     blacklist: string[] = []
   ): void {
-    if (control instanceof FormGroup) {
+    if (control instanceof UntypedFormGroup) {
       // Assumes that FormGroups will not be deeply nested
       Object.keys(control.controls).forEach((key: string) => {
         if (!blacklist.includes(key)) {
           this.setValidators(
-            control.controls[key] as FormControl,
+            control.controls[key] as UntypedFormControl,
             validators,
             blacklist
           );
@@ -112,14 +112,14 @@ export class FormUtilsService {
    * Resets control(s) and clears associated validators.
    */
   public resetAndClearValidators(
-    control: FormControl | FormGroup,
+    control: UntypedFormControl | UntypedFormGroup,
     blacklist: string[] = []
   ): void {
-    if (control instanceof FormGroup) {
+    if (control instanceof UntypedFormGroup) {
       // Assumes that FormGroups will not be deeply nested
       Object.keys(control.controls).forEach((key: string) => {
         if (!blacklist.includes(key)) {
-          this.resetAndClearValidators(control.controls[key] as FormControl);
+          this.resetAndClearValidators(control.controls[key] as UntypedFormControl);
         }
       });
     } else {
@@ -135,7 +135,7 @@ export class FormUtilsService {
    */
   public setOrResetValidators(
     setOrReset: boolean,
-    control: FormControl | FormGroup,
+    control: UntypedFormControl | UntypedFormGroup,
     blacklist?: string[]
   ): void {
     setOrReset
@@ -155,7 +155,7 @@ export class FormUtilsService {
    * isRequired(formGroup, 'arrayName')
    * isRequired(formGroup, 'arrayName[#].groupName.controlName')
    */
-  public isRequired(form: FormGroup, path: string): boolean {
+  public isRequired(form: UntypedFormGroup, path: string): boolean {
     const control = form.get(path);
 
     if (control?.validator) {
@@ -184,7 +184,7 @@ export class FormUtilsService {
       useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[];
       exclude?: AddressLine[];
     } | null = null
-  ): FormGroup {
+  ): UntypedFormGroup {
     const controlsConfig: AddressMap<unknown[]> = {
       street: [{ value: null, disabled: false }, []],
       city: [{ value: null, disabled: false }, []],

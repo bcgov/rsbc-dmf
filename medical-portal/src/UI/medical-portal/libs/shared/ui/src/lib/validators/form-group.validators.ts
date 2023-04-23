@@ -1,6 +1,6 @@
 import {
   AbstractControl,
-  FormGroup,
+  UntypedFormGroup,
   ValidationErrors,
   ValidatorFn,
   Validators,
@@ -13,7 +13,7 @@ export class FormGroupValidators {
    */
   public static match(inputKey: string, confirmInputKey: string): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
-      if (!(group instanceof FormGroup)) {
+      if (!(group instanceof UntypedFormGroup)) {
         throw Error('Invalid AbstractControl expect FormGroup');
       }
 
@@ -36,7 +36,7 @@ export class FormGroupValidators {
     allowlist: string[] = []
   ): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
-      if (!(group instanceof FormGroup)) {
+      if (!(group instanceof UntypedFormGroup)) {
         throw Error('Invalid AbstractControl expect FormGroup');
       }
 
@@ -56,7 +56,7 @@ export class FormGroupValidators {
    */
   public static lessThan(startKey: string, endKey: string): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
-      if (!(group instanceof FormGroup)) {
+      if (!(group instanceof UntypedFormGroup)) {
         throw Error('Invalid AbstractControl expect FormGroup');
       }
 
