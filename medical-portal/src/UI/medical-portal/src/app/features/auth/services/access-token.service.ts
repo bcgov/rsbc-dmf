@@ -20,6 +20,7 @@ export interface IAccessTokenService {
 @Injectable({
   providedIn: 'root',
 })
+
 export class AccessTokenService implements IAccessTokenService {
   private jwtHelper: JwtHelperService;
 

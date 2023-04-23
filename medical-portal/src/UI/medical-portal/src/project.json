@@ -1,6 +1,6 @@
 {
   "projectType": "application",
-  "root": "apps/pidp",
+  "root": ".",
   "sourceRoot": "src",
   "prefix": "app",
   "targets": {

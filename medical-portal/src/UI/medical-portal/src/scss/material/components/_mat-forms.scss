@@ -1,0 +1,34 @@
+@use 'pidp-variables' as pidp;
+@import 'palette';
+
+//
+// MATERIAL FORMS
+//
+.mat-form-field-appearance-outline {
+  .mat-form-field-infix {
+    padding: 0.5rem 0 0.75rem;
+  }
+}
+.mat-input-element,
+.mat-select-value {
+  color: pidp.$font-color-default !important;
+}
+.mat-input-element:disabled {
+  color: pidp.$font-color-disabled !important;
+}
+
+.mat-checkbox .mat-checkbox-inner-container {
+  // Enforce a white background to avoid transparency when
+  // placed when placed on coloured backgrounds
+  background-color: white;
+  margin-right: 1rem;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+  // Reduced to improve the appearance of labels that are line wrapped
+  line-height: 1.4rem;
+}
+
+.mat-checkbox-label {
+  line-height: 0.5rem;
+}
