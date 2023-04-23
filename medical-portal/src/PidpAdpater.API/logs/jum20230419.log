@@ -1,0 +1,857 @@
+[21:37:48 INF] Starting web host
+[21:37:49 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 31 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:39:30 INF] Starting web host
+[21:39:31 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 31 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:39:48 INF] Starting web host
+[21:39:49 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 31 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:40:50 INF] Starting web host
+[21:40:53 INF] ### App Version:1.0.0.0 ###
+[21:40:53 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:42:13 INF] Starting web host
+[21:42:14 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 37 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:43:48 INF] Starting web host
+[21:43:49 FTL] Host terminated unexpectedly
+System.IO.InvalidDataException: Failed to load configuration from file 'C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\appsettings.Development.json'.
+ ---> System.FormatException: Could not parse the JSON file.
+ ---> System.Text.Json.JsonReaderException: '"' is invalid after a value. Expected either ',', '}', or ']'. LineNumber: 37 | BytePositionInLine: 1.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenUntilAfterAllCommentsAreSkipped(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextToken(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ConsumeNextTokenOrRollback(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at System.Text.Json.JsonDocument.Parse(ReadOnlySpan`1 utf8JsonSpan, JsonReaderOptions readerOptions, MetadataDb& database, StackRowStack& stack)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 utf8Json, JsonReaderOptions readerOptions, Byte[] extraRentedArrayPoolBytes, PooledByteBufferWriter extraPooledByteBufferWriter)
+   at System.Text.Json.JsonDocument.Parse(ReadOnlyMemory`1 json, JsonDocumentOptions options)
+   at System.Text.Json.JsonDocument.Parse(String json, JsonDocumentOptions options)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationFileParser.ParseStream(Stream input)
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.Json.JsonConfigurationProvider.Load(Stream stream)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.HandleException(ExceptionDispatchInfo info)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+   at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load()
+   at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+   at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+   at Microsoft.Extensions.Hosting.HostBuilder.BuildAppConfiguration()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:45:05 INF] Starting web host
+[21:45:06 INF] ### App Version:1.0.0.0 ###
+[21:45:06 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:46:41 INF] Starting web host
+[21:46:47 INF] ### App Version:1.0.0.0 ###
+[21:46:48 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:48:18 INF] Starting web host
+[21:48:20 INF] ### App Version:1.0.0.0 ###
+[21:48:20 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:56:54 INF] Starting web host
+[21:57:02 INF] ### App Version:1.0.0.0 ###
+[21:57:02 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV","WellKnownConfig":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/.well-known/openid-configuration","TokenUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/realms/DEMSDEV/protocol/openid-connect/token","AdministrationUrl":"https://dev.common-sso.justice.gov.bc.ca/auth/admin/realms/DEMSDEV","AdministrationClientId":"PIDP-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://dev.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-WEBAPI","ClientSecret":"\u003Credacted\u003E","TokenUrl":"https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:57:20 INF] Now listening on: https://localhost:7215
+[21:57:20 INF] Application started. Press Ctrl+C to shut down.
+[21:57:20 INF] Hosting environment: Development
+[21:57:20 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:18:55 INF] Starting web host
+[22:19:02 INF] ### App Version:1.0.0.0 ###
+[22:19:02 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:19:12 INF] Now listening on: https://localhost:7215
+[22:19:12 INF] Application started. Press Ctrl+C to shut down.
+[22:19:12 INF] Hosting environment: Development
+[22:19:12 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:39:33 INF] Starting web host
+[22:39:40 INF] ### App Version:1.0.0.0 ###
+[22:39:40 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:39:58 INF] Now listening on: https://localhost:7215
+[22:39:58 INF] Application started. Press Ctrl+C to shut down.
+[22:39:58 INF] Hosting environment: Development
+[22:39:58 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:40:54 ERR] HTTP POST /contact/request responded 500 in 16282.0910 ms
+System.InvalidOperationException: sasl.username and sasl.password must be set
+   at Confluent.Kafka.Impl.SafeKafkaHandle.Create(RdKafkaType type, IntPtr config, IClient owner)
+   at Confluent.Kafka.Producer`2..ctor(ProducerBuilder`2 builder)
+   at Confluent.Kafka.ProducerBuilder`2.Build()
+   at pdipadapter.Kafka.Producer.KafkaProducer`2..ctor(ProducerConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Kafka\Producer\KafkaProducer.cs:line 10
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(Type serviceType)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:40:54 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: sasl.username and sasl.password must be set
+   at Confluent.Kafka.Impl.SafeKafkaHandle.Create(RdKafkaType type, IntPtr config, IClient owner)
+   at Confluent.Kafka.Producer`2..ctor(ProducerBuilder`2 builder)
+   at Confluent.Kafka.ProducerBuilder`2.Build()
+   at pdipadapter.Kafka.Producer.KafkaProducer`2..ctor(ProducerConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Kafka\Producer\KafkaProducer.cs:line 10
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeConstructorInfo.Invoke(BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitConstructor(ConstructorCallSite constructorCallSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSiteMain(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.VisitRootCache(ServiceCallSite callSite, RuntimeResolverContext context)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteVisitor`2.VisitCallSite(ServiceCallSite callSite, TArgument argument)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteRuntimeResolver.Resolve(ServiceCallSite callSite, ServiceProviderEngineScope scope)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.CreateServiceAccessor(Type serviceType)
+   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.GetService(Type serviceType, ServiceProviderEngineScope serviceProviderEngineScope)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.ServiceProviderEngineScope.GetService(Type serviceType)
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:40:55 ERR] HTTP POST /error responded 500 in 342.2321 ms
+[22:42:56 INF] Starting web host
+[22:43:01 INF] ### App Version:1.0.0.0 ###
+[22:43:01 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:43:03 INF] Now listening on: https://localhost:7215
+[22:43:03 INF] Application started. Press Ctrl+C to shut down.
+[22:43:03 INF] Hosting environment: Development
+[22:43:03 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:43:28 ERR] HTTP POST /contact/request responded 500 in 669.8909 ms
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Kafka.Producer.Interfaces.IKafkaProducer`2[System.String,pdipadapter.Features.Users.Models.UserModel]' while attempting to activate 'pdipadapter.Features.Users.Controllers.UsersController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:43:28 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Kafka.Producer.Interfaces.IKafkaProducer`2[System.String,pdipadapter.Features.Users.Models.UserModel]' while attempting to activate 'pdipadapter.Features.Users.Controllers.UsersController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:43:28 ERR] HTTP POST /error responded 500 in 215.6993 ms
+[22:45:32 INF] Starting web host
+[22:45:33 INF] ### App Version:1.0.0.0 ###
+[22:45:33 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:45:35 INF] Now listening on: https://localhost:7215
+[22:45:35 INF] Application started. Press Ctrl+C to shut down.
+[22:45:35 INF] Hosting environment: Development
+[22:45:35 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:45:44 ERR] HTTP POST /contact/request responded 500 in 609.3917 ms
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Kafka.Producer.Interfaces.IKafkaProducer`2[System.String,pdipadapter.Features.Users.Models.UserModel]' while attempting to activate 'pdipadapter.Features.Users.Controllers.UsersController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:45:44 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Kafka.Producer.Interfaces.IKafkaProducer`2[System.String,pdipadapter.Features.Users.Models.UserModel]' while attempting to activate 'pdipadapter.Features.Users.Controllers.UsersController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method125(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:45:45 ERR] HTTP POST /error responded 500 in 205.3838 ms
+[22:47:24 INF] Starting web host
+[22:47:25 INF] ### App Version:1.0.0.0 ###
+[22:47:25 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:47:30 INF] Now listening on: https://localhost:7215
+[22:47:30 INF] Application started. Press Ctrl+C to shut down.
+[22:47:30 INF] Hosting environment: Development
+[22:47:30 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:47:53 ERR] HTTP POST /contact/request responded 500 in 11592.4659 ms
+[22:49:19 INF] Starting web host
+[22:49:27 INF] ### App Version:1.0.0.0 ###
+[22:49:27 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:49:28 INF] Now listening on: https://localhost:7215
+[22:49:28 INF] Application started. Press Ctrl+C to shut down.
+[22:49:28 INF] Hosting environment: Development
+[22:49:28 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:49:47 ERR] HTTP POST /contact/request responded 500 in 6011.8701 ms
+System.InvalidOperationException: Error constructing handler for request of type MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,PidpAdapter.API.Features.Users.Models.PractitionerContact]. Register your handlers with the container. See the samples in GitHub for examples.
+ ---> System.InvalidOperationException: No service for type 'MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,PidpAdapter.API.Features.Users.Models.PractitionerContact]' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at MediatR.ServiceFactoryExtensions.GetInstance[T](ServiceFactory factory)
+   at MediatR.Wrappers.HandlerBase.GetHandler[THandler](ServiceFactory factory)
+   --- End of inner exception stack trace ---
+   at MediatR.Wrappers.HandlerBase.GetHandler[THandler](ServiceFactory factory)
+   at MediatR.Wrappers.RequestHandlerWrapperImpl`2.<>c__DisplayClass1_0.<Handle>g__Handler|0()
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:49:47 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Error constructing handler for request of type MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,PidpAdapter.API.Features.Users.Models.PractitionerContact]. Register your handlers with the container. See the samples in GitHub for examples.
+ ---> System.InvalidOperationException: No service for type 'MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,PidpAdapter.API.Features.Users.Models.PractitionerContact]' has been registered.
+   at Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions.GetRequiredService(IServiceProvider provider, Type serviceType)
+   at MediatR.ServiceFactoryExtensions.GetInstance[T](ServiceFactory factory)
+   at MediatR.Wrappers.HandlerBase.GetHandler[THandler](ServiceFactory factory)
+   --- End of inner exception stack trace ---
+   at MediatR.Wrappers.HandlerBase.GetHandler[THandler](ServiceFactory factory)
+   at MediatR.Wrappers.RequestHandlerWrapperImpl`2.<>c__DisplayClass1_0.<Handle>g__Handler|0()
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:49:47 ERR] HTTP POST /error responded 500 in 115.5118 ms
+[22:53:15 INF] Starting web host
+[22:53:20 INF] ### App Version:1.0.0.0 ###
+[22:53:20 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:53:28 INF] Now listening on: https://localhost:7215
+[22:53:28 INF] Application started. Press Ctrl+C to shut down.
+[22:53:28 INF] Hosting environment: Development
+[22:53:28 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:56:30 INF] Starting web host
+[22:56:32 INF] ### App Version:1.0.0.0 ###
+[22:56:32 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:56:47 INF] Now listening on: https://localhost:7215
+[22:56:47 INF] Application started. Press Ctrl+C to shut down.
+[22:56:47 INF] Hosting environment: Development
+[22:56:47 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:57:09 ERR] HTTP POST /contact/request responded 500 in 11521.5923 ms
+System.ArgumentException: Conversion from DateTime to Timestamp requires the DateTime kind to be Utc (Parameter 'dateTime')
+   at Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime dateTime)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:57:09 ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentException: Conversion from DateTime to Timestamp requires the DateTime kind to be Utc (Parameter 'dateTime')
+   at Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime dateTime)
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:57:10 ERR] HTTP POST /error responded 500 in 133.3075 ms
+[22:58:40 INF] Starting web host
+[22:58:42 INF] ### App Version:1.0.0.0 ###
+[22:58:42 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:58:46 INF] Now listening on: https://localhost:7215
+[22:58:46 INF] Application started. Press Ctrl+C to shut down.
+[22:58:46 INF] Hosting environment: Development
+[22:58:46 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:00:44 ERR] HTTP POST /contact/request responded 500 in 107041.6350 ms
+Grpc.Core.RpcException: Status(StatusCode="Cancelled", Detail="", DebugException="System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+   at System.Net.Http.Http2Connection.Http2Stream.<>c.<WaitForDataAsync>b__80_0(Object s, CancellationToken cancellationToken)
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)
+   at System.Threading.CancellationTokenSource.CallbackNode.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.TimerCallback(Object state)
+   at System.Threading.TimerQueueTimer.CallCallback(Boolean isThreadPool)
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.TimerQueue.AppDomainTimerCallback(Int32 id)
+   at System.Threading.UnmanagedThreadPoolWorkItem.System.Threading.IThreadPoolWorkItem.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Http.Http2Connection.Http2Stream.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:00:44 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Cancelled", Detail="", DebugException="System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+   at System.Net.Http.Http2Connection.Http2Stream.<>c.<WaitForDataAsync>b__80_0(Object s, CancellationToken cancellationToken)
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)
+   at System.Threading.CancellationTokenSource.CallbackNode.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.TimerCallback(Object state)
+   at System.Threading.TimerQueueTimer.CallCallback(Boolean isThreadPool)
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.TimerQueue.AppDomainTimerCallback(Int32 id)
+   at System.Threading.UnmanagedThreadPoolWorkItem.System.Threading.IThreadPoolWorkItem.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Http.Http2Connection.Http2Stream.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:00:44 ERR] HTTP POST /error responded 500 in 180.4434 ms
+[23:23:57 INF] Starting web host
+[23:24:10 INF] ### App Version:1.0.0.0 ###
+[23:24:10 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca/api","ClientId":"DMFT-SERVICE","ClientSecret":"cbfc39c5-3814-44cd-a5f7-36194f7281f9","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:24:18 INF] Now listening on: https://localhost:7215
+[23:24:18 INF] Application started. Press Ctrl+C to shut down.
+[23:24:18 INF] Hosting environment: Development
+[23:24:18 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:26:41 ERR] HTTP POST /contact/request responded 500 in 113209.1955 ms
+Grpc.Core.RpcException: Status(StatusCode="Cancelled", Detail="", DebugException="System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+   at System.Net.Http.Http2Connection.Http2Stream.<>c.<WaitForDataAsync>b__80_0(Object s, CancellationToken cancellationToken)
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)
+   at System.Threading.CancellationTokenSource.CallbackNode.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.TimerCallback(Object state)
+   at System.Threading.TimerQueueTimer.CallCallback(Boolean isThreadPool)
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.TimerQueue.AppDomainTimerCallback(Int32 id)
+   at System.Threading.UnmanagedThreadPoolWorkItem.System.Threading.IThreadPoolWorkItem.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Http.Http2Connection.Http2Stream.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+[23:26:42 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Cancelled", Detail="", DebugException="System.Threading.Tasks.TaskCanceledException: The request was canceled due to the configured HttpClient.Timeout of 100 seconds elapsing.
+ ---> System.TimeoutException: The operation was canceled.
+ ---> System.Threading.Tasks.TaskCanceledException: The operation was canceled.
+   at System.Net.Http.Http2Connection.Http2Stream.<>c.<WaitForDataAsync>b__80_0(Object s, CancellationToken cancellationToken)
+   at System.Threading.CancellationTokenSource.Invoke(Delegate d, Object state, CancellationTokenSource source)
+   at System.Threading.CancellationTokenSource.CallbackNode.ExecuteCallback()
+   at System.Threading.CancellationTokenSource.ExecuteCallbackHandlers(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.NotifyCancellation(Boolean throwOnFirstException)
+   at System.Threading.CancellationTokenSource.TimerCallback(Object state)
+   at System.Threading.TimerQueueTimer.CallCallback(Boolean isThreadPool)
+   at System.Threading.TimerQueueTimer.Fire(Boolean isThreadPool)
+   at System.Threading.TimerQueue.FireNextTimers()
+   at System.Threading.TimerQueue.AppDomainTimerCallback(Int32 id)
+   at System.Threading.UnmanagedThreadPoolWorkItem.System.Threading.IThreadPoolWorkItem.Execute()
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+--- End of stack trace from previous location ---
+   at System.Net.Http.Http2Connection.Http2Stream.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   --- End of inner exception stack trace ---
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpClient.HandleFailure(Exception e, Boolean telemetryStarted, HttpResponseMessage response, CancellationTokenSource cts, CancellationToken cancellationToken, CancellationTokenSource pendingRequestsCts)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:26:42 ERR] HTTP POST /error responded 500 in 529.5809 ms
+[23:29:28 ERR] HTTP POST /contact/request responded 500 in 64531.4420 ms
+Grpc.Core.RpcException: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: An error occurred while sending the request. IOException: The request was aborted. IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host.. SocketException: An existing connection was forcibly closed by the remote host.", DebugException="System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.IO.IOException: The request was aborted.
+ ---> System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](TIOAdapter adapter)
+   at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](TIOAdapter adapter, Memory`1 buffer)
+   at System.Net.Http.Http2Connection.ProcessIncomingFramesAsync()
+   --- End of inner exception stack trace ---
+   at System.Net.Http.Http2Connection.ThrowRequestAborted(Exception innerException)
+   at System.Net.Http.Http2Connection.Http2Stream.CheckResponseBodyState()
+   at System.Net.Http.Http2Connection.Http2Stream.TryEnsureHeaders()
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+[23:29:28 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: An error occurred while sending the request. IOException: The request was aborted. IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host.. SocketException: An existing connection was forcibly closed by the remote host.", DebugException="System.Net.Http.HttpRequestException: An error occurred while sending the request.
+ ---> System.IO.IOException: The request was aborted.
+ ---> System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host..
+ ---> System.Net.Sockets.SocketException (10054): An existing connection was forcibly closed by the remote host.
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource<System.Int32>.GetResult(Int16 token)
+   at System.Net.Security.SslStream.EnsureFullTlsFrameAsync[TIOAdapter](TIOAdapter adapter)
+   at System.Net.Security.SslStream.ReadAsyncInternal[TIOAdapter](TIOAdapter adapter, Memory`1 buffer)
+   at System.Net.Http.Http2Connection.ProcessIncomingFramesAsync()
+   --- End of inner exception stack trace ---
+   at System.Net.Http.Http2Connection.ThrowRequestAborted(Exception innerException)
+   at System.Net.Http.Http2Connection.Http2Stream.CheckResponseBodyState()
+   at System.Net.Http.Http2Connection.Http2Stream.TryEnsureHeaders()
+   at System.Net.Http.Http2Connection.Http2Stream.ReadResponseHeadersAsync(CancellationToken cancellationToken)
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.Http2Connection.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 62
+   at pdipadapter.PipelineBehaviours.ValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\PipelineBehaviours\ValidationBehvaviour.cs:line 23
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.UsersController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\UsersController.cs:line 33
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:29:28 ERR] HTTP POST /error responded 500 in 67.4000 ms

@@ -1,4 +1,6 @@
-﻿using Grpc.Core;
+﻿using Google.Protobuf.WellKnownTypes;
+using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,60 @@ namespace Rsbc.Dmf.CaseManagement.Service
         public UserService(IUserManager userManager)
         {
             this.userManager = userManager;
+        }
+        public async override Task<PractitionerReply>GetPractitionerContact(PractitionerRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var getPcontact = await userManager.GetPractitionerContact(new CaseManagement.PractitionerRequest { hpdid = request.Hpdid });
+                
+                if (getPcontact.contactId == string.Empty) { return new PractitionerReply(); }
+                
+                    return new PractitionerReply
+                    {
+                        FirstName = getPcontact.FirstName,
+                        LastName = getPcontact.LastName,
+                        Email = getPcontact.Email,
+                        ContactId = getPcontact.contactId,
+                        Gender = getPcontact.Gender,
+                        IdpId = getPcontact.IdpId,
+                        Birthdate = Timestamp.FromDateTime(DateTime.SpecifyKind(getPcontact.Birthdate.Value, DateTimeKind.Utc)),
+                        Role = getPcontact.Role,
+                        ClinicName = getPcontact.ClinicName
+                    };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public async override Task<PractitionerContactReply> CreatePractitionerContact(PractitionerContactRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var pContact = await userManager.CreatePractitionerContact(new CaseManagement.PractitionerContactRequest
+                {
+                    contactId = request.UserId,
+                    FirstName= request.FirstName,
+                    LastName= request.LastName,
+                    Email= request.Email,
+                    Birthdate = request.Birthdate.ToDateTime(),
+                    Role = request.Role,
+                    Gender = request.Gender,
+                    IdpId =request.IdpId,
+
+                });
+                return new PractitionerContactReply
+                {
+                    ContactId = pContact.ContactId,
+                    MedicalPractictionerId = pContact?.MedicalPractictionerId,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async override Task<UsersSearchReply> Search(UsersSearchRequest request, ServerCallContext context)

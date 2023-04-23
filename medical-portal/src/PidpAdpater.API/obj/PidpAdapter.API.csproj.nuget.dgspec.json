@@ -4,115 +4,6 @@
     "C:\\Users\\sookeke\\rsbc-dmf\\medical-portal\\src\\PidpAdpater.API\\PidpAdapter.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\Rsbc.Dmf.CaseManagement.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\Rsbc.Dmf.CaseManagement.csproj",
-        "projectName": "Rsbc.Dmf.CaseManagement",
-        "projectPath": "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\Rsbc.Dmf.CaseManagement.csproj",
-        "packagesPath": "C:\\Users\\sookeke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\sookeke\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "netstandard2.1"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "netstandard2.1": {
-            "targetAlias": "netstandard2.1",
-            "projectReferences": {}
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "netstandard2.1": {
-          "targetAlias": "netstandard2.1",
-          "dependencies": {
-            "Microsoft.Bcl.AsyncInterfaces": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "Microsoft.Extensions.Caching.Abstractions": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "Microsoft.Extensions.Configuration.Abstractions": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "Microsoft.Extensions.Configuration.Binder": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "Microsoft.Extensions.Http": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
-            "Microsoft.OData.Client": {
-              "target": "Package",
-              "version": "[7.12.5, )"
-            },
-            "Microsoft.OData.Core": {
-              "target": "Package",
-              "version": "[7.12.5, )"
-            },
-            "Microsoft.OData.Edm": {
-              "target": "Package",
-              "version": "[7.12.5, )"
-            },
-            "Microsoft.Spatial": {
-              "target": "Package",
-              "version": "[7.12.5, )"
-            },
-            "Serilog": {
-              "target": "Package",
-              "version": "[2.12.0, )"
-            },
-            "System.ComponentModel.Annotations": {
-              "target": "Package",
-              "version": "[5.0.0, )"
-            },
-            "System.Text.Json": {
-              "target": "Package",
-              "version": "[6.0.2, )"
-            },
-            "System.Threading": {
-              "target": "Package",
-              "version": "[4.3.0, )"
-            }
-          },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "NETStandard.Library": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.103\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
     "C:\\Users\\sookeke\\rsbc-dmf\\medical-portal\\src\\PidpAdpater.API\\PidpAdapter.API.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -136,11 +27,7 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {
-              "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\Rsbc.Dmf.CaseManagement.csproj": {
-                "projectPath": "C:\\Users\\sookeke\\rsbc-dmf\\cms-adapter\\src\\Rsbc.Dmf.CaseManagement\\Rsbc.Dmf.CaseManagement.csproj"
-              }
-            }
+            "projectReferences": {}
           }
         },
         "warningProperties": {
@@ -188,6 +75,20 @@
             "Flurl": {
               "target": "Package",
               "version": "[3.0.6, )"
+            },
+            "Google.Protobuf": {
+              "target": "Package",
+              "version": "[3.22.1, )"
+            },
+            "Grpc.AspNetCore": {
+              "target": "Package",
+              "version": "[2.49.0, )"
+            },
+            "Grpc.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.53.0, )"
             },
             "HybridModelBinding": {
               "target": "Package",
@@ -274,6 +175,10 @@
             "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": {
               "target": "Package",
               "version": "[6.0.6, )"
+            },
+            "Microsoft.OData.Edm": {
+              "target": "Package",
+              "version": "[7.15.0, )"
             },
             "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
               "target": "Package",

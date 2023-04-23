@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node", "@hirez_io/jest-single"],
+    "target": "es5"
+  },
+  "files": ["src/test-setup.ts"],
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
+}

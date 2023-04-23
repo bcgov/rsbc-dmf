@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "http://localhost:3020",
+    "target": "https://rsbc-dfp-medical-portal-dev.silver.devops.bcgov",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug"

@@ -1,35 +1,24 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build-env
-WORKDIR /source
+ARG BUILD_ID
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+ARG BUILD_ID
 
-ENV DOTNET_CLI_HOME="/opt"
-ENV PATH="$PATH:/opt/.dotnet/tools"
-
-RUN dotnet tool install --global dotnet-ef
-
-COPY *.csproj .
-RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
-
-COPY . .
-RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
-
-RUN dotnet ef migrations bundle
-
-#----------------------------------------------------------------#
-FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine
 WORKDIR /app
 
-ENV ASPNETCORE_ENVIRONMENT="Production"
-ENV ASPNETCORE_URLS="http://+:8080"
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-ENV \
-     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
-     LC_ALL=en_US.UTF-8 \
-     LANG=en_US.UTF-8
- RUN apk add --no-cache icu-libs
+COPY . .
+RUN dotnet restore "./medical-portal/src/PidpAdpater.API/"
+RUN dotnet test "./medical-portal/src/PidpAdpater.API/" /p:InformationalVersion="$BUILD_ID" -c Release
 
-COPY --from=build-env /app .
-COPY --from=build-env /source/efbundle .
+FROM build AS publish
+ARG BUILD_ID
 
+RUN dotnet publish /p:InformationalVersion="$BUILD_ID" "./medical-portal/src/PidpAdpater.API/PidpAdapter.API.csproj" -c Release -o /app/publish --no-restore 
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
 EXPOSE 8080
+ENV ASPNETCORE_URLS=http://*:8080
 
-CMD ["./pdipadapter"]
+CMD ["./PidpAdapter.API"]

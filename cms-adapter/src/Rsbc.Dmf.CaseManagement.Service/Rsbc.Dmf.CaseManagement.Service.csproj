@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Server" />
+    <None Remove="Protos\cmsAdapter.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,5 +23,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Server" />
   </ItemGroup>
 </Project>

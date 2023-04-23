@@ -32,7 +32,7 @@ public static class HttpClientSetup
             {
                 Address = config.PidpEndorsementAPI.TokenUrl,
                 ClientId = config.PidpEndorsementAPI.ClientId,
-                ClientSecret = config.PidpEndorsementAPI.ClientSecret
+                ClientSecret = config.PidpEndorsementAPI.ClientSecret,
             });
 
         //services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(config.LdapClient.Url);

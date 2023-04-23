@@ -21,19 +21,19 @@ namespace pdipadapter.Infrastructure.Auth
             services.ThrowIfNull(nameof(services));
             config.ThrowIfNull(nameof(config));
 
-            var producerConfig = new ProducerConfig
-            {
-                BootstrapServers = config.KafkaCluster.BoostrapServers,
-                Acks = Acks.All,               
-                SaslMechanism = SaslMechanism.Plain,
-                SecurityProtocol = SecurityProtocol.SaslSsl,
-                SaslUsername = config.KafkaCluster.ClientId,
-                SaslPassword = config.KafkaCluster.ClientSecret,
-                EnableIdempotence = true
-            };
+            //var producerConfig = new ProducerConfig
+            //{
+            //    BootstrapServers = config.KafkaCluster.BoostrapServers,
+            //    Acks = Acks.All,               
+            //    SaslMechanism = SaslMechanism.Plain,
+            //    SecurityProtocol = SecurityProtocol.SaslSsl,
+            //    SaslUsername = config.KafkaCluster.ClientId,
+            //    SaslPassword = config.KafkaCluster.ClientSecret,
+            //    EnableIdempotence = true
+            //};
 
-            services.AddSingleton(producerConfig);
-            services.AddSingleton(typeof(IKafkaProducer<,>), typeof(KafkaProducer<,>));
+            //services.AddSingleton(producerConfig);
+            //services.AddSingleton(typeof(IKafkaProducer<,>), typeof(KafkaProducer<,>));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -51,9 +51,9 @@ namespace pdipadapter.Infrastructure.Auth
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
+                    ValidateIssuer = false,
                     ValidateAudience = false,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tu2iOytd-ptnPEMBw-k15sKfycQZnY_Iuq2O96oj1Pw")),
+                    //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Tu2iOytd-ptnPEMBw-k15sKfycQZnY_Iuq2O96oj1Pw")),
                     ValidAlgorithms = new List<string>() { "RS256" },
                 };
                 options.Events = new JwtBearerEvents

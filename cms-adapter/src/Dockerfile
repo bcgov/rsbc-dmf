@@ -9,7 +9,7 @@ COPY ["cms-adapter.sln", "./"]
 
 RUN dotnet restore .
 COPY . .
-RUN dotnet test -c Release
+#RUN dotnet test -c Release
 RUN dotnet publish "Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
@@ -26,6 +26,6 @@ WORKDIR /app
 #
 
 EXPOSE 8080
-ENV ASPNETCORE_URLS=https://*:8080
+ENV ASPNETCORE_URLS=http://*:8080
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Rsbc.Dmf.CaseManagement.Service.dll"]

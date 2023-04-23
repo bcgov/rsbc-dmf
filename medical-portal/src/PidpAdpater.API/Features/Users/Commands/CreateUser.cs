@@ -4,18 +4,21 @@ using pdipadapter.Extensions;
 using pdipadapter.Infrastructure.Auth;
 using MediatR;
 using MedicalPortal.API.Extensions;
-using Rsbc.Dmf.CaseManagement;
-using Microsoft.OData.Edm;
+using PidpAdapter.API.Features.Users.Models;
+using Rsbc.Dmf.CaseManagement.Service;
+using Google.Protobuf.WellKnownTypes;
+using NodaTime;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MedicalPortal.API.Features.Users.Commands;
 public class CreateUser
 {
-    public class Command : IRequest<Model>
+    public class Command : IRequest<string>
     {
         public Guid UserId { get; set; }
         public string IdentityProvider { get; set; } = string.Empty;
         public string IdpId { get; set; } = string.Empty;
-        public Date? Birthdate { get; set; }
+        public DateTime? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
@@ -30,41 +33,56 @@ public class CreateUser
             var user = accessor?.HttpContext?.User;
 
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
-            this.RuleFor(x => x.IdentityProvider).NotEmpty().Equal(user.GetIdentityProvider());
+            //this.RuleFor(x => x.IdentityProvider).NotEmpty().Equal(user.GetIdentityProvider());
             this.RuleFor(x => x.IdpId).NotEmpty().Equal(user.GetIdpId());
             this.RuleFor(x => x.Roles).NotNull().ForEach(role =>
             {
                 role.Must(r => (bool)(user?.GetRoles().ToList().Contains(r.ToString())));
             });
 
+            //this.RuleFor(x => x.Gender).NotEmpty().Equal(user?.GetGender()).WithMessage($"Must match the \"gender\" Claim on the current User");
+
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
-            this.RuleFor(x => x.Gender).NotEmpty().MatchesUserClaim(user, Claims.Gender);
+            //this.RuleFor(x => x.Gender).NotEmpty().MatchesUserClaim(user, Claims.Gender);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
+
+            this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage($"Must match the \"birthdate\" Claim on the current User");
 
             this.When(x => x.IdentityProvider == IdentityProviders.BCServicesCard, () => this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage("Must match the \"birthdate\" Claim on the current User"))
                 .Otherwise(() => this.RuleFor(x => x.Birthdate).Empty());
         }
     }
-    public class CommandHandler : IRequestHandler<Command, Model>
+    public class CommandHandler : IRequestHandler<Command, string>
     {
-        private readonly IUserManager userManager;
+        private readonly UserManager.UserManagerClient userManager;
+        private readonly ILogger logger;
 
-        public CommandHandler(IUserManager userManager) => this.userManager = userManager;
-
-        public async Task<Model> Handle(Command command, CancellationToken cancellationToken)
+        public CommandHandler(UserManager.UserManagerClient userManager, ILogger logger)
         {
-            return await this.userManager.CreatePractitionerContact(new Practitioner
+            this.userManager = userManager;
+            this.logger = logger;
+        }
+
+        public async Task<string> Handle(Command command, CancellationToken cancellationToken)
+        {
+            var contactExist = await userManager.GetPractitionerContactAsync(new PractitionerRequest { Hpdid = command.IdpId });
+            if (!contactExist.ContactId.IsNullOrEmpty())
+            {
+                this.logger.LogError("Practitioner contact already exist");
+                throw new Exception("Practitioner contact already exist");
+            }
+            var pReply = await userManager.CreatePractitionerContactAsync(new PractitionerContactRequest
             {
                 Email = command.Email,
-                Birthdate = command.Birthdate,
+                Birthdate = Timestamp.FromDateTime(command.Birthdate!.Value.ToUniversalTime()),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
-                UserId = command.UserId,
+                UserId = command.UserId.ToString(),
                 Gender = command.Gender,
                 IdpId = command.IdpId,
-                Roles = command.Roles,
+                Role = command.Roles.Contains("MOA") ? "MOA" : command.Roles.Contains("PRACTITIONER") ? "PRACTITIONER" : string.Empty
             });
-
+            return pReply.ContactId.ToString();
 
         }
     }

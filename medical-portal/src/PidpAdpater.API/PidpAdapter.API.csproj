@@ -38,6 +38,12 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
     <PackageReference Include="Flurl" Version="3.0.6" />
+    <PackageReference Include="Google.Protobuf" Version="3.22.1" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.53.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="HybridModelBinding" Version="0.18.0" />
     <PackageReference Include="IdentityModel" Version="6.0.0" />
     <PackageReference Include="Mapster" Version="7.3.0" />
@@ -63,6 +69,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" Version="6.0.6" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions" Version="6.0.6" />
+    <PackageReference Include="Microsoft.OData.Edm" Version="7.15.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="NodaTime" Version="3.1.0" />
     <PackageReference Include="NodaTime.Serialization.JsonNet" Version="3.0.0" />
@@ -94,7 +101,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj" />
+    <Protobuf Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Protos\cmsAdapter.proto" GrpcServices="Client">
+      <Link>Protos\cmsAdapter.proto</Link>
+    </Protobuf>
   </ItemGroup>
 
 </Project>

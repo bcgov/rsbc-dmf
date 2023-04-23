@@ -321,6 +321,40 @@ service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc CreatePractitionerContact(PractitionerContactRequest) returns (PractitionerContactReply);
+  rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
+}
+message PractitionerContactRequest{
+	string userId = 1;
+	string gender = 2;
+	string idpId = 3;
+	optional google.protobuf.Timestamp birthdate = 4;
+	string firstName = 5;
+	string lastName = 6;
+	string email = 7;
+	string clinicName = 8;
+	string role = 9;
+}
+message PractitionerReply{
+	string contactId = 1;
+	string gender = 2;
+	string idpId = 3;
+	google.protobuf.Timestamp birthdate = 4;
+	string firstName = 5;
+	string lastName = 6;
+	string email = 7;
+	string clinicName = 8;
+	string role = 9;
+}
+message PractitionerRequest{
+	string hpdid = 1;
+}
+message PractitionerContactReply{
+	string ContactId = 1;
+	string MedicalPractictionerId = 2;
+}
+message ContactReply{
+
 }
 
 message UserSetEmailRequest {

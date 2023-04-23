@@ -12,6 +12,8 @@ public class PdipadapterConfiguration
     public KafkaClusterConfiguration KafkaCluster { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
     public MailServerConfiguration MailServer { get; set; } = new();
+
+    public CMSConfiguration CMS { get; set; } = new();
     public PidpEndorsementAPIConfiguration PidpEndorsementAPI { get; set; } = new();
 
     // ------- Configuration Objects -------
@@ -67,5 +69,12 @@ public class PdipadapterConfiguration
     {
         public string Url { get; set; } = string.Empty;
         public int Port { get; set; }
+    }
+
+    public class CMSConfiguration
+    {
+        public string SERVER_URL { get; set; } = string.Empty;
+        public string CLIENTSECRET { get; set; } = string.Empty;
+        public bool VALIDATESERVERCERTIFICATE { get; set; } = false;
     }
 }

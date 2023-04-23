@@ -4,5 +4,6 @@
     <Import Project="$(NuGetPackageRoot)microsoft.extensions.apidescription.server\3.0.0\build\Microsoft.Extensions.ApiDescription.Server.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.extensions.apidescription.server\3.0.0\build\Microsoft.Extensions.ApiDescription.Server.targets')" />
     <Import Project="$(NuGetPackageRoot)simplersoftware.entityframeworkcore.sqlserver.nodatime\6.0.1\build\netstandard2.0\SimplerSoftware.EntityFrameworkCore.SqlServer.NodaTime.targets" Condition="Exists('$(NuGetPackageRoot)simplersoftware.entityframeworkcore.sqlserver.nodatime\6.0.1\build\netstandard2.0\SimplerSoftware.EntityFrameworkCore.SqlServer.NodaTime.targets')" />
     <Import Project="$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.15.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets" Condition="Exists('$(NuGetPackageRoot)microsoft.visualstudio.azure.containers.tools.targets\1.15.1\build\Microsoft.VisualStudio.Azure.Containers.Tools.Targets.targets')" />
+    <Import Project="$(NuGetPackageRoot)grpc.tools\2.53.0\build\Grpc.Tools.targets" Condition="Exists('$(NuGetPackageRoot)grpc.tools\2.53.0\build\Grpc.Tools.targets')" />
   </ImportGroup>
 </Project>

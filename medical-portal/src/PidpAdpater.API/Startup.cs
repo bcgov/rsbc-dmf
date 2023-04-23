@@ -33,6 +33,10 @@ using pdipadapter.Infrastructure.HttpClients;
 using pdipadapter.Data.Seed;
 using pdipadapter.Helpers.Mapping;
 using Rsbc.Dmf.CaseManagement;
+using PidpAdapter.API.Infrastructure;
+using Rsbc.Dmf.CaseManagement.Service;
+using MediatR.Registration;
+using pdipadapter.Features.Users.Commands;
 
 namespace pdipadapter;
 public class Startup
@@ -48,7 +52,7 @@ public class Startup
           .AddAutoMapper(typeof(Startup))
           .AddHttpClients(config)
           .AddKeycloakAuth(config)
-          .AddSingleton<IClock>(NodaTime.SystemClock.Instance);
+          .AddSingleton<IClock>(NodaTime.SystemClock.Instance).AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<CreateUserCommandHandler>>());
 
         services.AddMapster(options =>
         {
@@ -94,7 +98,16 @@ public class Startup
             .UseSqlServer(config.ConnectionStrings.JumDatabase, sql => sql.UseNodaTime())
             .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
 
-        services.AddMediatR(typeof(Startup).Assembly);
+        var serviceConfig = new MediatRServiceConfiguration();
+        ServiceRegistrar.AddRequiredServices(services, serviceConfig);
+
+        services.Scan(scan => scan
+        .AddTypes(typeof(IRequestHandler<>))
+        .AsSelf()
+        .WithScopedLifetime());
+
+        //services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+        services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         //services.AddFluentValidation(new[] { typeof(UpdatePlayerCommandHandler).GetTypeInfo().Assembly });
         //services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
@@ -109,10 +122,10 @@ public class Startup
         services.AddScoped<IdentityProviderDataSeeder>();
         //services.AddScoped<IOpenIdConnectRequestClient, OpenIdConnectRequestClient>();
 
-
+       // services.AddMediatR(typeof(MedicalPortal.API.Features.Users.Commands.CreateUser).GetTypeInfo().Assembly);
         //services.AddDynamics(this.Configuration);
         services.AddDistributedMemoryCache();
-        services.AddCaseManagement(this.Configuration);
+        services.AddCmsAdapterGrpcService(config);
 
 
         services.AddHealthChecks()

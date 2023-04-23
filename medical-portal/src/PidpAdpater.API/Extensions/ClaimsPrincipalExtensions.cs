@@ -28,11 +28,12 @@ public static class ClaimsPrincipalExtensions
     /// <summary>
     /// Returns the Birthdate Claim of the User, parsed in ISO format (yyyy-MM-dd)
     /// </summary>
-    public static Date? GetBirthdate(this ClaimsPrincipal user)
+    public static DateTime? GetBirthdate(this ClaimsPrincipal user)
     {
         var birthdate = user.FindFirstValue(Claims.Birthdate);
-        Date c;
-        var parsed = Microsoft.OData.Edm.Date.TryParse(birthdate,out c);
+        DateTime c;
+        var parsed = DateTime.TryParse(birthdate,out c);
+        //var parsed = LocalDatePattern.Iso.Parse(birthdate);
         if (parsed)
         {
             return c;
@@ -75,6 +76,18 @@ public static class ClaimsPrincipalExtensions
         {
             return Enumerable.Empty<string>();
         }
+    }
+    /// <summary>
+    /// Returns the Gender Claim of the User, parsed in ISO format (M/F)
+    /// </summary>
+    public static string? GetGender(this ClaimsPrincipal user)
+    {
+        var gender = user.FindFirstValue(Claims.Gender);
+
+        if (string.IsNullOrEmpty(gender))
+            return null;
+
+        return gender;
     }
     public static IEnumerable<string> GetRoles(this ClaimsPrincipal principal)
     {

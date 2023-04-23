@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "FT1BdXonQC25EQ8ZoyVcjpmUkC8i9DYbgdZPkq8vK5w=",
+  "Source": "PidpAdapter.API",
+  "BasePath": "_content/PidpAdapter.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

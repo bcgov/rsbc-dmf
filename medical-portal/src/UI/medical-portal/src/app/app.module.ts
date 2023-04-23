@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -60,7 +60,7 @@ import { DmerSubmissionConfirmationDialogComponent } from './dmer-submission-con
     ManageMedicalPractitionerRoleAssociationDialogComponent,
     DmerSubmissionConfirmationComponent,
     DmerSubmissionConfirmationDialogComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -84,6 +84,11 @@ import { DmerSubmissionConfirmationDialogComponent } from './dmer-submission-con
         customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
       }
     })
+  ],
+  schemas: [
+    // This causes the compiler to allow the non-angular swiper html tags.
+    // Without this schema, compiling will fail on the swiper tags.
+    CUSTOM_ELEMENTS_SCHEMA,
   ],
   providers: [
     { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => {

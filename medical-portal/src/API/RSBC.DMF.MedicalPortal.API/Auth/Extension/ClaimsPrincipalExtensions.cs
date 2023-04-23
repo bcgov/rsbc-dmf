@@ -70,6 +70,8 @@ public static class ClaimsPrincipalExtensions
             return Enumerable.Empty<string>();
         }
     }
+    public static string GetIdentityProvider(this ClaimsPrincipal user) => user?.FindFirstValue(Claims.IdentityProvider);
+
 
     private class ResourceAccess
     {

@@ -23,6 +23,7 @@ public class ChesClient : BaseClient, IChesClient
         if (!result.IsSuccess)
         {
             return null;
+
         }
 
         return result.Value.Single().Status;

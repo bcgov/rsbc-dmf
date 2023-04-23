@@ -9,12 +9,15 @@ import { ConfigService } from '../api/services';
 import { EFormsServerOptions } from '../components/phsa-form-viewer/phsa-form-viewer.component';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ConfigurationService {
   private config: Configuration | null = null;
 
-  constructor(@Inject(APP_BASE_HREF) public baseHref: string, private configurationService: ConfigService) { }
+  constructor(
+    @Inject(APP_BASE_HREF) public baseHref: string,
+    private configurationService: ConfigService
+  ) {}
 
   public load(): Observable<Configuration> {
     if (this.config != null) {
@@ -28,16 +31,22 @@ export class ConfigurationService {
   }
 
   public getEFormsServerOptions(): EFormsServerOptions {
-    if (!this.isConfigured() || !this.config?.eformsConfiguration) { throw Error('EForms server configuration is missing'); }
+    if (!this.isConfigured() || !this.config?.eformsConfiguration) {
+      throw Error('EForms server configuration is missing');
+    }
     return {
       emrVendorId: this.config.eformsConfiguration.emrVendorId || '',
       fhirServerUrl: this.config.eformsConfiguration.fhirServerUrl || '',
-      formServerUrl: this.config.eformsConfiguration.formServerUrl || ''
+      formServerUrl: this.config.eformsConfiguration.formServerUrl || '',
     };
   }
 
   public getEFormsFormId(name: string): string {
-    return this.config?.eformsConfiguration?.forms?.find(f => f.name?.toLowerCase() === name.toLowerCase())?.id || '';
+    return (
+      this.config?.eformsConfiguration?.forms?.find(
+        (f) => f.name?.toLowerCase() === name.toLowerCase()
+      )?.id || ''
+    );
   }
 
   public isConfigured(): boolean {
@@ -45,19 +54,22 @@ export class ConfigurationService {
   }
 
   public getOAuthConfig(): Observable<AuthConfig> {
-    return this.load().pipe(map(c => {
-      return {
-        requestAccessToken: true,
-        issuer: c.oidcConfiguration?.issuer || undefined,
-        clientId: c.oidcConfiguration?.clientId || undefined,
-        redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
-        responseType: 'code',
-        scope: c.oidcConfiguration?.scope || undefined,
-        showDebugInformation: true, //!environment.production,
-        customQueryParams: {
-          acr_values: 'idp:bcsc',
-        }
-      };
-    }));
+    return this.load().pipe(
+      map((c) => {
+        return {
+          requestAccessToken: true,
+          issuer: c.oidcConfiguration?.issuer || undefined,
+          clientId: c.oidcConfiguration?.clientId || undefined,
+          requireHttps: false,
+          redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
+          responseType: 'code',
+          scope: c.oidcConfiguration?.scope || undefined,
+          showDebugInformation: true, //!environment.production,
+          customQueryParams: {
+            acr_values: 'idp:bcsc',
+          },
+        };
+      })
+    );
   }
 }

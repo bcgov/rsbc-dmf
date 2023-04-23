@@ -1,0 +1,3 @@
+obj\Debug\net6.0\linux-musl-x64/CmsAdapter.cs \
+obj\Debug\net6.0\linux-musl-x64/CmsAdapterGrpc.cs: C:/Users/sookeke/.nuget/packages/grpc.tools/2.53.0/build/native/include/google/protobuf/timestamp.proto\
+ ../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto

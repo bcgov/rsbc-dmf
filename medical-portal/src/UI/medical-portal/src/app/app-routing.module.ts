@@ -5,21 +5,45 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DmerSubmissionConfirmationComponent } from './dmer-submission-confirmation/dmer-submission-confirmation.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { ShellModule } from './features/shell/shell.module';
+import { ShellRoutes } from './features/shell/shell.routes';
 
 const routes: Routes = [
+  {
+    path: ShellRoutes.MODULE_PATH,
+    loadChildren: (): Promise<ShellModule> =>
+      import('./features/shell/shell.module').then((m) => m.ShellModule),
+  },
   { path: '', component: DashboardComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'cases', loadChildren: () => import('./cases/cases.module').then(m => m.CasesModule) },
-  { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
-  { path: 'notifications', loadChildren: () => import('./notifications/notifications.module').then(m => m.NotificationsModule) },
-  { path:'caseAssistance', component:CaseAssistanceComponent },
-  {path:'dmerSubmissionConfirmation', component:DmerSubmissionConfirmationComponent},
-  {path:'caseDetails/:id', component:CaseDetailsComponent},
+  {
+    path: 'cases',
+    loadChildren: () =>
+      import('./cases/cases.module').then((m) => m.CasesModule),
+  },
+  {
+    path: 'users',
+    loadChildren: () =>
+      import('./users/users.module').then((m) => m.UsersModule),
+  },
+  {
+    path: 'notifications',
+    loadChildren: () =>
+      import('./notifications/notifications.module').then(
+        (m) => m.NotificationsModule
+      ),
+  },
+  { path: 'caseAssistance', component: CaseAssistanceComponent },
+  {
+    path: 'dmerSubmissionConfirmation',
+    component: DmerSubmissionConfirmationComponent,
+  },
+  { path: 'caseDetails/:id', component: CaseDetailsComponent },
   { path: 'userProfile', component: UserProfileComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -18,13 +18,12 @@ namespace Rsbc.Dmf.CaseManagement
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
 
         Task<bool> SetUserEmail(string userId, string email);
-        Task<Model> CreatePractitionerContact(Practitioner practitioner);
-        Task<Practitioner> GetPractitionerContact(string hpdid);
+        Task<PractitionerContactReply> CreatePractitionerContact(PractitionerContactRequest practitioner);
+        Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
     }
-
-    public class Practitioner
+    public class PractitionerReply
     {
-        public Guid UserId { get; set; }
+        public string contactId { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
         public string IdpId { get; set; } = string.Empty;
         public Date? Birthdate { get; set; }
@@ -32,7 +31,19 @@ namespace Rsbc.Dmf.CaseManagement
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string ClinicName { get; set; } = string.Empty;
-        public string[] Roles { get; set; } = new string[] { };
+        public string Role { get; set; } = string.Empty;
+    }
+    public class PractitionerContactRequest
+    {
+        public string contactId { get; set; } = string.Empty;
+        public string Gender { get; set; } = string.Empty;
+        public string IdpId { get; set; } = string.Empty;
+        public Date? Birthdate { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ClinicName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
         //public List<MedicalPractitioner> MedicalPractitioner { get; set; } = new List<MedicalPractitioner>();
     }
 
@@ -70,10 +81,10 @@ namespace Rsbc.Dmf.CaseManagement
         public string Userid { get; set; }
         public string Email { get; set; }
     }
-    public class Model
+    public class PractitionerContactReply
     {
-        public Guid? ContactId { get; set; }
-        public Guid? MedicalPractictionerId { get; set; }
+        public string ContactId { get; set; }
+        public string MedicalPractictionerId { get; set; }
     }
     public abstract class User
     {
@@ -257,11 +268,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<Practitioner> GetPractitionerContact(string hpdid)
+        public async Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request)
         {
             var contact =  dynamicsContext.contacts
                 .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
-                .Where(contact => contact.externaluseridentifier == hpdid) //contactId is the hpdid from health bcsc idp
+                .Where(contact => contact.externaluseridentifier == request.hpdid) //contactId is the hpdid from health bcsc idp
                 .SingleOrDefault();
 
             if (contact != null)
@@ -273,19 +284,21 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.emailaddress1));
                 await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.birthdate));
                 await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.dfp_contact_dfp_medicalpractitioner));
-                return new Practitioner
+                return new PractitionerReply
                 {
-                    IdpId = contact.contactid.ToString(),
+                    contactId = contact.contactid.ToString(),
                     FirstName = contact.firstname,
                     LastName = contact.lastname,
-                    Birthdate = contact.birthdate,
-                    Email = contact.emailaddress1
+                    Birthdate = contact.birthdate.Value,
+                    Email = contact.emailaddress1,
+                    IdpId = contact.externaluseridentifier,
+                    Role = Enum.GetName(typeof(ProviderRole),contact.dfp_contact_dfp_medicalpractitioner.Select(n=>n.dfp_providerrole).FirstOrDefault())
                 };
             }
 
-            return null;
+            return new PractitionerReply();
         }
-        public async Task<Model> CreatePractitionerContact(Practitioner practitioner)
+        public async Task<PractitionerContactReply> CreatePractitionerContact(PractitionerContactRequest practitioner)
         {
 
             if (practitioner == null) throw new InvalidDataException();
@@ -300,7 +313,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 firstname = practitioner.FirstName,
                 lastname = practitioner.LastName,
-                contactid = practitioner.UserId,
+                contactid = new Guid(practitioner.contactId),
                 externaluseridentifier = practitioner.IdpId,
                 emailaddress1 = practitioner.Email,
                 birthdate = practitioner.Birthdate,
@@ -309,8 +322,8 @@ namespace Rsbc.Dmf.CaseManagement
             var medPractitioner = new dfp_medicalpractitioner
             {
                 dfp_fullname = $"{practitioner.FirstName} {practitioner.LastName}",
-                dfp_medicalpractitionerid = practitioner.UserId,
-                dfp_providerrole = practitioner.Roles.Any() ? (int)Enum.Parse<ProviderRole>(practitioner.Roles.FirstOrDefault()) : (int?)null
+                dfp_medicalpractitionerid = new Guid(practitioner.contactId),
+                dfp_providerrole = (int)Enum.Parse<ProviderRole>(practitioner.Role)
             };
             dynamicsContext.AddTocontacts(contact);
             dynamicsContext.AddTodfp_medicalpractitioners(medPractitioner);
@@ -322,10 +335,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
-            return new Model
+            return new PractitionerContactReply
             {
-                ContactId = contact.contactid,
-                MedicalPractictionerId = medPractitioner.dfp_medicalpractitionerid
+                ContactId = contact.contactid.ToString(),
+                MedicalPractictionerId = medPractitioner.dfp_medicalpractitionerid.ToString()
             };
 
         }
@@ -479,6 +492,11 @@ namespace Rsbc.Dmf.CaseManagement
         }
     }
 
+    public class PractitionerRequest
+    {
+        public string hpdid { get; set; } = string.Empty;
+    }
+
     internal enum LoginType
     {
         Bcsc = 100000000,
@@ -489,6 +507,7 @@ namespace Rsbc.Dmf.CaseManagement
     internal enum ProviderRole
     {
         PRACTITIONER = 100000000,
+        MOA = 100000012,
         Dentist = 100000001,
         Optometrist = 100000005,
         Pharmacist = 10000006,
