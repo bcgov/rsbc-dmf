@@ -118,8 +118,9 @@
       }
     }
   },
-  "defaultProject": "medical-portal",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }
