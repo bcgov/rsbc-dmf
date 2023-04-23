@@ -1,0 +1,23 @@
+.clinic-list{
+    ul{    
+        list-style-type: none;
+        margin: 0;
+        padding: 0;      
+    }
+    li::after{
+        content: "|";        
+        float: right;        
+    }
+
+    a{
+        font-style: 700;
+        font-weight: 700;
+        color: #003366;
+    }
+
+    li:last-child::after {    
+        display: none;
+    }
+} 
+
+        

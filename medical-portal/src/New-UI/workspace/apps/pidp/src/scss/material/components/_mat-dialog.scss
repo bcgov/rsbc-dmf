@@ -1,0 +1,9 @@
+@use 'palette' as palette;
+
+//
+// MATERIAL DIALOG
+//
+
+.mat-dialog-container {
+  color: palette.theme-palette(blue);
+}

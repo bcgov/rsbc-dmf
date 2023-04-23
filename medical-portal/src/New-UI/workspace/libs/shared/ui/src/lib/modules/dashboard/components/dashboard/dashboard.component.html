@@ -1,0 +1,46 @@
+<ui-dashboard-header
+  [theme]="headerConfig.theme"
+  [allowMobileToggle]="headerConfig.allowMobileToggle"
+  [username]="username"
+  (toggleMobileMenu)="sidenav.toggle()"
+  (logout)="onLogout()"></ui-dashboard-header>
+
+<mat-sidenav-container class="dashboard-sidenav-container">
+  <mat-sidenav
+    #sidenav
+    [mode]="sideNavProps.mode"
+    [opened]="sideNavProps.opened"
+    [fixedInViewport]="sideNavProps.fixedInViewport"
+    [fixedTopGap]="0"
+    [fixedBottomGap]="0">
+    <div class="logo">
+      <!--
+        NOTE: Pass placeholder markup using ngProjectAs to hold open the
+        dashboard navigation when no image or menu items exist. Do not
+        pass a blank img src to hold open the dashboard, which does not
+        meet WCAG standards for accessibility.
+
+        @example
+        <div ngProjectAs="ui-dashboard-image"></div>
+      -->
+      <ng-content select="ui-dashboard-image"></ng-content>
+    </div>
+
+    <ui-dashboard-menu
+      [menuItems]="menuItems"
+      [responsiveMenuItems]="responsiveMenuItems"
+      [showMenuItemIcons]="showMenuItemIcons"
+      (action)="onMenuItemAction($event)">
+    </ui-dashboard-menu>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

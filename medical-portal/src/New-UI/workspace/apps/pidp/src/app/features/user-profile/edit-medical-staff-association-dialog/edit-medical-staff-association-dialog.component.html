@@ -1,0 +1,82 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
+    <h1 class="title">Edit Association</h1>
+    <button mat-icon-button aria-label="Close" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <!-- <h1 mat-dialog-title class="modal-title">Edit Profile</h1> -->
+    <div mat-dialog-content class="dialog-content">
+      <form>
+        <div fxLayout="row" fxFlexAlign="space-between" fxLayoutGap="24px">
+          <div fxFlex>
+            <label class="form-label">First Name</label><br />
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                name="firstName"
+                [disabled]="true"
+                placeholder="First Name"
+                
+              />
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <label class="form-label">Last Name</label><br />
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                name="lastName"
+                [disabled]="true"
+                placeholder="Last Name "
+               
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxflex style="width: 100%">
+            <label class="form-label">Email Address</label><br />
+            <mat-form-field appearance="outline">
+              <input
+                matInput
+                name="email"
+                placeholder="Email Address "
+               
+              />
+            </mat-form-field>
+          </div>
+        </div>
+        <div>
+          <label class="form-label">Select Medical Practitioner(s) to associate the MOA with:*</label>
+          <mat-selection-list #practitioners>
+            <mat-list-option
+              checkboxPosition="before"
+              *ngFor="let practitioner of listOfPractitioners"
+            >
+              {{ practitioner }}
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+      </form>
+    </div>
+    <div
+      class="action-buttons"
+      fxLayout="column"
+      fxLayoutAlign="space-between center"
+    >
+      <button mat-raised-button color="primary" (click)="onConfirmChanges()">
+        Confirm Changes
+      </button>
+      <br />
+      <button
+        mat-button
+        mat-dialog-close
+        color="primary"
+        (click)="onCancel()"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+  

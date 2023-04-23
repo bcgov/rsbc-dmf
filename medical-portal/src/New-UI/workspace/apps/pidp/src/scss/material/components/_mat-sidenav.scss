@@ -1,0 +1,118 @@
+//
+// Sidenav
+//
+
+// TODO provide !default and allow override in theme to increase reuse without
+//      having to edit specific files only theme variables in isolated file
+$sideNavBackgroundColor: theme-palette(blue);
+$sideNavBorderRight: 0px solid transparent;
+$menuItemContentBorderWidth: 5px;
+$menuItemColor: white;
+$menuItemAnchorColorHover: theme-palette(yellow);
+$menuItemAnchorColorFocus: theme-palette(yellow);
+$menuItemAnchorColorActive: theme-palette(yellow);
+$menuItemAnchorBorderActiveColor: transparent;
+$menuListDividerColor: theme-palette(blue);
+
+// NOTE: Cannot be moved into dashboard component for use
+// in shadow DOM, since some of this won't work in the
+// component and have to be global.
+
+.mat-sidenav-container {
+  // Force the background to match loader overlay
+  background-color: #fff !important;
+}
+
+// NOTE: overflow-y must be unset in all parents to the left menu so position: sticky will work.
+.mat-drawer {
+  // This is needed to allow the sticky side nav to work.
+  overflow-y: unset !important;
+}
+.mat-drawer-container,
+.mat-drawer-inner-container {
+  // This is needed to allow the sticky side nav to work.
+  overflow: unset !important;
+}
+
+.mat-sidenav {
+  background-color: $sideNavBackgroundColor;
+  border-right: $sideNavBorderRight;
+
+  &.mat-drawer.mat-drawer-side {
+    // Reduced by 1 to allow overlays to cover the
+    // sidenav to overcome decendent depth
+    z-index: 1;
+  }
+
+  .mat-list-item {
+    .mat-list-item-content {
+      // Add a border for spacing to prevent the sidenav from jumping
+      // if the navigation applies an active border on menu items
+      border-right: $menuItemContentBorderWidth solid transparent !important;
+      padding-left: 25px !important;
+    }
+
+    // Force the mat-icon to be centered in the sidenav
+    // NOTE: used for mobile and tablet viewport sizes
+    .center-sidenav-icon {
+      display: block !important;
+      text-align: center !important;
+      padding: 0 !important;
+      width: 90% !important;
+    }
+
+    .extend-content-width {
+      // Force the link content to extend width of sidenav
+      padding-right: 1rem !important;
+    }
+
+    // Default turn off the focus and hover effects
+    &:hover,
+    &:focus {
+      background: transparent;
+    }
+
+    // Adjust icon and anchor alignment
+    .mat-icon + a {
+      margin-left: 0.35rem;
+      padding-top: 0.125rem;
+    }
+
+    .mat-icon,
+    a {
+      color: $menuItemColor !important;
+    }
+
+    &:hover {
+      .mat-icon,
+      a {
+        color: $menuItemAnchorColorHover;
+      }
+    }
+    &:focus {
+      .mat-icon,
+      a {
+        color: $menuItemAnchorColorFocus;
+      }
+    }
+
+    // Active class applied by Angular based on the current route, which
+    // can be customized to be a different class
+    &.ng-active {
+      background-color: mix(white, theme-palette(blue), 5%) !important;
+
+      .mat-list-item-content {
+        border-right: $menuItemContentBorderWidth solid
+          $menuItemAnchorBorderActiveColor !important;
+      }
+      .mat-icon,
+      a {
+        color: $menuItemAnchorColorActive !important;
+      }
+    }
+  }
+
+  .mat-divider {
+    border-top-color: $menuListDividerColor;
+  }
+}

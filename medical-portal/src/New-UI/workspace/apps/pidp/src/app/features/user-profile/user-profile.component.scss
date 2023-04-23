@@ -1,0 +1,142 @@
+.list {
+  padding-top: 50px;
+  h2 {
+    font-weight: bold;
+    color: #003366;
+    font-size: 31px;
+    border-left: 3px solid #fcba19;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  p {
+    padding-left: 13px;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+}
+
+.personal-information {
+  padding: 30px;
+}
+
+.info-icon {
+  vertical-align: middle;
+}
+
+.mat-icon{
+  padding-right: 5px;
+}
+ .paragraph-padding{
+   padding-left: 15px;
+ }
+
+.manage-button {
+  color: #003366;
+  padding-right: 5px;
+}
+
+.action-button {
+  padding-top: 4px;
+}
+
+.filter-icon {
+  color: #003366;
+  // margin-left:50px;
+  margin-right: 3px;
+  vertical-align: middle;
+}
+
+.filter-field{
+  padding-top: 8px;
+}
+
+.practiotioner-table {
+  padding-bottom: 30px;
+}
+
+.practiotioner-profile-table{
+ padding-bottom: 30px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.searchMedicalPractitioner{
+  padding-top: 50px;
+}
+
+.button{
+  color: #003366;
+}
+
+.mat-card-header{
+  border-radius: 5px;
+  height: 50px;
+  padding: 0;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.mat-card-title{
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.mat-card-content{
+  background-color: #fff;
+}
+
+// .th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type{
+// padding: 0;
+// }
+
+::ng-deep {
+  .mat-form-field-infix {
+      border: 0px !important;
+  }
+  .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+      transform: none !important;
+  }
+}
+
+.status {
+  border-radius: 10px;
+  text-align: center;
+  padding: 2px;
+  width: 100px;
+}
+
+.status.active {
+  color: #fff;
+  background-color: #43893e;
+}
+
+.status.inactive {
+  color: #fff;
+  background-color: #343a40;
+}
+
+.status.pending {
+  color: #212529;
+  background-color: #96c0e6;
+}
+
+.status.rejected{
+  color: #fff;
+  background-color: #d93e45;
+}
+
+.warn {
+  color: #d93e45;
+}
+
+
+
+

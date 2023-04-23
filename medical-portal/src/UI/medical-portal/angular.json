@@ -30,9 +30,7 @@
             "styles": [
               "node_modules/ng-busy/src/style/busy.css",
               "src/styles.scss",
-              "src/scss/app.scss",
-              "src/scss/bootstrap/_bootstrap-modules.scss",
-              "src/scss/_pidp-variables.scss"
+              "src/scss/app.scss"
             ],
             "stylePreprocessorOptions": {
               "includePaths": ["src/scss"]

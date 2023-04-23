@@ -1,0 +1,130 @@
+<div mat-dialog-title fxLayout="row" fxLayoutAlign="space-between">
+  <h1
+    class="title"
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Accept Selected'"
+  >
+    Accept Association Request(s)
+  </h1>
+  <h1
+    class="title"
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Renew Selected'"
+  >
+    Renew Association(s)
+  </h1>
+  <h1
+    class="title"
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Reject Selected'"
+  >
+    Reject Association(s)
+  </h1>
+  <h1
+    class="title"
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Deactivate Selected'"
+  >
+    Deactivate Association(s)
+  </h1>
+  <h1
+    class="title"
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Remove Selected'"
+  >
+    Remove Association From Associations Table
+  </h1>
+  <button mat-icon-button aria-label="Close" mat-dialog-close>
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<div mat-dialog-content class="dialog-content">
+  <div class="container">
+    <div *ngIf="data.selectedMedicalPractitionerStatus === 'Accept Selected'">
+      <h1>Are you sure you want to accept the association request?</h1>
+      <p>You are about to accept the following association request(s).</p>
+    </div>
+    <div *ngIf="data.selectedMedicalPractitionerStatus === 'Renew Selected'">
+      <h1>Are you sure you want to renew association(s)?</h1>
+      <p>You are about to renew following association(s).</p>
+    </div>
+    <div *ngIf="data.selectedMedicalPractitionerStatus === 'Reject Selected'">
+      <h1>Are you sure you want to reject the association request(s)?</h1>
+      <p>You are about to reject the following association request(s).</p>
+    </div>
+    <div
+      *ngIf="data.selectedMedicalPractitionerStatus === 'Deactivate Selected'"
+    >
+      <h1>Are you sure you want to deactivate the association request?</h1>
+      <p>You are about to deactivate the following association request(s).</p>
+    </div>
+    <div *ngIf="data.selectedMedicalPractitionerStatus === 'Remove Selected'">
+      <h1>
+        Are you sure you want to remove the following assocation from your
+        associations table?
+      </h1>
+      <p>
+        You are about to remove your association with the following individual
+        from your associations table.
+      </p>
+    </div>
+    <table mat-table #formsList [dataSource]="dataSource">
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+      </ng-container>
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let row">{{ row.role }}</td>
+      </ng-container>
+      <ng-container matColumnDef="lastActive">
+        <th mat-header-cell *matHeaderCellDef>Last Active</th>
+        <td mat-cell *matCellDef="let row">{{ row.lastActive }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+</div>
+<div mat-dialog-actions fxLayout="column" fxLayoutAlign="space-between center">
+  <button
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Accept Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Accept Association Request
+  </button>
+  <button
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Renew Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Renew Association(s)
+  </button>
+  <button
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Reject Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Reject Association(s)
+  </button>
+  <button
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Deactivate Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Deactivate Association(s)
+  </button>
+  <button
+    *ngIf="data.selectedMedicalPractitionerStatus === 'Remove Selected'"
+    mat-raised-button
+    color="primary"
+    (click)="onManageAssociation()"
+  >
+    Remove Association(s)
+  </button>
+  <br />
+  <button mat-button mat-dialog-close color="primary" (click)="onCancel()">
+    Cancel
+  </button>
+</div>

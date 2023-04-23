@@ -1,0 +1,47 @@
+@import 'palette';
+@import 'material/material-variables';
+@import 'bootstrap/bootstrap-imports';
+
+// NOTE: mat-sidenav is modified globally
+// @see ./scss/material/components/_mat-sidenav.scss
+
+.dashboard-sidenav-container {
+  position: absolute;
+  // Compensate for the application header, and the
+  // progress indicator for HTTP requests and routing
+  // @see dashboard-header.component.scss
+  top: $mat-theme-dashboard-header-height +
+    $mat-theme-dashboard-progress-bar-height; // .mat-toolbar height + .ngx-progress height
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+
+  // Change visibility to hidden, but don't remove the effect the
+  // image provides in the DOM with adjacent elements
+  &.hidden {
+    visibility: hidden;
+  }
+}
+
+.container-fluid {
+  .col {
+    padding-top: 3.5rem;
+    padding-bottom: 5rem;
+  }
+
+  @include media-breakpoint-up(sm) {
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+}
+
+@media print {
+  .mat-sidenav-content {
+    margin-left: 0 !important;
+  }
+}

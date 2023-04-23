@@ -1,0 +1,28 @@
+.notification {
+  border: none;
+  padding: 3px 10px;
+  text-align: center;
+  display: inline-block;
+  margin: 4px 2px;
+  border-radius: 12px;
+}
+
+.urgent {
+  background-color: #d93e45;
+  color: #ffffff;
+}
+.information {
+  background-color: #96c0e6;
+  color: #333333;
+}
+
+.notification-date {
+  font-weight: normal;
+  float: right;
+  padding: 3px 10px;
+  margin: 4px 2px;
+}
+
+.notification-level-container {
+  float: left;
+}

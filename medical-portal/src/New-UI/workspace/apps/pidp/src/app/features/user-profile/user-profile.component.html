@@ -1,0 +1,707 @@
+<div class="page-desc">
+  <div class="container">
+    <h1>User Profile</h1>
+    <p>Manage your profile information and medical team associations</p>
+  </div>
+</div>
+
+<!-- Manage User Profile -->
+<div class="container" *ngIf="permissions('manageUserProfile')">
+  <div class="list">
+    <h2>Manage Profile</h2>
+  </div>
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-label
+          ><mat-icon class="info-icon">person</mat-icon> Personal
+          Information</mat-label
+        >
+        <button mat-button (click)="openEditUserProfileDialog()">
+          <mat-icon class="edit-button">edit</mat-icon>Edit Profile Information
+        </button>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      class="personal-information"
+      fxLayout="row"
+      fxLayoutGap="120px"
+    >
+      <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+        <div>
+          Name:
+          <b> {{ userProfile?.lastName }}, {{ userProfile?.firstName }} </b>
+        </div>
+        <div>
+          Provider Role :
+          <b>{{translatePortalUserRole(userProfile?.clinics?.[0]?.role)}}</b>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutAlign="space-between" fxLayoutGap="24px">
+        <div>
+          Primary Email Address : <b>{{ userProfile?.emailAddress }}</b>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Medical Practioner Profile -->
+<div
+  class="container"
+  *ngIf="permissions('manageMedicalPractitionerUserProfile')"
+>
+  <div class="list">
+    <h2>Manage Profile</h2>
+  </div>
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-label
+          ><mat-icon class="info-icon">person</mat-icon> Personal
+          Information</mat-label
+        >
+        <button
+          mat-button
+          (click)="openEditMedicalPractitionerUserProfileDialogComponent()"
+        >
+          <mat-icon>edit</mat-icon>Edit Profile Information
+        </button>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      class="personal-information"
+      fxLayout="row"
+      fxLayoutGap="120px"
+    >
+      <div fxLayout="column" fxLayoutGap="24px">
+        <div>
+          Name:
+          <b> {{ userProfile?.lastName }}, {{ userProfile?.firstName }} </b>
+        </div>
+        <div>
+          Provider Role :
+          <b>{{translatePortalUserRole(userProfile?.clinics?.[0]?.role)}}</b>
+        </div>
+        <div>Practitioner License Number : <b>12344555</b></div>
+        <div>
+          Licensing Institution: <b>College of physicians and surgeons</b>
+        </div>
+        <div>
+          Practitioner License validation expiry date: <b>September 2, 2022</b>
+        </div>
+      </div>
+      <div fxLayout="column" fxLayoutGap="24px">
+        <div>Business Name/Operating as : <b>Dr. Shelby Drew</b></div>
+        <div>
+          Primary Email Address : <b>{{ userProfile?.emailAddress }}</b>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div
+  class="container"
+  *ngIf="permissions('manageMedicalPractitionerAssociations')"
+>
+  <div class="list">
+    <h2>Manage Associations</h2>
+  </div>
+
+  <div>
+    <div class="paragraph-padding">
+    <p>
+      This area allows you to add, edit and remove any users associated with
+      you.
+    </p>
+    <p><b> What role should I assign to a user?</b></p>
+    <p>
+      <b>Medical Office Manager (MOM):</b> : When you associate your profile
+      with a users as an MOM role, you are allowing that MOM to create MOA
+      associations on your behalf. A MOM can also start an eDMER for you and the
+      patient as well as input visual acuity values as needed.
+    </p>
+    <p>
+      <b>Medical Office Assistant (MOA):</b> A MOA can start an eDMER for you
+      and the patient as well as input visual acuity values as needed.
+    </p>
+  </div>
+    <button
+      mat-button
+      (click)="openCreateMedicalPractitionerRoleAssociationDialog()"
+      class="manage-button"
+      style="float: right"
+    >
+      <mat-icon>add_circle</mat-icon>Add Association
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px" class="searchMedicalPractitioner">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select [(ngModel)]="selectedMedicalPractitionerStatus">
+          <mat-option
+            *ngFor="let status of MedicalPractitionerStatuses"
+            [value]="status.label"
+          >
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalPractitionerProfileStatusChange()"
+      >
+        Apply
+      </button>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
+        <input matInput type="text" placeholder="Search by Name" />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchMedicalPractitioners()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="action-button" color="primary">
+      <button mat-button (click)="clear()">Clear</button>
+    </div>
+
+    <div class="filter-field">
+      <mat-icon class="filter-icon">filter_alt</mat-icon>
+      <mat-label style="color: #003366">Filter By: </mat-label>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select>
+          <mat-option *ngFor="let status of rolesFilter" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button" color="primary">
+      <button mat-button (click)="clear()">Clear</button>
+    </div>
+  </div>
+</div>
+<div
+  class="container"
+  *ngIf="permissions('manageMedicalPractitionerAssociationTable')"
+>
+  <table
+    class="practiotioner-profile-table"
+    mat-table
+    #formsList
+    [dataSource]="medicalPractitionerProfileDataSource"
+    matSort
+    (matSortChange)="sortMedicalPractitionerRolesData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? medicalPractitionerSelection.toggle(row) : null"
+          [checked]="medicalPractitionerSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="role">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="role"
+        sortActionDescription="Sort by name"
+      >
+        Role
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.role }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class.warn]="row.status === 'Inactive'">
+          {{ row.expiryDate }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="status {{ row.status.toLowerCase().replace(' ', '-') }}">
+          {{ row.status }}
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="editAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          class="manage-button"
+          (click)="openEditMedicalPractitionerRoleAssociationDialog(row)"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="removeAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          class="manage-button"
+          mat-icon-button
+          (click)="openManageMedicalPractitionerRoleAssociationDialog(row)"
+        >
+          <mat-icon>clear</mat-icon> Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr
+      mat-header-row
+      *matHeaderRowDef="displayedMedicalPractitionerProfileColumns"
+    ></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedMedicalPractitionerProfileColumns"
+    ></tr>
+  </table>
+  <div class="table-actions">
+    <p>Showing 7 of 7 Records</p>
+  </div>
+</div>
+
+<!-- Manage Medical Staff Associations -->
+
+<div class="container" *ngIf="permissions('manageMedicalStaffAssociation')">
+  <div class="list">
+    <h2>Manage Associations</h2>
+  </div>
+
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <div>
+          <mat-label
+            ><mat-icon class="info-icon">group</mat-icon> Medical Office
+            Staff</mat-label
+          >
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <div fxLayout="row" fxLayoutAlign="space-between">
+   <div class="paragraph-padding">
+    <p>
+      This area allows you to add, edit and remove any users associated with the
+      medical practitioners you are associated with.
+    </p>
+  </div>
+
+    <button
+      mat-button
+      class="manage-button"
+      (click)="openCreateMedicalStaffAssociationDialog()"
+    >
+      <mat-icon>add_circle</mat-icon>Add Association
+    </button>
+  </div>
+  <div fxLayout="row" fxLayoutGap="8px">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select [(ngModel)]="selectedStaffStatus">
+          <mat-option *ngFor="let status of MOMstatuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalStaffStatusChange()"
+      >
+        Apply
+      </button>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
+        <input matInput type="text" placeholder="Search by Name" />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchMedicalPractitioners()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="action-button" color="primary">
+      <button mat-button (click)="clear()">Clear</button>
+    </div>
+
+    <div class="filter-field">
+      <mat-icon class="filter-icon">filter_alt</mat-icon>
+      <mat-label style="color: #003366">Filter By: </mat-label>
+    </div>
+
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select>
+          <mat-option *ngFor="let status of MedicalStaffFilter" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button" color="primary">
+      <button mat-button (click)="clear()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="permissions('manageMedicalStaffTable')">
+  <table
+    class="practiotioner-table"
+    mat-table
+    #formsList
+    [dataSource]="medicalStaffDataSource"
+    matSort
+    (matSortChange)="sortMedicalStaffData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox style="color:#fff ;"></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? staffSelection.toggle(row) : null"
+          [checked]="staffSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="medicalPractitionerName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="medicalPractitionerName"
+        sortActionDescription="Sort by name"
+      >
+        Medical Practitioner
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.medicalPractitionerName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class.warn]="row.status === 'Inactive'">
+          {{ row.expiryDate }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="status {{ row.status.toLowerCase().replace(' ', '-') }}">
+          {{ row.status }}
+        </div>
+      </td>
+    </ng-container>
+    <!-- <ng-container matColumnDef="editAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          (click)="openEditMedicalStaffAssociationDialog(row)"
+        >
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      </td>
+    </ng-container> -->
+    <ng-container matColumnDef="removeAction">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          class="manage-button"
+          mat-icon-button
+          (click)="openRemoveMedicalStaffAssociationDialog(row)"
+        >
+          <mat-icon>clear</mat-icon> Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedMedicalStaffColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedMedicalStaffColumns"
+    ></tr>
+  </table>
+  <div class="table-actions">
+    <p>Showing 10 of 10 Records</p>
+  </div>
+</div>
+
+<!-- Manage Medical Practitioner Associations -->
+
+<div class="container" *ngIf="permissions('manageMOAAssociation')">
+  <div class="list">
+    <h2>Manage Associations</h2>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <div class="paragraph-padding">
+    <p>
+      This area allows you to manage your associations with medical
+      practitioners.
+    </p>
+    </div>
+
+    <button
+      mat-button
+      class="manage-button"
+      (click)="openCreateMedicalPractitionerAssociationDialog()"
+    >
+      <mat-icon>add_circle</mat-icon>Request Association
+    </button>
+  </div>
+</div>
+
+<div class="container" *ngIf="permissions('manageMOMAssociation')">
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <div>
+          <mat-label
+            ><mat-icon class="info-icon">local_hospital</mat-icon> Medical
+            Practitioners</mat-label
+          >
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+  </mat-card>
+  <div class="paragraph-padding">
+  <p>
+    This area allows you to manage your associations with medical practitioners.
+  </p>
+  <p>
+    In order to manage associations between MOAs and medical practitioners, a
+    MOM needs an association with one or more medical practitioner.
+  </p>
+  <p>
+    Medical practitioners must initiate an association with a MOM. If you are a
+    MOM and need an association with a specific medical practitioner, please
+    provide them with your email address used to create your portal account and
+    ask them to ‘Add a MOM Association’ with you in the portal. Once the medical
+    practitioner has completed that step, their name will appear in the table
+    below. You can then use the 'Add Association' link in the Medical Office
+    Staff section above to create associations between MOAs and your associated
+    medical practitioners, on their behalf.
+  </p>
+  </div>
+</div>
+
+<div class="container" *ngIf="permissions('manageMOASearch')">
+  <div fxLayout="row" fxLayoutGap="8px" style="width: 62%">
+    <div fxFlex>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-select [(ngModel)]="selectedPractitionerStatus">
+          <mat-option *ngFor="let status of MOAstatuses" [value]="status.label">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="action-button">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="medicalPractitionerStatusChange()"
+      >
+        Apply
+      </button>
+    </div>
+    <div fxFlex>
+      <mat-form-field class="full-width" appearance="outline">
+        <input matInput type="text" placeholder="Search by Name" />
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="search"
+          (click)="searchMedicalPractitioners()"
+        >
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="action-button" color="primary">
+      <button mat-button (click)="clear()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="permissions('manageMOATable')">
+  <table
+    class="practiotioner-table"
+    mat-table
+    #formsList
+    [dataSource]="dataSource"
+    matSort
+    (matSortChange)="sortMedicalPractitionerData($event)"
+    matSortActive="fullName"
+    matSortDirection="asc"
+    matSortDisableClear
+  >
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox></mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? practitionerSelection.toggle(row) : null"
+          [checked]="practitionerSelection.isSelected(row)"
+        >
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fullName">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="fullName"
+        sortActionDescription="Sort by name"
+      >
+        Name
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="expiryDate">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="expiryDate"
+        sortActionDescription="Sort by expiryDate"
+      >
+        Expiry Date
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <span [class.warn]="row.status === 'Inactive'">
+          {{ row.expiryDate }}
+        </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header="status"
+        sortActionDescription="Sort by status"
+      >
+        Status
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="status {{ row.status.toLowerCase().replace(' ', '-') }}">
+          {{ row.status }}
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row" class="col-action">
+        <button
+          mat-icon-button
+          class="manage-button"
+          (click)="openManageMedicalPractitionerAssociationDialog(row)"
+        >
+          <mat-icon>clear</mat-icon> Remove
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  <div class="table-actions">
+    <p>Showing 6 of 6 Records</p>
+  </div>
+</div>

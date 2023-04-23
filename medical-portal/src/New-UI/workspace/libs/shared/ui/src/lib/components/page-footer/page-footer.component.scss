@@ -1,0 +1,16 @@
+div {
+  display: flex;
+  margin-bottom: 2rem;
+
+  &.single {
+    justify-content: flex-end;
+  }
+
+  &.multiple {
+    justify-content: space-between;
+  }
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+}

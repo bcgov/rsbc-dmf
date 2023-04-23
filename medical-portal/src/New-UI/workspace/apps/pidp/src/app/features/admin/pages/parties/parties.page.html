@@ -1,0 +1,51 @@
+<ui-page>
+  <ui-page-header>{{ title }}</ui-page-header>
+</ui-page>
+
+<div class="admin-header">
+  <p id="parties-table-description">
+    <strong>List of users in the Provider Identity Portal</strong>
+  </p>
+  <ng-container *ngIf="environment !== production">
+    <button mat-stroked-button type="button" color="warn" (click)="onDelete()">
+      Delete all
+    </button>
+  </ng-container>
+</div>
+
+<table
+  mat-table
+  aria-describedby="parties-table-description"
+  [dataSource]="dataSource">
+  <ng-container matColumnDef="id">
+    <th *matHeaderCellDef scope="col" mat-header-cell>Reference ID</th>
+    <td *matCellDef="let element" mat-cell>{{ element.id }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="providerName">
+    <th *matHeaderCellDef scope="col" mat-header-cell>Provider Name</th>
+    <td *matCellDef="let element" mat-cell>{{ element.providerName }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="providerCollegeCode">
+    <th *matHeaderCellDef scope="col" mat-header-cell>Provider College</th>
+    <td *matCellDef="let element" mat-cell>
+      {{ element.providerCollegeCode | lookupCode: 'colleges':'acronym' }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="saEforms">
+    <th *matHeaderCellDef scope="col" mat-header-cell>SA eForms</th>
+    <td *matCellDef="let element" mat-cell>
+      <mat-icon
+        [class]="
+          element.saEformsAccessRequest ? 'has-requested' : 'not-requested'
+        ">
+        {{ element.saEformsAccessRequest ? 'check_circle' : 'block' }}
+      </mat-icon>
+    </td>
+  </ng-container>
+
+  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+  <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+</table>
