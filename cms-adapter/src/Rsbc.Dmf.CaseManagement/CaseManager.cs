@@ -2604,7 +2604,6 @@ namespace Rsbc.Dmf.CaseManagement
              catch (Exception e)
             {
                 logger.LogError(e, $"Update Document Status - Error updating");
-                result.ErrorDetail = e.Message;
             }
             return result;
         }
