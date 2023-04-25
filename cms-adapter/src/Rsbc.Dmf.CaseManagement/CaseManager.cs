@@ -80,6 +80,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status);
 
+
+        Task<ResultStatusReply> UpdateDriver(Driver driver);
+
         Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest);
 
         Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
@@ -297,6 +300,8 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Id;
         public bool Success { get; set; }
+
+        public string ErrorDetail { get; set; }
     }
 
     public class UpdateDriverRequest
@@ -983,6 +988,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     result.Success = false;
                     Log.Logger.Error(ex.Message);
+                    result.ErrorDetail = ex.Message;
                 }
 
 
@@ -2448,6 +2454,7 @@ namespace Rsbc.Dmf.CaseManagement
             catch (Exception e)
             {
                 logger.LogError(e, $"Update Clean Pass Flag - Error updating");
+                result.ErrorDetail = e.Message;
             }
 
             return result;
@@ -2538,6 +2545,7 @@ namespace Rsbc.Dmf.CaseManagement
              catch (Exception e)
             {
                 logger.LogError(e, $"Update Document Status - Error updating");
+                result.ErrorDetail = e.Message;
             }
             return result;
         }
@@ -2584,6 +2592,69 @@ namespace Rsbc.Dmf.CaseManagement
             catch (Exception e)
             {
                 logger.LogError(e, $"UpdateBirthdate - Error updating");
+                result.ErrorDetail = e.Message;
+            }
+            return result;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateDriver(Driver driver)
+        {
+            bool written = false;
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(x => x.dfp_licensenumber == driver.DriverLicenseNumber);
+
+            var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
+            dfp_driver[] driverResults = data.ToArray();
+
+            try
+            {
+
+                if (driverResults.Length > 0)
+                {
+                    foreach (var item in driverResults)
+                    {
+
+                        // ensure the contact information exists.
+
+                        dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
+
+                        contact driverContact;
+                        
+                        if (item.dfp_PersonId != null)
+                        {
+                            driverContact = item.dfp_PersonId;
+
+                            driverContact.firstname = driver.GivenName;
+                            driverContact.lastname = driver.Surname;
+                            driverContact.birthdate = driver.BirthDate;
+
+                            dynamicsContext.UpdateObject(driverContact);
+                            written = true;
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                        }
+                    }
+                    
+                }
+
+                if (written) 
+                {
+                    dynamicsContext.DetachAll();
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"UpdateDriver - Error updating");
+                result.ErrorDetail = e.Message;
             }
             return result;
         }
@@ -2709,7 +2780,8 @@ namespace Rsbc.Dmf.CaseManagement
                 catch (Exception ex)
                 {
                     result.Success = false;
-                    Log.Logger.Error(ex.Message);
+                    Log.Logger.Error(ex,ex.Message);
+                    result.ErrorDetail = ex.Message;
                 }
             }
             return result;

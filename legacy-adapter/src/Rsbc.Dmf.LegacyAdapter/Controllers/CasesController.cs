@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -65,33 +66,81 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
-            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
-            string caseId = GetCaseId( licenseNumber, surcode);
-            
-            if (caseId == null) // create it
+            // trim out any spaces, force upper case.
+
+            surcode = surcode.Trim().ToUpper();
+
+            if (surcode.Length > 3)
             {
-                try
-                {
-                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null)
-                    {
-                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                        {
-                            LicenseNumber = licenseNumber,
-                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty
-                        };
-                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogInformation(e,"Error getting driver.");
-                }
-                caseId = GetCaseId(licenseNumber, surcode);
+                surcode = surcode.Substring(0,3);
             }
-            
-            return Json(caseId);
+
+
+            string result = null;
+
+
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
+            var driver = _icbcClient.GetDriverHistory(licenseNumber);
+            if (driver != null && !string.IsNullOrEmpty(driver.INAM?.SURN))
+            {
+                // first check that it matches ICBC
+                
+                string surname = driver.INAM?.SURN;
+
+                surname = surname.Trim().ToUpper();
+
+                if (surname.Length > 3)
+                {
+                    surname = surname.Substring(0, 3);
+                }
+
+                if (surname == surcode)  // proceed if the surcode matches.
+                {
+                    // ensure the surcode matches.
+
+                    _cmsAdapterClient.UpdateDriver(new CaseManagement.Service.Driver
+                    {
+                        DriverLicenseNumber = licenseNumber,
+                        BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                        GivenName = driver.INAM?.GIV1 ?? string.Empty,
+                        Surname = driver.INAM?.SURN ?? string.Empty
+                    });
+
+                    result = GetCaseId(licenseNumber, surcode);
+                }
+                
+
+                if (result == null) // create it
+                {
+                    try
+                    {
+
+                        {
+                            //
+                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                            {
+                                LicenseNumber = licenseNumber,
+                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                Surname = driver.INAM?.SURN ?? string.Empty,
+                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                            };
+                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogInformation(e, "Error getting driver.");
+                    }
+                    result = GetCaseId(licenseNumber, surcode);
+                }
+
+            }
+            else  // fallback, just check Dynamics.
+            {
+                result = GetCaseId(licenseNumber, surcode);
+            }
+                            
+            return Json(result);
         }
 
         /// <summary>
@@ -111,13 +160,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null)
+                    if (driver != null && driver.INAM?.SURN != null)
                     {
                         LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty
+                            Surname = driver.INAM?.SURN ?? string.Empty,
+                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                     }

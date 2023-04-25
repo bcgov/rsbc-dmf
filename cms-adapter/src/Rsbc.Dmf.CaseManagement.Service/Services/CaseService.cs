@@ -947,6 +947,41 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        /// <summary>
+        /// Update Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateDriver(Driver request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+            
+            try
+            {
+                var updateStatus = await _caseManager.UpdateDriver(new CaseManagement.Driver { DriverLicenseNumber = request.DriverLicenseNumber, 
+                    BirthDate = request.BirthDate.ToDateTime(),
+                     GivenName = request.GivenName,
+                     Surname = request.Surname
+                    });
+                if (updateStatus.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = updateStatus.ErrorDetail ?? "unknown error";
+                }
+                
+            }
+            catch (Exception e)
+            {
+                reply.ErrorDetail=e.Message;
+            }
+
+            return reply;
+        }
+
         FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
         {
             FlagTypeOptions result = FlagTypeOptions.Unknown;
