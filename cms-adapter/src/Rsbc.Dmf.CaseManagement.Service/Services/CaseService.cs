@@ -945,18 +945,39 @@ namespace Rsbc.Dmf.CaseManagement.Service
             
             try
             {
-                var updateStatus = await _caseManager.UpdateDriver(new CaseManagement.Driver { DriverLicenseNumber = request.DriverLicenseNumber, 
-                    BirthDate = request.BirthDate.ToDateTime(),
-                     GivenName = request.GivenName,
-                     Surname = request.Surname
-                    });
-                if (updateStatus.Success)
+                // start by getting the driver.
+
+                var drivers = await _caseManager.GetDriver(request.DriverLicenseNumber);
+
+                // check the drivers.
+
+                bool isChange = false;
+
+                foreach (var driver in drivers)
                 {
-                    reply.ResultStatus = ResultStatus.Success;
+                    if (driver.Surname != request.Surname || driver.BirthDate != request.BirthDate.ToDateTime())
+                    {
+                        isChange = true;
+                    }
                 }
-                else
+
+                if (isChange)
                 {
-                    reply.ErrorDetail = updateStatus.ErrorDetail ?? "unknown error";
+                    var updateStatus = await _caseManager.UpdateDriver(new CaseManagement.Driver
+                    {
+                        DriverLicenseNumber = request.DriverLicenseNumber,
+                        BirthDate = request.BirthDate.ToDateTime(),
+                        GivenName = request.GivenName,
+                        Surname = request.Surname
+                    });
+                    if (updateStatus.Success)
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    else
+                    {
+                        reply.ErrorDetail = updateStatus.ErrorDetail ?? "unknown error";
+                    }
                 }
                 
             }
