@@ -71,10 +71,10 @@ service CaseManager {
   //Update Clean Pass Flag
   rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
 
-  // Send To BC mail
-  rpc GetListOfLettersSentToBcMail(EmptyRequest) returns (GetDocumentsReply);
+   // Send To BC mail
+   rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
 
-  rpc UpdateDocumentStatus(LegacyDocumentStatusRequest) returns (ResultStatusReply);
+   rpc UpdateDocumentStatus(PdfDocumentRequest) returns (PdfDocumentReply);
 }
 
 message UpdateDriverRequest{
@@ -167,6 +167,23 @@ message GetLegacyDocumentReply {
 	LegacyDocument document = 3;
 }
 
+message PdfDocumentRequest{
+	string pdfDoumentId = 1;
+	int64 stateCode = 2;
+	int64 statusCode = 3;
+}
+
+message PdfDocumentReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	repeated PdfDocument pdfDocuments = 3;
+}
+
+message PdfDocument{
+  string pdfDocumentId = 1;
+  int64 stateCode = 2;
+  int64 statusCode = 3;
+}
 
 message CreateStatusReply {	
 	ResultStatus resultStatus = 1;

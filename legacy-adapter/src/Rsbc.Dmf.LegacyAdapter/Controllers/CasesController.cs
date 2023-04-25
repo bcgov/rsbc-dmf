@@ -548,7 +548,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     OriginatingNumber = originatingNumber ?? string.Empty,
                     Driver = driver,
                     ValidationMethod = validationMethod ?? string.Empty,
-                    ValidationPrevious = validationPrevious ?? string.Empty
+                    ValidationPrevious = validationPrevious ?? string.Empty,
+                    Priority = priority ?? string.Empty,
+                    Owner = assign ?? string.Empty,
+                    
                 };
 
                 var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);

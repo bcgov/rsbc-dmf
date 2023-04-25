@@ -76,9 +76,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task ResolveCaseStatusUpdates();
 
-        Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail();
+        Task<IEnumerable<PdfDocument>> GetPdfDocuments();
 
-        Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status);
+        Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest pdfDocumentRequest);
 
 
         Task<ResultStatusReply> UpdateDriver(Driver driver);
@@ -308,6 +308,27 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string DriverLicenseNumber { get; set; }
         public DateTime BirthDate { get; set; }
+    }
+
+    public class PdfDocumentRequest
+    {
+        public string PdfDocumentId { get; set; }
+        public int? StatusCode { get; set; }
+        public int? StateCode { get; set; }
+    }
+
+
+    public class PdfDocument
+    {
+        public string PdfDocumentId { get; set; }
+        public int? StatusCode { get; set; }
+        public int? StateCode { get; set; }
+    }
+
+    public class PdfDocumentReply
+    {
+        public PdfDocument Document { get; set; }
+        public bool Success { get; set; }
     }
 
     internal class CaseManager : ICaseManager
@@ -1317,7 +1338,9 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // find the owner.
 
-                var newOwner = LookupTeam(TranslateOwner(request.Owner));
+                var newOwner = LookupTeam(request.Owner);
+
+
                 
 
                 if (bcgovDocumentUrl == null)
@@ -1951,17 +1974,32 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public principal LookupTeam(string name)
         {
+            // name can be username IDER\name or a Team Name like "Adjudicators"
             // this would need to check team first and then the systemuser entity
             principal result = null;
             
             try
             {
-                team lookupTeam = dynamicsContext.teams.Where(x => x.name == name).FirstOrDefault();
+                string translatedOwner = TranslateOwner(name);
+                
+                team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner).FirstOrDefault();
 
                 if (lookupTeam != null)
                 {
                     result = lookupTeam;
                 }
+                else
+                {
+                    if (!name.StartsWith("IDIR\\"))
+                    {
+                        name = $"IDIR\\" + name;
+                    }
+                    systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == name).FirstOrDefault();
+                    if (lookupUser != null)
+                    {
+                        result = lookupUser;
+                    }
+                }  
                 
             }
             catch (Exception e)
@@ -2013,16 +2051,6 @@ namespace Rsbc.Dmf.CaseManagement
         private string TranslateDmerType(int? dmerType)
         {
             var statusMap = new Dictionary<int, string>()
-            /*
-             * {
-                { 100000000, "Commercial/NSC" },
-                { 100000001, "Age" },
-                { 100000002, "Industrial Road" },
-                { 100000003, "Known/Suspected Condition" },
-                { 100000004, "Scheduled Routine"},
-                { 100000005, "No DMER"}
-               };
-            */
             {
                 { 100000000, "Commercial" },
                 { 100000001, "Scheduled Age" },
@@ -2067,12 +2095,20 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        // convert the owner from the value provided by the legacy system to Dynamics CRM
+
+        /// <summary>
+        ///  convert the owner from the value provided by the legacy system to Dynamics CRM
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <returns></returns>
         private string TranslateOwner(string owner)
         {
             var statusMap = new Dictionary<string, string>()
             {
-                {  "Adjudicators", "Team - Adjudicator" }               
+                {"Team Leads Review", "Team - Team Lead/Manager" },
+                {"Nurse Case Managers", "Team - Nurse Case Manager" },
+                {"Adjudicators", "Team - Adjudicator" },
+                {"Client Services", "Team - Intake" },
             };
 
             if (owner != null && statusMap.ContainsKey(owner))
@@ -2436,8 +2472,12 @@ namespace Rsbc.Dmf.CaseManagement
                    
                             if (document.dfp_DocumentTypeID != null)
                             {
-                                if (document.dfp_DocumentTypeID != null && document.dfp_DocumentTypeID.dfp_name != null && document.dfp_DocumentTypeID.dfp_name == "Clean Pass")
+                                if (document.dfp_DocumentTypeID != null && 
+                                    document.dfp_DocumentTypeID.dfp_name != null && 
+                                    document.dfp_DocumentTypeID.dfp_name == "Clean Pass"
+                                    )
                                 {
+                                    
                                     @case.dfp_iscleanpass = true;
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
@@ -2493,22 +2533,40 @@ namespace Rsbc.Dmf.CaseManagement
         /// GetListOfLettersSentToBcMail
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyDocument>> GetListOfLettersSentToBcMail()
+        public async Task<IEnumerable<PdfDocument>> GetPdfDocuments()
         {
             // Call the documents and get the list of documents in "Sent To BC Mail" status
 
-            return dynamicsContext.bcgov_documenturls.
-                Where(d => d.statuscode == 1)
-                .Select(document => new LegacyDocument
+            List<PdfDocument> result = new List<PdfDocument>();
+
+            try
+            {
+                var pdfDocuments = dynamicsContext.dfp_pdfdocuments.Where(
+                d => d.statecode == 0 &&
+                d.statuscode == 100000002).ToList();
+
+                foreach (var pdfDocument in pdfDocuments)
                 {
-                    DocumentId = document.bcgov_documenturlid.ToString(),
-                    
-                    DocumentUrl = document.bcgov_url ?? string.Empty,
-                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                    ImportId = document.dfp_importid ?? string.Empty,
-                }).ToList();
-           
+                    if (pdfDocument != null)
+                    {
+                        PdfDocument pdfDoc = new PdfDocument()
+                        {
+                            PdfDocumentId = pdfDocument.dfp_pdfdocumentid.ToString(),
+                            StateCode = pdfDocument.statecode,
+                            StatusCode = pdfDocument.statuscode
+                        };
+                        result.Add(pdfDoc);
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"GetPdfDocuments");
+            }
+
+            return result;
         }
 
 
@@ -2517,30 +2575,31 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <returns></returns>
 
-        public async Task<ResultStatusReply> UpdateDocumentStatus(string documentId, int status)
+        public async Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest pdfDocumentRequest)
         {
-            ResultStatusReply result = new ResultStatusReply()
+            PdfDocumentReply result = new PdfDocumentReply()
             {
                 Success = false
             };
 
             try{
-                var documents = dynamicsContext.bcgov_documenturls.
-                Where(d => d.statuscode == 1
-                && d.bcgov_documenturlid.ToString() == documentId
-                ) ; 
+             
+                var pdfDocument = dynamicsContext.dfp_pdfdocuments.Where( 
+                    d => d.dfp_pdfdocumentid == Guid.Parse(pdfDocumentRequest.PdfDocumentId)).FirstOrDefault();
 
-                foreach (var doc in documents)
+                if(pdfDocument != null)
                 {
-                    
-                    // Update Document status to Send or failure
-                    doc.statuscode = status;
-                 
-                    dynamicsContext.UpdateObject(doc);
-                }
+                    // Set the state code to Inacative
+                    // status to SEND or Failed TO Send
+                    pdfDocument.statecode = 1;
+                    pdfDocument.statuscode = pdfDocumentRequest.StatusCode;
 
-                await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.UpdateObject(pdfDocument);
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;         
+                }
                 dynamicsContext.DetachAll();
+
             }
              catch (Exception e)
             {
@@ -2549,6 +2608,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             return result;
         }
+
 
         /// <summary>
         /// 
