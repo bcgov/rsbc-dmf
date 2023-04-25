@@ -2662,11 +2662,12 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <returns></returns>
         public async Task<ResultStatusReply> UpdateDriver(Driver driver)
-        {
-            bool written = false;
+        {            
+            bool written = false; // if true, we have writtent to Dynamics
+
             ResultStatusReply result = new ResultStatusReply()
             {
-                Success = false
+                Success = false, ErrorDetail = string.Empty
             };
             var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
                 .Where(x => x.dfp_licensenumber == driver.DriverLicenseNumber);
