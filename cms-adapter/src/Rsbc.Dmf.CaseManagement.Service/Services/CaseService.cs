@@ -933,6 +933,62 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        /// <summary>
+        /// Update Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateDriver(Driver request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+            
+            try
+            {
+                // start by getting the driver.
+
+                var drivers = await _caseManager.GetDriver(request.DriverLicenseNumber);
+
+                // check the drivers.
+
+                bool isChange = false;
+
+                foreach (var driver in drivers)
+                {
+                    if (driver.Surname != request.Surname || driver.BirthDate != request.BirthDate.ToDateTime())
+                    {
+                        isChange = true;
+                    }
+                }
+
+                if (isChange)
+                {
+                    var updateStatus = await _caseManager.UpdateDriver(new CaseManagement.Driver
+                    {
+                        DriverLicenseNumber = request.DriverLicenseNumber,
+                        BirthDate = request.BirthDate.ToDateTime(),
+                        GivenName = request.GivenName,
+                        Surname = request.Surname
+                    });
+                    if (updateStatus.Success)
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    else
+                    {
+                        reply.ErrorDetail = updateStatus.ErrorDetail ?? "unknown error";
+                    }
+                }
+                
+            }
+            catch (Exception e)
+            {
+                reply.ErrorDetail=e.Message;
+            }
+
+            return reply;
+        }
+
         FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
         {
             FlagTypeOptions result = FlagTypeOptions.Unknown;

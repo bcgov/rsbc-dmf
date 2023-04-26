@@ -60,14 +60,16 @@ service CaseManager {
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
+  rpc UpdateDriver(Driver) returns (ResultStatusReply);
+
   // Resolve a case
-   rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
+  rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
 
    // Update Birth Date
-   rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
+  rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
 
-   //Update Clean Pass Flag
-   rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
+  //Update Clean Pass Flag
+  rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
 
    // Send To BC mail
    rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
@@ -286,6 +288,9 @@ message TokenReply {
 	string token = 2;
 	string errorDetail = 3;
 }
+
+
+
 
 message UpdateCaseRequest{
 	string caseId = 1;
