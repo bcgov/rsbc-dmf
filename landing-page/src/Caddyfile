@@ -28,3 +28,7 @@
 
     file_server
 }
+
+:2016 {
+	respond / 200
+}
