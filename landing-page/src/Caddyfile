@@ -3,11 +3,7 @@
 }
 
 :2015 {
-    log {
-      level {$LOG_LEVEL}
-    }
-
-    root * /site
+    root * /srv
 
     header / {
         # Enable HTTP Strict Transport Security (HSTS) to force clients to always connect via HTTPS (do not use if only testing)
