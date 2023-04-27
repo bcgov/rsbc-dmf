@@ -382,7 +382,7 @@ namespace Rsbc.Dmf.Scheduler
                 //app.UseDeveloperExceptionPage();
 
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ICBC Adapter v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scheduler v1"));
 
             }
 
@@ -474,7 +474,7 @@ namespace Rsbc.Dmf.Scheduler
                     .Enrich.WithExceptionDetails()
                     .WriteTo.Console()
                     .WriteTo.EventCollector(Configuration["SPLUNK_COLLECTOR_URL"],
-                        sourceType: "icbc-adapter", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
+                        sourceType: "scheduler-service", eventCollectorToken: Configuration["SPLUNK_TOKEN"],
                         restrictedToMinimumLevel: LogEventLevel.Information,
 #pragma warning disable CA2000 // Dispose objects before losing scope
                         messageHandler: new HttpClientHandler
@@ -496,7 +496,7 @@ namespace Rsbc.Dmf.Scheduler
                     .WriteTo.Console()
                     .CreateLogger();
             }
-            Log.Logger.Information("Icbc Adapter Container Started");
+            Log.Logger.Information("Scheduler Container Started");
             SelfLog.Enable(Console.Error);
         }
 

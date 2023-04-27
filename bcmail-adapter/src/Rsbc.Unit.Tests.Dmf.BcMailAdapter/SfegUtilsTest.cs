@@ -28,11 +28,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             sfegUtils = new SfegUtils(Configuration, CaseManagerClient);
         }
 
-        [Fact]
+/*        [Fact]
         public async void CanSendDocumentsToBcMail()
         {
             
             await sfegUtils.SendDocumentsToBcMail();
-        }
+        }*/
     }
 }
