@@ -136,7 +136,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             else  // fallback, just check Dynamics.
             {
                 _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
-                
+                DebugUtils.SaveDebug("IcbcError",$"{licenseNumber}-{surcode}");
+
                 result = GetCaseId(licenseNumber, surcode);
             }
 
