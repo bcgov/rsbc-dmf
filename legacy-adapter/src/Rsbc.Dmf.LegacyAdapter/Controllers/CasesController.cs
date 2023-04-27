@@ -558,7 +558,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                         ImportDate = Timestamp.FromDateTimeOffset(importDate),
                         ImportId = importID ?? string.Empty,
-
+                        
                         OriginatingNumber = originatingNumber ?? string.Empty,
                         Driver = driver,
                         ValidationMethod = validationMethod ?? string.Empty,
