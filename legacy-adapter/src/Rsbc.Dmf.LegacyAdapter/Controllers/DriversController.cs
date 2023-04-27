@@ -587,15 +587,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     OriginatingNumber = string.Empty
                 };
 
-                
-                
-
                 // Convert the 
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
-                string fileKey = DocumentUtils.SanitizeKeyFilename ($"{filename}-{importDateString}-{sequenceNumber}");
+                string fileKey = DocumentUtils.SanitizeKeyFilename($"D{importDateString}-{filename}");
 
-                
 
                 // add the document
                 UploadFileRequest pdfData = new UploadFileRequest()

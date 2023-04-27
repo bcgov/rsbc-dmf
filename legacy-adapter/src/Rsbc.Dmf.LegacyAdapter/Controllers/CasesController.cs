@@ -525,6 +525,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     fileName = DocumentUtils.SanitizeKeyFilename(fileName);
 
+                    string fileImportDateString = importDate.ToString("yyyyMMddHHmmss");
+                    string fileKey = DocumentUtils.SanitizeKeyFilename($"D{fileImportDateString}-{fileName}");
+
                     UploadFileRequest pdfData = new UploadFileRequest()
                     {
                         ContentType = DocumentUtils.GetMimeType(fileName),
