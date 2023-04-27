@@ -91,6 +91,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
           
         Task SwitchTo8Dl();
+
+        Task<ResultStatusReply> UpdateCleanPassDocuments(CleanPassRequest request);
     }
        
 
@@ -2458,23 +2460,27 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                    if (@case.bcgov_incident_bcgov_documenturl != null)
+                    if (@case.bcgov_incident_bcgov_documenturl != null && @case.statecode == 0)
                     {
                         foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
                    
-                            if (document.dfp_DocumentTypeID != null)
+                            if (document.dfp_DocumentTypeID != null && document.statecode == 0)
                             {
                                 if (document.dfp_DocumentTypeID != null && 
                                     document.dfp_DocumentTypeID.dfp_name != null && 
                                     document.dfp_DocumentTypeID.dfp_name == "Clean Pass"
                                     )
                                 {
-                                    
                                     @case.dfp_iscleanpass = true;
+                                    //document.dfp_submittalstatus = 100000009; //Clean Pass
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
+
+                                    //dynamicsContext.UpdateObject(document);
+
+                                    //await dynamicsContext.SaveChangesAsync(SaveChangesOptions.BatchWithIndependentOperations);
                                     dynamicsContext.DetachAll();
                                     result.Success = true;
                                     break;
@@ -2488,6 +2494,62 @@ namespace Rsbc.Dmf.CaseManagement
             catch (Exception e)
             {
                 logger.LogError(e, $"Update Clean Pass Flag - Error updating");
+            }
+
+            return result;
+
+        }
+
+
+        /// <summary>
+        /// Update CleanPass Documents Status
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateCleanPassDocuments(CleanPassRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try
+            {
+                string caseId = request.CaseId;
+                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+                if (@case != null)
+                {
+                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                    if (@case.bcgov_incident_bcgov_documenturl != null && @case.statecode == 0)
+                    {
+                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                            if (document.dfp_DocumentTypeID != null && document.dfp_submittalstatus == 100000001 && document.statecode ==0)
+                            {
+                                if (document.dfp_DocumentTypeID != null &&
+                                    document.dfp_DocumentTypeID.dfp_name != null &&
+                                    document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                    )
+                                {
+                                    document.dfp_submittalstatus = 100000009; //Clean Pass
+                                    dynamicsContext.UpdateObject(document);
+                                    await dynamicsContext.SaveChangesAsync();
+                                    dynamicsContext.DetachAll();
+                                    result.Success = true;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Update Document Status - Error updating");
             }
 
             return result;
@@ -2535,8 +2597,7 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var pdfDocuments = dynamicsContext.dfp_pdfdocuments.Where(
-                d => d.statecode == 0 &&
-                d.statuscode == 100000002).ToList();
+                d => d.statuscode == 100000002).ToList();
 
                 foreach (var pdfDocument in pdfDocuments)
                 {
@@ -2582,9 +2643,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if(pdfDocument != null)
                 {
-                    // Set the state code to Inacative
-                    // status to SEND or Failed TO Send
-                    pdfDocument.statecode = 1;
+                   
+                    // status to SEND or Failed TO Send                
                     pdfDocument.statuscode = pdfDocumentRequest.StatusCode;
 
                     dynamicsContext.UpdateObject(pdfDocument);

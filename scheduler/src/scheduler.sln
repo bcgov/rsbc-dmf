@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.Scheduler", "Rsbc.Dmf.Scheduler\Rsbc.Dmf.Scheduler.csproj", "{E89C9F09-209C-4720-8C8F-48407DB04D45}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Unit.Tests.Dmf.Scheduler", "Rsbc.Unit.Tests.Dmf.Scheduler\Rsbc.Unit.Tests.Dmf.Scheduler.csproj", "{415CB4B3-9CD7-4F66-8B4F-D9FE4EB296E6}"
+
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

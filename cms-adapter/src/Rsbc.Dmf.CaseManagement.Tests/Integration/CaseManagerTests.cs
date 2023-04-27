@@ -104,7 +104,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                         CaseId = caseId,
                     };
 
-                    await caseManager.UpdateCleanPassFlag(request);
+                    var cleanPass = await caseManager.UpdateCleanPassFlag(request);
+
+                    if (cleanPass != null)
+                    {
+                        await caseManager.UpdateCleanPassDocuments(request);
+                    }
 
 
                 }
@@ -113,13 +118,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             }
 
-           
-
-
-            // Assert: Get case and Verify clean pass is set
-           /* var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.FirstOrDefault();
-
-            Assert.True(queryResults.CleanPass);*/
             
         }
 
@@ -528,7 +526,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanGetListOfPdfDocuments()
         {
             
-            var docs = await caseManager.GetPdfDocuments();
+           await caseManager.GetPdfDocuments();
 
         }
 
@@ -547,6 +545,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }
+
+        /*[Fact(Skip = RequiresDynamics)]
+        public async Task CanUpdateCleanPassDocuments()
+        {
+            
+            await caseManager.UpdateCleanPassDocuments();
+        }*/
 
     }
 }
