@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -55,6 +56,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             _icbcClient = icbcClient;
         }
 
+
         /// <summary>
         /// DoesCaseExist
         /// </summary>
@@ -65,33 +67,81 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
-            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
-            string caseId = GetCaseId( licenseNumber, surcode);
-            
-            if (caseId == null) // create it
+            // trim out any spaces, force upper case.
+
+            surcode = surcode.Trim().ToUpper();
+
+            if (surcode.Length > 3)
             {
-                try
-                {
-                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null)
-                    {
-                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                        {
-                            LicenseNumber = licenseNumber,
-                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty
-                        };
-                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogInformation(e,"Error getting driver.");
-                }
-                caseId = GetCaseId(licenseNumber, surcode);
+                surcode = surcode.Substring(0, 3);
             }
-            
-            return Json(caseId);
+
+            string result = null;
+
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
+            var driver = _icbcClient.GetDriverHistory(licenseNumber);
+            if (driver != null && !string.IsNullOrEmpty(driver.INAM?.SURN))
+            {
+                // first check that it matches ICBC
+
+                string surname = driver.INAM?.SURN;
+
+                surname = surname.Trim().ToUpper();
+
+                if (surname.Length > 3)
+                {
+                    surname = surname.Substring(0, 3);
+                }
+
+                if (surname == surcode)  // proceed if the surcode matches.
+                {
+                    // ensure the surcode matches.
+
+                    _cmsAdapterClient.UpdateDriver(new CaseManagement.Service.Driver
+                    {
+                        DriverLicenseNumber = licenseNumber,
+                        BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                        GivenName = driver.INAM?.GIV1 ?? string.Empty,
+                        Surname = driver.INAM?.SURN ?? string.Empty
+                    });
+
+                    result = GetCaseId(licenseNumber, surcode);
+                }
+
+                if (result == null) // create it
+                {
+                    try
+                    {
+
+                        {
+                            //
+                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                            {
+                                LicenseNumber = licenseNumber,
+                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                Surname = driver.INAM?.SURN ?? string.Empty,
+                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                            };
+                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogInformation(e, "Error getting driver.");
+                    }
+                    result = GetCaseId(licenseNumber, surcode);
+                }
+
+            }
+            else  // fallback, just check Dynamics.
+            {
+                _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
+                DebugUtils.SaveDebug("IcbcError",$"{licenseNumber}-{surcode}");
+
+                result = GetCaseId(licenseNumber, surcode);
+            }
+
+            return Json(result);
         }
 
         /// <summary>
@@ -111,15 +161,20 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null)
+                    if (driver != null && driver.INAM?.SURN != null)
                     {
                         LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty
+                            Surname = driver.INAM?.SURN ?? string.Empty,
+                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                    }
+                    else
+                    {
+                        _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
                     }
                 }
                 catch (Exception e)
@@ -362,173 +417,189 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string envelopeId = null
             )
         {
-
-            string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
-
-            DateTimeOffset faxReceivedDate  = DocumentUtils.ParseDpsDate(faxReceivedDateString);
-            DateTimeOffset importDate= DocumentUtils.ParseDpsDate(importDateString);
-
-
-
-            var debugObject = new { driversLicense = licenseNumber, batchId = batchId, faxReceivedDate = faxReceivedDate, importDate = importDate,
-                importID = importID,
-                originatingNumber = originatingNumber,
-                documentPages = documentPages,
-                documentType = documentType,
-                documentTypeCode = documentTypeCode,
-                validationMethod = validationMethod,
-                validationPrevious = validationPrevious,
-                priority = priority,
-                assign = assign,
-                submittalStatus = submittalStatus,
-                surcode = surcode
-            };       
-            
-            //Log.Information(JsonConvert.SerializeObject(debugObject));
-
-            var driver = new CaseManagement.Service.Driver()
+            if (! string.IsNullOrEmpty(driversLicense)) 
             {
-                DriverLicenseNumber = licenseNumber,
-                Address = new Address()
+                string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
+
+                DateTimeOffset faxReceivedDate = DocumentUtils.ParseDpsDate(faxReceivedDateString);
+                DateTimeOffset importDate = DocumentUtils.ParseDpsDate(importDateString);
+
+
+
+                var debugObject = new
                 {
-                    City = String.Empty,
-                    Line1 = String.Empty,
-                    Line2 = String.Empty,
-                    Postal =String.Empty
-                },
-                BirthDate = Timestamp.FromDateTimeOffset(new DateTimeOffset(1970,1,1,0,0,0,TimeSpan.Zero)),
-                GivenName = String.Empty,
-                Height = 0.0,
-                Id = String.Empty,
-                Middlename = String.Empty,
-                Name = String.Empty,
-                Seck = String.Empty ,
-                Sex = String.Empty ,
-                Surname = String.Empty ,
-                Weight = 0.0
-            };
+                    driversLicense = licenseNumber,
+                    batchId = batchId,
+                    faxReceivedDate = faxReceivedDate,
+                    importDate = importDate,
+                    importID = importID,
+                    originatingNumber = originatingNumber,
+                    documentPages = documentPages,
+                    documentType = documentType,
+                    documentTypeCode = documentTypeCode,
+                    validationMethod = validationMethod,
+                    validationPrevious = validationPrevious,
+                    priority = priority,
+                    assign = assign,
+                    submittalStatus = submittalStatus,
+                    surcode = surcode
+                };
 
+                //Log.Information(JsonConvert.SerializeObject(debugObject));
 
-            var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
-            var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
-
-            string driverId = "";
-
-            if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
-            {
-                driverId = driverReply.Items.FirstOrDefault()?.Id;
-            }
-
-            if (faxReceivedDate == null)
-            {
-                faxReceivedDate = DateTimeOffset.Now;
-            }
-
-            if (importDate == null)
-            {
-                importDate = DateTimeOffset.Now;
-            }
-            
-
-            SearchReply reply;
-            if (caseId != null)
-            {
-                reply = _cmsAdapterClient.Search(new SearchRequest { CaseId = caseId });
-            }
-            else
-            {
-                reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
-            }
-
-             
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {                
-                // add the document
-                var ms = new MemoryStream();
-                if (file != null)
+                var driver = new CaseManagement.Service.Driver()
                 {
-                    file.OpenReadStream().CopyTo(ms);
+                    DriverLicenseNumber = licenseNumber,
+                    Address = new Address()
+                    {
+                        City = String.Empty,
+                        Line1 = String.Empty,
+                        Line2 = String.Empty,
+                        Postal = String.Empty
+                    },
+                    BirthDate = Timestamp.FromDateTimeOffset(new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)),
+                    GivenName = String.Empty,
+                    Height = 0.0,
+                    Id = String.Empty,
+                    Middlename = String.Empty,
+                    Name = String.Empty,
+                    Seck = String.Empty,
+                    Sex = String.Empty,
+                    Surname = String.Empty,
+                    Weight = 0.0
+                };
 
-                    string jsonFile = JsonConvert.SerializeObject(file);
-                    //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
+
+                var driverRequest = new DriverLicenseRequest() { DriverLicenseNumber = licenseNumber };
+                var driverReply = _cmsAdapterClient.GetDriver(driverRequest);
+
+                string driverId = "";
+
+                if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
+                {
+                    driverId = driverReply.Items.FirstOrDefault()?.Id;
+                }
+
+                if (faxReceivedDate == null)
+                {
+                    faxReceivedDate = DateTimeOffset.Now;
+                }
+
+                if (importDate == null)
+                {
+                    importDate = DateTimeOffset.Now;
+                }
+
+
+                SearchReply reply;
+                if (caseId != null)
+                {
+                    reply = _cmsAdapterClient.Search(new SearchRequest { CaseId = caseId });
                 }
                 else
                 {
-                    DebugUtils.SaveDebug("AddCaseDocument", "File is empty");                    
+                    reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
                 }
 
-                var data = ms.ToArray();
-                string fileName = file?.FileName ?? "UnknownFile.pdf";
 
-                // ensure there are no invalid characters.
-
-                fileName = DocumentUtils.SanitizeKeyFilename(fileName);
-
-                UploadFileRequest pdfData = new UploadFileRequest()
+                if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
-                    ContentType = DocumentUtils.GetMimeType(fileName),
-                    Data = ByteString.CopyFrom(data),
-                    EntityName = "dfp_driver",
-                    FileName = fileName,
-                    FolderName = driverId,
-                };
-                var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
-
-
-                if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
-                    || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
-                {
-                    return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
-                }
-
-                string legacyDocumentType = documentType ?? String.Empty;
-
-                var document = new LegacyDocument()
-                {
-                    BatchId = batchId ?? String.Empty,
-                    DocumentPages = documentPages ?? 1,
-                    DocumentType = legacyDocumentType,
-                    DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
-                    DocumentUrl = fileReply.FileName,
-                    CaseId = caseId ?? string.Empty,
-                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
-                    ImportDate = Timestamp.FromDateTimeOffset(importDate),
-                    ImportId = importID ?? string.Empty,
-
-                    OriginatingNumber = originatingNumber ?? string.Empty,
-                    Driver = driver,
-                    ValidationMethod = validationMethod ?? string.Empty,
-                    ValidationPrevious = validationPrevious ?? string.Empty,
-                    Priority = priority ?? string.Empty,
-                    Owner = assign ?? string.Empty,
-                    
-                };
-
-                var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
-
-                if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                {
-                    var actionName = nameof(AddCaseDocument);
-                    var routeValues = new
+                    // add the document
+                    var ms = new MemoryStream();
+                    if (file != null)
                     {
-                        driversLicence = licenseNumber
+                        file.OpenReadStream().CopyTo(ms);
+
+                        string jsonFile = JsonConvert.SerializeObject(file);
+                        //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
+                    }
+                    else
+                    {
+                        DebugUtils.SaveDebug("AddCaseDocument", "File is empty");
+                    }
+
+                    var data = ms.ToArray();
+                    string fileName = file?.FileName ?? "UnknownFile.pdf";
+
+                    // ensure there are no invalid characters.
+
+                    fileName = DocumentUtils.SanitizeKeyFilename(fileName);
+
+                    string fileImportDateString = importDate.ToString("yyyyMMddHHmmss");
+                    string fileKey = DocumentUtils.SanitizeKeyFilename($"D{fileImportDateString}-{fileName}");
+
+                    UploadFileRequest pdfData = new UploadFileRequest()
+                    {
+                        ContentType = DocumentUtils.GetMimeType(fileName),
+                        Data = ByteString.CopyFrom(data),
+                        EntityName = "dfp_driver",
+                        FileName = fileName,
+                        FolderName = driverId,
+                    };
+                    var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+
+
+                    if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
+                        || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
+                    {
+                        return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
+                    }
+
+                    string legacyDocumentType = documentType ?? String.Empty;
+
+                    var document = new LegacyDocument()
+                    {
+                        BatchId = batchId ?? String.Empty,
+                        DocumentPages = documentPages ?? 1,
+                        DocumentType = legacyDocumentType,
+                        DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
+                        DocumentUrl = fileReply.FileName,
+                        CaseId = caseId ?? string.Empty,
+                        FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
+                        ImportDate = Timestamp.FromDateTimeOffset(importDate),
+                        ImportId = importID ?? string.Empty,
+                        
+                        OriginatingNumber = originatingNumber ?? string.Empty,
+                        Driver = driver,
+                        ValidationMethod = validationMethod ?? string.Empty,
+                        ValidationPrevious = validationPrevious ?? string.Empty,
+                        Priority = priority ?? string.Empty,
+                        Owner = assign ?? string.Empty,
+
                     };
 
-                    return CreatedAtAction(actionName, routeValues, document);
+                    var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
+
+                    if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    {
+                        var actionName = nameof(AddCaseDocument);
+                        var routeValues = new
+                        {
+                            driversLicence = licenseNumber
+                        };
+
+                        return CreatedAtAction(actionName, routeValues, document);
+                    }
+                    else
+                    {
+                        Serilog.Log.Error(result.ErrorDetail);
+                        return StatusCode(500, result.ErrorDetail);
+                    }
                 }
                 else
                 {
-                    Serilog.Log.Error(result.ErrorDetail);
-                    return StatusCode(500, result.ErrorDetail);
+                    Serilog.Log.Error("Unable to fetch Case details " + reply.ErrorDetail);
+                    return StatusCode(500, reply.ErrorDetail);
                 }
+
             }
             else
             {
-                Serilog.Log.Error("Unable to fetch Case details " + reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
+                Serilog.Log.Error("Add Case Document called with no Drivers License");
+                return Ok();
             }
-
         }
+            
 
     }
 }
