@@ -102,6 +102,14 @@ To promote code to PROD, login to OpenShift and start the Kubernetes Pipeline fo
 ### Restore PROD from backup
 If you wish to revert to the previous PROD deployment, login to OpenShift and start the Kubernetes Pipeline for Restore PROD from Backup.
 
+
+## Hangfire
+This system makes use of Hangfire for scheduling.  More information on Hangfire can be found at the website [hangfire.io](https://hangfire.io); the system uses a stock configuration of Hangfire.
+
+To login to a hangfire dashboard, forward traffic from the OpenShift pod for the scheduler service and access http://localhost:8080
+
+`oc port-forward <POD NAME> 8080:8080`
+
 Contribution
 ------------
 

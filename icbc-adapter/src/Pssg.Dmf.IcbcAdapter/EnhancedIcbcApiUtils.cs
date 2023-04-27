@@ -212,13 +212,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                     // Compare Dynamics DOB and ICBC DOB
                     if (driver.BirthDate != Timestamp.FromDateTime((DateTime)response.BIDT))
                     {
-                        var driverRequest = new UpdateDriverRequest()
+                        _caseManagerClient.UpdateDriver(new CaseManagement.Service.Driver
                         {
                             DriverLicenseNumber = dlNumber,
-                            BirthDate = Timestamp.FromDateTime((DateTime)response.BIDT)
-                        };
-
-                        _caseManagerClient.UpdateBirthDate(driverRequest);
+                            BirthDate = Timestamp.FromDateTimeOffset(response.BIDT ?? DateTime.Now),
+                            GivenName = response.INAM?.GIV1 ?? string.Empty,
+                            Surname = response.INAM?.SURN ?? string.Empty
+                        });
                     }
                   
                 }
