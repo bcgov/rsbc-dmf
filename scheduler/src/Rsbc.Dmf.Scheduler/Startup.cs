@@ -31,7 +31,6 @@ using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Serilog.Context;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
@@ -40,6 +39,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
+using static Rsbc.Dmf.Scheduler.ScheduledJobs;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -64,7 +64,11 @@ namespace Rsbc.Dmf.Scheduler
 
         private IConfiguration Configuration { get; }
         private IWebHostEnvironment _env;
-
+       // private readonly ScheduledJobs schedulerJobClient;
+        private readonly IcbcAdapterClient icbcAdapterClient;
+        private readonly BcMailAdapterClient bcMailAdapterClient;
+        private readonly CaseManagerClient caseManagerClient;
+        private readonly ScheduledJobs schedulerJobClient;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -176,39 +180,7 @@ namespace Rsbc.Dmf.Scheduler
 
             services.AddEndpointsApiExplorer();
 
-            // Swagger is used for API documentation
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Scheduler", Version = "v1" });
-                c.EnableAnnotations();
-
-                string baseUri = Configuration["BASE_URI"];
-                if (baseUri != null)
-                {
-                    // ensure baseUri is in the right format.
-                    baseUri = baseUri.TrimEnd('/') + @"/";
-
-                    c.AddSecurityDefinition("bearer", new OpenApiSecurityScheme
-                    {
-                        Type = SecuritySchemeType.OAuth2,
-                        Flows = new OpenApiOAuthFlows
-                        {
-                            Implicit = new OpenApiOAuthFlow
-                            {
-                                AuthorizationUrl = new Uri(baseUri + "authentication/redirect/" + Configuration["JWT_TOKEN_KEY"]),
-                                Scopes = new Dictionary<string, string>
-                                {
-                                    {"openid", "oidc standard"}
-                                }
-                            }
-                        }
-                    });
-
-                    c.OperationFilter<AuthenticationRequirementsOperationFilter>();
-
-                }
-                
-            });
+          
 
             // health checks. 
             services.AddHealthChecks()
@@ -349,7 +321,14 @@ namespace Rsbc.Dmf.Scheduler
                 services.AddTransient(_ => new BcMailAdapterClient(channel));
 
             }
+
+            if (Configuration["SCHEDULER_SERVICE_URI"] != null)
+            {
+                services.AddTransient(_ => new ScheduledJobs(Configuration, schedulerJobClient, icbcAdapterClient, caseManagerClient, bcMailAdapterClient));
+            }
         }
+
+
 
         private void ConfigureProblemDetails(ProblemDetailsOptions options)
         {
@@ -377,15 +356,7 @@ namespace Rsbc.Dmf.Scheduler
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (!env.IsProduction()) {
-                
-                //app.UseDeveloperExceptionPage();
-
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Scheduler v1"));
-
-            }
-
+           
             app.UseProblemDetails();
 
             app.UseForwardedHeaders();
@@ -552,24 +523,7 @@ namespace Rsbc.Dmf.Scheduler
         }
     }
 
-    /// <summary>
-    /// Helper filter for Swagger authentication
-    /// </summary>
-    public class AuthenticationRequirementsOperationFilter : IOperationFilter
-    {
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
-        {
-            if (operation.Security == null)
-                operation.Security = new List<OpenApiSecurityRequirement>();
-
-
-            var scheme = new OpenApiSecurityScheme { Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearer" } };
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                [scheme] = new List<string>()
-            });
-        }
-    }
+    
 
 
 }

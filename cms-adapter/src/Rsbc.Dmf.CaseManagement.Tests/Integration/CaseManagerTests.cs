@@ -97,21 +97,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     // set the value to true
                     await caseManager.SetCleanPassFlag(caseId, false);
 
-                    //dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenseNumber.ShouldBe(driverLicenseNumber);
-
                     var request = new CleanPassRequest
                     {
                         CaseId = caseId,
                     };
 
-                    var cleanPass = await caseManager.UpdateCleanPassFlag(request);
-
-                    if (cleanPass != null)
-                    {
-                        await caseManager.UpdateCleanPassDocuments(request);
-                    }
-
-
+                    await caseManager.UpdateCleanPassFlag(request);
                 }
 
                 // verify in dynamics wether this is updated
