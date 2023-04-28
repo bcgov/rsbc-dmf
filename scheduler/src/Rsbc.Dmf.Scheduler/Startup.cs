@@ -322,10 +322,9 @@ namespace Rsbc.Dmf.Scheduler
 
             }
 
-            if (Configuration["SCHEDULER_SERVICE_URI"] != null)
-            {
+           
                 services.AddTransient(_ => new ScheduledJobs(Configuration, schedulerJobClient, icbcAdapterClient, caseManagerClient, bcMailAdapterClient));
-            }
+            
         }
 
 
