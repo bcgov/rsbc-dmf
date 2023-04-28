@@ -1216,7 +1216,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     //isCleanPass = true
                 };
 
-                await _caseManager.UpdateCleanPassFlag(cleanPassRequest);
+                var cleanpass = await _caseManager.UpdateCleanPassFlag(cleanPassRequest);
+
+                if (cleanpass != null)
+                {
+                    await _caseManager.UpdateCleanPassDocuments(cleanPassRequest);
+                }
+
                 reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)

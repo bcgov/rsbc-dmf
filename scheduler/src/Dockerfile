@@ -7,10 +7,10 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY . .
-RUN dotnet restore ./scheduler/src/Pssg.Dmf.Scheduler 
+RUN dotnet restore ./scheduler/src/Rsbc.Dmf.Scheduler 
 
 FROM build AS publish
-RUN dotnet publish ./scheduler/src/Pssg.Dmf.Scheduler -c Release -o /app/publish
+RUN dotnet publish ./scheduler/src/Rsbc.Dmf.Scheduler -c Release -o /app/publish
 
 
 FROM base AS final
@@ -23,4 +23,4 @@ COPY --from=publish /app/publish .
 
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
-ENTRYPOINT ["dotnet", "Pssg.Dmf.Scheduler.dll"]
+ENTRYPOINT ["dotnet", "Rsbc.Dmf.Scheduler.dll"]
