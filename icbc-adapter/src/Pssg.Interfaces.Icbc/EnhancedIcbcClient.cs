@@ -214,7 +214,7 @@ namespace Pssg.Interfaces
                 };
             }
 
-            return result.CLNT;
+            return result?.CLNT;
 
         }
 

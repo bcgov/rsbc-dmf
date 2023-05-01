@@ -210,7 +210,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 if (response != null && response.BIDT != null)
                 {
                     // Compare Dynamics DOB and ICBC DOB
-                    if (driver.BirthDate != Timestamp.FromDateTime((DateTime)response.BIDT))
+                    if (driver.BirthDate.ToDateTime() != (DateTime)response.BIDT)
                     {
                         _caseManagerClient.UpdateDriver(new CaseManagement.Service.Driver
                         {

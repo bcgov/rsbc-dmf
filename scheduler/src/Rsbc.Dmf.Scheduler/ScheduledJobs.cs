@@ -13,6 +13,9 @@ using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Rsbc.Dmf.CaseManagement.Service;
 using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
+using Grpc.Net.Client;
+using System.Net.Http;
+using System.Net;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -33,6 +36,54 @@ namespace Rsbc.Dmf.Scheduler
             _icbcAdapterClient = icbcAdapterClient;
             _caseManagerClient = caseManagerClient;
             _bcMailAdapterClient = bcMailAdapterClient;
+
+
+            if (_icbcAdapterClient == null)
+            {
+
+                // Add ICBC Adapter
+                string icbcAdapterURI = _configuration["ICBC_ADAPTER_URI"];
+
+                if (!string.IsNullOrEmpty(icbcAdapterURI))
+                {
+                    var httpClientHandler = new HttpClientHandler();
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    
+
+                    var httpClient = new HttpClient(httpClientHandler);
+                    // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                    httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                    if (!string.IsNullOrEmpty(_configuration["ICBC_ADAPTER_JWT_SECRET"]))
+                    {
+                        var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                        var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
+                        // call the token service to get a token.
+                        var tokenRequest = new IcbcAdapter.TokenRequest
+                        {
+                            Secret = _configuration["ICBC_ADAPTER_JWT_SECRET"]
+                        };
+
+                        var tokenReply = initialClient.GetToken(tokenRequest);
+
+                        if (tokenReply != null && tokenReply.ResultStatus == IcbcAdapter.ResultStatus.Success)
+                        {
+                            // Add the bearer token to the client.
+                            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                        }
+
+
+                    }
+
+                    var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    _icbcAdapterClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(channel);
+
+                }
+            }
+
         }
 
     
