@@ -254,16 +254,16 @@ namespace Rsbc.Dmf.Scheduler
                 {
                     var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
 
-                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
                     // call the token service to get a token.
-                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    var tokenRequest = new IcbcAdapter.TokenRequest
                     {
                         Secret = Configuration["ICBC_ADAPTER_JWT_SECRET"]
                     };
 
                     var tokenReply = initialClient.GetToken(tokenRequest);
 
-                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    if (tokenReply != null && tokenReply.ResultStatus == IcbcAdapter.ResultStatus.Success)
                     {
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
