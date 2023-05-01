@@ -35,18 +35,6 @@ parameters:
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
     required: true
-  - description: CDGS_SERVICE_URI
-    name: CDGS_SERVICE_URI
-    required: true
-  - description: CDGS_OAUTH_CLIENT_ID
-    name: CDGS_OAUTH_CLIENT_ID
-    required: true
-  - description: CDGS_TOKEN_ENDPOINT
-    name: CDGS_TOKEN_ENDPOINT
-    required: true
-  - description: CDGS_OAUTH_CLIENT_SECRET
-    name: CDGS_OAUTH_CLIENT_SECRET
-    required: true
 
 objects:
   - kind: ConfigMap
@@ -75,10 +63,6 @@ objects:
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
-      CDGS_SERVICE_URI: ${CDGS_SERVICE_URI}
-      CDGS_OAUTH_CLIENT_ID: ${CDGS_OAUTH_CLIENT_ID}
-      CDGS_TOKEN_ENDPOINT: ${CDGS_TOKEN_ENDPOINT}
-      CDGS_OAUTH_CLIENT_SECRET: ${CDGS_OAUTH_CLIENT_SECRET}
 
   - kind: Service
     apiVersion: v1
