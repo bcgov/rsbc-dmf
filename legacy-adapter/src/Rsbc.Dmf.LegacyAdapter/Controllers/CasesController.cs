@@ -412,7 +412,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] IFormFile file,
             [FromForm] string priority = "Regular",
             [FromForm] string assign = null,
-            [FromForm] string submittalStatus = null,
+            [FromForm] string submittalStatus = "Accept",
             [FromForm] string surcode = null,         // Driver -> Lastname
             [FromForm] string envelopeId = null
             )
@@ -565,6 +565,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         ValidationPrevious = validationPrevious ?? string.Empty,
                         Priority = priority ?? string.Empty,
                         Owner = assign ?? string.Empty,
+                        SubmittalStatus = submittalStatus ?? string.Empty,
 
                     };
 
