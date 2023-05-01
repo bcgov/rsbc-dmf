@@ -129,6 +129,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Driver = driver,
                 Priority = request.Priority ?? string.Empty,
                 Owner = request.Owner ?? string.Empty,
+                SubmittalStatus = request.SubmittalStatus ?? string.Empty,
             };
 
             var result = await _caseManager.CreateLegacyCaseDocument(newDocument);

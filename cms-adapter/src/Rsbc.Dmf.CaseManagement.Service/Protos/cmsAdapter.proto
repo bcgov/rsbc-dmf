@@ -155,6 +155,7 @@ message LegacyDocument {
 	string ValidationPrevious = 17;
 	string Priority = 18;
 	string Owner = 19;
+	string SubmittalStatus = 20;
 }
 
 message GetDocumentRequest {	

@@ -153,6 +153,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string ValidationPrevious { get; set; }
         public string Priority { get; set; }
         public string Owner { get; set; }
+        public string SubmittalStatus { get; set; }
     }
 
     public class CreateStatusReply
@@ -1359,10 +1360,8 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = 100000001; // Received
-                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);     
-               
-
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);   
  
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
@@ -2095,6 +2094,31 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private int TranslateSubmittalStatusCode(string submittalStatusCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                {  "Accept", 100000001 }, // Received
+                { "Reject",  100000004 }, // Rejected
+                { "Clean Pass" ,  100000009}, // Clean Pass
+                
+            };
+
+            if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
+            {
+                return statusMap[submittalStatusCode];
+            }
+            else
+            {
+                return 100000001;
+            }
+        }
+
 
         /// <summary>
         ///  convert the owner from the value provided by the legacy system to Dynamics CRM
@@ -2470,25 +2494,28 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
                    
-                            if (document.dfp_DocumentTypeID != null && document.statecode == 0)
+                            if (document.dfp_DocumentTypeID != null && document.statecode == 0 
+                                && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
+                                )
                             {
                                 
                                if (document.dfp_DocumentTypeID != null && 
                                     document.dfp_DocumentTypeID.dfp_name != null && 
                                     document.dfp_DocumentTypeID.dfp_name == "DMER" )
-                                
-                              
+                                {
                                     // Update cleanpass value on case
                                     @case.dfp_iscleanpass = true;
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
-                                    
-                                    
-                                    // Update document status
-                                    document.dfp_submittalstatus = 100000009; //Clean Pass
-                                    dynamicsContext.UpdateObject(document);
-                                    await dynamicsContext.SaveChangesAsync();
                                     result.Success = true;
+                                }
+
+                                // Update document status
+                                /*document.dfp_submittalstatus = 100000009; //Clean Pass
+                                dynamicsContext.UpdateObject(document);
+                                await dynamicsContext.SaveChangesAsync();*/
+                               
+                               
 
 
                             }
@@ -2496,7 +2523,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         dynamicsContext.DetachAll();
-                        
+
                     }
                 }
             }
