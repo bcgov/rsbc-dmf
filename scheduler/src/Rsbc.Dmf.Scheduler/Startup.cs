@@ -317,7 +317,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 }
 
-                var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 services.AddTransient(_ => new BcMailAdapterClient(channel));
 
             }
