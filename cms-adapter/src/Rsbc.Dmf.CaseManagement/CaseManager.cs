@@ -2494,25 +2494,28 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
                    
-                            if (document.dfp_DocumentTypeID != null && document.statecode == 0 && document.dfp_submittalstatus == 100000009)
+                            if (document.dfp_DocumentTypeID != null && document.statecode == 0 
+                                && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
+                                )
                             {
                                 
                                if (document.dfp_DocumentTypeID != null && 
                                     document.dfp_DocumentTypeID.dfp_name != null && 
                                     document.dfp_DocumentTypeID.dfp_name == "DMER" )
-                                
-                              
+                                {
                                     // Update cleanpass value on case
                                     @case.dfp_iscleanpass = true;
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
-                                    
-                                    
-                                    /*// Update document status
-                                    document.dfp_submittalstatus = 100000009; //Clean Pass
-                                    dynamicsContext.UpdateObject(document);
-                                    await dynamicsContext.SaveChangesAsync();
-                                    result.Success = true;*/
+                                    result.Success = true;
+                                }
+
+                                // Update document status
+                                /*document.dfp_submittalstatus = 100000009; //Clean Pass
+                                dynamicsContext.UpdateObject(document);
+                                await dynamicsContext.SaveChangesAsync();*/
+                               
+                               
 
 
                             }
@@ -2520,7 +2523,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         dynamicsContext.DetachAll();
-                        
+
                     }
                 }
             }
