@@ -2515,9 +2515,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 dynamicsContext.UpdateObject(document);
                                 await dynamicsContext.SaveChangesAsync();*/
                                
-                               
-
-
                             }
 
                         }
