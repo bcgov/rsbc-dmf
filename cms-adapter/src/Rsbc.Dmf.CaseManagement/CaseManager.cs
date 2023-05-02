@@ -2728,7 +2728,11 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
 
                         contact driverContact;
-                        
+
+                        item.dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname ;
+                        dynamicsContext.UpdateObject(item);
+                        await dynamicsContext.SaveChangesAsync();
+
                         if (item.dfp_PersonId != null)
                         {
                             driverContact = item.dfp_PersonId;
