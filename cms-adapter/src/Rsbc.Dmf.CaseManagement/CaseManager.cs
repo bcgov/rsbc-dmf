@@ -2739,8 +2739,17 @@ namespace Rsbc.Dmf.CaseManagement
 
                             dynamicsContext.UpdateObject(driverContact);
                             written = true;
-                            await dynamicsContext.SaveChangesAsync();
-                            result.Success = true;
+                            try
+                            {
+                                await dynamicsContext.SaveChangesAsync();
+                                result.Success = true;
+                            }
+                            catch (Exception e)
+                            {
+                                result.ErrorDetail = e.Message;
+                                result.Success = false;
+                            }
+                            
                         }
                     }
                     
