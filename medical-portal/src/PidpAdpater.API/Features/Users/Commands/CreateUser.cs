@@ -35,21 +35,21 @@ public class CreateUser
             this.RuleFor(x => x.UserId).NotEmpty().Equal(user.GetUserId());
             //this.RuleFor(x => x.IdentityProvider).NotEmpty().Equal(user.GetIdentityProvider());
             this.RuleFor(x => x.IdpId).NotEmpty().Equal(user.GetIdpId());
-            this.RuleFor(x => x.Roles).NotNull().ForEach(role =>
-            {
-                role.Must(r => (bool)(user?.GetRoles().ToList().Contains(r.ToString())));
-            });
+            ////this.RuleFor(x => x.Roles).NotNull().ForEach(role =>
+            ////{
+            ////    role.Must(r => (bool)(user?.GetRoles().ToList().Contains(r.ToString())));
+            ////});
 
-            //this.RuleFor(x => x.Gender).NotEmpty().Equal(user?.GetGender()).WithMessage($"Must match the \"gender\" Claim on the current User");
+            ////this.RuleFor(x => x.Gender).NotEmpty().Equal(user?.GetGender()).WithMessage($"Must match the \"gender\" Claim on the current User");
 
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
-            //this.RuleFor(x => x.Gender).NotEmpty().MatchesUserClaim(user, Claims.Gender);
+            ////this.RuleFor(x => x.Gender).NotEmpty().MatchesUserClaim(user, Claims.Gender);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
             this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage($"Must match the \"birthdate\" Claim on the current User");
 
-            this.When(x => x.IdentityProvider == IdentityProviders.BCServicesCard, () => this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage("Must match the \"birthdate\" Claim on the current User"))
-                .Otherwise(() => this.RuleFor(x => x.Birthdate).Empty());
+            ////this.When(x => x.IdentityProvider == IdentityProviders.BCServicesCard, () => this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage("Must match the \"birthdate\" Claim on the current User"))
+            ////    .Otherwise(() => this.RuleFor(x => x.Birthdate).Empty());
         }
     }
     public class CommandHandler : IRequestHandler<Command, string>
@@ -68,9 +68,14 @@ public class CreateUser
             var contactExist = await userManager.GetPractitionerContactAsync(new PractitionerRequest { Hpdid = command.IdpId });
             if (!contactExist.ContactId.IsNullOrEmpty())
             {
-                this.logger.LogError("Practitioner contact already exist");
-                throw new Exception("Practitioner contact already exist");
+                this.logger.LogInformation("Practitioner contact already exist");
+                return contactExist.ContactId;
             }
+            //if (!contactExist.ContactId.IsNullOrEmpty() && contactExist != command)
+            //{
+            // possibly change in pidp info you should 
+            //    //update the contact in dynamics
+            //}
             var pReply = await userManager.CreatePractitionerContactAsync(new PractitionerContactRequest
             {
                 Email = command.Email,
@@ -78,7 +83,7 @@ public class CreateUser
                 FirstName = command.FirstName,
                 LastName = command.LastName,
                 UserId = command.UserId.ToString(),
-                Gender = command.Gender,
+                Gender = "male",
                 IdpId = command.IdpId,
                 Role = command.Roles.Contains("MOA") ? "MOA" : command.Roles.Contains("PRACTITIONER") ? "PRACTITIONER" : string.Empty
             });

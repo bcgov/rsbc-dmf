@@ -1,0 +1,456 @@
+[10:52:25 INF] HTTP OPTIONS /api/client-logs responded 401 in 116.1634 ms
+[12:10:06 INF] HTTP GET /api/contacts responded 200 in 2059.6019 ms
+[12:10:07 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 990.9252 ms
+[12:11:29 INF] HTTP GET /api/contacts responded 200 in 1190.6654 ms
+[12:11:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1066.5712 ms
+[13:05:08 INF] HTTP GET /api/contacts responded 200 in 1659.4577 ms
+[13:05:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 949.6946 ms
+[13:24:56 INF] HTTP GET /api/contacts responded 200 in 1370.7935 ms
+[13:24:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1014.1751 ms
+[13:32:04 INF] HTTP GET /api/contacts responded 200 in 1323.4678 ms
+[13:32:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 922.6809 ms
+[13:32:40 INF] HTTP GET /api/contacts responded 200 in 1014.8659 ms
+[13:32:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 881.7852 ms
+[13:32:57 INF] HTTP GET /api/contacts responded 200 in 1056.3066 ms
+[13:32:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1062.4427 ms
+[13:35:19 INF] HTTP GET /api/contacts responded 200 in 1474.7482 ms
+[13:35:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 933.8710 ms
+[13:35:24 INF] HTTP GET /api/contacts responded 200 in 873.2906 ms
+[13:35:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 881.5092 ms
+[13:36:40 INF] HTTP GET /api/contacts responded 200 in 1105.9995 ms
+[13:36:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 900.9575 ms
+[13:37:09 INF] HTTP GET /api/contacts responded 200 in 1167.4472 ms
+[13:37:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1008.0687 ms
+[14:05:14 INF] HTTP GET /api/contacts responded 200 in 1472.8148 ms
+[14:05:15 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 871.2578 ms
+[17:50:59 INF] HTTP GET /api/contacts responded 200 in 2951.2275 ms
+[17:51:00 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 987.4695 ms
+[19:16:41 INF] HTTP GET /api/contacts responded 200 in 1273.3501 ms
+[19:16:42 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 948.9595 ms
+[19:17:26 INF] HTTP GET /api/contacts responded 200 in 1032.5487 ms
+[19:17:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 915.1041 ms
+[20:24:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8615.9207 ms
+[20:25:01 INF] HTTP GET /api/contacts responded 200 in 1083.6136 ms
+[20:25:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1032.2063 ms
+[20:30:16 INF] HTTP GET /api/contacts responded 200 in 1631.9843 ms
+[20:30:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 954.6958 ms
+[20:56:19 INF] HTTP GET /api/contacts responded 200 in 3526.4354 ms
+[20:56:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1122.3800 ms
+[21:01:16 INF] HTTP GET /api/contacts responded 200 in 1497.2616 ms
+[21:01:16 INF] HTTP GET /api/contacts responded 200 in 1247.8090 ms
+[21:01:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1368.6592 ms
+[21:01:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1311.0635 ms
+[21:02:45 INF] HTTP GET /api/contacts responded 200 in 1296.9368 ms
+[21:02:47 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 961.6763 ms
+[21:20:16 INF] HTTP GET /api/contacts responded 200 in 1686.7496 ms
+[21:20:16 INF] HTTP GET /api/contacts responded 200 in 2168.3692 ms
+[21:20:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1140.7796 ms
+[21:20:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1133.8741 ms
+[21:20:29 INF] HTTP GET /api/contacts responded 200 in 981.3892 ms
+[21:20:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 936.0739 ms
+[21:23:34 INF] HTTP GET /api/contacts responded 200 in 1393.3345 ms
+[21:23:34 INF] HTTP GET /api/contacts responded 200 in 1559.3052 ms
+[21:23:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1143.2713 ms
+[21:23:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1178.5324 ms
+[21:23:49 INF] HTTP GET /api/contacts responded 200 in 1261.9814 ms
+[21:23:50 INF] HTTP GET /api/contacts responded 200 in 1264.6507 ms
+[21:23:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1405.3153 ms
+[21:23:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1473.8936 ms
+[21:40:54 INF] HTTP GET /api/contacts responded 200 in 1940.4013 ms
+[21:40:54 INF] HTTP GET /api/contacts responded 200 in 1701.6985 ms
+[21:40:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1193.2231 ms
+[21:40:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1130.4050 ms
+[21:48:12 INF] HTTP GET /api/contacts responded 200 in 1489.4649 ms
+[21:48:13 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 985.5870 ms
+[21:52:12 INF] HTTP GET /api/contacts responded 200 in 1446.1684 ms
+[21:52:13 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1025.5055 ms
+[21:54:05 INF] HTTP GET /api/contacts responded 200 in 1540.7264 ms
+[21:54:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1016.4771 ms
+[21:54:54 INF] HTTP GET /api/contacts responded 200 in 1025.5013 ms
+[21:54:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 917.5928 ms
+[21:55:21 INF] HTTP GET /api/contacts responded 200 in 1283.7697 ms
+[21:55:22 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 932.5291 ms
+[21:56:11 INF] HTTP GET /api/contacts responded 200 in 1105.7698 ms
+[21:56:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1018.7807 ms
+[21:58:14 INF] HTTP GET /api/contacts responded 200 in 1670.8935 ms
+[21:58:15 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1131.4879 ms
+[21:58:37 INF] HTTP GET /api/contacts responded 200 in 1060.1568 ms
+[21:58:38 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 950.3159 ms
+[21:59:13 INF] HTTP GET /api/contacts responded 200 in 1316.4642 ms
+[21:59:14 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 993.4901 ms
+[22:00:05 INF] HTTP GET /api/contacts responded 200 in 1033.1604 ms
+[22:00:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 988.1209 ms
+[22:00:26 INF] HTTP GET /api/contacts responded 200 in 1151.7047 ms
+[22:00:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 934.3061 ms
+[22:02:18 INF] HTTP GET /api/contacts responded 200 in 1292.8528 ms
+[22:02:19 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 912.4277 ms
+[22:02:22 INF] HTTP GET /api/contacts responded 200 in 874.2703 ms
+[22:02:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 991.3481 ms
+[22:02:34 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8199.8203 ms
+[22:02:49 INF] HTTP GET /api/contacts responded 200 in 1090.5622 ms
+[22:02:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 889.5910 ms
+[22:04:04 INF] HTTP GET /api/contacts responded 200 in 1174.6540 ms
+[22:04:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 964.0260 ms
+[22:04:18 INF] HTTP GET /api/contacts responded 200 in 903.9067 ms
+[22:04:19 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1007.5917 ms
+[22:17:10 INF] HTTP GET /api/contacts responded 200 in 1712.8453 ms
+[22:17:10 INF] HTTP GET /api/contacts responded 200 in 1395.9440 ms
+[22:17:11 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1086.8519 ms
+[22:17:11 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1157.0746 ms
+[22:38:19 INF] HTTP GET /api/contacts responded 200 in 1686.9402 ms
+[22:38:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1017.4791 ms
+[22:43:11 INF] HTTP GET /api/contacts responded 200 in 1278.5732 ms
+[22:43:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1093.6440 ms
+[22:44:04 INF] HTTP GET /api/contacts responded 200 in 1135.1564 ms
+[22:44:04 INF] HTTP GET /api/contacts responded 200 in 1068.0209 ms
+[22:44:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1081.1385 ms
+[22:44:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1080.9275 ms
+[22:44:19 INF] HTTP GET /api/contacts responded 200 in 1091.6629 ms
+[22:44:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 930.6689 ms
+[22:44:34 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8278.0570 ms
+[22:44:39 INF] HTTP GET /api/contacts responded 200 in 1001.6600 ms
+[22:44:40 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 977.6021 ms
+[22:47:07 INF] HTTP GET /api/contacts responded 200 in 1261.7071 ms
+[22:47:08 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1004.4393 ms
+[23:14:33 INF] Starting web host
+[23:14:34 INF] ### App Version:1.0.0.0 ###
+[23:14:34 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:14:39 FTL] Host terminated unexpectedly
+Grpc.Core.RpcException: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020) SocketException: No connection could be made because the target machine actively refused it.", DebugException="System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|277_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp2ConnectionAsync(HttpRequestMessage request)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttp2ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at Grpc.Net.Client.Internal.HttpClientCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.<BlockingUnaryCall>b__3_0[TRequest,TResponse](TRequest req, ClientInterceptorContext`2 ctx)
+   at Grpc.Core.ClientBase.ClientBaseConfiguration.ClientBaseConfigurationInterceptor.BlockingUnaryCall[TRequest,TResponse](TRequest request, ClientInterceptorContext`2 context, BlockingUnaryCallContinuation`2 continuation)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, CallOptions options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 690
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, Metadata headers, Nullable`1 deadline, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 679
+   at PidpAdapter.API.Infrastructure.CmsAdapterConfiguration.AddCmsAdapterGrpcService(IServiceCollection services, PdipadapterConfiguration config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\CmsAdapterConfiguration.cs:line 47
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 128
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[23:31:30 INF] Starting web host
+[23:31:30 INF] ### App Version:1.0.0.0 ###
+[23:31:30 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:31:32 INF] Now listening on: https://localhost:7215
+[23:31:32 INF] Now listening on: http://localhost:5050
+[23:31:32 INF] Application started. Press Ctrl+C to shut down.
+[23:31:32 INF] Hosting environment: Development
+[23:31:32 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:32:26 INF] HTTP GET /api/contacts responded 200 in 1150.8522 ms
+[23:32:27 ERR] HTTP POST /api/contacts responded 500 in 612.4126 ms
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[23:32:27 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:32:27 ERR] HTTP POST /error responded 500 in 121.4810 ms
+[23:32:55 INF] HTTP GET /api/contacts responded 200 in 72.0335 ms
+[23:32:55 ERR] HTTP POST /api/contacts responded 500 in 127.5188 ms
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[23:32:55 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:32:55 ERR] HTTP POST /error responded 500 in 0.5343 ms
+[23:32:57 INF] HTTP GET /api/contacts responded 200 in 52.5471 ms
+[23:32:57 ERR] HTTP POST /api/contacts responded 500 in 111.3703 ms
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+[23:32:57 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:32:57 ERR] HTTP POST /error responded 500 in 0.3657 ms
+[23:46:17 INF] HTTP GET /api/contacts responded 200 in 484.3354 ms
+[23:46:18 ERR] HTTP POST /api/contacts responded 500 in 125.1129 ms
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+[23:46:18 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:46:18 ERR] HTTP POST /error responded 500 in 0.3710 ms
+[23:46:25 INF] HTTP GET /api/contacts responded 200 in 47.4333 ms
+[23:46:25 ERR] HTTP POST /api/contacts responded 500 in 103.8403 ms
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[23:46:25 ERR] An unhandled exception has occurred while executing the request.
+Grpc.Core.RpcException: Status(StatusCode="Unknown", Detail="Exception was thrown by handler. ArgumentException: Must specify valid information for parsing in the string. (Parameter 'value')")
+   at MedicalPortal.API.Features.Users.Commands.CreateUser.CommandHandler.Handle(Command command, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Commands\CreateUser.cs:line 74
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestExceptionActionProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPostProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at MediatR.Pipeline.RequestPreProcessorBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next)
+   at pdipadapter.Features.Users.Controllers.ContactsController.CreateContact(Command command) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 33
+   at lambda_method116(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:46:25 ERR] HTTP POST /error responded 500 in 0.3253 ms
+[23:46:56 INF] Application is shutting down...
+[23:47:09 INF] Starting web host
+[23:47:09 INF] ### App Version:1.0.0.0 ###
+[23:47:09 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:47:10 INF] Now listening on: https://localhost:7215
+[23:47:10 INF] Now listening on: http://localhost:5050
+[23:47:10 INF] Application started. Press Ctrl+C to shut down.
+[23:47:10 INF] Hosting environment: Development
+[23:47:10 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:48:20 INF] HTTP GET /api/contacts responded 403 in 267.1800 ms
+[23:48:20 INF] HTTP GET /api/contacts responded 403 in 2.8806 ms
+[23:48:47 INF] HTTP GET /api/contacts responded 403 in 2.1777 ms
+[23:48:47 INF] HTTP GET /api/contacts responded 403 in 1.2559 ms
+[23:50:25 INF] HTTP GET /api/contacts responded 403 in 1.2567 ms
+[23:50:25 INF] HTTP GET /api/contacts responded 403 in 1.2794 ms
+[23:50:56 INF] HTTP GET /api/contacts responded 200 in 1016.3114 ms
+[23:50:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 559.2559 ms
+[23:51:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6818.2625 ms

@@ -1,4 +1,4 @@
-# Provider Identity Portal (PIDP)
+# Medical Portal With Provider Identity Portal API Feature
 
 ## Table of Contents
 
@@ -6,7 +6,7 @@
 
 ## Installation and Configuration
 
-The installation and configuration of the PIdP development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
+The installation and configuration of the Medical Portal development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
 
 ### Installation
 
@@ -16,10 +16,10 @@ The following list includes the required software needed to run the application,
 
 [Download](https://git-scm.com/downloads) and install the Git version control system, and optionally [download](https://www.gitkraken.com) and install the free GitKraken Git GUI client.
 
-Clone the PIdP repository into a project directory GitKraken or the terminal by typing:
+Clone the repository into a project directory GitKraken or the terminal by typing:
 
 ```bash
-git clone https://github.com/bcgov/moh-pidp
+git clone https://github.com/bcgov/rsbc-dmf
 ```
 
 #### Node
@@ -28,7 +28,7 @@ git clone https://github.com/bcgov/moh-pidp
 
 #### VS Code
 
-[Download](https://code.visualstudio.com/) and install VSCode and accept the prompt to install the recommended extensions when the PIdP repository is initially opened in VSCode.
+[Download](https://code.visualstudio.com/) and install VSCode and accept the prompt to install the recommended extensions when the repository is initially opened in VSCode.
 
 #### PostMan
 

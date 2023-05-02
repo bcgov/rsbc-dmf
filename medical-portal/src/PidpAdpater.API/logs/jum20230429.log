@@ -1,0 +1,399 @@
+[09:38:33 INF] Starting web host
+[09:38:34 INF] ### App Version:1.0.0.0 ###
+[09:38:34 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[09:38:36 INF] Now listening on: https://localhost:7215
+[09:38:36 INF] Now listening on: http://localhost:5050
+[09:38:36 INF] Application started. Press Ctrl+C to shut down.
+[09:38:36 INF] Hosting environment: Development
+[09:38:36 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[09:39:05 INF] HTTP GET /api/contacts responded 200 in 4767.8972 ms
+[09:39:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 674.3841 ms
+[09:39:43 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 27898.2137 ms
+[10:38:40 INF] HTTP GET /api/contacts responded 200 in 1160.5264 ms
+[10:38:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 696.7943 ms
+[10:46:37 INF] HTTP GET /api/contacts responded 200 in 796.1439 ms
+[10:46:38 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1044.3097 ms
+[10:46:49 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7884.3817 ms
+[11:27:41 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7919.6127 ms
+[11:59:46 INF] HTTP GET /api/contacts responded 200 in 980.1349 ms
+[11:59:47 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.3216 ms
+[11:59:57 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8772.7171 ms
+[12:03:46 INF] HTTP GET /api/contacts responded 200 in 961.2207 ms
+[12:03:47 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.6062 ms
+[12:03:57 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8120.0708 ms
+[12:09:29 INF] HTTP GET /api/contacts responded 200 in 1720.1873 ms
+[12:09:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 594.0899 ms
+[12:09:38 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6975.5428 ms
+[12:13:11 INF] HTTP GET /api/contacts responded 200 in 909.9249 ms
+[12:13:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 586.3071 ms
+[12:13:14 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 856.5271 ms
+[12:45:44 INF] HTTP GET /api/contacts responded 200 in 1054.4791 ms
+[12:45:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 613.6559 ms
+[12:45:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7932.1233 ms
+[13:02:19 INF] HTTP GET /api/contacts responded 200 in 990.5200 ms
+[13:02:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 591.3459 ms
+[13:02:27 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6516.9336 ms
+[13:03:31 INF] HTTP GET /api/contacts responded 200 in 736.5915 ms
+[13:03:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 607.4880 ms
+[13:03:40 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6798.3116 ms
+[13:16:20 INF] HTTP GET /api/contacts responded 200 in 1007.6745 ms
+[13:16:21 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 619.9605 ms
+[13:16:29 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6931.2360 ms
+[13:16:54 INF] HTTP GET /api/contacts responded 200 in 632.6461 ms
+[13:16:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.1826 ms
+[13:17:00 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2894.5057 ms
+[13:23:04 INF] HTTP GET /api/contacts responded 200 in 917.5645 ms
+[13:23:04 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.8350 ms
+[13:23:13 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7854.0771 ms
+[13:25:59 INF] HTTP GET /api/contacts responded 200 in 841.1508 ms
+[13:26:00 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 622.0862 ms
+[13:26:06 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4218.8099 ms
+[13:57:50 INF] HTTP GET /api/contacts responded 200 in 1089.4681 ms
+[13:57:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 649.6376 ms
+[13:57:59 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6970.2779 ms
+[13:58:54 INF] HTTP GET /api/contacts responded 200 in 844.6969 ms
+[13:58:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 576.6726 ms
+[13:59:04 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7131.5214 ms
+[14:02:36 INF] HTTP GET /api/contacts responded 200 in 899.5132 ms
+[14:02:37 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 605.2597 ms
+[14:02:39 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1008.3456 ms
+[14:05:44 INF] HTTP GET /api/contacts responded 200 in 830.7677 ms
+[14:05:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.1046 ms
+[14:05:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 9439.3234 ms
+[14:09:31 INF] HTTP GET /api/contacts responded 200 in 890.1626 ms
+[14:09:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 582.5075 ms
+[14:09:34 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 819.6732 ms
+[14:11:02 INF] HTTP GET /api/contacts responded 200 in 798.7014 ms
+[14:11:03 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 607.3618 ms
+[14:11:12 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7220.6847 ms
+[14:12:58 INF] HTTP GET /api/contacts responded 200 in 845.5692 ms
+[14:12:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 608.1179 ms
+[14:13:07 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7100.3890 ms
+[14:15:02 INF] HTTP GET /api/contacts responded 200 in 854.6086 ms
+[14:15:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 617.5263 ms
+[14:15:06 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2618.2680 ms
+[14:16:16 INF] HTTP GET /api/contacts responded 200 in 735.2696 ms
+[14:16:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.2796 ms
+[14:16:19 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 796.7974 ms
+[14:17:25 INF] HTTP GET /api/contacts responded 200 in 772.2017 ms
+[14:17:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 591.0578 ms
+[14:17:31 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4727.6132 ms
+[14:18:37 INF] HTTP GET /api/contacts responded 200 in 873.1909 ms
+[14:18:37 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 628.2597 ms
+[14:18:44 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5577.0248 ms
+[14:23:57 INF] HTTP GET /api/contacts responded 200 in 936.0382 ms
+[14:23:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 594.0737 ms
+[14:24:06 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7159.5488 ms
+[14:26:37 INF] HTTP GET /api/contacts responded 200 in 856.4090 ms
+[14:26:37 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.5485 ms
+[14:26:42 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3813.2515 ms
+[14:27:20 INF] HTTP GET /api/contacts responded 200 in 594.6550 ms
+[14:27:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 596.4283 ms
+[14:27:30 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8279.1423 ms
+[14:28:27 INF] HTTP GET /api/contacts responded 200 in 733.4619 ms
+[14:28:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 595.4186 ms
+[14:28:29 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 880.1475 ms
+[14:30:50 INF] HTTP GET /api/contacts responded 200 in 820.9437 ms
+[14:30:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 628.4216 ms
+[14:31:00 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8126.3969 ms
+[14:31:51 INF] HTTP GET /api/contacts responded 200 in 696.2630 ms
+[14:31:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 651.6465 ms
+[14:31:53 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 759.6227 ms
+[15:01:08 INF] HTTP GET /api/contacts responded 200 in 1021.7074 ms
+[15:01:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.5558 ms
+[15:01:17 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6493.7109 ms
+[15:07:28 INF] HTTP GET /api/contacts responded 200 in 825.1992 ms
+[15:07:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 583.2945 ms
+[15:07:37 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7777.5976 ms
+[15:08:11 INF] HTTP GET /api/contacts responded 200 in 701.2983 ms
+[15:08:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.9588 ms
+[15:08:22 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6741.6118 ms
+[15:09:08 INF] HTTP GET /api/contacts responded 200 in 707.7875 ms
+[15:09:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.6274 ms
+[15:09:13 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2635.3484 ms
+[15:12:06 INF] HTTP GET /api/contacts responded 200 in 872.1786 ms
+[15:12:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 641.0815 ms
+[15:12:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 779.8099 ms
+[15:22:07 INF] HTTP GET /api/contacts responded 200 in 985.2024 ms
+[15:22:07 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 575.9738 ms
+[15:22:15 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6967.9133 ms
+[15:22:44 INF] HTTP GET /api/contacts responded 200 in 653.2134 ms
+[15:22:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 588.7097 ms
+[15:22:52 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6033.0135 ms
+[15:27:49 INF] HTTP GET /api/contacts responded 200 in 820.5398 ms
+[15:27:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 602.3492 ms
+[15:27:57 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6396.5413 ms
+[15:29:07 INF] HTTP GET /api/contacts responded 200 in 849.3882 ms
+[15:29:08 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.6162 ms
+[15:29:13 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3969.0734 ms
+[15:30:33 INF] HTTP GET /api/contacts responded 200 in 811.8239 ms
+[15:30:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.7136 ms
+[15:30:40 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2656.0490 ms
+[15:34:47 INF] HTTP GET /api/contacts responded 200 in 989.2518 ms
+[15:34:48 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 684.3459 ms
+[15:34:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6473.7960 ms
+[15:35:41 INF] HTTP GET /api/contacts responded 200 in 708.0627 ms
+[15:35:42 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 606.8391 ms
+[15:35:46 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 720.5647 ms
+[15:36:56 INF] HTTP GET /api/contacts responded 200 in 842.6211 ms
+[15:36:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 620.7714 ms
+[15:37:00 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3099.5672 ms
+[15:37:32 INF] HTTP GET /api/contacts responded 200 in 693.7540 ms
+[15:37:33 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 612.2739 ms
+[15:37:35 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 813.6150 ms
+[15:38:05 INF] HTTP GET /api/contacts responded 200 in 722.6878 ms
+[15:38:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 621.8045 ms
+[15:38:07 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 915.0689 ms
+[15:38:43 INF] HTTP GET /api/contacts responded 200 in 683.0104 ms
+[15:38:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 672.5276 ms
+[15:38:47 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2765.8606 ms
+[15:39:22 INF] HTTP GET /api/contacts responded 200 in 1029.4561 ms
+[15:39:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.5303 ms
+[15:39:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 762.4253 ms
+[15:39:36 INF] HTTP GET /api/contacts responded 200 in 722.8644 ms
+[15:39:37 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 621.8740 ms
+[15:39:39 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 723.4253 ms
+[15:40:18 INF] HTTP GET /api/contacts responded 200 in 649.3463 ms
+[15:40:19 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 629.2660 ms
+[15:40:24 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4152.2667 ms
+[15:41:02 INF] HTTP GET /api/contacts responded 200 in 737.8081 ms
+[15:41:03 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 718.0885 ms
+[15:41:11 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7051.4461 ms
+[15:43:22 INF] HTTP GET /api/contacts responded 200 in 916.7970 ms
+[15:43:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 668.4503 ms
+[15:43:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 909.4409 ms
+[15:43:56 INF] HTTP GET /api/contacts responded 200 in 663.4149 ms
+[15:43:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 646.7370 ms
+[15:44:03 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3549.0024 ms
+[15:44:32 INF] HTTP GET /api/contacts responded 200 in 747.9483 ms
+[15:44:33 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 657.0316 ms
+[15:44:35 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 903.4805 ms
+[15:45:16 INF] HTTP GET /api/contacts responded 200 in 751.6338 ms
+[15:45:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 617.0066 ms
+[15:45:19 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 779.7762 ms
+[15:50:49 INF] HTTP GET /api/contacts responded 200 in 874.7963 ms
+[15:50:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 639.8755 ms
+[15:50:56 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5631.6116 ms
+[15:54:27 INF] HTTP GET /api/contacts responded 200 in 821.5220 ms
+[15:54:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.4759 ms
+[15:54:33 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3994.8860 ms
+[16:15:34 INF] HTTP GET /api/contacts responded 200 in 1024.9190 ms
+[16:15:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 577.1174 ms
+[16:15:43 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6725.2503 ms
+[16:18:09 INF] HTTP GET /api/contacts responded 200 in 907.7080 ms
+[16:18:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 640.6810 ms
+[16:18:13 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 708.0010 ms
+[16:19:24 INF] HTTP GET /api/contacts responded 200 in 792.5318 ms
+[16:19:24 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 607.8524 ms
+[16:19:29 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3224.5343 ms
+[16:20:18 INF] HTTP GET /api/contacts responded 200 in 651.9757 ms
+[16:20:19 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.0333 ms
+[16:20:21 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 782.5709 ms
+[16:38:02 INF] HTTP GET /api/contacts responded 200 in 1037.7202 ms
+[16:38:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 602.7366 ms
+[16:39:47 INF] HTTP GET /api/contacts responded 200 in 829.1235 ms
+[16:39:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 616.1978 ms
+[16:39:58 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6580.8957 ms
+[16:47:28 INF] HTTP GET /api/contacts responded 200 in 870.8787 ms
+[16:47:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 637.3477 ms
+[16:47:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5644.0920 ms
+[16:51:22 INF] HTTP GET /api/contacts responded 200 in 1005.2599 ms
+[16:51:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 624.5986 ms
+[16:51:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 742.7322 ms
+[16:52:15 INF] HTTP GET /api/contacts responded 200 in 673.6695 ms
+[16:52:16 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 594.2216 ms
+[16:52:23 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5919.8165 ms
+[16:55:10 INF] HTTP GET /api/contacts responded 200 in 908.1635 ms
+[16:55:15 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 640.3824 ms
+[16:55:26 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6497.7326 ms
+[16:56:43 INF] HTTP GET /api/contacts responded 200 in 886.5268 ms
+[16:56:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 623.7636 ms
+[16:56:45 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 837.0840 ms
+[16:58:02 INF] HTTP GET /api/contacts responded 200 in 914.8361 ms
+[16:58:03 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 595.8979 ms
+[16:58:11 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6354.2200 ms
+[16:58:56 INF] HTTP GET /api/contacts responded 200 in 604.8994 ms
+[16:58:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 608.8159 ms
+[16:58:59 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 788.4226 ms
+[17:00:42 INF] HTTP GET /api/contacts responded 200 in 885.7089 ms
+[17:00:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 642.9579 ms
+[17:00:49 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4623.9107 ms
+[17:02:01 INF] HTTP GET /api/contacts responded 200 in 959.8196 ms
+[17:02:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 620.7007 ms
+[17:02:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5654.1477 ms
+[17:03:31 INF] HTTP GET /api/contacts responded 200 in 858.6162 ms
+[17:03:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.4786 ms
+[17:03:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3184.3996 ms
+[17:15:39 INF] HTTP GET /api/contacts responded 200 in 934.1141 ms
+[17:15:40 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 583.5657 ms
+[17:15:47 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5863.2047 ms
+[17:17:26 INF] HTTP GET /api/contacts responded 200 in 794.8582 ms
+[17:17:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.0992 ms
+[17:17:28 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 770.5306 ms
+[17:25:01 INF] HTTP GET /api/contacts responded 200 in 909.3595 ms
+[17:25:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.9581 ms
+[17:25:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6398.2050 ms
+[17:30:40 INF] HTTP GET /api/contacts responded 200 in 867.6990 ms
+[17:30:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 627.3188 ms
+[17:30:49 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6836.4737 ms
+[18:09:04 INF] HTTP GET /api/contacts responded 200 in 1073.4442 ms
+[18:09:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 581.2514 ms
+[18:09:16 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 9396.0044 ms
+[18:17:24 INF] HTTP GET /api/contacts responded 200 in 867.9907 ms
+[18:17:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 626.7762 ms
+[18:17:32 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5830.4210 ms
+[18:18:35 INF] HTTP GET /api/contacts responded 200 in 792.3618 ms
+[18:18:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 637.7339 ms
+[18:18:40 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3282.7259 ms
+[18:20:06 INF] HTTP GET /api/contacts responded 200 in 928.4083 ms
+[18:20:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 627.0446 ms
+[18:20:10 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3156.8393 ms
+[18:26:57 INF] HTTP GET /api/contacts responded 200 in 982.8946 ms
+[18:26:57 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.3468 ms
+[18:27:05 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6199.3379 ms
+[18:47:21 INF] HTTP GET /api/contacts responded 200 in 979.1178 ms
+[18:47:21 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.0058 ms
+[18:47:32 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8208.5856 ms
+[20:27:47 INF] Starting web host
+[20:27:48 INF] ### App Version:1.0.0.0 ###
+[20:27:48 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[20:27:50 INF] Now listening on: https://localhost:7215
+[20:27:50 INF] Now listening on: http://localhost:5050
+[20:27:50 INF] Application started. Press Ctrl+C to shut down.
+[20:27:50 INF] Hosting environment: Development
+[20:27:50 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[20:28:10 INF] HTTP GET /api/contacts responded 200 in 2390.9699 ms
+[20:28:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 617.7929 ms
+[20:28:19 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6633.0907 ms
+[20:32:46 INF] HTTP GET /api/contacts responded 200 in 882.7833 ms
+[20:32:47 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 581.2396 ms
+[20:32:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6096.9494 ms
+[20:34:45 INF] HTTP GET /api/contacts responded 200 in 861.4554 ms
+[20:34:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.9218 ms
+[20:34:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6352.8659 ms
+[20:50:50 INF] HTTP GET /api/contacts responded 200 in 1019.8757 ms
+[20:50:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.9742 ms
+[20:51:03 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 10559.2742 ms
+[20:51:57 INF] HTTP GET /api/contacts responded 200 in 705.2137 ms
+[20:51:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 588.5881 ms
+[20:52:00 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 669.2345 ms
+[20:53:54 INF] HTTP GET /api/contacts responded 200 in 755.0222 ms
+[20:53:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.3349 ms
+[20:54:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4112.0645 ms
+[20:56:24 INF] HTTP GET /api/contacts responded 200 in 798.3445 ms
+[20:56:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 617.4070 ms
+[20:56:29 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2868.9339 ms
+[20:57:44 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3182.4090 ms
+[21:00:42 INF] HTTP GET /api/contacts responded 200 in 845.3566 ms
+[21:00:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 639.5085 ms
+[21:00:49 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3995.8045 ms
+[21:02:44 INF] HTTP GET /api/contacts responded 200 in 876.3278 ms
+[21:02:44 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.3291 ms
+[21:02:53 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6498.0915 ms
+[21:04:24 INF] HTTP GET /api/contacts responded 200 in 801.7355 ms
+[21:04:24 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.1307 ms
+[21:04:28 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 730.8759 ms
+[21:07:12 INF] HTTP GET /api/contacts responded 200 in 786.9955 ms
+[21:07:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.8320 ms
+[21:07:20 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3438.6729 ms
+[21:07:52 INF] HTTP GET /api/contacts responded 200 in 611.1729 ms
+[21:07:53 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 603.5292 ms
+[21:07:59 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4567.0608 ms
+[21:12:25 INF] HTTP GET /api/contacts responded 200 in 840.0625 ms
+[21:12:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 663.1440 ms
+[21:12:30 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2907.5829 ms
+[21:14:34 INF] HTTP GET /api/contacts responded 200 in 895.7516 ms
+[21:14:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 642.2828 ms
+[21:14:40 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4186.6604 ms
+[21:15:54 INF] HTTP GET /api/contacts responded 200 in 750.2006 ms
+[21:15:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 622.8339 ms
+[21:16:02 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4807.0615 ms
+[21:18:32 INF] HTTP GET /api/contacts responded 200 in 812.3014 ms
+[21:18:33 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 644.6903 ms
+[21:18:38 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3259.2167 ms
+[21:26:32 INF] HTTP GET /api/contacts responded 200 in 929.6221 ms
+[21:26:33 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.0084 ms
+[21:26:41 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5969.1325 ms
+[21:29:38 INF] HTTP GET /api/contacts responded 200 in 824.8792 ms
+[21:29:39 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.1951 ms
+[21:29:47 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7346.4695 ms
+[21:35:33 INF] HTTP GET /api/contacts responded 200 in 973.9535 ms
+[21:35:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.1189 ms
+[21:35:41 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5903.1133 ms
+[21:37:09 INF] HTTP GET /api/contacts responded 200 in 934.1865 ms
+[21:37:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 619.0624 ms
+[21:37:12 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 727.1811 ms
+[21:39:55 INF] HTTP GET /api/contacts responded 200 in 811.5332 ms
+[21:39:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 595.1793 ms
+[21:39:58 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 872.3254 ms
+[21:48:01 INF] Application is shutting down...
+[21:54:35 INF] Starting web host
+[21:54:36 INF] ### App Version:1.0.0.0 ###
+[21:54:36 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:54:41 FTL] Host terminated unexpectedly
+Grpc.Core.RpcException: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020) SocketException: No connection could be made because the target machine actively refused it.", DebugException="System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|277_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp2ConnectionAsync(HttpRequestMessage request)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttp2ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at Grpc.Net.Client.Internal.HttpClientCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.<BlockingUnaryCall>b__3_0[TRequest,TResponse](TRequest req, ClientInterceptorContext`2 ctx)
+   at Grpc.Core.ClientBase.ClientBaseConfiguration.ClientBaseConfigurationInterceptor.BlockingUnaryCall[TRequest,TResponse](TRequest request, ClientInterceptorContext`2 context, BlockingUnaryCallContinuation`2 continuation)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, CallOptions options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 690
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, Metadata headers, Nullable`1 deadline, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 679
+   at PidpAdapter.API.Infrastructure.CmsAdapterConfiguration.AddCmsAdapterGrpcService(IServiceCollection services, PdipadapterConfiguration config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\CmsAdapterConfiguration.cs:line 47
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 128
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[21:55:28 INF] Starting web host
+[21:55:28 INF] ### App Version:1.0.0.0 ###
+[21:55:28 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:55:29 INF] Now listening on: https://localhost:7215
+[21:55:29 INF] Now listening on: http://localhost:5050
+[21:55:29 INF] Application started. Press Ctrl+C to shut down.
+[21:55:29 INF] Hosting environment: Development
+[21:55:29 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[21:55:54 INF] HTTP GET /api/contacts responded 200 in 2146.6610 ms
+[21:55:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 622.5634 ms
+[21:56:31 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7577.4909 ms
+[22:02:34 INF] HTTP GET /api/contacts responded 200 in 811.2710 ms
+[22:02:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.5125 ms
+[22:02:53 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7889.9131 ms
+[22:15:18 INF] HTTP GET /api/contacts responded 200 in 972.8824 ms
+[22:15:19 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 619.6316 ms
+[22:15:23 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 738.1977 ms
+[22:27:53 INF] HTTP GET /api/contacts responded 200 in 982.7262 ms
+[22:27:54 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 602.2732 ms
+[22:28:02 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6320.7433 ms
+[22:29:57 INF] HTTP GET /api/contacts responded 200 in 794.0485 ms
+[22:29:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 600.2649 ms
+[22:30:03 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4118.1022 ms
+[22:32:15 INF] HTTP GET /api/contacts responded 200 in 751.8163 ms
+[22:32:16 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.0076 ms
+[22:32:21 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3107.0165 ms
+[23:15:58 INF] HTTP GET /api/contacts responded 200 in 1018.9695 ms
+[23:15:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.6765 ms
+[23:42:28 INF] HTTP GET /api/contacts responded 200 in 427.1337 ms
+[23:42:30 INF] HTTP POST /api/contacts responded 200 in 1362.5780 ms
+[23:42:30 INF] HTTP GET /api/cfe2b660-0c9b-43a3-934e-24c863f065a7/Contacts responded 200 in 578.3734 ms

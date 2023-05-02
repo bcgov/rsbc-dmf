@@ -108,7 +108,7 @@ public class Startup
 
         //services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+       // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         //services.AddFluentValidation(new[] { typeof(UpdatePlayerCommandHandler).GetTypeInfo().Assembly });
         //services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
         //services.AddTransient<ExceptionHandlingMiddleware>();
@@ -127,6 +127,7 @@ public class Startup
         services.AddDistributedMemoryCache();
         services.AddCmsAdapterGrpcService(config);
 
+        //services.AddGrpc(o => o.Interceptors.Add<UserManagerProblemDetailsFactory>());
 
         services.AddHealthChecks()
             .AddCheck("liveliness", () => HealthCheckResult.Healthy())
@@ -170,6 +171,16 @@ public class Startup
             options.OperationFilter<SecurityRequirementsOperationFilter>();
             options.CustomSchemaIds(x => x.FullName);
         });
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                    .WithOrigins("http://localhost:8089", "http://localhost:9092", "http://localhost:4200", "https://medical-portal-pidp-0137d5-dev.apps.silver.devops.gov.bc.ca") //use config later
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+        }); 
+
         services.AddFluentValidationRulesToSwagger();
 
     }

@@ -346,7 +346,7 @@ namespace Rsbc.Dmf.CaseManagement
             var cases = (await SearchCases(dynamicsContext, request)).Concat(await SearchDriverCases(dynamicsContext, request));
 
             //lazy load case related properties
-            foreach (var @case in cases)
+            foreach (var @case in cases.Take(10))
             {
                 await LazyLoadProperties(@case);
             }

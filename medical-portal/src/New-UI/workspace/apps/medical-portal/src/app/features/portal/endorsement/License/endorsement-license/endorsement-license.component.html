@@ -1,0 +1,21 @@
+<p-table [value]="config.data">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>College</th>
+      <th>Status</th>
+      <th>Status Code</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-rowData>
+    <tr>
+      <td>{{ rowData.identifierType }}</td>
+      <td>
+        <p-tag
+          icon="pi pi-check"
+          [value]="rowData.statusCode"
+          [severity]="'success'"></p-tag>
+      </td>
+      <td>{{ rowData.statusReasonCode }}</td>
+    </tr>
+  </ng-template>
+</p-table>

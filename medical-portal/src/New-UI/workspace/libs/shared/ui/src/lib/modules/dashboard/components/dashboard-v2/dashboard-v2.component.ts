@@ -1,17 +1,20 @@
 import {
   Component,
   EventEmitter,
+  Inject,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { MatDrawerMode } from '@angular/material/sidenav';
-import { IsActiveMatchOptions } from '@angular/router';
+import { IsActiveMatchOptions, Router } from '@angular/router';
 
 import { DashboardStateModel } from '@pidp/data-model';
 
 import { RoutePath } from '@bcgov/shared/utils';
+
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { PidpViewport, ViewportService } from '../../../../services';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '../../models';
@@ -30,6 +33,7 @@ export class DashboardV2Component implements OnChanges {
   public showMiniMenuButton = true;
   public isSidenavOpened = false;
   public sidenavMode: MatDrawerMode = 'over';
+  protected uri: string;
   public get isHeaderImageVisible(): boolean {
     // Hide the image in xsmall small when there is title text to display.
     if (
@@ -61,14 +65,19 @@ export class DashboardV2Component implements OnChanges {
   public get showTitleDescription(): boolean {
     return !!this.dashboardState.titleDescriptionText;
   }
-  public get isCollegeInfoVisible(): boolean {
+  public get isContactRoleVisible(): boolean {
     return (
       this.isMenuUserProfileVisible &&
-      !!this.dashboardState.userProfileCollegeNameText
+      !!this.dashboardState.userProfileRoleNameText
     );
   }
 
-  public constructor(private viewportService: ViewportService) {
+  public constructor(
+    @Inject(APP_CONFIG) config: AppConfig,
+    private viewportService: ViewportService,
+    private router: Router
+  ) {
+    this.uri = config.pidpPortalUrl;
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport)
     );
@@ -111,7 +120,11 @@ export class DashboardV2Component implements OnChanges {
   public onLogout(): void {
     this.logout.emit();
   }
-
+  public navigateToPidp(): void {
+    this.router.navigate(['/']).then((result) => {
+      window.location.href = this.uri;
+    });
+  }
   private onViewportChange(viewport: PidpViewport): void {
     this.viewport = viewport;
     this.refresh();

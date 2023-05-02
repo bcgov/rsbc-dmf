@@ -69,6 +69,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             var userContext = await userService.GetCurrentUserContext();
 
+
+
             var searchRequest = new SearchRequest
             {
                 Title = query.ByTitle ?? string.Empty,
@@ -90,7 +92,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             }
             else
             {
-                searchRequest.ClinicId = userContext.CurrentClinicAssignment.ClinicId;
+                searchRequest.ClinicId = "";// userContext.CurrentClinicAssignment.ClinicId;
             }
             
             searchRequest.Statuses.Add(query.ByStatus);

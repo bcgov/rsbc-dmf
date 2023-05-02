@@ -46,7 +46,7 @@ namespace pdipadapter.Infrastructure.Auth
             {
                 options.Authority = config.Keycloak.RealmUrl;
                 options.RequireHttpsMetadata = false;
-                options.Audience = Clients.PidpApi;
+                options.Audience = Clients.PidpAdapterApi;
                 options.MetadataAddress = config.Keycloak.WellKnownConfig;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
@@ -58,7 +58,8 @@ namespace pdipadapter.Infrastructure.Auth
                 };
                 options.Events = new JwtBearerEvents
                 {
-                    OnTokenValidated = context => {
+                    OnTokenValidated = context =>
+                    {
                         if (context.Principal?.Identity is ClaimsIdentity identity
                             && identity.IsAuthenticated)
                         {
@@ -87,7 +88,7 @@ namespace pdipadapter.Infrastructure.Auth
                             }
                             await context.Response.WriteAsync(response);
                         });
-                   
+
                         //context.HandleResponse();
                         //context.Response.WriteAsync(response).Wait();
                         return Task.CompletedTask;
@@ -125,6 +126,9 @@ namespace pdipadapter.Infrastructure.Auth
                 options.AddPolicy(Policies.MedicalPractitioner, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
+                options.AddPolicy(Policies.DmftEnroledUser, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireRole(Claims.IdentityProvider, Roles.DfmtEnroledRole));
             });
             return services;
             

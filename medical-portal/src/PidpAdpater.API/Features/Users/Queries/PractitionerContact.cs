@@ -10,7 +10,49 @@ using Google.Protobuf.WellKnownTypes;
 namespace MedicalPortal.API.Features.Users.Queries;
 public class PractitionerContactQuery
 {
-    public sealed record Query(string Hpdid) : IRequest<PractitionerContactResponse>;
+    public sealed record Query(string contactId) : IRequest<List<Model>>;
+    
+    public class Model
+    {
+        public string Id { get; set;} = string.Empty;
+    }
+    public class QueryHandler : IRequestHandler<Query, List<Model>>
+    {
+        private readonly UserManager.UserManagerClient userManager;
+        public QueryHandler(UserManager.UserManagerClient userManager)
+        {
+            this.userManager = userManager;
+        }
+
+        public async Task<List<Model>> Handle(Query request, CancellationToken cancellationToken)
+        {
+            var pReponse =  await userManager.GetPractitionerContactAsync(new PractitionerRequest
+            {
+                Hpdid = request.contactId,
+            });
+
+            if (pReponse.ContactId.ToString() == string.Empty)
+            {
+                return new List<Model>();
+
+            }
+
+            var g = new Model
+            {
+                Id = pReponse.ContactId
+            };
+
+            return new List<Model> { g };
+        }
+    }
+    
+
+}
+
+
+public class ContactQuery
+{
+    public sealed record Query(string contactId) : IRequest<PractitionerContactResponse>;
     public class QueryHandler : IRequestHandler<Query, PractitionerContactResponse>
     {
         private readonly UserManager.UserManagerClient userManager;
@@ -21,10 +63,11 @@ public class PractitionerContactQuery
 
         public async Task<PractitionerContactResponse> Handle(Query request, CancellationToken cancellationToken)
         {
-            var pReponse =  await userManager.GetPractitionerContactAsync(new PractitionerRequest
+            var pReponse = await userManager.GetPractitionerContactAsync(new PractitionerRequest
             {
-                Hpdid= request.Hpdid,
+                Hpdid = request.contactId,
             });
+
             if (pReponse.ContactId.ToString() == string.Empty)
             {
                 return new PractitionerContactResponse();
@@ -44,4 +87,3 @@ public class PractitionerContactQuery
     }
 
 }
-

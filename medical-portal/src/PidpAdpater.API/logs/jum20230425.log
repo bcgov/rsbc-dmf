@@ -1,0 +1,451 @@
+[00:00:33 INF] HTTP GET /api/contacts responded 200 in 988.8216 ms
+[00:12:40 INF] HTTP GET /api/contacts responded 200 in 1108.7248 ms
+[00:24:01 INF] HTTP GET /api/contacts responded 200 in 1151.7725 ms
+[00:24:06 INF] HTTP GET /api/contacts responded 200 in 662.6406 ms
+[00:29:45 INF] HTTP GET /api/contacts responded 200 in 1028.1445 ms
+[00:29:45 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.3481 ms
+[00:29:45 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.3501 ms
+[00:39:19 INF] HTTP GET /api/contacts responded 200 in 1046.2081 ms
+[00:39:19 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.2961 ms
+[00:39:19 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8698 ms
+[00:44:06 INF] HTTP GET /api/contacts responded 200 in 1071.7943 ms
+[00:44:06 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.2881 ms
+[00:44:06 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.1589 ms
+[00:44:38 INF] HTTP GET /api/contacts responded 200 in 774.2676 ms
+[00:44:38 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.4504 ms
+[00:44:38 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.0065 ms
+[00:46:39 INF] HTTP GET /api/contacts responded 200 in 962.3333 ms
+[00:46:39 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.3264 ms
+[00:46:40 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.0635 ms
+[00:47:01 INF] HTTP GET /api/contacts responded 200 in 684.7460 ms
+[00:47:01 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.1557 ms
+[00:47:01 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.0059 ms
+[00:49:21 INF] HTTP GET /api/contacts responded 200 in 1044.3567 ms
+[00:49:22 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.7793 ms
+[00:49:22 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.6041 ms
+[00:49:28 INF] HTTP GET /api/contacts responded 200 in 677.9735 ms
+[00:49:28 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.5467 ms
+[00:49:28 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.4895 ms
+[00:50:01 INF] HTTP GET /api/contacts responded 200 in 688.2020 ms
+[00:50:01 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.6153 ms
+[00:50:01 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.2240 ms
+[00:53:08 INF] HTTP GET /api/contacts responded 200 in 1035.1092 ms
+[00:53:09 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.9238 ms
+[00:53:09 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.2431 ms
+[01:01:14 INF] HTTP GET /api/contacts responded 200 in 3782.1234 ms
+[01:01:14 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8362 ms
+[01:01:14 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.6026 ms
+[01:01:49 INF] HTTP GET /api/contacts responded 200 in 701.5771 ms
+[01:01:49 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.2653 ms
+[01:01:49 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8192 ms
+[01:13:15 INF] HTTP GET /api/contacts responded 200 in 1122.4274 ms
+[01:13:15 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8320 ms
+[01:13:15 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8810 ms
+[01:17:02 INF] HTTP GET /api/contacts responded 403 in 15.1109 ms
+[01:17:02 INF] HTTP GET /api/contacts responded 403 in 10.4769 ms
+[01:20:08 INF] HTTP GET /api/contacts responded 403 in 22879.4005 ms
+[01:20:18 INF] HTTP GET /api/contacts responded 403 in 9979.0752 ms
+[01:22:31 INF] HTTP GET /api/contacts responded 403 in 3587.0515 ms
+[01:22:34 INF] HTTP GET /api/contacts responded 403 in 2652.5726 ms
+[01:30:09 INF] HTTP GET /api/contacts responded 403 in 4870.7154 ms
+[01:30:18 INF] HTTP GET /api/contacts responded 403 in 9275.6495 ms
+[01:37:00 INF] HTTP GET /api/contacts responded 403 in 2785.8044 ms
+[01:37:02 INF] HTTP GET /api/contacts responded 403 in 2727.6807 ms
+[01:37:57 INF] HTTP GET /api/contacts responded 403 in 2643.0514 ms
+[01:38:00 INF] HTTP GET /api/contacts responded 403 in 2085.1725 ms
+[01:39:22 INF] HTTP GET /api/contacts responded 403 in 64514.5824 ms
+[01:39:24 INF] HTTP GET /api/contacts responded 403 in 2192.1184 ms
+[01:39:26 INF] HTTP GET /api/contacts responded 403 in 2514.5658 ms
+[01:51:32 INF] Starting web host
+[01:51:34 INF] ### App Version:1.0.0.0 ###
+[01:51:34 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[01:51:37 INF] Now listening on: https://localhost:7215
+[01:51:37 INF] Now listening on: http://localhost:5050
+[01:51:37 INF] Application started. Press Ctrl+C to shut down.
+[01:51:37 INF] Hosting environment: Development
+[01:51:37 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[01:52:25 INF] HTTP GET /api/contacts responded 403 in 2478.2658 ms
+[01:52:25 INF] HTTP GET /api/contacts responded 403 in 19.2582 ms
+[01:52:32 INF] HTTP GET /api/contacts responded 403 in 1.8695 ms
+[01:52:32 INF] HTTP GET /api/contacts responded 403 in 1.2551 ms
+[01:52:36 INF] HTTP GET /api/contacts responded 403 in 1.2228 ms
+[01:52:36 INF] HTTP GET /api/contacts responded 403 in 1.5452 ms
+[01:57:40 INF] HTTP GET /api/contacts responded 403 in 1.9800 ms
+[01:57:40 INF] HTTP GET /api/contacts responded 403 in 7.7044 ms
+[01:58:04 INF] HTTP GET /api/contacts responded 403 in 1.1898 ms
+[01:58:04 INF] HTTP GET /api/contacts responded 403 in 1.2659 ms
+[02:00:19 INF] HTTP GET /api/contacts responded 403 in 1.6724 ms
+[02:00:19 INF] HTTP GET /api/contacts responded 403 in 1.3331 ms
+[02:00:41 INF] HTTP GET /api/contacts responded 200 in 1396.5906 ms
+[02:00:41 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.4461 ms
+[02:00:41 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.4606 ms
+[02:01:00 INF] HTTP GET /api/contacts responded 200 in 697.3743 ms
+[02:01:00 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.1939 ms
+[02:01:00 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 2.6230 ms
+[02:01:27 INF] HTTP GET /api/contacts responded 200 in 750.6106 ms
+[02:01:27 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.8597 ms
+[02:01:27 INF] HTTP POST /api/parties/undefined/profile-status responded 404 in 1.3178 ms
+[06:18:56 INF] HTTP GET /api/contacts responded 200 in 1341.4524 ms
+[06:18:56 INF] HTTP POST /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.2136 ms
+[06:18:56 INF] HTTP POST /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.6655 ms
+[06:22:16 INF] HTTP GET /api/contacts responded 200 in 905.1227 ms
+[06:22:52 INF] HTTP POST /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.6650 ms
+[06:22:52 INF] HTTP POST /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.7291 ms
+[06:24:37 INF] HTTP GET /api/contacts responded 200 in 970.6305 ms
+[06:24:45 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 2.0999 ms
+[06:24:45 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.7057 ms
+[06:26:23 INF] HTTP GET /contacts/gggg responded 401 in 5366.3043 ms
+[06:27:26 INF] HTTP GET /api/contacts responded 200 in 1086.6006 ms
+[06:27:26 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.2801 ms
+[06:27:26 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.2760 ms
+[06:28:43 INF] HTTP GET /api/contacts responded 200 in 972.4168 ms
+[06:28:43 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.6309 ms
+[06:28:43 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.3503 ms
+[06:30:01 INF] HTTP GET /api/contacts responded 200 in 971.6237 ms
+[06:30:01 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.1287 ms
+[06:30:01 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.6423 ms
+[06:31:11 INF] HTTP GET /contacts/gggg responded 401 in 9627.8714 ms
+[06:33:37 INF] HTTP GET /api/contacts responded 200 in 890.1518 ms
+[06:33:37 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.1873 ms
+[06:33:37 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.7263 ms
+[06:35:20 INF] HTTP GET /api/contacts responded 403 in 4.1498 ms
+[06:35:20 INF] HTTP GET /api/contacts responded 403 in 1.1702 ms
+[06:36:15 INF] HTTP GET /api/contacts responded 200 in 961.9424 ms
+[06:36:15 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.6234 ms
+[06:36:15 INF] HTTP GET /api/contacts/73b5daa2-fa32-49f8-a87c-cee520610298 responded 404 in 1.2182 ms
+[06:37:34 INF] Starting web host
+[06:37:36 INF] ### App Version:1.0.0.0 ###
+[06:37:36 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:37:39 INF] Now listening on: https://localhost:7215
+[06:37:39 INF] Now listening on: http://localhost:5050
+[06:37:39 INF] Application started. Press Ctrl+C to shut down.
+[06:37:39 INF] Hosting environment: Development
+[06:37:39 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:38:01 INF] HTTP GET /contacts/wwww responded 401 in 10533.6043 ms
+[06:40:38 INF] Starting web host
+[06:40:40 INF] ### App Version:1.0.0.0 ###
+[06:40:40 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:40:44 INF] Now listening on: https://localhost:7215
+[06:40:44 INF] Now listening on: http://localhost:5050
+[06:40:44 INF] Application started. Press Ctrl+C to shut down.
+[06:40:44 INF] Hosting environment: Development
+[06:40:44 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:41:11 INF] HTTP GET /contacts/ssss responded 200 in 18851.8125 ms
+[06:42:41 INF] Starting web host
+[06:42:42 INF] ### App Version:1.0.0.0 ###
+[06:42:43 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:42:46 INF] Now listening on: https://localhost:7215
+[06:42:46 INF] Now listening on: http://localhost:5050
+[06:42:46 INF] Application started. Press Ctrl+C to shut down.
+[06:42:46 INF] Hosting environment: Development
+[06:42:46 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:43:01 ERR] HTTP GET /contacts/dddd responded 500 in 203.1781 ms
+[06:43:44 INF] Starting web host
+[06:43:45 INF] ### App Version:1.0.0.0 ###
+[06:43:45 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:43:51 INF] Now listening on: https://localhost:7215
+[06:43:51 INF] Now listening on: http://localhost:5050
+[06:43:51 INF] Application started. Press Ctrl+C to shut down.
+[06:43:51 INF] Hosting environment: Development
+[06:43:51 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:44:51 INF] Starting web host
+[06:44:51 INF] ### App Version:1.0.0.0 ###
+[06:44:52 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:44:54 INF] Now listening on: https://localhost:7215
+[06:44:54 INF] Now listening on: http://localhost:5050
+[06:44:54 INF] Application started. Press Ctrl+C to shut down.
+[06:44:54 INF] Hosting environment: Development
+[06:44:54 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:45:07 INF] HTTP GET /dddd/Contacts responded 200 in 3519.0959 ms
+[06:45:52 INF] HTTP GET /api/contacts responded 200 in 735.4693 ms
+[06:45:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.7350 ms
+[06:45:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0732 ms
+[06:46:05 INF] HTTP GET /api/contacts responded 200 in 792.2512 ms
+[06:46:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0205 ms
+[06:46:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0272 ms
+[06:46:59 INF] HTTP GET /api/contacts responded 200 in 838.0030 ms
+[06:46:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0201 ms
+[06:46:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0327 ms
+[06:47:10 INF] HTTP GET /api/contacts responded 200 in 810.9436 ms
+[06:47:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0205 ms
+[06:47:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 0.0343 ms
+[06:48:26 INF] Starting web host
+[06:48:27 INF] ### App Version:1.0.0.0 ###
+[06:48:27 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:48:29 INF] Now listening on: https://localhost:7215
+[06:48:29 INF] Now listening on: http://localhost:5050
+[06:48:29 INF] Application started. Press Ctrl+C to shut down.
+[06:48:29 INF] Hosting environment: Development
+[06:48:29 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:48:40 INF] HTTP GET /api/contacts responded 200 in 1145.3687 ms
+[06:48:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 18112.7320 ms
+[06:50:21 INF] HTTP GET /api/contacts responded 200 in 834.2427 ms
+[06:50:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 2760.1824 ms
+[06:51:47 INF] HTTP GET /api/contacts responded 200 in 970.7903 ms
+[06:52:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 15705.1462 ms
+[06:58:39 INF] HTTP GET /api/contacts responded 200 in 940.0549 ms
+[06:59:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 3761.1414 ms
+[06:59:32 INF] HTTP GET /api/contacts responded 200 in 1085.3753 ms
+[06:59:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 4359.6363 ms
+[07:06:05 INF] HTTP GET /api/contacts responded 200 in 1160.5782 ms
+[07:06:14 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 4434.0158 ms
+[07:56:47 INF] HTTP GET /api/contacts responded 200 in 1149.2718 ms
+[08:14:30 INF] Starting web host
+[08:14:33 INF] ### App Version:1.0.0.0 ###
+[08:14:33 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[08:14:37 INF] Now listening on: https://localhost:7215
+[08:14:37 INF] Now listening on: http://localhost:5050
+[08:14:37 INF] Application started. Press Ctrl+C to shut down.
+[08:14:37 INF] Hosting environment: Development
+[08:14:37 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[08:15:10 INF] HTTP GET /api/contacts responded 200 in 13541.4699 ms
+[08:15:31 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 20634.2878 ms
+[08:16:27 INF] HTTP GET /api/contacts responded 200 in 5198.9751 ms
+[08:16:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 22783.4022 ms
+[08:20:06 INF] HTTP GET /api/contacts responded 200 in 6143.5313 ms
+[08:21:49 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 13776.6809 ms
+[08:24:49 INF] HTTP GET /api/contacts responded 200 in 4529.1606 ms
+[08:25:04 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 15439.4385 ms
+[08:27:11 INF] HTTP GET /api/contacts responded 200 in 11852.9840 ms
+[08:27:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 14221.7451 ms
+[08:38:34 INF] HTTP GET /api/contacts responded 200 in 87030.5587 ms
+[08:38:44 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 10641.2374 ms
+[08:40:31 INF] HTTP GET /api/contacts responded 200 in 17936.4750 ms
+[08:40:31 INF] HTTP GET /api/contacts responded 200 in 17217.3433 ms
+[08:40:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 13692.7141 ms
+[08:40:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 11068.9149 ms
+[08:41:33 INF] HTTP GET /api/contacts responded 200 in 1143.3082 ms
+[08:41:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 898.6461 ms
+[08:41:45 INF] HTTP GET /api/contacts responded 200 in 902.8226 ms
+[08:41:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 926.7141 ms
+[08:45:02 INF] HTTP GET /api/contacts responded 200 in 1438.1546 ms
+[08:45:03 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1115.7762 ms
+[08:46:05 INF] HTTP GET /api/contacts responded 200 in 1194.4185 ms
+[08:46:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 908.6149 ms
+[08:46:38 INF] HTTP GET /api/contacts responded 200 in 1153.0087 ms
+[08:46:39 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1024.5446 ms
+[08:47:11 INF] HTTP GET /api/contacts responded 200 in 1170.3771 ms
+[08:47:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 891.5529 ms
+[08:49:52 INF] HTTP GET /api/contacts responded 200 in 1408.8023 ms
+[08:49:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 885.5258 ms
+[09:18:43 INF] HTTP GET /api/contacts responded 200 in 1494.2670 ms
+[09:18:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1040.0212 ms
+[09:23:39 INF] HTTP GET /api/contacts responded 200 in 1331.8817 ms
+[09:23:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1292.6442 ms
+[09:33:58 INF] HTTP GET /api/contacts responded 200 in 1607.6817 ms
+[09:33:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 998.2058 ms
+[09:43:29 INF] HTTP GET /api/contacts responded 200 in 1450.5213 ms
+[09:43:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 984.5748 ms
+[09:46:16 INF] HTTP GET /api/contacts responded 200 in 1390.5537 ms
+[09:46:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 892.7104 ms
+[09:46:27 INF] HTTP GET /api/contacts responded 200 in 866.1772 ms
+[09:46:28 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 888.4672 ms
+[10:37:59 INF] HTTP GET /api/contacts responded 200 in 1595.1061 ms
+[10:38:00 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 916.3269 ms
+[10:59:03 INF] HTTP GET /api/contacts responded 200 in 1515.6582 ms
+[10:59:04 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 907.3700 ms
+[11:07:50 INF] HTTP GET /api/contacts responded 200 in 1399.8734 ms
+[11:07:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 931.2550 ms
+[11:08:17 INF] HTTP GET /api/contacts responded 200 in 908.1909 ms
+[11:08:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 868.6763 ms
+[11:27:22 INF] HTTP GET /api/contacts responded 200 in 1346.6903 ms
+[11:27:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 893.4178 ms
+[14:15:19 INF] HTTP GET /api/contacts responded 200 in 1595.8025 ms
+[14:15:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1003.9698 ms
+[14:17:39 INF] HTTP GET /api/Contactsundefined/endorsement responded 404 in 1.0788 ms
+[14:17:39 INF] HTTP GET /api/Contactsundefined/endorsement responded 404 in 0.0366 ms
+[14:17:41 INF] HTTP GET /api/contacts responded 200 in 1437.6789 ms
+[14:17:42 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 902.3185 ms
+[14:17:44 INF] HTTP GET /api/contacts responded 200 in 871.0795 ms
+[14:17:45 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 885.8537 ms
+[14:17:46 INF] HTTP GET /api/Contactsundefined/endorsement responded 404 in 0.0217 ms
+[14:17:46 INF] HTTP GET /api/Contactsundefined/endorsement responded 404 in 0.0199 ms
+[14:52:32 INF] Starting web host
+[14:52:35 INF] ### App Version:1.0.0.0 ###
+[14:52:35 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[14:52:38 INF] Now listening on: https://localhost:7215
+[14:52:38 INF] Now listening on: http://localhost:5050
+[14:52:38 INF] Application started. Press Ctrl+C to shut down.
+[14:52:38 INF] Hosting environment: Development
+[14:52:38 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[14:56:12 INF] HTTP GET /api/contacts responded 200 in 5514.1890 ms
+[14:56:12 ERR] HTTP POST /api/contacts responded 500 in 190.2063 ms
+[16:09:09 INF] HTTP GET /api/contacts responded 200 in 758.8818 ms
+[16:09:09 ERR] HTTP POST /api/contacts responded 500 in 5.6731 ms
+[16:09:52 INF] HTTP GET /api/contacts responded 200 in 197.0260 ms
+[16:09:52 ERR] HTTP POST /api/contacts responded 500 in 0.6241 ms
+[16:11:42 INF] HTTP GET /api/contacts responded 200 in 532.9336 ms
+[16:13:02 ERR] HTTP POST /api/contacts responded 500 in 80129.3349 ms
+[16:14:52 INF] Starting web host
+[16:14:55 INF] ### App Version:1.0.0.0 ###
+[16:14:55 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:14:57 INF] Now listening on: https://localhost:7215
+[16:14:57 INF] Now listening on: http://localhost:5050
+[16:14:57 INF] Application started. Press Ctrl+C to shut down.
+[16:14:57 INF] Hosting environment: Development
+[16:14:57 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:15:30 INF] HTTP GET /api/contacts responded 200 in 850.7246 ms
+[16:16:25 ERR] HTTP POST /api/contacts responded 500 in 55316.6336 ms
+[16:17:36 INF] HTTP GET /api/contacts responded 200 in 449.1347 ms
+[16:17:36 ERR] HTTP POST /api/contacts responded 500 in 1.3956 ms
+[16:17:59 INF] Starting web host
+[16:18:00 INF] ### App Version:1.0.0.0 ###
+[16:18:00 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:18:02 INF] Now listening on: https://localhost:7215
+[16:18:02 INF] Now listening on: http://localhost:5050
+[16:18:02 INF] Application started. Press Ctrl+C to shut down.
+[16:18:02 INF] Hosting environment: Development
+[16:18:02 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:18:13 INF] HTTP GET /api/contacts responded 200 in 439.2091 ms
+[16:19:41 INF] HTTP POST /api/contacts responded 200 in 88148.8763 ms
+[16:19:42 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 958.4181 ms
+[16:23:18 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsement responded 404 in 0.2322 ms
+[16:23:18 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsement responded 404 in 0.0243 ms
+[16:23:23 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsement responded 404 in 0.0239 ms
+[16:23:23 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsement responded 404 in 0.0265 ms
+[16:24:45 ERR] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 500 in 19.4457 ms
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[16:24:45 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[16:24:45 ERR] HTTP GET /error responded 500 in 170.6866 ms
+[16:24:51 ERR] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 500 in 0.9022 ms
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[16:24:51 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[16:24:51 ERR] HTTP GET /error responded 500 in 17.7638 ms
+[16:25:45 INF] HTTP GET /api/contacts responded 200 in 1292.6320 ms
+[16:25:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 891.2961 ms
+[16:25:50 ERR] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 500 in 9.9260 ms
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[16:25:50 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: No authenticationScheme was specified, and there was no DefaultChallengeScheme found. The default schemes can be set using either AddAuthentication(string defaultScheme) or AddAuthentication(Action<AuthenticationOptions> configureOptions).
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.ChallengeAsync(HttpContext context, String scheme, AuthenticationProperties properties)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[16:25:50 ERR] HTTP GET /error responded 500 in 22.7149 ms
+[16:26:56 INF] Starting web host
+[16:26:58 INF] ### App Version:1.0.0.0 ###
+[16:26:58 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:27:01 INF] Now listening on: https://localhost:7215
+[16:27:01 INF] Now listening on: http://localhost:5050
+[16:27:01 INF] Application started. Press Ctrl+C to shut down.
+[16:27:01 INF] Hosting environment: Development
+[16:27:01 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:27:13 INF] HTTP GET /api/contacts responded 200 in 1973.1230 ms
+[16:27:14 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 905.4996 ms
+[16:27:38 ERR] Received non-success status code "NotFound" with message: {"title":"Not Found","status":404}.
+[16:27:42 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 200 in 26191.1830 ms
+[16:28:44 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 401 in 19.4121 ms
+[16:29:40 ERR] Received non-success status code "NotFound" with message: {"title":"Not Found","status":404}.
+[16:29:42 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@bcsc/endorsements responded 200 in 46176.1019 ms
+[16:29:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2408.2905 ms
+[16:32:34 ERR] Received non-success status code "NotFound" with message: {"title":"Not Found","status":404}.
+[16:32:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6@/endorsements responded 200 in 10639.7997 ms
+[16:32:45 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 952.8439 ms
+[16:33:06 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 537.4111 ms
+[17:07:15 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2831.5348 ms
+[17:15:20 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2491.3243 ms
+[17:25:12 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2622.6714 ms
+[17:27:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2589.8627 ms
+[17:32:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 788.2178 ms
+[17:32:18 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2285.2536 ms
+[17:35:19 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2608.3677 ms
+[17:45:03 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2903.2774 ms
+[17:47:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 837.8096 ms
+[17:47:40 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 386.4283 ms
+[17:47:50 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 1.6350 ms
+[17:48:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 505.2210 ms
+[17:48:23 INF] HTTP GET /api/contacts responded 200 in 1067.5294 ms
+[17:48:24 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 934.8532 ms
+[17:48:27 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 370.9647 ms
+[17:49:31 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 603.6530 ms
+[17:52:04 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2580.7759 ms
+[17:54:27 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6571.9616 ms
+[17:54:30 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6103.2892 ms
+[17:55:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 508.8074 ms
+[17:55:52 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 665.5580 ms
+[17:58:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 929.9562 ms
+[17:58:39 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 304.6480 ms
+[18:01:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7054.3660 ms
+[18:01:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2687.5330 ms
+[18:03:16 INF] HTTP GET /api/contacts responded 200 in 1287.7680 ms
+[18:03:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 930.2711 ms
+[18:05:08 INF] HTTP GET /api/contacts responded 200 in 1341.4310 ms
+[18:05:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 878.1767 ms
+[18:05:28 INF] HTTP GET /api/contacts responded 200 in 976.9119 ms
+[18:05:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 894.3462 ms
+[18:05:42 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 482.5608 ms
+[18:08:58 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 9140.6661 ms
+[18:19:10 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7251.8232 ms
+[18:19:35 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6158.4707 ms
+[18:20:08 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 378.1464 ms
+[18:20:47 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 649.5638 ms
+[18:20:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 373.7992 ms
+[18:23:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2518.2326 ms
+[18:27:23 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6037.7109 ms
+[21:04:46 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6881.5865 ms
+[21:06:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6922.5986 ms
+[21:08:58 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 746.1012 ms
+[21:10:16 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2520.9467 ms
+[21:10:30 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4347.4143 ms
+[21:14:04 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6804.3626 ms
+[21:21:50 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7516.1202 ms
+[21:26:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6239.8388 ms
+[21:28:58 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6700.8978 ms
+[21:29:29 INF] HTTP GET /api/contacts responded 200 in 1035.4073 ms
+[21:29:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 944.9260 ms
+[21:29:46 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 445.4718 ms
+[21:31:12 INF] HTTP GET /api/contacts responded 200 in 1172.1196 ms
+[21:31:13 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 905.0073 ms
+[23:14:30 INF] HTTP GET /api/contacts responded 200 in 737.0392 ms
+[23:14:57 INF] HTTP POST /api/contacts responded 200 in 26347.9387 ms
+[23:14:58 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1041.2733 ms
+[23:15:12 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7021.0825 ms
+[23:16:18 INF] HTTP GET /api/contacts responded 200 in 1213.7489 ms
+[23:16:19 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 961.5747 ms
+[23:16:38 INF] HTTP GET /api/contacts responded 200 in 1071.2837 ms
+[23:16:40 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1078.2938 ms
+[23:16:52 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 6020.1924 ms
+[23:18:36 INF] HTTP GET /api/contacts responded 200 in 1210.2469 ms
+[23:18:38 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1021.0664 ms
+[23:19:16 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 2809.4985 ms
+[23:21:46 INF] HTTP GET /api/contacts responded 200 in 1184.6323 ms
+[23:21:47 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 891.1309 ms
+[23:23:10 INF] HTTP GET /api/contacts responded 200 in 1297.9282 ms
+[23:23:11 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 958.1366 ms

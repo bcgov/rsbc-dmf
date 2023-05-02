@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "medical-portal": {
+      "architect": {
+        "build": {
+          "options": {
+            "proxyConfig": "./apps/medical-portal/proxy.conf.ts"
+          }
+        }
+      }
+    }
+  }
+}

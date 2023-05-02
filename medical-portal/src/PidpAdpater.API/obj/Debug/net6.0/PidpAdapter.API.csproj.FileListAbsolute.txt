@@ -334,3 +334,13 @@ C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\lo
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230420.json
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230421.json
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230422.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230423.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230424.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230425.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230426.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230427.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230428.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230429.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230430.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230501.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230502.json

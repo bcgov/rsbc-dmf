@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RouteUtils } from '@bcgov/shared/utils';
+
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 @Component({
   selector: 'ui-access-denied',
@@ -17,7 +19,8 @@ import { RouteUtils } from '@bcgov/shared/utils';
           </h1>
 
           <button mat-flat-button (click)="routeToRoot()">
-            Let us help you find your way to your destination
+            Please, go to the Health Provider Identity Portal to Enrol for
+            Access!
           </button>
         </div>
       </div>
@@ -26,9 +29,18 @@ import { RouteUtils } from '@bcgov/shared/utils';
   styleUrls: ['../../shared/root-route-page-styles.scss'],
 })
 export class AccessDeniedComponent {
-  public constructor(private route: ActivatedRoute, private router: Router) {}
+  private uri: string;
+  public constructor(
+    @Inject(APP_CONFIG) config: AppConfig,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
+    this.uri = config.pidpPortalUrl;
+  }
 
   public routeToRoot(): void {
-    this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));
+    this.router.navigate(['/']).then((result) => {
+      window.location.href = this.uri;
+    });
   }
 }

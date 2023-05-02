@@ -1,0 +1,91 @@
+<h3 class="section-label">ENDORSEMENT MANAGEMENT</h3>
+<small
+  >View and manage your relationships and endorsements from Provider Identity
+  Portal.
+</small>
+
+<p-table
+  styleClass="p-datatable-gridlines"
+  [rowHover]="true"
+  [tableStyle]="{ width: 'max-content' }"
+  [value]="endorsements"
+  [paginator]="true"
+  [rows]="paginationConfig.pageSize">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Hpdid</th>
+      <th>Full Name</th>
+      <th>Email</th>
+      <th>Role</th>
+      <th>Licenses</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-endorsement>
+    <tr>
+      <td>
+        <span class="pi pi-user">{{ '' }} {{ endorsement.hpdid }}</span>
+      </td>
+      <td>
+        <span
+          >{{ endorsement.contact.firstName }}
+          {{ endorsement.contact.lastName }}</span
+        >
+      </td>
+      <td>
+        <span class="pi pi-envelope"
+          >{{ '' }} {{ endorsement.contact.email }}</span
+        >
+      </td>
+      <td>
+        {{ endorsement.contact.role }}
+      </td>
+      <td>
+        <p-dialog
+          [showHeader]="true"
+          [dismissableMask]="true"
+          [modal]="true"
+          [header]="'License Information'"
+          [position]="'right'"
+          [contentStyle]="{ 'max-height': '200px' }"
+          [(visible)]="display">
+          <p>Medical Office Assistant</p>
+          <ng-template pTemplate="footer">
+            <p-button
+              icon="pi pi-check"
+              label="Ok"
+              styleClass="p-button-text"
+              (click)="getUserLicense(endorsement.hpdid)"></p-button>
+          </ng-template>
+        </p-dialog>
+        <p-toast></p-toast>
+        <div class="button">
+          <button
+            class="p-button-text"
+            icon="pi pi-info-circle"
+            pButton
+            type="button"
+            label="View Status"
+            (click)="getUserLicense(endorsement.hpdid)"></button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+<style>
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .header h2 {
+    margin-bottom: 0;
+    color: green;
+  }
+
+  button {
+    margin-bottom: 10px;
+  }
+</style>

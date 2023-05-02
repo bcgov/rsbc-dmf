@@ -23,5 +23,9 @@ public class AuthConstant
         public const string Practitoner = "PRACTITIONER";
         public const string Moa = "MOA";
     }
+    public static class Policies
+    {
+        public const string MedicalPractitioner = "medical-practitioner";
+    }
 }
 

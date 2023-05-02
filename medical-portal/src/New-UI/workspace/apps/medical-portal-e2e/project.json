@@ -1,0 +1,28 @@
+{
+  "root": "apps/medical-portal-e2e",
+  "sourceRoot": "apps/medical-portal-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/medical-portal-e2e/cypress.json",
+        "devServerTarget": "pidp:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "pidp:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/medical-portal-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["medical-portal"]
+}

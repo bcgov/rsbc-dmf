@@ -1,0 +1,103 @@
+{
+  "projectType": "application",
+  "root": "apps/medical-portal",
+  "sourceRoot": "apps/medical-portal/src",
+  "prefix": "app",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/medical-portal",
+        "index": "apps/medical-portal/src/index.html",
+        "main": "apps/medical-portal/src/main.ts",
+        "polyfills": "apps/medical-portal/src/polyfills.ts",
+        "tsConfig": "apps/medical-portal/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/medical-portal/src/favicon.ico",
+          "apps/medical-portal/src/assets",
+          "apps/medical-portal/src/robots.txt"
+        ],
+        "styles": ["apps/medical-portal/src/scss/app.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/medical-portal/src/scss"]
+        },
+        "scripts": [],
+        "allowedCommonJsDependencies": ["keycloak-js"]
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "3mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "30kb",
+              "maximumError": "40kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/medical-portal/src/environments/environment.ts",
+              "with": "apps/medical-portal/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "medical-portal:build:production"
+        },
+        "development": {
+          "browserTarget": "medical-portal:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "port": 4200,
+        "proxyConfig": "apps/medical-portal/proxy.conf.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "medical-portal:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/medical-portal/src/**/*.ts",
+          "apps/medical-portal/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/medical-portal"],
+      "options": {
+        "jestConfig": "apps/medical-portal/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:medical-portal", "type:app"]
+}

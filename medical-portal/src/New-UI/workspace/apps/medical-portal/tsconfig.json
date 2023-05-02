@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
+  ],
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictNullChecks": true,
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@env/*": ["apps/medical-portal/src/environment/*"],
+      "@test/*": ["apps/medical-portal/src/test/*"],
+      "@app/*": ["apps/medical-portal/src/app/*"],
+      "@core/*": ["apps/medical-portal/src/app/core/*"],
+      "@shared/*": ["apps/medical-portal/src/app/shared/*"],
+      "@pidp/presentation": ["libs/pidp/presentation/src/index.ts"],
+      "@pidp/data-model": ["libs/pidp/data-model/src/index.ts"],
+      "@bcgov/shared/data-access": ["libs/shared/data-access/src/index.ts"],
+      "@bcgov/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@bcgov/shared/utils": ["libs/shared/utils/src/index.ts"]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  }
+}

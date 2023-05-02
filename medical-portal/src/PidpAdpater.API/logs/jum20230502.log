@@ -1,0 +1,318 @@
+[00:09:07 INF] HTTP OPTIONS /contacts responded 401 in 0.2392 ms
+[00:09:07 INF] HTTP OPTIONS /contacts responded 401 in 0.2646 ms
+[00:09:32 INF] HTTP OPTIONS /contacts responded 401 in 0.2258 ms
+[00:09:32 INF] HTTP OPTIONS /contacts responded 401 in 0.2757 ms
+[00:14:41 INF] Application is shutting down...
+[00:14:50 INF] Starting web host
+[00:14:51 INF] ### App Version:1.0.0.0 ###
+[00:14:51 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[00:14:52 INF] Now listening on: https://localhost:7215
+[00:14:52 INF] Now listening on: http://localhost:5050
+[00:14:52 INF] Application started. Press Ctrl+C to shut down.
+[00:14:52 INF] Hosting environment: Development
+[00:14:52 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[00:15:01 INF] HTTP OPTIONS /contacts responded 204 in 21.7000 ms
+[00:15:02 INF] HTTP GET /contacts responded 404 in 278.9685 ms
+[00:15:02 INF] HTTP GET /contacts responded 404 in 2.6623 ms
+[06:26:30 INF] HTTP OPTIONS /contacts responded 204 in 1.3026 ms
+[06:26:30 INF] HTTP OPTIONS /contacts responded 204 in 0.0361 ms
+[06:28:12 INF] HTTP OPTIONS /contacts responded 204 in 0.0362 ms
+[06:28:12 INF] HTTP OPTIONS /contacts responded 204 in 0.0348 ms
+[06:28:18 INF] HTTP OPTIONS /contacts responded 204 in 0.0287 ms
+[06:28:18 INF] HTTP OPTIONS /contacts responded 204 in 0.0295 ms
+[06:28:43 INF] HTTP OPTIONS /contacts responded 204 in 0.0332 ms
+[06:28:43 INF] HTTP OPTIONS /contacts responded 204 in 0.0472 ms
+[06:29:45 INF] Application is shutting down...
+[06:29:54 INF] Starting web host
+[06:29:55 INF] ### App Version:1.0.0.0 ###
+[06:29:55 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[06:29:56 INF] Now listening on: https://localhost:7215
+[06:29:56 INF] Now listening on: http://localhost:5050
+[06:29:56 INF] Application started. Press Ctrl+C to shut down.
+[06:29:56 INF] Hosting environment: Development
+[06:29:56 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[06:30:15 INF] HTTP OPTIONS /contacts responded 204 in 13.8465 ms
+[06:30:15 INF] HTTP GET /contacts responded 404 in 273.9540 ms
+[06:30:15 INF] HTTP GET /contacts responded 404 in 3.1108 ms
+[06:32:59 INF] HTTP OPTIONS /contacts responded 204 in 0.0473 ms
+[06:32:59 INF] HTTP GET /contacts responded 404 in 3.2582 ms
+[06:32:59 INF] HTTP GET /contacts responded 404 in 1.3076 ms
+[06:35:20 INF] HTTP OPTIONS /contacts responded 204 in 0.0564 ms
+[06:35:20 INF] HTTP GET /contacts responded 404 in 1.4501 ms
+[06:35:20 INF] HTTP GET /contacts responded 404 in 1.7627 ms
+[06:41:30 INF] HTTP OPTIONS /api/contacts responded 204 in 0.6374 ms
+[06:41:34 INF] HTTP GET /api/contacts responded 200 in 3773.5294 ms
+[06:41:34 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.1539 ms
+[06:41:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 649.5702 ms
+[06:42:34 INF] HTTP OPTIONS /api//Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0640 ms
+[06:42:34 INF] HTTP GET /api//Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 404 in 1.7746 ms
+[06:42:34 INF] HTTP GET /api//Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 404 in 1.2600 ms
+[07:07:08 INF] HTTP GET /api/contacts responded 200 in 1077.6542 ms
+[07:07:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 631.7648 ms
+[07:07:31 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6791.6317 ms
+[07:14:09 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0629 ms
+[07:14:10 INF] HTTP GET /api/contacts responded 200 in 935.9496 ms
+[07:14:10 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0942 ms
+[07:14:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 642.0981 ms
+[07:14:25 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0476 ms
+[07:14:25 INF] HTTP GET /api/contacts responded 200 in 611.3837 ms
+[07:14:25 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.1517 ms
+[07:14:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 591.6565 ms
+[07:14:48 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.1367 ms
+[07:14:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5524.0991 ms
+[07:18:10 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0546 ms
+[07:18:11 INF] HTTP GET /api/contacts responded 200 in 928.7136 ms
+[07:18:12 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0783 ms
+[07:18:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.0868 ms
+[07:19:50 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0569 ms
+[07:19:51 INF] HTTP GET /api/contacts responded 200 in 818.4901 ms
+[07:19:51 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0633 ms
+[07:19:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 632.2036 ms
+[07:22:49 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0498 ms
+[07:22:56 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6867.3866 ms
+[08:30:47 INF] HTTP OPTIONS /api/contacts responded 204 in 1.6765 ms
+[08:30:49 INF] HTTP GET /api/contacts responded 200 in 1372.1786 ms
+[08:30:49 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0379 ms
+[08:30:49 INF] HTTP OPTIONS /api/apis/Cases responded 204 in 0.0257 ms
+[08:30:49 INF] HTTP GET /api/apis/Cases responded 404 in 1.0791 ms
+[08:30:49 INF] HTTP GET /api/apis/Cases responded 404 in 1.6359 ms
+[08:30:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.8549 ms
+[08:32:19 INF] HTTP GET /api/apis/Cases responded 401 in 26.7922 ms
+[08:32:19 INF] HTTP GET /favicon.ico responded 401 in 0.3300 ms
+[08:40:29 INF] Application is shutting down...
+[08:40:44 INF] Starting web host
+[08:40:45 INF] ### App Version:1.0.0.0 ###
+[08:40:45 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[08:40:47 INF] Now listening on: https://localhost:7215
+[08:40:47 INF] Now listening on: http://localhost:5050
+[08:40:47 INF] Application started. Press Ctrl+C to shut down.
+[08:40:47 INF] Hosting environment: Development
+[08:40:47 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[08:42:07 INF] HTTP OPTIONS /apis/contacts responded 204 in 13.7573 ms
+[08:42:08 INF] HTTP GET /apis/contacts responded 200 in 1396.6036 ms
+[08:42:08 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.3534 ms
+[08:42:08 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.1065 ms
+[08:42:08 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 2.3864 ms
+[08:42:08 INF] HTTP GET /apis/api/Cases responded 404 in 5.0950 ms
+[08:42:08 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 404 in 1.8237 ms
+[08:42:08 INF] HTTP GET /apis/api/Cases responded 404 in 1.4695 ms
+[08:44:20 INF] Application is shutting down...
+[08:44:26 INF] Starting web host
+[08:44:26 INF] ### App Version:1.0.0.0 ###
+[08:44:26 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[08:44:27 INF] Now listening on: https://localhost:7215
+[08:44:27 INF] Now listening on: http://localhost:5050
+[08:44:27 INF] Application started. Press Ctrl+C to shut down.
+[08:44:27 INF] Hosting environment: Development
+[08:44:27 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[08:45:31 INF] HTTP OPTIONS /apis/contacts responded 204 in 13.4052 ms
+[08:45:32 INF] HTTP GET /apis/contacts responded 200 in 1330.8124 ms
+[08:45:32 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.2944 ms
+[08:45:32 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.0566 ms
+[08:45:32 INF] HTTP GET /apis/api/Cases responded 404 in 2.5965 ms
+[08:45:32 INF] HTTP GET /apis/api/Cases responded 404 in 1.8297 ms
+[08:45:33 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 680.7082 ms
+[08:49:56 INF] HTTP OPTIONS /apis/contacts responded 204 in 0.0708 ms
+[08:49:57 INF] HTTP GET /apis/contacts responded 200 in 911.4040 ms
+[08:49:57 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0744 ms
+[08:49:58 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.0354 ms
+[08:49:58 INF] HTTP GET /apis/api/Cases responded 404 in 1.2253 ms
+[08:49:58 INF] HTTP GET /apis/api/Cases responded 404 in 2.4125 ms
+[08:49:58 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 634.3276 ms
+[08:50:46 INF] HTTP OPTIONS /apis/contacts responded 204 in 0.0564 ms
+[08:50:47 INF] HTTP GET /apis/contacts responded 200 in 668.6924 ms
+[08:50:47 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0719 ms
+[08:50:47 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.0435 ms
+[08:50:47 INF] HTTP GET /apis/api/Cases responded 404 in 1.0149 ms
+[08:50:47 INF] HTTP GET /apis/api/Cases responded 404 in 1.3075 ms
+[08:50:47 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 616.4956 ms
+[09:02:50 INF] HTTP OPTIONS /contacts responded 204 in 0.1035 ms
+[09:03:08 INF] HTTP OPTIONS /contacts responded 204 in 0.0354 ms
+[09:03:12 INF] HTTP OPTIONS /contacts responded 204 in 0.0316 ms
+[09:03:29 INF] HTTP OPTIONS /contacts responded 204 in 0.0575 ms
+[09:04:32 INF] HTTP GET /contacts responded 404 in 1.7236 ms
+[09:04:32 INF] HTTP GET /contacts responded 404 in 1.3106 ms
+[09:10:12 INF] HTTP OPTIONS /contacts responded 204 in 0.0492 ms
+[09:10:12 INF] HTTP GET /contacts responded 404 in 1.5394 ms
+[09:10:12 INF] HTTP GET /contacts responded 404 in 1.4822 ms
+[09:10:59 INF] HTTP OPTIONS /contacts responded 204 in 0.0908 ms
+[09:10:59 INF] HTTP GET /contacts responded 404 in 1.6103 ms
+[09:10:59 INF] HTTP GET /contacts responded 404 in 1.6326 ms
+[09:15:38 INF] HTTP OPTIONS /apis/contacts responded 204 in 0.0987 ms
+[09:15:39 INF] HTTP GET /apis/contacts responded 200 in 977.1001 ms
+[09:15:39 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0649 ms
+[09:15:39 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.0251 ms
+[09:15:39 INF] HTTP GET /apis/api/Cases responded 404 in 1.3020 ms
+[09:15:39 INF] HTTP GET /apis/api/Cases responded 404 in 1.1444 ms
+[09:15:40 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 598.8690 ms
+[09:31:51 INF] HTTP OPTIONS /apis/contacts responded 204 in 0.0466 ms
+[09:31:52 INF] HTTP GET /apis/contacts responded 200 in 980.8214 ms
+[09:31:52 INF] HTTP OPTIONS /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0427 ms
+[09:31:52 INF] HTTP OPTIONS /apis/api/Cases responded 204 in 0.0265 ms
+[09:31:52 INF] HTTP GET /apis/api/Cases responded 404 in 0.9840 ms
+[09:31:52 INF] HTTP GET /apis/api/Cases responded 404 in 1.1147 ms
+[09:31:52 INF] HTTP GET /apis/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 666.6850 ms
+[09:42:03 INF] Application is shutting down...
+[09:42:13 INF] Starting web host
+[09:42:14 INF] ### App Version:1.0.0.0 ###
+[09:42:14 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[09:42:16 INF] Now listening on: https://localhost:7215
+[09:42:16 INF] Now listening on: http://localhost:5050
+[09:42:16 INF] Application started. Press Ctrl+C to shut down.
+[09:42:16 INF] Hosting environment: Development
+[09:42:16 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[09:45:45 INF] HTTP OPTIONS /api/contacts responded 204 in 16.9786 ms
+[09:45:45 INF] HTTP OPTIONS /api/contacts responded 204 in 0.6639 ms
+[09:46:39 INF] Application is shutting down...
+[09:46:47 INF] Starting web host
+[09:46:47 INF] ### App Version:1.0.0.0 ###
+[09:46:47 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[09:46:48 INF] Now listening on: https://localhost:7215
+[09:46:48 INF] Now listening on: http://localhost:5050
+[09:46:48 INF] Application started. Press Ctrl+C to shut down.
+[09:46:48 INF] Hosting environment: Development
+[09:46:48 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[09:46:56 INF] HTTP OPTIONS /api/contacts responded 204 in 13.5597 ms
+[09:46:58 INF] HTTP GET /api/contacts responded 200 in 1488.0003 ms
+[09:46:58 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.3465 ms
+[09:46:58 INF] HTTP OPTIONS /api/api/Cases responded 204 in 0.0607 ms
+[09:46:58 INF] HTTP GET /api/api/Cases responded 404 in 3.5328 ms
+[09:46:58 INF] HTTP GET /api/api/Cases responded 404 in 1.7826 ms
+[09:46:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 662.7475 ms
+[09:47:52 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0605 ms
+[09:47:53 INF] HTTP GET /api/contacts responded 200 in 687.6027 ms
+[09:47:53 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0654 ms
+[09:47:53 INF] HTTP OPTIONS /api/api/Cases responded 204 in 0.0328 ms
+[09:47:53 INF] HTTP GET /api/api/Cases responded 404 in 1.1843 ms
+[09:47:53 INF] HTTP GET /api/api/Cases responded 404 in 1.2140 ms
+[09:47:53 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 639.3458 ms
+[09:48:06 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0486 ms
+[09:48:07 INF] HTTP GET /api/contacts responded 200 in 745.0743 ms
+[09:48:07 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0551 ms
+[09:48:07 INF] HTTP OPTIONS /api/api/Cases responded 204 in 0.0437 ms
+[09:48:07 INF] HTTP GET /api/api/Cases responded 404 in 0.9830 ms
+[09:48:07 INF] HTTP GET /api/api/Cases responded 404 in 1.1029 ms
+[09:48:08 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.9814 ms
+[09:49:10 INF] HTTP OPTIONS /api/contacts responded 204 in 0.2214 ms
+[09:49:11 INF] HTTP GET /api/contacts responded 200 in 844.1228 ms
+[09:49:11 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0724 ms
+[09:49:11 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 591.4152 ms
+[09:54:48 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0591 ms
+[09:54:48 INF] HTTP GET /api/contacts responded 200 in 881.1889 ms
+[09:54:49 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0828 ms
+[09:54:49 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 616.7292 ms
+[09:59:24 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0535 ms
+[09:59:25 INF] HTTP GET /api/contacts responded 200 in 981.4546 ms
+[09:59:25 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0670 ms
+[09:59:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 639.1861 ms
+[10:01:50 INF] HTTP OPTIONS /api/contacts responded 204 in 0.1223 ms
+[10:01:51 INF] HTTP GET /api/contacts responded 200 in 845.0571 ms
+[10:01:51 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0393 ms
+[10:01:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 645.8301 ms
+[10:05:22 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0283 ms
+[10:05:23 INF] HTTP GET /api/contacts responded 200 in 955.2178 ms
+[10:05:23 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0345 ms
+[10:05:24 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.2350 ms
+[10:09:19 INF] HTTP OPTIONS /api/contacts responded 204 in 0.1162 ms
+[10:09:20 INF] HTTP GET /api/contacts responded 200 in 885.0966 ms
+[10:09:20 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0311 ms
+[10:09:21 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 604.7951 ms
+[10:10:58 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0261 ms
+[10:10:59 INF] HTTP GET /api/contacts responded 200 in 993.4562 ms
+[10:10:59 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0260 ms
+[10:10:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.2781 ms
+[10:12:57 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0348 ms
+[10:12:58 INF] HTTP GET /api/contacts responded 200 in 868.7961 ms
+[10:12:58 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0301 ms
+[10:12:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.2880 ms
+[10:13:42 INF] Application is shutting down...
+[10:13:49 INF] Starting web host
+[10:13:50 INF] ### App Version:1.0.0.0 ###
+[10:13:50 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[10:13:51 INF] Now listening on: https://localhost:7215
+[10:13:51 INF] Now listening on: http://localhost:5050
+[10:13:51 INF] Application started. Press Ctrl+C to shut down.
+[10:13:51 INF] Hosting environment: Development
+[10:13:51 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[10:14:15 INF] HTTP OPTIONS /api/contacts responded 204 in 13.6286 ms
+[10:14:16 INF] HTTP GET /api/contacts responded 200 in 1234.5973 ms
+[10:14:16 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 1.1467 ms
+[10:14:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 640.6015 ms
+[10:16:53 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0744 ms
+[10:17:00 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6773.9477 ms
+[10:17:24 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0653 ms
+[10:17:25 INF] HTTP GET /api/contacts responded 200 in 699.1902 ms
+[10:17:25 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.1101 ms
+[10:17:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 720.2420 ms
+[10:17:33 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0501 ms
+[10:17:33 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 821.2162 ms
+[10:18:01 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0696 ms
+[10:18:02 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 867.6098 ms
+[10:22:09 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0613 ms
+[10:22:10 INF] HTTP GET /api/contacts responded 200 in 900.8508 ms
+[10:22:10 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0615 ms
+[10:22:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 631.4822 ms
+[10:23:36 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0816 ms
+[10:23:37 INF] HTTP GET /api/contacts responded 200 in 838.7239 ms
+[10:23:37 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0891 ms
+[10:23:38 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.7590 ms
+[10:25:08 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0995 ms
+[10:25:09 INF] HTTP GET /api/contacts responded 200 in 841.6338 ms
+[10:25:09 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0919 ms
+[10:25:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 606.7385 ms
+[10:27:52 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0478 ms
+[10:27:53 INF] HTTP GET /api/contacts responded 200 in 863.6371 ms
+[10:27:53 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0492 ms
+[10:27:54 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.1381 ms
+[10:29:23 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0508 ms
+[10:29:24 INF] HTTP GET /api/contacts responded 200 in 784.8274 ms
+[10:29:24 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0821 ms
+[10:29:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 605.4983 ms
+[10:59:36 WRN] As of ""2023-05-02T17:59:32.8281385+00:00"", the heartbeat has been running for ""00:00:03.3672994"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:35:22 WRN] As of ""2023-05-02T18:35:20.5814345+00:00"", the heartbeat has been running for ""00:00:01.7279815"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:35:42 WRN] As of ""2023-05-02T18:35:30.4567830+00:00"", the heartbeat has been running for ""00:00:11.5817976"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:52:40 WRN] As of ""2023-05-02T18:52:36.4782628+00:00"", the heartbeat has been running for ""00:00:03.9844123"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:54:28 WRN] As of ""2023-05-02T18:54:22.8882612+00:00"", the heartbeat has been running for ""00:00:05.7923847"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:54:49 WRN] As of ""2023-05-02T18:54:41.6796055+00:00"", the heartbeat has been running for ""00:00:07.3592604"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:55:03 WRN] As of ""2023-05-02T18:54:58.4868423+00:00"", the heartbeat has been running for ""00:00:05.3941866"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[11:55:51 WRN] As of ""2023-05-02T18:55:48.1581279+00:00"", the heartbeat has been running for ""00:00:02.8638769"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:09:45 WRN] As of ""2023-05-02T19:09:39.5205832+00:00"", the heartbeat has been running for ""00:00:05.8117577"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:11:34 WRN] As of ""2023-05-02T19:11:30.2970189+00:00"", the heartbeat has been running for ""00:00:04.6279441"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:12:42 WRN] As of ""2023-05-02T19:12:41.0848627+00:00"", the heartbeat has been running for ""00:00:01.1061978"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:16:17 WRN] As of ""2023-05-02T19:16:14.5187928+00:00"", the heartbeat has been running for ""00:00:03.3178143"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:21:42 WRN] As of ""2023-05-02T19:21:40.7293036+00:00"", the heartbeat has been running for ""00:00:01.4182532"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:31:50 WRN] As of ""2023-05-02T19:31:43.7765550+00:00"", the heartbeat has been running for ""00:00:06.6809253"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:32:55 WRN] As of ""2023-05-02T19:32:52.9696101+00:00"", the heartbeat has been running for ""00:00:02.5274356"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:45:28 WRN] As of ""2023-05-02T19:45:25.5074668+00:00"", the heartbeat has been running for ""00:00:02.7026525"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:45:50 WRN] As of ""2023-05-02T19:45:45.2731014+00:00"", the heartbeat has been running for ""00:00:04.7856462"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[12:54:28 WRN] As of ""2023-05-02T19:54:23.0180723+00:00"", the heartbeat has been running for ""00:00:05.3430714"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[13:07:04 WRN] As of ""2023-05-02T20:07:02.5879556+00:00"", the heartbeat has been running for ""00:00:02.2621667"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[13:10:34 WRN] As of ""2023-05-02T20:10:27.5840785+00:00"", the heartbeat has been running for ""00:00:06.9873841"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[13:13:53 WRN] As of ""2023-05-02T20:13:51.5569439+00:00"", the heartbeat has been running for ""00:00:02.2965265"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[13:16:35 WRN] As of ""2023-05-02T20:16:34.0583579+00:00"", the heartbeat has been running for ""00:00:01.1779994"" which is longer than ""00:00:01"". This could be caused by thread pool starvation.
+[16:22:54 INF] HTTP OPTIONS /api/contacts responded 204 in 14.3163 ms
+[16:22:58 INF] HTTP GET /api/contacts responded 200 in 3677.1758 ms
+[16:22:58 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0363 ms
+[16:22:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 634.3129 ms
+[16:23:58 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0749 ms
+[16:23:59 INF] HTTP GET /api/contacts responded 200 in 831.4296 ms
+[16:23:59 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0409 ms
+[16:23:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.1210 ms
+[16:25:30 INF] HTTP OPTIONS /api/contacts responded 204 in 2.1460 ms
+[16:25:31 INF] HTTP GET /api/contacts responded 200 in 926.5727 ms
+[16:25:31 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0302 ms
+[16:25:31 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 600.3607 ms
+[16:29:19 INF] HTTP OPTIONS /api/contacts responded 204 in 5.5074 ms
+[16:29:20 INF] HTTP GET /api/contacts responded 200 in 1272.0007 ms
+[16:29:20 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0678 ms
+[16:29:22 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 1962.7436 ms
+[16:29:43 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.1991 ms
+[16:29:49 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5870.4575 ms
+[16:30:12 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0392 ms
+[16:30:20 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7566.2121 ms
+[16:31:15 INF] HTTP OPTIONS /api/contacts responded 204 in 0.8737 ms
+[16:31:19 INF] HTTP GET /api/contacts responded 200 in 3447.7882 ms
+[16:31:19 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 204 in 0.0322 ms
+[16:31:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 744.9908 ms
+[16:31:34 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0764 ms
+[16:31:35 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 899.7176 ms

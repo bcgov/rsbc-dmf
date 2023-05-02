@@ -38,6 +38,8 @@
     "luxon": "^2.1.1",
     "ngx-mask": "^13.0.0",
     "ngx-progressbar": "^7.0.0",
+    "primeicons": "^6.0.1",
+    "primeng": "^13.0.0",
     "rxjs": "~7.4.0",
     "swiper": "^9.1.0",
     "tslib": "^2.0.0",

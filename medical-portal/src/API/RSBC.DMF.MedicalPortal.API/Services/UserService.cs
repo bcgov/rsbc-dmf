@@ -66,9 +66,9 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             return await Task.FromResult(new UserContext
             {
-                Id = user.FindFirstValue(ClaimTypes.Sid),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName),
-                LastName = user.FindFirstValue(ClaimTypes.Surname),
+                Id = user.FindFirstValue(Claims.PreferredUsername),
+                FirstName = user.FindFirstValue(Claims.GivenName),
+                LastName = user.FindFirstValue(Claims.FamilyName),
                 Email = user.FindFirstValue(ClaimTypes.Email),
                 ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
             });

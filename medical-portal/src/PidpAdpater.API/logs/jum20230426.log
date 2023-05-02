@@ -1,0 +1,67 @@
+[14:10:22 INF] HTTP GET /api/contacts responded 200 in 2110.3606 ms
+[14:10:24 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 977.0210 ms
+[14:10:36 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 6900.7362 ms
+[15:36:03 INF] HTTP GET /api/contacts responded 200 in 2205.2856 ms
+[15:36:04 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1045.9587 ms
+[15:36:37 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7541.4529 ms
+[15:37:53 INF] HTTP GET /api/contacts responded 200 in 1315.5436 ms
+[15:37:54 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 978.2915 ms
+[15:48:26 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7129.0467 ms
+[18:44:04 INF] HTTP GET /api/contacts responded 200 in 2859.0772 ms
+[18:44:05 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1085.1342 ms
+[18:44:24 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7882.6994 ms
+[19:45:43 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 6959.1729 ms
+[19:46:13 INF] HTTP GET /api/contacts responded 200 in 943.4996 ms
+[19:46:13 INF] HTTP GET /api/Cases responded 404 in 61.9832 ms
+[19:46:13 INF] HTTP GET /api/Cases responded 404 in 1.9161 ms
+[19:46:14 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1242.1760 ms
+[19:48:15 INF] HTTP GET /api/Cases responded 401 in 4.5264 ms
+[19:56:05 INF] HTTP GET /api/contacts responded 200 in 1467.1558 ms
+[19:56:11 INF] HTTP GET /api/Cases responded 401 in 0.1234 ms
+[19:56:12 INF] HTTP GET /api/Cases responded 401 in 0.1176 ms
+[19:56:30 INF] HTTP GET /api/Cases responded 404 in 25.7542 ms
+[19:56:30 INF] HTTP GET /api/Cases responded 404 in 12.2304 ms
+[19:56:31 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1021.1498 ms
+[20:02:23 INF] HTTP GET /api/contacts responded 200 in 1438.8342 ms
+[20:02:54 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1023.4859 ms
+[20:06:56 INF] HTTP GET /api/contacts responded 200 in 1831.7888 ms
+[20:07:10 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1080.4435 ms
+[20:08:42 INF] HTTP GET /api/contacts responded 200 in 1188.7160 ms
+[20:08:48 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1173.1541 ms
+[20:11:15 INF] HTTP GET /api/contacts responded 200 in 1216.0413 ms
+[20:11:16 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1055.6215 ms
+[20:12:25 INF] HTTP GET /api/contacts responded 200 in 1314.6018 ms
+[20:12:26 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 931.5480 ms
+[21:45:16 INF] Starting web host
+[21:45:17 INF] ### App Version:1.0.0.0 ###
+[21:45:17 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:45:20 INF] Now listening on: https://localhost:7215
+[21:45:20 INF] Now listening on: http://localhost:5050
+[21:45:20 INF] Application started. Press Ctrl+C to shut down.
+[21:45:20 INF] Hosting environment: Development
+[21:45:20 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[21:45:40 INF] HTTP GET /api/contacts responded 200 in 2509.4630 ms
+[21:45:42 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 938.8013 ms
+[21:49:16 INF] HTTP GET /api/contacts responded 200 in 1486.4506 ms
+[21:49:17 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 994.4037 ms
+[21:50:52 INF] HTTP GET /api/contacts responded 200 in 1331.8587 ms
+[21:50:53 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1151.3026 ms
+[21:53:57 INF] HTTP GET /api/contacts responded 200 in 1319.1708 ms
+[21:53:59 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1092.7800 ms
+[21:59:01 INF] HTTP GET /api/contacts responded 200 in 1393.7428 ms
+[21:59:02 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 888.1412 ms
+[22:16:56 INF] HTTP GET /api/contacts responded 200 in 1551.6699 ms
+[22:16:57 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1253.2479 ms
+[22:24:49 INF] HTTP GET /api/contacts responded 200 in 1232.6075 ms
+[22:24:50 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 910.6901 ms
+[22:35:32 INF] HTTP GET /api/contacts responded 200 in 7381.6774 ms
+[22:35:33 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 971.1860 ms
+[22:41:09 INF] HTTP GET /api/contacts responded 200 in 1340.1292 ms
+[22:41:17 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 1095.7275 ms
+[22:47:04 INF] HTTP GET /api/contacts responded 200 in 1283.2885 ms
+[22:47:10 INF] HTTP GET /api/4e70fd43-e6fb-489b-a04b-3dbe02e96b3f/Contacts responded 200 in 943.3687 ms
+[22:50:10 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7513.6758 ms
+[23:08:35 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 8264.6919 ms
+[23:09:02 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 6529.0250 ms
+[23:10:19 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 3665.3486 ms
+[23:21:32 INF] HTTP GET /api/Contacts/yxu6r32wfowloriosdy77fxerm3lpk2p/endorsements responded 200 in 7653.9511 ms

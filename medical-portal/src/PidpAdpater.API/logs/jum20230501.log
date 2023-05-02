@@ -1,0 +1,15 @@
+[22:33:41 INF] Starting web host
+[22:33:41 INF] ### App Version:1.0.0.0 ###
+[22:33:41 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:33:44 INF] Now listening on: https://localhost:7215
+[22:33:44 INF] Now listening on: http://localhost:5050
+[22:33:44 INF] Application started. Press Ctrl+C to shut down.
+[22:33:44 INF] Hosting environment: Development
+[22:33:44 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:45:17 INF] HTTP GET /api/contacts responded 200 in 2638.4482 ms
+[22:45:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 703.7394 ms
+[22:46:02 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 28128.4012 ms
+[23:53:56 INF] HTTP OPTIONS /contacts responded 401 in 21.5551 ms
+[23:53:56 INF] HTTP OPTIONS /contacts responded 401 in 0.3039 ms
+[23:55:23 INF] HTTP OPTIONS /contacts responded 401 in 0.1505 ms
+[23:55:23 INF] HTTP OPTIONS /contacts responded 401 in 0.1844 ms

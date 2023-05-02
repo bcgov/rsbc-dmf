@@ -1,0 +1,162 @@
+<div class="page-desc">
+  <div class="container">
+    <div class="list">
+      <h2>DMER Case Details</h2>
+      <p>
+        Find below the Driver's Medical Examination Report (DMER) submission
+        information and how to submit further information to RoadSafetyBC
+        regarding this patient.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-icon
+          class="medical-professionals-icon"
+          svgIcon="medical-professionals-icon"></mat-icon>
+        DMER Information
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content
+      class="dmer-information"
+      fxLayout="row"
+      fxLayoutGap="120px">
+      <div
+        fxLayout="column"
+        fxFlex="1 1 50%"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="24px">
+        <div fxLayout="row">
+          <div fxFlex="1 1 30%">DMER Case ID:</div>
+          <div fxFlex="1 1 70%">
+            <b> {{ selectedCase?.title }}</b>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="1 1 30%">DMER Type:</div>
+          <div fxFlex="1 1 70%">
+            <label class="dmer-type">{{ selectedCase?.dmerType }}</label>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="1 1 30%">Driver Name :</div>
+          <div fxFlex="1 1 70%">
+            <b
+              >{{ selectedCase?.patientFirstname }},
+              {{ selectedCase?.patientLastname }}
+              {{ selectedCase?.patientMiddlename }}</b
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        fxLayout="column"
+        fxFlex="1 1 50%"
+        fxLayoutAlign="space-between"
+        fxLayoutGap="24px">
+        <div fxLayout="row">
+          <div fxFlex="1 1 40%">Case Status:</div>
+          <div fxFlex="1 1 60%">
+            <b> {{ selectedCase?.status }}</b>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="1 1 40%">Submission Date:</div>
+          <div fxFlex="1 1 60%">
+            <b>{{ selectedCase?.createdOn | date }}</b>
+          </div>
+        </div>
+        <div fxLayout="row">
+          <div fxFlex="1 1 40%">Medical Practioner on Record:</div>
+          <div fxFlex="1 1 60%"><b>Dr. Shelby Drew</b></div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="container">
+  <mat-card class="search">
+    <mat-card-header class="primary">
+      <mat-card-title>
+        <mat-icon class="info-icon">info</mat-icon> Further Information
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="further-info">
+        <b
+          >When would a medical professional submit further information to
+          RoadSafetyBC regarding this patient?</b
+        >
+        <ul>
+          <li>
+            A medical professional may be contacted by a patient requesting
+            further medical information that RSBC requires to assess their case.
+          </li>
+          <li>
+            A medical professional can submit further information regarding a
+            patient at any time. This information may include:
+            <ul>
+              <li>
+                An amendment* and/or supplement to this DMER submission (e.g.
+                relevant specialist consult reports, results of medical
+                investigations, etc.)
+              </li>
+              <li>
+                Any other information they believe should be taken into
+                consideration when assessing this patient's fitness to drive.
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <div>
+          <b> Submit further medical information by fax to RoadSafetyBC: </b>
+          <br />
+          Fax number: 250-952-6888 <br />
+          <b>REQUIRED</b>: Patient’s full name, address and date of birth
+          <br />
+          <b>IF AVAILABLE</b>: Driver's licence number <br />
+          <div class="footnote">
+            * Please be advised that the original e-DMER cannot be altered once
+            submitted. Any additional information must be submitted to
+            RoadSafetyBC by fax.
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div style="display: flex; justify-content: space-around">
+    <div class="alert-toolbar">
+      <span>
+        <mat-icon class="info-icon">info</mat-icon>
+      </span>
+      <span>
+        <div>
+          <b
+            >If a patient has a medical condition that raises significant
+            concern about their ability to <br />
+            safely operate a motor vehicle, please submit a Report of a
+            Condition Affecting Fitness and <br />
+            Ability to Drive.</b
+          >
+        </div>
+      </span>
+      <span>
+        <div class="dmer-content">
+          <button
+            class="download-button"
+            mat-flat-button
+            color="primary"
+            onClick="window.open('https://www2.gov.bc.ca/assets/gov/driving-and-transportation/driving/roadsafetybc/medical-fitness/medical-prof/mv2351_condition_affecting_ability_to_drive_2022may.pdf')">
+            Report a Condition
+          </button>
+        </div>
+      </span>
+    </div>
+  </div>
+</div>

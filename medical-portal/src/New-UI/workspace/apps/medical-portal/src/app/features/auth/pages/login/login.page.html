@@ -1,0 +1,110 @@
+<ui-layout-header-footer>
+  <div class="main-container" uiPidpInjectViewportCss>
+    <span page-v2-title></span>
+    <div class="content-container">
+      <header *ngIf="isMobileTitleVisible" class="title-container">
+        <h1 class="title">
+          <span class="title-text">
+            <span class="title-provider">Driver</span>
+            <span class="title-portal">Medical Portal</span>
+          </span>
+        </h1>
+      </header>
+      <header *ngIf="isWebTitleVisible" class="title-container">
+        <div class="title-content-container">
+          <h1 class="title">
+            <span class="title-text">Driver<br />Medical Portal</span>
+          </h1>
+          <section class="title-site-description">
+            <p>
+              A portal for healthcare professionals in British Columbia to check
+              the status of DMER they submitted as required by RoadSafetyBC.
+            </p>
+          </section>
+          <section class="title-bcgov">
+            <div class="title-bcgov-logo">
+              <!-- <picture>
+                <source
+                  type="image/webp"
+                  srcset="/assets/images/RoadSafetyBC1.png" />
+                <source
+                  type="image/png"
+                  srcset="/assets/images/RoadSafetyBC1.png" />
+                <img
+                  title="BC Government Logo"
+                  loading="lazy"
+                  aria-label="RoadSafety BC Logo" />
+              </picture> -->
+            </div>
+          </section>
+        </div>
+      </header>
+      <section class="welcome-section">
+        <div class="welcome-container">
+          <div *ngIf="isPidpLogoVisible" class="welcome-dmft-portal-logo">
+            <img
+              src="/assets/images/dmft-portal-logo.svg"
+              title="DMFT Logo"
+              loading="lazy"
+              aria-label="DMFT Logo" />
+          </div>
+          <h1 id="welcome" class="welcome-title">Welcome</h1>
+          <ng-container *ngTemplateOutlet="login"></ng-container>
+        </div>
+      </section>
+      <section class="systems-section">
+        <!-- <h1 class="systems-title">Systems Available</h1>
+        <ng-container *ngTemplateOutlet="systems"></ng-container> -->
+      </section>
+    </div>
+  </div>
+</ui-layout-header-footer>
+
+<ng-template #login>
+  <div class="login-container">
+    <div class="login-content">
+      <button
+        class="login-app-button"
+        mat-stroked-button
+        (click)="onLogin(IdentityProvider.BCSC)">
+        Login with the BC Services Card app
+      </button>
+      <div class="login-setup">
+        <small>
+          Don't have an account?
+          <a uiAnchor [href]="bcscMobileSetupUrl">Set up</a>
+        </small>
+      </div>
+
+      <div class="login-continue-with">
+        <div class="login-line-container">
+          <hr class="login-line" />
+        </div>
+        <span class="login-continue-with-text">Or continue with</span>
+        <div class="login-line-container">
+          <hr class="login-line" />
+        </div>
+      </div>
+
+      <div class="login-secondary-container">
+        <button
+          class="login-button-secondary"
+          mat-stroked-button
+          (click)="onLogin(IdentityProvider.PHSA)">
+          Login with your Health Authority ID
+        </button>
+      </div>
+      <div class="login-with-idir">
+        <small
+          >Do you have a IDIR account?
+          <a
+            href="javascript:"
+            role="button"
+            (click)="onLogin(IdentityProvider.IDIR)"
+            >Login</a
+          ></small
+        >
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -9,6 +9,14 @@
       <mat-icon>menu</mat-icon>
     </button>
     <div *ngIf="isLogoutButtonVisible">
+      <span class="signout-text">pidp portal</span>
+      <button
+        mat-icon-button
+        matTooltip="Pidp Portal"
+        aria-label="Pidp Portal"
+        (click)="navigateToPidp()">
+        <mat-icon>local_hospital</mat-icon>
+      </button>
       <span class="signout-text">sign out</span>
       <button
         mat-icon-button
@@ -52,10 +60,10 @@
       </div>
       <div *ngIf="isHeaderImageVisible" class="header-image-container">
         <img
-          src="/assets/images/pidp-logo-white.svg"
-          title="PIDP Logo"
+          src="/assets/images/BC-DMFT2.svg"
+          title="DMFT Logo"
           loading="lazy"
-          aria-label="PIDP Logo"
+          aria-label="DMFT Logo"
           aria-hidden="true" />
       </div>
     </header>
@@ -69,8 +77,8 @@
           <p class="sidenav-name">
             {{ dashboardState.userProfileFullNameText }}
           </p>
-          <p *ngIf="isCollegeInfoVisible" class="sidenav-college">
-            {{ dashboardState.userProfileCollegeNameText }}
+          <p *ngIf="isContactRoleVisible" class="sidenav-college">
+            {{ dashboardState.userProfileRoleNameText }}
           </p>
         </div>
         <div *ngIf="isMenuUserProfileVisible" class="sidenav-line"></div>

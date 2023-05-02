@@ -1,9 +1,9 @@
 {
   "version": 2,
   "projects": {
-    "pidp": "apps/pidp",
+    "medical-portal": "apps/medical-portal",
+    "medical-portal-e2e": "apps/medical-portal-e2e",
     "pidp-data-model": "libs/pidp/data-model",
-    "pidp-e2e": "apps/pidp-e2e",
     "pidp-presentation": "libs/pidp/presentation",
     "shared-data-access": "libs/shared/data-access",
     "shared-ui": "libs/shared/ui",

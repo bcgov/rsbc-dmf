@@ -122,6 +122,8 @@ namespace Rsbc.Dmf.CaseManagement
     {
         private readonly DynamicsContext dynamicsContext;
 
+        public contact contact { get; private set; }
+
         public UserManager(DynamicsContext dynamicsContext)
         {
             this.dynamicsContext = dynamicsContext;
@@ -270,10 +272,21 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request)
         {
-            var contact =  dynamicsContext.contacts
+            if (Guid.TryParse(request.hpdid, out Guid result))
+            {
+                contact = dynamicsContext.contacts
+                .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
+                .Where(contact => contact.contactid == new Guid(request.hpdid)) //contactId is the hpdid from health bcsc idp
+                .SingleOrDefault();
+            }
+            else
+            {
+                contact = dynamicsContext.contacts
                 .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
                 .Where(contact => contact.externaluseridentifier == request.hpdid) //contactId is the hpdid from health bcsc idp
                 .SingleOrDefault();
+            }
+            
 
             if (contact != null)
             {

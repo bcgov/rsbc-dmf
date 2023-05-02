@@ -38,14 +38,17 @@ public class Endorsement : BaseClient, IEndorsement
 
        return endorsementRelations.Select(e => new Model.Endorsement
         {
-            ContactId = e.Result.contact.ContactId,
-            Email = e.Result.contact.Email,
-            Hpdid = e.Result.HpDid!,
-            BirthDate = e.Result.contact.Birthdate == null ? "" : e.Result.contact.Birthdate.ToDateTime().ToString(),
-            Role = e.Result.contact.Role,
-            FirstName = e.Result.contact.FirstName,
-            LastName = e.Result.contact.LastName,
-            Licences = e.Result.License
+           Hpdid = e.Result.HpDid,
+           Licences = e.Result.License,
+           Contact = new Contact
+           {
+               ContactId = e.Result.contact.ContactId,
+               Email = e.Result.contact.Email,
+               BirthDate = e.Result.contact.Birthdate == null ? "" : e.Result.contact.Birthdate.ToDateTime().ToString(),
+               Role = e.Result.contact.Role,
+               FirstName = e.Result.contact.FirstName,
+               LastName = e.Result.contact.LastName,               
+           }
         });
     }
 }

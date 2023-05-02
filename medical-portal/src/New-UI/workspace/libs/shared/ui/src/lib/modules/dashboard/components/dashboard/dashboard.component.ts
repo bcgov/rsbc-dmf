@@ -9,6 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -76,7 +77,10 @@ export class DashboardComponent implements OnInit {
 
   public sideNavProps!: DashboardSidenavProps;
 
-  public constructor(private viewportService: ViewportService) {
+  public constructor(
+    private viewportService: ViewportService,
+    private router: Router
+  ) {
     this.headerConfig = {
       theme: 'dark',
       allowMobileToggle: true,
@@ -127,5 +131,11 @@ export class DashboardComponent implements OnInit {
     } else {
       return new DashboardSidenavProps('over', false, false);
     }
+  }
+  public navigateToPidp(): void {
+    this.router.navigate(['/']).then((result) => {
+      window.location.href =
+        'https://test.healthprovideridentityportal.gov.bc.ca/';
+    });
   }
 }

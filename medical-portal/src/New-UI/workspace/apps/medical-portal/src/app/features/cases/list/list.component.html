@@ -1,0 +1,119 @@
+<div class="container">
+  <mat-card class="list">
+    <mat-card-header class="primary">
+      <mat-card-title>{{ clinicName }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container>
+        Filter By:
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select multiple [formControl]="statusFilter">
+            <mat-option> In Progress </mat-option>
+
+            <mat-option> Submitted </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Last Modified By</mat-label>
+          <mat-select multiple [formControl]="lastModifiedByFilter">
+            <mat-option> Sample User </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <table
+        mat-table
+        #formsList
+        matSort
+        matSortActive="title"
+        matSortDirection="asc"
+        matSortDisableClear
+        [dataSource]="sortedData"
+        (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="title">
+          <th
+            *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header="title"
+            sortActionDescription="Sort by DMER Case ID">
+            DMER Case ID
+          </th>
+          <td *matCellDef="let row" mat-cell>
+            <a
+              routerLinkActive="router-link-active"
+              [routerLink]="['../case', row.id]">
+              {{ row.title }}
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="patientName">
+          <th
+            *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header="patientName"
+            sortActionDescription="Sort by Patient's Name">
+            Patient's Name
+          </th>
+          <td *matCellDef="let row" mat-cell>{{ row.patientName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="lastUpdatedOn">
+          <th
+            *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header="modifiedOn"
+            sortActionDescription="Sort by Last Date Modified">
+            Last Date Modified
+          </th>
+          <td *matCellDef="let row" mat-cell>{{ row.modifiedOn | date }}</td>
+        </ng-container>
+        <ng-container matColumnDef="lastUpdatedBy">
+          <th
+            *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header="modifiedBy"
+            sortActionDescription="Sort by Last Modified By">
+            Last Modified By
+          </th>
+          <td *matCellDef="let row" mat-cell>{{ row.modifiedBy }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th
+            *matHeaderCellDef
+            mat-header-cell
+            mat-sort-header="status"
+            sortActionDescription="Sort by Status">
+            Status
+          </th>
+          <td *matCellDef="let row" mat-cell>{{ row.status }}</td>
+        </ng-container>
+
+        <tr
+          *matHeaderRowDef="[
+            'title',
+            'patientName',
+            'lastUpdatedOn',
+            'lastUpdatedBy',
+            'status'
+          ]"
+          mat-header-row></tr>
+        <tr
+          *matRowDef="
+            let row;
+            columns: [
+              'title',
+              'patientName',
+              'lastUpdatedOn',
+              'lastUpdatedBy',
+              'status'
+            ]
+          "
+          mat-row></tr>
+      </table>
+      <div class="table-actions">
+        <p>Showing 10 of 25 records</p>
+        <a href="#">View more records<mat-icon>arrow_drop_down</mat-icon> </a>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

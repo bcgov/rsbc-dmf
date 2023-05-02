@@ -1,0 +1,394 @@
+[00:01:26 INF] HTTP GET /api/contacts responded 200 in 927.1695 ms
+[00:01:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 549.2565 ms
+[08:10:17 INF] HTTP GET /api/contacts responded 200 in 1106.7872 ms
+[08:10:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 589.4850 ms
+[08:10:24 INF] HTTP GET /api/contacts responded 200 in 576.7231 ms
+[08:10:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 580.4319 ms
+[08:21:21 INF] HTTP GET /api/contacts responded 200 in 968.7636 ms
+[08:21:22 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 577.9574 ms
+[08:21:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6367.9431 ms
+[08:21:39 INF] HTTP GET /api/contacts responded 200 in 596.2099 ms
+[08:21:40 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 588.2236 ms
+[08:21:55 INF] HTTP GET /api/contacts responded 200 in 626.2543 ms
+[08:21:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 565.0210 ms
+[08:27:55 INF] HTTP GET /api/contacts responded 200 in 888.5774 ms
+[08:27:56 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 589.2375 ms
+[08:28:09 INF] HTTP GET /api/contacts responded 200 in 594.1437 ms
+[08:28:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 624.1134 ms
+[08:30:19 INF] HTTP GET /api/contacts responded 200 in 931.7827 ms
+[08:30:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 605.5660 ms
+[08:30:27 INF] HTTP GET /api/contacts responded 200 in 629.3709 ms
+[08:30:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 557.1196 ms
+[08:30:50 INF] HTTP GET /api/contacts responded 200 in 656.0140 ms
+[08:30:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.0689 ms
+[09:58:10 INF] HTTP GET /api/contacts responded 200 in 1014.3432 ms
+[09:58:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.3761 ms
+[09:59:11 INF] HTTP GET /api/contacts responded 200 in 783.2748 ms
+[09:59:12 INF] HTTP GET /api/contacts responded 200 in 624.1030 ms
+[09:59:12 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 553.5117 ms
+[09:59:13 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 587.6984 ms
+[10:11:05 INF] HTTP GET /api/ApplicationVersionInfo responded 404 in 1.9855 ms
+[10:11:05 INF] HTTP GET /api/ApplicationVersionInfo responded 404 in 1.2026 ms
+[10:11:06 INF] HTTP GET /api/contacts responded 200 in 939.0505 ms
+[10:11:07 INF] HTTP GET /api/contacts responded 200 in 619.8695 ms
+[10:11:07 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.8371 ms
+[10:11:08 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 571.0456 ms
+[10:12:44 INF] HTTP GET /api/ApplicationVersionInfo responded 404 in 1.8788 ms
+[10:12:44 INF] HTTP GET /api/ApplicationVersionInfo responded 404 in 1.6137 ms
+[10:12:45 INF] HTTP GET /api/contacts responded 200 in 1019.4675 ms
+[10:12:46 INF] HTTP GET /api/contacts responded 200 in 605.6207 ms
+[10:12:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 607.7543 ms
+[10:12:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 581.6453 ms
+[10:16:35 INF] HTTP GET /api/contacts responded 200 in 964.3004 ms
+[10:16:35 INF] HTTP GET /api/contacts responded 200 in 695.5856 ms
+[10:16:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 788.7357 ms
+[10:16:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 765.1857 ms
+[10:18:16 INF] HTTP GET /api/contacts responded 200 in 842.7039 ms
+[10:18:17 INF] HTTP GET /api/contacts responded 200 in 657.3131 ms
+[10:18:17 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 580.3269 ms
+[10:18:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 634.4863 ms
+[10:18:22 INF] HTTP GET /api/contacts responded 200 in 615.2433 ms
+[10:18:23 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.1299 ms
+[10:26:46 INF] HTTP GET /api/contacts responded 200 in 1065.5350 ms
+[10:26:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 651.4097 ms
+[10:35:58 INF] HTTP GET /api/contacts responded 200 in 1246.6492 ms
+[10:35:59 INF] HTTP GET /api/contacts responded 200 in 607.0488 ms
+[10:35:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 601.6297 ms
+[10:35:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 598.2220 ms
+[10:42:15 INF] HTTP GET /api/contacts responded 200 in 982.8802 ms
+[10:42:15 INF] HTTP GET /api/contacts responded 200 in 585.3136 ms
+[10:42:15 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 579.6807 ms
+[10:42:16 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 578.2546 ms
+[10:42:17 INF] HTTP GET /api/contacts responded 200 in 588.4328 ms
+[10:42:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 601.2837 ms
+[10:43:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7904.0707 ms
+[10:51:18 INF] HTTP GET /api/contacts responded 200 in 839.0612 ms
+[10:51:18 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.8427 ms
+[10:54:25 INF] HTTP GET /api/contacts responded 200 in 961.6487 ms
+[10:54:25 INF] HTTP GET /api/contacts responded 200 in 592.2076 ms
+[10:54:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 620.3790 ms
+[10:54:26 INF] HTTP GET /api/contacts responded 200 in 585.0413 ms
+[10:54:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.2468 ms
+[10:54:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 572.7969 ms
+[10:55:45 INF] HTTP GET /api/contacts responded 200 in 849.8205 ms
+[10:55:46 INF] HTTP GET /api/contacts responded 200 in 601.2795 ms
+[10:55:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 575.1837 ms
+[10:55:46 INF] HTTP GET /api/contacts responded 200 in 610.8161 ms
+[10:55:46 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 602.5495 ms
+[10:55:47 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 598.8965 ms
+[10:56:26 INF] HTTP GET /api/contacts responded 200 in 790.3228 ms
+[10:56:26 INF] HTTP GET /api/contacts responded 200 in 617.2084 ms
+[10:56:26 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.7522 ms
+[10:56:27 INF] HTTP GET /api/contacts responded 200 in 603.8470 ms
+[10:56:27 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 606.7808 ms
+[10:56:28 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 606.6108 ms
+[11:01:47 INF] HTTP GET /api/contacts responded 200 in 866.0046 ms
+[11:01:48 INF] HTTP GET /api/contacts responded 200 in 649.8408 ms
+[11:01:48 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 643.7861 ms
+[11:01:49 INF] HTTP GET /api/contacts responded 200 in 593.0357 ms
+[11:01:49 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 577.1863 ms
+[11:01:49 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 601.5642 ms
+[11:02:51 INF] HTTP GET /api/contacts responded 200 in 810.0696 ms
+[11:02:52 INF] HTTP GET /api/contacts responded 200 in 608.9529 ms
+[11:02:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 581.6004 ms
+[11:02:52 INF] HTTP GET /api/contacts responded 200 in 607.8862 ms
+[11:02:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 569.5287 ms
+[11:02:53 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 628.6315 ms
+[11:03:01 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.7037 ms
+[11:03:07 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7364.5574 ms
+[11:04:53 INF] HTTP GET /api/undefined/Contacts responded 200 in 309.6792 ms
+[11:04:53 INF] HTTP GET /api/contacts responded 200 in 865.0034 ms
+[11:04:54 INF] HTTP GET /api/contacts responded 200 in 592.9535 ms
+[11:04:54 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 588.7793 ms
+[11:04:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 614.5363 ms
+[11:04:59 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6661.5758 ms
+[11:05:28 INF] HTTP GET /api/undefined/Contacts responded 200 in 77.6900 ms
+[11:05:29 INF] HTTP GET /api/contacts responded 200 in 672.4861 ms
+[11:05:29 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 878.4670 ms
+[11:05:30 INF] HTTP GET /api/contacts responded 200 in 572.8571 ms
+[11:05:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 594.6852 ms
+[11:05:30 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 571.5475 ms
+[11:06:07 INF] HTTP GET /api/undefined/Contacts responded 200 in 163.7996 ms
+[11:06:08 INF] HTTP GET /api/contacts responded 200 in 618.3812 ms
+[11:06:09 INF] HTTP GET /api/contacts responded 200 in 599.1581 ms
+[11:06:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 603.4867 ms
+[11:06:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1898.0726 ms
+[11:06:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 566.7872 ms
+[11:06:28 INF] HTTP GET /api/contacts responded 200 in 612.8377 ms
+[11:06:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 599.3720 ms
+[11:07:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 840.3221 ms
+[11:07:36 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 842.4848 ms
+[11:08:31 INF] HTTP GET /api/undefined/Contacts responded 200 in 83.2557 ms
+[11:08:31 INF] HTTP GET /api/contacts responded 200 in 608.4633 ms
+[11:08:32 INF] HTTP GET /api/contacts responded 200 in 600.1044 ms
+[11:08:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 567.9440 ms
+[11:08:33 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 590.4399 ms
+[11:08:34 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3027.4428 ms
+[11:08:57 INF] HTTP GET /api/undefined/Contacts responded 200 in 181.2872 ms
+[11:08:57 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 731.7189 ms
+[11:09:01 INF] HTTP GET /api/contacts responded 200 in 602.4144 ms
+[11:09:02 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 587.2886 ms
+[11:09:03 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 573.6556 ms
+[11:09:48 INF] HTTP GET /api/undefined/Contacts responded 200 in 75.0461 ms
+[11:09:48 INF] HTTP GET /api/contacts responded 200 in 581.9129 ms
+[11:09:49 INF] HTTP GET /api/contacts responded 200 in 575.2836 ms
+[11:09:49 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 600.3284 ms
+[11:09:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 577.3997 ms
+[11:10:29 INF] HTTP GET /api/undefined/Contacts responded 200 in 167.5150 ms
+[11:10:40 INF] HTTP GET /api/contacts responded 200 in 638.0864 ms
+[11:10:41 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 586.7294 ms
+[11:10:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 589.7872 ms
+[11:10:43 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 750.9876 ms
+[11:10:54 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 628.5689 ms
+[11:10:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 770.7901 ms
+[11:11:12 INF] HTTP GET /api/contacts responded 200 in 628.9460 ms
+[11:11:13 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 598.9707 ms
+[11:11:15 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 581.1369 ms
+[11:11:25 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 610.5278 ms
+[11:11:27 INF] HTTP GET /api/undefined/Contacts responded 200 in 47.9303 ms
+[11:11:39 INF] HTTP GET /api/undefined/Contacts responded 200 in 126.8817 ms
+[11:11:50 INF] HTTP GET /api/contacts responded 200 in 658.2201 ms
+[11:11:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.6438 ms
+[11:11:51 INF] HTTP GET /api/undefined/Contacts responded 200 in 57.5091 ms
+[11:11:52 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 732.3338 ms
+[11:11:55 INF] HTTP GET /api/contacts responded 200 in 608.6106 ms
+[11:11:55 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.7478 ms
+[11:18:34 INF] HTTP GET /api/contacts responded 200 in 977.8839 ms
+[11:18:34 INF] HTTP GET /api/contacts responded 200 in 602.7393 ms
+[11:18:34 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 580.3616 ms
+[11:18:35 INF] HTTP GET /api/contacts responded 200 in 557.2414 ms
+[11:18:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 582.0828 ms
+[11:18:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 587.7612 ms
+[11:18:44 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6654.4738 ms
+[11:18:48 INF] HTTP GET /api/contacts responded 200 in 613.1215 ms
+[11:18:48 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 597.9364 ms
+[11:18:48 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 694.9017 ms
+[11:18:52 INF] HTTP GET /api/contacts responded 200 in 614.7876 ms
+[11:18:52 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 563.9663 ms
+[11:18:52 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 618.1285 ms
+[11:19:08 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 609.7095 ms
+[11:19:10 INF] HTTP GET /api/undefined/Contacts responded 200 in 49.2613 ms
+[11:19:24 INF] HTTP GET /api/undefined/Contacts responded 200 in 67.3063 ms
+[11:19:30 INF] HTTP GET /api/undefined/Contacts responded 200 in 47.6216 ms
+[11:19:38 INF] HTTP GET /api/contacts responded 200 in 701.0201 ms
+[11:19:38 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 585.1047 ms
+[11:19:51 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2442.9682 ms
+[11:20:52 INF] HTTP GET /api/contacts responded 200 in 787.8999 ms
+[11:20:53 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 594.7603 ms
+[11:21:06 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 775.2106 ms
+[12:11:57 INF] HTTP GET /api/contacts responded 200 in 1186.1574 ms
+[12:11:58 INF] HTTP GET /api/contacts responded 200 in 587.2773 ms
+[12:11:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 610.7762 ms
+[12:11:58 INF] HTTP GET /api/contacts responded 200 in 577.9632 ms
+[12:11:58 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 572.7017 ms
+[12:11:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 584.6291 ms
+[12:12:02 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5212.4495 ms
+[16:38:03 INF] Application is shutting down...
+[16:38:11 INF] Starting web host
+[16:38:12 INF] ### App Version:1.0.0.0 ###
+[16:38:12 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:38:13 INF] Now listening on: https://localhost:7215
+[16:38:13 INF] Now listening on: http://localhost:5050
+[16:38:13 INF] Application started. Press Ctrl+C to shut down.
+[16:38:13 INF] Hosting environment: Development
+[16:38:13 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:39:44 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 488.1391 ms
+[16:54:54 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 403 in 23.2476 ms
+[16:56:14 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 403 in 2.2795 ms
+[16:59:21 INF] Application is shutting down...
+[16:59:32 INF] Starting web host
+[16:59:33 INF] ### App Version:1.0.0.0 ###
+[16:59:33 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DMFT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-WEBAPP","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:59:34 INF] Now listening on: https://localhost:7215
+[16:59:34 INF] Now listening on: http://localhost:5050
+[16:59:34 INF] Application started. Press Ctrl+C to shut down.
+[16:59:34 INF] Hosting environment: Development
+[16:59:34 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[17:00:31 ERR] Exception occurred while processing message.
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+[17:00:31 ERR] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 500 in 205.9428 ms
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+[17:00:31 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[17:00:31 ERR] HTTP GET /error responded 500 in 0.7251 ms
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+[17:00:31 ERR] An exception was thrown attempting to execute the error handler.
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[17:00:31 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: IDX20803: Unable to obtain configuration from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+ ---> System.IO.IOException: IDX20807: Unable to retrieve document from: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'. HttpResponseMessage: '[PII of type 'System.Net.Http.HttpResponseMessage' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]', HttpResponseMessage.Content: '[PII of type 'System.String' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]'.
+   at Microsoft.IdentityModel.Protocols.HttpDocumentRetriever.GetDocumentAsync(String address, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectConfigurationRetriever.GetAsync(String address, IDocumentRetriever retriever, CancellationToken cancel)
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.Protocols.ConfigurationManager`1.GetConfigurationAsync(CancellationToken cancel)
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerHandler.HandleAuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationHandler`1.AuthenticateAsync()
+   at Microsoft.AspNetCore.Authentication.AuthenticationService.AuthenticateAsync(HttpContext context, String scheme)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[17:03:52 INF] Application is shutting down...
+[17:03:58 INF] Starting web host
+[17:03:58 INF] ### App Version:1.0.0.0 ###
+[17:03:58 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[17:03:59 INF] Now listening on: https://localhost:7215
+[17:03:59 INF] Now listening on: http://localhost:5050
+[17:03:59 INF] Application started. Press Ctrl+C to shut down.
+[17:03:59 INF] Hosting environment: Development
+[17:03:59 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[17:04:13 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8475.5216 ms
+[17:17:44 INF] HTTP GET /api/contacts responded 200 in 989.7086 ms
+[17:17:53 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 666.5142 ms
+[17:20:10 INF] HTTP GET /api/contacts responded 200 in 765.8969 ms
+[17:20:10 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 586.7177 ms
+[17:21:50 INF] HTTP GET /api/contacts responded 200 in 799.9060 ms
+[17:21:51 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 586.5709 ms
+[17:21:56 ERR] Received non-success status code "GatewayTimeout" with message: <html>
+<head><title>504 Gateway Time-out</title></head>
+<body>
+<center><h1>504 Gateway Time-out</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+.
+[17:21:56 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 60133.6915 ms
+[17:22:45 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 9.8206 ms
+[17:22:53 ERR] Received non-success status code "GatewayTimeout" with message: <html>
+<head><title>504 Gateway Time-out</title></head>
+<body>
+<center><h1>504 Gateway Time-out</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+.
+[17:22:53 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 60120.0517 ms
+[17:23:24 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 0.7036 ms
+[17:23:50 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1360.8807 ms
+[17:24:38 INF] HTTP GET /api/contacts responded 200 in 644.7656 ms
+[17:24:39 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.1566 ms
+[17:25:17 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 34585.7005 ms
+[17:27:22 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 9424.3055 ms
+[18:34:32 INF] Starting web host
+[18:34:33 INF] ### App Version:1.0.0.0 ###
+[18:34:33 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[18:34:35 INF] Now listening on: https://localhost:7215
+[18:34:35 INF] Now listening on: http://localhost:5050
+[18:34:35 INF] Application started. Press Ctrl+C to shut down.
+[18:34:35 INF] Hosting environment: Development
+[18:34:35 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[18:35:04 INF] HTTP GET /api/contacts responded 200 in 2461.5182 ms
+[18:35:05 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 627.5889 ms
+[18:35:25 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 9800.6059 ms
+[20:17:08 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7582.3043 ms
+[20:33:23 INF] Application is shutting down...
+[20:33:31 INF] Starting web host
+[20:33:32 INF] ### App Version:1.0.0.0 ###
+[20:33:32 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT","WellKnownConfig":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/.well-known/openid-configuration","TokenUrl":"https://test.common-sso.justice.gov.bc.ca/auth/realms/DFMT/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[20:33:34 INF] Now listening on: https://localhost:7215
+[20:33:34 INF] Now listening on: http://localhost:5050
+[20:33:34 INF] Application started. Press Ctrl+C to shut down.
+[20:33:34 INF] Hosting environment: Development
+[20:33:34 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[20:33:51 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8516.8436 ms
+[20:39:35 INF] HTTP GET /api/contacts responded 200 in 956.2465 ms
+[20:39:36 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 613.8911 ms
+[20:39:46 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6599.9198 ms
+[21:06:28 INF] HTTP GET /api/contacts responded 200 in 1084.7047 ms
+[21:06:29 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 628.3113 ms
+[21:06:39 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7681.0357 ms
+[21:08:27 INF] HTTP GET /api/contacts responded 200 in 844.4145 ms
+[21:08:28 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 586.7041 ms
+[21:08:38 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8196.4069 ms
+[21:15:08 INF] HTTP GET /api/contacts responded 200 in 863.6693 ms
+[21:15:09 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 589.0622 ms
+[21:15:19 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 8577.1191 ms
+[21:16:06 INF] HTTP GET /api/contacts responded 200 in 634.8479 ms
+[21:16:07 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 602.4112 ms
+[21:16:09 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 851.7415 ms
+[21:18:49 INF] HTTP GET /api/contacts responded 200 in 868.7378 ms
+[21:18:50 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 625.0332 ms
+[21:18:55 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3336.3643 ms
+[21:19:21 INF] HTTP GET /api/contacts responded 200 in 610.7832 ms
+[21:19:22 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 603.5278 ms
+[21:19:28 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5088.6143 ms
+[21:20:40 INF] HTTP GET /api/contacts responded 200 in 771.2099 ms
+[21:20:40 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 593.1944 ms
+[21:20:43 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 863.5947 ms
+[21:27:13 INF] HTTP GET /api/contacts responded 200 in 897.8292 ms
+[21:27:14 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/Contacts responded 200 in 592.8931 ms
+[21:27:22 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 7491.9834 ms

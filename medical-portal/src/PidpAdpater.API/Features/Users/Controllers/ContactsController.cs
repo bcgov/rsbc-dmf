@@ -1,19 +1,15 @@
-﻿using pdipadapter.Features.Users.Commands;
-using pdipadapter.Features.Users.Models;
-using pdipadapter.Features.Users.Queries;
-using pdipadapter.Infrastructure.Auth;
-using pdipadapter.Kafka.Producer.Interfaces;
+﻿using pdipadapter.Infrastructure.Auth;
 using MediatR;
 using MedicalPortal.API.Features.Users.Commands;
 using MedicalPortal.API.Features.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Rsbc.Dmf.CaseManagement;
 using PidpAdapter.API.Features.Users.Models;
 
 namespace pdipadapter.Features.Users.Controllers;
 
 [Authorize(Policy = Infrastructure.Auth.Policies.MedicalPractitioner)] //must have an MOA or Practicitoner role in claim
+[Authorize(Policy = Infrastructure.Auth.Policies.DmftEnroledUser)]
 [Route("api/[controller]")]
 [ApiController]
 public class ContactsController : ControllerBase
@@ -28,13 +24,25 @@ public class ContactsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<string>> CreateContact(
                                                  [FromBody] CreateUser.Command command) 
     => await _mediator.Send(command);
-    [HttpGet("{hpdid}")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<PractitionerContactResponse>> GetContact(
-                                             [FromRoute] PractitionerContactQuery.Query query)
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<List<PractitionerContactQuery.Model>>> GetContacts(
+                                             [FromQuery] PractitionerContactQuery.Query query)
     => await _mediator.Send(query);
+    [HttpGet("/api/{contactId}/Contacts")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<ActionResult<PractitionerContactResponse>> GetContact(
+                                         [FromRoute] ContactQuery.Query query)
+=> await _mediator.Send(query);
 }

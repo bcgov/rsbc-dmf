@@ -49,7 +49,7 @@ public static class Roles
 }
 public static class Clients
 {
-    public const string PidpApi = "DMFT-WEBAPI";
+    public const string PidpAdapterApi = "DMFT-SEVICE";
     public const string PidpExternalApi = "DMFT-WEBAPP";
     public const string LicenceStatus = "LICENCE-STATUS";
 }
