@@ -16,6 +16,7 @@ using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 using Grpc.Net.Client;
 using System.Net.Http;
 using System.Net;
+using System;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -51,16 +52,16 @@ namespace Rsbc.Dmf.Scheduler
                     httpClientHandler.ServerCertificateCustomValidationCallback =
                             HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                     
-
-                    var httpClient = new HttpClient(httpClientHandler);
-                    // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                    httpClient.DefaultRequestVersion = HttpVersion.Version20;
+                    var httpClient = new HttpClient(httpClientHandler) 
+                    { Timeout = TimeSpan.FromMinutes(30),
+                      DefaultRequestVersion = HttpVersion.Version20
+                    };
 
                     if (!string.IsNullOrEmpty(_configuration["ICBC_ADAPTER_JWT_SECRET"]))
                     {
                         var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
 
-                        var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
+                        var initialClient = new IcbcAdapterClient(initialChannel);
                         // call the token service to get a token.
                         var tokenRequest = new IcbcAdapter.TokenRequest
                         {

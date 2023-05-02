@@ -445,7 +445,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     surcode = surcode
                 };
 
-                //Log.Information(JsonConvert.SerializeObject(debugObject));
+                Log.Information(JsonConvert.SerializeObject(debugObject));
 
                 var driver = new CaseManagement.Service.Driver()
                 {
