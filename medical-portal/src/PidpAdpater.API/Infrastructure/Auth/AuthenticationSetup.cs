@@ -128,7 +128,7 @@ namespace pdipadapter.Infrastructure.Auth
                     .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
                 options.AddPolicy(Policies.DmftEnroledUser, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireRole(Claims.IdentityProvider, Roles.DfmtEnroledRole));
+                    .RequireRole(Claims.IdentityProvider, Roles.DfmtEnroledRole, Roles.DmftEnroledOld));
             });
             return services;
             

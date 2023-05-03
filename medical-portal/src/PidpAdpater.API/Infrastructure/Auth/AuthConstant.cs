@@ -45,6 +45,7 @@ public static class Roles
     public const string Practitoner = "PRACTITIONER";
     public const string Moa = "MOA";
     public const string DfmtEnroledRole = "ROLE_NAME_TBD";
+    public const string DmftEnroledOld = "DMFT_ENROLLED";
     public const string ViewEndorsements = "view_endorsement_data";
 }
 public static class Clients
