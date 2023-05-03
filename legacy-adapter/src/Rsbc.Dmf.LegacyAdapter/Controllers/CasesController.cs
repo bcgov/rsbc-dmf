@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 
@@ -69,7 +70,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // trim out any spaces, force upper case.
 
-            surcode = surcode.Trim().ToUpper();
+            surcode = surcode.ToUpper();
+
+            Regex rgx = new Regex("[^A-Z]");
+            surcode = rgx.Replace(surcode, "");
+
+            surcode = surcode.Trim();
+
+
 
             if (surcode.Length > 3)
             {
@@ -86,7 +94,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 string surname = driver.INAM?.SURN;
 
-                surname = surname.Trim().ToUpper();
+                surname = surname.ToUpper();
+                surname = rgx.Replace(surname, "");
+
+                surname = surname.Trim();
 
                 if (surname.Length > 3)
                 {
