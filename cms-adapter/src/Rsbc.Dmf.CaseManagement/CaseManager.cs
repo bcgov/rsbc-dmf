@@ -258,6 +258,7 @@ namespace Rsbc.Dmf.CaseManagement
         UnfitToDrive = 3
     }
 
+   
     public class Decision
     {
         public string Id { get; set; }
@@ -1314,124 +1315,132 @@ namespace Rsbc.Dmf.CaseManagement
             if (driverCase != null)
             {
                 bool found = false;
-                // ensure we have the documents.
-                await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
                 bcgov_documenturl bcgovDocumentUrl = null;
 
-                if (documentTypeId != null)
+                if (request.SubmittalStatus == "Reject")
                 {
-                    foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
-                    {
-                        await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
-                        if (doc.statecode == 0 // active
-                            && doc.dfp_submittalstatus == 100000000
-                            && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid) // open - required
-                        {
-                            bcgovDocumentUrl = doc;
-                            found = true;
-                            break;
-                        }
-                        
-                    }
+                    // Create a new document with the reject status attached to the driver
+
+                    found = false;
+
                 }
 
-                
-
-                // find the owner.
-
-                var newOwner = LookupTeam(request.Owner);
-
-
-                
-
-                if (bcgovDocumentUrl == null)
+                else
                 {
-                    bcgovDocumentUrl = new bcgov_documenturl() ;                   
-                }               
-                
-                bcgovDocumentUrl.dfp_batchid = request.BatchId;
-                bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
-                bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
-                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
-                bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
-                bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
-                bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
-                bcgovDocumentUrl.dfp_importid = request.ImportId;
-                bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
-                bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
-                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
-                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);   
- 
+                    // scan through the documents to see if there is document in open pending status
+                    // ensure we have the documents.
+                    await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                if (!string.IsNullOrEmpty(request.DocumentUrl))
-                {
-                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
-                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    if (documentTypeId != null)
+                    {
+                        foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
+                            if (doc.statecode == 0 // active
+                                && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid
+                                && doc.dfp_submittalstatus == 100000000)
+                            {
+                                bcgovDocumentUrl = doc;
+                                found = true;
+                                break;
+                            }
+                        }
+                    }
+
                 }
+                    // find the owner.
+                    var newOwner = LookupTeam(request.Owner);
 
-                if (found) // update
-                {
-                    try
+                    if (bcgovDocumentUrl == null)
                     {
-                        dynamicsContext.UpdateObject(bcgovDocumentUrl);                        
-
-                        dynamicsContext.SetLink (bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
-
-
-                        if (newOwner != null)
-                        {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
-                        }
-                        
-                        
-                        await dynamicsContext.SaveChangesAsync();
-                        result.Success = true;
-                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        dynamicsContext.DetachAll();
+                        bcgovDocumentUrl = new bcgov_documenturl();
                     }
-                    catch (Exception ex)
+
+                    bcgovDocumentUrl.dfp_batchid = request.BatchId;
+                    bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
+                    bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
+                    bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                    bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
+                    bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
+                    bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                    bcgovDocumentUrl.dfp_importid = request.ImportId;
+                    bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
+                    bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
+                    bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
+                    bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                    bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+
+
+                    if (!string.IsNullOrEmpty(request.DocumentUrl))
                     {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
-                        result.Success = false;
+                        bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                        bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    }
+
+                    if (found) // update
+                    {
+                        try
+                        {
+                            dynamicsContext.UpdateObject(bcgovDocumentUrl);
+
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+
+
+                            if (newOwner != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                            }
+
+
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                            result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                            dynamicsContext.DetachAll();
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                            result.Success = false;
+                        }
+                    }
+                    else // insert
+                    {
+                        try
+                        {
+
+                            dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+
+                            if (documentTypeId != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                            }
+
+                            if (!driverMismatch && driverCase != null)
+                            {
+                                dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                            }
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+
+
+                            if (newOwner != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                            }
+
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                            result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                            dynamicsContext.DetachAll();
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                            result.Success = false;
+                        }
                     }
                 }
-                else // insert
-                {
-                    try
-                    {
-                        dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-
-                        if (documentTypeId != null)
-                        {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
-                        }
-
-                        if (!driverMismatch && driverCase != null)
-                        {
-                            dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);                                
-                        }
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
-
-                        
-                        if(newOwner != null)
-                        {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid),newOwner);
-                        }
-                        
-                        await dynamicsContext.SaveChangesAsync();
-                        result.Success = true;
-                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        dynamicsContext.DetachAll();
-                    }
-                    catch (Exception ex)
-                    {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
-                        result.Success = false;
-                    }
-                }
-            }
+           
 
             return result;
         }
@@ -2507,14 +2516,18 @@ namespace Rsbc.Dmf.CaseManagement
                                     @case.dfp_iscleanpass = true;
                                     dynamicsContext.UpdateObject(@case);
                                     await dynamicsContext.SaveChangesAsync();
+
+                                    // Update document status
+                                    /*document.dfp_submittalstatus = 100000009; //Clean Pass
+                                    dynamicsContext.UpdateObject(document);
+                                    await dynamicsContext.SaveChangesAsync();*/
+
                                     result.Success = true;
+
                                 }
 
-                                // Update document status
-                                /*document.dfp_submittalstatus = 100000009; //Clean Pass
-                                dynamicsContext.UpdateObject(document);
-                                await dynamicsContext.SaveChangesAsync();*/
-                               
+                                
+
                             }
 
                         }
