@@ -1349,9 +1349,11 @@ namespace Rsbc.Dmf.CaseManagement
 
                 }
                     // find the owner.
-                    var newOwner = LookupTeam(request.Owner);
+                    var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
-                    if (bcgovDocumentUrl == null)
+               
+
+                if (bcgovDocumentUrl == null)
                     {
                         bcgovDocumentUrl = new bcgov_documenturl();
                     }
@@ -1369,6 +1371,8 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                     bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
                     bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+
+                
 
 
                     if (!string.IsNullOrEmpty(request.DocumentUrl))
@@ -1980,9 +1984,9 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public principal LookupTeam(string name)
+        public principal LookupTeam(string name, string ValidationPrevious)
         {
-            // name can be username IDER\name or a Team Name like "Adjudicators"
+            // name can be username IDIR\name or a Team Name like "Adjudicators"
             // this would need to check team first and then the systemuser entity
             principal result = null;
             
@@ -1998,11 +2002,12 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 else
                 {
-                    if (!name.StartsWith("IDIR\\"))
+                    
+                    if (!ValidationPrevious.StartsWith("IDIR\\"))
                     {
-                        name = $"IDIR\\" + name;
+                        ValidationPrevious = $"IDIR\\" + ValidationPrevious;
                     }
-                    systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == name).FirstOrDefault();
+                    systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == ValidationPrevious).FirstOrDefault();
                     if (lookupUser != null)
                     {
                         result = lookupUser;
