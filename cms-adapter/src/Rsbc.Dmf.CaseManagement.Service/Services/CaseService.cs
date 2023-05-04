@@ -1246,7 +1246,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             result.ResultStatus = ResultStatus.Fail;
 
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
-            if (!string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
+            if (configuredSecret != null && !string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
