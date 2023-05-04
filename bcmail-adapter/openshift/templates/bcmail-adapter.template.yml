@@ -26,6 +26,18 @@ parameters:
   - description: ASPNET runtime environment (Development/Staging/Production)
     name: RUNTIME_ENVIRONMENT
     value: Staging
+  - description: CMS_ADAPTER_URI
+    name: CMS_ADAPTER_URI
+    required: true
+  - description: CMS_ADAPTER_SECRET
+    name: CMS_ADAPTER_SECRET
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_URI
+    name: DOCUMENT_STORAGE_ADAPTER_URI
+    required: true
+  - description: DOCUMENT_STORAGE_ADAPTER_SECRET
+    name: DOCUMENT_STORAGE_ADAPTER_SECRET
+    required: true
   - description: JWT_TOKEN_KEY
     name: JWT_TOKEN_KEY
     required: true
@@ -35,6 +47,7 @@ parameters:
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
     required: true
+
 
 objects:
   - kind: ConfigMap
@@ -59,7 +72,9 @@ objects:
       labels:
         app: ${APP_NAME}
         app.kubernetes.io/part-of: ${APP_NAME}
-    stringData:   
+    stringData: 
+      CMS_ADAPTER_URI: ${CMS_ADAPTER_URI}
+      DOCUMENT_STORAGE_ADAPTER_URI: ${DOCUMENT_STORAGE_ADAPTER_URI}  
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
@@ -170,7 +185,17 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: splunk
-                      key: token                
+                      key: token
+                - name: CMS_ADAPTER_JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${CMS_ADAPTER_SECRET}
+                      key: JWT_TOKEN_KEY 
+                - name: DOCUMENT_STORAGE_ADAPTER_JWT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${DOCUMENT_STORAGE_ADAPTER_SECRET}
+                      key: JWT_TOKEN_KEY               
               envFrom:                
                 - configMapRef:
                     name: ${APP_NAME}-config
