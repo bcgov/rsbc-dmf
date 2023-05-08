@@ -2602,7 +2602,8 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var pdfDocuments = dynamicsContext.dfp_pdfdocuments.Where(
-                d => d.statuscode == 100000002).ToList();
+                d => d.statuscode == 100000002 // PDF documents in Send to BC mail Status
+                && d.statecode == 0).ToList();
 
                 foreach (var pdfDocument in pdfDocuments)
                 {
