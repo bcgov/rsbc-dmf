@@ -116,7 +116,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Surname = driver.INAM?.SURN ?? string.Empty
                     });
 
-                    result = GetCaseId(licenseNumber, surcode);
+                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
                 }
 
                 if (result == null) // create it
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         _logger.LogInformation(e, "Error getting driver.");
                     }
-                    result = GetCaseId(licenseNumber, surcode);
+                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
                 }
 
             }
