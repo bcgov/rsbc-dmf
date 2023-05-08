@@ -158,6 +158,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                     };
                 })
 
+
                 .AddControllers(options => {
 
                 // only allow anonymous access if there is no JWT secret...
