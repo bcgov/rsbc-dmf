@@ -212,7 +212,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         if (attachment.Css != null && attachment.Css.Length > 0)
                         {
                             string decodedStyle = ParseByteArrayToString(attachment.Css);
-                            System.IO.File.WriteAllText(stylesheetFileName, decodedStyle);
+                            System.IO.File.WriteAllText(stylesheetFileName, decodedStyle, Encoding.UTF8);
                             var stylesettings = new WebSettings() { UserStyleSheet = $"file:///{stylesheetFileName}" };
                             Serilog.Log.Logger.Information(stylesettings.UserStyleSheet);
                             doc.Objects[0].WebSettings.UserStyleSheet = stylesettings.UserStyleSheet;
@@ -224,7 +224,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             decodedHeader = "<!doctype html>\n<html><body><header>\n" + decodedHeader + "\n</header></body></html>";
 
 
-                            System.IO.File.WriteAllText(headerFilename, decodedHeader);
+                            System.IO.File.WriteAllText(headerFilename, decodedHeader, Encoding.UTF8);
                             var headerSettings = new HeaderSettings() {   HtmlUrl = $"file:///{headerFilename}"  };
                             Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
@@ -239,7 +239,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
                             decodedFooter = "<!doctype html>\n<html><body><footer>\n" + decodedFooter + "\n</footer></body></html>";
                             
-                            System.IO.File.WriteAllText(footerFilename, decodedFooter);
+                            System.IO.File.WriteAllText(footerFilename, decodedFooter, Encoding.UTF8);
                             var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
                             
