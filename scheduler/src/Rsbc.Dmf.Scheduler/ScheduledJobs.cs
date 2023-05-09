@@ -85,6 +85,55 @@ namespace Rsbc.Dmf.Scheduler
                 }
             }
 
+            if (_bcMailAdapterClient == null)
+            {
+                //Add BC MAil Adapter 
+                string bcmailAdapterURI = _configuration["BCMAIL_ADAPTER_URI"];
+
+                if (!string.IsNullOrEmpty(bcmailAdapterURI))
+                {
+                    var httpClientHandler = new HttpClientHandler();
+                   
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    
+
+                    var httpClient = new HttpClient(httpClientHandler);
+                    // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                    httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                    if (!string.IsNullOrEmpty(_configuration["BCMAIL_ADAPTER_JWT_SECRET"]))
+                    {
+                        var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                        var initialClient = new BcMailAdapterClient(initialChannel);
+                        // call the token service to get a token.
+                        var tokenRequest = new BcMailAdapter.TokenRequest
+                        {
+                            Secret = _configuration["BCMAIL_ADAPTER_JWT_SECRET"]
+                        };
+
+                        var tokenReply = initialClient.GetToken(tokenRequest);
+
+                        if (tokenReply != null && tokenReply.ResultStatus == BcMailAdapter.ResultStatus.Success)
+                        {
+                            // Add the bearer token to the client.
+                            httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                        }
+
+
+                    }
+
+                    var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    _bcMailAdapterClient = new BcMailAdapterClient(channel);
+                    
+
+                }
+            }
+
+
+
         }
 
     

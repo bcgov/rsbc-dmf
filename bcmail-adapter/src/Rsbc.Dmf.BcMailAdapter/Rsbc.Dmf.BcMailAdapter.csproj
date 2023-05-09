@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6B5E</UserSecretsId>
+    <UserSecretsId>0C2F735B-5510-4249-970C-778FA9FE6BFF</UserSecretsId>
     <RootNamespace>Rsbc.Dmf.BcMailAdapter</RootNamespace>
 	<GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
@@ -13,7 +13,9 @@
 	  <PackageReference Include="Google.Protobuf" Version="3.22.0" />
 
 	  <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="6.0.5" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.51.0" />
+
+	  <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.53.0" />
     <PackageReference Include="Haukcode.WkHtmlToPdfDotNet" Version="1.5.86" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageReference Include="IdentityModel.AspNetCore.OAuth2Introspection" Version="6.2.0" />
@@ -28,7 +30,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.14" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-	  <PackageReference Include="Grpc.Tools" Version="2.51.0">
+	  <PackageReference Include="Grpc.Tools" Version="2.54.0">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
@@ -44,6 +46,15 @@
 	
 	<ItemGroup>
 	  <Folder Include="gRPC Prototypes\" />
+	  	
 	</ItemGroup>
 
+	<ItemGroup>		
+
+	<Protobuf Include="Protos/bcmailAdapter.proto" GrpcServices="Server">
+		<Link>gRPC Prototypes\bcmailAdapter.proto</Link>
+	</Protobuf>
+
+	</ItemGroup>
+	
 </Project>

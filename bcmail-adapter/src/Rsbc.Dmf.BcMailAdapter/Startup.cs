@@ -46,6 +46,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using Pssg.DocumentStorageAdapter;
 using System.Buffers;
+using Rsbc.Dmf.BcMailAdapter.Services;
 
 namespace Rsbc.Dmf.BcMailAdapter
 {
@@ -176,7 +177,13 @@ namespace Rsbc.Dmf.BcMailAdapter
                 
               .AddProblemDetailsConventions();
 
-            
+            services.AddGrpc(options =>
+            {
+                options.EnableDetailedErrors = true;
+                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
+            });
+
 
             services.AddSwaggerGen(c =>
             {               
@@ -325,6 +332,7 @@ namespace Rsbc.Dmf.BcMailAdapter
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<BcMailService>();
                 endpoints.MapGet("/",
                     async context =>
                     {

@@ -124,14 +124,20 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         {
                             
                          string decodedbody = ParseByteArrayToString(attachment.Body);
-                        
-                        if (decodedbody.Contains("<mark>"))
-                        {
-                            //generate pdf with error message content
-                            _logger.LogError("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
-                            return BadRequest("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
 
+                        
+                        if (!String.IsNullOrEmpty(Configuration["VALIDATE_MARK_TAGS"]))
+
+                        {
+                            if (decodedbody.Contains("<mark>"))
+                            {
+                                //generate pdf with error message content
+                                _logger.LogError("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
+                                return BadRequest("Manual Entry Fields which should be replaced have not all been removed from this issuance. Please review the content of all attachments before issuing to BCMail.");
+
+                            }
                         }
+                       
                         //string decodedHeader = ParseByteArrayToString(attachment.Header);
                         //string decodedFooter = ParseByteArrayToString(attachment.Footer);
 
@@ -212,7 +218,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         if (attachment.Css != null && attachment.Css.Length > 0)
                         {
                             string decodedStyle = ParseByteArrayToString(attachment.Css);
-                            System.IO.File.WriteAllText(stylesheetFileName, decodedStyle);
+                            System.IO.File.WriteAllText(stylesheetFileName, decodedStyle, Encoding.UTF8);
                             var stylesettings = new WebSettings() { UserStyleSheet = $"file:///{stylesheetFileName}" };
                             Serilog.Log.Logger.Information(stylesettings.UserStyleSheet);
                             doc.Objects[0].WebSettings.UserStyleSheet = stylesettings.UserStyleSheet;
@@ -224,7 +230,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             decodedHeader = "<!doctype html>\n<html><body><header>\n" + decodedHeader + "\n</header></body></html>";
 
 
-                            System.IO.File.WriteAllText(headerFilename, decodedHeader);
+                            System.IO.File.WriteAllText(headerFilename, decodedHeader, Encoding.UTF8);
                             var headerSettings = new HeaderSettings() {   HtmlUrl = $"file:///{headerFilename}"  };
                             Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
@@ -239,7 +245,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedFooter = ParseByteArrayToString(attachment.Footer);
                             decodedFooter = "<!doctype html>\n<html><body><footer>\n" + decodedFooter + "\n</footer></body></html>";
                             
-                            System.IO.File.WriteAllText(footerFilename, decodedFooter);
+                            System.IO.File.WriteAllText(footerFilename, decodedFooter, Encoding.UTF8);
                             var footerSettings = new FooterSettings() { HtmlUrl = $"file:///{footerFilename}" };
                             doc.Objects[0].FooterSettings = footerSettings;
                             

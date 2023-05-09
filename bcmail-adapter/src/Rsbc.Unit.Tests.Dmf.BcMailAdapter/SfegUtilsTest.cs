@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
         IConfiguration Configuration;
         SfegUtils sfegUtils;
         
-        CaseManager.CaseManagerClient CaseManagerClient { get; set; }
+       // CaseManagerClient CaseManagerClient { get; set; }
 
         /// <summary>
         /// Setup the test
@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                 .AddEnvironmentVariables()
                 .Build();
 
-            sfegUtils = new SfegUtils(Configuration, CaseManagerClient);
+           // sfegUtils = new SfegUtils(Configuration, CaseManagerClient);
         }
 
 /*        [Fact]

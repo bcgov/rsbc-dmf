@@ -25,3 +25,12 @@ oc process -f ..\landing-page\openshift\templates\landing-page.template.yml --pa
 REM MEDICAL PORTAL
 
 oc process -f ..\doctors-portal\openshift\templates\doctors-portal.template.yml --param-file ..\..\..\params\doctors-portal.test.params | oc apply -f -
+
+REM SCHEDULER SERVICE
+
+oc process -f ..\scheduler\openshift\templates\scheduler-service.template.yml --param-file ..\..\..\params\scheduler-service.test.params | oc apply -f -
+
+REM BC Mail Adapter 
+
+oc process -f ..\bcmail-adapter\openshift\templates\bcmail-adapter.template.yml --param-file ..\..\..\params\bcmail-adapter.test.params | oc apply -f -
+
