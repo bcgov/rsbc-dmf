@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
+using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -672,18 +673,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var result = await _caseManager.GetPdfDocuments();
 
-               /* foreach (var item in result)
+                foreach (var item in result)
                 {
-                    var pdfDocument = new PdfDocument();
-                    if (item != null)
+                    var pdfDocument = new PdfDocument()
                     {
-                        pdfDocument.PdfDocumentId = item.PdfDocumentId;
-                        pdfDocument.StatusCode = (long)item.StatusCode;
-                        pdfDocument.StateCode = (long)item.StateCode;
-                    }
+                        PdfDocumentId = item.PdfDocumentId,
+                        StatusCode = ConvertStatusCode(item.StatusCode) 
+                    };
                     reply.PdfDocuments.Add(pdfDocument);
                 }
-                reply.ResultStatus = ResultStatus.Success;*/
+                reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)
             {
@@ -700,14 +699,20 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest request, ServerCallContext context)
+        public async override Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocument request, ServerCallContext context)
         {
             var reply = new PdfDocumentReply();
-            var pdfDocument = new CaseManagement.PdfDocumentRequest()
+
+            var pdfDocument = new CaseManagement.PdfDocument()
             {
-                PdfDocumentId = request.PdfDoumentId,
-                StatusCode = (int)request.StatusCode
+                PdfDocumentId = request.PdfDocumentId,
+                StatusCode = ConvertPdfDocumentStatusCodes(request.StatusCode)
             };
+                
+                //PdfDocumentId = request.PdfDoumentId,
+                //StatusCode = ConvertPdfDocumentStatusCodes(request.StatusCode)
+                //StatusCode = ConvertPdfDocumentStatusCodes()
+           
 
             try
             {
@@ -727,6 +732,30 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
 
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        StatusCodeOptionSet ConvertPdfDocumentStatusCodes(StatusCodeOptions value)
+        {
+            StatusCodeOptionSet result = StatusCodeOptionSet.SendToBCMail;
+            switch (value)
+            {
+                case StatusCodeOptions.Sent:
+                    result = StatusCodeOptionSet.Sent;
+                    break;
+                case StatusCodeOptions.FailedToSend:
+                    result = StatusCodeOptionSet.FailedToSend;
+                    break;
+            }
+
+            return result;
+        }
+
+
 
 
         /// <summary>
@@ -1007,6 +1036,23 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 case FlagTypeOptionSet.Submittal:
                     result = FlagTypeOptions.Submittal;
                     break;
+            }
+
+            return result;
+        }
+
+        StatusCodeOptions ConvertStatusCode(StatusCodeOptionSet? value)
+        {
+            StatusCodeOptions result = StatusCodeOptions.SendToBcmail;
+            switch (value)
+            {
+                case StatusCodeOptionSet.Sent:
+                    result = StatusCodeOptions.Sent;
+                    break;
+                case StatusCodeOptionSet.FailedToSend:
+                    result = StatusCodeOptions.FailedToSend;
+                    break;
+               
             }
 
             return result;
