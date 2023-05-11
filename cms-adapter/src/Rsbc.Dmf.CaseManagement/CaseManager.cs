@@ -78,7 +78,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<PdfDocument>> GetPdfDocuments();
 
-        Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest pdfDocumentRequest);
+        Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocument pdfDocumentRequest);
 
         Task<ResultStatusReply> UpdateDriver(Driver driver);
 
@@ -298,6 +298,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     }
 
+
     public class ResultStatusReply
     {
         public string Id;
@@ -312,18 +313,19 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTime BirthDate { get; set; }
     }
 
-    public class PdfDocumentRequest
+    public enum StatusCodeOptionSet 
     {
-        public string PdfDocumentId { get; set; }
-        public int? StatusCode { get; set; }
-        public int? StateCode { get; set; }
+        SendToBCMail = 100000002,
+        Sent = 100000005,
+        FailedToSend = 100000006
     }
 
+    
 
     public class PdfDocument
     {
         public string PdfDocumentId { get; set; }
-        public int? StatusCode { get; set; }
+        public StatusCodeOptionSet StatusCode { get; set; }
         public int? StateCode { get; set; }
     }
 
@@ -2134,6 +2136,7 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+
         /// <summary>
         ///  convert the owner from the value provided by the legacy system to Dynamics CRM
         /// </summary>
@@ -2602,7 +2605,7 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var pdfDocuments = dynamicsContext.dfp_pdfdocuments.Where(
-                d => d.statuscode == 100000002 // PDF documents in Send to BC mail Status
+                d => d.statuscode == (int)StatusCodeOptionSet.SendToBCMail // PDF documents in Send to BC mail Status
                 && d.statecode == 0).ToList();
 
                 foreach (var pdfDocument in pdfDocuments)
@@ -2612,8 +2615,8 @@ namespace Rsbc.Dmf.CaseManagement
                         PdfDocument pdfDoc = new PdfDocument()
                         {
                             PdfDocumentId = pdfDocument.dfp_pdfdocumentid.ToString(),
-                            StateCode = pdfDocument.statecode,
-                            StatusCode = pdfDocument.statuscode
+                            //StateCode = pdfDocument.statecode,
+                            StatusCode = (StatusCodeOptionSet)pdfDocument.statuscode
                         };
                         result.Add(pdfDoc);
                     }
@@ -2635,7 +2638,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <returns></returns>
 
-        public async Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocumentRequest pdfDocumentRequest)
+        public async Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocument pdfDocumentRequest)
         {
             PdfDocumentReply result = new PdfDocumentReply()
             {
@@ -2643,15 +2646,14 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
             try{
-             
-                var pdfDocument = dynamicsContext.dfp_pdfdocuments.Where( 
-                    d => d.dfp_pdfdocumentid == Guid.Parse(pdfDocumentRequest.PdfDocumentId)).FirstOrDefault();
+                var pdfDocument = dynamicsContext.dfp_pdfdocuments.ByKey(Guid.Parse(pdfDocumentRequest.PdfDocumentId)).GetValue();
 
                 if(pdfDocument != null)
                 {
                    
                     // status to SEND or Failed TO Send                
-                    pdfDocument.statuscode = pdfDocumentRequest.StatusCode;
+                    pdfDocument.statuscode = (int)pdfDocumentRequest.StatusCode;
+                    //pdfDocument.statecode = pdfDocumentRequest.StatusCode;
 
                     dynamicsContext.UpdateObject(pdfDocument);
                     await dynamicsContext.SaveChangesAsync();
@@ -2667,6 +2669,31 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+         private int TranslatePdfDocumentStatus(string submittalStatusCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+               
+                { "Send To BCMail", 100000002 }, // Received
+                { "Sent",  100000005 }, // Rejected
+                { "Failed to Send" ,  100000006},
+                
+            };
+
+            if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
+            {
+                return statusMap[submittalStatusCode];
+            }
+            else
+            {
+                return 100000002;
+            }
+        }
 
         /// <summary>
         /// 

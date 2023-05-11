@@ -526,10 +526,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanUpdatePdfDocumentStatus()
         {
             var pdfDocumentId = "c28a6d49-77dd-ed11-b841-00505683fbf4";
-            var request = new PdfDocumentRequest()
+            var request = new PdfDocument()
             {
-                PdfDocumentId = pdfDocumentId,
-                StatusCode = 100000004,
+                
+                    PdfDocumentId = pdfDocumentId,
+                    StatusCode = StatusCodeOptionSet.Sent
+                
+                
 
             };
             var result = await caseManager.UpdateDocumentStatus(request);

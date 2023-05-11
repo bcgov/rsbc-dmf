@@ -74,7 +74,7 @@ service CaseManager {
    // Send To BC mail
    rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
 
-   rpc UpdateDocumentStatus(PdfDocumentRequest) returns (PdfDocumentReply);
+   rpc UpdateDocumentStatus(PdfDocument) returns (PdfDocumentReply);
 }
 
 message UpdateDriverRequest{
@@ -168,11 +168,7 @@ message GetLegacyDocumentReply {
 	LegacyDocument document = 3;
 }
 
-message PdfDocumentRequest{
-	string pdfDoumentId = 1;
-	int64 stateCode = 2;
-	int64 statusCode = 3;
-}
+
 
 message PdfDocumentReply {	
 	ResultStatus resultStatus = 1;
@@ -182,9 +178,17 @@ message PdfDocumentReply {
 
 message PdfDocument{
   string pdfDocumentId = 1;
-  int64 stateCode = 2;
-  int64 statusCode = 3;
+  enum StatusCodeOptions{
+	  SendToBCMail = 0;
+	  Sent = 1;
+	  FailedToSend = 2;
+   }
+  StatusCodeOptions statusCode = 2;
+  //int64 stateCode = 3;
+  
 }
+
+
 
 message CreateStatusReply {	
 	ResultStatus resultStatus = 1;

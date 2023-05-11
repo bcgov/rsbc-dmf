@@ -103,33 +103,34 @@ namespace Rsbc.Interfaces
 
                         try
                         {
-                           // client.UploadFile(stream, filePath);
-                            // Update the status to SEND and attach the document
+                    // client.UploadFile(stream, filePath);
+                    // Update the status to SEND and attach the document
 
-                            PdfDocumentRequest pdfDocument1 = new PdfDocumentRequest()
-                            {
-                                PdfDoumentId = doc.PdfDocumentId,
-                                StatusCode = 100000003
 
-                            };
+                    var pdfDocument = new PdfDocument()
+                    {
+                        PdfDocumentId = doc.PdfDocumentId,
+                        StatusCode = PdfDocument.Types.StatusCodeOptions.Sent
+                    };
                             
-                            _caseManagerClient.UpdateDocumentStatus(pdfDocument1);
+                            
+                            _caseManagerClient.UpdateDocumentStatus(pdfDocument);
                         }
 
                         catch(Exception ex)
 
                         {
-                            // set the status to Fail To 
+                    // set the status to Fail To 
+                       result.ResultStatus = ResultStatus.Fail;
+                       Log.Error(ex, "Send Documents to BC mail : Set the status to Failed to send ");
 
-                            PdfDocumentRequest pdfDocument2 = new PdfDocumentRequest()
-                            {
-                                PdfDoumentId = doc.PdfDocumentId,
-                                StatusCode = 100000004
+                        _caseManagerClient.UpdateDocumentStatus(new PdfDocument()
+                        {
+                        PdfDocumentId = doc.PdfDocumentId,
+                        StatusCode = PdfDocument.Types.StatusCodeOptions.FailedToSend
+                        });
 
-                            };
-                            _caseManagerClient.UpdateDocumentStatus(pdfDocument2);
                         }
-
             }
             return result;
         }
