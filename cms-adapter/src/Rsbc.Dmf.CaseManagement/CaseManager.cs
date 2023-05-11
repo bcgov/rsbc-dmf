@@ -78,7 +78,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<PdfDocument>> GetPdfDocuments();
 
-        Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocument pdfDocumentRequest);
+        Task<PdfDocumentReply> UpdatePdfDocumentStatus(PdfDocument pdfDocumentRequest);
+
+        Task<Guid> CreatePdfDocument(PdfDocument pdfDocumentRequest);
 
         Task<ResultStatusReply> UpdateDriver(Driver driver);
 
@@ -1129,9 +1131,15 @@ namespace Rsbc.Dmf.CaseManagement
                     comment.dfp_caseidguid = sequenceNumber.ToString();
 
                     try
-                    {
-                        dynamicsContext.AddTodfp_comments(comment);
+                    {                        
                         await dynamicsContext.SaveChangesAsync();
+                        dynamicsContext.AddTodfp_comments(comment);
+                        var saveResult = await dynamicsContext.SaveChangesAsync();
+                        var tempId = GetCreatedId(saveResult);
+                        if (tempId != null)
+                        {
+                            comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
+                        }
                         result.Success = true;
                     }
                     catch (Exception ex)
@@ -1414,10 +1422,16 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         try
                         {
+                            await dynamicsContext.SaveChangesAsync();
+                            dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);                                                    
+                            var saveResult = await dynamicsContext.SaveChangesAsync();
+                            var tempId = GetCreatedId(saveResult);
+                            if (tempId != null)
+                            {
+                              bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                            }
 
-                            dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-
-                            if (documentTypeId != null)
+                        if (documentTypeId != null)
                             {
                                 dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                             }
@@ -1835,8 +1849,15 @@ namespace Rsbc.Dmf.CaseManagement
 
                         try
                         {
-                            dynamicsContext.AddTocontacts(driverContact);
                             await dynamicsContext.SaveChangesAsync();
+                            dynamicsContext.AddTocontacts(driverContact);
+                            var saveResult = await dynamicsContext.SaveChangesAsync();
+                            var tempId = GetCreatedId(saveResult);
+                            if (tempId != null)
+                            {
+                                contactId = tempId.Value;
+                                driverContact = dynamicsContext.contacts.ByKey(tempId).GetValue();
+                            }
                         }
                         catch (Exception e)
                         {
@@ -1888,8 +1909,15 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                     try
                     {
-                        dynamicsContext.AddTocontacts(driverContact);
                         await dynamicsContext.SaveChangesAsync();
+                        dynamicsContext.AddTocontacts(driverContact);
+                        var saveResult2 = await dynamicsContext.SaveChangesAsync();
+                        var tempId2 = GetCreatedId(saveResult2);
+                        if (tempId2 != null)
+                        {
+                            contactId = tempId2.Value;
+                            driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
+                        }
                     }
                     catch (Exception e)
                     {
@@ -1909,8 +1937,15 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driver.dfp_dob = birthDate.Value;
                 }
-
+                await dynamicsContext.SaveChangesAsync();
                 dynamicsContext.AddTodfp_drivers(driver);
+                var saveResult = await dynamicsContext.SaveChangesAsync();
+                var tempId = GetCreatedId(saveResult);
+                if (tempId != null)
+                {
+                    driverId = tempId.Value;
+                    driver = dynamicsContext.dfp_drivers.ByKey(tempId).GetValue();
+                }
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
 
                 // this save is necessary so that the create incident will work.
@@ -1918,7 +1953,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             // create the case.
-            incident @case = new incident()
+            incident newIncident = new incident()
             {               
                 customerid_contact = driverContact,
                 // set status to Open Pending for Submission
@@ -1931,12 +1966,19 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                dynamicsContext.AddToincidents(@case);
+                dynamicsContext.AddToincidents(newIncident);
                 if (driverContact != null)
                 {
-                    dynamicsContext.SetLink(@case, nameof(incident.customerid_contact), driverContact);
+                    dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
                 }
-                await dynamicsContext.SaveChangesAsync();
+                var saveResult = await dynamicsContext.SaveChangesAsync();
+                
+                var tempId = GetCreatedId(saveResult);
+                if (tempId != null)
+                {
+                    newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
+                }
+
             }
             catch (Exception e)
             {
@@ -1945,7 +1987,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                dynamicsContext.SetLink(@case, nameof(incident.dfp_DriverId), driver);
+                dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driver);
 
                 await dynamicsContext.SaveChangesAsync();
             }
@@ -2534,8 +2576,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 }
 
-                                
-
                             }
 
                         }
@@ -2633,12 +2673,63 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+
         /// <summary>
         /// Method to set the resolve case status
         /// </summary>
         /// <returns></returns>
 
-        public async Task<PdfDocumentReply> UpdateDocumentStatus(PdfDocument pdfDocumentRequest)
+        public async Task<Guid> CreatePdfDocument(PdfDocument pdfDocumentRequest)
+        {
+            PdfDocumentReply result = new PdfDocumentReply()
+            {
+                Success = false
+            };
+
+            dfp_pdfdocument newDoc = new dfp_pdfdocument()
+            {
+                statuscode = (int)pdfDocumentRequest.StatusCode                    
+            };
+
+            dynamicsContext.AddTodfp_pdfdocuments(newDoc);
+    
+
+            DataServiceResponse saveResult = dynamicsContext.SaveChanges();
+
+            return GetCreatedId(saveResult).Value;
+            
+        }
+
+        Guid? GetCreatedId (DataServiceResponse saveResult)
+        {
+            Guid? result = null;
+            try
+            {
+                string returnId = null;
+
+                var tempId = saveResult.First().Headers["OData-EntityId"];
+
+                int bracketLeft = tempId.IndexOf("(");
+                int bracketRight = tempId.IndexOf(")");
+                if (bracketLeft != -1 && bracketRight != -1)
+                {
+                    returnId = tempId.Substring(bracketLeft + 1, bracketRight - bracketLeft - 1);
+                    result = Guid.Parse(returnId);
+                }
+            }
+            catch (Exception)
+            { }
+
+
+            return result;
+        }
+
+        /// <summary>
+        /// Method to set the resolve case status
+        /// </summary>
+        /// <returns></returns>
+
+        public async Task<PdfDocumentReply> UpdatePdfDocumentStatus(PdfDocument pdfDocumentRequest)
         {
             PdfDocumentReply result = new PdfDocumentReply()
             {
@@ -3001,7 +3092,20 @@ namespace Rsbc.Dmf.CaseManagement
                             bcgov_origincode = 931490000,
                             bcgov_filesize = HumanReadableFileLength(fileSize)
                         };
+
+                        await dynamicsContext.SaveChangesAsync();
                         dynamicsContext.AddTobcgov_documenturls(givenUrl);
+
+                        var saveResult = await dynamicsContext.SaveChangesAsync();
+                        var tempId = GetCreatedId(saveResult);
+                        if (tempId != null)
+                        {
+
+                            givenUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                        }
+
+
+
                     }
                     dynamicsContext.AddLink(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl), givenUrl);
                 }

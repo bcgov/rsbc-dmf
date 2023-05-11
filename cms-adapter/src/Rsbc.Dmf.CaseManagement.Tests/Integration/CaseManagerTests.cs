@@ -525,17 +525,15 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdatePdfDocumentStatus()
         {
-            var pdfDocumentId = "c28a6d49-77dd-ed11-b841-00505683fbf4";
+
+            var pdfDocumentId = await caseManager.CreatePdfDocument(new PdfDocument { StatusCode = StatusCodeOptionSet.SendToBCMail });
             var request = new PdfDocument()
             {
                 
-                    PdfDocumentId = pdfDocumentId,
-                    StatusCode = StatusCodeOptionSet.Sent
-                
-                
-
+                    PdfDocumentId = pdfDocumentId.ToString(),
+                    StatusCode = StatusCodeOptionSet.Sent                
             };
-            var result = await caseManager.UpdateDocumentStatus(request);
+            var result = await caseManager.UpdatePdfDocumentStatus(request);
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }

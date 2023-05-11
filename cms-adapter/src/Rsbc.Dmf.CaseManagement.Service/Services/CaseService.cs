@@ -718,7 +718,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 if(pdfDocument != null)
                 {
-                    await _caseManager.UpdateDocumentStatus(pdfDocument);
+                    await _caseManager.UpdatePdfDocumentStatus(pdfDocument);
                     reply.ResultStatus = ResultStatus.Success;
                 }               
             }
