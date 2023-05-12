@@ -2863,13 +2863,13 @@ namespace Rsbc.Dmf.CaseManagement
 
                         // ensure the contact information exists.
 
-                        dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
-
-                        contact driverContact;
-
                         item.dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname ;
                         dynamicsContext.UpdateObject(item);
                         await dynamicsContext.SaveChangesAsync();
+
+
+                        dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
+                        contact driverContact;
 
                         if (item.dfp_PersonId != null)
                         {
