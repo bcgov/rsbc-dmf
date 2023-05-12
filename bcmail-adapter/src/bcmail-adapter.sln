@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CdgsServiceClient", "Rsbc.I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{9D75F5FE-6BFC-4456-8480-40947BD8BAE4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{34314093-1683-4AC3-80C6-EF9624584424}"
 EndProject
 Global
@@ -35,6 +37,10 @@ Global
 		{9D75F5FE-6BFC-4456-8480-40947BD8BAE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D75F5FE-6BFC-4456-8480-40947BD8BAE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D75F5FE-6BFC-4456-8480-40947BD8BAE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{34314093-1683-4AC3-80C6-EF9624584424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34314093-1683-4AC3-80C6-EF9624584424}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34314093-1683-4AC3-80C6-EF9624584424}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -25,6 +25,7 @@ namespace Rsbc.Interfaces
         /// <summary>
         /// SFEG Utils
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="caseManagerClient"></param>
         /// <param name="documentStorageAdapterClient"></param>
         public SfegUtils(IConfiguration configuration , CaseManager.CaseManagerClient caseManagerClient)
@@ -41,13 +42,13 @@ namespace Rsbc.Interfaces
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> SendDocumentsToBcMail()
+        public ResultStatusReply SendDocumentsToBcMail()
         {
             var result = new ResultStatusReply();
             //Step 1: 
             // call cms adpter to get the list of documents in "Send to BC Mail " Status
-           
-            var documentsResponse = _caseManagerClient.GetPdfDocuments(new EmptyRequest());
+           var emptyRequest = new Rsbc.Dmf.CaseManagement.Service.EmptyRequest();
+            PdfDocumentReply documentsResponse = _caseManagerClient.GetPdfDocuments(emptyRequest);
 
             // Step 2:
             //Is the fileurl is same as the document url?

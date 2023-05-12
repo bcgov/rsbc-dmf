@@ -236,6 +236,15 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
                 .Returns(new LegacyCandidateReply { ResultStatus = ResultStatus.Success });
 
+            mockClient
+                .Setup(m => m.GetPdfDocuments(
+                    It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
+                .Returns<EmptyRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) => {
+                    var result = new PdfDocumentReply { ResultStatus = ResultStatus.Success, ErrorDetail = string.Empty };
+                    return result;
+                });
+
+
             return mockClient.Object;
         }
     }
