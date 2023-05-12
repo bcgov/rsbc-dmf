@@ -2737,14 +2737,15 @@ namespace Rsbc.Dmf.CaseManagement
             };
 
             try{
-                var pdfDocument = dynamicsContext.dfp_pdfdocuments.ByKey(Guid.Parse(pdfDocumentRequest.PdfDocumentId)).GetValue();
+                dfp_pdfdocument pdfDocument = dynamicsContext.dfp_pdfdocuments.ByKey(Guid.Parse(pdfDocumentRequest.PdfDocumentId)).GetValue();
 
                 if(pdfDocument != null)
                 {
-                   
-                    // status to SEND or Failed TO Send                
+
+                    // status to SEND or Failed TO Send
                     pdfDocument.statuscode = (int)pdfDocumentRequest.StatusCode;
-                    //pdfDocument.statecode = pdfDocumentRequest.StatusCode;
+                    
+                    // 
 
                     dynamicsContext.UpdateObject(pdfDocument);
                     await dynamicsContext.SaveChangesAsync();

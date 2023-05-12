@@ -53,7 +53,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Services
             var result = new ResultStatusReply();
 
             var sfegUtils = new SfegUtils(_configuration, _caseManagerClient);
-            sfegUtils.SendDocumentsToBcMail().GetAwaiter().GetResult();
+            sfegUtils.SendDocumentsToBcMail();
             return Task.FromResult(result);
 
         }
