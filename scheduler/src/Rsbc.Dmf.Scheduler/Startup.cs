@@ -499,13 +499,13 @@ namespace Rsbc.Dmf.Scheduler
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily);
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateCleanPassFlag(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Never);
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily);
 
 
 
