@@ -1,14 +1,11 @@
-﻿using Org.BouncyCastle.Bcpg;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
-namespace Rsbc.Dmf.LegacyAdapter.ViewModels
+namespace Rsbc.Dmf.CaseManagement
 {
-    public class CaseDetails
+    public class CaseDetail
     {
-        /// <summary>
-        /// The GUID that is the primary key for this case, sent as a string
-        /// </summary>
         public string CaseId { get; set; }
 
         /// <summary>
@@ -54,7 +51,7 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Indicates the type and category of the most recent decision
         /// </summary>
-        public DateTimeOffset LatestDecision { get; set; }
+        public string LatestDecision { get; set; }
 
         /// <summary>
         /// Indicates approved license class of the most recent decision
@@ -64,17 +61,15 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         /// <summary>
         /// Indicates the date of the most recent decision
         /// </summary>
-        public DateTimeOffset DecisionDate { get; set; }
+        public DateTimeOffset? DecisionDate { get; set; }
 
         /// <summary>
         /// Indicates the current date of fax intake processing for DPS
         /// </summary>
         public DateTimeOffset DpsProcessingDate { get; set; }
 
-        public List<Document> Documents { get; set; }
-
-        public List<Comment> Comments { get; set; }
-
 
     }
+
+
 }
