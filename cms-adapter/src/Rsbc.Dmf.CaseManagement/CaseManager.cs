@@ -1865,7 +1865,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         driver.dfp_PersonId = driverContact;
                         try
-                        {
+                        {                            
                             dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
                             await dynamicsContext.SaveChangesAsync();
                         }
