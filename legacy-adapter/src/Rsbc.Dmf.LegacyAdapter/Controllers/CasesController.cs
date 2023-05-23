@@ -202,17 +202,40 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// Get Case
         /// </summary>
         /// <param name="licenseNumber"></param>
-
-        [ProducesResponseType(typeof(ViewModels.CaseDetails), 200)]
+        [HttpGet("{caseId}")]
+        [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCase")]
-
-        [HttpGet()]
         public ActionResult GetCase([Required][FromRoute] string caseId)
         {
-            var result = new ViewModels.CaseDetails();
+            var result = new ViewModels.CaseDetail();
 
+            
+
+            var c = _cmsAdapterClient.GetCaseDetail (new CaseIdRequest { CaseId = caseId });  
+            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                result.CaseId = c.Item.CaseId;
+                result.Title = c.Item.Title;
+                result.IdCode = c.Item.IdCode;
+                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
+                result.CaseType = c.Item.CaseType;
+                result.DmerType = c.Item.DmerType;
+                result.Status = c.Item.Status;
+                result.AssigneeTitle = c.Item.AssigneeTitle;
+                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
+                result.LatestDecision = c.Item.LatestDecision;
+                result.DecisionForClass = c.Item.DecisionForClass;
+                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+            }
+
+            // set to null if no decision has been made.
+            if (result.DecisionDate == DateTimeOffset.MinValue)
+            {
+                result.DecisionDate = null;
+            }
             return Json(result);
         }
 
