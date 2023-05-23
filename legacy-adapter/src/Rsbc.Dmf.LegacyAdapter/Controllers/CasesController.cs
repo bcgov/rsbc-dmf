@@ -198,6 +198,24 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(caseId);
         }
 
+        /// <summary>
+        /// Get Case
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+
+        [ProducesResponseType(typeof(ViewModels.CaseDetails), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetCase")]
+
+        [HttpGet()]
+        public ActionResult GetCase([Required][FromRoute] string caseId)
+        {
+            var result = new ViewModels.CaseDetails();
+
+            return Json(result);
+        }
+
         private string GetCaseId(string licenseNumber, string surcode)
         {
 
