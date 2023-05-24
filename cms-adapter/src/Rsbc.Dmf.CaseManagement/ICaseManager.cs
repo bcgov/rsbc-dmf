@@ -90,5 +90,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task SwitchTo8Dl();
 
+        Task MakeFakeDls();
+
     }
 }

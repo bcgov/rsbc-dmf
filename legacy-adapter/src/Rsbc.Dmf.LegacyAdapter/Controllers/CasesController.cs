@@ -229,6 +229,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 result.DecisionForClass = c.Item.DecisionForClass;
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+                result.Comments = GetCommentsForCase(caseId);
             }
 
             // set to null if no decision has been made.
@@ -290,6 +292,45 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
             }
             return caseId;
+        }
+
+        private List<Comment> GetCommentsForCase(string caseId)
+        {
+            List<ViewModels.Comment> result = new List<ViewModels.Comment>();
+            var reply = _cmsAdapterClient.GetCaseComments(new CaseIdRequest() { CaseId = caseId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    result.Add(new ViewModels.Comment
+                    {
+                        CaseId = item.CaseId,
+                        CommentDate = item.CommentDate.ToDateTimeOffset(),
+                        CommentId = item.CommentId,
+                        CommentText = item.CommentText,
+                        CommentTypeCode = item.CommentTypeCode,
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                
+            }
+            return result;
         }
 
         /// <summary>
@@ -585,7 +626,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         ContentType = DocumentUtils.GetMimeType(fileName),
                         Data = ByteString.CopyFrom(data),
                         EntityName = "dfp_driver",
-                        FileName = fileName,
+                        FileName = fileKey,
                         FolderName = driverId,
                     };
                     var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
