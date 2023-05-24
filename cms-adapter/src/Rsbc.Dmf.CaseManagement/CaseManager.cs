@@ -879,11 +879,16 @@ namespace Rsbc.Dmf.CaseManagement
                     }
 
                     await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.stageid_processstage));
-                    // status
-                    if (fetchedCase.stageid_processstage != null) 
-                    {                        
-                        result.Status = fetchedCase.stageid_processstage.stagename;
+
+                    var bpf = dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == fetchedCase.incidentid).FirstOrDefault();
+
+                    if (bpf != null)
+                    {
+                        await dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+                        result.Status = bpf.activestageid.stagename;
                     }
+
+                    
 
 
                     // case assignment
@@ -3001,7 +3006,7 @@ namespace Rsbc.Dmf.CaseManagement
             // get all the drivers.
 
             var drivers = dynamicsContext.dfp_drivers.Where(x => x.dfp_licensenumber != null).ToList();
-
+            int i = 0;
             foreach (var driver in drivers)
             {
                 if (driver.dfp_licensenumber.Length == 7)
@@ -3009,10 +3014,45 @@ namespace Rsbc.Dmf.CaseManagement
                     // zero pad
                     driver.dfp_licensenumber = "0" + driver.dfp_licensenumber;
                     dynamicsContext.UpdateObject(driver);
+                    i++;
+                }
+
+                if (driver.dfp_licensenumber.Length == 8)
+                {
+                    // zero pad
+                    driver.dfp_licensenumber = driver.dfp_licensenumber.Substring(1);
+                    dynamicsContext.UpdateObject(driver);
+                    i++;
+                }
+
+                if (i % 1000 == 0)
+                {
                     await dynamicsContext.SaveChangesAsync();
-                }                
-            }            
+                }
+            }
+            await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
+        }
+
+        public async Task MakeFakeDls()
+        {
+            for (int i = 111144; i < 1150000; i++)
+            {
+                int fakeDl = 2000000 + i;
+                string dl = fakeDl.ToString();
+                var driver = new dfp_driver()
+                {
+                    dfp_licensenumber = fakeDl.ToString(),
+                    dfp_dob = DateTime.Now,
+                    dfp_fullname = $"FAKE {dl}"                    
+                };
+                dynamicsContext.AddTodfp_drivers(driver);
+                if (i % 500 == 0)
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                }
+            }
+            await dynamicsContext.SaveChangesAsync();
         }
 
 

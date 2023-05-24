@@ -462,8 +462,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             await caseManager.SwitchTo8Dl();
         }
 
+        [Fact(Skip = RequiresDynamics)]
+        public async Task MakeFakeDls()
+        {
+            await caseManager.MakeFakeDls();
+        }
 
-            [Fact(Skip = RequiresDynamics)]
+
+        [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateIcbcError()
         {
             var driverLicenseNumber = configuration["ICBC_TEST_DL"];
