@@ -2541,50 +2541,55 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 string caseId = request.CaseId;
-                incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
 
-                if (@case != null && @case.statecode == 0)
+                if (caseId != null && caseId != string.Empty)
                 {
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+                    incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
 
-                    if (@case.bcgov_incident_bcgov_documenturl != null)
+                    if (@case != null && @case.statecode == 0)
                     {
-                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                        if (@case.bcgov_incident_bcgov_documenturl != null)
                         {
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-                   
-                            if (document.dfp_DocumentTypeID != null && document.statecode == 0 
-                                && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
-                                )
+                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
                             {
-                                
-                               if (document.dfp_DocumentTypeID != null && 
-                                    document.dfp_DocumentTypeID.dfp_name != null && 
-                                    document.dfp_DocumentTypeID.dfp_name == "DMER" )
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                                if (document.dfp_DocumentTypeID != null && document.statecode == 0
+                                    && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
+                                    )
                                 {
-                                    // Update cleanpass value on case
-                                    @case.dfp_iscleanpass = true;
-                                    dynamicsContext.UpdateObject(@case);
-                                    await dynamicsContext.SaveChangesAsync();
 
-                                    // Update document status
-                                    /*document.dfp_submittalstatus = 100000009; //Clean Pass
-                                    dynamicsContext.UpdateObject(document);
-                                    await dynamicsContext.SaveChangesAsync();*/
+                                    if (document.dfp_DocumentTypeID != null &&
+                                         document.dfp_DocumentTypeID.dfp_name != null &&
+                                         document.dfp_DocumentTypeID.dfp_name == "DMER")
+                                    {
+                                        // Update cleanpass value on case
+                                        @case.dfp_iscleanpass = true;
+                                        dynamicsContext.UpdateObject(@case);
+                                        await dynamicsContext.SaveChangesAsync();
 
-                                    result.Success = true;
+                                        // Update document status
+                                        /*document.dfp_submittalstatus = 100000009; //Clean Pass
+                                        dynamicsContext.UpdateObject(document);
+                                        await dynamicsContext.SaveChangesAsync();*/
+
+                                        result.Success = true;
+
+                                    }
 
                                 }
 
                             }
 
+                            dynamicsContext.DetachAll();
+
                         }
-
-                        dynamicsContext.DetachAll();
-
                     }
                 }
             }
+            
             catch (Exception e)
             {
                 logger.LogError(e, $"Update Clean Pass Flag - Error updating");
