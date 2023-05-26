@@ -27,6 +27,8 @@ service CaseManager {
 
   rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
 
+  rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
+
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
@@ -104,6 +106,12 @@ message LegacyDocumentStatusRequest{
 }
 
 
+message GetCaseDetailReply {
+	CaseDetail item = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
 message GetCommentsReply {
 	repeated LegacyComment items = 1;
 	ResultStatus resultStatus = 2;
@@ -122,6 +130,8 @@ message GetCommentReply {
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
 }
+
+
 
 
 message LegacyComment {
@@ -168,8 +178,6 @@ message GetLegacyDocumentReply {
 	LegacyDocument document = 3;
 }
 
-
-
 message PdfDocumentReply {	
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
@@ -188,6 +196,21 @@ message PdfDocument{
   
 }
 
+message CaseDetail {
+	string caseId = 1;
+    string title = 2;
+	string idCode = 3;
+	google.protobuf.Timestamp openedDate = 4;
+	string caseType = 5;
+	string dmerType = 6;
+	string status = 7;
+	string assigneeTitle = 8;
+	google.protobuf.Timestamp lastActivityDate = 9;
+	string latestDecision = 10;
+	string decisionForClass = 11;
+	google.protobuf.Timestamp decisionDate = 12;
+	google.protobuf.Timestamp dpsProcessingDate = 13;
+}
 
 
 message CreateStatusReply {	

@@ -7,97 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-    public interface ICaseManager
-    {
-        Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
 
-        Task<CreateStatusReply> CreateLegacyCaseComment(LegacyComment request);
-
-        Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request);
-
-        Task<bool> DeleteComment(string commentId);
-
-        Task<bool> DeleteLegacyDocument(string documentId);
-        
-        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
-
-        Task<LegacyComment> GetComment(string commentId);
-
-        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
-
-        Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
-
-        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
-
-        Task<LegacyDocument> GetLegacyDocument(string documentId);
-
-        Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
-
-        Task<IEnumerable<Driver>> GetDriver(string licensenumber);
-
-        Task<IEnumerable<Driver>> GetDrivers();
-
-        Task<CaseSearchReply> LegacyCandidateSearch(LegacyCandidateSearchRequest request);
-
-        /// <summary>
-        /// Create a Legacy Candidate
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns>Guid of the created case</returns>
-        /// 
-        Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
-
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source);
-
-        Task MarkMedicalUpdatesSent(List<string> ids);
-
-        Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request);
-
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null);
-
-        Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
-
-        Task<List<Flag>> GetAllFlags();
-
-        Task<CaseSearchReply> GetUnsentMedicalUpdates();
-
-        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
-
-        DateTimeOffset GetDpsProcessingDate();
-
-        Task UpdateNonComplyDocuments();
-
-        Task ResolveCaseStatusUpdates();
-
-        Task<IEnumerable<PdfDocument>> GetPdfDocuments();
-
-        Task<PdfDocumentReply> UpdatePdfDocumentStatus(PdfDocument pdfDocumentRequest);
-
-        Task<Guid> CreatePdfDocument(PdfDocument pdfDocumentRequest);
-
-        Task<ResultStatusReply> UpdateDriver(Driver driver);
-
-        Task<ResultStatusReply> UpdateBirthDate(UpdateDriverRequest driverRequest);
-
-        Task SetCaseResolveDate(string caseId, DateTimeOffset resolvedDate);
-
-        Task <bool> SetCaseStatus(string caseId , bool caseStatus);
-
-        Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus);
-
-        Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
-          
-        Task SwitchTo8Dl();
-
-    }
-       
 
     public class CaseSearchRequest
     {
@@ -269,15 +183,6 @@ namespace Rsbc.Dmf.CaseManagement
         public DecisionOutcome? Outcome { get; set; }
     }
 
-    public class BringForwardRequest
-    {
-        public string CaseId { get; set; }
-        public string Assignee{ get; set; }
-        public string Subject { get; set; }
-        public string Description { get; set; }
-        public BringForwardPriority? Priority { get; set; }
-        
-    }
 
     public class IcbcErrorRequest
     {
@@ -880,7 +785,164 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        private string TranslateCaseType(int? optionSetValue)
+        {
+            string result = null;
+            switch (optionSetValue)
+            {
+                case 100000004:
+                    result = "OTHR";
+                    break;
+                case 100000002:
+                    result = "POL";
+                    break;
+                case 100000001:
+                    result = "LEG";
+                    break;
+                case 2:
+                    result = "DMER";
+                    break;
+                case 100000003:
+                    result = "RSBC";
+                    break;
+                case 3:
+                    result = "PDR";
+                    break;
+                case 100000005:
+                    result = "UNSL";
+                    break;
+            }
+            return result;
+        }
 
+
+        private string TranslateDmerTypeRaw(int? optionSetValue)
+        {
+            string result = null;
+            switch (optionSetValue)
+            {
+                case 100000000:
+                    result = "Commercial/NSC";
+                    break;
+                case 100000001:
+                    result = "Age";
+                    break;
+                case 100000002:
+                    result = "Industrial Road";
+                    break;
+                case 100000003:
+                    result = "Known Medical";
+                    break;
+                case 100000006:
+                    result = "Suspected Medical";
+                    break;
+                case 100000005:
+                    result = "No DMER";
+                    break;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Get Legacy Document
+        /// </summary>
+        /// <param name="commentId"></param>
+        /// <returns></returns>
+        public async Task<CaseDetail> GetCaseDetail(string caseId)
+        {
+            CaseDetail result = null;
+            try
+            {
+                var fetchedCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(caseId)).FirstOrDefault();
+                if (fetchedCase != null)
+                {                    
+                    result = new CaseDetail
+                    {
+                        CaseId = fetchedCase.incidentid.ToString(),
+                        Title = fetchedCase.title,
+                        IdCode = fetchedCase.ticketnumber,
+                        OpenedDate = fetchedCase.createdon.Value,
+                        LastActivityDate = fetchedCase.modifiedon.Value,
+                        LatestDecision = null                                                
+                    };
+
+                    // get the case type.
+
+                    if (fetchedCase.casetypecode != null)
+                    {
+                        result.CaseType = TranslateCaseType(fetchedCase.casetypecode);
+                    }
+
+                    if (fetchedCase.dfp_dmertype != null)
+                    {
+                        result.DmerType = TranslateDmerTypeRaw(fetchedCase.dfp_dmertype);
+                    }
+
+                    await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.stageid_processstage));
+
+                    var bpf = dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == fetchedCase.incidentid).FirstOrDefault();
+
+                    if (bpf != null)
+                    {
+                        await dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+                        result.Status = bpf.activestageid.stagename;
+                    }
+
+                    
+
+
+                    // case assignment
+
+                    if (fetchedCase._owningteam_value.HasValue)
+                     {                         
+                         await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.owningteam));
+                         result.AssigneeTitle = fetchedCase.owningteam.name;
+                     }
+                     /*
+                     else
+                    {
+                        if (fetchedCase._owninguser_value.HasValue)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.owninguser));
+                            result.AssigneeTitle = fetchedCase.owninguser.fullname;
+                        }
+                    }
+                    */
+
+                    // get the related decisions.
+
+                    await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.dfp_incident_dfp_decision));
+                    if (fetchedCase.dfp_incident_dfp_decision != null && fetchedCase.dfp_incident_dfp_decision.Count > 0)
+                    {
+                        foreach (var decision in fetchedCase.dfp_incident_dfp_decision)
+                        {                            
+                            if (result.DecisionDate == null || decision.createdon > result.DecisionDate)
+                            {
+                                if (decision.dfp_OutcomeStatus != null) 
+                                {
+                                    await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+                                    result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
+                                }
+
+                                result.DecisionDate = decision.createdon;
+                                result.DecisionForClass = decision.dfp_eligibledlclass;
+                                
+                            }
+                        }                        
+                    }
+
+                    result.DpsProcessingDate = GetDpsProcessingDate();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting case {caseId}");
+            }
+
+
+            return result;
+
+        }
 
 
         /// <summary>
@@ -1865,7 +1927,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                         driver.dfp_PersonId = driverContact;
                         try
-                        {
+                        {                            
                             dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
                             await dynamicsContext.SaveChangesAsync();
                         }
@@ -2949,7 +3011,7 @@ namespace Rsbc.Dmf.CaseManagement
             // get all the drivers.
 
             var drivers = dynamicsContext.dfp_drivers.Where(x => x.dfp_licensenumber != null).ToList();
-
+            int i = 0;
             foreach (var driver in drivers)
             {
                 if (driver.dfp_licensenumber.Length == 7)
@@ -2957,10 +3019,45 @@ namespace Rsbc.Dmf.CaseManagement
                     // zero pad
                     driver.dfp_licensenumber = "0" + driver.dfp_licensenumber;
                     dynamicsContext.UpdateObject(driver);
+                    i++;
+                }
+
+                if (driver.dfp_licensenumber.Length == 8)
+                {
+                    // zero pad
+                    driver.dfp_licensenumber = driver.dfp_licensenumber.Substring(1);
+                    dynamicsContext.UpdateObject(driver);
+                    i++;
+                }
+
+                if (i % 1000 == 0)
+                {
                     await dynamicsContext.SaveChangesAsync();
-                }                
-            }            
+                }
+            }
+            await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
+        }
+
+        public async Task MakeFakeDls()
+        {
+            for (int i = 111144; i < 1150000; i++)
+            {
+                int fakeDl = 2000000 + i;
+                string dl = fakeDl.ToString();
+                var driver = new dfp_driver()
+                {
+                    dfp_licensenumber = fakeDl.ToString(),
+                    dfp_dob = DateTime.Now,
+                    dfp_fullname = $"FAKE {dl}"                    
+                };
+                dynamicsContext.AddTodfp_drivers(driver);
+                if (i % 500 == 0)
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                }
+            }
+            await dynamicsContext.SaveChangesAsync();
         }
 
 

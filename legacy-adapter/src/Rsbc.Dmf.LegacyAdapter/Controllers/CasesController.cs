@@ -198,6 +198,49 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(caseId);
         }
 
+        /// <summary>
+        /// Get Case
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+        [HttpGet("{caseId}")]
+        [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetCase")]
+        public ActionResult GetCase([Required][FromRoute] string caseId)
+        {
+            var result = new ViewModels.CaseDetail();
+
+            
+
+            var c = _cmsAdapterClient.GetCaseDetail (new CaseIdRequest { CaseId = caseId });  
+            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                result.CaseId = c.Item.CaseId;
+                result.Title = c.Item.Title;
+                result.IdCode = c.Item.IdCode;
+                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
+                result.CaseType = c.Item.CaseType;
+                result.DmerType = c.Item.DmerType;
+                result.Status = c.Item.Status;
+                result.AssigneeTitle = c.Item.AssigneeTitle;
+                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
+                result.LatestDecision = c.Item.LatestDecision;
+                result.DecisionForClass = c.Item.DecisionForClass;
+                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+                result.Comments = GetCommentsForCase(caseId);
+            }
+
+            // set to null if no decision has been made.
+            if (result.DecisionDate == DateTimeOffset.MinValue)
+            {
+                result.DecisionDate = null;
+            }
+            return Json(result);
+        }
+
         private string GetCaseId(string licenseNumber, string surcode)
         {
 
@@ -249,6 +292,45 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
             }
             return caseId;
+        }
+
+        private List<Comment> GetCommentsForCase(string caseId)
+        {
+            List<ViewModels.Comment> result = new List<ViewModels.Comment>();
+            var reply = _cmsAdapterClient.GetCaseComments(new CaseIdRequest() { CaseId = caseId });
+
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // get the comments
+                
+
+                foreach (var item in reply.Items)
+                {
+                    // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                    ViewModels.Driver driver = new ViewModels.Driver()
+                    {
+                        LicenseNumber = item.Driver.DriverLicenseNumber,
+                        Flag51 = false,
+                        LastName = item.Driver.Surname,
+                        LoadedFromICBC = false,
+                        MedicalIssueDate = DateTimeOffset.Now
+                    };
+
+                    result.Add(new ViewModels.Comment
+                    {
+                        CaseId = item.CaseId,
+                        CommentDate = item.CommentDate.ToDateTimeOffset(),
+                        CommentId = item.CommentId,
+                        CommentText = item.CommentText,
+                        CommentTypeCode = item.CommentTypeCode,
+                        Driver = driver,
+                        SequenceNumber = item.SequenceNumber,
+                        UserId = item.UserId
+                    });
+                }
+                
+            }
+            return result;
         }
 
         /// <summary>
@@ -544,7 +626,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         ContentType = DocumentUtils.GetMimeType(fileName),
                         Data = ByteString.CopyFrom(data),
                         EntityName = "dfp_driver",
-                        FileName = fileName,
+                        FileName = fileKey,
                         FolderName = driverId,
                     };
                     var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
