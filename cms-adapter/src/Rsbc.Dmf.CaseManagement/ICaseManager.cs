@@ -23,7 +23,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<LegacyComment> GetComment(string commentId);
 
-        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments);
+        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
 
         Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
 

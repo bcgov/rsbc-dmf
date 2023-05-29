@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Net.Http;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
@@ -15,6 +16,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             {
                 var options = sp.GetRequiredService<IOptions<DynamicsOptions>>().Value;
                 c.BaseAddress = new Uri(options.Adfs.OAuth2TokenEndpoint);                
+            }).ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            }
             });
             services.AddTransient<ISecurityTokenProvider, CachedADFSSecurityTokenProvider>();
             services.AddScoped(sp =>

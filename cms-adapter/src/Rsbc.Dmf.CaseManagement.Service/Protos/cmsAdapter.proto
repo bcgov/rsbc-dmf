@@ -25,7 +25,7 @@ service CaseManager {
 
   rpc GetComment (CommentIdRequest) returns (GetCommentReply);
 
-  rpc GetCaseComments (CaseIdRequest) returns (GetCommentsReply);
+  rpc GetCaseComments (CaseCommentsRequest) returns (GetCommentsReply);
 
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
@@ -90,6 +90,19 @@ message DriverLicenseRequest {
 
 message CaseIdRequest {
 	string caseId= 1;
+}
+
+
+enum OriginRestrictions {
+	None = 0;
+	UserOnly = 1;
+	SystemOnly = 2;
+}
+
+message CaseCommentsRequest {
+	string caseId= 1;
+	OriginRestrictions originRestrictions =2;
+
 }
 
 message CommentIdRequest {

@@ -41,8 +41,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
         public async Task<string> AcquireToken()
         {
-            using var httpClient = httpClientFactory.CreateClient("adfs_token");
-
+            using var httpClient = httpClientFactory.CreateClient("adfs_token");           
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
             // Construct the body of the request

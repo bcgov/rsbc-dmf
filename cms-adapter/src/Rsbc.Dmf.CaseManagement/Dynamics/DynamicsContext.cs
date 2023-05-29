@@ -12,6 +12,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
+            this.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
 

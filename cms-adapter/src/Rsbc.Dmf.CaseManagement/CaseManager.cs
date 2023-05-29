@@ -323,7 +323,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <param name="allComments"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments)
+        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions originRestrictions)
         {
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
@@ -340,8 +340,31 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
+                    // determine if there is a match.
+
+                    bool originMatch = false;
+
+                    switch (originRestrictions)
+                    {
+                        case OriginRestrictions.None: 
+                            originMatch = true; 
+                            break;
+                        case OriginRestrictions.UserOnly: 
+                            if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.User)
+                            {
+                                originMatch = true;
+                            }
+                            break;
+                        case OriginRestrictions.SystemOnly:
+                            if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.System)
+                            {
+                                originMatch = true;
+                            }
+                            break;
+                    }
+
                     // ignore inactive and system generated
-                    if (comment.statecode != null && comment.statecode == 0 && comment.dfp_origin == null || comment.dfp_origin == 100000000)
+                    if ((comment.statecode != null && comment.statecode == 0) || originMatch)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
@@ -2545,6 +2568,7 @@ namespace Rsbc.Dmf.CaseManagement
                 incident.dfp_resolvecase = true;
 
                 dynamicsContext.UpdateObject(incident);
+                
             }
 
             await dynamicsContext.SaveChangesAsync();
