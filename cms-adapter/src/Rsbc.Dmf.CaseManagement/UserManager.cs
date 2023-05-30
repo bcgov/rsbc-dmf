@@ -118,7 +118,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     await dynamicsContext.LoadPropertyAsync(user, nameof(dfp_login.dfp_login_dfp_role));     
 
-                    user.dfp_login_dfp_medicalpractitioner = new Collection<dfp_medicalpractitioner>((await dynamicsContext.GetAllPagesAsync(dynamicsContext.dfp_medicalpractitioners
+                    user.dfp_login_dfp_medicalpractitioner = new DataServiceCollection<dfp_medicalpractitioner>((await dynamicsContext.GetAllPagesAsync(dynamicsContext.dfp_medicalpractitioners
                         .Expand(d => d.dfp_PersonId)
                         .Expand(d => d.dfp_ClinicId)                        
                         .Where(d => d._dfp_loginid_value == user.dfp_loginid))).ToList());                    

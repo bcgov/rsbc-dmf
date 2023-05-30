@@ -2554,24 +2554,44 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task ResolveCaseStatusUpdates()
         {
+            var dpsProcessingDate = GetDpsProcessingDate();
 
-           var dpsProcessingDate = GetDpsProcessingDate();
+            var query = from incident
+   in dynamicsContext.incidents
+                        where incident.dfp_caseresolvedate < dpsProcessingDate && incident.statecode == 0
+                        select incident;
 
-            var resolveCases = dynamicsContext.incidents.Where(
-                 x => x.dfp_caseresolvedate < dpsProcessingDate
-                 && x.statecode == 0 // ensure that we only get active records
-                 );
+            DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
 
-            foreach (var incident in resolveCases)
+            List<Guid> ids = new List<Guid>();
+            foreach (var item in resolveCases)
             {
-                // set resolve case status to yes
-                incident.dfp_resolvecase = true;
-
-                dynamicsContext.UpdateObject(incident);
+                ids.Add(item.incidentid.Value);
+                dynamicsContext.Detach(item); // needed in order to allow the incident to be attached below
+            }
+            
+            foreach (var id in ids)
+            { 
                 
+                var changedIncident = new incident
+                {
+                    incidentid = id,
+                    dfp_resolvecase = true
+                };
+                dynamicsContext.AttachTo("incidents",changedIncident);
+                dynamicsContext.UpdateObject(changedIncident);
             }
 
-            await dynamicsContext.SaveChangesAsync();
+            DataServiceResponse response = null;
+            try
+            {
+                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);                
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex, $"CMS.CaseManager ResolveCaseStatusUpdates  ex.Message");
+            }
+            
             dynamicsContext.DetachAll();
         }
 

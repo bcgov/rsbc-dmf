@@ -6826,10 +6826,11 @@
         <Property Name="statecode" Type="Edm.Int32" />
         <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
         <Property Name="_organizationid_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="_dfp_documenttypeid_value" Type="Edm.Guid" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
@@ -6864,6 +6865,7 @@
           <ReferentialConstraint Property="_dfp_documenttypeid_value" ReferencedProperty="dfp_submittaltypeid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_documentsubtype_bcgov_documenturl_DocumentSubType" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_DocumentSubType" />
+        <NavigationProperty Name="dfp_documentsubtype_dfp_pdfdocument_DocumentSubTypeID" Type="Collection(mscrm.dfp_pdfdocument)" Partner="dfp_DocumentSubTypeID" />
       </EntityType>
       <EntityType Name="dfp_dpsaction" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -7509,47 +7511,50 @@
         <Key>
           <PropertyRef Name="dfp_pdfdocumentid" />
         </Key>
-        <Property Name="_ownerid_value" Type="Edm.Guid" />
-        <Property Name="_dfp_caseid_value" Type="Edm.Guid" />
         <Property Name="dfp_pdfdocumentid" Type="Edm.Guid" />
-        <Property Name="dfp_conditionsrequired" Type="Edm.Int32" />
-        <Property Name="_dfp_templateid_value" Type="Edm.Guid" />
-        <Property Name="_dfp_parentpdfdocumentid_value" Type="Edm.Guid" />
-        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="dfp_restrictionsadded" Type="Edm.Int32" />
+        <Property Name="dfp_count" Type="Edm.Int32" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
-        <Property Name="dfp_lastmodifieddate" Type="Edm.DateTimeOffset" />
-        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
-        <Property Name="dfp_documentnumber" Type="Edm.String" Unicode="false" />
+        <Property Name="_dfp_parentpdfdocumentid_value" Type="Edm.Guid" />
         <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="dfp_followuprequired" Type="Edm.Int32" />
-        <Property Name="dfp_ishtml" Type="Edm.Boolean" />
-        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_lastpreviewdate" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_conditionsrequired" Type="Edm.Int32" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_iscommercialclass" Type="Edm.Int32" />
+        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
+        <Property Name="_dfp_caseid_value" Type="Edm.Guid" />
+        <Property Name="dfp_lastmodifieddate" Type="Edm.DateTimeOffset" />
+        <Property Name="_dfp_documentsubtypeid_value" Type="Edm.Guid" />
         <Property Name="dfp_body" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_eracompleted" Type="Edm.Int32" />
+        <Property Name="dfp_followuprequired" Type="Edm.Int32" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
+        <Property Name="dfp_ishtml" Type="Edm.Boolean" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="dfp_type" Type="Edm.Int32" />
-        <Property Name="createdon" Type="Edm.DateTimeOffset" />
-        <Property Name="_createdby_value" Type="Edm.Guid" />
-        <Property Name="dfp_codewadded" Type="Edm.Int32" />
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="dfp_expectationsforfollowup" Type="Edm.Int32" />
-        <Property Name="statuscode" Type="Edm.Int32" />
         <Property Name="dfp_restriction25" Type="Edm.Int32" />
-        <Property Name="dfp_restrictionsremoved" Type="Edm.Int32" />
-        <Property Name="dfp_restrictionsadded" Type="Edm.Int32" />
-        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="_owningteam_value" Type="Edm.Guid" />
         <Property Name="dfp_codewremoved" Type="Edm.Int32" />
-        <Property Name="dfp_iscommercialclass" Type="Edm.Int32" />
-        <Property Name="dfp_outstandingnondmf" Type="Edm.Int32" />
-        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="dfp_count" Type="Edm.Int32" />
-        <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="_dfp_templateid_value" Type="Edm.Guid" />
+        <Property Name="dfp_lastpreviewdate" Type="Edm.DateTimeOffset" />
+        <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
         <Property Name="dfp_dlstatus" Type="Edm.Int32" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
-        <Property Name="dfp_eracompleted" Type="Edm.Int32" />
-        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="dfp_restrictionsremoved" Type="Edm.Int32" />
+        <Property Name="dfp_attachments" Type="Edm.Int32" />
+        <Property Name="dfp_expectationsforfollowup" Type="Edm.Int32" />
+        <Property Name="dfp_outstandingnondmf" Type="Edm.Int32" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_codewadded" Type="Edm.Int32" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_documentnumber" Type="Edm.String" Unicode="false" />
+        <Property Name="_dfp_documenttypeid_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_pdfdocument_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -7595,6 +7600,12 @@
           <ReferentialConstraint Property="_dfp_templateid_value" ReferencedProperty="dfp_attachmenttemplateid" />
         </NavigationProperty>
         <NavigationProperty Name="dfp_pdfdocument_task_LetterID" Type="Collection(mscrm.task)" Partner="dfp_LetterID_Task" />
+        <NavigationProperty Name="dfp_DocumentTypeID" Type="mscrm.dfp_submittaltype" Nullable="false" Partner="dfp_submittaltype_dfp_pdfdocument_DocumentTypeID">
+          <ReferentialConstraint Property="_dfp_documenttypeid_value" ReferencedProperty="dfp_submittaltypeid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_DocumentSubTypeID" Type="mscrm.dfp_documentsubtype" Nullable="false" Partner="dfp_documentsubtype_dfp_pdfdocument_DocumentSubTypeID">
+          <ReferentialConstraint Property="_dfp_documentsubtypeid_value" ReferencedProperty="dfp_documentsubtypeid" />
+        </NavigationProperty>
       </EntityType>
       <EntityType Name="dfp_permission" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -7753,32 +7764,33 @@
         <Key>
           <PropertyRef Name="dfp_submittaltypeid" />
         </Key>
-        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
-        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
-        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
-        <Property Name="_ownerid_value" Type="Edm.Guid" />
-        <Property Name="dfp_apidocumenttype" Type="Edm.String" Unicode="false" />
-        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="dfp_businessarea" Type="Edm.Int32" />
-        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
-        <Property Name="statuscode" Type="Edm.Int32" />
-        <Property Name="dfp_submittaltypeid" Type="Edm.Guid" />
-        <Property Name="versionnumber" Type="Edm.Int64" />
-        <Property Name="importsequencenumber" Type="Edm.Int32" />
-        <Property Name="_owningteam_value" Type="Edm.Guid" />
-        <Property Name="dfp_code" Type="Edm.String" Unicode="false" />
-        <Property Name="_owninguser_value" Type="Edm.Guid" />
-        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
-        <Property Name="dfp_documentcategory" Type="Edm.Int32" />
-        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
         <Property Name="dfp_isurgent" Type="Edm.Boolean" />
+        <Property Name="dfp_description" Type="Edm.String" Unicode="false" />
+        <Property Name="dfp_documentcategory" Type="Edm.Int32" />
+        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="timezoneruleversionnumber" Type="Edm.Int32" />
+        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
+        <Property Name="importsequencenumber" Type="Edm.Int32" />
+        <Property Name="dfp_businessarea" Type="Edm.Int32" />
+        <Property Name="statecode" Type="Edm.Int32" />
+        <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="dfp_submittaltypeid" Type="Edm.Guid" />
+        <Property Name="dfp_code" Type="Edm.String" Unicode="false" />
+        <Property Name="createdon" Type="Edm.DateTimeOffset" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="versionnumber" Type="Edm.Int64" />
+        <Property Name="_modifiedonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="_owningteam_value" Type="Edm.Guid" />
+        <Property Name="_createdonbehalfby_value" Type="Edm.Guid" />
+        <Property Name="dfp_name" Type="Edm.String" Unicode="false" />
         <Property Name="_modifiedby_value" Type="Edm.Guid" />
         <Property Name="dfp_envelopeid" Type="Edm.String" Unicode="false" />
-        <Property Name="dfp_priorityscore" Type="Edm.Int32" />
-        <Property Name="statecode" Type="Edm.Int32" />
-        <Property Name="createdon" Type="Edm.DateTimeOffset" />
-        <Property Name="_createdby_value" Type="Edm.Guid" />
+        <Property Name="dfp_apidocumenttype" Type="Edm.String" Unicode="false" />
+        <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
+        <Property Name="_ownerid_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_dfp_submittaltype_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
@@ -7816,6 +7828,21 @@
         <NavigationProperty Name="dfp_submittaltype_dfp_documentsubtype_DocumentTypeID" Type="Collection(mscrm.dfp_documentsubtype)" Partner="dfp_DocumentTypeID" />
         <NavigationProperty Name="dfp_submittaltype_incident_OldestDocumentReceivedTypeId" Type="Collection(mscrm.incident)" Partner="dfp_OldestDocumentReceivedTypeId" />
         <NavigationProperty Name="dfp_submittaltype_incident_DocumentTypeID" Type="Collection(mscrm.incident)" Partner="dfp_DocumentTypeID" />
+        <NavigationProperty Name="dfp_submittaltype_dfp_pdfdocument_DocumentTypeID" Type="Collection(mscrm.dfp_pdfdocument)" Partner="dfp_DocumentTypeID" />
+        <Annotation Term="OData.Community.Keys.V1.AlternateKeys">
+          <Collection>
+            <Record Type="OData.Community.Keys.V1.AlternateKey">
+              <PropertyValue Property="Key">
+                <Collection>
+                  <Record Type="OData.Community.Keys.V1.PropertyRef">
+                    <PropertyValue Property="Alias" String="dfp_code" />
+                    <PropertyValue Property="Name" PropertyPath="dfp_code" />
+                  </Record>
+                </Collection>
+              </PropertyValue>
+            </Record>
+          </Collection>
+        </Annotation>
       </EntityType>
       <EntityType Name="dfp_xsstatuscode" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -31780,6 +31807,7 @@
           <NavigationPropertyBinding Path="dfp_documentsubtype_PrincipalObjectAttributeAccesses" Target="principalobjectattributeaccessset" />
           <NavigationPropertyBinding Path="dfp_DocumentTypeID" Target="dfp_submittaltypes" />
           <NavigationPropertyBinding Path="dfp_documentsubtype_bcgov_documenturl_DocumentSubType" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="dfp_documentsubtype_dfp_pdfdocument_DocumentSubTypeID" Target="dfp_pdfdocuments" />
         </EntitySet>
         <EntitySet Name="dfp_dpsactions" EntityType="Microsoft.Dynamics.CRM.dfp_dpsaction">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -32014,6 +32042,8 @@
           <NavigationPropertyBinding Path="dfp_pdfdocument_dfp_pdfdocument" Target="dfp_pdfdocuments" />
           <NavigationPropertyBinding Path="dfp_TemplateId" Target="dfp_attachmenttemplates" />
           <NavigationPropertyBinding Path="dfp_pdfdocument_task_LetterID" Target="tasks" />
+          <NavigationPropertyBinding Path="dfp_DocumentTypeID" Target="dfp_submittaltypes" />
+          <NavigationPropertyBinding Path="dfp_DocumentSubTypeID" Target="dfp_documentsubtypes" />
         </EntitySet>
         <EntitySet Name="dfp_permissions" EntityType="Microsoft.Dynamics.CRM.dfp_permission">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
@@ -32085,6 +32115,7 @@
           <NavigationPropertyBinding Path="dfp_submittaltype_dfp_documentsubtype_DocumentTypeID" Target="dfp_documentsubtypes" />
           <NavigationPropertyBinding Path="dfp_submittaltype_incident_OldestDocumentReceivedTypeId" Target="incidents" />
           <NavigationPropertyBinding Path="dfp_submittaltype_incident_DocumentTypeID" Target="incidents" />
+          <NavigationPropertyBinding Path="dfp_submittaltype_dfp_pdfdocument_DocumentTypeID" Target="dfp_pdfdocuments" />
         </EntitySet>
         <EntitySet Name="dfp_xsstatuscodes" EntityType="Microsoft.Dynamics.CRM.dfp_xsstatuscode">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
