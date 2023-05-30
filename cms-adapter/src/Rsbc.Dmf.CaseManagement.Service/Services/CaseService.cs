@@ -272,12 +272,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetCommentsReply> GetCaseComments(CaseIdRequest request, ServerCallContext context)
+        public async override Task<GetCommentsReply> GetCaseComments(CaseCommentsRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
             try
             {
-                var result = await _caseManager.GetCaseLegacyComments(request.CaseId, false);
+                CaseManagement.OriginRestrictions originRestrictions = CaseManagement.OriginRestrictions.None;
+                switch (request.OriginRestrictions)
+                {
+                    case OriginRestrictions.None:
+                        originRestrictions = CaseManagement.OriginRestrictions.None;
+                        break;
+                    case OriginRestrictions.UserOnly:
+                        originRestrictions = CaseManagement.OriginRestrictions.UserOnly;
+                        break;
+                    case OriginRestrictions.SystemOnly:
+                        originRestrictions = CaseManagement.OriginRestrictions.SystemOnly;
+                        break;
+
+                }
+
+                var result = await _caseManager.GetCaseLegacyComments(request.CaseId, false, originRestrictions);
 
                 foreach (var item in result)
                 {

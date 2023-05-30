@@ -230,7 +230,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
-                result.Comments = GetCommentsForCase(caseId);
+                result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly);
             }
 
             // set to null if no decision has been made.
@@ -294,10 +294,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return caseId;
         }
 
-        private List<Comment> GetCommentsForCase(string caseId)
+        private List<Comment> GetCommentsForCase(string caseId, OriginRestrictions originRestrictions)
         {
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            var reply = _cmsAdapterClient.GetCaseComments(new CaseIdRequest() { CaseId = caseId });
+            var reply = _cmsAdapterClient.GetCaseComments(new CaseCommentsRequest() { CaseId = caseId, OriginRestrictions = originRestrictions });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -348,7 +348,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // call the back end
 
-            var reply = _cmsAdapterClient.GetCaseComments(new CaseIdRequest() { CaseId = caseId });
+            var reply = _cmsAdapterClient.GetCaseComments(new CaseCommentsRequest() { CaseId = caseId, OriginRestrictions = OriginRestrictions.UserOnly });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {

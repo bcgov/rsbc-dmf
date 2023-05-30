@@ -176,7 +176,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
 
 
             mockClient
-                .Setup(m => m.GetCaseComments(It.IsAny<CaseIdRequest>(), null, null, CancellationToken.None))
+                .Setup(m => m.GetCaseComments(It.IsAny<CaseCommentsRequest>(), null, null, CancellationToken.None))
                 .Returns<CaseIdRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
                 {
                     GetCommentsReply reply = new() { ResultStatus = ResultStatus.Success };

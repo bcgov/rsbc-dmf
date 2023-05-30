@@ -130,9 +130,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     switch (sort)
                     {
-                        case 'D': // - commentDate
-                            result = result.OrderByDescending(x => x.CommentDate).ToList();
-                            break;
+                        
                         case 'T': // - commentTypeCode
                             result = result.OrderBy(x => x.CommentTypeCode).ToList();
                             break;
@@ -142,7 +140,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         case 'C': // - commentText
                             result = result.OrderBy(x => x.CommentText).ToList();
                             break;
+
+                        case 'D': // - commentDate
+                        default:
+                            result = result.OrderByDescending(x => x.CommentDate).ToList();
+                            break;
                     }
+                }
+                else
+                {
+                    result = result.OrderByDescending(x => x.CommentDate).ToList();
                 }
                 return Json(result);
             }

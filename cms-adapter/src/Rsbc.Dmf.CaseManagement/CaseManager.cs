@@ -323,7 +323,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <param name="allComments"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments)
+        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions originRestrictions)
         {
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
@@ -340,8 +340,31 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_comment));
                 foreach (var comment in @case.dfp_incident_dfp_comment)
                 {
+                    // determine if there is a match.
+
+                    bool originMatch = false;
+
+                    switch (originRestrictions)
+                    {
+                        case OriginRestrictions.None: 
+                            originMatch = true; 
+                            break;
+                        case OriginRestrictions.UserOnly: 
+                            if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.User)
+                            {
+                                originMatch = true;
+                            }
+                            break;
+                        case OriginRestrictions.SystemOnly:
+                            if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.System)
+                            {
+                                originMatch = true;
+                            }
+                            break;
+                    }
+
                     // ignore inactive and system generated
-                    if (comment.statecode != null && comment.statecode == 0 && comment.dfp_origin == null || comment.dfp_origin == 100000000)
+                    if ((comment.statecode != null && comment.statecode == 0) || originMatch)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
@@ -2531,23 +2554,44 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task ResolveCaseStatusUpdates()
         {
+            var dpsProcessingDate = GetDpsProcessingDate();
 
-           var dpsProcessingDate = GetDpsProcessingDate();
+            var query = from incident
+   in dynamicsContext.incidents
+                        where incident.dfp_caseresolvedate < dpsProcessingDate && incident.statecode == 0
+                        select incident;
 
-            var resolveCases = dynamicsContext.incidents.Where(
-                 x => x.dfp_caseresolvedate < dpsProcessingDate
-                 && x.statecode == 0 // ensure that we only get active records
-                 );
+            DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
 
-            foreach (var incident in resolveCases)
+            List<Guid> ids = new List<Guid>();
+            foreach (var item in resolveCases)
             {
-                // set resolve case status to yes
-                incident.dfp_resolvecase = true;
-
-                dynamicsContext.UpdateObject(incident);
+                ids.Add(item.incidentid.Value);
+                dynamicsContext.Detach(item); // needed in order to allow the incident to be attached below
+            }
+            
+            foreach (var id in ids)
+            { 
+                
+                var changedIncident = new incident
+                {
+                    incidentid = id,
+                    dfp_resolvecase = true
+                };
+                dynamicsContext.AttachTo("incidents",changedIncident);
+                dynamicsContext.UpdateObject(changedIncident);
             }
 
-            await dynamicsContext.SaveChangesAsync();
+            DataServiceResponse response = null;
+            try
+            {
+                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);                
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex, $"CMS.CaseManager ResolveCaseStatusUpdates  ex.Message");
+            }
+            
             dynamicsContext.DetachAll();
         }
 

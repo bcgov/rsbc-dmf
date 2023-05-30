@@ -316,7 +316,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // confirm it is present
 
-            var comments = await caseManager.GetCaseLegacyComments(caseId, true);
+            var comments = await caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
 
             bool found = false;
 
@@ -344,7 +344,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             found = false;
 
-            comments = await caseManager.GetCaseLegacyComments(caseId, true);
+            comments = await caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
 
             foreach (var comment in comments)
             {

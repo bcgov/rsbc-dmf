@@ -71,6 +71,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
             services.AddGrpcReflection();
             services.AddDistributedMemoryCache();
             services.AddCaseManagement(Configuration);
+            /*
+            services.AddHttpClient("adfs_token").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+                ServerCertificateCustomValidationCallback =
+            (httpRequestMessage, cert, cetChain, policyErrors) =>
+            {
+                return true;
+            }
+            });
+
+            */
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

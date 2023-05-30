@@ -12,7 +12,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
+            this.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
+            MergeOption = MergeOption.OverwriteChanges;
+
             this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
 
             Func<Uri, Uri> formatUri = requestUri => requestUri.IsAbsoluteUri
@@ -30,6 +33,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 // do not send reference properties and null values to Dynamics
                 arg.Entry.Properties = arg.Entry.Properties.Where((prop) => !prop.Name.StartsWith('_') && prop.Value != null);
             });
+
+            Format.UseJson();
             
         }
 
