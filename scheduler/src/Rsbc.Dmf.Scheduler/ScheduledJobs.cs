@@ -212,6 +212,21 @@ namespace Rsbc.Dmf.Scheduler
         }
 
         /// <summary>
+        /// Hangfire job Update Non Comply Document Status
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task UpdateNonComplyDocuments(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting to check the case status");
+
+            // Call ICBC Adapter to do the check for candidates
+            _caseManagerClient.UpdateNonComplyDocuments(new CaseManagement.Service.EmptyRequest());
+
+
+            LogStatement(hangfireContext, "End of checks case resolve status.");
+        }
+
+        /// <summary>
         /// Hangfire job fix Birth dates
         /// </summary>
         [AutomaticRetry(Attempts = 0)]

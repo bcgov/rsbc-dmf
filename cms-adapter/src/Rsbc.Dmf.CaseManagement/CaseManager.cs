@@ -2532,19 +2532,46 @@ namespace Rsbc.Dmf.CaseManagement
 
             var dpsProcessingDate = GetDpsProcessingDate();
 
-            var nonComplyDocuments = dynamicsContext.bcgov_documenturls.Where(
-                x => x.dfp_submittalstatus == 100000000 // Open - Required
-                && x.dfp_compliancedate < dpsProcessingDate
-                );
+            var query = from bcgov_documenturl
+                        in dynamicsContext.bcgov_documenturls
+                        where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open - Required
+                        && bcgov_documenturl.dfp_compliancedate < dpsProcessingDate 
+                        select bcgov_documenturl;
 
-            foreach (var document in nonComplyDocuments)
+            DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(query);
+
+            List<Guid> documentIds = new List<Guid>();
+            foreach (var item in nonComplyDocuments)
             {
-                document.dfp_submittalstatus = 100000005; // Non Comply
-                dynamicsContext.UpdateObject(document);
+                documentIds.Add(item.bcgov_documenturlid.Value);
+                dynamicsContext.Detach(item); // needed in order to allow the incident to be attached below
             }
 
-            await dynamicsContext.SaveChangesAsync();
+            foreach (var documentId in documentIds)
+            {
+
+                var changedDocument = new bcgov_documenturl
+                {
+                    bcgov_documenturlid = documentId,
+                    dfp_submittalstatus = 100000005
+            };
+                dynamicsContext.AttachTo("bcgov_documenturls", changedDocument);
+                dynamicsContext.UpdateObject(changedDocument);
+            }
+
+            DataServiceResponse response = null;
+            try
+            {
+                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);
+            }
+            catch (Exception ex)
+            {
+                Serilog.Log.Error(ex, $"CMS.CaseManager UpdateNonComplyDocuments  ex.Message");
+            }
+
             dynamicsContext.DetachAll();
+
+
         }
 
         /// <summary>
@@ -2557,7 +2584,7 @@ namespace Rsbc.Dmf.CaseManagement
             var dpsProcessingDate = GetDpsProcessingDate();
 
             var query = from incident
-   in dynamicsContext.incidents
+                        in dynamicsContext.incidents
                         where incident.dfp_caseresolvedate < dpsProcessingDate && incident.statecode == 0
                         select incident;
 
