@@ -71,12 +71,15 @@ service CaseManager {
   rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
 
   //Update Clean Pass Flag
-  rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
+   rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
 
    // Send To BC mail
    rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
 
    rpc UpdateDocumentStatus(PdfDocument) returns (PdfDocumentReply);
+
+   // Update Non Comply documents
+   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
 message UpdateDriverRequest{

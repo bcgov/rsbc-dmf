@@ -87,8 +87,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
                 string originatingNumber = "";
                 int documentPages = 1;
-                string documentType = "DiabeticDriverReport2-C5-8";
-                string documentTypeCode = "12321";
+                string documentType = "DMER";
+                string documentTypeCode = "001";
                 string validationMethod = "Single User";
                 string validationPrevious = "BHAMMED";
                 string priority = "Expedited";

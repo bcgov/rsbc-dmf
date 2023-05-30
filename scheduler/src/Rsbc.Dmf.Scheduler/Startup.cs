@@ -501,6 +501,8 @@ namespace Rsbc.Dmf.Scheduler
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily);
 
+                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateNonComplyDocuments(null), Cron.Daily);
+
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
 
                                   RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateCleanPassFlag(null), Cron.Never);

@@ -720,6 +720,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Update Non Comply status 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateNonComplyDocuments(EmptyRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                // call case manager
+                await _caseManager.UpdateNonComplyDocuments();
+            }
+
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+
+        }
+
+        /// <summary>
         /// Get List OfLettersSentToBcMail
         /// </summary>
         /// <param name="request"></param>
