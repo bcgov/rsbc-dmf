@@ -2677,43 +2677,51 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (caseId != null && caseId != string.Empty)
                 {
-                    incident @case = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+                    var currentCase = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
 
-                    if (@case != null && @case.statecode == 0)
+                    if (currentCase != null && currentCase.statecode == 0)
                     {
-                        await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(currentCase, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                        if (@case.bcgov_incident_bcgov_documenturl != null)
+                        if (currentCase.bcgov_incident_bcgov_documenturl != null)
                         {
-                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                       
+                            foreach (var document in currentCase.bcgov_incident_bcgov_documenturl)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
                                     && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
                                     )
                                 {
-
+                                    
                                     if (document.dfp_DocumentTypeID != null &&
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                        // Update cleanpass value on case
-                                        @case.dfp_iscleanpass = true;
-                                        dynamicsContext.UpdateObject(@case);
-                                        await dynamicsContext.SaveChangesAsync();
-
-                                        // Update document status
-                                        /*document.dfp_submittalstatus = 100000009; //Clean Pass
-                                        dynamicsContext.UpdateObject(document);
-                                        await dynamicsContext.SaveChangesAsync();*/
-
+                                        dynamicsContext.Detach(currentCase);
+                                        var changedIncident = new incident()
+                                        {
+                                            incidentid = currentCase.incidentid,
+                                            dfp_iscleanpass = true
+                                        };
+                                        dynamicsContext.AttachTo("incidents", changedIncident);
+                                        dynamicsContext.UpdateObject(changedIncident);
                                         result.Success = true;
-
                                     }
 
                                 }
 
+                            }
+
+                            try
+                            {
+                                dynamicsContext.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                Serilog.Log.Error(ex, $"CMS.CaseManager Update Clean Pass  ex.Message");
                             }
 
                             dynamicsContext.DetachAll();

@@ -661,11 +661,26 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         SubmittalStatus = submittalStatus ?? string.Empty,
 
                     };
+                    
 
                     var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
 
                     if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                     {
+
+                        if (!String.IsNullOrEmpty(_configuration["CLEAN_PASS_DOCUMENT"]))
+                        {
+                            if (submittalStatus == "Clean Pass")
+                            {
+                                var cleanPassRequest = new CleanPassRequest
+                                {
+                                    CaseId = caseId
+
+                                };
+                                _cmsAdapterClient.UpdateCleanPassFlag(cleanPassRequest);
+                            }
+                        }
+                          
                         var actionName = nameof(AddCaseDocument);
                         var routeValues = new
                         {
