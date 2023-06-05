@@ -2169,9 +2169,9 @@ namespace Rsbc.Dmf.CaseManagement
                 { 3, "Waiting on Details" },
                 { 4, "Case Created" },
                 { 100000000, "Open - Pending Submission" },
-                { 5, "RSBC Decision Rendered" },
+                { 5, "Decision Rendered" },
                 { 1000, "RSBC Received" },
-                { 6, "Closed/Canceled" },
+                { 6, "Canceled" },
                 { 2000, "Merged" },
             };
 
