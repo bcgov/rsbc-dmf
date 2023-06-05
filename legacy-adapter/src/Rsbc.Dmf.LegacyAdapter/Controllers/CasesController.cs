@@ -241,8 +241,21 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(result);
         }
 
+        /// <summary>
+        /// Get Case Id
+        /// </summary>
+        /// <param name="licenseNumber"></param>
+        /// <param name="surcode"></param>
+        /// <returns></returns>
         private string GetCaseId(string licenseNumber, string surcode)
         {
+            var closedStatus = new HashSet<string>
+            {
+                "Decision Rendered",
+                "Canceled"
+            };
+
+
 
             string trimmedSurcode = surcode;
             if (trimmedSurcode.Length > 3)
@@ -259,7 +272,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 foreach (var item in sorted)
                 {
-                    if (item.Status != "Closed/Canceled")
+
+                    if (!closedStatus.Contains(item.Status))
                     {
                         if ((bool)(item.Driver?.Surname.ToUpper().StartsWith(trimmedSurcode.ToUpper())))
                         {
@@ -275,6 +289,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         private string GetCaseIdByDl(string licenseNumber)
         {
+            var closedStatus = new HashSet<string>()
+            {
+                "Decision Rendered",
+                "Canceled"
+            };
+
             string caseId = null;
             var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
@@ -284,7 +304,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 foreach (var item in sorted)
                 {
-                    if (item.Status != "Closed/Canceled")
+                    if (!closedStatus.Contains(item.Status))
                     {
                         caseId = item.CaseId;
                         break;
