@@ -308,6 +308,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(500)]
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
+            if (!string.IsNullOrEmpty(_configuration["DEBUG_ERROR"]))
+            {
+                return StatusCode(500, "TEST - SAMPLE ERROR");
+            };
 
             //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
             // add the comment
