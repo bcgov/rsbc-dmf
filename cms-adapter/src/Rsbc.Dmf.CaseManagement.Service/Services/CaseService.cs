@@ -636,6 +636,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        
+
 
         /// <summary>
         /// Process Legacy Candidate
@@ -658,7 +660,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 };
                 var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
 
+                bool found = false;
                 if (searchResult != null && searchResult.Items.Count() > 0)
+                {
+                    var closedStatus = new HashSet<string>
+            {
+                "Decision Rendered",
+                "Canceled"
+            };
+
+                    foreach (var item in searchResult.Items)
+                    {
+                        if (!closedStatus.Contains(item.Status))
+                        {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (found)
                 {
                     // case exists.
                     reply.ResultStatus = ResultStatus.Success;
