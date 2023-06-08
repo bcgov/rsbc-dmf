@@ -439,7 +439,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                    SequenceNumber = @case.dfp_dfcmscasesequencenumber.GetValueOrDefault(),                                    
                                     Driver = driver
                                 };
 
@@ -2046,7 +2046,7 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                importsequencenumber = request.SequenceNumber,                
+                dfp_dfcmscasesequencenumber = request.SequenceNumber,                
             };
 
             try
