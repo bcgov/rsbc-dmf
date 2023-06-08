@@ -10756,6 +10756,7 @@
         <Property Name="dfp_caseresolvedate" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_oldestdocumentreceiveddate" Type="Edm.DateTimeOffset" />
         <Property Name="statuscode" Type="Edm.Int32" />
+        <Property Name="dfp_dfcmscasesequencenumber" Type="Edm.Int32" />
         <Property Name="description" Type="Edm.String" Unicode="false" />
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
