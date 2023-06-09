@@ -45,20 +45,21 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             {
                 // get the history from ICBC
                 data = _icbcClient.GetDriverHistory(driversLicence);
+                // Key not in cache, so get data.
+                //cacheEntry = DateTime.Now;
+                if (data != null)
+                {
+                    // Set cache options.
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromHours(2));
 
-
-
+                    // Save data in cache.
+                    _cache.Set(driversLicence, data, cacheEntryOptions);
+                }
+                
             }
-            // Key not in cache, so get data.
-            //cacheEntry = DateTime.Now;
-
-            // Set cache options.
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                // Keep in cache for this time, reset time if accessed.
-                .SetSlidingExpiration(TimeSpan.FromHours(2));
-
-            // Save data in cache.
-            _cache.Set(driversLicence, data, cacheEntryOptions);
+            
 
             if (data != null)
             {
