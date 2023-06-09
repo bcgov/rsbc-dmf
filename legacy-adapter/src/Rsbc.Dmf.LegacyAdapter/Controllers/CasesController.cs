@@ -117,32 +117,34 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     });
 
                     result = GetCaseId(licenseNumber, driver.INAM?.SURN);
-                }
-
-                if (result == null) // create it
-                {
-                    try
+                    if (result == null) // create it
                     {
-
+                        try
                         {
-                            //
-                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                            {
-                                LicenseNumber = licenseNumber,
-                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                                Surname = driver.INAM?.SURN ?? string.Empty,
-                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
-                            };
-                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogInformation(e, "Error getting driver.");
-                    }
-                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
-                }
 
+                            {
+                                //
+                                LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                                {
+                                    LicenseNumber = licenseNumber,
+                                    EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                    Surname = driver.INAM?.SURN ?? string.Empty,
+                                    BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                                };
+                                var legacyResult = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                if (legacyResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                                {
+                                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogInformation(e, "Error getting driver.");
+                        }
+
+                    }
+                }
             }
             else  // fallback, just check Dynamics.
             {
