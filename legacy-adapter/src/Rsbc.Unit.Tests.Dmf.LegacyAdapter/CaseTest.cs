@@ -101,7 +101,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         /// </summary>
         /// <param name="licenceNumber"></param>
         /// <param name="surcode"></param>
-        private void TestSurCode (string licenceNumber, string surcode)
+        private void TestSurCode (string licenseNumber, string surcode)
         {
             Login();
             
