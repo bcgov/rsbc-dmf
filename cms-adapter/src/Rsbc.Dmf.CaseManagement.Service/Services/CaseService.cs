@@ -684,6 +684,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     // case exists.
                     reply.ResultStatus = ResultStatus.Success;
                 }
+                
                 else
                 {
                     DateTimeOffset? dto = null;

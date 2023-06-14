@@ -3,11 +3,13 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Models;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using Serilog;
@@ -39,6 +41,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IIcbcClient _icbcClient;
+        private readonly IMemoryCache _cache;
 
         /// <summary>
         /// Cases Controller
@@ -48,8 +51,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="cmsAdapterClient"></param>
         /// <param name="documentStorageAdapterClient"></param>
         /// <param name="icbcClient"></param>
-        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient)
+        public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient,
+            IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
@@ -86,7 +91,26 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
 
 
-            var driver = _icbcClient.GetDriverHistory(licenseNumber);
+            CLNT driver = null;
+            if (!_cache.TryGetValue(licenseNumber, out driver))
+            {
+                // get the history from ICBC
+                driver = _icbcClient.GetDriverHistory(licenseNumber);
+                // Key not in cache, so get data.
+                //cacheEntry = DateTime.Now;
+                if (driver != null)
+                {
+                    // Set cache options.
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromHours(2));
+
+                    // Save data in cache.
+                    _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                }
+                
+            }
+
             if (driver != null && !string.IsNullOrEmpty(driver.INAM?.SURN))
             {
                 // first check that it matches ICBC
@@ -115,42 +139,34 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     });
 
                     result = GetCaseId(licenseNumber, driver.INAM?.SURN);
-
-                     var debugObject = new
+                    if (result == null) // create it
                     {
-                        driversLicense = licenseNumber,
-                        surname = surname,
-                       
-                        
-                    };
-
-                    Log.Information(JsonConvert.SerializeObject(debugObject));
-                }
-
-                if (result == null) // create it
-                {
-                    try
-                    {
-
+                        try
                         {
-                            //
-                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                            {
-                                LicenseNumber = licenseNumber,
-                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                                Surname = driver.INAM?.SURN ?? string.Empty,
-                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
-                            };
-                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogInformation(e, "Error getting driver.");
-                    }
-                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
-                }
 
+                            {
+                                //
+                                LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                                {
+                                    LicenseNumber = licenseNumber,
+                                    EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                    Surname = driver.INAM?.SURN ?? string.Empty,
+                                    BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                                };
+                                var legacyResult = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                if (legacyResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                                {
+                                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            _logger.LogInformation(e, "Error getting driver.");
+                        }
+
+                    }
+                }
             }
             else  // fallback, just check Dynamics.
             {
@@ -179,7 +195,26 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 try
                 {
-                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    CLNT driver = null;
+
+                    if (!_cache.TryGetValue(licenseNumber, out driver))
+                    {
+                        // get the history from ICBC
+                        driver = _icbcClient.GetDriverHistory(licenseNumber);
+                        // Key not in cache, so get data.
+                        //cacheEntry = DateTime.Now;
+                        if (driver != null)
+                        {
+                            // Set cache options.
+                            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                                // Keep in cache for this time, reset time if accessed.
+                                .SetSlidingExpiration(TimeSpan.FromHours(2));
+
+                            // Save data in cache.
+                            _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                        }
+
+                    }
                     if (driver != null && driver.INAM?.SURN != null)
                     {
                         LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest

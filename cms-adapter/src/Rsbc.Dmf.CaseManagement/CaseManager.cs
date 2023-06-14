@@ -439,7 +439,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                    SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
+                                    SequenceNumber = @case.dfp_dfcmscasesequencenumber.GetValueOrDefault(),                                    
                                     Driver = driver
                                 };
 
@@ -1857,7 +1857,7 @@ namespace Rsbc.Dmf.CaseManagement
                 driver = null;
             }
 
-            if (driver == null) // get by DL + name
+            if (driver == null) // get by DL 
             {
                 var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
                 var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
@@ -1869,8 +1869,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (data != null && data.Count > 0)
                 {
-                    dfp_driver[] driverResults;
-
+                    dfp_driver[] driverResults = data.ToArray();
+                    /*
                     if (!string.IsNullOrEmpty(request?.Surname))
                     {
                         driverResults = data.Where(x => x?.dfp_PersonId?.lastname != null && (bool)(x?.dfp_PersonId?.lastname.ToUpper().StartsWith(request?.Surname.ToUpper()))).ToArray();
@@ -1879,7 +1879,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         driverResults = data.ToArray();
                     }
-
+                    */
                     if (driverResults.Length > 0)
                     {
                         driver = driverResults[0];
@@ -2046,7 +2046,7 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                importsequencenumber = request.SequenceNumber,                
+                dfp_dfcmscasesequencenumber = request.SequenceNumber,                
             };
 
             try

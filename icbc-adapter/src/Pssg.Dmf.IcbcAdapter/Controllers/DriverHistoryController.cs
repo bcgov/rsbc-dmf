@@ -1,19 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Rsbc.Dmf.IcbcAdapter.ViewModels;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
 using Pssg.Interfaces.Icbc.ViewModels;
 using Pssg.Interfaces.ViewModelExtensions;
-using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
-using Pssg.Interfaces.IcbcModels;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -23,13 +19,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     [Route("[controller]")]
     public class DriverHistoryController : Controller
     {
+        private readonly IMemoryCache _cache;
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IIcbcClient _icbcClient;
         private readonly EnhancedIcbcApiUtils _enhancedIcbcUtils;
 
-        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient)
+
+        public DriverHistoryController(ILogger<DriverHistoryController> logger, IConfiguration configuration, IIcbcClient icbcClient, CaseManagerClient caseManagerClient, IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
             _configuration = configuration;
             _logger = logger;
             _icbcClient = icbcClient;
@@ -40,8 +39,27 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpGet()]
         public ActionResult GetHistory(string driversLicence)
         {
-            // get the history from ICBC
-            CLNT data = _icbcClient.GetDriverHistory(driversLicence);
+            // first check that the item is not in the cache.
+            CLNT data = null;
+            if (!_cache.TryGetValue(driversLicence, out data))
+            {
+                // get the history from ICBC
+                data = _icbcClient.GetDriverHistory(driversLicence);
+                // Key not in cache, so get data.
+                //cacheEntry = DateTime.Now;
+                if (data != null)
+                {
+                    // Set cache options.
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromHours(2));
+
+                    // Save data in cache.
+                    _cache.Set(driversLicence, data, cacheEntryOptions);
+                }
+                
+            }
+            
 
             if (data != null)
             {
@@ -149,10 +167,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             else
             {
                 return Json(null);
-                
+
                 //StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
             }
-            
+
         }
 
     }
