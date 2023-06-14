@@ -81,9 +81,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             surcode = rgx.Replace(surcode, "");
 
             surcode = surcode.Trim();
-
-
-
             if (surcode.Length > 3)
             {
                 surcode = surcode.Substring(0, 3);
@@ -133,7 +130,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 if (surname == surcode)  // proceed if the surcode matches.
                 {
                     // ensure the surcode matches.
-
                     _cmsAdapterClient.UpdateDriver(new CaseManagement.Service.Driver
                     {
                         DriverLicenseNumber = licenseNumber,
