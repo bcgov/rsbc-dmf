@@ -271,9 +271,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 result.LatestDecision = c.Item.LatestDecision;
                 result.DecisionForClass = c.Item.DecisionForClass;
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
-                result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly);
+                result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
             }
 
             // set to null if no decision has been made.
