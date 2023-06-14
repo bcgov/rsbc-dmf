@@ -1,0 +1,25 @@
+<h1>Migration Metrics</h1>
+<p><a href="/swagger">Swagger</a></p>
+<table border="1" width="80%">
+  <tr >
+    <th>Label</th>
+    <th>Total</th>
+    <th>Improvement</th>
+    <th>Time</th>
+    <th>Velocity</th>
+    <th>Projected End</th>
+  </tr>
+  <tr *ngFor="let v of velocityData">
+    <td>{{ v.label }}</td>
+    <td>{{ v.total }}</td>
+    <td>{{ v.improvement }}</td>
+    <td>{{ v.time | number:'1.2-2' }}</td>
+    <td>{{ v.velocity | number:'1.2-2' }}</td>
+    <td>{{ v.projectedEnd }}</td>
+
+  </tr>
+
+
+</table>
+
+
