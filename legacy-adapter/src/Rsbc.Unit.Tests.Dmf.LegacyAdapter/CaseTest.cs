@@ -44,6 +44,87 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Assert.True(caseId != null);
         }
 
+        /// <summary>
+        /// Test the surcode validation with Three characters
+        /// </summary>
+        [Fact]
+        public async void TestThreeDigitSurCodeIntegration()
+        {
+            Login();
+            string licenseNumber = "02100110";
+            string surcode = "SMI";
+
+            TestSurCode(licenseNumber, surcode);
+        }
+
+        /// <summary>
+        /// Test the surcode validation with two characters
+        /// </summary>
+        [Fact]
+        public async void TestTwoDigitSurCodeIntegration()
+        {
+            Login();
+            string licenseNumber = "01000101";
+            string surcode = "LO";
+
+            TestSurCode(licenseNumber, surcode);
+        }
+
+        /// <summary>
+        /// Test the surcode validation with single character
+        /// </summary>
+        [Fact]
+        public async void TestSingleDigitSurCodeIntegration()
+        {
+            Login();
+            string licenseNumber = "01000045";
+            string surcode = "U";
+
+            TestSurCode(licenseNumber, surcode);
+        }
+
+        /// <summary>
+        /// Test the surcode validation with four character
+        /// </summary>
+        [Fact]
+        public async void TestLongSurCodeIntegration()
+        {
+            Login();
+            string licenseNumber = "00200699";
+            string surcode = "AMTI";
+
+            TestSurCode(licenseNumber, surcode);
+        }
+
+        /// <summary>
+        /// Test Surcode validation
+        /// </summary>
+        /// <param name="licenceNumber"></param>
+        /// <param name="surcode"></param>
+        private void TestSurCode (string licenceNumber, string surcode)
+        {
+            Login();
+            
+            string result = null;
+            if (!string.IsNullOrEmpty(testDl))
+            {
+
+                var request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/Exist?licenseNumber={licenseNumber}&surcode={surcode}");
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+                result = JsonConvert.DeserializeObject<string>(responseContent);
+            }
+
+            Assert.False(string.IsNullOrEmpty(result));
+        }
+
+
+        /// <summary>
+        /// Does Case Exsist
+        /// </summary>
         [Fact]
         public async void DoesCaseExist()
         {
