@@ -52,9 +52,9 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         run: |
           mkdir -p CovTestResults
-          rm -rf .MigrationMetrics.Tests/TestResults
+          rm -rf .Tests/TestResults
           dotnet test --collect:"XPlat Code Coverage" --settings Tests/coverlet.runsettings --no-restore
-          mv MigrationMetrics.Tests/TestResults/*/* ./CovTestResults/
+          mv Tests/TestResults/*/* ./CovTestResults/
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
