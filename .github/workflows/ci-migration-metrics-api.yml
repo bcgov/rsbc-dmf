@@ -40,12 +40,12 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore
+        run: dotnet build --configuration Release 
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Test
         run: |          
-          dotnet test -c Release --no-restore --verbosity normal           
+          dotnet test -c Release --verbosity normal           
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       
       - name: Generate code coverage
