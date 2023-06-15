@@ -75,4 +75,4 @@ jobs:
       - name: Build image
         run: |
           echo BUILD_ID=$BUILD_ID
-          docker build --build-arg BUILD_ID="$BUILD_ID" . --file ./migration-metrics/src/API/Dockerfile --tag $IMAGE_NAME
+          docker build --build-arg BUILD_ID="$BUILD_ID" . --file ./migration-metrics/src/Dockerfile --tag $IMAGE_NAME
