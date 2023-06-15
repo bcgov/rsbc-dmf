@@ -53,7 +53,7 @@ jobs:
         run: |
           mkdir -p CovTestResults
           rm -rf .MigrationMetrics.Tests/TestResults
-          dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings --no-restore
+          dotnet test --collect:"XPlat Code Coverage" --settings Tests/coverlet.runsettings --no-restore
           mv MigrationMetrics.Tests/TestResults/*/* ./CovTestResults/
           head CovTestResults/coverage.opencover.xml      
       
