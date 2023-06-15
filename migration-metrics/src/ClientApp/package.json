@@ -10,7 +10,8 @@
     "build": "ng build",
     "build:ssr": "ng run Project10:server:dev",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "eslint.js"
   },
   "private": true,
   "dependencies": {
