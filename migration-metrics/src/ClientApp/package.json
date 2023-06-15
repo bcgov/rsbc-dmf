@@ -26,6 +26,7 @@
     "bootstrap": "^5.2.3",
     "chart.js": "^4.3.0",
     "jquery": "^3.6.3",
+    "lint": "^0.8.19",
     "oidc-client": "^1.11.5",
     "popper.js": "^1.16.0",
     "run-script-os": "^1.1.6",
