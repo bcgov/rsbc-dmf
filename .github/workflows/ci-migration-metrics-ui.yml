@@ -1,4 +1,4 @@
-name: ci-medical-portal-ui
+name: ci-migration-metrics-ui
 
 on:
   push:
