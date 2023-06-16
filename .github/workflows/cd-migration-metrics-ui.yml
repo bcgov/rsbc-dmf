@@ -10,7 +10,7 @@ on:
     tags:
       - v*
     paths:
-      - "migration-metrics/src/UI/**"
+      - "migration-metrics/src/ClientApp/**"
       - ".github/workflows/cd-migration-metrics-ui.yml"
 env:
   IMAGE_NAME: migration-metrics-ui
@@ -31,7 +31,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./migration-metrics/src/Clientapp
+        working-directory: ./migration-metrics/src/ClientApp
         run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
