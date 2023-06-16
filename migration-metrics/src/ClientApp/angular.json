@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Project10": {
+    "migration-metrics": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Project10:build:production"
+              "browserTarget": "migration-metrics:build:production"
             },
             "development": {
-              "browserTarget": "Project10:build:development",
+              "browserTarget": "migration-metrics:build:development",
               "proxyConfig": "proxy.conf.js"
             }
           },
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Project10:build"
+            "browserTarget": "migration-metrics:build"
           }
         },
         "test": {
@@ -141,5 +141,5 @@
       }
     }
   },
-  "defaultProject": "Project10"
+  "defaultProject": "migration-metrics"
 }
