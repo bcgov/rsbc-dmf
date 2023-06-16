@@ -55,5 +55,5 @@ jobs:
           env_vars: javascript
 
       - name: Build image
-        working-directory: ./driver-portal/src
+        working-directory: ./driver-portal/src/
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
