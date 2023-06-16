@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MigrationMetrics.Controllers
+namespace RSBC.DMF.DriverPortal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

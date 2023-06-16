@@ -4,7 +4,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<SpaRoot>DriverPortalApp\</SpaRoot>
+		<SpaRoot>ClientApp\</SpaRoot>
 		<SpaProxyServerUrl>https://localhost:44405</SpaProxyServerUrl>
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<ImplicitUsings>enable</ImplicitUsings>
