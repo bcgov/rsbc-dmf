@@ -6,7 +6,7 @@ COPY ./ .
 RUN npm run lint
 RUN npm run test -- --no-watch --no-progress
 
-RUN npm run build -- --base-href /rsbc-dfp-migration-metrics/ --deploy-url /rsbc-dfp-migration-metrics/ --configuration production
+RUN npm run build -- --configuration production
 
 FROM caddy:alpine as final
 COPY Caddyfile /etc/caddy/Caddyfile

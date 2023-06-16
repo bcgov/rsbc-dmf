@@ -45,7 +45,7 @@ objects:
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-doctors-api-config
+      name: ${APP_NAME}-migration-metrics-api-config
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
         app: ${APP_NAME}-migration-metrics
