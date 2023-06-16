@@ -1,8 +1,8 @@
 FROM trion/ng-cli-karma AS ng-builder
 WORKDIR /src
-COPY ./migration-metrics/src/ClientApp/package*.json ./
+COPY ./package*.json ./
 RUN npm install
-COPY ./migration-metrics/src/ClientApp/ .
+COPY ./ .
 RUN npm run lint
 RUN npm run test -- --no-watch --no-progress
 
