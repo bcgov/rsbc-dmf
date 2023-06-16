@@ -12,16 +12,22 @@ namespace MigrationMetrics.Services;
 public interface IMonthlyCountStatService
 {
 IEnumerable<MonthlyCountStat> GetAll();
-MonthlyCountStat GetById(int id);
-void Create(CreateRequest model);
+IEnumerable<MonthlyCountStat> GetByCategory(string category);
+
+    IEnumerable<string> GetCategories();
+    void Create(CreateRequest model);
 void Update(int id, UpdateRequest model);
 void Delete(int id);
 
     IEnumerable<DateTime> GetRecordedDates();
 
+    IEnumerable<DateTime> GetRecordedDatesByCategory(string category);
+
     IEnumerable<DateTime> GetStartDates();
 
     IEnumerable<MonthlyCountStat> GetDataByRecordedDate(DateTime recordedDate);
+
+    IEnumerable<MonthlyCountStat> GetDataByRecordedDateCategory(DateTime recordedDate, string category);
 
 }
 
@@ -43,13 +49,28 @@ public IEnumerable<MonthlyCountStat> GetAll()
     return _context.MonthlyCountStats;
 }
 
-public IEnumerable<DateTime> GetRecordedDates()
+public IEnumerable<MonthlyCountStat> GetByCategory(string category)
+{
+    return _context.MonthlyCountStats.Where(x => x.Category == category);
+}
+
+    public IEnumerable<DateTime> GetRecordedDates()
 {
         return _context.MonthlyCountStats.Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x);
 }
 
 
-public IEnumerable<DateTime> GetStartDates()
+    public IEnumerable<DateTime> GetRecordedDatesByCategory(string category)
+    {
+        return _context.MonthlyCountStats.Where(x => x.Category == category).Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x);
+    }
+
+    public IEnumerable<string> GetCategories()
+    {
+        return _context.MonthlyCountStats.Select(x => x.Category).Distinct().OrderBy(x => x);
+    }
+
+    public IEnumerable<DateTime> GetStartDates()
 {
     return _context.MonthlyCountStats.Select(x => x.Start).Distinct().OrderBy(x => x);
 }
@@ -82,6 +103,36 @@ public   IEnumerable<MonthlyCountStat> GetDataByRecordedDate(DateTime recordedDa
 
         return ordered;
 }
+
+
+    public IEnumerable<MonthlyCountStat> GetDataByRecordedDateCategory(DateTime recordedDate, string category)
+    {
+
+        // trim the ticks as sqlite lacks precision
+        //recordedDate = recordedDate.Subtract(TimeSpan.FromTicks(recordedDate.Ticks % 1000));
+
+        var rawData = _context.MonthlyCountStats.ToList();
+        /*
+        var filtered = new List<MonthlyCountStat>();
+
+        foreach (var data in rawData)
+        {
+            var ticks = data.RecordedTime.Ticks;
+
+            if (ticks == recordedDate.Ticks)
+            {
+                filtered.Add(data);
+            }
+        }
+        */
+        var filtered = rawData.Where(x => x.Category == category && x.RecordedTime.Ticks == recordedDate.Ticks).ToList();
+
+        var ordered = filtered.OrderBy(x => x.Start);
+
+
+
+        return ordered;
+    }
 
     public MonthlyCountStat GetById(int id)
 {

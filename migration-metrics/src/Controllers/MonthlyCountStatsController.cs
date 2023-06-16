@@ -33,10 +33,18 @@ public class MonthlyCountStatsController : ControllerBase
         return Ok(users);
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetById(int id)
+    [HttpGet("{category}")]
+    public IActionResult GetByCategory(string category)
     {
-        var user = _monthlyCountStatService.GetById(id);
+        var users = _monthlyCountStatService.GetByCategory(category);
+        return Ok(users);
+    }
+
+    
+    [HttpGet("Categories")]
+    public IActionResult GetCategories()
+    {
+        var user = _monthlyCountStatService.GetCategories();
         return Ok(user);
     }
 
