@@ -86,16 +86,16 @@ public class ChartController : ControllerBase
                 newItem.PointHoverRadius = 2;
                 newItem.BorderColor = "green";  
                 newItem.BorderWidth = 2;
-                newItem.Fill = false;
+                newItem.Fill = true;
                 newItem.DrawActiveElementsOnTop = false;
             }
             else
             {
-                int greyScale = l / recordedDates.Count();
+                int greyScale = ((int)Math.Round ((l / recordedDates.Count()) * 0.5));
                 newItem.PointHoverRadius = 1;
                 newItem.BorderColor = $"#{greyScale.ToString("X")}{greyScale.ToString("X")}{greyScale.ToString("X")}";
                 newItem.BorderWidth = 1;
-                newItem.Fill = false;
+                newItem.Fill = true;
                 newItem.DrawActiveElementsOnTop = true;
             }
 
