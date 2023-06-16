@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 using MigrationMetrics.Helpers;
 using MigrationMetrics.Services;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +49,10 @@ services.AddSwaggerGen(options =>
     });
 });
 
+// health checks. 
+services.AddHealthChecks()
+    .AddCheck("migration-metrics", () => HealthCheckResult.Healthy("OK"));
+
 services.AddHttpClient();
 
 
@@ -74,6 +81,18 @@ app.MapControllerRoute(
 
 app.MapFallbackToFile("index.html");
 app.MapSwagger();
+
+app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecks("/hc/live", new HealthCheckOptions
+{
+    // Exclude all checks and return a 200-Ok.
+    Predicate = _ => false
+});
 
 app.Run();
 

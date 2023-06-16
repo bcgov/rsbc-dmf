@@ -41,3 +41,7 @@ oc process -f ..\doctors-portal\openshift\templates\doctors-portal.template.yml 
 REM Scheduler Adapter 
 
 oc process -f ..\scheduler\openshift\templates\scheduler-service.template.yml --param-file ..\..\..\params\scheduler-service.dev.params | oc apply -f -
+
+REM Migration Metrics
+
+oc process -f ..\migration-metrics\openshift\templates\migration-metrics.template.yml --param-file ..\..\..\params\migration-metrics.dev.params | oc apply -f -
