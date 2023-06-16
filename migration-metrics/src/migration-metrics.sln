@@ -5,6 +5,8 @@ VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "migration-metrics", "migration-metrics.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E6D1328-ABE5-42AE-AFE1-37D09269F831}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
