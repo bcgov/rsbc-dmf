@@ -14,4 +14,4 @@ COPY --from=ng-builder /src/dist/ /site
 ENV API_URL=
 EXPOSE 2015
 
-CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
+USER 1001
