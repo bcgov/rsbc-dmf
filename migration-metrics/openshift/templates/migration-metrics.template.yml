@@ -64,7 +64,7 @@ objects:
         app: ${APP_NAME}-migration-metrics
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:      
-      CLINIC_ID: ${CLINIC_ID}
+      DATABASE_LOCATION: '/db/DATA.db'
 
   - kind: Service
     apiVersion: v1
