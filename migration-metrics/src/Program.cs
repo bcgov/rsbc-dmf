@@ -66,6 +66,19 @@ services.AddHttpClient();
 
 var app = builder.Build();
 
+
+app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecks("/hc/live", new HealthCheckOptions
+{
+    // Exclude all checks and return a 200-Ok.
+    Predicate = _ => false
+});
+
 // configure HTTP request pipeline
 
 // global cors policy
@@ -81,6 +94,10 @@ app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapSwagger();
+
+app.UseHttpLogging();
+
 app.UseRouting();
 
 app.MapControllerRoute(
@@ -88,19 +105,8 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
-app.MapSwagger();
 
-app.UseHealthChecks("/hc/ready", new HealthCheckOptions
-{
-    Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
 
-app.UseHealthChecks("/hc/live", new HealthCheckOptions
-{
-    // Exclude all checks and return a 200-Ok.
-    Predicate = _ => false
-});
 
 app.Run();
 
