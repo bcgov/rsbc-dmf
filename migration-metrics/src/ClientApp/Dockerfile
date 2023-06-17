@@ -8,7 +8,7 @@ COPY ./ .
 
 RUN npm run build -- --configuration production
 
-FROM caddy:alpine as final
+FROM caddy:latest as final
 COPY Caddyfile /etc/caddy/Caddyfile
 COPY --from=ng-builder /src/dist/ /site
 ENV API_URL=

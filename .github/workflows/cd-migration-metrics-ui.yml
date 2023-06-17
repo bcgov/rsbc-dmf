@@ -29,10 +29,14 @@ jobs:
 
       - name: Pull image
         run: docker pull $IMAGE_ID || true
+      
+      - name: Pull Caddy from OpenShift
+        run: docker pull caddy:latest
 
       - name: Build image
         working-directory: ./migration-metrics/src/ClientApp
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME 
+        # --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
