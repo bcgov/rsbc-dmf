@@ -6,8 +6,16 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost
+    .UseUrls()
+    .UseKestrel(options =>
+    {
+    options.Listen(IPAddress.Any, 8080);
+    });
 
 // add services to DI container
 

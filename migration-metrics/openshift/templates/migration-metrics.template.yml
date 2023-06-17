@@ -231,7 +231,7 @@ objects:
       name: ${APP_NAME}-migration-metrics-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
-      replicas: 2
+      replicas: 1
       selector:
         deploymentconfig: ${APP_NAME}-migration-metrics-ui
       strategy:
