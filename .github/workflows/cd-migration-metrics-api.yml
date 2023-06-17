@@ -10,7 +10,7 @@ on:
     tags:
       - v*
     paths:
-      - "migration-metrics/src/API/**"
+      - "migration-metrics/src/**"
       - ".github/workflows/cd-migration-metrics-api.yml"
 
 env:
