@@ -24,7 +24,7 @@
 	encode zstd gzip
 
 	route {
-		#uri strip_prefix /rsbc-dfp-migration-metrics
+		uri strip_prefix /metrics
 		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 	}
