@@ -3,8 +3,19 @@ using System.Text.Json.Serialization;
 using MigrationMetrics.Helpers;
 using MigrationMetrics.Services;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost
+    .UseUrls()
+    .UseKestrel(options =>
+    {
+    options.Listen(IPAddress.Any, 8080);
+    });
 
 // add services to DI container
 
@@ -46,10 +57,27 @@ services.AddSwaggerGen(options =>
     });
 });
 
+// health checks. 
+services.AddHealthChecks()
+    .AddCheck("migration-metrics", () => HealthCheckResult.Healthy("OK"));
+
 services.AddHttpClient();
 
 
 var app = builder.Build();
+
+
+app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecks("/hc/live", new HealthCheckOptions
+{
+    // Exclude all checks and return a 200-Ok.
+    Predicate = _ => false
+});
 
 // configure HTTP request pipeline
 
@@ -66,6 +94,10 @@ app.UseRouting();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapSwagger();
+
+app.UseHttpLogging();
+
 app.UseRouting();
 
 app.MapControllerRoute(
@@ -73,7 +105,8 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 
 app.MapFallbackToFile("index.html");
-app.MapSwagger();
+
+
 
 app.Run();
 
