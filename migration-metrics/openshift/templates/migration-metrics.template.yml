@@ -112,7 +112,7 @@ objects:
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       host: ${HOST}
-      path: /rsbc-dfp-migration-metrics
+      path: /metrics
       port:
         targetPort: 2015-tcp
       tls:
@@ -253,6 +253,8 @@ objects:
         spec:
           containers:
             - name: migration-metrics-ui
+              securityContext:
+                allowPrivilegeEscalation: true
               env:
                 - name: API_URL
                   value: ${APP_NAME}-migration-metrics-api:8080
