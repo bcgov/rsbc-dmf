@@ -364,7 +364,7 @@ namespace Rsbc.Dmf.CaseManagement
                     }
 
                     // ignore inactive and system generated
-                    if ((comment.statecode != null && comment.statecode == 0) || originMatch)
+                    if ((comment.statecode != null && comment.statecode == 0) && originMatch)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
@@ -941,14 +941,14 @@ namespace Rsbc.Dmf.CaseManagement
                         {                            
                             if (result.DecisionDate == null || decision.createdon > result.DecisionDate)
                             {
+                                await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
                                 if (decision.dfp_OutcomeStatus != null) 
-                                {
-                                    await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+                                {                                    
                                     result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
                                 }
 
                                 result.DecisionDate = decision.createdon;
-                                result.DecisionForClass = decision.dfp_eligibledlclass;
+                                result.DecisionForClass = TranslateDecisionForClass (decision.dfp_eligibledlclass);
                                 
                             }
                         }                        
@@ -965,6 +965,47 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
 
+        }
+
+        private string TranslateDecisionForClass (string data)
+        {
+            string result = null;
+            if (data != null)
+            {
+                var items = data.Split(",");
+                result = "";
+                foreach (var item in items)
+                {
+                    if (result.Length > 0)
+                    {
+                        result += ", ";
+                    }
+                    switch (item)
+                    {
+                        case "100000001":
+                            result += "C1";
+                        break;
+                        case "100000002":
+                            result += "C2";
+                            break;
+                        case "100000003":
+                            result += "C3";
+                            break;
+                        case "100000004":
+                            result += "C4";
+                            break;
+                        case "100000005":
+                            result += "C5/C7";
+                            break;
+                        case "100000006":
+                            result += "C6";
+                            break;
+                    }
+
+                }
+            }
+
+            return result;
         }
 
 
