@@ -1,0 +1,11 @@
+NAMESPACE_PREFIX=<openshift namespace>
+ENV=dev
+APP_NAME=dev-driver-portal
+TAG=latest
+RUNTIME_ENVIRONMENT=staging
+OAUTH_SERVER_URL=<oauth server url>
+OAUTH_CLIENTID=<driver portal oauth client id>
+OAUTH_CLIENTSECRET=<driver portal oauth client secret>
+OIDC_CLIENTID=<oauth server oidc client name>
+OIDC_SCOPE =<oc scope>
+CORS_ORIGINS=<cross origin>

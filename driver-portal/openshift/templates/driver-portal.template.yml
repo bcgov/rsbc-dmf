@@ -1,0 +1,326 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: driver-portal-template
+
+parameters:
+  - description: openshift namespace prefix
+    name: NAMESPACE_PREFIX
+    required: true
+  - description: openshift namespace env name
+    name: ENV
+    required: true
+  - description: app name
+    name: APP_NAME
+    required: true
+  - description: image tag for deployments
+    name: TAG
+    required: true
+  - description: host for routes
+    name: HOST
+    required: true
+  - description: ASPNET runtime environment (Development/Staging/Production)
+    name: RUNTIME_ENVIRONMENT
+    value: Staging
+  - description: oauth server url
+    name: OAUTH_SERVER_URL
+    required: false
+  - description: oauth server client id
+    name: OAUTH_CLIENTID
+    required: false
+  - description: oauth server client secret
+    name: OAUTH_CLIENTSECRET
+    required: false
+  - description: oidc client id
+    name: OIDC_CLIENTID
+    required: false
+  - description: oidc scopes
+    name: OIDC_SCOPE
+    value: "openid profile email driver-portal-api"
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    value: "true"
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-driver-portal-api-config
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+    data:
+      ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
+      KEY_RING_PATH: "/dpkeys"
+      app__cors__origins: ${CORS_ORIGINS}
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+      name: ${APP_NAME}-driver-portal-api-secrets
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+    stringData:      
+      DATABASE_LOCATION: '/db/DATA.db'
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-driver-portal-api
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${APP_NAME}-driver-portal-api
+      type: ClusterIP
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-driver-portal-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 2015-tcp
+          port: 2015
+          protocol: TCP
+          targetPort: 2015
+      selector:
+        deploymentconfig: ${APP_NAME}-driver-portal-ui
+      type: ClusterIP
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-driver-portal-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      host: ${HOST}
+      path: /metrics
+      port:
+        targetPort: 2015-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}-driver-portal-ui
+        weight: 100
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${APP_NAME}-driver-portal
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      podSelector:
+        matchLabels:
+          app: ${APP_NAME}-driver-portal
+      ingress:
+        - ports:
+            - protocol: TCP
+              port: 2015
+            - protocol: TCP
+              port: 8080
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-driver-portal-api
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${APP_NAME}-driver-portal-api
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-driver-portal
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-driver-portal-api
+        spec:
+          containers:
+            - name: driver-portal-api
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}-driver-portal-api-config
+                - secretRef:
+                    name: ${APP_NAME}-driver-portal-api-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/driver-portal-api:${TAG}
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /dpkeys
+                  name: dp-keys              
+                - mountPath: /db
+                  name: db
+              livenessProbe:
+                httpGet:
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: dp-keys
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-driver-portal-api-key-ring
+            - name: db
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-driver-portal-api-db
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - driver-portal-api
+            from:
+              kind: ImageStreamTag
+              name: driver-portal-api:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-driver-portal
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-migration-metrics-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${APP_NAME}-migration-metrics-ui
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-migration-metrics
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-migration-metrics-ui
+        spec:
+          containers:
+            - name: migration-metrics-ui
+              securityContext:
+                allowPrivilegeEscalation: true
+              env:
+                - name: API_URL
+                  value: ${APP_NAME}-migration-metrics-api:8080
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/migration-metrics-ui:${TAG}
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 2015
+                  protocol: TCP
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              startupProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - migration-metrics-ui
+            from:
+              kind: ImageStreamTag
+              name: migration-metrics-ui:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-migration-metrics-api-key-ring
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-migration-metrics
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "100Mi"
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-migration-metrics-api-db
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-migration-metrics
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "5Gi"

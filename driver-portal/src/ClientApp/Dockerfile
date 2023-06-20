@@ -6,7 +6,7 @@ COPY ./ .
 #RUN npm run lint
 #RUN npm run test -- --no-watch --no-progress
 
-RUN npm run build -- --configuration production
+RUN npm run build -- --base-href /driver-portal/ --deploy-url /driver-portal/ --configuration production
 
 FROM caddy:latest as final
 COPY Caddyfile /etc/caddy/Caddyfile
