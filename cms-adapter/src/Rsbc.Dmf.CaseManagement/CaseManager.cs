@@ -945,11 +945,21 @@ namespace Rsbc.Dmf.CaseManagement
                         {                            
                             if (result.DecisionDate == null || decision.createdon > result.DecisionDate)
                             {
+                                result.LatestDecision = "";
+
                                 await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
                                 if (decision.dfp_OutcomeStatus != null) 
                                 {                                    
                                     result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
                                 }
+
+                                // now try and get the sub type
+                                await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
+                                if (decision.dfp_OutcomeSubStatus != null)
+                                {
+                                    result.LatestDecision += " - " + decision.dfp_OutcomeSubStatus.dfp_name;
+                                }
+
 
                                 result.DecisionDate = decision.createdon;
                                 result.DecisionForClass = TranslateDecisionForClass (decision.dfp_eligibledlclass);                                
