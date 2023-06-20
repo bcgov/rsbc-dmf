@@ -1,7 +1,8 @@
 NAMESPACE_PREFIX=0137d5
 ENV=dev
-APP_NAME=dev-driver-portal
+APP_NAME=dev
 TAG=latest
+HOST=rsbc-dfp-driver-portal-dev.apps.silver.devops.gov.bc.ca
 RUNTIME_ENVIRONMENT=staging
 OAUTH_SERVER_URL=<oauth server url>
 OAUTH_CLIENTID=<driver portal oauth client id>

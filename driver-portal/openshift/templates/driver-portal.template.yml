@@ -64,7 +64,7 @@ objects:
         app: ${APP_NAME}-driver-portal
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:      
-      DATABASE_LOCATION: '/db/DATA.db'
+      
 
   - kind: Service
     apiVersion: v1
@@ -112,7 +112,7 @@ objects:
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       host: ${HOST}
-      path: /metrics
+      path: /driver-portal
       port:
         targetPort: 2015-tcp
       tls:
@@ -183,8 +183,6 @@ objects:
               volumeMounts:
                 - mountPath: /dpkeys
                   name: dp-keys              
-                - mountPath: /db
-                  name: db
               livenessProbe:
                 httpGet:
                   path: /hc/live
@@ -206,9 +204,6 @@ objects:
             - name: dp-keys
               persistentVolumeClaim:
                 claimName: ${APP_NAME}-driver-portal-api-key-ring
-            - name: db
-              persistentVolumeClaim:
-                claimName: ${APP_NAME}-driver-portal-api-db
       test: false
       triggers:
         - type: ConfigChange
@@ -228,12 +223,12 @@ objects:
       labels:
         app: ${APP_NAME}-driver-portal
         app.kubernetes.io/part-of: ${APP_NAME}
-      name: ${APP_NAME}-migration-metrics-ui
+      name: ${APP_NAME}-driver-portal-ui
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       replicas: 1
       selector:
-        deploymentconfig: ${APP_NAME}-migration-metrics-ui
+        deploymentconfig: ${APP_NAME}-driver-portal-ui
       strategy:
         activeDeadlineSeconds: 21600
         resources: {}
@@ -247,18 +242,18 @@ objects:
       template:
         metadata:
           labels:
-            app: ${APP_NAME}-migration-metrics
+            app: ${APP_NAME}-driver-portal
             app.kubernetes.io/part-of: ${APP_NAME}
-            deploymentconfig: ${APP_NAME}-migration-metrics-ui
+            deploymentconfig: ${APP_NAME}-driver-portal-ui
         spec:
           containers:
-            - name: migration-metrics-ui
+            - name: driver-portal-ui
               securityContext:
                 allowPrivilegeEscalation: true
               env:
                 - name: API_URL
-                  value: ${APP_NAME}-migration-metrics-api:8080
-              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/migration-metrics-ui:${TAG}
+                  value: ${APP_NAME}-driver-portal-api:8080
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/driver-portal-ui:${TAG}
               imagePullPolicy: Always
               ports:
                 - containerPort: 2015
@@ -290,19 +285,19 @@ objects:
           imageChangeParams:
             automatic: true
             containerNames:
-              - migration-metrics-ui
+              - driver-portal-ui
             from:
               kind: ImageStreamTag
-              name: migration-metrics-ui:${TAG}
+              name: driver-portal-ui:${TAG}
               namespace: ${NAMESPACE_PREFIX}-tools
 
   - kind: "PersistentVolumeClaim"
     apiVersion: "v1"
     metadata:
-      name: ${APP_NAME}-migration-metrics-api-key-ring
+      name: ${APP_NAME}-driver-portal-api-key-ring
       namespace: ${NAMESPACE_PREFIX}-${ENV}
       labels:
-        app: ${APP_NAME}-migration-metrics
+        app: ${APP_NAME}-driver-portal
         app.kubernetes.io/part-of: ${APP_NAME}
     spec:
       accessModes:
@@ -310,17 +305,4 @@ objects:
       resources:
         requests:
           storage: "100Mi"
-  - kind: "PersistentVolumeClaim"
-    apiVersion: "v1"
-    metadata:
-      name: ${APP_NAME}-migration-metrics-api-db
-      namespace: ${NAMESPACE_PREFIX}-${ENV}
-      labels:
-        app: ${APP_NAME}-migration-metrics
-        app.kubernetes.io/part-of: ${APP_NAME}
-    spec:
-      accessModes:
-        - "ReadWriteMany"
-      resources:
-        requests:
-          storage: "5Gi"
+  
