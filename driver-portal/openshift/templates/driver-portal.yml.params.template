@@ -1,0 +1,12 @@
+NAMESPACE_PREFIX=0137d5
+ENV=dev
+APP_NAME=dev
+TAG=latest
+HOST=rsbc-dfp-driver-portal-dev.apps.silver.devops.gov.bc.ca
+RUNTIME_ENVIRONMENT=staging
+OAUTH_SERVER_URL=<oauth server url>
+OAUTH_CLIENTID=<driver portal oauth client id>
+OAUTH_CLIENTSECRET=<driver portal oauth client secret>
+OIDC_CLIENTID=<oauth server oidc client name>
+OIDC_SCOPE =<oc scope>
+CORS_ORIGINS=<cross origin>
