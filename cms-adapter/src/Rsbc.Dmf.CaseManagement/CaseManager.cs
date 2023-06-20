@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -494,8 +495,11 @@ namespace Rsbc.Dmf.CaseManagement
                         Surname = driverItem.dfp_PersonId?.lastname ?? String.Empty
                     };
 
+
+
+
                     // get the cases for that driver.
-                    var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid
+                    var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid && i.dfp_origin == (int?)OriginTypes.User
                     ).OrderByDescending(x=> x.dfp_legacyid).OrderByDescending(x => x.createdon).ToList();
 
 
@@ -941,15 +945,14 @@ namespace Rsbc.Dmf.CaseManagement
                         {                            
                             if (result.DecisionDate == null || decision.createdon > result.DecisionDate)
                             {
-                                await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+                                await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
                                 if (decision.dfp_OutcomeStatus != null) 
                                 {                                    
                                     result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
                                 }
 
                                 result.DecisionDate = decision.createdon;
-                                result.DecisionForClass = TranslateDecisionForClass (decision.dfp_eligibledlclass);
-                                
+                                result.DecisionForClass = TranslateDecisionForClass (decision.dfp_eligibledlclass);                                
                             }
                         }                        
                     }
