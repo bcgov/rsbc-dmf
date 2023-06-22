@@ -198,6 +198,7 @@ namespace Rsbc.Dmf.CaseManagement
         public bool isCleanPass { get; set; }
     }
 
+ 
     public enum BringForwardPriority
     {
         Low = 0,
@@ -2300,9 +2301,10 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                {  "Accept", 100000001 }, // Received
+                { "Accept", 100000001 }, // Received
                 { "Reject",  100000004 }, // Rejected
                 { "Clean Pass" ,  100000009}, // Clean Pass
+                { "Manual Pass", 100000012 } // Manual Pass
                 
             };
 
@@ -2746,7 +2748,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == 100000009 // this is only for DMER clean pass document type
+                                    && document.dfp_submittalstatus == 100000009 || document.dfp_submittalstatus == 100000012 // this is only for DMER clean pass or manual pass document type
                                     )
                                 {
                                     
@@ -2796,8 +2798,6 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-       
-        
 
         /// <summary>
         /// Set Case Status
