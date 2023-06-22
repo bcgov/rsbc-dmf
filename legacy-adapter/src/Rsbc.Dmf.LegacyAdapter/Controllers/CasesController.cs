@@ -734,7 +734,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                         if (!String.IsNullOrEmpty(_configuration["CLEAN_PASS_DOCUMENT"]))
                         {
-                            if (submittalStatus == "Clean Pass")
+                            if (submittalStatus == "Clean Pass" || submittalStatus =="Manual Pass")
                             {
                                 var cleanPassRequest = new CleanPassRequest
                                 {
