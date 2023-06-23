@@ -19,7 +19,6 @@ env:
   
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ github.run_number }}
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   build:
@@ -39,10 +38,9 @@ jobs:
         run: |
           echo "BUILD ID=$BUILD_ID" 
           echo "RUN NUMBER=$RUN_NUMBER"  
-          echo ::set-env name=ADJUSTED_RUN_NUMBER::$(($RUN_NUMBER % 256))
-          echo ::set-env name=BUILD_VERSION::$(BUILD_PREFIX)$(ADJUSTED_RUN_NUMBER)
+          echo "BUILD PREFIX=$BUILD_PREFIX"
                  
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" --build-arg BUILD_VERSION="$BUILD_VERSION" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" --build-arg BUILD_PREFIX="$BUILD_PREFIX" --build-arg RUN_NUMBER="$RUN_NUMBER" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
