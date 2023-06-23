@@ -13,14 +13,14 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 COPY . .
 RUN dotnet restore ./migration-metrics/src/
-RUN BUILD_VERSION="$BUILD_PREFIX($RUN_NUMBER % 256)" && dotnet test ./migration-metrics/src/ /p:Version="$BUILD_VERSION"  /p:InformationalVersion="$BUILD_ID" -c Release
+RUN ARN=$(expr $RUN_NUMBER % 256) && BUILD_VERSION="$BUILD_PREFIX$ARN" && echo $BUILD_VERSION && dotnet test ./migration-metrics/src/ /p:Version="$BUILD_VERSION"  /p:InformationalVersion="$BUILD_ID" -c Release
 
 FROM build AS publish
 ARG BUILD_ID
 ARG BUILD_PREFIX
 ARG RUN_NUMBER
 
-RUN BUILD_VERSION="$BUILD_PREFIX($RUN_NUMBER % 256)" && dotnet publish /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" "./migration-metrics/src/" -c Release -o /app/publish --no-restore 
+RUN ARN=$(expr $RUN_NUMBER % 256) && BUILD_VERSION="$BUILD_PREFIX$ARN" && echo $BUILD_VERSION && dotnet publish /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" "./migration-metrics/src/" -c Release -o /app/publish --no-restore 
 
 FROM base AS final
 WORKDIR /app
