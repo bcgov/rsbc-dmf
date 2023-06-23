@@ -19,6 +19,7 @@ env:
   
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ github.run_number }}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 jobs:
   build:
