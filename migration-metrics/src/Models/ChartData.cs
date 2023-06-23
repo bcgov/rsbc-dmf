@@ -25,7 +25,9 @@
 
         public int BorderWidth { get; set; }
 
-        public bool Fill { get; set; }
+        public string BackgroundColor { get; set; }
+
+        public string Fill { get; set; }
 
         public bool DrawActiveElementsOnTop { get; set; }
 
