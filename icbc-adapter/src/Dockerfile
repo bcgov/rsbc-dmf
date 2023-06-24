@@ -13,6 +13,8 @@ COPY . .
 RUN dotnet restore ./icbc-adapter/src/Pssg.Dmf.IcbcAdapter 
 
 FROM build AS publish
+ARG BUILD_ID
+ARG BUILD_VERSION
 RUN dotnet publish ./icbc-adapter/src/Pssg.Dmf.IcbcAdapter /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish
 
 FROM base AS final
