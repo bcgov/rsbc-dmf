@@ -32,14 +32,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             DateTime creationTime = System.IO.File.GetLastWriteTimeUtc(assembly.Location);
             FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
             string fileVersion = fvi.FileVersion;
-            string fileDescription = fvi.FileDescription;
+            string productVersion = fvi.ProductVersion;
 
             ApplicationVersionInfo avi = new ApplicationVersionInfo
             {
                 Environment = _configuration["ASPNETCORE_ENVIRONMENT"],
                 FileCreationTime = creationTime.ToString("O"), // Use the round trip format as it includes the time zone.
                 FileVersion = fileVersion,
-                FileDescription = fileDescription
+                ProductVersion = productVersion
             };
 
             return new JsonResult(avi);
