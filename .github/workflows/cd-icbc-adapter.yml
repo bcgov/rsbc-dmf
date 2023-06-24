@@ -15,6 +15,8 @@ on:
 env:
   IMAGE_NAME: icbc-adapter
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/icbc-adapter
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
 
 jobs:
   build:
@@ -35,7 +37,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./icbc-adapter/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
+        run: docker build . --file ./icbc-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |

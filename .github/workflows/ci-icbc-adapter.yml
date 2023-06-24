@@ -10,6 +10,8 @@ on:
 env:
   IMAGE_NAME: icbc-adapter
   solution-folder: icbc-adapter/src/ 
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -69,4 +71,4 @@ jobs:
           fail_ci_if_error: true
 
       - name: Build image
-        run: docker build . --file ./icbc-adapter/src/Dockerfile --tag $IMAGE_NAME
+        run: docker build --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./icbc-adapter/src/Dockerfile --tag $IMAGE_NAME
