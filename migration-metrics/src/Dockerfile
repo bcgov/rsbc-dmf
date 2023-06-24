@@ -14,14 +14,14 @@ FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 COPY . .
 RUN echo "$BUILD_PREFIX$RUN_NUMBER"
 RUN dotnet restore ./migration-metrics/src/
-RUN export BUILD_VERSION="$BUILD_PREFIX$RUN_NUMBER" && echo $BUILD_VERSION && dotnet test ./migration-metrics/src/ /p:Version="$BUILD_VERSION"  /p:InformationalVersion="$BUILD_ID" -c Release
+RUN dotnet test ./migration-metrics/src/ /p:Version="$BUILD_PREFIX$RUN_NUMBER" /p:InformationalVersion="$BUILD_ID" -c Release
 
 FROM build AS publish
 ARG BUILD_ID
 ARG BUILD_PREFIX
 ARG RUN_NUMBER
-
-RUN export BUILD_VERSION="$BUILD_PREFIX$RUN_NUMBER" && echo $BUILD_VERSION && dotnet publish /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" "./migration-metrics/src/" -c Release -o /app/publish --no-restore 
+RUN echo "$BUILD_PREFIX$RUN_NUMBER"
+RUN dotnet publish ./migration-metrics/src/ /p:Version="$BUILD_PREFIX$RUN_NUMBER" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish --no-restore 
 
 FROM base AS final
 WORKDIR /app
