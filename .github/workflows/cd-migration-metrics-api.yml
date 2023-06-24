@@ -39,6 +39,7 @@ jobs:
           echo "BUILD ID=$BUILD_ID" 
           echo "RUN NUMBER=$RUN_NUMBER"  
           echo "BUILD PREFIX=$BUILD_PREFIX"
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"
                  
           docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
 
