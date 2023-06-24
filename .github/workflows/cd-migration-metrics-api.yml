@@ -18,7 +18,7 @@ env:
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.versionprefix }}!${{ github.run_number }}
   
   RUN_NUMBER: ${{ github.run_number }}
-  BUILD_PREFIX: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ github.versionprefix }}
 
 jobs:
   build:
@@ -40,7 +40,7 @@ jobs:
           echo "RUN NUMBER=$RUN_NUMBER"  
           echo "BUILD PREFIX=$BUILD_PREFIX"
                  
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" --build-arg BUILD_PREFIX="$BUILD_PREFIX" --build-arg RUN_NUMBER="`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_PREFIX --build-arg RUN_NUMBER="`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
