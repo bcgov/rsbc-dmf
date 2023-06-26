@@ -1388,6 +1388,36 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Update Manual Pass Flag on the case
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateManualPassFlag(ManualPassRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply();
+            try
+            {
+                var manualPassRequest = new CaseManagement.ManualPassRequest()
+                {
+                    CaseId = request.CaseId,
+                    //isCleanPass = true
+                };
+
+                await _caseManager.UpdateManualPassFlag(manualPassRequest);
+
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
         /// Get Token
         /// </summary>
         /// <param name="request"></param>

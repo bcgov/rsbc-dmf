@@ -88,6 +88,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
 
+        Task<ResultStatusReply> UpdateManualPassFlag(ManualPassRequest request);
+
+        Task<bool> SetManualPassFlag(string caseId, bool manualPassStatus);
+
         Task SwitchTo8Dl();
 
         Task MakeFakeDls();

@@ -80,6 +80,9 @@ service CaseManager {
 
    // Update Non Comply documents
    rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
+ 
+  //Update Manual Pass Flag
+   rpc UpdateManualPassFlag(ManualPassRequest) returns (ResultStatusReply);
 }
 
 message UpdateDriverRequest{
@@ -257,6 +260,12 @@ message CleanPassRequest{
 	string caseId = 1;
 	bool isCleanPass = 2;
 }
+
+message ManualPassRequest{
+	string caseId = 1;
+	bool isCleanPass = 2;
+}
+
 
 message GetAllFlagsReply {
 	repeated FlagItem Flags = 1;

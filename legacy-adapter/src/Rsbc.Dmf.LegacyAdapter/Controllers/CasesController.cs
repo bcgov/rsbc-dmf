@@ -744,7 +744,20 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 _cmsAdapterClient.UpdateCleanPassFlag(cleanPassRequest);
                             }
                         }
-                          
+
+                        if (!String.IsNullOrEmpty(_configuration["MANUAL_PASS_DOCUMENT"]))
+                        {
+                            if (submittalStatus == "Manual Pass")
+                            {
+                                var manualPassRequest = new ManualPassRequest
+                                {
+                                    CaseId = caseId
+
+                                };
+                                _cmsAdapterClient.UpdateManualPassFlag(manualPassRequest);
+                            }
+                        }
+
                         var actionName = nameof(AddCaseDocument);
                         var routeValues = new
                         {

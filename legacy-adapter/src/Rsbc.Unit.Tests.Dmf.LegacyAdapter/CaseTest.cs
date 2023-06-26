@@ -174,7 +174,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string validationPrevious = "BHAMMED";
                 string priority = "Expedited";
                 string assign = "Adjudicators";
-                string submittalStatus = "Accept";
+                string submittalStatus = "Manual Pass";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");

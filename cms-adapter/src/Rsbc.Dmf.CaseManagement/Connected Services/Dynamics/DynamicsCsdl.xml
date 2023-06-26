@@ -10668,6 +10668,7 @@
         <Property Name="_productid_value" Type="Edm.Guid" />
         <Property Name="firstresponsesent" Type="Edm.Boolean" />
         <Property Name="decremententitlementterm" Type="Edm.Boolean" />
+        <Property Name="dfp_ismanualpass" Type="Edm.Boolean" />
         <Property Name="dfp_restrictionsupdated" Type="Edm.Boolean" />
         <Property Name="dfp_allexpecteddocumentsreceived" Type="Edm.Boolean" />
         <Property Name="_resolvebykpiid_value" Type="Edm.Guid" />

@@ -112,6 +112,39 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             
         }
 
+        /// <summary>
+        /// CanSetManualPassValue
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanSetManualPassValue()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            if (queryResults.Count() > 0)
+            {
+                queryResults.ShouldNotBeEmpty();
+                foreach (var dmerCase in queryResults)
+                {
+                    var caseId = dmerCase.Id;
+                    // set the value to true
+                    await caseManager.SetManualPassFlag(caseId, false);
+
+                    var request = new ManualPassRequest
+                    {
+                        CaseId = caseId
+                    };
+
+                    await caseManager.UpdateManualPassFlag(request);
+                }
+
+                // verify in dynamics wether this is updated
+
+            }
+
+
+        }
 
 
 
