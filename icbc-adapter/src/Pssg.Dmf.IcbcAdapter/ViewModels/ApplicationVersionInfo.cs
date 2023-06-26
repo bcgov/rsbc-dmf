@@ -26,7 +26,7 @@
         /// </summary>
         public string FileVersion { get; set; }
 
-        public string FileDescription {  get; set; }
+        public string ProductVersion {  get; set; }
 
         /// <summary>
         /// Git commit used to build the application
