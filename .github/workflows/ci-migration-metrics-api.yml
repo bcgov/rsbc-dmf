@@ -14,6 +14,8 @@ env:
   solution-folder: migration-metrics/src/  
   IMAGE_NAME: migration-metrics-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
 
 jobs:
   build:
@@ -74,5 +76,6 @@ jobs:
 
       - name: Build image
         run: |
-          echo BUILD_ID=$BUILD_ID
-          docker build --build-arg BUILD_ID="$BUILD_ID" . --file ./migration-metrics/src/Dockerfile --tag $IMAGE_NAME
+          echo "BUILD ID=$BUILD_ID" 
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"                 
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID

@@ -83,20 +83,22 @@ public class ChartController : ControllerBase
 
             if (l == 0)
             {
-                newItem.PointHoverRadius = 2;
-                newItem.BorderColor = "green";  
-                newItem.BorderWidth = 2;
-                newItem.Fill = true;
-                newItem.DrawActiveElementsOnTop = false;
+                newItem.PointHoverRadius = 1;
+                newItem.BorderColor = "red";  
+                newItem.BackgroundColor = "#222222";
+                newItem.BorderWidth = 1;
+                newItem.Fill = "origin"; 
+                //newItem.DrawActiveElementsOnTop = true;
             }
             else
             {
                 int greyScale = ((int)Math.Round ((l / recordedDates.Count()) * 0.5));
                 newItem.PointHoverRadius = 1;
-                newItem.BorderColor = $"#{greyScale.ToString("X")}{greyScale.ToString("X")}{greyScale.ToString("X")}";
+                newItem.BorderColor = $"#00{greyScale.ToString("X")}00";
+                newItem.BackgroundColor = $"#00{greyScale.ToString("X")}00";
                 newItem.BorderWidth = 1;
-                newItem.Fill = true;
-                newItem.DrawActiveElementsOnTop = true;
+                newItem.Fill = "origin";
+                //newItem.DrawActiveElementsOnTop = true;
             }
 
 

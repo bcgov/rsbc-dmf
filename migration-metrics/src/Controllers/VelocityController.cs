@@ -27,10 +27,10 @@ public class VelocityController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet()]
-    public IActionResult GetChart()
+    [HttpGet("{category}")]
+    public IActionResult GetChart(string category)
     {
-        var recordedDates = _monthlyCountStatService.GetRecordedDates().OrderBy(x => x);
+        var recordedDates = _monthlyCountStatService.GetRecordedDatesByCategory(category).OrderBy(x => x);
 
         List<VelocityData> data = new List<VelocityData>();
 
@@ -45,7 +45,7 @@ public class VelocityController : ControllerBase
         {
             VelocityData velocityData = new VelocityData() { Label = recordedDate.ToShortDateString() };
 
-            var theData = _monthlyCountStatService.GetDataByRecordedDate(recordedDate);
+            var theData = _monthlyCountStatService.GetDataByRecordedDateCategory(recordedDate,category);
             int total = 0;
             foreach (var item in theData)
             {
@@ -98,8 +98,7 @@ public class VelocityController : ControllerBase
             data.Add(velocityData);
         }
 
-            
-
+        
         return Ok(data);
     }
 

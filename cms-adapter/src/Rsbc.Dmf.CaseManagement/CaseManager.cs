@@ -2132,9 +2132,16 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driver);
+                // first check to see that the driver is not already linked.
 
-                await dynamicsContext.SaveChangesAsync();
+                await dynamicsContext.LoadPropertyAsync(newIncident, nameof(incident.dfp_DriverId));
+
+                if (newIncident._dfp_driverid_value == null)
+                {
+                    dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driver);
+
+                    await dynamicsContext.SaveChangesAsync();
+                }                
             }
             catch (Exception e)
             {

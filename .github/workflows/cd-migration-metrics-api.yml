@@ -15,7 +15,10 @@ on:
 env:
   IMAGE_NAME: migration-metrics-api
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/migration-metrics-api
-  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.versionprefix }}!${{ github.run_number }}
+  
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
 
 jobs:
   build:
@@ -33,8 +36,12 @@ jobs:
 
       - name: Build image
         run: |
-          echo "BUILD ID=$BUILD_ID"          
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
+          echo "BUILD ID=$BUILD_ID" 
+          echo "RUN NUMBER=$RUN_NUMBER"  
+          echo "BUILD PREFIX=$BUILD_PREFIX"
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"
+                 
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
