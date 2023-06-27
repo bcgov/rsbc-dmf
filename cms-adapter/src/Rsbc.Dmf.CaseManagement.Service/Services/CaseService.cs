@@ -230,7 +230,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var c = await _caseManager.GetCaseDetail(request.CaseId);
                 if (c != null)
                 {
+                    
+
                     reply.Item = new CaseDetail();
+                    reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;
                     reply.Item.Title = c.Title ?? string.Empty;
                     reply.Item.IdCode = c.IdCode ?? string.Empty;

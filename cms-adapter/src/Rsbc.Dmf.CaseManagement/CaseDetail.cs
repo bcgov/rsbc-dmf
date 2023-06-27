@@ -11,6 +11,9 @@ namespace Rsbc.Dmf.CaseManagement
         /// <summary>
         /// Indicates system title of the case
         /// </summary>
+        /// 
+        public int CaseSequence { get; set; }
+
         public string Title { get; set; }
 
         /// <summary>
