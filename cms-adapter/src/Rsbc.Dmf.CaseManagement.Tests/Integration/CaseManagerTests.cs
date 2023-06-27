@@ -97,12 +97,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     // set the value to true
                     await caseManager.SetCleanPassFlag(caseId, false);
 
-                    var request = new CleanPassRequest
-                    {
-                        CaseId = caseId,
-                    };
+                    // Update Clean Pass Flag
 
-                    await caseManager.UpdateCleanPassFlag(request);
+                    await caseManager.UpdateCleanPassFlag(caseId);
                 }
 
                 // verify in dynamics wether this is updated
@@ -112,6 +109,35 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             
         }
 
+        /// <summary>
+        /// CanSetManualPassValue
+        /// </summary>
+        /// <returns></returns>
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanSetManualPassValue()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            if (queryResults.Count() > 0)
+            {
+                queryResults.ShouldNotBeEmpty();
+                foreach (var dmerCase in queryResults)
+                {
+                    var caseId = dmerCase.Id;
+                    // set the value to true
+                    await caseManager.SetManualPassFlag(caseId, false);
+
+                    // Update Manaul Pass Flag
+                    await caseManager.UpdateManualPassFlag(caseId);
+                }
+
+                // verify in dynamics wether this is updated
+
+            }
+
+
+        }
 
 
 

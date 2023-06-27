@@ -191,14 +191,14 @@ namespace Rsbc.Dmf.CaseManagement
         public string ErrorMessage { get; set; }
     }
 
-
-    public class CleanPassRequest
+    public enum submittalStatusOptionSet
     {
-        public string CaseId { get; set; }
-        public bool isCleanPass { get; set; }
+        Accept = 100000001,
+        Reject = 100000004, 
+        CleanPass=  100000009,
+        ManualPass = 100000012 
     }
 
- 
     public enum BringForwardPriority
     {
         Low = 0,
@@ -206,7 +206,6 @@ namespace Rsbc.Dmf.CaseManagement
         High = 2
 
     }
-
 
     public class ResultStatusReply
     {
@@ -2727,7 +2726,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request)
+        public async Task<ResultStatusReply> UpdateCleanPassFlag(string caseId)
         {
             ResultStatusReply result = new ResultStatusReply()
             {
@@ -2736,7 +2735,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                string caseId = request.CaseId;
+               // string id = caseId;
 
                 if (caseId != null && caseId != string.Empty)
                 {
@@ -2755,8 +2754,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == 100000009 || document.dfp_submittalstatus == 100000012 // this is only for DMER clean pass or manual pass document type
-                                    )
+                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
                                 {
                                     
                                     if (document.dfp_DocumentTypeID != null &&
@@ -2805,7 +2803,6 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
         /// <summary>
         /// Set Case Status
         /// </summary>
@@ -2817,9 +2814,6 @@ namespace Rsbc.Dmf.CaseManagement
         {
             // get the case
             incident @case = GetIncidentById(caseId);
-
-            
-
             try
             {
                 if (@case.statecode == 0)
@@ -2834,6 +2828,118 @@ namespace Rsbc.Dmf.CaseManagement
             catch (Exception e)
             {
                 logger.LogError(e, $"SetCleanPassStatus - Error updating");
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Update Manual Pass Flag
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<ResultStatusReply> UpdateManualPassFlag(string caseId)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            try
+            {
+                //string caseId = request.CaseId;
+
+                if (caseId != null && caseId != string.Empty)
+                {
+                    var currentCase = dynamicsContext.incidents.ByKey(Guid.Parse(caseId)).GetValue();
+
+                    if (currentCase != null && currentCase.statecode == 0)
+                    {
+                        await dynamicsContext.LoadPropertyAsync(currentCase, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                        if (currentCase.bcgov_incident_bcgov_documenturl != null)
+                        {
+
+                            foreach (var document in currentCase.bcgov_incident_bcgov_documenturl)
+                            {
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+
+                                if (document.dfp_DocumentTypeID != null && document.statecode == 0
+                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass
+                                    )
+                                {
+
+                                    if (document.dfp_DocumentTypeID != null &&
+                                         document.dfp_DocumentTypeID.dfp_name != null &&
+                                         document.dfp_DocumentTypeID.dfp_name == "DMER")
+                                    {
+                                        dynamicsContext.Detach(currentCase);
+                                        var changedIncident = new incident()
+                                        {
+                                            incidentid = currentCase.incidentid,
+                                            dfp_ismanualpass = true
+                                        };
+                                        dynamicsContext.AttachTo("incidents", changedIncident);
+                                        dynamicsContext.UpdateObject(changedIncident);
+                                        result.Success = true;
+                                    }
+
+                                }
+
+                            }
+
+                            try
+                            {
+                                dynamicsContext.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                Serilog.Log.Error(ex, $"CMS.CaseManager Update Manual Pass  ex.Message");
+                            }
+
+                            dynamicsContext.DetachAll();
+
+                        }
+                    }
+                }
+            }
+
+            catch (Exception e)
+            {
+                logger.LogError(e, $"Update Manual Pass Flag - Error updating");
+                result.ErrorDetail = e.Message;
+            }
+
+            return result;
+
+        }
+
+        /// <summary>
+        /// Set Manual Pass Status
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+
+        public async Task<bool> SetManualPassFlag(string caseId, bool manualPassStatus)
+        {
+            // get the case
+            incident @case = GetIncidentById(caseId);
+            try
+            {
+                if (@case.statecode == 0)
+                {
+                   @case.dfp_ismanualpass = manualPassStatus;
+
+                    dynamicsContext.UpdateObject(@case);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"SetManualPassStatus - Error updating");
             }
 
             return true;

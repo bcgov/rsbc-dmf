@@ -734,17 +734,16 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                         if (!String.IsNullOrEmpty(_configuration["CLEAN_PASS_DOCUMENT"]))
                         {
-                            if (submittalStatus == "Clean Pass" || submittalStatus =="Manual Pass")
+                            if (submittalStatus == "Clean Pass")
                             {
-                                var cleanPassRequest = new CleanPassRequest
-                                {
-                                    CaseId = caseId
-
-                                };
-                                _cmsAdapterClient.UpdateCleanPassFlag(cleanPassRequest);
+                                _cmsAdapterClient.UpdateCleanPassFlag(new CaseIdRequest { CaseId = caseId });
                             }
+                            else if(submittalStatus == "Manual Pass")
+                           {   
+                                _cmsAdapterClient.UpdateManualPassFlag(new CaseIdRequest { CaseId = caseId });
+                           }
                         }
-                          
+
                         var actionName = nameof(AddCaseDocument);
                         var routeValues = new
                         {

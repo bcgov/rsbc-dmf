@@ -1355,26 +1355,42 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
 
         /// <summary>
-        /// Mark Medical Update Error when ICBC fails to update
+        /// Update Clean Pass Flag
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> UpdateCleanPassFlag(CaseIdRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();
             try
             {
-                var cleanPassRequest = new CaseManagement.CleanPassRequest()
-                {
-                    CaseId = request.CaseId,
-                    //isCleanPass = true
-                };
+               
+               await _caseManager.UpdateCleanPassFlag(request.CaseId);
 
-                 await _caseManager.UpdateCleanPassFlag(cleanPassRequest);
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
 
-               //  await _caseManager.UpdateCleanPassDocuments(cleanPassRequest);
-                
+            return reply;
+        }
+
+        /// <summary>
+        /// Update Manual Pass Flag on the case
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> UpdateManualPassFlag(CaseIdRequest request, ServerCallContext context)
+        {
+            ResultStatusReply reply = new ResultStatusReply();
+            try
+            {
+                await _caseManager.UpdateManualPassFlag(request.CaseId);
 
                 reply.ResultStatus = ResultStatus.Success;
             }
