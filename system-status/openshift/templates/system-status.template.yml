@@ -40,6 +40,30 @@ parameters:
   - description: CORS_ORIGINS
     name: CORS_ORIGINS
     value: "true"
+  - description: DEV_ICBC
+    name: DEV_ICBC
+    required: false
+  - description: TEST_ICBC
+    name: TEST_ICBC
+    required: false
+  - description: TRAIN_ICBC
+    name: TRAIN_ICBC
+    required: false
+  - description: PROD_ICBC
+    name: PROD_ICBC
+    required: false
+  - description: DEV_S3
+    name: DEV_S3
+    required: false
+  - description: TEST_S3
+    name: TEST_S3
+    required: false
+  - description: TRAIN_S3
+    name: TRAIN_S3
+    required: false
+  - description: PROD_S3
+    name: PROD_S3
+    required: false
 
 objects:
   - kind: ConfigMap
@@ -64,7 +88,14 @@ objects:
         app: ${APP_NAME}-system-status
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:      
-      DATABASE_LOCATION: '/db/DATA.db'
+      DEV_ICBC: ${DEV_ICBC}
+      TEST_ICBC: ${TEST_ICBC}
+      TRAIN_ICBC: ${TRAIN_ICBC}
+      PROD_ICBC: ${PROD_ICBC}
+      DEV_S3: ${DEV_S3}
+      TEST_S3: ${TEST_S3}
+      TRAIN_S3: ${TRAIN_S3}
+      PROD_S3: ${PROD_S3}
 
   - kind: Service
     apiVersion: v1
