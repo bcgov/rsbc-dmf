@@ -9,6 +9,7 @@ using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables();
 builder.WebHost
     .UseUrls()
     .UseKestrel(options =>

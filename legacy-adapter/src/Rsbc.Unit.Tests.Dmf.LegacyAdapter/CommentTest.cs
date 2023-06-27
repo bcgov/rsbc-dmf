@@ -31,7 +31,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         }
 
 
-            [Fact]
+        [Fact]
         public async void TestDeleteComment()
         {
             Login();
