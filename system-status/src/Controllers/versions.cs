@@ -37,6 +37,7 @@ namespace SystemStatus.Controllers
             }
             else 
             { 
+
                 return Ok("{\"basePath\":null,\"baseUri\":null,\"environment\":\"staging\",\"fileCreationTime\":\"" + DateTimeOffset.Now.ToString() + "\",\"fileVersion\":\"Unknown\",\"productVersion\":\"https://github.com!bcgov/rsbc-dmf!main!invalid!1.1.1.!1\",\"sourceCommit\":null,\"sourceReference\":null,\"sourceRepository\":null}"); }
 
         }

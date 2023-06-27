@@ -88,14 +88,14 @@ objects:
         app: ${APP_NAME}-system-status
         app.kubernetes.io/part-of: ${APP_NAME}
     stringData:      
-      DEV_ICBC: ${DEV_ICBC}
-      TEST_ICBC: ${TEST_ICBC}
-      TRAIN_ICBC: ${TRAIN_ICBC}
-      PROD_ICBC: ${PROD_ICBC}
-      DEV_S3: ${DEV_S3}
-      TEST_S3: ${TEST_S3}
-      TRAIN_S3: ${TRAIN_S3}
-      PROD_S3: ${PROD_S3}
+      URL_DEV_ICBC: ${DEV_ICBC}
+      URL_TEST_ICBC: ${TEST_ICBC}
+      URL_TRAIN_ICBC: ${TRAIN_ICBC}
+      URL_PROD_ICBC: ${PROD_ICBC}
+      URL_DEV_S3: ${DEV_S3}
+      URL_TEST_S3: ${TEST_S3}
+      URL_TRAIN_S3: ${TRAIN_S3}
+      URL_PROD_S3: ${PROD_S3}
 
   - kind: Service
     apiVersion: v1
