@@ -169,6 +169,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 Serilog.Log.Logger.Error("No response received from ICBC - Network Error");
                 return Json(null);
 
+                //
                 
                 //StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
             }
