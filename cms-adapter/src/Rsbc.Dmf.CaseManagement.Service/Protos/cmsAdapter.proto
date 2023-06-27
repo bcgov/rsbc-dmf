@@ -71,7 +71,10 @@ service CaseManager {
   rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
 
   //Update Clean Pass Flag
-   rpc UpdateCleanPassFlag(CleanPassRequest) returns (ResultStatusReply);
+   rpc UpdateCleanPassFlag(CaseIdRequest) returns (ResultStatusReply);
+
+    //Update Manual Pass Flag
+   rpc UpdateManualPassFlag(CaseIdRequest) returns (ResultStatusReply);
 
    // Send To BC mail
    rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
@@ -81,8 +84,7 @@ service CaseManager {
    // Update Non Comply documents
    rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
  
-  //Update Manual Pass Flag
-   rpc UpdateManualPassFlag(ManualPassRequest) returns (ResultStatusReply);
+ 
 }
 
 message UpdateDriverRequest{
@@ -258,12 +260,10 @@ message EmptyRequest {
 
 message CleanPassRequest{
 	string caseId = 1;
-	bool isCleanPass = 2;
 }
 
 message ManualPassRequest{
 	string caseId = 1;
-	bool isCleanPass = 2;
 }
 
 

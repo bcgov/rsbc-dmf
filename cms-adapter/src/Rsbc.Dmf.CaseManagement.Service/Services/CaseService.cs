@@ -1355,26 +1355,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
 
         /// <summary>
-        /// Mark Medical Update Error when ICBC fails to update
+        /// Update Clean Pass Flag
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> UpdateCleanPassFlag(CaseIdRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();
             try
             {
-                var cleanPassRequest = new CaseManagement.CleanPassRequest()
-                {
-                    CaseId = request.CaseId,
-                    //isCleanPass = true
-                };
-
-                 await _caseManager.UpdateCleanPassFlag(cleanPassRequest);
-
-               //  await _caseManager.UpdateCleanPassDocuments(cleanPassRequest);
-                
+               
+               await _caseManager.UpdateCleanPassFlag(request.CaseId);
 
                 reply.ResultStatus = ResultStatus.Success;
             }
@@ -1393,18 +1385,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<ResultStatusReply> UpdateManualPassFlag(ManualPassRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> UpdateManualPassFlag(CaseIdRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();
             try
             {
-                var manualPassRequest = new CaseManagement.ManualPassRequest()
-                {
-                    CaseId = request.CaseId,
-                    //isCleanPass = true
-                };
-
-                await _caseManager.UpdateManualPassFlag(manualPassRequest);
+                await _caseManager.UpdateManualPassFlag(request.CaseId);
 
                 reply.ResultStatus = ResultStatus.Success;
             }

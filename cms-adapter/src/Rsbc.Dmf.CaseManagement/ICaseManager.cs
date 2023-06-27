@@ -86,9 +86,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus);
 
-        Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request);
+        Task<ResultStatusReply> UpdateCleanPassFlag(string caseId);
 
-        Task<ResultStatusReply> UpdateManualPassFlag(ManualPassRequest request);
+        Task<ResultStatusReply> UpdateManualPassFlag(string caseId);
 
         Task<bool> SetManualPassFlag(string caseId, bool manualPassStatus);
 

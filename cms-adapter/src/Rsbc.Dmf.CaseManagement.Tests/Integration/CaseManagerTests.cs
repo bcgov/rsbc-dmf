@@ -97,12 +97,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     // set the value to true
                     await caseManager.SetCleanPassFlag(caseId, false);
 
-                    var request = new CleanPassRequest
-                    {
-                        CaseId = caseId,
-                    };
+                    // Update Clean Pass Flag
 
-                    await caseManager.UpdateCleanPassFlag(request);
+                    await caseManager.UpdateCleanPassFlag(caseId);
                 }
 
                 // verify in dynamics wether this is updated
@@ -131,12 +128,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     // set the value to true
                     await caseManager.SetManualPassFlag(caseId, false);
 
-                    var request = new ManualPassRequest
-                    {
-                        CaseId = caseId
-                    };
-
-                    await caseManager.UpdateManualPassFlag(request);
+                    // Update Manaul Pass Flag
+                    await caseManager.UpdateManualPassFlag(caseId);
                 }
 
                 // verify in dynamics wether this is updated

@@ -191,17 +191,12 @@ namespace Rsbc.Dmf.CaseManagement
         public string ErrorMessage { get; set; }
     }
 
-
-    public class CleanPassRequest
+    public enum submittalStatusOptionSet
     {
-        public string CaseId { get; set; }
-        public bool isCleanPass { get; set; }
-    }
-
-    public class ManualPassRequest
-    {
-        public string CaseId { get; set; }
-        public bool isCleanPass { get; set; }
+        Accept = 100000001,
+        Reject = 100000004, 
+        CleanPass=  100000009,
+        ManualPass = 100000012 
     }
 
     public enum BringForwardPriority
@@ -211,7 +206,6 @@ namespace Rsbc.Dmf.CaseManagement
         High = 2
 
     }
-
 
     public class ResultStatusReply
     {
@@ -2732,7 +2726,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> UpdateCleanPassFlag(CleanPassRequest request)
+        public async Task<ResultStatusReply> UpdateCleanPassFlag(string caseId)
         {
             ResultStatusReply result = new ResultStatusReply()
             {
@@ -2741,7 +2735,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                string caseId = request.CaseId;
+               // string id = caseId;
 
                 if (caseId != null && caseId != string.Empty)
                 {
@@ -2760,8 +2754,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == 100000009// this is only for DMER clean pass document type
-                                    )
+                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
                                 {
                                     
                                     if (document.dfp_DocumentTypeID != null &&
@@ -2845,7 +2838,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> UpdateManualPassFlag(ManualPassRequest request)
+        public async Task<ResultStatusReply> UpdateManualPassFlag(string caseId)
         {
             ResultStatusReply result = new ResultStatusReply()
             {
@@ -2854,7 +2847,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                string caseId = request.CaseId;
+                //string caseId = request.CaseId;
 
                 if (caseId != null && caseId != string.Empty)
                 {
@@ -2873,7 +2866,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == 100000012// this is only for DMER clean pass or manual pass document type
+                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass
                                     )
                                 {
 
