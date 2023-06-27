@@ -20,54 +20,8 @@ export class HomeComponent {
 
   }
 
-  ngOnInit(): void {
-    this.http.get<string[]>(this.baseUrl + 'api/MonthlyCountStats/Categories').subscribe(result => {
 
 
-
-      //var ctx = document.getElementById("theChart");
-      this.categories = result;
-      this.categories.forEach((category) => {
-
-        this.http.get<VelocityData[]>(this.baseUrl + 'api/Velocity/' + category).subscribe(result => {
-
-
-
-          //let htmlRef = this.elementRef.nativeElement.querySelector("#theChart");
-
-          //var ctx = document.getElementById("theChart");
-          this.velocityData[category] = result;
-
-
-        });
-
-        
-      });
-      
-
-    });
-
-
-   
-
-    
-
-  }
-
-}
-
-
-interface VelocityData {
-  label: string;
-
-  total: number;
-
-  improvement: number;
-
-  time: number;
-
-  velocity: number;
-  projectedEnd: string;
 
 }
 
