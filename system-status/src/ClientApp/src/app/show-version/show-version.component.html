@@ -1,0 +1,13 @@
+&nbsp;
+<br />
+<table *ngIf="versionData" width="80%">
+  <tr>
+    <th colspan=2><p style="text-align:center;">{{ name }}</p></th>
+  </tr>
+  <tr><th>Git Commit</th><td><a href="{{ versionData.gitReference }}">{{ versionData.gitReference }}</a></td></tr>
+  <tr><th>Git Branch</th><td>{{ versionData.gitBranch }}</td></tr>
+  <tr><th>Version</th><td>{{ versionData.fileVersion }}</td></tr>
+  <tr><th>Date</th><td>{{ versionData.fileCreationTime | date:'medium' }}</td></tr>
+</table>
+
+
