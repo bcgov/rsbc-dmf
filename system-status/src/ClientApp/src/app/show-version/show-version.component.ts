@@ -1,6 +1,6 @@
 import { Component, Input, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { OnInit } from '@angular/core';
+import { OnInit, OnDestroy } from '@angular/core';
 
 
 @Component({
@@ -8,7 +8,7 @@ import { OnInit } from '@angular/core';
   templateUrl: './show-version.component.html',
   styleUrls: ['./show-version.component.css']
 })
-export class ShowVersionComponent {
+export class ShowVersionComponent implements OnInit, OnDestroy {
   @Input()
     token!: string;
   @Input()
@@ -16,14 +16,13 @@ export class ShowVersionComponent {
   versionData!: VersionData;
 
   baseUrl: string;
-
+  id: any;
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.baseUrl = baseUrl;
 
   }
 
-
-  ngOnInit(): void {
+  refresh() {
     this.http.get<VersionData>(this.baseUrl + 'api/versions/' + this.token).subscribe(result => {
 
       var splitted = result.productVersion.split("!", 4);
@@ -33,10 +32,26 @@ export class ShowVersionComponent {
 
       this.versionData = result;
 
-      
+
 
 
     });
+  }
+
+  ngOnDestroy() {
+    if (this.id) {
+      clearInterval(this.id);
+    }
+  }
+
+  ngOnInit(): void {
+    this.refresh();
+    this.id = setInterval(() => {
+      this.refresh();
+    }, 5000);
+
+
+    
 
   }
 }
