@@ -1,35 +1,32 @@
-name: cd-icbc-adapter
+name: cd-system-status-api
 
 on:
   push:
     # Publish `main` as Docker `latest` image.
-    branches: [main]
-
+    branches:
+      - main
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-    paths:    
-      - "icbc-adapter/src/**"
-      - ".github/workflows/cd-icbc-adapter.yml"
+    paths:
+      - "system-status/src/**"
+      - ".github/workflows/cd-system-status-api.yml"
 
 env:
-  IMAGE_NAME: icbc-adapter
-  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/icbc-adapter
+  IMAGE_NAME: system-status-api
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/system-status-api
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.versionprefix }}!${{ github.run_number }}
+  
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
-  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    env:
-       working-directory: ./icbc-adapter/src
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       GIT_BRANCH: "${{github.ref}}"
 
     steps:
-      - uses: actions/checkout@v2      
+      - uses: actions/checkout@v2
 
       - name: Log into registry
         run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
@@ -38,7 +35,11 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./icbc-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
+        run: |
+          echo "BUILD ID=$BUILD_ID" 
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"
+                 
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./system-status/src/Dockerfile --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
