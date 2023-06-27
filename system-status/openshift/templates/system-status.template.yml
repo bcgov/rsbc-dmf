@@ -112,7 +112,7 @@ objects:
       namespace: ${NAMESPACE_PREFIX}-${ENV}
     spec:
       host: ${HOST}
-      path: /metrics
+      path: /status
       port:
         targetPort: 2015-tcp
       tls:
