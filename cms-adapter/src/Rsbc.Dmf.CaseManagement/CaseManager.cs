@@ -893,6 +893,16 @@ namespace Rsbc.Dmf.CaseManagement
                         LatestDecision = null                                                
                     };
 
+                    if (fetchedCase.dfp_dfcmscasesequencenumber == null)
+                    {
+                        result.CaseSequence = -1;
+                    }
+                    else
+                    {
+                        result.CaseSequence = fetchedCase.dfp_dfcmscasesequencenumber.Value;
+                    }
+
+
                     // get the case type.
 
                     if (fetchedCase.casetypecode != null)

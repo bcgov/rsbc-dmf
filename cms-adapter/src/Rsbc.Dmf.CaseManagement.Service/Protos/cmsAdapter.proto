@@ -231,6 +231,7 @@ message CaseDetail {
 	string decisionForClass = 11;
 	google.protobuf.Timestamp decisionDate = 12;
 	google.protobuf.Timestamp dpsProcessingDate = 13;
+	int64 caseSequence = 14;
 }
 
 
