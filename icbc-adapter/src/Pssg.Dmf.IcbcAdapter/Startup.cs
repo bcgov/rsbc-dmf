@@ -32,7 +32,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Serilog.Context;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
