@@ -1,4 +1,4 @@
-﻿namespace Rsbc.Dmf.IcbcAdapter.ViewModels
+﻿namespace Pssg.DocumentStorageAdapter.ViewModels
 {
     public class ApplicationVersionInfo
     {

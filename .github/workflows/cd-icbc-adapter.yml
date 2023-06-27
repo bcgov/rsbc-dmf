@@ -1,13 +1,14 @@
 name: cd-icbc-adapter
 
 on:
+  workflow_dispatch:
   push:
     # Publish `main` as Docker `latest` image.
-    branches: [main]
+    #branches: [main]
 
     # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+    #tags:
+    #  - v*
     paths:    
       - "icbc-adapter/src/**"
       - ".github/workflows/cd-icbc-adapter.yml"
@@ -17,7 +18,7 @@ env:
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/icbc-adapter
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
-  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.versionprefix }}!${{ github.run_number }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
 jobs:
   build:

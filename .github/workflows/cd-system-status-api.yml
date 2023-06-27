@@ -1,4 +1,4 @@
-name: cd-migration-metrics-api
+name: cd-system-status-api
 
 on:
   push:
@@ -9,12 +9,12 @@ on:
     tags:
       - v*
     paths:
-      - "migration-metrics/src/**"
-      - ".github/workflows/cd-migration-metrics-api.yml"
+      - "system-status/src/**"
+      - ".github/workflows/cd-system-status-api.yml"
 
 env:
-  IMAGE_NAME: migration-metrics-api
-  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/migration-metrics-api
+  IMAGE_NAME: system-status-api
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/system-status-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.versionprefix }}!${{ github.run_number }}
   
   RUN_NUMBER: ${{ github.run_number }}
@@ -39,7 +39,7 @@ jobs:
           echo "BUILD ID=$BUILD_ID" 
           echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"
                  
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./migration-metrics/src/Dockerfile --cache-from=$IMAGE_ID
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./system-status/src/Dockerfile --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |

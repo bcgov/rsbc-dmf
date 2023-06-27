@@ -1,0 +1,357 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: system-status-template
+
+parameters:
+  - description: openshift namespace prefix
+    name: NAMESPACE_PREFIX
+    required: true
+  - description: openshift namespace env name
+    name: ENV
+    required: true
+  - description: app name
+    name: APP_NAME
+    required: true
+  - description: image tag for deployments
+    name: TAG
+    required: true
+  - description: host for routes
+    name: HOST
+    required: true
+  - description: ASPNET runtime environment (Development/Staging/Production)
+    name: RUNTIME_ENVIRONMENT
+    value: Staging
+  - description: oauth server url
+    name: OAUTH_SERVER_URL
+    required: false
+  - description: oauth server client id
+    name: OAUTH_CLIENTID
+    required: false
+  - description: oauth server client secret
+    name: OAUTH_CLIENTSECRET
+    required: false
+  - description: oidc client id
+    name: OIDC_CLIENTID
+    required: false
+  - description: oidc scopes
+    name: OIDC_SCOPE
+    value: "openid profile email system-status-api"
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    value: "true"
+  - description: DEV_ICBC
+    name: DEV_ICBC
+    required: false
+  - description: TEST_ICBC
+    name: TEST_ICBC
+    required: false
+  - description: TRAIN_ICBC
+    name: TRAIN_ICBC
+    required: false
+  - description: PROD_ICBC
+    name: PROD_ICBC
+    required: false
+  - description: DEV_S3
+    name: DEV_S3
+    required: false
+  - description: TEST_S3
+    name: TEST_S3
+    required: false
+  - description: TRAIN_S3
+    name: TRAIN_S3
+    required: false
+  - description: PROD_S3
+    name: PROD_S3
+    required: false
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-system-status-api-config
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+    data:
+      ASPNETCORE_ENVIRONMENT: ${RUNTIME_ENVIRONMENT}
+      KEY_RING_PATH: "/dpkeys"
+      app__cors__origins: ${CORS_ORIGINS}
+  - kind: Secret
+    apiVersion: v1
+    type: Opaque
+    metadata:
+      name: ${APP_NAME}-system-status-api-secrets
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+    stringData:      
+      URL_DEV_ICBC: ${DEV_ICBC}
+      URL_TEST_ICBC: ${TEST_ICBC}
+      URL_TRAIN_ICBC: ${TRAIN_ICBC}
+      URL_PROD_ICBC: ${PROD_ICBC}
+      URL_DEV_S3: ${DEV_S3}
+      URL_TEST_S3: ${TEST_S3}
+      URL_TRAIN_S3: ${TRAIN_S3}
+      URL_PROD_S3: ${PROD_S3}
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-system-status-api
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentconfig: ${APP_NAME}-system-status-api
+      type: ClusterIP
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-system-status-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      ports:
+        - name: 2015-tcp
+          port: 2015
+          protocol: TCP
+          targetPort: 2015
+      selector:
+        deploymentconfig: ${APP_NAME}-system-status-ui
+      type: ClusterIP
+
+  - kind: Route
+    apiVersion: route.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-system-status-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      host: ${HOST}
+      path: /status
+      port:
+        targetPort: 2015-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: ${APP_NAME}-system-status-ui
+        weight: 100
+
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: ${APP_NAME}-system-status
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      podSelector:
+        matchLabels:
+          app: ${APP_NAME}-system-status
+      ingress:
+        - ports:
+            - protocol: TCP
+              port: 2015
+            - protocol: TCP
+              port: 8080
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-system-status-api
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${APP_NAME}-system-status-api
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-system-status
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-system-status-api
+        spec:
+          containers:
+            - name: system-status-api
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}-system-status-api-config
+                - secretRef:
+                    name: ${APP_NAME}-system-status-api-secrets
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/system-status-api:${TAG}
+              imagePullPolicy: Always
+              volumeMounts:
+                - mountPath: /dpkeys
+                  name: dp-keys              
+                - mountPath: /db
+                  name: db
+              livenessProbe:
+                httpGet:
+                  path: /hc/live
+                  port: 8080
+              startupProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /hc/ready
+                  port: 8080
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - name: dp-keys
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-system-status-api-key-ring
+            - name: db
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-system-status-api-db
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - system-status-api
+            from:
+              kind: ImageStreamTag
+              name: system-status-api:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: DeploymentConfig
+    apiVersion: apps.openshift.io/v1
+    metadata:
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+      name: ${APP_NAME}-system-status-ui
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+    spec:
+      replicas: 1
+      selector:
+        deploymentconfig: ${APP_NAME}-system-status-ui
+      strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          labels:
+            app: ${APP_NAME}-system-status
+            app.kubernetes.io/part-of: ${APP_NAME}
+            deploymentconfig: ${APP_NAME}-system-status-ui
+        spec:
+          containers:
+            - name: system-status-ui
+              securityContext:
+                allowPrivilegeEscalation: true
+              env:
+                - name: API_URL
+                  value: ${APP_NAME}-system-status-api:8080
+              image: docker-registry.default.svc:5000/${NAMESPACE_PREFIX}-tools/system-status-ui:${TAG}
+              imagePullPolicy: Always
+              ports:
+                - containerPort: 2015
+                  protocol: TCP
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              livenessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              startupProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+              readinessProbe:
+                httpGet:
+                  path: /
+                  port: 2015
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - system-status-ui
+            from:
+              kind: ImageStreamTag
+              name: system-status-ui:${TAG}
+              namespace: ${NAMESPACE_PREFIX}-tools
+
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-system-status-api-key-ring
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "100Mi"
+  - kind: "PersistentVolumeClaim"
+    apiVersion: "v1"
+    metadata:
+      name: ${APP_NAME}-system-status-api-db
+      namespace: ${NAMESPACE_PREFIX}-${ENV}
+      labels:
+        app: ${APP_NAME}-system-status
+        app.kubernetes.io/part-of: ${APP_NAME}
+    spec:
+      accessModes:
+        - "ReadWriteMany"
+      resources:
+        requests:
+          storage: "5Gi"

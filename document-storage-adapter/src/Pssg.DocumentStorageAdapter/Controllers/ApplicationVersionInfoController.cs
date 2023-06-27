@@ -1,4 +1,4 @@
-﻿using Rsbc.Dmf.IcbcAdapter.ViewModels;
+﻿using Pssg.DocumentStorageAdapter.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace Rsbc.Dmf.IcbcAdapter.Controllers
+namespace Pssg.DocumentStorageAdapter.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

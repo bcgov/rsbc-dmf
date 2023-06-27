@@ -1,18 +1,25 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 COPY . .
 RUN dotnet restore ./document-storage-adapter/src/Pssg.DocumentStorageAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./document-storage-adapter/src/Pssg.DocumentStorageAdapter -c Release -o /app/publish
+ARG BUILD_ID
+ARG BUILD_VERSION
+RUN dotnet publish ./document-storage-adapter/src/Pssg.DocumentStorageAdapter /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish
 
 FROM base AS final
+ARG BUILD_ID
+ARG BUILD_VERSION
 WORKDIR /app
 COPY --from=publish /app/publish .
 
