@@ -1,6 +1,9 @@
-
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
