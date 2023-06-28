@@ -22,6 +22,11 @@ namespace Rsbc.Dmf.LegacyAdapter.ViewModels
         public string IdCode { get; set; }
 
         /// <summary>
+        /// The Oracle Case Sequence, if available
+        /// </summary>
+        public int? CaseSequence { get; set; }
+
+        /// <summary>
         /// Indicated the date the case was opened.
         /// </summary>
         public DateTimeOffset OpenedDate { get; set; }

@@ -138,7 +138,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Surname = driver.INAM?.SURN ?? string.Empty
                     });
 
-                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
+                    result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
                     if (result == null) // create it
                     {
                         try
@@ -156,7 +156,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 var legacyResult = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                                 if (legacyResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                                 {
-                                    result = GetCaseId(licenseNumber, driver.INAM?.SURN);
+                                    result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
                                 }
                             }
                         }
@@ -173,7 +173,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
                 DebugUtils.SaveDebug("IcbcError",$"{licenseNumber}-{surcode}");
 
-                result = GetCaseId(licenseNumber, surcode);
+                result = _cmsAdapterClient.GetCaseId(licenseNumber, surcode);
             }
 
             return Json(result);
@@ -189,7 +189,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
             licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
-            string caseId = GetCaseIdByDl(licenseNumber);
+            string caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
 
             if (caseId == null) // create it
             {
@@ -235,7 +235,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     _logger.LogInformation(e, "Error getting driver.");
                 }
-                caseId = GetCaseIdByDl(licenseNumber);
+                caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
             }
 
             return Json(caseId);
@@ -271,7 +271,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 result.LatestDecision = c.Item.LatestDecision;
                 result.DecisionForClass = c.Item.DecisionForClass;
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                
+                if (c.Item.CaseSequence > -1)
+                {
+                    result.CaseSequence = (int)c.Item.CaseSequence;
+                }                
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
                 result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
@@ -285,78 +288,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(result);
         }
 
-        /// <summary>
-        /// Get Case Id
-        /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <param name="surcode"></param>
-        /// <returns></returns>
-        private string GetCaseId(string licenseNumber, string surcode)
-        {
-            var closedStatus = new HashSet<string>
-            {
-                "Decision Rendered",
-                "Canceled"
-            };
-
-
-
-            string trimmedSurcode = surcode;
-            if (trimmedSurcode.Length > 3)
-            {
-                trimmedSurcode = trimmedSurcode.Substring(0, 3);    
-            }
-
-            string caseId = null;
-            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                // ensure newest first.
-                var sorted = reply.Items.OrderByDescending(x => x.CreatedOn);
-
-                foreach (var item in sorted)
-                {
-
-                    if (!closedStatus.Contains(item.Status))
-                    {
-                        if ((bool)(item.Driver?.Surname.ToUpper().StartsWith(trimmedSurcode.ToUpper())))
-                        {
-                            caseId = item.CaseId;
-                            break;
-                        }
-                    }                    
-                }
-            }
-            return caseId;
-        }
-
-
-        private string GetCaseIdByDl(string licenseNumber)
-        {
-            var closedStatus = new HashSet<string>()
-            {
-                "Decision Rendered",
-                "Canceled"
-            };
-
-            string caseId = null;
-            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                // ensure newest first.
-                var sorted = reply.Items.OrderByDescending( x=> x.CreatedOn);
-
-                foreach (var item in sorted)
-                {
-                    if (!closedStatus.Contains(item.Status))
-                    {
-                        caseId = item.CaseId;
-                        break;
-                    }                                        
-                }
-            }
-            return caseId;
-        }
+        
 
         private List<Comment> GetCommentsForCase(string caseId, OriginRestrictions originRestrictions)
         {
@@ -467,9 +399,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public ActionResult CreateComments([FromRoute] string caseId, [FromBody] ViewModels.Comment comment )
-        {            
-            // add the comment
-            return CreatedAtAction("Comments", comment);
+        {
+
+            throw new NotImplementedException();
         }
 
         /// <summary>

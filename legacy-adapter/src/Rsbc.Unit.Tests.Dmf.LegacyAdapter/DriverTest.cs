@@ -178,7 +178,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 SequenceNumber = 4,
                 CommentTypeCode = commentTypeCode,
                 UserId = "IDIR\\TESTUSER",
-                CaseId = "none"
+                CaseId = null,
+                CommentId = null
             };
 
             var stringContent = JsonConvert.SerializeObject(comment);

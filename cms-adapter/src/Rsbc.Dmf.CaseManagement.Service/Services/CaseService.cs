@@ -61,32 +61,40 @@ namespace Rsbc.Dmf.CaseManagement.Service
             if (Guid.TryParse(request.CaseId, out caseId))
             {
                 caseIdString = caseId.ToString();
-            }
 
-            var newComment = new CaseManagement.LegacyComment()
-            {
-                CaseId = caseIdString,
-                CommentText = request.CommentText,
-                CommentTypeCode = request.CommentTypeCode,
-                SequenceNumber = (int)request.SequenceNumber,
-                UserId = request.UserId,            
-                Driver = driver,
-                CommentDate = commentDate,
-                CommentId = request.CommentId
-            };
+                var newComment = new CaseManagement.LegacyComment()
+                {
+                    CaseId = caseIdString,
+                    CommentText = request.CommentText,
+                    CommentTypeCode = request.CommentTypeCode,
+                    SequenceNumber = (int)request.SequenceNumber,
+                    UserId = request.UserId,
+                    Driver = driver,
+                    CommentDate = commentDate,
+                    CommentId = request.CommentId
+                };
 
-            var result = await _caseManager.CreateLegacyCaseComment(newComment);
+                var result = await _caseManager.CreateLegacyCaseComment(newComment);
 
-            if (result.Success )
-            {
-                reply.ResultStatus = ResultStatus.Success;
-                reply.Id = result.Id;
+                if (result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                    reply.Id = result.Id;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                    reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
+                }
             }
             else
             {
+                // fetch the current case for the driver.
                 reply.ResultStatus = ResultStatus.Fail;
-                reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
+                reply.ErrorDetail = "Case ID is a required field to CreateLegacyCaseComment.";
             }
+
+            
 
             return reply;
         }
@@ -230,7 +238,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var c = await _caseManager.GetCaseDetail(request.CaseId);
                 if (c != null)
                 {
+                    
+
                     reply.Item = new CaseDetail();
+                    reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;
                     reply.Item.Title = c.Title ?? string.Empty;
                     reply.Item.IdCode = c.IdCode ?? string.Empty;
@@ -992,6 +1003,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ClinicName = c.ClinicName ?? string.Empty,
                         Status = c.Status,
                         DmerType = c.DmerType ?? string.Empty,
+                        CaseSequence = c.CaseSequence
                     };
                     newCase.Flags.Add(c.Flags.Select(f => new FlagItem
                     {
