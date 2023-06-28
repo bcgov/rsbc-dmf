@@ -1,8 +1,18 @@
-
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Net;
+using HealthChecks.UI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost
+    .UseUrls()
+    .UseKestrel(options =>
+    {
+    options.Listen(IPAddress.Any, 8080);
+    });
 
 // add services to DI container
 
@@ -41,10 +51,26 @@ services.AddSwaggerGen(options =>
     });
 });
 
+// Health Checks
+services.AddHealthChecks()
+    .AddCheck("driver-portal", () => HealthCheckResult.Healthy("OK"));
+
 services.AddHttpClient();
 
 
 var app = builder.Build();
+
+app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+{
+    Predicate = _ => true,
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseHealthChecks("/hc/live", new HealthCheckOptions
+{
+    // Exclude all checks and return a 200-Ok.
+    Predicate = _ => false
+});
 
 // configure HTTP request pipeline
 
