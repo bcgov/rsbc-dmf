@@ -3,12 +3,16 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Org.BouncyCastle.Crypto.Operators;
 using Pssg.DocumentStorageAdapter;
+using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.IcbcModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using System;
@@ -36,13 +40,19 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        private readonly IIcbcClient _icbcClient;
+        private readonly IMemoryCache _cache;
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,IIcbcClient icbcClient,
+            IMemoryCache memoryCache)
         {
+            _cache = memoryCache;
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
+            _icbcClient = icbcClient;
+
         }
 
 
@@ -313,10 +323,46 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 return StatusCode(500, "TEST - SAMPLE ERROR");
             };
 
-            //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
-            // add the comment
+            licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
 
-            if (comment.CommentText.Length > 1900 )
+
+            CLNT icbcDriver = null;
+            if (!_cache.TryGetValue(licenseNumber, out icbcDriver))
+            {
+                // get the history from ICBC
+                icbcDriver = _icbcClient.GetDriverHistory(licenseNumber);
+                // Key not in cache, so get data.
+                //cacheEntry = DateTime.Now;
+                if (icbcDriver != null)
+                {
+                    // Set cache options.
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        // Keep in cache for this time, reset time if accessed.
+                        .SetSlidingExpiration(TimeSpan.FromHours(2));
+
+                    // Save data in cache.
+                    _cache.Set(licenseNumber, icbcDriver, cacheEntryOptions);
+                }
+
+            }
+
+            if (icbcDriver != null && !string.IsNullOrEmpty(icbcDriver.INAM?.SURN)  && comment.Driver.LastName != icbcDriver.INAM?.SURN)
+            {
+                comment.Driver.LastName = icbcDriver.INAM?.SURN;
+                // ensure Dynamics has the most recent data.
+                _cmsAdapterClient.UpdateDriver(new CaseManagement.Service.Driver
+                {
+                    DriverLicenseNumber = licenseNumber,
+                    BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now),
+                    GivenName = icbcDriver.INAM?.GIV1 ?? string.Empty,
+                    Surname = icbcDriver.INAM?.SURN ?? string.Empty
+                });
+            }
+
+                //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
+                // add the comment
+
+                if (comment.CommentText.Length > 1900 )
             {
                 comment.CommentText = comment.CommentText.Substring(0,1900);
                 Serilog.Log.Error("Encountered comment longer than 1900 chars");
@@ -327,7 +373,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 DriverLicenseNumber = licenseNumber,
                 Surname = string.Empty,
-                Address = new Address { City = string.Empty, Line1 = string.Empty, Line2 = string.Empty, Postal = string.Empty },
+                Address = new CaseManagement.Service.Address { City = string.Empty, Line1 = string.Empty, Line2 = string.Empty, Postal = string.Empty },
                 BirthDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
                 GivenName = string.Empty,
                 Height = 0.0,
@@ -354,12 +400,25 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
 
                 string caseId = string.Empty;
-                if (comment.CaseId != null && comment.CaseId != "none")
+                if (comment.CaseId != null && comment.CaseId != "none" && comment.CaseId != "null")
                 {
                     caseId = comment.CaseId;
                 }
+                else // handle situations where the CaseID is not supplied.
+                {
+                    if (comment.SequenceNumber != null)
+                    {
+                        // fetch it from the sequence number.
+                        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
+                    }
+                    
+                    if (caseId == null) // try just the DL and Surname.
+                    {
+                        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName);
+                    }
+                }
 
-                var result = _cmsAdapterClient.CreateLegacyCaseComment(new LegacyComment()
+                var payload = new LegacyComment()
                 {
                     CaseId = caseId ?? string.Empty,
                     CommentText = comment.CommentText ?? string.Empty,
@@ -369,7 +428,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                     Driver = driver,
                     CommentId = comment.CommentId ?? string.Empty
-                });
+                };
+
+                var result = _cmsAdapterClient.CreateLegacyCaseComment(payload);
 
                 if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {

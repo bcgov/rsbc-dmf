@@ -159,6 +159,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string ClinicName { get; set;}
 
         public string DmerType { get; set;}
+
+        public int CaseSequence { get; set; }
     }
 
     public class Flag
@@ -1826,7 +1828,8 @@ namespace Rsbc.Dmf.CaseManagement
                                 Outcome = TranslateDecisionOutcome(d.dfp_decisionid),
                                 CreatedOn = d.createdon ?? default
                             }),                        
-                        Status = TranslateStatus(c.statuscode)
+                        Status = TranslateStatus(c.statuscode),
+                        CaseSequence = c.dfp_dfcmscasesequencenumber ?? -1
                     };
                 }).ToArray()
             };
