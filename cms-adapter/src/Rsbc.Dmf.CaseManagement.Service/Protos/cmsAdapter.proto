@@ -287,6 +287,8 @@ message DmerCase {
 	string clinicName = 14;
 	repeated FlagItem Flags = 30;
 	repeated DecisionItem Decisions = 35;
+	int64 caseSequence = 40;
+
 }
 
 message Driver {
