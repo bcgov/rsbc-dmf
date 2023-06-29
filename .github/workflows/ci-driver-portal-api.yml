@@ -14,6 +14,8 @@ env:
   solution-folder: driver-portal/src/  
   IMAGE_NAME: driver-portal-api
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
 
 jobs:
   build:
@@ -75,4 +77,5 @@ jobs:
       - name: Build image
         run: |
           echo BUILD_ID=$BUILD_ID
-          docker build --build-arg BUILD_ID="$BUILD_ID" . --file ./driver-portal/src/Dockerfile --tag $IMAGE_NAME
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"                 
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/Dockerfile --tag $IMAGE_NAME
