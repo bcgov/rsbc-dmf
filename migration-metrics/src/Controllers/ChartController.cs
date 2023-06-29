@@ -27,10 +27,10 @@ public class ChartController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet()]
-    public IActionResult GetChart()
+    [HttpGet("{chartId}")]
+    public IActionResult GetChart(string chartId)
     {
-        var recordedDates = _monthlyCountStatService.GetRecordedDates();
+        var recordedDates = _monthlyCountStatService.GetRecordedDatesByCategory(chartId);
 
         List<string> labels = new List<string>();
 
@@ -58,7 +58,7 @@ public class ChartController : ControllerBase
         foreach (var recordedDate in recordedDates)
         {
             
-            var theData = _monthlyCountStatService.GetDataByRecordedDate(recordedDate);
+            var theData = _monthlyCountStatService.GetDataByRecordedDateCategory(recordedDate, chartId);
 
             var normalizedData = new int[startDatesArray.Length];
 
@@ -85,25 +85,31 @@ public class ChartController : ControllerBase
             {
                 newItem.PointHoverRadius = 1;
                 newItem.BorderColor = "red";  
-                newItem.BackgroundColor = "#222222";
+                newItem.BackgroundColor = "red";
                 newItem.BorderWidth = 1;
-                newItem.Fill = "origin"; 
+                newItem.Fill = true; 
                 //newItem.DrawActiveElementsOnTop = true;
             }
             else
             {
-                int greyScale = ((int)Math.Round ((l / recordedDates.Count()) * 0.5));
+                int greyScale = ((int)Math.Round (((l * 1.0) / 5.0) * 255.0));
                 newItem.PointHoverRadius = 1;
                 newItem.BorderColor = $"#00{greyScale.ToString("X")}00";
                 newItem.BackgroundColor = $"#00{greyScale.ToString("X")}00";
                 newItem.BorderWidth = 1;
-                newItem.Fill = "origin";
+                newItem.Fill = true;
                 //newItem.DrawActiveElementsOnTop = true;
             }
 
 
             datasets.Add(newItem);
             l++;
+
+            // only need a certain number of lines.
+            if (l > 5)
+            {
+                break;
+            }
         }
 
         var chartWrapper = new ChartWrapper { 
