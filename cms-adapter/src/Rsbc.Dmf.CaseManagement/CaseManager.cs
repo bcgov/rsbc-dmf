@@ -2156,10 +2156,12 @@ namespace Rsbc.Dmf.CaseManagement
                 try
                 {
                     dynamicsContext.AddToincidents(newIncident);
-                    if (driverContact != null)
+                    
+                    if (driverContact != null && newIncident._customerid_value != driverContact.contactid)
                     {
                         dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
                     }
+                    
                     var saveResult = await dynamicsContext.SaveChangesAsync();
 
                     var tempId = GetCreatedId(saveResult);
