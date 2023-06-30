@@ -1926,7 +1926,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (driver == null) // get by DL 
             {
-                var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
+                var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0); // active
                 var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
                 if (birthDate != null && birthDate.Value.Year < 1753)
@@ -1973,19 +1973,29 @@ namespace Rsbc.Dmf.CaseManagement
                     
                     try
                     {
-                        driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();
-
-                        if (driverContact != null)
-                        {                            
-                            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
-                        }
+                        driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();                        
                     }
                     catch (Exception)
                     {
                         driverContact = null;
                     }
 
-                    if (driverContact == null)
+                    if (driverContact != null)
+                    {
+                        try
+                        {
+                            if (driver._dfp_personid_value == null)
+                            {
+                                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+                                await dynamicsContext.SaveChangesAsync();
+                            }                            
+                        }
+                        catch (Exception e)
+                        {
+                            Log.Error(e, "LegacyCandidateCreate ERROR linking Driver to Contact " + e.Message);
+                        }
+                    }
+                    else
                     {
                         driverContact = new contact()
                         {
@@ -2000,8 +2010,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         try
-                        {
-                            await dynamicsContext.SaveChangesAsync();
+                        {                            
                             dynamicsContext.AddTocontacts(driverContact);
                             var saveResult = await dynamicsContext.SaveChangesAsync();
                             var tempId = GetCreatedId(saveResult);
@@ -2075,7 +2084,6 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact - " + e.Message);
                     }
-
                 }                
 
                 driver = new dfp_driver()
@@ -2129,8 +2137,6 @@ namespace Rsbc.Dmf.CaseManagement
                 paddedSize += sequenceString.Length;
                 
                 string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + request.DriverLicenseNumber + sequenceString;
-
-
 
                 newIncident.incidentid = Guid.Parse(incidentIdString);
             }
