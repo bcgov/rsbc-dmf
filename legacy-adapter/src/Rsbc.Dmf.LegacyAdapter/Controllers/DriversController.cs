@@ -431,7 +431,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                     Surname = icbcDriver.INAM?.SURN ?? string.Empty,
                                     BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now)
                                 };
-                                _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                var lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                if (lc.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                                {
+                                    // try it again.
+                                    lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                }
+                                if (lc.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                                {
+                                    // try it again.
+                                    lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                }
                             }
                             else
                             {
