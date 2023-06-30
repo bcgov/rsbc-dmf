@@ -2104,6 +2104,8 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.SaveChangesAsync();
             }
 
+
+
             // create the case.
             incident newIncident = new incident()
             {               
@@ -2115,6 +2117,21 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_progressstatus = 100000000,
                 dfp_dfcmscasesequencenumber = request.SequenceNumber,                
             };
+
+
+            if (request.SequenceNumber != null && request.SequenceNumber > 0)
+            {
+                string baseGuid = "407f23fb5500ec11b82bfbf5fbf5fbf5";
+
+                int paddedSize = request.DriverLicenseNumber.Length;
+
+                string sequenceString = request.SequenceNumber.ToString();
+                paddedSize += sequenceString.Length;
+                
+                string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + request.DriverLicenseNumber + sequenceString;
+
+                newIncident.incidentid = Guid.Parse(incidentIdString);
+            }
 
             try
             {
