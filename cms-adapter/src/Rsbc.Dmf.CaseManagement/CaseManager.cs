@@ -2126,8 +2126,10 @@ namespace Rsbc.Dmf.CaseManagement
                 var saveResult = await dynamicsContext.SaveChangesAsync();
                 
                 var tempId = GetCreatedId(saveResult);
+
                 if (tempId != null)
                 {
+                    dynamicsContext.Detach(newIncident);
                     newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
                 }
 
@@ -2141,7 +2143,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 // first check to see that the driver is not already linked.
 
-                await dynamicsContext.LoadPropertyAsync(newIncident, nameof(incident.dfp_DriverId));
+                //await dynamicsContext.LoadPropertyAsync(newIncident, nameof(incident.dfp_DriverId));
 
                 if (newIncident._dfp_driverid_value == null)
                 {
