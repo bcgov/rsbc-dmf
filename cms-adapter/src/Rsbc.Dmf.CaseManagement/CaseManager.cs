@@ -2130,31 +2130,61 @@ namespace Rsbc.Dmf.CaseManagement
                 
                 string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + request.DriverLicenseNumber + sequenceString;
 
+
+
                 newIncident.incidentid = Guid.Parse(incidentIdString);
             }
 
-            try
+            // check to see if the incident has already been created.
+
+            bool found = false;
+            if (newIncident.incidentid != null)
             {
-                dynamicsContext.AddToincidents(newIncident);
-                if (driverContact != null)
+                try
+                {
+                    newIncident = dynamicsContext.incidents.ByKey(newIncident.incidentid).GetValue();
+                    found = true;
+                }
+                catch (Exception ex)
+                {
+                    found = false;
+                }
+            }
+
+            if (!found)
+            {
+                try
+                {
+                    dynamicsContext.AddToincidents(newIncident);
+                    if (driverContact != null)
+                    {
+                        dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
+                    }
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+
+                    var tempId = GetCreatedId(saveResult);
+
+                    if (tempId != null)
+                    {
+                        dynamicsContext.Detach(newIncident);
+                        newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, $"LegacyCandidateCreate {source} ERROR CREATING INCIDENT - " + e.Message);
+                }
+            }
+            else
+            {
+                if (newIncident._customerid_value != null && newIncident._customerid_value != driverContact.contactid)
                 {
                     dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
                 }
-                var saveResult = await dynamicsContext.SaveChangesAsync();
-                
-                var tempId = GetCreatedId(saveResult);
-
-                if (tempId != null)
-                {
-                    dynamicsContext.Detach(newIncident);
-                    newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
-                }
-
             }
-            catch (Exception e)
-            {
-                Log.Error(e, $"LegacyCandidateCreate {source} ERROR CREATING INCIDENT - " + e.Message);
-            }
+
+            
 
             try
             {
@@ -2162,10 +2192,9 @@ namespace Rsbc.Dmf.CaseManagement
 
                 //await dynamicsContext.LoadPropertyAsync(newIncident, nameof(incident.dfp_DriverId));
 
-                if (newIncident._dfp_driverid_value == null)
+                if (newIncident._dfp_driverid_value == null || newIncident._dfp_driverid_value != driver.dfp_driverid)
                 {
                     dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driver);
-
                     await dynamicsContext.SaveChangesAsync();
                 }                
             }
