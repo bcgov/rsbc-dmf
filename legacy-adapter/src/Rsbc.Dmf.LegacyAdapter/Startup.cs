@@ -181,7 +181,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
-                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                 var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
                 // call the token service to get a token.
@@ -197,7 +197,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     // Add the bearer token to the client.
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
-                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
                 }
