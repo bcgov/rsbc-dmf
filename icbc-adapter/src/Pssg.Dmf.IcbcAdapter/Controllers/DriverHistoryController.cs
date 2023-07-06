@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     // Set cache options.
                     var cacheEntryOptions = new MemoryCacheEntryOptions()
                         // Keep in cache for this time, reset time if accessed.
-                        .SetSlidingExpiration(TimeSpan.FromHours(2));
+                        .SetSlidingExpiration(TimeSpan.FromHours(6));
 
                     // Save data in cache.
                     _cache.Set(driversLicence, data, cacheEntryOptions);
