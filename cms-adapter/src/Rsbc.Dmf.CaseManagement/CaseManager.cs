@@ -3370,7 +3370,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task MakeFakeDls()
         {
-            for (int i = 111144; i < 1150000; i++)
+            for (int i = 0; i < 1150000; i++)
             {
                 int fakeDl = 2000000 + i;
                 string dl = fakeDl.ToString();
