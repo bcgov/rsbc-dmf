@@ -247,7 +247,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     internal class CaseManager : ICaseManager
     {
-        private readonly DynamicsContext dynamicsContext;
+        internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
 
         public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger)
