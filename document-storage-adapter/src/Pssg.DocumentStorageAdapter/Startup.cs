@@ -74,8 +74,8 @@ namespace Pssg.DocumentStorageAdapter
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
-                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxReceiveMessageSize = null; 
+                options.MaxSendMessageSize = null; 
             });
 
             // health checks. 

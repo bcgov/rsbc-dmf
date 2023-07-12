@@ -268,7 +268,7 @@ namespace Rsbc.Dmf.CaseManagement
 
     internal class CaseManager : ICaseManager
     {
-        private readonly DynamicsContext dynamicsContext;
+        internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
 
         public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger)
@@ -3502,23 +3502,38 @@ namespace Rsbc.Dmf.CaseManagement
 
                         // ensure the contact information exists.
 
-                        item.dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname ;
-                        dynamicsContext.UpdateObject(item);
-                        await dynamicsContext.SaveChangesAsync();
+                        var id = item.dfp_driverid;
 
+                        dynamicsContext.Detach(item);
+
+                        var updateDriver = new dfp_driver
+                        {
+                            dfp_driverid = id,
+                            dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname
+                        };
+                        dynamicsContext.AttachTo("dfp_drivers", updateDriver);
+                        dynamicsContext.UpdateObject(updateDriver);
+                        await dynamicsContext.SaveChangesAsync();
 
                         dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
                         contact driverContact;
 
                         if (item.dfp_PersonId != null)
                         {
-                            driverContact = item.dfp_PersonId;
+                            var contactId = item.dfp_PersonId.contactid;
 
-                            driverContact.firstname = driver.GivenName;
-                            driverContact.lastname = driver.Surname;
-                            driverContact.birthdate = driver.BirthDate;
+                            dynamicsContext.Detach(item.dfp_PersonId);
+
+                            driverContact = new contact()
+                            {
+                                contactid = contactId,
+                                firstname = driver.GivenName,
+                                lastname = driver.Surname,
+                                birthdate = driver.BirthDate
+                            };
 
                             dynamicsContext.UpdateObject(driverContact);
+
                             written = true;
                             try
                             {
@@ -3613,7 +3628,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task MakeFakeDls()
         {
-            for (int i = 111144; i < 1150000; i++)
+            for (int i = 0; i < 1150000; i++)
             {
                 int fakeDl = 2000000 + i;
                 string dl = fakeDl.ToString();

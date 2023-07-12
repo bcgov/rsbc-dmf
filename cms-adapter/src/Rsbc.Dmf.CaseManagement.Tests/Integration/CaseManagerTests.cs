@@ -18,7 +18,18 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
            
             caseManager = services.GetRequiredService<ICaseManager>();
+
+            
         }
+
+        // example of how to get the dynamics context.  Requires special internal access to be provided from the CaseManager assembly.
+
+        private void DynamicsContextExample ()
+        {
+            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
+            // ... now you can use the Dynamics context...
+        }
+
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanSetFlagsAndSearchById()
