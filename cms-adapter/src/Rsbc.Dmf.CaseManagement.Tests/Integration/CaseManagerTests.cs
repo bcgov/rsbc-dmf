@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 using System;
+using NuGet.Frameworks;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -570,12 +571,56 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.True(result.Success);
         }
 
-        /*[Fact(Skip = RequiresDynamics)]
-        public async Task CanUpdateCleanPassDocuments()
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateDriver()
         {
-            
-            await caseManager.UpdateCleanPassDocuments();
-        }*/
+            // Create Driver contact
 
+            
+
+            // Act : Create the driver
+            var createDriver = new CreateDriverRequest()
+            {
+                DriverLicenseNumber = "01234567",
+                BirthDate = DateTimeOffset.UtcNow,
+                Surname = "Test"
+
+            };
+            // check to driver exsists 
+
+
+            // delete it and then create
+
+            // Create Driver
+            var newDriver =  await caseManager.CreateDriver(createDriver);
+
+            // Query dynamics to see if the driver is created
+
+            var driver = caseManager.GetDriverByLicenseNumber( createDriver.DriverLicenseNumber).GetAwaiter().GetResult().FirstOrDefault();
+
+            Assert.Equal(driver.Surname, createDriver.Surname);
+
+
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateCase()
+        {
+             // Arrange
+            var createCase = new CreateCaseRequest()
+            {
+                DriverLicenseNumber = "",
+                SequenceNumber = 1,
+                
+                
+            };
+
+            // Act
+            await caseManager.CreateCase(createCase);
+
+            // Assert
+
+            
+        }
     }
 }
