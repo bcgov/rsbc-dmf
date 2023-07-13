@@ -3140,31 +3140,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                         var id = item.dfp_driverid;
 
-                        dynamicsContext.Detach(item);
-
-                        var updateDriver = new dfp_driver
-                        {
-                            dfp_driverid = id,
-                            dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname
-                        };
-                        dynamicsContext.AttachTo("dfp_drivers", updateDriver);
-                        dynamicsContext.UpdateObject(updateDriver);
-
-                        try
-                        {
-                            await dynamicsContext.SaveChangesAsync();
-                            result.Success = true;
-                        }
-                        catch (Exception e)
-                        {
-                            logger.LogError(e, $"UpdateDriver - Error Save Changes Update Driver");
-                            result.ErrorDetail = e.Message;
-                            result.Success = false;
-                        }
-
-                        
-
                         dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
+
                         contact driverContact;
 
                         if (item.dfp_PersonId != null)
@@ -3195,8 +3172,36 @@ namespace Rsbc.Dmf.CaseManagement
                                 result.ErrorDetail = e.Message;
                                 result.Success = false;
                             }
-                            
+
                         }
+
+
+                        dynamicsContext.Detach(item);
+
+                        var updateDriver = new dfp_driver
+                        {
+                            dfp_driverid = id,
+                            dfp_fullname = driver.DriverLicenseNumber + " - " + driver.Surname
+                        };
+                        dynamicsContext.AttachTo("dfp_drivers", updateDriver);
+                        dynamicsContext.UpdateObject(updateDriver);
+
+                        try
+                        {
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogError(e, $"UpdateDriver - Error Save Changes Update Driver");
+                            result.ErrorDetail = e.Message;
+                            result.Success = false;
+                        }
+
+                        
+
+                        
+                        
                     }
                     
                 }
