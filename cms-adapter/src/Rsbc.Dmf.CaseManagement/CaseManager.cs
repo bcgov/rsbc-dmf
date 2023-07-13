@@ -3255,7 +3255,20 @@ namespace Rsbc.Dmf.CaseManagement
                         };
                         dynamicsContext.AttachTo("dfp_drivers", updateDriver);
                         dynamicsContext.UpdateObject(updateDriver);
-                        await dynamicsContext.SaveChangesAsync();
+
+                        try
+                        {
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                        }
+                        catch (Exception e)
+                        {
+                            logger.LogError(e, $"UpdateDriver - Error Save Changes Update Driver");
+                            result.ErrorDetail = e.Message;
+                            result.Success = false;
+                        }
+
+                        
 
                         dynamicsContext.LoadProperty(item, nameof(dfp_driver.dfp_PersonId));
                         contact driverContact;
@@ -3273,7 +3286,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 lastname = driver.Surname,
                                 birthdate = driver.BirthDate
                             };
-
+                            dynamicsContext.AttachTo("contacts", driverContact);
                             dynamicsContext.UpdateObject(driverContact);
 
                             written = true;
@@ -3284,6 +3297,7 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                             catch (Exception e)
                             {
+                                logger.LogError(e, $"UpdateDriver - Error Save Changes Update Contact");
                                 result.ErrorDetail = e.Message;
                                 result.Success = false;
                             }
@@ -3300,7 +3314,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception e)
             {
-                logger.LogError(e, $"UpdateDriver - Error updating");
+                logger.LogError(e, $"UpdateDriver - Generic Error updating");
                 result.ErrorDetail = e.Message;
             }
             return result;
