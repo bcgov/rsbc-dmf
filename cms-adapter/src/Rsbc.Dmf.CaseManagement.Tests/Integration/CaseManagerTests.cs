@@ -590,32 +590,27 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateDriver()
         {
-           
+            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
             // Act : Create the driver
             var request = new CreateDriverRequest()
             {
-                DriverLicenseNumber = "01234565",
+                DriverLicenseNumber = "01234568",
                 BirthDate = DateTimeOffset.UtcNow,
                 Surname = "Test2"
 
             };
 
             // check to driver exsists and delete 
-
-            
-            var driverExists = ((CaseManager)caseManager).dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
+            var driverExists = dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
             
 
             if (driverExists != null)
             {
                 // Delete if driver exsists
                bool result = false;
-              // ((CaseManager)caseManager).dynamicsContext.DeactivateObject(driverExists, 2);
-
-                ((CaseManager)caseManager).dynamicsContext.DeleteObject(driverExists);
-                // set to inactive.                
-               await ((CaseManager)caseManager).dynamicsContext.SaveChangesAsync();
-               ((CaseManager)caseManager).dynamicsContext.DetachAll();
+               dynamicsContext.DeleteObject(driverExists);                
+               await dynamicsContext.SaveChangesAsync();
+               dynamicsContext.DetachAll();
                 result = true;
             }
 
@@ -623,11 +618,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             // Create Driver
             var createDriver = await caseManager.CreateDriver(request);
 
-
             // Query dynamics to check if the driver is created
 
-
-            var createdDriverExists = ((CaseManager)caseManager).dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
+            var createdDriverExists = dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
 
             Assert.Equal(createdDriverExists.dfp_licensenumber, request.DriverLicenseNumber);
 
@@ -637,23 +630,49 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateCase()
         {
+
+            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
+
              // Arrange
-            var createCase = new CreateCaseRequest()
+            var request = new CreateCaseRequest()
             {
-                DriverLicenseNumber = "",
-                SequenceNumber = 1,
-                
-                
+                DriverLicenseNumber = "01234568",
+                SequenceNumber = 2,
+               
             };
 
+            // check to driver 
+            var driverExists = dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
 
+            if (driverExists != null)
+            {
 
-            // Act
-            await caseManager.CreateCase(createCase);
+                // check for case 
+                var caseQuery = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == driverExists.dfp_driverid).FirstOrDefault();
 
-            // Assert
+                if (caseQuery != null)
+                {
 
-            
+                    // delete the case
+                    bool result = false;
+                    dynamicsContext.DeleteObject(caseQuery);
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.DetachAll();
+                    result = true;
+
+                }
+ 
+                // Create a case  
+
+                var createCase = await caseManager.CreateCase(request);
+
+                // Search for the case id 
+
+                var searchaseQuery = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == driverExists.dfp_driverid).FirstOrDefault();
+
+                Assert.Equal(searchaseQuery._dfp_driverid_value, driverExists.dfp_driverid);
+
+            }
         }
     }
 }
