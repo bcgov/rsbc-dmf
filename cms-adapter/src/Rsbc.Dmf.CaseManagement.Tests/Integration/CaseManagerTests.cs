@@ -594,9 +594,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             // Act : Create the driver
             var request = new CreateDriverRequest()
             {
-                DriverLicenseNumber = "01234568",
+                DriverLicenseNumber = "01234571",
                 BirthDate = DateTimeOffset.UtcNow,
-                Surname = "Test2"
+                Surname = "TestUser"
 
             };
 
@@ -636,7 +636,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
              // Arrange
             var request = new CreateCaseRequest()
             {
-                DriverLicenseNumber = "01234568",
+                DriverLicenseNumber = "01234571",
                 SequenceNumber = 2,
                
             };

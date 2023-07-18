@@ -657,9 +657,22 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         SubmittalStatus = submittalStatus ?? string.Empty,
 
                     };
-                    
 
-                    var result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
+                    // Check the document is PDR, POlice report, Unsolisitated document
+
+                    CreateStatusReply result;
+
+                    if(document.DocumentType == "PDR" || document.DocumentType == "Police Report" || document.DocumentType == "Unsolicited Report of Concern")
+                    {
+                       result = _cmsAdapterClient.CreateUnsolicitedCaseDocument( document );
+                       
+                    }
+                    else
+                    {
+                        result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
+                    }
+
+                   
 
                     if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                     {
@@ -706,4 +719,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             
 
     }
+
+   
 }

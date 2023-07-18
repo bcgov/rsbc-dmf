@@ -100,5 +100,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> CreateDriver(CreateDriverRequest request);
 
         Task<ResultStatusReply> CreateCase(CreateCaseRequest request);
+
+        Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument newDocument);
     }
 }

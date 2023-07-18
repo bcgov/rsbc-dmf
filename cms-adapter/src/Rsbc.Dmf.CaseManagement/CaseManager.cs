@@ -212,6 +212,7 @@ namespace Rsbc.Dmf.CaseManagement
     public class ResultStatusReply
     {
         public string Id;
+
         public bool Success { get; set; }
 
         public string ErrorDetail { get; set; }
@@ -227,9 +228,11 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
 
-        public int SequenceNumber { get; set; }
+        public int? SequenceNumber { get; set; }
 
         public string DriverLicenseNumber { get; set; }
+
+        public string DocumentType { get; set; }
        
     }
 
@@ -240,6 +243,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Surname { get; set; }
 
         public DateTimeOffset? BirthDate { get; set; }
+
+        public int? SequenceNumber { get; set; }
 
     }
 
@@ -1439,6 +1444,158 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument request)
+        {
+            CreateStatusReply result = new CreateStatusReply();
+
+            // Step 1: Check the driver if cannot find create the driver
+
+            bool secondCandidateCreate = true;
+
+            var searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+
+            if (searchdriver == null)
+            {
+                var newDriver = new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    Surname = request.Driver.Surname ?? string.Empty,
+                    SequenceNumber = request.SequenceNumber
+                };
+
+                await CreateDriver(newDriver);
+
+                secondCandidateCreate = false;
+                searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
+
+            // Step 2: Check for case if cannot find create the case
+
+            incident searchcase = GetIncidentById(request.CaseId);
+
+            bool driverMismatch = false;
+
+            if (searchcase != null && searchdriver.dfp_driverid != searchcase._dfp_driverid_value)
+            {
+                // driver mismatch
+                driverMismatch = true;
+            }
+
+            if (searchcase == null)
+            {
+                var newCase = new CreateCaseRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    SequenceNumber = request.SequenceNumber
+                };
+
+                if (secondCandidateCreate)
+                {
+                    // create the case                   
+                    await CreateCase(newCase);
+
+                }
+
+                /*var newCaseId = await GetNewestCaseIdForDriver(newCase);
+
+                if (newCaseId != null)
+                {
+                    searchcase = GetIncidentById(newCaseId.Value.ToString());
+                }*/
+            }
+
+            // Create the unsolicitated document
+
+            var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+
+            if (searchcase != null)
+            {
+
+                bcgov_documenturl bcgovDocumentUrl = null;
+
+                await dynamicsContext.LoadPropertyAsync(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+
+
+                var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+
+                // Create the document 
+
+                if (bcgovDocumentUrl == null)
+                {
+                    bcgovDocumentUrl = new bcgov_documenturl();
+                }
+
+                bcgovDocumentUrl.dfp_batchid = request.BatchId;
+                bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
+                bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
+                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
+                bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
+                bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                bcgovDocumentUrl.dfp_importid = request.ImportId;
+                bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
+                bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
+                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+
+                if (!string.IsNullOrEmpty(request.DocumentUrl))
+                {
+                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                }
+
+
+                try
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+                    var tempId = GetCreatedId(saveResult);
+                    if (tempId != null)
+                    {
+                        bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                    }
+
+                    if (documentTypeId != null)
+                    {
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    }
+
+                    if (!driverMismatch && searchcase != null)
+                    {
+                        dynamicsContext.AddLink(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                    }
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
+
+
+                    if (newOwner != null)
+                    {
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                    }
+
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, "CreateUnsolicitatedCaseDocument");
+                    result.Success = false;
+                }
+            }
+
+
+
+            return result;
+        }
 
 
         /// <summary>
@@ -2360,6 +2517,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<ResultStatusReply> CreateCase(CreateCaseRequest request )
         {
+            //return case Id in response
             ResultStatusReply result = null;
 
             dfp_driver driver;
@@ -2378,11 +2536,13 @@ namespace Rsbc.Dmf.CaseManagement
 
                 incident newIncident = new incident()
                 {
+                    // Check the 
 
                     customerid_contact = driverQuery.dfp_PersonId,
                     // set status to Open Pending for Submission
                     statuscode = 100000000,
-                    casetypecode = 2, // DMER
+                    // use dictionary to translate the codes
+                    casetypecode = TranslateDocumentStatusCode(request.DocumentType),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
 
@@ -2663,6 +2823,32 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 return null;
+            }
+        }
+
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private int TranslateDocumentStatusCode(string documentStatusCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "DMER",2 }, // DMER
+                { "PDR",3 }, // PDR document
+                { "UNSL",100000005}, // Unsolisitated Document
+                { "POL",100000002 } //Police Report
+                
+            };
+
+            if (documentStatusCode != null && statusMap.ContainsKey(documentStatusCode))
+            {
+                return statusMap[documentStatusCode];
+            }
+            else
+            {
+                return 2;
             }
         }
 
@@ -4115,7 +4301,10 @@ namespace Rsbc.Dmf.CaseManagement
     /// </summary>
     internal enum CaseTypeOptionSet
     {
-        DMER = 2
+        DMER = 2, // DMER
+        UNSL = 100000005, // Unsolocitated document
+        PDR = 3, // PDR Document
+        POL = 100000002 // Police Report
     }
 
     /// <summary>
