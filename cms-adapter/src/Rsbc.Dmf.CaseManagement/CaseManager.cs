@@ -955,7 +955,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         foreach (var decision in fetchedCase.dfp_incident_dfp_decision)
                         {                            
-                            if (result.DecisionDate == null || decision.createdon > result.DecisionDate)
+                            if ((result.DecisionDate == null || decision.createdon > result.DecisionDate) && decision.statecode == 0)
                             {
                                 result.LatestDecision = "";
 
