@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
 
-        Task<IEnumerable<Driver>> GetDriver(string licensenumber);
+        Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber);
 
         Task<IEnumerable<Driver>> GetDrivers();
 
@@ -96,5 +97,10 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task MakeFakeDls();
 
+        Task<ResultStatusReply> CreateDriver(CreateDriverRequest request);
+
+        Task<ResultStatusReply> CreateCase(CreateCaseRequest request);
+
+        Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument newDocument);
     }
 }

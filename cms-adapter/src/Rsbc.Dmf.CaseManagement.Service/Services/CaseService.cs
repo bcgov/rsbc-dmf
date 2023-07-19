@@ -1,11 +1,13 @@
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -151,6 +153,64 @@ namespace Rsbc.Dmf.CaseManagement.Service
             else
             {
        
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Create Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
+                driver.Surname = request.Driver.Surname ?? string.Empty;
+            }
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                BatchId = request.BatchId ?? string.Empty,
+                CaseId = request.CaseId ?? string.Empty,
+                DocumentId = request.DocumentId ?? string.Empty,
+                DocumentPages = (int)request.DocumentPages,
+                DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
+                DocumentUrl = request.DocumentUrl ?? string.Empty,
+                FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
+                // may need to add FileSize,
+                ImportDate = request.ImportDate.ToDateTimeOffset(),
+                ImportId = request.ImportId ?? string.Empty,
+                OriginatingNumber = request.OriginatingNumber ?? string.Empty,
+                ValidationMethod = request.ValidationMethod ?? string.Empty,
+                ValidationPrevious = request.ValidationPrevious ?? string.Empty,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId ?? string.Empty,
+                Driver = driver,
+                Priority = request.Priority ?? string.Empty,
+                Owner = request.Owner ?? string.Empty,
+                SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+            };
+
+            var result = await _caseManager.CreateUnsolicitedCaseDocument(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+
                 reply.ResultStatus = ResultStatus.Fail;
             }
 
@@ -624,7 +684,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDriversReply();
             try
             {
-                var result = await _caseManager.GetDriver(request.DriverLicenseNumber);
+                var result = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
 
                 foreach (var item in result)
                 {
@@ -1024,6 +1084,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> CreateCase(CreateCaseRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+             
+            try
+            {
+
+                var caseCreateRequest = new CaseManagement.CreateCaseRequest()
+                {
+                    CaseId = request.CaseId,
+                };
+
+
+                var createDriver = await _caseManager.CreateCase(caseCreateRequest);
+                
+
+                   reply.ResultStatus = ResultStatus.Success;
+            }
+
+            catch(Exception e) 
+            {
+                _logger.LogError(e, "Error occurred while updating case.");
+                reply.ErrorDetail = e.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+
+        }
+
+
+        /// <summary>
         /// Update Case
         /// </summary>
         /// <param name="request"></param>
@@ -1084,6 +1182,64 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Create Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> CreateDriver(CreateDriverRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                // start by getting the driver.
+
+                var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
+
+                // check the drivers.
+
+                bool isChange = false;
+
+                foreach (var driver in drivers)
+                {
+                    if (driver.Surname != request.Surname || driver.BirthDate != request.BirthDate.ToDateTime())
+                    {
+                        isChange = true;
+                    }
+                }
+
+                if (isChange)
+                {
+                   
+                   
+                    var createDriver = await _caseManager.CreateDriver(new CaseManagement.CreateDriverRequest
+                    {
+                        DriverLicenseNumber = request.DriverLicenseNumber,
+                        BirthDate = request.BirthDate.ToDateTime(),
+                        Surname = request.Surname
+                    });
+                    if (createDriver.Success)
+                    {
+                        reply.ResultStatus = ResultStatus.Success;
+                    }
+                    else
+                    {
+                        reply.ErrorDetail = createDriver.ErrorDetail ?? "unknown error";
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
+
+        /// <summary>
         /// Update Driver
         /// </summary>
         /// <param name="request"></param>
@@ -1097,7 +1253,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 // start by getting the driver.
 
-                var drivers = await _caseManager.GetDriver(request.DriverLicenseNumber);
+                var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
 
                 // check the drivers.
 
@@ -1139,6 +1295,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        /// <summary>
+        /// Convert Flag Type
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
         {
             FlagTypeOptions result = FlagTypeOptions.Unknown;
@@ -1161,6 +1322,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        /// <summary>
+        /// Convert Status Code
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         StatusCodeOptions ConvertStatusCode(StatusCodeOptionSet? value)
         {
             StatusCodeOptions result = StatusCodeOptions.SendToBcmail;

@@ -14,6 +14,8 @@ service CaseManager {
 
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
+  rpc CreateUnsolicitedCaseDocument(LegacyDocument) returns (CreateStatusReply);
+
   rpc DeleteLegacyCaseDocument (LegacyDocumentRequest) returns (ResultStatusReply);
 
   rpc DeleteComment (CommentIdRequest) returns (ResultStatusReply);
@@ -58,10 +60,17 @@ service CaseManager {
   rpc Search (SearchRequest) returns (SearchReply);
 
   rpc SetCasePractitionerClinic(SetCasePractitionerClinicRequest) returns (SetCasePractitionerClinicReply);
+  
+  //Create a case
+  rpc CreateCase(CreateCaseRequest) returns (ResultStatusReply);
 
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
+  // Create a Driver
+  rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
+
+  // Update a Driver
   rpc UpdateDriver(Driver) returns (ResultStatusReply);
 
   // Resolve a case
@@ -345,7 +354,20 @@ message TokenReply {
 	string errorDetail = 3;
 }
 
+message CreateDriverRequest {
+	string driverLicenseNumber = 1;
+	google.protobuf.Timestamp birthDate = 2;
+	string surname = 3;
+}
 
+message CreateCaseRequest {
+	string caseId = 1;
+	int64 SequenceNumber = 2;
+	string driverLicenseNumber = 3;
+	string Priority = 4;
+	string Owner = 5;
+	string SubmittalStatus = 6;
+}
 
 
 message UpdateCaseRequest{
