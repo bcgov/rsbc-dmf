@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -3026,42 +3027,54 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
         {
-            var caseQuery = dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)                
-                .Expand(i => i.dfp_incident_dfp_decision)
+            var outputArray = new List<incident>();
+
+            DataServiceQueryContinuation<incident> nextLink = null;
+
+            var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
+                .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null);
-           //var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
-           var cases = (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToList();
+           
 
+            var response = caseQuery.Execute() as QueryOperationResponse<incident>;
 
-             var outputArray = new List<incident>();
-
-            foreach (var @case in cases)
+            do
             {
-                if (@case._dfp_driverid_value.HasValue)
+                if (nextLink != null)
                 {
-                    //load driver info
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                    if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                    response = dynamicsContext.Execute<incident>(nextLink) as QueryOperationResponse<incident>;
                 }
-
-
-                //load decisions
-                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
-                if (@case.dfp_incident_dfp_decision.Count > 0)
+                if (response != null)
                 {
-                    foreach (var decision in @case.dfp_incident_dfp_decision)
+                    // You must enumerate the response before calling GetContinuation below.
+                    foreach (var item in response)
                     {
-                        await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
-                        if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
-                    }
-                    outputArray.Add(@case);
+                        if (item._dfp_driverid_value.HasValue)
+                        {
+                            //load driver info
+                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                        }
 
+
+                        //load decisions
+                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
+                        if (item.dfp_incident_dfp_decision.Count > 0)
+                        {
+                            foreach (var decision in item.dfp_incident_dfp_decision)
+                            {
+                                //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
+                                if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+                            }
+                            outputArray.Add(item);
+
+                        }
+                    }
                 }
-                
-                
             }
+            // Loop if there is a next link
+            while ((nextLink = response.GetContinuation()) != null);
 
             dynamicsContext.DetachAll();
 
