@@ -3031,9 +3031,11 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_incident_dfp_decision)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null);
-            var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
-    
-            var outputArray = new List<incident>();
+           //var cases = await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync();
+           var cases = (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToList();
+
+
+             var outputArray = new List<incident>();
 
             foreach (var @case in cases)
             {
@@ -3043,6 +3045,7 @@ namespace Rsbc.Dmf.CaseManagement
                     await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
                     if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                 }
+
 
                 //load decisions
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));

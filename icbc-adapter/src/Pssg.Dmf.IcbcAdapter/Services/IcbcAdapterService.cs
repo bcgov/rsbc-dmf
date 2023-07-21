@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             // process medical status updates
 
             var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
-                enhancedIcbcUtils.SendMedicalUpdates(null).GetAwaiter().GetResult();
+                enhancedIcbcUtils.SendMedicalUpdates().GetAwaiter().GetResult();
 
             return Task.FromResult(result);
         }

@@ -226,7 +226,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                 }
 
-                var httpClient = new HttpClient(httpClientHandler) { Timeout = TimeSpan.FromMinutes(15)};
+                var httpClient = new HttpClient(httpClientHandler) 
+                { 
+                    Timeout = TimeSpan.FromMinutes(30)
+                };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 

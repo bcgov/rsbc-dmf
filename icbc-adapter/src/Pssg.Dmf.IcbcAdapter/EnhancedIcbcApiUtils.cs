@@ -56,10 +56,10 @@ namespace Rsbc.Dmf.IcbcAdapter
         /// <summary>
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
-        [AutomaticRetry(Attempts = 0)]
-        public async Task SendMedicalUpdates(PerformContext hangfireContext)
+       
+        public async Task SendMedicalUpdates()
         {
-            LogStatement(hangfireContext, "Starting SendMedicalUpdates");
+            Log.Logger.Error("Starting SendMedicalUpdates");
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
 
@@ -77,7 +77,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     if (responseContent.Contains("SUCCESS"))
                     {
                         // mark it as sent
-                        MarkMedicalUpdateSent(hangfireContext, unsentItem.CaseId);                             
+                        MarkMedicalUpdateSent(unsentItem.CaseId);                             
                     }
                     else
                     {
@@ -100,28 +100,28 @@ namespace Rsbc.Dmf.IcbcAdapter
                             ErrorMessage = "ICBC Error"
                         };
 
-                        _caseManagerClient.MarkMedicalUpdateError(icbcError);    
+                        _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                        LogStatement(hangfireContext, $"ICBC ERROR {responseContent}");
+                        Log.Logger.Error($"ICBC Error {responseContent}");
                     }                                            
                 }
                 else
                 {
-                    LogStatement(hangfireContext, $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
+                    Log.Logger.Error( $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
                 }
 
             }
 
-            LogStatement(hangfireContext, "End of SendMedicalUpdates.");
+            Log.Logger.Error( "End of SendMedicalUpdates.");
         }
 
-        private void MarkMedicalUpdateSent (PerformContext hangfireContext, string caseId)
+        private void MarkMedicalUpdateSent ( string caseId)
         {            
             var idListRequest = new IdListRequest();
             idListRequest.IdList.Add(caseId);
             var result = _caseManagerClient.MarkMedicalUpdatesSent(idListRequest);
 
-            LogStatement(hangfireContext, $"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
+            Log.Logger.Error($"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
         public IcbcMedicalUpdate GetMedicalUpdateData (DmerCase item)

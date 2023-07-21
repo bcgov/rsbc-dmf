@@ -193,6 +193,7 @@ namespace Rsbc.Dmf.Scheduler
             if (!string.IsNullOrEmpty(cmsAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
+               
                 if (!_env.IsProduction()) // Ignore certificate errors in non-production modes.  
                                           // This allows you to use OpenShift self-signed certificates for testing.
                 {
@@ -201,7 +202,10 @@ namespace Rsbc.Dmf.Scheduler
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                 }
 
-                var httpClient = new HttpClient(httpClientHandler);
+                var httpClient = new HttpClient(httpClientHandler)
+                {
+                    Timeout = TimeSpan.FromMinutes(30)
+                };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
@@ -246,7 +250,10 @@ namespace Rsbc.Dmf.Scheduler
                         HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
                 }
 
-                var httpClient = new HttpClient(httpClientHandler);
+                var httpClient = new HttpClient(httpClientHandler)
+                {
+                    Timeout = TimeSpan.FromMinutes(30)
+                };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
