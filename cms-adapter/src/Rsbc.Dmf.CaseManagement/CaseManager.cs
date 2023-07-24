@@ -2302,8 +2302,24 @@ namespace Rsbc.Dmf.CaseManagement
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
                 dfp_progressstatus = 100000000,
-                dfp_dfcmscasesequencenumber = request.SequenceNumber,
+                
             };
+
+            int? sequenceNumber = request.SequenceNumber;
+
+            if (request.SequenceNumber != null)
+            {
+                newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
+            }
+            else 
+            {
+                // get the number of cases that the driver has.
+
+                await dynamicsContext.LoadPropertyAsync(driver, nameof(dfp_driver.dfp_driver_incident_DriverId));
+
+                sequenceNumber = driver.dfp_driver_incident_DriverId.Count + 1;
+                
+            }
 
 
             if (request.SequenceNumber != null && request.SequenceNumber > 0)
