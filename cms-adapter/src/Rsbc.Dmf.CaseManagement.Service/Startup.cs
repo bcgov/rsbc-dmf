@@ -110,8 +110,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Predicate = (_) => false
                 });
                 endpoints.MapGrpcService<CaseService>();
+                endpoints.MapGrpcService<CssService>();
                 endpoints.MapGrpcService<UserService>();
-
+                
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client");

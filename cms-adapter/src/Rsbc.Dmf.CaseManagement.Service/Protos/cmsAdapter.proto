@@ -439,6 +439,21 @@ message DecisionItem {
 	DecisionOutcomeOptions outcome = 3;
 }
 
+service CssManager {
+	rpc GetCss(CssRequest) returns (CssReply);
+}
+
+message CssRequest {	
+	string id = 1;
+}
+
+message CssReply {	
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	string css = 3; 
+}
+
+
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);

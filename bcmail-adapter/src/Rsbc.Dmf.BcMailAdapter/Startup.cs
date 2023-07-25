@@ -101,6 +101,7 @@ namespace Rsbc.Dmf.BcMailAdapter
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders =
@@ -284,6 +285,7 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                services.AddTransient(_ => new CssManager.CssManagerClient(channel));
             }
 
             // health checks. 

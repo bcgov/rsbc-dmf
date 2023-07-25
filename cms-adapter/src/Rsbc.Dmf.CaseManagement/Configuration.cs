@@ -10,7 +10,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             services.AddDynamics(configuration);
             services.AddTransient<ICaseManager, CaseManager>();
-            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<ICssManager, CssManager>();
+            services.AddTransient<IUserManager, UserManager>();            
             return services;
         }
     }

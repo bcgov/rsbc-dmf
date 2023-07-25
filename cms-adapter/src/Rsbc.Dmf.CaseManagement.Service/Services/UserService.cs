@@ -8,7 +8,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class UserService : UserManager.UserManagerBase
     {
-        private readonly IUserManager userManager;
+        private readonly IUserManager userManager;      
 
         public UserService(IUserManager userManager)
         {
