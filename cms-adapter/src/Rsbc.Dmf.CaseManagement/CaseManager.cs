@@ -2330,8 +2330,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber.Value);
 
-
-
             // Check sequence number on case 
 
             int incidentLoop = 0;
