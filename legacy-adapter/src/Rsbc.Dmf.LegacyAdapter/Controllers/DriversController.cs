@@ -390,11 +390,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
             }
 
-            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now;
+            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now.AddMinutes(-1); 
             // Dynamics has a minimum value for a date.
             if (commentDate.Year < 1753)
             {
-                commentDate = DateTimeOffset.Now;
+                commentDate = DateTimeOffset.Now.AddMinutes(-1);
             }
             try
             {
