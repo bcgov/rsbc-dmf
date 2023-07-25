@@ -16,6 +16,8 @@ service CaseManager {
 
   rpc CreateUnsolicitedCaseDocument(LegacyDocument) returns (CreateStatusReply);
 
+  rpc CreateCaseDocument(LegacyDocument) returns (CreateStatusReply);
+
   rpc DeleteLegacyCaseDocument (LegacyDocumentRequest) returns (ResultStatusReply);
 
   rpc DeleteComment (CommentIdRequest) returns (ResultStatusReply);

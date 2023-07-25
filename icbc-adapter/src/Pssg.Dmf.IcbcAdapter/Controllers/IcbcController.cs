@@ -14,6 +14,7 @@ using Pssg.Interfaces.ViewModelExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using Rsbc.Dmf.CaseManagement.Service;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -83,11 +84,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         {
 
 
-            return Ok();
+            //return Ok();
 
-            /*
+        
 
-            // check for duplicates; if there is an existing case then do not create a new one
+             //check for duplicates; if there is an existing case then do not create a new one
+
             foreach (var item in newCandidates)
             {
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
@@ -98,14 +100,23 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.BirthDate ?? DateTimeOffset.MinValue ),
                     EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.EffectiveDate ?? DateTimeOffset.MinValue ),
                 };
-                _caseManagerClient.ProcessLegacyCandidate(lcr);
+
+                
+               var candidateCreation =  _caseManagerClient.ProcessLegacyCandidate(lcr);
+
+                if(candidateCreation != null ) {
+
+                    // call the cms adpter to create an DMER envelope
+                }
+
+
                 _logger.LogInformation($"Received Candidate {item.DlNumber}");
 
             }
 
             return Ok();
 
-            */
+         
         }
 
         /// <summary>

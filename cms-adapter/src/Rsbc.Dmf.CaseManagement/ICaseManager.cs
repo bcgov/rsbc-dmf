@@ -102,5 +102,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> CreateCase(CreateCaseRequest request);
 
         Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument newDocument);
+
+       Task<CreateStatusReply> CreateCaseDocument(LegacyDocument newDocument);
     }
 }

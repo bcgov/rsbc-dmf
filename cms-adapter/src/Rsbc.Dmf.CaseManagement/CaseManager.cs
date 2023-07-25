@@ -199,7 +199,8 @@ namespace Rsbc.Dmf.CaseManagement
         Accept = 100000001,
         Reject = 100000004, 
         CleanPass=  100000009,
-        ManualPass = 100000012 
+        ManualPass = 100000012,
+        OpenRequired = 100000000
     }
 
     public enum BringForwardPriority
@@ -1512,10 +1513,49 @@ namespace Rsbc.Dmf.CaseManagement
 
             // Create the unsolicitated document
 
+            await CreateCaseDocument(request);
+
+            return result;
+        }
+
+
+        /// <summary>
+        /// CreateICBCDocumentEnvelope
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        //public async Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument request)
+        //{
+        //    CreateStatusReply result = new CreateStatusReply();
+        //    LegacyDocument documentenvelope = new LegacyDocument()
+        //    {
+        //        SubmittalStatus = "Open-Required",
+        //        DocumentType = "DMER" ,
+        //        //BusinessArea = 
+        //     };
+
+        //     await CreateCaseDocument(documentenvelope);
+
+        //    return result;
+
+        //}
+
+        public async Task<CreateStatusReply> CreateCaseDocument(LegacyDocument request)
+        {
+            CreateStatusReply result = new CreateStatusReply();
+
+            // Search for driver
+            var searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+
+            // Search for case
+            incident searchcase = GetIncidentById(request.CaseId);
+
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
-            if (searchcase != null)
+            if (searchcase != null && searchdriver != null)
             {
+                // Create the document envelope
+               
 
                 bcgov_documenturl bcgovDocumentUrl = null;
 
@@ -1544,6 +1584,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
@@ -1569,7 +1610,7 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                     }
 
-                    if (!driverMismatch && searchcase != null)
+                    if (searchcase != null)
                     {
                         dynamicsContext.AddLink(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                     }
@@ -1588,23 +1629,21 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 catch (Exception ex)
                 {
-                    Serilog.Log.Error(ex, "CreateUnsolicitatedCaseDocument");
+                    Serilog.Log.Error(ex, "CreateCaseDocumentEnvelope");
                     result.Success = false;
                 }
             }
-
-
 
             return result;
         }
 
 
-        /// <summary>
-        /// Create Legacy Case Document
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
-        public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
+            /// <summary>
+            /// Create Legacy Case Document
+            /// </summary>
+            /// <param name="request"></param>
+            /// <returns></returns>
+            public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
             // get the driver
@@ -2802,7 +2841,8 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Accept", 100000001 }, // Received
                 { "Reject",  100000004 }, // Rejected
                 { "Clean Pass" ,  100000009}, // Clean Pass
-                { "Manual Pass", 100000012 } // Manual Pass
+                { "Manual Pass", 100000012 }, // Manual Pass
+                { "Open-Required", 100000000 } // Open required
                 
             };
 
