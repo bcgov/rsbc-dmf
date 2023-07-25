@@ -64,7 +64,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public async void TestTwoDigitSurCodeIntegration()
         {
             Login();
-            string licenseNumber = "01000101";
+            string licenseNumber = "001000101";
             string surcode = "LO";
 
             TestSurCode(licenseNumber, surcode);
