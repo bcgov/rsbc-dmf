@@ -2320,73 +2320,59 @@ namespace Rsbc.Dmf.CaseManagement
                 sequenceNumber = driver.dfp_driver_incident_DriverId.Count + 1;
                 
             }
-
-
-            if (request.SequenceNumber != null && request.SequenceNumber > 0)
+            if (sequenceNumber == 0)
             {
-                string baseGuid = "407f23fb5500ec11b82bfbf5fbf5fbf5";
-
-                int paddedSize = request.DriverLicenseNumber.Length;
-
-                string sequenceString = request.SequenceNumber.ToString();
-                paddedSize += sequenceString.Length;
-
-                string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + request.DriverLicenseNumber + sequenceString;
-
-                newIncident.incidentid = Guid.Parse(incidentIdString);
+                sequenceNumber = 1;
             }
 
-            // check to see if the incident has already been created.
+            // Check sequence number on case 
 
-            bool found = false;
-            if (newIncident.incidentid != null)
+
+            newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber.Value);
+
+            // Check sequence number on case 
+
+            int incidentLoop = 0;
+            while (IncidentExists(newIncident.incidentid.Value))
             {
-                try
+                sequenceNumber++;
+                newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber.Value);
+
+                incidentLoop++;
+
+
+                if (incidentLoop > 1000)
                 {
-                    newIncident = dynamicsContext.incidents.ByKey(newIncident.incidentid).GetValue();
-                    found = true;
-                }
-                catch (Exception ex)
-                {
-                    found = false;
+                    throw new Exception("IncidentLoop count exceeded");
                 }
             }
+            newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
 
-            if (!found)
+            try
             {
-                try
-                {
-                    dynamicsContext.AddToincidents(newIncident);
+                dynamicsContext.AddToincidents(newIncident);
 
-                    if (driverContact != null && newIncident._customerid_value != driverContact.contactid)
-                    {
-                        dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
-                    }
-
-                    var saveResult = await dynamicsContext.SaveChangesAsync();
-
-                    var tempId = GetCreatedId(saveResult);
-
-                    if (tempId != null)
-                    {
-                        dynamicsContext.Detach(newIncident);
-                        newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, $"LegacyCandidateCreate {source} ERROR CREATING INCIDENT - " + e.Message);
-                }
-            }
-            else
-            {
-                if (newIncident._customerid_value != null && newIncident._customerid_value != driverContact.contactid)
+                if (driverContact != null && newIncident._customerid_value != driverContact.contactid)
                 {
                     dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverContact);
                 }
-            }
 
+                var saveResult = await dynamicsContext.SaveChangesAsync();
+
+                var tempId = GetCreatedId(saveResult);
+
+                if (tempId != null)
+                {
+                    dynamicsContext.Detach(newIncident);
+                    newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
+                }
+
+            }
+            catch (Exception e)
+            {
+                Log.Error(e, $"LegacyCandidateCreate {source} ERROR CREATING INCIDENT - " + e.Message);
+            }
+ 
 
 
             try
@@ -2527,6 +2513,36 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
     
+
+        private bool IncidentExists(Guid id)
+        {
+            bool found = false;
+            try
+            {
+                var temp = dynamicsContext.incidents.ByKey(id).GetValue();
+                found = true;
+            }
+            catch (Exception ex)
+            {
+                found = false;
+            }
+            return found;
+        }
+
+        private Guid CreateIncidentGuid(string driverLicenseNumber, int sequenceNumber)
+        {
+            string baseGuid = "407f23fb5500ec11b82bfbf5fbf5fbf5";
+
+            int paddedSize = driverLicenseNumber.Length;
+
+            string sequenceString = sequenceNumber.ToString();
+            paddedSize += sequenceString.Length;
+
+            string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + driverLicenseNumber + sequenceString;
+
+            return Guid.Parse(incidentIdString);
+        }
+
         /// <summary>
         /// Create Case
         /// </summary>
@@ -2550,6 +2566,28 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 await dynamicsContext.LoadPropertyAsync(driverQuery, nameof(dfp_driver.dfp_PersonId));
 
+                int sequenceNumber;
+
+                if (request.SequenceNumber != null)
+                {
+                    sequenceNumber = request.SequenceNumber.Value;
+                }
+                else
+                {
+                    // get the number of cases that the driver has.
+
+                    await dynamicsContext.LoadPropertyAsync(driverQuery, nameof(dfp_driver.dfp_driver_incident_DriverId));
+
+                    sequenceNumber = driverQuery.dfp_driver_incident_DriverId.Count + 1;
+
+                }
+
+                if (sequenceNumber == 0)
+                {
+                    sequenceNumber = 1;
+                }
+
+
 
                 incident newIncident = new incident()
                 {
@@ -2567,69 +2605,54 @@ namespace Rsbc.Dmf.CaseManagement
                 };
 
                 // Check sequence number on case 
-                if (request.SequenceNumber != null && request.SequenceNumber > 0)
-                {
-                    string baseGuid = "407f23fb5500ec11b82bfbf5fbf5fbf5";
 
-                    int paddedSize = request.DriverLicenseNumber.Length;
 
-                    string sequenceString = request.SequenceNumber.ToString();
-                    paddedSize += sequenceString.Length;
-
-                    string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + request.DriverLicenseNumber + sequenceString;
-
-                    newIncident.incidentid = Guid.Parse(incidentIdString);
-                }
+                newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber);
+                
 
                 bool found = false;
-                if (newIncident.incidentid != null)
+                int incidentLoop = 0;
+                while (IncidentExists(newIncident.incidentid.Value))
                 {
-                    try
+                    sequenceNumber++;
+                    newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber);
+
+                    incidentLoop++;
+
+
+                    if (incidentLoop > 1000)
                     {
-                        newIncident = dynamicsContext.incidents.ByKey(newIncident.incidentid).GetValue();
-                        found = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        found = false;
+                        throw new Exception("IncidentLoop count exceeded");
                     }
                 }
-
-                if (!found)
+                newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
+                
+                try
                 {
-                    try
-                    {
-                        dynamicsContext.AddToincidents(newIncident);
+                    dynamicsContext.AddToincidents(newIncident);
 
-                        if (driverQuery.dfp_PersonId != null && newIncident._customerid_value != driverQuery.dfp_PersonId.contactid)
-                        {
-                            dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverQuery.dfp_PersonId);
-                        }
-
-                        var saveResult = await dynamicsContext.SaveChangesAsync();
-
-                        var tempId = GetCreatedId(saveResult);
-
-                        if (tempId != null)
-                        {
-                            dynamicsContext.Detach(newIncident);
-                            newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
-                        }
-
-                    }
-                    catch (Exception e)
-                    {
-                        Log.Error(e, $"CandidateCreate ERROR CREATING INCIDENT - " + e.Message);
-                    }
-                }
-                else
-                {
-                    if (newIncident._customerid_value != null && newIncident._customerid_value != driverQuery.dfp_PersonId.contactid)
+                    if (driverQuery.dfp_PersonId != null && newIncident._customerid_value != driverQuery.dfp_PersonId.contactid)
                     {
                         dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverQuery.dfp_PersonId);
                     }
-                }
 
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+
+                    var tempId = GetCreatedId(saveResult);
+
+                    if (tempId != null)
+                    {
+                        dynamicsContext.Detach(newIncident);
+                        newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Log.Error(e, $"CandidateCreate ERROR CREATING INCIDENT - " + e.Message);
+                }
+                
+                
                 try
                 {
                     // first check to see that the driver is not already linked.
