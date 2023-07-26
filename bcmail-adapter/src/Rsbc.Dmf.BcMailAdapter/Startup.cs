@@ -121,6 +121,7 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
+                        builder.AllowAnyHeader()
 
                         /*
                         builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH");
