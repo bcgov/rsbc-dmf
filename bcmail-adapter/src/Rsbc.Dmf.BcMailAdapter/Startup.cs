@@ -55,6 +55,8 @@ namespace Rsbc.Dmf.BcMailAdapter
     /// </summary>
     public class Startup
     {
+        private readonly string MyAllowSpecificOrigins = "script-src 'self' 'unsafe-eval' 'unsafe-inline'";
+
         /// <summary>
         /// Autentication Handler
         /// </summary>
@@ -101,6 +103,35 @@ namespace Rsbc.Dmf.BcMailAdapter
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        if (Configuration["CORS_ORIGINS"] != null)
+                        {
+                            string[] origins = Configuration["CORS_ORIGINS"].Split(" ");
+                            builder.WithOrigins(origins);
+                        }
+                        else
+                        {
+                            builder.AllowAnyOrigin();
+                        }
+
+                        builder.AllowAnyHeader();
+                        builder.AllowAnyMethod();
+
+                        /*
+                        builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH");
+                        builder.WithHeaders("X-FHIR-Starter", "Origin", "Accept", "X-Requested-With", "Content-Type",
+                            "Access-Control-Request-Method", "Access-Control-Request-Headers", "Authorization",
+                            "Location","Content-Location");
+                        */
+                    });
+            });
+
+
             services.AddMemoryCache();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -317,6 +348,7 @@ namespace Rsbc.Dmf.BcMailAdapter
             app.UseForwardedHeaders();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseJwtBearerQueryString();
             app.UseAuthorization();
 
