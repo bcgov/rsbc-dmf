@@ -104,6 +104,12 @@ namespace Rsbc.Dmf.BcMailAdapter
         public void ConfigureServices(IServiceCollection services)
         {
 
+            
+
+
+            services.AddMemoryCache();
+
+            services.AddRouting();
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -121,7 +127,8 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                         builder.AllowAnyHeader();
                         builder.AllowAnyMethod();
-                        builder.AllowAnyHeader()
+                        builder.AllowAnyHeader();
+                        //builder.AllowCredentials();
 
                         /*
                         builder.WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "FETCH");
@@ -132,17 +139,15 @@ namespace Rsbc.Dmf.BcMailAdapter
                     });
             });
 
-
-            services.AddMemoryCache();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            // Add CDGS Service
+            
 
-            // services.AddHttpClient<>();
+            
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
                 services.AddIdentity<IdentityUser, IdentityRole>()
@@ -347,9 +352,13 @@ namespace Rsbc.Dmf.BcMailAdapter
             //app.UseHttpLogging();
             app.UseProblemDetails();
             app.UseForwardedHeaders();
+            app.UseHsts();
+            
+
             app.UseRouting();
-            app.UseAuthentication();
             app.UseCors(MyAllowSpecificOrigins);
+
+            app.UseAuthentication();            
             app.UseJwtBearerQueryString();
             app.UseAuthorization();
 
