@@ -63,39 +63,33 @@ namespace Rsbc.Dmf.CaseManagement.Service
             if (Guid.TryParse(request.CaseId, out caseId))
             {
                 caseIdString = caseId.ToString();
+            }
 
-                var newComment = new CaseManagement.LegacyComment()
-                {
-                    CaseId = caseIdString,
-                    CommentText = request.CommentText,
-                    CommentTypeCode = request.CommentTypeCode,
-                    SequenceNumber = (int)request.SequenceNumber,
-                    UserId = request.UserId,
-                    Driver = driver,
-                    CommentDate = commentDate,
-                    CommentId = request.CommentId
-                };
+            var newComment = new CaseManagement.LegacyComment()
+            {
+                CaseId = caseIdString,
+                CommentText = request.CommentText,
+                CommentTypeCode = request.CommentTypeCode,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,
+                Driver = driver,
+                CommentDate = commentDate,
+                CommentId = request.CommentId
+            };
 
-                var result = await _caseManager.CreateLegacyCaseComment(newComment);
+            var result = await _caseManager.CreateLegacyCaseComment(newComment);
 
-                if (result.Success)
-                {
-                    reply.ResultStatus = ResultStatus.Success;
-                    reply.Id = result.Id;
-                }
-                else
-                {
-                    reply.ResultStatus = ResultStatus.Fail;
-                    reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
-                }
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
             }
             else
             {
-                // fetch the current case for the driver.
                 reply.ResultStatus = ResultStatus.Fail;
-                reply.ErrorDetail = "Case ID is a required field to CreateLegacyCaseComment.";
+                reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
             }
-
+            
             
 
             return reply;

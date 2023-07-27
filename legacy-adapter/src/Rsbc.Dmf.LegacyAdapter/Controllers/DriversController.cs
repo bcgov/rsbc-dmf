@@ -416,44 +416,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName);
                     }
-
-                    if (caseId == null) // create it
-                    {
-                        try
-                        {
-                            
-                            if (icbcDriver != null && icbcDriver.INAM?.SURN != null)
-                            {
-                                LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                                {
-                                    LicenseNumber = licenseNumber,
-                                    EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                                    Surname = icbcDriver.INAM?.SURN ?? string.Empty,
-                                    BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now)
-                                };
-                                var lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                                if (lc.ResultStatus != CaseManagement.Service.ResultStatus.Success)
-                                {
-                                    // try it again.
-                                    lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                                }
-                                if (lc.ResultStatus != CaseManagement.Service.ResultStatus.Success)
-                                {
-                                    // try it again.
-                                    lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                                }
-                            }
-                            else
-                            {
-                                _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            _logger.LogInformation(e, "Error getting driver.");
-                        }
-                        caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
-                    }
+                    
                 }
 
                 var payload = new LegacyComment()

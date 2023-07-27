@@ -1237,147 +1237,122 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false,
                 ErrorDetail = "unknown error - CreateLegacyCaseComment"
             };
-            string caseId = request.CaseId;
-            if (string.IsNullOrEmpty(caseId))
+
+            dfp_comment comment = null;
+
+            var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            if (driver == null)
             {
-                Serilog.Log.Information("Case not found, creating");
-                // create a new case.
-                LegacyCandidateSearchRequest newCandidate = new LegacyCandidateSearchRequest()
+                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseComment-1");                
+                driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
+
+            if (string.IsNullOrEmpty(request.CommentId)) // create
+            {
+                // create the comment
+                comment = new dfp_comment()
                 {
-                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
-                    SequenceNumber = request.SequenceNumber,
-                    Surname = request.Driver.Surname ?? string.Empty
+                    createdon = request.CommentDate,
+                    dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
+                    dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
+                    dfp_userid = request.UserId,
+                    dfp_commentdetails = request.CommentText,
+                    dfp_date = request.CommentDate,
+                    statecode = 0,
+                    statuscode = 1,
+                    overriddencreatedon = request.CommentDate
+
                 };
-
-                var searchResult = await LegacyCandidateSearch(newCandidate);
-                var firstCase = searchResult.Items.FirstOrDefault();
-                if (firstCase != null)
+                int sequenceNumber = 0;
+                if (request.SequenceNumber != null)
                 {
-                    caseId = firstCase.Id;
-                }
-                else
-                {
-                    await LegacyCandidateCreate(newCandidate, request.Driver.BirthDate, DateTimeOffset.MinValue, "CreateLegacyCaseComment");
-
-                    // now do a search to get the case.
-                    searchResult = await LegacyCandidateSearch(newCandidate);
-                    firstCase = searchResult.Items.FirstOrDefault();
-                    if (firstCase != null)
-                    {
-                        caseId = firstCase.Id;
-                    }
-
+                    sequenceNumber = request.SequenceNumber.Value;
                 }
 
-            }
-            if (string.IsNullOrEmpty(caseId))
-            {
-                result.ErrorDetail = "Unable to create a candidate.";
-            }
-            else
-            {
-                // get the case
-                incident driverCase = GetIncidentById(caseId);
+                comment.dfp_caseidguid = sequenceNumber.ToString();
 
-                var driver = driverCase.dfp_DriverId;
-
-
-                // determine if it is an update or create
-
-                if (string.IsNullOrEmpty(request.CommentId)) // create
+                try
                 {
-                    // create the comment
-                    dfp_comment comment = new dfp_comment()
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.AddTodfp_comments(comment);
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+                    var tempId = GetCreatedId(saveResult);
+                    if (tempId != null)
                     {
-                        createdon = request.CommentDate,
-                        dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
-                        dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I",
-                        dfp_userid = request.UserId,
-                        dfp_commentdetails = request.CommentText,
-                        dfp_date = request.CommentDate,
-                        statecode = 0,
-                        statuscode = 1,
-                        overriddencreatedon = request.CommentDate
-
-                    };
-                    int sequenceNumber = 0;
-                    if (request.SequenceNumber != null)
-                    {
-                        sequenceNumber = request.SequenceNumber.Value;
+                        comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
                     }
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
+                    result.Success = false;
+                    result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
 
-                    comment.dfp_caseidguid = sequenceNumber.ToString();
-
-                    try
-                    {
-                        await dynamicsContext.SaveChangesAsync();
-                        dynamicsContext.AddTodfp_comments(comment);
-                        var saveResult = await dynamicsContext.SaveChangesAsync();
-                        var tempId = GetCreatedId(saveResult);
-                        if (tempId != null)
-                        {
-                            comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
-                        }
-                        result.Success = true;
-                    }
-                    catch (Exception ex)
-                    {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
-                        result.Success = false;
-                        result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
-
-                    }
-
-                    if (result.Success == true)
-                    {
-                        try
-                        {
-                            dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
-                            dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
-
-                            await dynamicsContext.SaveChangesAsync();
-                            result.Success = true;
-                            result.Id = comment.dfp_commentid.ToString();
-                            dynamicsContext.DetachAll();
-                        }
-                        catch (Exception ex)
-                        {
-                            Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
-                            result.Success = false;
-                            result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
-                        }
-                    }
                 }
 
-                else // update
+                if (result.Success == true)
                 {
                     try
                     {
-                        Guid key = Guid.Parse(request.CommentId);
-                        var comment = dynamicsContext.dfp_comments.ByKey(key).GetValue();
-                        comment.dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode);
-                        comment.dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I";
-                        comment.dfp_userid = request.UserId;
-                        comment.dfp_commentdetails = request.CommentText;
-                        comment.dfp_date = request.CommentDate;
-                        comment.overriddencreatedon = request.CommentDate;
-
-                        dynamicsContext.UpdateObject(comment);
+                        dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+                        
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = comment.dfp_commentid.ToString();
-                        dynamicsContext.DetachAll();
                     }
                     catch (Exception ex)
                     {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Update Comment Error");
+                        Serilog.Log.Error(ex, "CreateLegacyCaseComment Set Links Error");
                         result.Success = false;
-                        result.ErrorDetail = "CreateLegacyCaseComment Update Comment Error " + ex.Message;
+                        result.ErrorDetail = "CreateLegacyCaseComment Set Links Error" + ex.Message;
                     }
                 }
-
             }
 
+            else // update
+            {
+                try
+                {
+                    Guid key = Guid.Parse(request.CommentId);
+                    comment = dynamicsContext.dfp_comments.ByKey(key).GetValue();
+                    comment.dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode);
+                    comment.dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I";
+                    comment.dfp_userid = request.UserId;
+                    comment.dfp_commentdetails = request.CommentText;
+                    comment.dfp_date = request.CommentDate;
+                    comment.overriddencreatedon = request.CommentDate;
+
+                    dynamicsContext.UpdateObject(comment);
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    result.Id = comment.dfp_commentid.ToString();
+                    
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Update Comment Error");
+                    result.Success = false;
+                    result.ErrorDetail = "CreateLegacyCaseComment Update Comment Error " + ex.Message;
+                }            
+            }
+            
+            if (!string.IsNullOrEmpty(request.CaseId))
+            {
+                try
+                {
+                    incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId)).GetValue();
+                    dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+                    await dynamicsContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Warning(ex, "Unable to link comment to case");                    
+                }
+            }
+
+            dynamicsContext.DetachAll();
             return result;
         }
 
