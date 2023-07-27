@@ -446,6 +446,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             else
                             {
                                 _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
+
+                                LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                                {
+                                    LicenseNumber = licenseNumber,
+                                    EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                    Surname = comment?.Driver?.LastName ?? string.Empty
+                                };
+                                var lc = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+
                             }
                         }
                         catch (Exception e)
