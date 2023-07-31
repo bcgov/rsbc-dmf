@@ -204,7 +204,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 var httpClient = new HttpClient(httpClientHandler)
                 {
-                    Timeout = TimeSpan.FromMinutes(60)
+                    Timeout = TimeSpan.FromMinutes(30)
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
@@ -252,7 +252,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 var httpClient = new HttpClient(httpClientHandler)
                 {
-                    Timeout = TimeSpan.FromMinutes(60)
+                    Timeout = TimeSpan.FromMinutes(30)
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
