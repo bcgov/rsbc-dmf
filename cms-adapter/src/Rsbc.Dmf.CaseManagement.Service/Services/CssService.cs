@@ -33,7 +33,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 Guid id = Guid.Parse(request.Id);
 
-                result.Css = await cssManager.GetCss(id);
+                result.Css = await cssManager.GetCss(id) ?? string.Empty;
                 
                 result.ResultStatus = ResultStatus.Success;                
             }
