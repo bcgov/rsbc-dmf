@@ -112,6 +112,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 driver.Surname = request.Driver.Surname ?? string.Empty;
             }
 
+          
             var newDocument = new CaseManagement.LegacyDocument()
             {
                 BatchId = request.BatchId ?? string.Empty,
@@ -122,9 +123,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentType = request.DocumentType ?? string.Empty,
                 BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
-                FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
-                // may need to add FileSize,
-                ImportDate = request.ImportDate.ToDateTimeOffset(),
                 ImportId = request.ImportId ?? string.Empty,
                 OriginatingNumber = request.OriginatingNumber ?? string.Empty,
                 ValidationMethod = request.ValidationMethod ?? string.Empty,
@@ -136,6 +134,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
             };
+
+            if (request.FaxReceivedDate != null)
+            {
+                newDocument.FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset();
+            }
+
+            if(request.ImportDate != null)
+            {
+                newDocument.ImportDate = request.ImportDate.ToDateTimeOffset();
+            }
 
             var result = await _caseManager.CreateLegacyCaseDocument(newDocument);
 
@@ -154,7 +162,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
-        /// Create Legacy Case Document
+        /// Create Unsolicitated Case Document
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
@@ -180,9 +188,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentType = request.DocumentType ?? string.Empty,
                 BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
-                FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset(),
-                // may need to add FileSize,
-                ImportDate = request.ImportDate.ToDateTimeOffset(),
                 ImportId = request.ImportId ?? string.Empty,
                 OriginatingNumber = request.OriginatingNumber ?? string.Empty,
                 ValidationMethod = request.ValidationMethod ?? string.Empty,
@@ -195,7 +200,150 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
             };
 
+            if(request.FaxReceivedDate != null)
+            {
+                newDocument.FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset();
+            }
+
+            if(request.ImportDate != null)
+            {
+                newDocument.ImportDate = request.ImportDate.ToDateTimeOffset();
+            }
+
             var result = await _caseManager.CreateUnsolicitedCaseDocument(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Create Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateCaseDocument(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
+                driver.Surname = request.Driver.Surname ?? string.Empty;
+            }
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                BatchId = request.BatchId ?? string.Empty,
+                CaseId = request.CaseId ?? string.Empty,
+                DocumentId = request.DocumentId ?? string.Empty,
+                DocumentPages = (int)request.DocumentPages,
+                DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
+                DocumentUrl = request.DocumentUrl ?? string.Empty,
+                ImportId = request.ImportId ?? string.Empty,
+                OriginatingNumber = request.OriginatingNumber ?? string.Empty,
+                ValidationMethod = request.ValidationMethod ?? string.Empty,
+                ValidationPrevious = request.ValidationPrevious ?? string.Empty,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId ?? string.Empty,
+                Driver = driver,
+                Priority = request.Priority ?? string.Empty,
+                Owner = request.Owner ?? string.Empty,
+                SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+            };
+
+            if (request.FaxReceivedDate != null)
+            {
+                newDocument.FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset();
+            }
+
+            if(request.ImportDate != null)
+            {
+                newDocument.ImportDate = request.ImportDate.ToDateTimeOffset();
+            }
+
+            var result = await _caseManager.CreateCaseDocument(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Create Unsolisitaed Document enevelope
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
+                driver.Surname = request.Driver.Surname ?? string.Empty;
+            }
+
+
+            var faxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset();
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                BatchId = request.BatchId ?? string.Empty,
+                CaseId = request.CaseId ?? string.Empty,
+                DocumentId = request.DocumentId ?? string.Empty,
+                DocumentPages = (int)request.DocumentPages,
+                DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
+                DocumentUrl = request.DocumentUrl ?? string.Empty,
+                ImportId = request.ImportId ?? string.Empty,
+                OriginatingNumber = request.OriginatingNumber ?? string.Empty,
+                ValidationMethod = request.ValidationMethod ?? string.Empty,
+                ValidationPrevious = request.ValidationPrevious ?? string.Empty,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId ?? string.Empty,
+                Driver = driver,
+                Priority = request.Priority ?? string.Empty,
+                Owner = request.Owner ?? string.Empty,
+                SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+                
+            };
+
+            if (faxReceivedDate != DateTimeOffset.MinValue)
+            {
+                newDocument.FaxReceivedDate = faxReceivedDate;
+            }
+
+            if(request.ImportDate != null)
+            {
+                newDocument.ImportDate = request.ImportDate.ToDateTimeOffset();
+            }
+            var result = await _caseManager.CreateICBCDocumentEnvelope(newDocument);
 
             if (result.Success)
             {
@@ -413,19 +561,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber ?? string.Empty;
                         driver.Surname = item.Driver.Surname ?? string.Empty;
                     }
-                    reply.Items.Add(new LegacyDocument
+                    var newDocument = new LegacyDocument
                     {
                         BatchId = item.BatchId ?? string.Empty,
                         DocumentPages = item.DocumentPages,
                         DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
-                   
                         CaseId = item.CaseId ?? string.Empty,
-                        FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
-                        ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
                         ImportId = item.ImportId ?? string.Empty,
-                        
                         OriginatingNumber = item.OriginatingNumber ?? string.Empty,
-                          
                         DocumentId = item.DocumentId ?? string.Empty,
                         SequenceNumber = (long)(item.SequenceNumber ?? -1),
                         UserId = item.UserId ?? string.Empty,
@@ -433,12 +576,25 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DocumentUrl = item.DocumentUrl ?? string.Empty,
                         ValidationMethod = item.ValidationMethod ?? string.Empty,
                         ValidationPrevious = item.ValidationPrevious ?? string.Empty
-                        
-                    });
+
+                    };
+
+                    if(newDocument.FaxReceivedDate != null)
+                    {
+                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
+                          
+                    }
+
+                    if(newDocument.ImportDate != null)
+                    {
+                        newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
+                    }
+
+                    reply.Items.Add(newDocument);
+
+                    
                 }
                 reply.ResultStatus = ResultStatus.Success;
-
-
 
             }
             catch (Exception ex)
@@ -600,8 +756,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
                         driver.Surname = item.Driver.Surname ?? string.Empty;
-                    }
-                    reply.Items.Add(new LegacyDocument
+                    } 
+
+                    var newDocument = new LegacyDocument
                     {
                         BatchId = item.BatchId,
                         BusinessArea = item.BusinessArea,
@@ -611,16 +768,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DocumentType = item.DocumentType ?? string.Empty,
                         DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
                         DocumentUrl = item.DocumentUrl ?? string.Empty,
-                        FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate),
-                        ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate),
                         ImportId = item.ImportId ?? string.Empty,
                         OriginatingNumber = item.OriginatingNumber ?? string.Empty,
                         ValidationMethod = item.ValidationMethod ?? string.Empty,
                         ValidationPrevious = item.ValidationPrevious ?? string.Empty,
                         SequenceNumber = item.SequenceNumber ?? -1,
                         Driver = driver
-                        
-                    });
+
+                    };
+
+                    if (newDocument.FaxReceivedDate != null)
+                    {
+                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
+                    }
+
+                    if(newDocument.ImportDate != null)
+                    {
+                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
+                    }
+                    reply.Items.Add(newDocument);
+
+
                 }
                 reply.ResultStatus = ResultStatus.Success;
             }
@@ -1632,9 +1800,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
                     DocumentUrl = d.DocumentUrl ?? string.Empty,
-                    FaxReceivedDate = Timestamp.FromDateTimeOffset(d.FaxReceivedDate),
-                    // may need to add FileSize,
-                    ImportDate = Timestamp.FromDateTimeOffset(d.ImportDate),
                     ImportId = d.ImportId ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
                     ValidationMethod = d.ValidationMethod ?? string.Empty,
@@ -1642,6 +1807,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     SequenceNumber = (int)(d.SequenceNumber ?? -1),
                     UserId = d.UserId ?? string.Empty,                    
                 };
+
+                if(d.FaxReceivedDate != null)
+                {
+                    reply.Document.FaxReceivedDate = Timestamp.FromDateTimeOffset(d.FaxReceivedDate.Value);
+                }
+
+                if(d.ImportDate != null)
+                {
+                    reply.Document.ImportDate = Timestamp.FromDateTimeOffset(d.ImportDate.Value);
+                }
+
                 reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception e)

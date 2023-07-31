@@ -26,15 +26,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             
         }
 
-        // example of how to get the dynamics context.  Requires special internal access to be provided from the CaseManager assembly.
-
-        private void DynamicsContextExample ()
-        {
-            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
-            // ... now you can use the Dynamics context...
-        }
-
-
         [Fact(Skip = RequiresDynamics)]
         public async Task CanSetFlagsAndSearchById()
         {
@@ -673,6 +664,60 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 Assert.Equal(searchaseQuery._dfp_driverid_value, driverExists.dfp_driverid);
 
             }
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateDocumentEnvelope()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            // get the case
+            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;
+
+            string documentUrl = $"DMER-TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
+
+            // add a document
+
+            LegacyDocument legacyDocumentRequest = new LegacyDocument
+            {
+                BatchId = "1",
+                CaseId = caseId,
+                DocumentType = "DMER",
+                DocumentTypeCode = "001",
+                Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
+               // FaxReceivedDate = DateTime.MinValue,
+                ImportDate = DateTimeOffset.UtcNow,
+                FileSize = 10,
+                DocumentPages = 1,
+                OriginatingNumber = "1",
+                SequenceNumber = 1,
+                DocumentUrl = documentUrl,
+                SubmittalStatus = "Open-Required"
+            };
+
+            await caseManager.CreateICBCDocumentEnvelope(legacyDocumentRequest);
+
+            // confirm it is present
+
+            var docs = await caseManager.GetCaseLegacyDocuments(caseId);
+
+            bool found = false;
+
+            string documentId = null;
+
+            foreach (var doc in docs)
+            {
+                if (doc.DocumentUrl == documentUrl)
+                {
+                    found = true;
+                    documentId = doc.DocumentId;
+                    break;
+                }
+            }
+
+            Assert.False(found);
         }
     }
 }

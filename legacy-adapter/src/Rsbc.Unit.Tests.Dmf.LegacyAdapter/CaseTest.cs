@@ -240,8 +240,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
                 string originatingNumber = "";
                 int documentPages = 1;
-                string documentType = "Unsolicited Report of Concern";
-                string documentTypeCode = "190";
+                string documentType = "Police Report";
+                string documentTypeCode = "150";
                 string validationMethod = "Single User";
                 string validationPrevious = "BHAMMED";
                 string priority = "Expedited";
