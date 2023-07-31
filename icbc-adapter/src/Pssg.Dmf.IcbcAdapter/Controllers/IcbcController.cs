@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Swashbuckle.AspNetCore.Annotations;
 using Rsbc.Dmf.CaseManagement.Service;
 using Org.BouncyCastle.Asn1.Ocsp;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -50,7 +51,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         public string Status { get; set; }
     }
 
-    
+
 
     [Authorize]
     [ApiController]
@@ -70,7 +71,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             icbcClient = new IcbcClient(configuration);
             _caseManagerClient = caseManagerClient;
         }
-        
+
         /// <summary>
         /// POST: /Icbc/Candidates
         /// </summary>
@@ -79,16 +80,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("Candidates")]
         [SwaggerResponse(200, "The candidates were processed correctly")]
         [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
-        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]        
-        public ActionResult CreateCandidates ([FromBody] List<NewCandidate> newCandidates )
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
+        public ActionResult CreateCandidates([FromBody] List<NewCandidate> newCandidates)
         {
 
 
             //return Ok();
 
-        
 
-             //check for duplicates; if there is an existing case then do not create a new one
+
+            //check for duplicates; if there is an existing case then do not create a new one
 
             foreach (var item in newCandidates)
             {
@@ -97,16 +98,37 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     LicenseNumber = item.DlNumber,
                     Surname = item.LastName ?? string.Empty,
                     ClientNumber = string.Empty,
-                    BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.BirthDate ?? DateTimeOffset.MinValue ),
-                    EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset( item.EffectiveDate ?? DateTimeOffset.MinValue ),
+                    BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
+                    EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
                 };
 
+
+                var candidateCreation = _caseManagerClient.ProcessLegacyCandidate(lcr);
+
                 
-               var candidateCreation =  _caseManagerClient.ProcessLegacyCandidate(lcr);
 
-                if(candidateCreation != null ) {
+                if (candidateCreation != null) {
 
-                    // call the cms adpter to create an DMER envelope
+                    var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
+                   
+
+                    _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
+                    {
+                        CaseId = caseId,
+                        Driver = new CaseManagement.Service.Driver()
+                        {
+                            DriverLicenseNumber = lcr.LicenseNumber,
+                        },
+                        SubmittalStatus = "Open-Required",
+                        DocumentType = "DMER",
+                        DocumentTypeCode = "001",
+                        FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                        DocumentId = Guid.NewGuid().ToString(),
+                        SequenceNumber = 1,
+
+                    }) ; 
+
                 }
 
 
@@ -116,7 +138,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
             return Ok();
 
-         
+
         }
 
         /// <summary>
@@ -127,7 +149,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [HttpPost("CandidatesError")]
         [SwaggerResponse(200, "The candidates were processed correctly")]
         [SwaggerResponse(400, "The format of the provided data was invalid.  Please refer to the model.")]
-        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")] 
+        [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
         public ActionResult CreateCandidatesError([FromBody] List<NewCandidate> newCandidates)
         {
             throw new Exception("Sample Error.");
@@ -140,7 +162,48 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             return new CaseStatus();
         }
 
+    }
 
+    public static class CaseUtils
+    {
+        static public HashSet<string> closedStatus = new HashSet<string>
+            {
+                "Decision Rendered",
+                "Canceled"
+            };
+
+        public static string GetCaseId(this CaseManager.CaseManagerClient _cmsAdapterClient, string licenseNumber, string surcode)
+        {
+            
+
+            string trimmedSurcode = surcode;
+            if (trimmedSurcode.Length > 3)
+            {
+                trimmedSurcode = trimmedSurcode.Substring(0, 3);
+            }
+
+            string caseId = null;
+            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                // ensure newest first.
+                var sorted = reply.Items.OrderByDescending(x => x.CreatedOn);
+
+                foreach (var item in sorted)
+                {
+
+                    if (!closedStatus.Contains(item.Status))
+                    {
+                        if ((bool)(item.Driver?.Surname.ToUpper().StartsWith(trimmedSurcode.ToUpper())))
+                        {
+                            caseId = item.CaseId;
+                            break;
+                        }
+                    }
+                }
+            }
+            return caseId;
+        }
 
     }
 }

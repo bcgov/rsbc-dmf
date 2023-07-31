@@ -58,8 +58,8 @@ namespace Rsbc.Dmf.CaseManagement
         public long FileSize { get; set; }
         public string UserId { get; set; }
         public string CaseId { get; set; }
-        public DateTimeOffset FaxReceivedDate { get; set; }
-        public DateTimeOffset ImportDate { get; set; }
+        public DateTimeOffset? FaxReceivedDate { get; set; }
+        public DateTimeOffset? ImportDate { get; set; }
         public string DocumentId { get; set; }
         public string ImportId { get; set; }
         public Driver Driver { get; set; }
@@ -1480,13 +1480,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             incident searchcase = GetIncidentById(request.CaseId);
 
-            bool driverMismatch = false;
-
-            if (searchcase != null && searchdriver.dfp_driverid != searchcase._dfp_driverid_value)
-            {
-                // driver mismatch
-                driverMismatch = true;
-            }
 
             if (searchcase == null)
             {
@@ -1503,17 +1496,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                 }
 
-                /*var newCaseId = await GetNewestCaseIdForDriver(newCase);
-
-                if (newCaseId != null)
-                {
-                    searchcase = GetIncidentById(newCaseId.Value.ToString());
-                }*/
             }
 
             // Create the unsolicitated document
 
-            await CreateCaseDocument(request);
+           
+            result = await CreateCaseDocument(request);
 
             return result;
         }
@@ -1524,37 +1512,55 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        //public async Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument request)
-        //{
-        //    CreateStatusReply result = new CreateStatusReply();
-        //    LegacyDocument documentenvelope = new LegacyDocument()
-        //    {
-        //        SubmittalStatus = "Open-Required",
-        //        DocumentType = "DMER" ,
-        //        //BusinessArea = 
-        //     };
+        public async Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument request)
+        {
+            CreateStatusReply result = new CreateStatusReply();
 
-        //     await CreateCaseDocument(documentenvelope);
+          
+            // Create a document enevelope
+            var documentEnvelope = new LegacyDocument()
+            {
+                SubmittalStatus = request.SubmittalStatus,
+                DocumentType = request.DocumentType,
+                DocumentTypeCode = request.DocumentTypeCode,
+                Driver = new Driver()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber
+                },
+                CaseId = request.CaseId,
+                
+              
+                ImportDate = request.ImportDate,
+                DocumentId = request.DocumentId,
+                SequenceNumber = request.SequenceNumber
+            };
 
-        //    return result;
+            if(request.FaxReceivedDate != null)
+            {
+                documentEnvelope.FaxReceivedDate = request.FaxReceivedDate;
+            }
 
-        //}
+            result = await CreateCaseDocument(documentEnvelope);
+
+            return result;
+
+        }
 
         public async Task<CreateStatusReply> CreateCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
 
             // Search for driver
-            var searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            var searchDriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
 
             // Search for case
             incident searchcase = GetIncidentById(request.CaseId);
 
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
-            if (searchcase != null && searchdriver != null)
+            if (searchcase != null && searchDriver != null)
             {
-                // Create the document envelope
+                // Create the case document 
                
 
                 bcgov_documenturl bcgovDocumentUrl = null;
@@ -1614,7 +1620,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         dynamicsContext.AddLink(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                     }
-                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchDriver);
 
 
                     if (newOwner != null)
@@ -1629,7 +1635,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 catch (Exception ex)
                 {
-                    Serilog.Log.Error(ex, "CreateCaseDocumentEnvelope");
+                    Serilog.Log.Error(ex, "CreateCaseDocument");
                     result.Success = false;
                 }
             }
