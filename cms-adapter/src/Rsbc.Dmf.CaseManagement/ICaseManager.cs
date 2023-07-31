@@ -106,7 +106,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<CreateStatusReply> CreateCaseDocument(LegacyDocument newDocument);
         Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument newDocument);
 
-
+        Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request);
 
     }
 }

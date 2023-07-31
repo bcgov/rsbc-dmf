@@ -96,6 +96,68 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Create ICBC Medical Candidate Comment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
+                driver.Surname = request.Driver.Surname;
+            }
+
+            var commentDate = request.CommentDate.ToDateTimeOffset();
+
+            if (commentDate.Year < 1753)
+            {
+                commentDate = DateTimeOffset.Now;
+            }
+
+            string caseIdString = null;
+            Guid caseId;
+
+            if (Guid.TryParse(request.CaseId, out caseId))
+            {
+                caseIdString = caseId.ToString();
+            }
+
+            var newComment = new CaseManagement.LegacyComment()
+            {
+                CaseId = caseIdString,
+                CommentText = request.CommentText,
+                CommentTypeCode = request.CommentTypeCode,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,
+                Driver = driver,
+                CommentDate = commentDate,
+                CommentId = request.CommentId
+            };
+
+            var result = await _caseManager.CreateICBCMedicalCandidateComment(newComment);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
+            }
+
+
+
+            return reply;
+        }
+
+        /// <summary>
         /// Create Legacy Case Document
         /// </summary>
         /// <param name="request"></param>

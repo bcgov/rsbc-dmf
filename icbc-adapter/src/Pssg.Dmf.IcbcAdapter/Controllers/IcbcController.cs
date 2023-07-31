@@ -112,6 +112,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
                    
 
+                    // Create Document Envelope
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                     {
                         CaseId = caseId,
@@ -123,12 +124,40 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         DocumentType = "DMER",
                         DocumentTypeCode = "001",
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
 
-                    }) ; 
+                    }) ;
 
+                    if (caseId != null)
+                    {
+                        // Create a bring forward
+                        _caseManagerClient.CreateBringForward(new BringForwardRequest()
+                        {
+                            CaseId = caseId,
+                            Description = "ICBC",
+                            Assignee = string.Empty,
+                            Priority = BringForwardPriority.High,
+                            Subject = "A DMER Candidate was introduced to a Case In Progress",
+                            
+                        });
+
+                        // Create Comment
+                        _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                        {
+                            CaseId = caseId,
+                            Driver = new CaseManagement.Service.Driver()
+                            {
+                                DriverLicenseNumber = lcr.LicenseNumber,
+                            },
+                            SequenceNumber = 1,
+                            CommentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
+                            CommentText = "A DMER was issued to this driver by ICBC while this case was already in progress",
+                            CommentTypeCode = "C",
+                            UserId = "System"
+                        });  
+                    }
                 }
 
 

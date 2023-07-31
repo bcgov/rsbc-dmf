@@ -12,6 +12,8 @@ service CaseManager {
 
   rpc CreateLegacyCaseComment (LegacyComment) returns (CreateStatusReply);
 
+  rpc CreateICBCMedicalCandidateComment(LegacyComment) returns (CreateStatusReply);
+
   rpc CreateLegacyCaseDocument (LegacyDocument) returns (CreateStatusReply);
 
   rpc CreateUnsolicitedCaseDocument(LegacyDocument) returns (CreateStatusReply);
