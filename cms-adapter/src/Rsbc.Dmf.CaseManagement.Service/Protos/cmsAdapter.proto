@@ -415,6 +415,7 @@ message LegacyCandidateRequest{
 message LegacyCandidateReply{
 	ResultStatus resultStatus = 1;
 	string errorDetail = 2;
+	bool isNewCase = 3;
 }
 
 

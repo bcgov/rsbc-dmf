@@ -959,10 +959,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 if (searchResult != null && searchResult.Items.Count() > 0)
                 {
                     var closedStatus = new HashSet<string>
-            {
+                {
                 "Decision Rendered",
                 "Canceled"
-            };
+                };
 
                     foreach (var item in searchResult.Items)
                     {
@@ -978,6 +978,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 {
                     // case exists.
                     reply.ResultStatus = ResultStatus.Success;
+                    reply.IsNewCase = false;
                 }
                 
                 else
@@ -999,6 +1000,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto, "ProcessLegacyCandidate");
 
                     reply.ResultStatus = ResultStatus.Success;
+                    reply.IsNewCase = true;
                 }
             }
             catch (Exception ex)
@@ -1910,7 +1912,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Assignee = request.Assignee ?? string.Empty,
                     Description = request.Description?? string.Empty,                
                     Subject = request.Subject ?? string.Empty,
-                    Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+                    Priority = (CaseManagement.BringForwardPriority?)request.Priority
                 };
                 
                 // call _caseManager...

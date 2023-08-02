@@ -323,11 +323,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             // load owner
-            /* if (@case._ownerid_value.HasValue)
-             {
-                 //load driver info
-                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
-             }*/
+            //if (@case._ownerid_value.HasValue)
+            //{
+            //    //load driver info
+            //    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
+               
+            //}
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
@@ -1164,31 +1165,58 @@ namespace Rsbc.Dmf.CaseManagement
                     description = request.Description,
                     subject = request.Subject,
                     scheduledend = DateTimeOffset.UtcNow,
+                    prioritycode = (int?)request.Priority,
                     //ownerid = request.Assignee
                 };
 
-               
                 // Get the case
                 var @case = GetIncidentById(caseId);
+                // load owner
 
+                
+               
+                if (string.IsNullOrEmpty(request.Assignee))
+                 {
+                    
+                   if(@case._owningteam_value != null)
+                    {
+                        // create a reference to team
+                        var caseTeam = dynamicsContext.teams.ByKey(@case._owningteam_value.Value).GetValue();
+
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
+                    }
+                    else {
+                        //create a reference to system user
+
+                        var caseUser = dynamicsContext.systemusers.ByKey(@case._owninguser_value).GetValue();
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseUser);
+                    }
+
+                   
+                }
+                else
+                {
+                    // set the BF owner to request assignee
+                    if (@case._ownerid_value != null)
+
+                    {
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
+
+                    };
+                }
+
+               
                 // Create a bring Forward
                 try
                 {
-                    dynamicsContext.AddTotasks(newTask);
                     // set Case Id
                     dynamicsContext.SetLink(newTask, nameof(task.regardingobjectid_incident), @case);
-                    // set the Assignee
-                    if (string.IsNullOrEmpty(request.Assignee) && @case.ownerid != null)
-                    {
-
-                        // set the assignee to case owner
-                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case.ownerid);
-
-                    };
 
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
-                    //result.Id = newTask.regardingobjectid_incident.ToString();
                     dynamicsContext.DetachAll();
                 }
                 catch (Exception ex)
@@ -1197,11 +1225,11 @@ namespace Rsbc.Dmf.CaseManagement
                     Log.Logger.Error(ex.Message);
                     result.ErrorDetail = ex.Message;
                 }
-
-
             }
             return result;
         }
+
+
 
         /// <summary>
         /// Get Incident By Id

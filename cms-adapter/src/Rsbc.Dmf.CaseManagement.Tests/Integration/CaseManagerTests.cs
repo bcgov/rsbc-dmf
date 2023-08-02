@@ -479,10 +479,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var bringForwardRequest = new CaseManagement.BringForwardRequest()
             {
                 CaseId = caseId,
-                Assignee = "Team - Intake",
+                Assignee = string.Empty,
                 Description = "Test Description1",
                 Subject = "ICBC Error Test",
-                Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.Normal
+                Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.High
             };
             var result = await caseManager.CreateBringForward(bringForwardRequest);
             result.ShouldNotBeNull();
