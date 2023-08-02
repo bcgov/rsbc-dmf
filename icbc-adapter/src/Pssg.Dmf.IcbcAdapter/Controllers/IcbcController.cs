@@ -98,19 +98,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     LicenseNumber = item.DlNumber,
                     Surname = item.LastName ?? string.Empty,
                     ClientNumber = string.Empty,
-                    BirthDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
-                    EffectiveDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
+                    BirthDate = Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
+                    EffectiveDate = Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
                 };
 
 
                 var candidateCreation = _caseManagerClient.ProcessLegacyCandidate(lcr);
-
-                
-
-                if (candidateCreation != null) {
-
+                if (candidateCreation != null) 
+                {
                     var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
-                   
+                    var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
+
+                    // Create DMER envelope for the case
 
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                     {
@@ -123,14 +122,69 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         DocumentType = "DMER",
                         DocumentTypeCode = "001",
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
 
-                    }) ; 
+                    });
 
+                    // If a new case is created on the driver
+                    if (candidateCreation.IsNewCase == true && caseId != null)
+                    {
+                       
+                        // Create Comment
+                        _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                        {
+                            CaseId = caseId,
+                            Driver = new CaseManagement.Service.Driver()
+                            {
+                                DriverLicenseNumber = lcr.LicenseNumber,
+                            },
+                            SequenceNumber = 1,
+                            CommentDate = commentDate,
+                            CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {commentDate}",
+                            CommentTypeCode = "C",
+                            UserId = "System"
+                        });
+
+                    }
+
+                    // If there is exsisting case on a driver
+                    else
+                    {
+                        
+                        if (caseId != null)
+                        {
+                           
+                            // Create a bring forward
+                            _caseManagerClient.CreateBringForward(new BringForwardRequest()
+                            {
+                                CaseId = caseId,
+                                Description = "ICBC",
+                                Assignee = string.Empty,
+                                Priority = BringForwardPriority.High,
+                                Subject = "A DMER Candidate was introduced to a Case In Progress",     
+
+                            });
+
+                            // Create Comment
+                            _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                            {
+                                CaseId = caseId,
+                                Driver = new CaseManagement.Service.Driver()
+                                {
+                                    DriverLicenseNumber = lcr.LicenseNumber,
+                                },
+                                SequenceNumber = 1,
+                                CommentDate = commentDate,
+                                CommentText = $"A DMER was issued to this driver by ICBC on {commentDate} while this case was already in progress",
+                                CommentTypeCode = "C",
+                                UserId = "System"
+                            });
+                        }
+                    }
+                    
                 }
-
 
                 _logger.LogInformation($"Received Candidate {item.DlNumber}");
 
@@ -164,46 +218,4 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
     }
 
-    public static class CaseUtils
-    {
-        static public HashSet<string> closedStatus = new HashSet<string>
-            {
-                "Decision Rendered",
-                "Canceled"
-            };
-
-        public static string GetCaseId(this CaseManager.CaseManagerClient _cmsAdapterClient, string licenseNumber, string surcode)
-        {
-            
-
-            string trimmedSurcode = surcode;
-            if (trimmedSurcode.Length > 3)
-            {
-                trimmedSurcode = trimmedSurcode.Substring(0, 3);
-            }
-
-            string caseId = null;
-            var reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber ?? string.Empty });
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                // ensure newest first.
-                var sorted = reply.Items.OrderByDescending(x => x.CreatedOn);
-
-                foreach (var item in sorted)
-                {
-
-                    if (!closedStatus.Contains(item.Status))
-                    {
-                        if ((bool)(item.Driver?.Surname.ToUpper().StartsWith(trimmedSurcode.ToUpper())))
-                        {
-                            caseId = item.CaseId;
-                            break;
-                        }
-                    }
-                }
-            }
-            return caseId;
-        }
-
-    }
 }

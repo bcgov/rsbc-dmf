@@ -323,11 +323,12 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             // load owner
-            /* if (@case._ownerid_value.HasValue)
-             {
-                 //load driver info
-                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
-             }*/
+            //if (@case._ownerid_value.HasValue)
+            //{
+            //    //load driver info
+            //    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
+               
+            //}
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
@@ -1163,30 +1164,59 @@ namespace Rsbc.Dmf.CaseManagement
 
                     description = request.Description,
                     subject = request.Subject,
-
-
+                    scheduledend = DateTimeOffset.UtcNow,
+                    prioritycode = (int?)request.Priority,
+                    //ownerid = request.Assignee
                 };
+
                 // Get the case
                 var @case = GetIncidentById(caseId);
+                // load owner
 
+                
+               
+                if (string.IsNullOrEmpty(request.Assignee))
+                 {
+                    
+                   if(@case._owningteam_value != null)
+                    {
+                        // create a reference to team
+                        var caseTeam = dynamicsContext.teams.ByKey(@case._owningteam_value.Value).GetValue();
+
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
+                    }
+                    else {
+                        //create a reference to system user
+
+                        var caseUser = dynamicsContext.systemusers.ByKey(@case._owninguser_value).GetValue();
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseUser);
+                    }
+
+                   
+                }
+                else
+                {
+                    // set the BF owner to request assignee
+                    if (@case._ownerid_value != null)
+
+                    {
+                        dynamicsContext.AddTotasks(newTask);
+                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
+
+                    };
+                }
+
+               
                 // Create a bring Forward
                 try
                 {
-                    dynamicsContext.AddTotasks(newTask);
                     // set Case Id
                     dynamicsContext.SetLink(newTask, nameof(task.regardingobjectid_incident), @case);
-                    // set the Assignee
-                    if (string.IsNullOrEmpty(request.Assignee) && @case.ownerid != null)
-                    {
-
-                        // set the assignee to case owner
-                        dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case.ownerid);
-
-                    };
 
                     await dynamicsContext.SaveChangesAsync();
                     result.Success = true;
-                    //result.Id = newTask.regardingobjectid_incident.ToString();
                     dynamicsContext.DetachAll();
                 }
                 catch (Exception ex)
@@ -1195,11 +1225,11 @@ namespace Rsbc.Dmf.CaseManagement
                     Log.Logger.Error(ex.Message);
                     result.ErrorDetail = ex.Message;
                 }
-
-
             }
             return result;
         }
+
+
 
         /// <summary>
         /// Get Incident By Id
@@ -1358,13 +1388,128 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// Get Document Type
+        /// Create ICBC Medical Candidate Comment
         /// </summary>
-        /// <param name="documentTypeCode"></param>
-        /// <param name="documentType"></param>
-        /// <param name="businessArea"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
-        private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
+        public async Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request)
+        {
+            CreateStatusReply result = new CreateStatusReply()
+            {
+                Success = false,
+                ErrorDetail = "unknown error - CreateICBCMedicalCandidateComment"
+            };
+
+            dfp_comment comment = null;
+
+            var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            if (driver == null)
+            {
+                /*var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
+                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseComment-1");*/
+                var newDriver = new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    Surname = request.Driver.Surname ?? string.Empty,
+                    SequenceNumber = request.SequenceNumber
+                };
+
+                await CreateDriver(newDriver);
+
+                driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
+
+
+            if (string.IsNullOrEmpty(request.CommentId)) // create
+            {
+                // create the comment
+                comment = new dfp_comment()
+                {
+                    createdon = request.CommentDate,
+                    dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode),
+                    dfp_icbc = request.CommentTypeCode == "C",
+                    dfp_userid = request.UserId,
+                    dfp_commentdetails = request.CommentText,
+                    dfp_date = request.CommentDate,
+                    statecode = 0,
+                    statuscode = 1,
+                    overriddencreatedon = request.CommentDate
+
+                };
+                int sequenceNumber = 0;
+                if (request.SequenceNumber != null)
+                {
+                    sequenceNumber = request.SequenceNumber.Value;
+                }
+
+                comment.dfp_caseidguid = sequenceNumber.ToString();
+
+                try
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.AddTodfp_comments(comment);
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+                    var tempId = GetCreatedId(saveResult);
+                    if (tempId != null)
+                    {
+                        comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
+                    }
+                    result.Success = true;
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, "CreateICBCMedicalCandidateComment Error adding comment");
+                    result.Success = false;
+                    result.ErrorDetail = "CreateICBCMedicalCandidateComment Error adding comment" + ex.Message;
+
+                }
+
+                if (result.Success == true)
+                {
+                    try
+                    {
+                        dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = comment.dfp_commentid.ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "CreateICBCMedicalCandidateComment Set Links Error");
+                        result.Success = false;
+                        result.ErrorDetail = "CreateICBCMedicalCandidateComment Set Links Error" + ex.Message;
+                    }
+                } 
+            }
+            // Check if the CaseId is null
+            if (!string.IsNullOrEmpty(request.CaseId))
+            {
+                try
+                {
+                    incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId)).GetValue();
+                    dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+                    await dynamicsContext.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Warning(ex, "Unable to link comment to case");
+                }
+            }
+
+            dynamicsContext.DetachAll();
+
+            return result;
+        }
+
+            /// <summary>
+            /// Get Document Type
+            /// </summary>
+            /// <param name="documentTypeCode"></param>
+            /// <param name="documentType"></param>
+            /// <param name="businessArea"></param>
+            /// <returns></returns>
+            private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
         {
             dfp_submittaltype result = null;
             string documentTypeCode = null;
