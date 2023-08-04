@@ -1433,7 +1433,8 @@ namespace Rsbc.Dmf.CaseManagement
                     dfp_date = request.CommentDate,
                     statecode = 0,
                     statuscode = 1,
-                    overriddencreatedon = request.CommentDate
+                    overriddencreatedon = request.CommentDate,
+                    dfp_origin = 100000001
 
                 };
                 int sequenceNumber = 0;

@@ -109,6 +109,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
                     var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
 
+                    var dmerIssuranceDate = DateTime.UtcNow.ToString("MM/dd/yyyy hh:mm tt");
+                  
                     // Create DMER envelope for the case
 
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
@@ -142,9 +144,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             },
                             SequenceNumber = 1,
                             CommentDate = commentDate,
-                            CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {commentDate}",
+                            CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {dmerIssuranceDate}",
                             CommentTypeCode = "C",
-                            UserId = "System"
+                            UserId = "System",
+                             
+                            // dfp_origin 100000001
                         });
 
                     }
@@ -177,7 +181,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 },
                                 SequenceNumber = 1,
                                 CommentDate = commentDate,
-                                CommentText = $"A DMER was issued to this driver by ICBC on {commentDate} while this case was already in progress",
+                                CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress",
                                 CommentTypeCode = "C",
                                 UserId = "System"
                             });
