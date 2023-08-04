@@ -28,6 +28,7 @@ namespace Pssg.DocumentStorageAdapter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
         }
 
         public IConfiguration Configuration { get; }
@@ -41,7 +42,7 @@ namespace Pssg.DocumentStorageAdapter
                 options.ForwardedHeaders =
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
-
+            
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 

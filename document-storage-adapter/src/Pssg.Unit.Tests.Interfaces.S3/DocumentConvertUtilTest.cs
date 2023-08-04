@@ -14,11 +14,13 @@ namespace Pssg.Unit.Tests.Interfaces.S3
         {
             //Arrange
             // Get TiffImage as bytes array
-            byte[] imageAsByteStream = File.ReadAllBytes("../../../TestFiles/test_file_1.tiff");
+            byte[] imageAsByteStream = File.ReadAllBytes("test.tiff");
 
             // Act 
             // and then send it to convertTiff2Pdf function 
             var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(imageAsByteStream);
+
+            File.WriteAllBytes("test.pdf", pdfBytes);
 
             // Asset 
             // check result is of type bytes 
