@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,30 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
+services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/";
+})
+.AddOpenIdConnect(options =>
+{
+    options.Authority = builder.Configuration["OIDC_AUTHORITY"];
+    options.ClientId = builder.Configuration["OIDC_CLIENT_ID"];
+    options.ClientSecret = builder.Configuration["OIDC_CLIENT_SECRET"];
+    options.ResponseType = "code";
+    options.SaveTokens = true;
+    options.Scope.Add("openid");
+    options.Scope.Add("profile");
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        NameClaimType = "preferred_username",
+        RoleClaimType = "roles"
+    };
+});
 
 services.AddCors();
 services.AddControllersWithViews().AddJsonOptions(x =>
@@ -78,6 +105,9 @@ app.UseHealthChecks("/hc/live", new HealthCheckOptions
     // Exclude all checks and return a 200-Ok.
     Predicate = _ => false
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // configure HTTP request pipeline
 
