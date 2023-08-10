@@ -106,8 +106,6 @@ app.UseHealthChecks("/hc/live", new HealthCheckOptions
     Predicate = _ => false
 });
 
-app.UseAuthentication();
-app.UseAuthorization();
 
 // configure HTTP request pipeline
 
@@ -129,6 +127,9 @@ app.MapSwagger();
 app.UseHttpLogging();
 
 app.UseRouting();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
