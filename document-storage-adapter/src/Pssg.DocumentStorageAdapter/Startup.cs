@@ -28,7 +28,7 @@ namespace Pssg.DocumentStorageAdapter
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
+            //SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
         }
 
         public IConfiguration Configuration { get; }

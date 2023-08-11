@@ -12,7 +12,6 @@ using TiffLibrary.PixelFormats;
 using TiffLibrary.Compression;
 using Org.BouncyCastle.Utilities.IO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using TiffLibrary.ImageSharpAdapter;
 
 namespace Pssg.DocumentStorageAdapter
 {
