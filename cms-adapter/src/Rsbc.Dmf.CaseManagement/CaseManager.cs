@@ -1437,6 +1437,8 @@ namespace Rsbc.Dmf.CaseManagement
                     dfp_origin = 100000001
 
                 };
+
+
                 int sequenceNumber = 0;
                 if (request.SequenceNumber != null)
                 {
@@ -1654,6 +1656,7 @@ namespace Rsbc.Dmf.CaseManagement
                 ImportDate = request.ImportDate,
                 DocumentId = request.DocumentId,
                 SequenceNumber = request.SequenceNumber
+                
             };
 
             if(request.FaxReceivedDate != null)
@@ -1713,6 +1716,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
                 //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+                bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
