@@ -428,7 +428,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     UserId = comment.UserId ?? string.Empty,
                     CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                     Driver = driver,
-                    CommentId = comment.CommentId ?? string.Empty
+                    CommentId = comment.CommentId ?? string.Empty,
+                    Assignee = string.Empty
                 };
 
                 var result = _cmsAdapterClient.CreateLegacyCaseComment(payload);
