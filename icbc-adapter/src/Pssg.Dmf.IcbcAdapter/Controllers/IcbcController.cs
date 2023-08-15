@@ -110,6 +110,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
 
                     var dmerIssuranceDate = DateTime.UtcNow.ToString("MM/dd/yyyy hh:mm tt");
+
+                    var assignee = string.Empty;
                   
                     // Create DMER envelope for the case
 
@@ -133,10 +135,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     // If a new case is created on the driver
                     if (candidateCreation.IsNewCase == true && caseId != null)
                     {
-                       
                         // Create Comment
                         _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
-                        {
+                        {  
                             CaseId = caseId,
                             Driver = new CaseManagement.Service.Driver()
                             {
@@ -147,8 +148,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {dmerIssuranceDate}",
                             CommentTypeCode = "C",
                             UserId = "System",
-                             
-                            // dfp_origin 100000001
+                            Assignee = assignee
                         });
 
                     }
@@ -181,9 +181,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 },
                                 SequenceNumber = 1,
                                 CommentDate = commentDate,
-                                CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress",
+                                CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress and assigned to {{assignee}}",
                                 CommentTypeCode = "C",
-                                UserId = "System"
+                                UserId = "System",
+                                Assignee = assignee
                             });
                         }
                     }
@@ -195,8 +196,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             }
 
             return Ok();
-
-
         }
 
         /// <summary>

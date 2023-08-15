@@ -179,6 +179,7 @@ message LegacyComment {
 	string CommentId = 6;
 	google.protobuf.Timestamp CommentDate = 7;
 	Driver Driver = 8;
+	string Assignee = 9;
 }
 
 message LegacyDocument {

@@ -136,7 +136,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 UserId = request.UserId,
                 Driver = driver,
                 CommentDate = commentDate,
-                CommentId = request.CommentId
+                CommentId = request.CommentId,
+                Assignee = request.Assignee ?? string.Empty
             };
 
             var result = await _caseManager.CreateICBCMedicalCandidateComment(newComment);
