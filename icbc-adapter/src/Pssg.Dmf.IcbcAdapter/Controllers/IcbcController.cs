@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using Rsbc.Dmf.CaseManagement.Service;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Google.Protobuf.WellKnownTypes;
+using Org.BouncyCastle.Bcpg;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -112,7 +113,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     var dmerIssuranceDate = DateTime.UtcNow.ToString("MM/dd/yyyy hh:mm tt");
 
                     var assignee = string.Empty;
-                  
+
+                    var commentTypeCode = "C" ?? string.Empty;
+
+                    var userId = "System" ?? string.Empty;
+
                     // Create DMER envelope for the case
 
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
@@ -146,8 +151,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             SequenceNumber = 1,
                             CommentDate = commentDate,
                             CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {dmerIssuranceDate}",
-                            CommentTypeCode = "C",
-                            UserId = "System",
+                            CommentTypeCode = commentTypeCode,
+                            UserId = userId,
                             Assignee = assignee
                         });
 
@@ -182,8 +187,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 SequenceNumber = 1,
                                 CommentDate = commentDate,
                                 CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress and assigned to {{assignee}}",
-                                CommentTypeCode = "C",
-                                UserId = "System",
+                                CommentTypeCode = commentTypeCode,
+                                UserId = userId,
                                 Assignee = assignee
                             });
                         }
