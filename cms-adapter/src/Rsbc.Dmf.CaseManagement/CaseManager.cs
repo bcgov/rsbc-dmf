@@ -235,7 +235,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string DriverLicenseNumber { get; set; }
 
-        //public string DocumentType { get; set; }
+        public string DocumentType { get; set; }
        
         public string CaseTypeCode { get; set; }
     }
@@ -2803,7 +2803,7 @@ namespace Rsbc.Dmf.CaseManagement
                     // set status to Open Pending for Submission
                     statuscode = 100000000,
                     // use dictionary to translate the codes
-                    casetypecode = TranslateDocumentStatusCode(request.CaseTypeCode),
+                    casetypecode = TranslateDocumentStatusCode(request.CaseTypeCode ?? request.DocumentType),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
 
