@@ -235,8 +235,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string DriverLicenseNumber { get; set; }
 
-        public string DocumentType { get; set; }
+        //public string DocumentType { get; set; }
        
+        public string CaseTypeCode { get; set; }
     }
 
     public class CreateDriverRequest
@@ -2802,7 +2803,7 @@ namespace Rsbc.Dmf.CaseManagement
                     // set status to Open Pending for Submission
                     statuscode = 100000000,
                     // use dictionary to translate the codes
-                    casetypecode = TranslateDocumentStatusCode(request.DocumentType),
+                    casetypecode = TranslateDocumentStatusCode(request.CaseTypeCode),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
 
@@ -3072,6 +3073,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+
         /// <summary>
         /// Translate the Dynamics Priority (status reason) field to text
         /// </summary>
@@ -3083,8 +3085,12 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 { "DMER",2 }, // DMER
                 { "PDR",3 }, // PDR document
+                { "Priority Doctors Report" , 3},
                 { "UNSL",100000005}, // Unsolisitated Document
-                { "POL",100000002 } //Police Report
+                { "Unsolicited Report of Concern", 100000005  },
+                { "POL",100000002 }, //Police Report
+                { "Police Report", 100000002},
+                { "OTHR", 100000004 },
                 
             };
 
@@ -3094,7 +3100,8 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else
             {
-                return 2;
+                // default value is OTHER 
+                return 100000004;
             }
         }
 
