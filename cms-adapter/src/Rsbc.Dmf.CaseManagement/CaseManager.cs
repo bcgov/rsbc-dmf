@@ -41,6 +41,7 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset CommentDate { get; set; }
         public string CommentId { get; set; }
         public Driver Driver { get; set; }
+        public string Assignee { get; set; }
     }
 
 
@@ -1405,8 +1406,6 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                /*var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseComment-1");*/
                 var newDriver = new CreateDriverRequest()
                 {
                     DriverLicenseNumber = request.Driver.DriverLicenseNumber,
@@ -1434,9 +1433,11 @@ namespace Rsbc.Dmf.CaseManagement
                     statecode = 0,
                     statuscode = 1,
                     overriddencreatedon = request.CommentDate,
-                    dfp_origin = 100000001
-
+                    dfp_origin = 100000001         
+                    
                 };
+
+
                 int sequenceNumber = 0;
                 if (request.SequenceNumber != null)
                 {
@@ -1445,10 +1446,48 @@ namespace Rsbc.Dmf.CaseManagement
 
                 comment.dfp_caseidguid = sequenceNumber.ToString();
 
+                // Get owner for the comment
+
+                var getCase = GetIncidentById(request.CaseId);
+
+                if (string.IsNullOrEmpty(request.Assignee))
+                {
+                    principal assignee = null;
+
+                    string assigneeDisplayName;
+
+                    if (getCase._owningteam_value != null)
+                    {
+                        // create a reference to team
+                        var caseTeam = dynamicsContext.teams.ByKey(getCase._owningteam_value.Value).GetValue();
+                  
+                        assignee = (principal)caseTeam;
+
+                        assigneeDisplayName = caseTeam.name;
+                    }
+                    else
+                    {
+                        //create a reference to system user
+
+                        var caseUser = dynamicsContext.systemusers.ByKey(getCase._owninguser_value).GetValue();
+
+                        assignee = (principal)caseUser;
+
+                        assigneeDisplayName = caseUser.dfp_signaturename;
+
+                    }
+
+                    comment.dfp_commentdetails = comment.dfp_commentdetails.Replace("{assignee}", assigneeDisplayName);
+
+                    dynamicsContext.AddTodfp_comments(comment);
+                    dynamicsContext.SetLink(comment, nameof(dfp_comment.ownerid), assignee);
+
+                }
+
                 try
                 {
                     await dynamicsContext.SaveChangesAsync();
-                    dynamicsContext.AddTodfp_comments(comment);
+                    //dynamicsContext.AddTodfp_comments(comment);
                     var saveResult = await dynamicsContext.SaveChangesAsync();
                     var tempId = GetCreatedId(saveResult);
                     if (tempId != null)
@@ -1654,6 +1693,7 @@ namespace Rsbc.Dmf.CaseManagement
                 ImportDate = request.ImportDate,
                 DocumentId = request.DocumentId,
                 SequenceNumber = request.SequenceNumber
+                
             };
 
             if(request.FaxReceivedDate != null)
@@ -1713,6 +1753,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
                 //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+                bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
@@ -1878,9 +1919,6 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
 
-
-
-
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
                     bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
@@ -1944,6 +1982,7 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
 
+                        
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
@@ -3601,7 +3640,8 @@ namespace Rsbc.Dmf.CaseManagement
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
-                                            dfp_ismanualpass = true
+                                            dfp_ismanualpass = true,
+                                            
                                         };
                                         dynamicsContext.AttachTo("incidents", changedIncident);
                                         dynamicsContext.UpdateObject(changedIncident);
