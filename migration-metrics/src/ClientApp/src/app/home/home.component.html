@@ -1,33 +1,12 @@
 <h1>Migration Metrics</h1>
+
+<h1>Current Progress on LDR Data Cleanup</h1>
+<app-progress-chart category="DocumentsInLegacyReview" title="Documents of type Legacy Review" />
+<hr />
+<h1>Live Case Data</h1>
+<app-progress-table category="ClosedCaseMissingDecision" title="Closed Cases Missing Decision" />
+
 <p><a href="/swagger">Swagger</a></p>
-<div *ngFor="let c of categories">
-  <h2>{{ c }}</h2>
-
-  <table border="1" width="80%">
-    <tr>
-      <th>Label</th>
-      <th>Total</th>
-      <th>Improvement</th>
-      <th>Time</th>
-      <th>Velocity</th>
-      <th>Projected End</th>
-    </tr>
-    <tr *ngFor="let v of velocityData[c]">
-      <td>{{ v.label }}</td>
-      <td>{{ v.total }}</td>
-      <td>{{ v.improvement }}</td>
-      <td>{{ v.time | number:'1.2-2' }}</td>
-      <td>{{ v.velocity | number:'1.2-2' }}</td>
-      <td>{{ v.projectedEnd }}</td>
-
-    </tr>
-
-
-  </table>
-
-
-</div>
-<h2> </h2>
 
 
 

@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { ProgressComponent } from './progress/progress.component';
 import { ProgressChartComponent } from './progress-chart/progress-chart.component';
+import { ProgressTableComponent } from './progress-table/progress-table.component';
 
 
 
@@ -22,7 +23,8 @@ import { ProgressChartComponent } from './progress-chart/progress-chart.componen
     CounterComponent,
     FetchDataComponent,
     ProgressComponent,
-    ProgressChartComponent
+    ProgressChartComponent,
+    ProgressTableComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),    
