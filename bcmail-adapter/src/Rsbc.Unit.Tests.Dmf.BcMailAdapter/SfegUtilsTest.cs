@@ -7,6 +7,9 @@ using System.Net.Http;
 using Xunit;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Rsbc.Dmf.CaseManagement.Helpers;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using Pssg.DocumentStorageAdapter;
+using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.BcMailAdapter.Tests
 {
@@ -16,6 +19,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
         SfegUtils sfegUtils;
         
         CaseManagerClient _caseManagerClient { get; set; }
+        DocumentStorageAdapterClient _documentStorageAdapterClient { get; set; }
 
         /// <summary>
         /// Setup the test
@@ -69,8 +73,51 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 _caseManagerClient = new CaseManager.CaseManagerClient(channel);
+
+
+                // DOCUMENT STORAGE CLIENT
+
+
+                var documentStorageHttpClient = new HttpClient(httpClientHandler);
+
+                string documentStorageAdapterURI = Configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+
+
+
+                if (!string.IsNullOrEmpty(documentStorageAdapterURI))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = documentStorageHttpClient });
+
+                    var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                    {
+                        Secret = Configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        documentStorageHttpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+
+                    var documentStorageChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = documentStorageHttpClient });
+                    _documentStorageAdapterClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(documentStorageChannel);
+
+
+                }
+
             }
-            sfegUtils = new SfegUtils(Configuration, _caseManagerClient);
+            sfegUtils = new SfegUtils(Configuration, _caseManagerClient, _documentStorageAdapterClient);
+        }
+
+        [Fact]
+        public void CanVerifyConnection()
+        {
+
+            sfegUtils.SendDocumentsToBcMail();
         }
 
         [Fact]
