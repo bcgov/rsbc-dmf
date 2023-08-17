@@ -36,8 +36,8 @@ export class ProgressTableComponent {
       this.velocityData = result;
 
 
-    }
- });
+    });
+ }
 }
 
 
