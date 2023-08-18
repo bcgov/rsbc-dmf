@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -844,7 +845,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private string TranslateCaseType(int? optionSetValue)
+        private string TranslateCaseTypeToString(int? optionSetValue)
         {
             string result = null;
             switch (optionSetValue)
@@ -939,7 +940,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (fetchedCase.casetypecode != null)
                     {
-                        result.CaseType = TranslateCaseType(fetchedCase.casetypecode);
+                        result.CaseType = TranslateCaseTypeToString(fetchedCase.casetypecode);
                     }
 
                     if (fetchedCase.dfp_dmertype != null)
@@ -1926,26 +1927,23 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
 
+                // assign the owner to DPSR if the docuemnttype = "DMER" and submittalStatus = "ManualPass"
+               
+
                 if (found) // update
                 {
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
 
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DocumentTypeID), documentTypeId);
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
 
 
-                        if (newOwner != null)
-                        {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
-                        }
-
-
+                    
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        dynamicsContext.DetachAll();
                     }
                     catch (Exception ex)
                     {
@@ -1975,28 +1973,56 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                         }
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), driver);
-
-
-                        if (newOwner != null)
-                        {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
-                        }
-
-                        
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
+                       
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        dynamicsContext.DetachAll();
+                        
                     }
+
+                    
+
                     catch (Exception ex)
                     {
                         Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
                         result.Success = false;
                     }
                 }
-            }
 
+                if (request.SubmittalStatus == "Manual Pass")
+                {
+                    var validationPrevious = request.ValidationPrevious;
+                    try
+                    {
+
+                       /* if (validationPrevious.StartsWith("IDIR\\"))
+                        {
+                            validationPrevious = $"IDIR\\" + validationPrevious;
+                        }*/
+
+                        systemuser manualPassOwner = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
+
+                        // set the owner to DPSR
+                        //var manualPassOwner = dynamicsContext.systemusers.FirstOrDefault(u => u.domainname == request.ValidationPrevious);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), manualPassOwner);
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "Failed to get the user value");
+                    }
+                }
+                else
+                {
+                    if (newOwner != null)
+                    {
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), newOwner);
+                        
+                    }
+                }
+            }
+            await dynamicsContext.SaveChangesAsync();
+            dynamicsContext.DetachAll();
 
             return result;
         }
@@ -2765,7 +2791,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             // Query the driver
 
-            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0).FirstOrDefault();
+            var driverQuery = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0).FirstOrDefault();
 
 
             if(driverQuery != null)
@@ -2803,7 +2829,7 @@ namespace Rsbc.Dmf.CaseManagement
                     // set status to Open Pending for Submission
                     statuscode = 100000000,
                     // use dictionary to translate the codes
-                    casetypecode = TranslateDocumentStatusCode(request.CaseTypeCode ?? request.DocumentType),
+                    casetypecode = TranslateCaseType(request.CaseTypeCode ?? request.DocumentType),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
 
@@ -3079,7 +3105,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        private int TranslateDocumentStatusCode(string documentStatusCode)
+        private int TranslateCaseType(string documentStatusCode)
         {
             var statusMap = new Dictionary<string, int>()
             {
@@ -3101,7 +3127,7 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 // default value is OTHER 
-                return 100000004;
+                return statusMap["OTHR"];
             }
         }
 
@@ -3530,7 +3556,7 @@ namespace Rsbc.Dmf.CaseManagement
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                        dynamicsContext.Detach(currentCase);
+                                        bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
@@ -3643,7 +3669,7 @@ namespace Rsbc.Dmf.CaseManagement
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                        dynamicsContext.Detach(currentCase);
+                                        bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
