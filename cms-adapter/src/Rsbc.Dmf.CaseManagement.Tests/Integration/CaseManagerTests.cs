@@ -629,7 +629,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             {
                 DriverLicenseNumber = "01234571",
                 SequenceNumber = 2,
-               
+                CaseTypeCode = "EVF"
             };
 
             // check to driver 
