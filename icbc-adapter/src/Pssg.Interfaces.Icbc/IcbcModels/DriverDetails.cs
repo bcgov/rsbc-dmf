@@ -5,7 +5,7 @@ namespace Pssg.Interfaces.IcbcModels
 {
     public class DriverDetails
     {
-        public int LicenceNumber { get; set; }
+        public string LicenceNumber { get; set; }
         public DateTime LicenceExpiryDate { get; set; }
         public int LicenceClass { get; set; }
         public string MasterStatusCode { get; set; }

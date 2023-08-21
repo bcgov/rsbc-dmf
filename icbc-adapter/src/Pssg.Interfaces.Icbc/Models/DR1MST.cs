@@ -26,7 +26,7 @@ namespace Pssg.Interfaces.Icbc.Models
         /// <summary>
         /// Initializes a new instance of the DR1MST class.
         /// </summary>
-        public DR1MST(string mSCD = default(string), List<int> rSCD = default(List<int>), System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), List<DR1STAT> dR1STAT = default(List<DR1STAT>), int? lCLS = default(int?), IList<DR1MEDNITEM> dR1MEDN = default(IList<DR1MEDNITEM>))
+        public DR1MST(string mSCD = default(string), List<int> rSCD = default(List<int>), System.DateTime? rRDT = default(System.DateTime?), string lNUM = default(string), List<DR1STAT> dR1STAT = default(List<DR1STAT>), int? lCLS = default(int?), IList<DR1MEDNITEM> dR1MEDN = default(IList<DR1MEDNITEM>))
         {
             MSCD = mSCD;
             RSCD = rSCD;
@@ -62,7 +62,7 @@ namespace Pssg.Interfaces.Icbc.Models
         /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "LNUM")]
-        public int? LNUM { get; set; }
+        public string LNUM { get; set; }
 
         /// <summary>
         /// </summary>

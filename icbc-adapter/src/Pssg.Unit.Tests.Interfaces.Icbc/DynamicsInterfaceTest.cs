@@ -25,15 +25,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             response.EnsureSuccessStatusCode();
 
-            
-
             Driver clientResult = JsonConvert.DeserializeObject<Driver>(jsonString);
 
-            int result = 0;
-            int.TryParse(testDl, out result);
             // content should match
 
-            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber.Value, result);
+            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber, testDl);
         }
 
         /// <summary>

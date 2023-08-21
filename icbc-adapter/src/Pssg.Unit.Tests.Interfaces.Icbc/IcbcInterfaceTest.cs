@@ -60,7 +60,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
             // content should match
 
-            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber.Value, int.Parse(testDl));
+            Assert.Equal(clientResult.DriverMasterStatus.LicenceNumber, testDl);
         }
 
 

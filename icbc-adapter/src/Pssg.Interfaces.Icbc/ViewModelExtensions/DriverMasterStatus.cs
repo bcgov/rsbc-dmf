@@ -21,7 +21,7 @@ namespace Pssg.Interfaces.ViewModelExtensions
                 {
                     MasterStatusCode = item.MSCD,                    
                     LicenceExpiryDate = item.RRDT,
-                    LicenceNumber = item.LNUM,
+                    LicenceNumber = item.LNUM.ToString(),
                     LicenceClass = item.LCLS
                 };
 
