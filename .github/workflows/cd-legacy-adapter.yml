@@ -16,11 +16,17 @@ on:
 env:
   IMAGE_NAME: legacy-adapter
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/legacy-adapter
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
+    env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       GIT_BRANCH: "${{github.ref}}"
 
     steps:
       - uses: actions/checkout@v2
@@ -32,7 +38,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        run: docker build . --file ./legacy-adapter/src/Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
+        run: docker build . --file ./legacy-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |
