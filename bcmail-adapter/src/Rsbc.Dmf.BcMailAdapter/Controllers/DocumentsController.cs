@@ -325,7 +325,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// </summary>
         /// <param name="srcPDFs"></param>
         /// <returns></returns>
-        public byte[] CombinePDFs(List<byte[]> srcPDFs)
+        private byte[] CombinePDFs(List<byte[]> srcPDFs)
         {
             byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);

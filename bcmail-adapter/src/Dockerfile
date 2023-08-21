@@ -1,7 +1,9 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 USER 0
 
 RUN apt-get -y update && apt install -y libgdiplus
@@ -15,7 +17,8 @@ RUN ln -s /usr/local/lib/libwkhtmltox.so /usr/lib/libwkhtmltox.so
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 COPY . .
 RUN dotnet restore ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter 
 
@@ -23,6 +26,8 @@ FROM build AS publish
 RUN dotnet publish ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter -c Release -o /app/publish
 
 FROM base AS final
+ARG BUILD_ID
+ARG BUILD_VERSION
 WORKDIR /app
 COPY --from=publish /app/publish .
 
