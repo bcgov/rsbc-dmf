@@ -22,7 +22,7 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// </summary>
         public DriverMasterStatus(string mSCD = default(string),
             List<int> restrictionCodes = default(List<int>),
-            System.DateTime? rRDT = default(System.DateTime?), int? lNUM = default(int?), int? lCLS = default(int?), List<DriverMedical> dR1MEDN = default(List<DriverMedical>))
+            System.DateTime? rRDT = default(System.DateTime?), string lNUM = default(string), int? lCLS = default(int?), List<DriverMedical> dR1MEDN = default(List<DriverMedical>))
         {
             MasterStatusCode = mSCD; 
             RestrictionCodes = restrictionCodes;
@@ -53,7 +53,7 @@ namespace Pssg.Interfaces.Icbc.ViewModels
 
         /// <summary>
         /// </summary>        
-        public int? LicenceNumber { get; set; }
+        public string LicenceNumber { get; set; }
 
         /// <summary>
         /// </summary>        

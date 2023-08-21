@@ -45,6 +45,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             {
                 // get the history from ICBC
                 data = _icbcClient.GetDriverHistory(driversLicence);
+
+                // ensure the presentation of the DL matches the calling system.
+                data.DR1MST.LNUM = driversLicence;
                 // Key not in cache, so get data.
                 //cacheEntry = DateTime.Now;
                 if (data != null)

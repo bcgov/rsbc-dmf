@@ -16,9 +16,9 @@ namespace Pssg.Interfaces.Icbc.Helpers
             icbcClient
                 .Setup(x => x.GetDriverHistory(It.IsAny<string>()))
                 .Returns<string>(x => {
-                    int licenceNumber = 0;
+                    string licenceNumber = $"{x}";
                     
-                    int.TryParse(x, out licenceNumber );
+                    
 
                     return new CLNT() {  DR1MST = new DR1MST() { LNUM = licenceNumber } };
 
