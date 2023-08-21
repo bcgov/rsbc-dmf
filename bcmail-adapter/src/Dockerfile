@@ -23,7 +23,7 @@ COPY . .
 RUN dotnet restore ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter 
 
 FROM build AS publish
-RUN dotnet publish ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter -c Release -o /app/publish
+RUN dotnet publish ./bcmail-adapter/src/Rsbc.Dmf.BcMailAdapter /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID"  -c Release -o /app/publish
 
 FROM base AS final
 ARG BUILD_ID
