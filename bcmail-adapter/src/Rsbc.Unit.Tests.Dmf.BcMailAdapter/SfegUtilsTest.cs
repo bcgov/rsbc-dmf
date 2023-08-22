@@ -16,7 +16,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
     public class SfegUtilsTest
     {
         IConfiguration Configuration;
-        SfegUtils sfegUtils;
+        SftpUtils sfegUtils;
         
         CaseManagerClient _caseManagerClient { get; set; }
         DocumentStorageAdapterClient _documentStorageAdapterClient { get; set; }
@@ -110,7 +110,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
                 }
 
             }
-            sfegUtils = new SfegUtils(Configuration, _caseManagerClient, _documentStorageAdapterClient);
+            sfegUtils = new SftpUtils(Configuration, _caseManagerClient, _documentStorageAdapterClient);
         }
 
         [Fact]

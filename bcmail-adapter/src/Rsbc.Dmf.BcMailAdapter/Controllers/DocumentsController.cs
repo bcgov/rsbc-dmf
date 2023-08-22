@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Features;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
@@ -55,6 +56,16 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// Mail a document
         /// </summary>
         /// <returns></returns>
+
+        [AllowAnonymous]
+        [HttpGet("test")]
+        public ActionResult TestBcMail()
+        {
+            SftpUtils sfg = new SftpUtils(Configuration, null, null);
+            sfg.CheckConnection();
+            return Ok("Test complete.");
+
+        }
 
         // POST: /Documents/BcMail}
         [HttpPost("BcMail")]

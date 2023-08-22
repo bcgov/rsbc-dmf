@@ -52,7 +52,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Services
         {
             var result = new ResultStatusReply();
 
-            var sfegUtils = new SfegUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
+            var sfegUtils = new SftpUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
             sfegUtils.SendDocumentsToBcMail();
             return Task.FromResult(result);
 
