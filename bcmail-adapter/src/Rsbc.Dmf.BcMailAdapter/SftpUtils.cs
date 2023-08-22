@@ -14,7 +14,7 @@ namespace Rsbc.Interfaces
     /// <summary>
     /// SFEG Utils
     /// </summary>
-    public class SfegUtils
+    public class SftpUtils
     {
 
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
@@ -27,7 +27,7 @@ namespace Rsbc.Interfaces
         /// <param name="configuration"></param>
         /// <param name="caseManagerClient"></param>
         /// <param name="documentStorageAdapterClient"></param>
-        public SfegUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public SftpUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
