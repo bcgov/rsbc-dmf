@@ -3669,15 +3669,24 @@ namespace Rsbc.Dmf.CaseManagement
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                       bool detach = dynamicsContext.Detach(currentCase);
+                                                                               bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
-                                            dfp_ismanualpass = true,
-                                            
+                                                                                   
                                         };
-                                        dynamicsContext.AttachTo("incidents", changedIncident);
+                                                                                
+                                        dynamicsContext.AttachTo("incident", changedIncident);
+                                        changedIncident.dfp_ismanualpass = true;
                                         dynamicsContext.UpdateObject(changedIncident);
+                                        try
+                                        {
+                                            dynamicsContext.SaveChanges();
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Serilog.Log.Error(ex, $"CMS.CaseManager Update Manual Pass  {ex.Message}");
+                                        }
                                         result.Success = true;
                                     }
 
@@ -3685,14 +3694,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                             }
 
-                            try
-                            {
-                                dynamicsContext.SaveChanges();
-                            }
-                            catch (Exception ex)
-                            {
-                                Serilog.Log.Error(ex, $"CMS.CaseManager Update Manual Pass  ex.Message");
-                            }
+                            
 
                             dynamicsContext.DetachAll();
 
