@@ -1992,14 +1992,14 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (request.SubmittalStatus == "Manual Pass")
                 {
-                    var validationPrevious = request.ValidationPrevious;
+                    
                     try
                     {
-
-                       /* if (validationPrevious.StartsWith("IDIR\\"))
+                        var validationPrevious = request.ValidationPrevious;
+                        if (!validationPrevious.StartsWith("IDIR\\"))
                         {
                             validationPrevious = $"IDIR\\" + validationPrevious;
-                        }*/
+                        }
 
                         systemuser manualPassOwner = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
 
@@ -3669,7 +3669,7 @@ namespace Rsbc.Dmf.CaseManagement
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                        bool detach = dynamicsContext.Detach(currentCase);
+                                       bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
