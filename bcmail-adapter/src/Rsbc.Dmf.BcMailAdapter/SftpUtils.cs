@@ -191,7 +191,7 @@ namespace Rsbc.Interfaces
 
                         try
                         {
-                            // client.UploadFile(stream, filePath);
+                            client.UploadFile(stream, filePath);
                             // Update the status to SEND and attach the document
 
 
