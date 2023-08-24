@@ -161,7 +161,7 @@ namespace Rsbc.Interfaces
                 string key = _configuration["SCP_KEY"];
 
                 // Check the folder and file name and confirm
-                string folder = _configuration["SCP_FOLDER_DOCUMENTS"];
+                string folder = _configuration["SCP_FOLDER"];
 
                 // verify file name
                 var filename = doc.Filename;
