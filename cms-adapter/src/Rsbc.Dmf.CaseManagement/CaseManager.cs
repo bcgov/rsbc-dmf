@@ -3766,17 +3766,23 @@ namespace Rsbc.Dmf.CaseManagement
                     if (pdfDocument != null)
                     {
                         // get the associated document.
-                        var document = dynamicsContext.bcgov_documenturls.ByKey(pdfDocument.dfp_pdfdocumentid).GetValue();
 
-                        PdfDocument pdfDoc = new PdfDocument()
+                        var document = dynamicsContext.bcgov_documenturls.Where(x => x._dfp_pdfdocumentid_value == pdfDocument.dfp_pdfdocumentid).FirstOrDefault();                         
+
+                        if (document != null)
                         {
-                            PdfDocumentId = pdfDocument.dfp_pdfdocumentid.ToString(),
-                            //StateCode = pdfDocument.statecode,
-                            Filename = document.bcgov_filename,
-                            ServerUrl = document.bcgov_url,
-                            StatusCode = (StatusCodeOptionSet)pdfDocument.statuscode
-                        };
-                        result.Add(pdfDoc);
+                            PdfDocument pdfDoc = new PdfDocument()
+                            {
+                                PdfDocumentId = pdfDocument.dfp_pdfdocumentid.ToString(),
+                                //StateCode = pdfDocument.statecode,
+                                Filename = document.bcgov_filename,
+                                ServerUrl = document.bcgov_url,
+                                StatusCode = (StatusCodeOptionSet)pdfDocument.statuscode
+                            };
+                            result.Add(pdfDoc);
+                        }
+
+                        
                     }
 
                 }
