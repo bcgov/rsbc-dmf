@@ -223,13 +223,16 @@ message PdfDocumentReply {
 
 message PdfDocument{
   string pdfDocumentId = 1;
+
+  
   enum StatusCodeOptions{
 	  SendToBCMail = 0;
 	  Sent = 1;
 	  FailedToSend = 2;
    }
   StatusCodeOptions statusCode = 2;
-  //int64 stateCode = 3;
+  string filename = 3;
+  string serverUrl = 4;
   
 }
 
