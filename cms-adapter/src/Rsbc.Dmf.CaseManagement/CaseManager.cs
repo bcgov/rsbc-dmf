@@ -3761,8 +3761,12 @@ namespace Rsbc.Dmf.CaseManagement
                 d => d.statuscode == (int)StatusCodeOptionSet.SendToBCMail // PDF documents in Send to BC mail Status
                 && d.statecode == 0).ToList();
 
+
+                int count = 0;
+
                 foreach (var pdfDocument in pdfDocuments)
                 {
+                    count++;
                     if (pdfDocument != null)
                     {
                         // get the associated document.
@@ -3771,11 +3775,16 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (document != null)
                         {
+                            dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+                            dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DriverId));
+
+                            string filename = document.dfp_DriverId.dfp_licensenumber + "-" + document.dfp_DocumentTypeID.dfp_name.Replace(" ", "") + count.ToString() + ".pdf";
+
                             PdfDocument pdfDoc = new PdfDocument()
                             {
                                 PdfDocumentId = pdfDocument.dfp_pdfdocumentid.ToString(),
                                 //StateCode = pdfDocument.statecode,
-                                Filename = document.bcgov_filename,
+                                Filename = filename,
                                 ServerUrl = document.bcgov_url,
                                 StatusCode = (StatusCodeOptionSet)pdfDocument.statuscode
                             };
