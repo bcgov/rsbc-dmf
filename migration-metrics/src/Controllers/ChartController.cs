@@ -28,7 +28,7 @@ public class ChartController : ControllerBase
     }
 
     [HttpGet("{chartId}")]
-    public IActionResult GetChart(string chartId)
+    public IActionResult GetChart(string chartId, bool showRed = false)
     {
         var recordedDates = _monthlyCountStatService.GetRecordedDatesByCategory(chartId);
 
@@ -81,7 +81,7 @@ public class ChartController : ControllerBase
                 Data = normalizedData
             };
 
-            if (l == 0)
+            if (l == 0 && showRed)
             {
                 newItem.PointHoverRadius = 1;
                 newItem.BorderColor = "red";  
