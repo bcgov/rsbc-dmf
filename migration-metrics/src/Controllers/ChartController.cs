@@ -28,7 +28,7 @@ public class ChartController : ControllerBase
     }
 
     [HttpGet("{chartId}")]
-    public IActionResult GetChart(string chartId, bool showRed = false)
+    public IActionResult GetChart(string chartId, bool showRed = true)
     {
         var recordedDates = _monthlyCountStatService.GetRecordedDatesByCategory(chartId);
 
@@ -81,25 +81,51 @@ public class ChartController : ControllerBase
                 Data = normalizedData
             };
 
-            if (l == 0 && showRed)
+            if (showRed)
             {
-                newItem.PointHoverRadius = 1;
-                newItem.BorderColor = "red";  
-                newItem.BackgroundColor = "red";
-                newItem.BorderWidth = 1;
-                newItem.Fill = true; 
-                //newItem.DrawActiveElementsOnTop = true;
+                if (l == 0)
+                {
+                    newItem.PointHoverRadius = 1;
+                    newItem.BorderColor = "red";
+                    newItem.BackgroundColor = "red";
+                    newItem.BorderWidth = 1;
+                    newItem.Fill = true;
+                    //newItem.DrawActiveElementsOnTop = true;
+                }
+                else
+                {
+                    int greyScale = ((int)Math.Round(((l * 1.0) / 10.0) * 255.0));
+                    newItem.PointHoverRadius = 1;
+                    newItem.BorderColor = $"#00{greyScale.ToString("X")}00";
+                    newItem.BackgroundColor = $"#00{greyScale.ToString("X")}00";
+                    newItem.BorderWidth = 1;
+                    newItem.Fill = true;
+                    //newItem.DrawActiveElementsOnTop = true;
+                }
             }
             else
             {
-                int greyScale = ((int)Math.Round (((l * 1.0) / 10.0) * 255.0));
-                newItem.PointHoverRadius = 1;
-                newItem.BorderColor = $"#00{greyScale.ToString("X")}00";
-                newItem.BackgroundColor = $"#00{greyScale.ToString("X")}00";
-                newItem.BorderWidth = 1;
-                newItem.Fill = true;
-                //newItem.DrawActiveElementsOnTop = true;
+                if (l == 0)
+                {
+                    newItem.PointHoverRadius = 1;
+                    newItem.BorderColor = "green";
+                    newItem.BackgroundColor = "green";
+                    newItem.BorderWidth = 1;
+                    newItem.Fill = true;
+                    //newItem.DrawActiveElementsOnTop = true;
+                }
+                else
+                {
+                    int greyScale = ((int)Math.Round(((l * 1.0) / 10.0) * 255.0));
+                    newItem.PointHoverRadius = 1;
+                    newItem.BorderColor = $"#00{greyScale.ToString("X")}00";
+                    newItem.BackgroundColor = $"#00{greyScale.ToString("X")}00";
+                    newItem.BorderWidth = 1;
+                    newItem.Fill = true;
+                    //newItem.DrawActiveElementsOnTop = true;
+                }
             }
+            
 
 
             datasets.Add(newItem);
