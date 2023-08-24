@@ -148,7 +148,7 @@ namespace Rsbc.Interfaces
                 {
                     // ServerRelativeUrl = doc.PdfDocumentId
                     // Are we storing the document url in pdfDocument 
-                    ServerRelativeUrl = doc.PdfDocumentId,
+                    ServerRelativeUrl = doc.ServerUrl,
 
                 });
 
@@ -164,7 +164,7 @@ namespace Rsbc.Interfaces
                 string folder = _configuration["SCP_FOLDER_DOCUMENTS"];
 
                 // verify file name
-                var filename = doc.PdfDocumentId;
+                var filename = doc.Filename;
 
                 if (CheckScpSettings(host, username, key))
                 {
@@ -194,6 +194,7 @@ namespace Rsbc.Interfaces
                             client.UploadFile(stream, filePath);
                             // Update the status to SEND and attach the document
 
+                            Log.Information($"SFTP Upload complete for {filePath}");
 
                             var pdfDocument = new PdfDocument()
                             {

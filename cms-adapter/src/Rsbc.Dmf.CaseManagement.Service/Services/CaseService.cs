@@ -1084,6 +1084,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     var pdfDocument = new PdfDocument()
                     {
                         PdfDocumentId = item.PdfDocumentId,
+                        Filename = item.Filename,
+                        ServerUrl = item.ServerUrl,
                         StatusCode = ConvertStatusCode(item.StatusCode) 
                     };
                     reply.PdfDocuments.Add(pdfDocument);
