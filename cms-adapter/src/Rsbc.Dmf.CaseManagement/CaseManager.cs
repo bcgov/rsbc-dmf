@@ -3775,10 +3775,30 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (document != null)
                         {
-                            dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-                            dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DriverId));
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DriverId));
 
-                            string filename = document.dfp_DriverId.dfp_licensenumber + "-" + document.dfp_DocumentTypeID.dfp_name.Replace(" ", "") + count.ToString() + ".pdf";
+                            string filename = count.ToString() + "-";
+
+                            if (document.dfp_DriverId == null)
+                            {
+                                Log.Error("Error - PDF record has document with no driver.");
+                            }
+                            else
+                            {
+                                filename += document.dfp_DriverId.dfp_licensenumber;
+                            }
+
+                            if (document.dfp_DocumentTypeID == null)
+                            {
+                                Log.Error("Error - PDF record has document with no document type.");
+                            }
+                            else
+                            {
+                                filename += document.dfp_DocumentTypeID.dfp_name.Replace(" ", "");
+                            }
+
+                            filename += ".pdf";
 
                             PdfDocument pdfDoc = new PdfDocument()
                             {
