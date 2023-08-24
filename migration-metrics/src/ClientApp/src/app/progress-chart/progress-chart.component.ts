@@ -14,6 +14,8 @@ export class ProgressChartComponent {
 
   @Input() title!: string;
 
+  @Input() showRed!: boolean;
+
   public chart: any;
 
   chartConfig: any;
@@ -25,7 +27,7 @@ export class ProgressChartComponent {
   }
 
   ngOnInit(): void {
-    this.http.get<ChartConfiguration>(this.baseUrl + 'api/chart/' + this.chartId).subscribe(result => {
+    this.http.get<ChartConfiguration>(this.baseUrl + 'api/chart/' + this.chartId + '?showRed=' + this.showRed ).subscribe(result => {
 
       this.chartConfig = result;
 
