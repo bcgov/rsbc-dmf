@@ -1643,14 +1643,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
-        /// Get Unsent Medical Updates
+        /// Get Unsent Medical Updates for clean pass and manual pass
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<SearchReply> GetUnsentMedicalUpdates(EmptyRequest request, ServerCallContext context)
+        public async override Task<SearchReply> GetUnsentMedicalPass(EmptyRequest request, ServerCallContext context)
         {
-            var data = await _caseManager.GetUnsentMedicalUpdates();
+            var data = await _caseManager.GetUnsentMedicalPass();
                 
             var cases = data.Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
 
@@ -1701,6 +1701,72 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
                 }));
 
+                return newCase;
+            }));
+
+            return reply;
+        }
+
+        /// <summary>
+        /// Get Unsent Medical Updates for adjudication
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<SearchReply> GetUnsentMedicalAdjudication(EmptyRequest request, ServerCallContext context)
+        {
+            var data = await _caseManager.GetUnsentMedicalAdjudication();
+
+            var cases = data.Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
+
+            SearchReply reply = new();
+
+            reply.Items.Add(cases.Select(c =>
+            {
+
+                Driver driver = null;
+                if (c.Driver != null && c.Driver.Id != null)
+                {
+                    driver = new Driver()
+                    {
+                        Id = c.Driver.Id ?? string.Empty,
+                        Surname = c.Driver.Surname ?? string.Empty,
+                        GivenName = c.Driver.GivenName ?? string.Empty,
+                        BirthDate = Timestamp.FromDateTime(c.Driver.BirthDate.ToUniversalTime()),
+                        DriverLicenseNumber = c.Driver.DriverLicenseNumber ?? string.Empty,
+                        Address = new Address()
+                        {
+                            City = c.Driver.Address.City ?? string.Empty,
+                            Postal = c.Driver.Address.Postal ?? string.Empty,
+                            Line1 = c.Driver.Address.Line1 ?? string.Empty,
+                            Line2 = c.Driver.Address.Line2 ?? string.Empty,
+                        },
+                        Sex = c.Driver.Sex ?? string.Empty,
+                        Name = c.Driver.Name ?? string.Empty
+                    };
+                }
+                var newCase = new DmerCase
+                {
+                    CaseId = c.Id,
+                    Title = c.Title ?? string.Empty,
+                    CreatedBy = c.CreatedBy ?? string.Empty,
+                    CreatedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    ModifiedBy = c.CreatedBy ?? string.Empty,
+                    ModifiedOn = Timestamp.FromDateTime(c.CreatedOn.ToUniversalTime()),
+                    Driver = driver,
+                    IsCommercial = c.IsCommercial,
+                    ClinicName = c.ClinicName ?? string.Empty,
+                    Status = c.Status
+                };
+
+                /*newCase.Decisions.Add(c.Decisions.Select(d => new DecisionItem
+                {
+                    Identifier = d.Id,
+                    Outcome = ConvertDecisionOutcome(d.Outcome),
+                    CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
+                }));
+*/
+                
                 return newCase;
             }));
 

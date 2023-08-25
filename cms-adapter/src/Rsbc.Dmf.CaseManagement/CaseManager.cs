@@ -164,6 +164,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string DmerType { get; set;}
 
         public int CaseSequence { get; set; }
+
     }
 
     public class Flag
@@ -202,7 +203,8 @@ namespace Rsbc.Dmf.CaseManagement
         Reject = 100000004, 
         CleanPass=  100000009,
         ManualPass = 100000012,
-        OpenRequired = 100000000
+        OpenRequired = 100000000,
+        Reviewed = 100000003
     }
 
     public enum BringForwardPriority
@@ -3302,10 +3304,10 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// Get Unsent Medical Updates
+        /// Get Unsent Medical Updates for clean pass and manual pass
         /// </summary>
         /// <returns></returns>
-        public async Task<CaseSearchReply> GetUnsentMedicalUpdates()
+        public async Task<CaseSearchReply> GetUnsentMedicalPass()
         {
             var outputArray = new List<incident>();
 
@@ -3359,6 +3361,104 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             return MapCases(outputArray);            
+        }
+
+        /// <summary>
+        /// Get Unsent Medical Updates for Adjudication
+        /// </summary>
+        /// <returns></returns>
+        public async Task<CaseSearchReply> GetUnsentMedicalAdjudication()
+        {
+            var outputArray = new List<incident>();
+
+            DataServiceQueryContinuation<incident> nextLink = null;
+
+            var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
+                .Expand(i => i.dfp_DriverId)
+                .Where(i => i.statecode == 0 // Active
+                        && i.dfp_datesenttoicbc == null
+                        && i.dfp_bpfstage == 100000002); // case is in under review);
+
+            // Get the document of type DMER from documents entity and not in Rejected, Clean Pass, or Manual Pass(Query document entity)
+            // Add condition to check document is in review (Document entity)
+            //
+
+            var response = caseQuery.Execute() as QueryOperationResponse<incident>;
+
+            do
+            {
+                if (nextLink != null)
+                {
+                    response = dynamicsContext.Execute<incident>(nextLink) as QueryOperationResponse<incident>;
+                }
+                if (response != null)
+                {
+                    // You must enumerate the response before calling GetContinuation below.
+                    foreach (var item in response)
+                    {
+                        if (item._dfp_driverid_value.HasValue)
+                        {
+                            //load driver info
+                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                        }
+
+                        // Load documents
+
+                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        foreach (var document in item.bcgov_incident_bcgov_documenturl)
+                        {
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                            // condition : check for
+                            // 1. DMER type
+                            // 2. submital status is in review and not in  Rejected, Clean Pass, or Manual Pass 
+
+                            if (document.dfp_DocumentTypeID != null
+                                && document.dfp_DocumentTypeID.dfp_name == "DMER"
+
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject)
+                            {
+
+                                
+                                outputArray.Add(item);
+                            }
+                            else
+                            {
+                                //condition : Check for
+                                //1. DMER type
+                                //2. Submital status is manual pass or clean pass and is in review state
+
+                                if(document.dfp_DocumentTypeID != null
+                                && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass
+                                )
+                                {
+                                    outputArray.Add(item);
+                                }
+                            }
+
+                           
+
+                            // 
+                        }
+
+
+
+
+                      
+                    }
+                }
+            }
+            // Loop if there is a next link
+            while ((nextLink = response.GetContinuation()) != null);
+
+            dynamicsContext.DetachAll();
+
+            return MapCases(outputArray);
         }
 
         /// <summary>

@@ -40,11 +40,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                 .Setup(m => m.GetDriver(
                     It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
                 .Returns(mockDriverResult);
-            mockClient
-                .Setup(m => m.GetUnsentMedicalUpdates(
-                    It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
-                .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
-
+         
             mockClient
                 .Setup(m => m.ProcessLegacyCandidate(
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
@@ -221,12 +217,17 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                });
 
             mockClient
-                .Setup(m => m.GetUnsentMedicalUpdates(
+                .Setup(m => m.GetUnsentMedicalPass(
                     It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
                 .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
 
-
             mockClient
+               .Setup(m => m.GetUnsentMedicalAdjudication(
+                   It.IsAny<EmptyRequest>(), null, null, CancellationToken.None))
+               .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
+
+
+           mockClient
                 .Setup(m => m.MarkMedicalUpdateError(
                     It.IsAny<IcbcErrorRequest>(), null, null, CancellationToken.None))
                 .Returns(new ResultStatusReply { ResultStatus = ResultStatus.Success });
