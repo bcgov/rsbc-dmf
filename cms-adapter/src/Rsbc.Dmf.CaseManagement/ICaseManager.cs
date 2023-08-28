@@ -61,7 +61,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<List<Flag>> GetAllFlags();
 
-        Task<CaseSearchReply> GetUnsentMedicalUpdates();
+        Task<CaseSearchReply> GetUnsentMedicalPass();
+
+        Task<CaseSearchReply> GetUnsentMedicalAdjudication();
 
         Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
 

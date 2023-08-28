@@ -528,11 +528,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
         {
-            var queryResults = await caseManager.GetUnsentMedicalUpdates();
+            var queryResults = await caseManager.GetUnsentMedicalPass();
             queryResults.Items.ShouldNotBeEmpty();
         }
 
-
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetUnsentMedicalUpdatesAdjudication()
+        {
+            var queryResults = await caseManager.GetUnsentMedicalAdjudication();
+            queryResults.Items.ShouldNotBeEmpty();
+        }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateDriverBirthDate()

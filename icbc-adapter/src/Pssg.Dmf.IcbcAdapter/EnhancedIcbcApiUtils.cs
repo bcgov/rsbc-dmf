@@ -61,13 +61,16 @@ namespace Rsbc.Dmf.IcbcAdapter
         {
             Log.Logger.Error("Starting SendMedicalUpdates");
 
-            var unsentItems = _caseManagerClient.GetUnsentMedicalUpdates(new CaseManagement.Service.EmptyRequest());
+            // Get Unsent Medical for manual and clean pass
+            
+            var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
 
-           
+            
 
             foreach (var unsentItem in unsentItems.Items)
             {
-                var item = GetMedicalUpdateData(unsentItem);
+                
+                var item = GetMedicalUpdateDataforPass(unsentItem);
 
                 if (item != null)
                 {
@@ -105,17 +108,29 @@ namespace Rsbc.Dmf.IcbcAdapter
                         Log.Logger.Error($"ICBC Error {responseContent}");
                     }                                            
                 }
+
+
                 else
                 {
                     Log.Logger.Error( $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
                 }
 
+
             }
 
             Log.Logger.Error( "End of SendMedicalUpdates.");
-        }
 
-        private void MarkMedicalUpdateSent ( string caseId)
+            // create for one more call for GetmedicalAdjudication
+
+            var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
+            foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
+            {
+
+                var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
+            }
+            }
+
+            private void MarkMedicalUpdateSent ( string caseId)
         {            
             var idListRequest = new IdListRequest();
             idListRequest.IdList.Add(caseId);
@@ -124,7 +139,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             Log.Logger.Error($"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
-        public IcbcMedicalUpdate GetMedicalUpdateData (DmerCase item)
+        public IcbcMedicalUpdate GetMedicalUpdateDataforPass (DmerCase item)
         {
 
             // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
@@ -151,16 +166,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                             {
                                 newUpdate.MedicalDisposition = "P";
                             }
-                            else
-                            {
-                                newUpdate.MedicalDisposition = "J";
-                            }
+                            
+                           
                         }
-                        else
-                        {
-                            newUpdate.MedicalDisposition = "J";
-                        }
-
+                       
                         // get most recent Medical Issue Date from the driver.
 
                         DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
@@ -186,6 +195,64 @@ namespace Rsbc.Dmf.IcbcAdapter
                 Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
             }
              
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public IcbcMedicalUpdate GetMedicalUpdateDataforAdjudication(DmerCase item)
+        {
+
+            // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
+
+            if (item.Driver != null)
+            {
+                string licenseNumber = item.Driver.DriverLicenseNumber;
+                try
+                {
+                    var driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    if (driver != null && driver.INAM?.SURN != null)
+                    {
+                        var newUpdate = new IcbcMedicalUpdate()
+                        {
+                            DlNumber = licenseNumber,
+                            LastName = driver.INAM.SURN,
+                        };
+
+                        if(newUpdate != null)
+                        {
+                            newUpdate.MedicalDisposition = "J";
+                        }
+
+
+                        // get most recent Medical Issue Date from the driver.
+
+                        DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
+
+                        newUpdate.MedicalIssueDate = adjustedDate;
+
+                        return newUpdate;
+                    }
+                    else
+                    {
+                        Log.Logger.Error("Error getting driver from ICBC.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    Log.Logger.Error(e, "Error getting driver from ICBC.");
+                }
+
+
+            }
+            else
+            {
+                Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
+            }
+
             return null;
         }
 

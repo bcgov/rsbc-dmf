@@ -52,7 +52,9 @@ service CaseManager {
   // Get a token given a secret.
   rpc GetToken (TokenRequest) returns (TokenReply);
 
-  rpc GetUnsentMedicalUpdates(EmptyRequest) returns (SearchReply);
+  rpc GetUnsentMedicalPass(EmptyRequest) returns (SearchReply);
+
+  rpc GetUnsentMedicalAdjudication(EmptyRequest) returns (SearchReply);
 
   rpc MarkMedicalUpdatesSent(IdListRequest) returns (ResultStatusReply);
 

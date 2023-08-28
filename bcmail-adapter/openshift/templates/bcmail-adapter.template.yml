@@ -38,6 +38,9 @@ parameters:
   - description: DOCUMENT_STORAGE_ADAPTER_SECRET
     name: DOCUMENT_STORAGE_ADAPTER_SECRET
     required: true
+  - description: CORS_ORIGINS
+    name: CORS_ORIGINS
+    required: true
   - description: JWT_TOKEN_KEY
     name: JWT_TOKEN_KEY
     required: true
@@ -47,8 +50,16 @@ parameters:
   - description: JWT_VALID_ISSUER
     name: JWT_VALID_ISSUER
     required: true
-
-
+  - description: SCP_USER
+    name: SCP_USER
+    required: true
+  - description: SCP_HOST
+    name: SCP_HOST
+    required: true
+  - description: SCP_FOLDER
+    name: SCP_FOLDER
+    required: true
+  
 objects:
   - kind: ConfigMap
     apiVersion: v1
@@ -78,7 +89,10 @@ objects:
       JWT_TOKEN_KEY: ${JWT_TOKEN_KEY}
       JWT_VALID_AUDIENCE: ${JWT_VALID_AUDIENCE}
       JWT_VALID_ISSUER: ${JWT_VALID_ISSUER}
-
+      CORS_ORIGINS: ${CORS_ORIGINS}
+      SCP_USER : ${SCP_USER}
+      SCP_HOST : ${SCP_HOST}
+      SCP_FOLDER : ${SCP_FOLDER}
   - kind: Service
     apiVersion: v1
     metadata:
@@ -114,7 +128,7 @@ objects:
     spec:
       host: ${HOST}
       port:
-        targetPort: 8080-tcp
+        targetPort: 8088-tcp
       # tls:
       #   insecureEdgeTerminationPolicy: Redirect
       #   termination: edge
@@ -195,7 +209,27 @@ objects:
                   valueFrom:
                     secretKeyRef:
                       name: ${DOCUMENT_STORAGE_ADAPTER_SECRET}
-                      key: JWT_TOKEN_KEY               
+                      key: JWT_TOKEN_KEY 
+                - name: SCP_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP_NAME}-secrets
+                      key: SCP_USER   
+                - name: SCP_FOLDER
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP_NAME}-secrets  
+                      key: SCP_FOLDER
+                - name: SCP_HOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${APP_NAME}-secrets  
+                      key: SCP_HOST
+                - name: SCP_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: bcmail-ssh 
+                      key: key  
               envFrom:                
                 - configMapRef:
                     name: ${APP_NAME}-config
