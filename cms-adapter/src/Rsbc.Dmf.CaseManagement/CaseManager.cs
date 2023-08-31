@@ -3886,7 +3886,9 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                             else
                             {
-                                filename += document.dfp_DriverId.dfp_licensenumber;
+                                // instead use case title add timestamp so that it will be unique
+                                //filename += document.dfp_DriverId.dfp_licensenumber;
+                                filename +=document.bcgov_CaseId.title;
                             }
 
                             if (document.dfp_DocumentTypeID == null)
