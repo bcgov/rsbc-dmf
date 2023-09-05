@@ -3880,11 +3880,14 @@ namespace Rsbc.Dmf.CaseManagement
                             
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.bcgov_CaseId));
 
-                            await dynamicsContext.LoadPropertyAsync(document.bcgov_CaseId, nameof(document.bcgov_CaseId.dfp_DriverId));
-
+                            if(document.bcgov_CaseId != null)
+                            {
+                                await dynamicsContext.LoadPropertyAsync(document.bcgov_CaseId, nameof(document.bcgov_CaseId.dfp_DriverId));
+                            }
+                            
                             string filename = count.ToString();
 
-                            if (document.bcgov_CaseId.dfp_DriverId.dfp_licensenumber == null )
+                            if (document.bcgov_CaseId?.dfp_DriverId?.dfp_licensenumber == null )
                             {
                                 Log.Error("Error - PDF record has document with no driver");
                             }
