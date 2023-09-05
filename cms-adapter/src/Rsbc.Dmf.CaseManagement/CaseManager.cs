@@ -3887,9 +3887,9 @@ namespace Rsbc.Dmf.CaseManagement
                             
                             string filename = count.ToString();
 
-                            if (document.bcgov_CaseId?.dfp_DriverId?.dfp_licensenumber == null )
+                            if (document.bcgov_CaseId?.dfp_DriverId?.dfp_licensenumber == null || document.bcgov_CaseId == null)
                             {
-                                Log.Error("Error - PDF record has document with no driver");
+                                Log.Information("Info - PDF record has document with no driver or case title");
                             }
                             else
                             {
@@ -3901,7 +3901,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                             if (document.dfp_DocumentTypeID == null)
                             {
-                                Log.Error("Error - PDF record has document with no document type.");
+                                Log.Information("Info - PDF record has document with no document type.");
                             }
                             else
                             {
