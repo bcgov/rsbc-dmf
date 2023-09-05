@@ -662,7 +662,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     CreateStatusReply result;
 
-                    if(document.DocumentType == "PDR" || document.DocumentType == "Police Report" || document.DocumentType == "Unsolicited Report of Concern")
+                    if(document.DocumentType == "PDR" || document.DocumentType == "Police Report" || document.DocumentType == "Unsolicited Report of Concern" 
+                        || document.DocumentType == "(PDR)PriorityDoctorsReport" || document.DocumentType == "UnsolicitedReportofConcern" || document.DocumentType == "(POL)-PoliceReport")
                     {
                        result = _cmsAdapterClient.CreateUnsolicitedCaseDocument( document );
                        

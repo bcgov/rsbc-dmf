@@ -150,7 +150,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null && driver.INAM?.SURN != null)
+                    var medicalDispositionValue = GetMedicalDisposition(driver);
+
+
+                    if (driver != null && driver.INAM?.SURN != null && medicalDispositionValue != "P"
+                        // Add check driver already has a P in the driver history
+                       
+                        )
                     {
                         var newUpdate = new IcbcMedicalUpdate()
                         {
@@ -165,11 +171,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                             if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
                             {
                                 newUpdate.MedicalDisposition = "P";
-                            }
-                            
-                           
+                            }                          
                         }
-                       
+
                         // get most recent Medical Issue Date from the driver.
 
                         DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
@@ -292,7 +296,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             }        
         }
 
-
+        /// <summary>
+        /// Get Medical IssueDate
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
         public DateTime GetMedicalIssueDate(CLNT driver)
         {
             DateTime result = DateTime.MinValue;
@@ -311,6 +319,28 @@ namespace Rsbc.Dmf.IcbcAdapter
             return result;
         }
 
+        /// <summary>
+        /// Get Medical Disposition
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public string GetMedicalDisposition(CLNT driver)
+        {
+            string result = string.Empty;
+
+            if (driver.DR1MST != null && driver.DR1MST.DR1MEDN != null)
+            {
+                foreach (var item in driver.DR1MST.DR1MEDN)
+                {
+                    if (item.MDSP != null)
+                    {
+                        result= item.MDSP;
+                    }
+                }
+            }
+
+           return result;
+        }
 
         public class ClientResult
         {

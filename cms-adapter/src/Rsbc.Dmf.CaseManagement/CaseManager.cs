@@ -3115,13 +3115,14 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 { "DMER",2 }, // DMER
                 { "PDR",3 }, // PDR document
-                { "Priority Doctors Report" , 3},
+                { "(PDR)PriorityDoctorsReport" , 3},
                 { "UNSL",100000005}, // Unsolisitated Document
-                { "Unsolicited Report of Concern", 100000005  },
+                { "UnsolicitedReportofConcern", 100000005  },
                 { "POL",100000002 }, //Police Report
-                { "Police Report", 100000002},
+                { "Police Report",100000002 },
+                { "(POL)-PoliceReport", 100000002},
                 { "OTHR", 100000004 },
-                
+
             };
 
             if (documentStatusCode != null && statusMap.ContainsKey(documentStatusCode))
@@ -3876,19 +3877,23 @@ namespace Rsbc.Dmf.CaseManagement
                         if (document != null)
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DriverId));
+                            
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.bcgov_CaseId));
 
-                            string filename = count.ToString() + "-";
+                            await dynamicsContext.LoadPropertyAsync(document.bcgov_CaseId, nameof(document.bcgov_CaseId.dfp_DriverId));
 
-                            if (document.dfp_DriverId == null)
+                            string filename = count.ToString();
+
+                            if (document.bcgov_CaseId.dfp_DriverId.dfp_licensenumber == null )
                             {
-                                Log.Error("Error - PDF record has document with no driver.");
+                                Log.Error("Error - PDF record has document with no driver");
                             }
                             else
                             {
-                                // instead use case title add timestamp so that it will be unique
-                                //filename += document.dfp_DriverId.dfp_licensenumber;
-                                filename +=document.bcgov_CaseId.title;
+                               var driverLicenceNumber = document.bcgov_CaseId.dfp_DriverId.dfp_licensenumber;
+
+                               filename = $"DMF-{driverLicenceNumber}-{filename}";
+                                
                             }
 
                             if (document.dfp_DocumentTypeID == null)
