@@ -3876,36 +3876,35 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (document != null)
                         {
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DocumentTypeID));
                             
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.bcgov_CaseId));
+                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_CaseId));
 
-                            if(document.bcgov_CaseId != null)
-                            {
-                                await dynamicsContext.LoadPropertyAsync(document.bcgov_CaseId, nameof(document.bcgov_CaseId.dfp_DriverId));
-                            }
+                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DriverId));
+                            
                             
                             string filename = count.ToString();
 
-                            if (document.bcgov_CaseId?.dfp_DriverId?.dfp_licensenumber == null || document.bcgov_CaseId == null)
+                            if (pdfDocument.dfp_DriverId?.dfp_licensenumber == null || pdfDocument.dfp_CaseId?.title == null)
                             {
-                                Log.Information("Info - PDF record has document with no driver or case title");
+                                //Log.Information("Info - PDF record has document with no driver ");
+                                Log.Information($"No driver record available for case {pdfDocument?.dfp_CaseId?.title}");
                             }
                             else
                             {
-                               var driverLicenceNumber = document.bcgov_CaseId.dfp_DriverId.dfp_licensenumber;
+                                var driverLicenceNumber = pdfDocument.dfp_DriverId.dfp_licensenumber;
 
                                filename = $"DMF-{driverLicenceNumber}-{filename}";
                                 
                             }
 
-                            if (document.dfp_DocumentTypeID == null)
+                            if (pdfDocument.dfp_DocumentTypeID == null)
                             {
                                 Log.Information("Info - PDF record has document with no document type.");
                             }
                             else
                             {
-                                filename += document.dfp_DocumentTypeID.dfp_name.Replace(" ", "");
+                                filename += pdfDocument.dfp_DocumentTypeID.dfp_name.Replace(" ", "");
                             }
 
                             filename += ".pdf";
