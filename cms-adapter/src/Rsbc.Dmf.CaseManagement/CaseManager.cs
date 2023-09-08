@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
+using Microsoft.OData.UriParser;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
@@ -1713,6 +1714,108 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<CreateStatusReply> CreateDocumentOnDriver(LegacyDocument request)
+        {
+            CreateStatusReply result = new CreateStatusReply();
+            // Search for triage driver
+
+            var triagedriver = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == "00000000").ToList();
+
+            // Get Document Type
+            var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+
+            if (triagedriver != null)
+            {
+               
+                bcgov_documenturl bcgovDocumentUrl = null;
+               
+                // Load Driver lookup from the documents entity
+                await dynamicsContext.LoadPropertyAsync(triagedriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+
+                var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+
+                // Create the document 
+
+                if (bcgovDocumentUrl == null)
+                {
+                    bcgovDocumentUrl = new bcgov_documenturl();
+                }
+
+                bcgovDocumentUrl.dfp_batchid = request.BatchId;
+                bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
+                bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
+                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
+                bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
+                bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                bcgovDocumentUrl.dfp_importid = request.ImportId;
+                bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
+                bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
+                bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
+                bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+                bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
+
+                if (!string.IsNullOrEmpty(request.DocumentUrl))
+                {
+                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                }
+
+                try
+                {
+                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+                    var saveResult = await dynamicsContext.SaveChangesAsync();
+                    var tempId = GetCreatedId(saveResult);
+                    if (tempId != null)
+                    {
+                        bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                    }
+
+                    if (documentTypeId != null)
+                    {
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    }
+
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), triagedriver);
+
+
+                    if (newOwner != null)
+                    {
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                    }
+
+                    await dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                    dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, "Cannot create a Document");
+                    result.Success = false;
+                }
+            
+
+            }
+            return result;
+
+           
+        }
+
+        /// <summary>
+        /// Create Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+
         public async Task<CreateStatusReply> CreateCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
@@ -1994,7 +2097,7 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
-                if (request.SubmittalStatus == "Manual Pass")
+                if (request.SubmittalStatus == "Manual Pass" || request.SubmittalStatus == "Clean Pass")
                 {
                     
                     try
@@ -3894,17 +3997,8 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 var driverLicenceNumber = pdfDocument.dfp_DriverId.dfp_licensenumber;
 
-                               filename = $"DMF-{driverLicenceNumber}-{filename}";
+                               filename = $"{driverLicenceNumber}-{filename}-DMF";
                                 
-                            }
-
-                            if (pdfDocument.dfp_DocumentTypeID == null)
-                            {
-                                Log.Information("Info - PDF record has document with no document type.");
-                            }
-                            else
-                            {
-                                filename += pdfDocument.dfp_DocumentTypeID.dfp_name.Replace(" ", "");
                             }
 
                             filename += ".pdf";
