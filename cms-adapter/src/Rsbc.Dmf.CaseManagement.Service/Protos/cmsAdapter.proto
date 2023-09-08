@@ -20,6 +20,8 @@ service CaseManager {
 
   rpc CreateCaseDocument(LegacyDocument) returns (CreateStatusReply);
 
+  rpc CreateDocumentOnDriver(LegacyDocument) returns (CreateStatusReply);
+
   rpc CreateICBCDocumentEnvelope(LegacyDocument) returns (CreateStatusReply);
 
   rpc DeleteLegacyCaseDocument (LegacyDocumentRequest) returns (ResultStatusReply);
@@ -100,6 +102,9 @@ service CaseManager {
 
    // Update Non Comply documents
    rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
+
+   // 
+
  
  
 }

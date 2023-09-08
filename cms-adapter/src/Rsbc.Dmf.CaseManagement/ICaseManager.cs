@@ -105,6 +105,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CreateStatusReply> CreateUnsolicitedCaseDocument(LegacyDocument newDocument);
 
+        Task<CreateStatusReply> CreateDocumentOnDriver(LegacyDocument newDocument);
+
         Task<CreateStatusReply> CreateCaseDocument(LegacyDocument newDocument);
         Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument newDocument);
 

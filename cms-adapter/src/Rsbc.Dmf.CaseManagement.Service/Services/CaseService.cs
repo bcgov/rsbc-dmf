@@ -159,6 +159,72 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Create Document on Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateDocumentOnDriver(LegacyDocument request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
+                driver.Surname = request.Driver.Surname ?? string.Empty;
+            }
+
+            var newDocument = new CaseManagement.LegacyDocument()
+            {
+                BatchId = request.BatchId ?? string.Empty,
+                CaseId = request.CaseId ?? string.Empty,
+                DocumentId = request.DocumentId ?? string.Empty,
+                DocumentPages = (int)request.DocumentPages,
+                DocumentTypeCode = request.DocumentTypeCode ?? string.Empty,
+                DocumentType = request.DocumentType ?? string.Empty,
+                BusinessArea = request.BusinessArea ?? string.Empty,
+                DocumentUrl = request.DocumentUrl ?? string.Empty,
+                ImportId = request.ImportId ?? string.Empty,
+                OriginatingNumber = request.OriginatingNumber ?? string.Empty,
+                ValidationMethod = request.ValidationMethod ?? string.Empty,
+                ValidationPrevious = request.ValidationPrevious ?? string.Empty,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId ?? string.Empty,
+                Driver = driver,
+                Priority = request.Priority ?? string.Empty,
+                Owner = request.Owner ?? string.Empty,
+                SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+            };
+
+            if (request.FaxReceivedDate != null)
+            {
+                newDocument.FaxReceivedDate = request.FaxReceivedDate.ToDateTimeOffset();
+            }
+
+            if (request.ImportDate != null)
+            {
+                newDocument.ImportDate = request.ImportDate.ToDateTimeOffset();
+            }
+
+            var result = await _caseManager.CreateDocumentOnDriver(newDocument);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+
+        /// <summary>
         /// Create Legacy Case Document
         /// </summary>
         /// <param name="request"></param>
