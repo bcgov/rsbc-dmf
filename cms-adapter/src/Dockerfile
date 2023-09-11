@@ -1,4 +1,8 @@
+ARG BUILD_ID
+ARG BUILD_VERSION
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG BUILD_ID
+ARG BUILD_VERSION
 WORKDIR /src
 COPY ["Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj", "Rsbc.Dmf.CaseManagement.Service/"]
 COPY ["Rsbc.Dmf.CaseManagement/Rsbc.Dmf.CaseManagement.csproj", "Rsbc.Dmf.CaseManagement/"]
@@ -10,10 +14,11 @@ COPY ["cms-adapter.sln", "./"]
 RUN dotnet restore .
 COPY . .
 RUN dotnet test -c Release
-RUN dotnet publish "Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj" -c Release -o /app/publish --no-restore
+RUN dotnet publish "Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj" /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
-
+ARG BUILD_ID
+ARG BUILD_VERSION
 
 WORKDIR /app
 

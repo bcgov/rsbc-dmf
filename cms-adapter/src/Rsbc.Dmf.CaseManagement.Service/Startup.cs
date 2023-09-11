@@ -18,6 +18,8 @@ using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Filters;
 using Serilog.Sinks.Splunk;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -64,6 +66,29 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
                 
             services.AddAuthorization();
+
+
+            services.AddControllers(options =>
+            {
+
+                //options.Filters.Add( typeof(ServerErrorExceptionFilterAttribute));
+                options.EnableEndpointRouting = false;
+
+
+            })
+            .AddNewtonsoftJson(opts =>
+            {
+                opts.SerializerSettings.Formatting = Formatting.Indented;
+                opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+                // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
+
             services.AddGrpc(opts =>
             {
                 opts.EnableDetailedErrors = true;
@@ -112,6 +137,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 endpoints.MapGrpcService<CaseService>();
                 endpoints.MapGrpcService<CssService>();
                 endpoints.MapGrpcService<UserService>();
+
+                endpoints.MapControllers();
                 
                 endpoints.MapGet("/", async context =>
                 {
@@ -134,8 +161,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     fields.CustomFieldList.Add(new CustomField("channel", Configuration["SPLUNK_CHANNEL"]));
 
                 // Fix for bad SSL issues 
-
-
                 Log.Logger = new LoggerConfiguration()
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails()
