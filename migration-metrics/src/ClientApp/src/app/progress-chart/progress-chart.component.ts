@@ -14,7 +14,7 @@ export class ProgressChartComponent {
 
   @Input() title!: string;
 
-  @Input() showRed!: boolean;
+  @Input() showRed!: string;
 
   public chart: any;
 
