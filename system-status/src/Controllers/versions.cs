@@ -21,19 +21,21 @@ namespace SystemStatus.Controllers
         {
             if (!string.IsNullOrEmpty(_configuration[$"URL_{token}"]))
             {
-                var handler = new HttpClientHandler();
-                handler.ClientCertificateOptions = ClientCertificateOption.Manual;
-                handler.ServerCertificateCustomValidationCallback =
-                    (httpRequestMessage, cert, cetChain, policyErrors) =>
-                    {
-                        return true;
-                    };
+                using (var handler = new HttpClientHandler())
+                {                    
+                    handler.ServerCertificateCustomValidationCallback =
+                        (httpRequestMessage, cert, cetChain, policyErrors) =>
+                        {
+                            return true;
+                        };
 
-                var client = new HttpClient(handler);
+                    var client = new HttpClient(handler);
 
-                var url = _configuration[$"URL_{token}"];
-                var result = await client.GetStringAsync(url);
-                return Ok(result);
+                    var url = _configuration[$"URL_{token}"];
+                    var result = await client.GetStringAsync(url);
+                    return Ok(result);
+                }
+                
             }
             else 
             { 
