@@ -109,7 +109,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     // Save data in cache.
                     _cache.Set(licenseNumber, driver, cacheEntryOptions);
                 }
-                
+
             }
 
             if (driver != null && !string.IsNullOrEmpty(driver.INAM?.SURN))
@@ -139,49 +139,42 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Surname = driver.INAM?.SURN ?? string.Empty
                     });
 
-                 
-                 result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
+                    result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
 
-                    
-
-                        if (result == null) // create it
+                    if (result == null)
                     {
-                        try
+                        if (String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"])) // create it
                         {
-
+                            try
                             {
-                                //
-                                LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+
                                 {
-                                    LicenseNumber = licenseNumber,
-                                    EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                                    Surname = driver.INAM?.SURN ?? string.Empty,
-                                    BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
-                                };
-                                var legacyResult = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                                if (legacyResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                                {
-                                    result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
+                                    //
+                                    LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                                    {
+                                        LicenseNumber = licenseNumber,
+                                        EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                        Surname = driver.INAM?.SURN ?? string.Empty,
+                                        BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now),
+                                    };
+                                    var legacyResult = _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                                    if (legacyResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                                    {
+                                        result = _cmsAdapterClient.GetCaseId(licenseNumber, driver.INAM?.SURN);
+                                    }
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                _logger.LogInformation(e, "Error getting driver.");
+                            }
                         }
-                        catch (Exception e)
+                        else
                         {
-                            _logger.LogInformation(e, "Error getting driver.");
-                        }
-
-                    }
-
-                    // Add a featuure flag to check if the driver exsists and skip the case creation
-
-                    if (!String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]))
-                    {
-                        // If driver exsists 
-
-
-                        if (driver != null)
-                        {
-                            
+                            if (driver != null)
+                            {
+                                result = Guid.Empty.ToString();
+                            }
                         }
                     }
                 }
@@ -189,7 +182,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             else  // fallback, just check Dynamics.
             {
                 _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
-                DebugUtils.SaveDebug("IcbcError",$"{licenseNumber}-{surcode}");
+                DebugUtils.SaveDebug("IcbcError", $"{licenseNumber}-{surcode}");
 
                 result = _cmsAdapterClient.GetCaseId(licenseNumber, surcode);
             }
@@ -272,9 +265,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
-            
 
-            var c = _cmsAdapterClient.GetCaseDetail (new CaseIdRequest { CaseId = caseId });  
+
+            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 result.CaseId = c.Item.CaseId;
@@ -292,7 +285,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 if (c.Item.CaseSequence > -1)
                 {
                     result.CaseSequence = (int)c.Item.CaseSequence;
-                }                
+                }
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
                 result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
@@ -306,7 +299,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(result);
         }
 
-        
+
 
         private List<Comment> GetCommentsForCase(string caseId, OriginRestrictions originRestrictions)
         {
@@ -316,7 +309,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 // get the comments
-                
+
 
                 foreach (var item in reply.Items)
                 {
@@ -342,7 +335,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         UserId = item.UserId
                     });
                 }
-                
+
             }
             return result;
         }
@@ -358,7 +351,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public ActionResult GetComments([FromRoute] string caseId)
-        
+
         {
             // call the back end
 
@@ -416,7 +409,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult CreateComments([FromRoute] string caseId, [FromBody] ViewModels.Comment comment )
+        public ActionResult CreateComments([FromRoute] string caseId, [FromBody] ViewModels.Comment comment)
         {
 
             throw new NotImplementedException();
@@ -453,7 +446,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         LoadedFromICBC = false,
                         MedicalIssueDate = DateTimeOffset.Now
                     };
-                 
+
                     result.Add(new ViewModels.Document
                     {
                         CaseId = item.CaseId,
@@ -469,7 +462,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
             else
             {
-                return StatusCode(500,reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
             }
             /*
             result.Add (new ViewModels.Comment() { CaseId = Guid.NewGuid().ToString(), CommentText = "SAMPLE TEXT", CommentTypeCode="W",  CommentDate = DateTime.Now, CommentId = Guid.NewGuid().ToString(),
@@ -481,7 +474,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <summary>
         /// Add Case Document
         /// </summary>
-        /// <param name="caseId"></param>
+        /// <param name="caseId">Pass Guid.empty to bypass case creation.</param>
         /// <param name="skipDpsProcessing"></param>
         /// <param name="licenseNumber"></param>
         /// <param name="batchId"></param>
@@ -505,7 +498,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         // allow large uploads
         [DisableRequestSizeLimit]
         public async Task<IActionResult> AddCaseDocument([FromRoute] string caseId,  // GUID
-            [FromForm] [Required] string driversLicense,  // Driver -> DL            
+            [FromForm][Required] string driversLicense,  // Driver -> DL            
             [FromForm] string batchId,         // add to document entity
             [FromForm] string faxReceivedDateString,  // dfp_faxreceivedate
             [FromForm] string importDateString,  // dfp_dpsprocessingdate
@@ -530,8 +523,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 DateTimeOffset faxReceivedDate = DocumentUtils.ParseDpsDate(faxReceivedDateString);
                 DateTimeOffset importDate = DocumentUtils.ParseDpsDate(importDateString);
-
-
 
                 var debugObject = new
                 {
@@ -598,18 +589,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     importDate = DateTimeOffset.Now;
                 }
 
-
-
                 // New workflow for the DPS mitigation 
-                if (String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]))
+                if (caseId == Guid.Empty.ToString() || String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]))
                 {
-                   
-
                     // check if driver exsists 
                     if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
                     {
                         driverId = driverReply.Items.FirstOrDefault()?.Id;
-
 
                         if (driverId != null)
                         {
@@ -619,9 +605,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             if (file != null)
                             {
                                 file.OpenReadStream().CopyTo(ms);
-
-                                string jsonFile = JsonConvert.SerializeObject(file);
-                                //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
                             }
                             else
                             {
@@ -684,21 +667,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             // Check if the document is classified
                             if (documentType != null && documentType == legacyDocumentType)
                             {
-                                var caseExists = _cmsAdapterClient.GetCaseId(licenseNumber, driver.Surname);
-                                // check if case exsists and its active
-
-                                if (caseExists == null)
-                                {
-                                    var newCase = new CreateCaseRequest()
-                                    {
-                                        DriverLicenseNumber = licenseNumber,
-                                        //SequenceNumber = request.SequenceNumber
-                                    };
-                                    // Create a Case if the case does not exsists
-
-                                    _cmsAdapterClient.CreateCase(newCase);
-                                }
-
                                 // Add the document
                                 result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
 
@@ -709,24 +677,20 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 };
 
                                 return CreatedAtAction(actionName, routeValues, document);
-
-
                             }
 
                             else
                             {
-                                if (documentType != null || documentType == "UnClassified" || documentType == "Remedial" )
+                                if (documentType != null || documentType == "UnClassified" || documentType == "Remedial")
                                 {
                                     // Path 2: If the document is unclassified
                                     // Attach the documents to the driver 00000000 
                                     if (documentType != null && documentType == "UnClassified")
                                     {
-                                      var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
+                                        var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
                                     }
                                 }
                             }
-
-
                         }
 
                         else // Feature Flag not set: Use the old code DPS flow
@@ -861,23 +825,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             }
 
                         }
-
-
-
                     }
                 }
-
-
             }
-
-
-           
-        
-                return Ok();
+            return Ok();
         }
-            
-
     }
-
-   
 }
