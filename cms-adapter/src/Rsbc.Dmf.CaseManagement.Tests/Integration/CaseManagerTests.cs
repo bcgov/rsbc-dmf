@@ -590,7 +590,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             // Act : Create the driver
             var request = new CreateDriverRequest()
             {
-                DriverLicenseNumber = "01234571",
+                DriverLicenseNumber = "01234111",
                 BirthDate = DateTimeOffset.UtcNow,
                 Surname = "TestUser"
 
@@ -724,5 +724,36 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             Assert.False(found);
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateDocumentOnDriver()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+
+            string documentUrl = $"DMER-TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
+
+
+            LegacyDocument legacyDocumentRequest = new LegacyDocument
+            {
+                BatchId = "1",
+                //CaseId = caseId,
+                DocumentType = "DMER",
+                DocumentTypeCode = "001",
+                Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
+                // FaxReceivedDate = DateTime.MinValue,
+                ImportDate = DateTimeOffset.UtcNow,
+                FileSize = 10,
+                DocumentPages = 1,
+                OriginatingNumber = "1",
+                SequenceNumber = 1,
+                DocumentUrl = documentUrl,
+                SubmittalStatus = "Uploaded"
+            };
+
+            await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+
+
+        }        
+    
     }
 }

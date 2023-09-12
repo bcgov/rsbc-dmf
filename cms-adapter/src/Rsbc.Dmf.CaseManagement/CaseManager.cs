@@ -1724,7 +1724,9 @@ namespace Rsbc.Dmf.CaseManagement
             CreateStatusReply result = new CreateStatusReply();
             // Search for triage driver
 
-            var triagedriver = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == "00000000").ToList();
+            var triagedriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+
+            //dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == "01234111");
 
             // Get Document Type
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
