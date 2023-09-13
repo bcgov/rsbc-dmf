@@ -17,9 +17,6 @@
     <Folder Include="Protos\" />
   </ItemGroup>
   <ItemGroup>
-    <Protobuf Include="../../../../cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
-      <Link>Protos\cmsAdapter.proto</Link>
-    </Protobuf>
 	<Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
 		<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
 	</Protobuf>
@@ -41,5 +38,9 @@
 
   <ItemGroup>
     <Folder Include="Protos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
   </ItemGroup>
 </Project>

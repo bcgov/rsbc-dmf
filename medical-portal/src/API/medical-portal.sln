@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.DMF.MedicalPortal.API"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.MedicalPortal.API", "RSBC.Tests.Unit.DMF.MedicalPortal.API\RSBC.Tests.Unit.DMF.MedicalPortal.API.csproj", "{696AD72D-D097-432F-900B-2DB5330868E7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{C3414AA1-227B-4EEB-AC70-5CDF312827CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,18 @@ Global
 		{696AD72D-D097-432F-900B-2DB5330868E7}.Release|x64.Build.0 = Release|Any CPU
 		{696AD72D-D097-432F-900B-2DB5330868E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{696AD72D-D097-432F-900B-2DB5330868E7}.Release|x86.Build.0 = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|x64.Build.0 = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Debug|x86.Build.0 = Debug|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x64.ActiveCfg = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x64.Build.0 = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x86.ActiveCfg = Release|Any CPU
+		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
