@@ -30,6 +30,8 @@ using Pssg.DocumentStorageAdapter;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Runtime.Serialization;
 using Microsoft.OpenApi.Any;
+using Rsbc.Dmf.CaseManagement.Service;
+
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -171,7 +173,49 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management Service
 
-            services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
+            // Add Case Management System (CMS) Adapter 
+
+            string cmsAdapterURI = configuration["CMS_ADAPTER_URI"];
+
+            if (!string.IsNullOrEmpty(cmsAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                
+                    // Return `true` to allow certificates that are untrusted/invalid                    
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                if (!string.IsNullOrEmpty(configuration["CMS_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
+                    // call the token service to get a token.
+                    var tokenRequest = new Rsbc.Dmf.CaseManagement.Service.TokenRequest
+                    {
+                        Secret = configuration["CMS_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest);
+
+                    if (tokenReply != null && tokenReply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    }
+                }
+
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+                services.AddTransient(_ => new CssManager.CssManagerClient(channel));
+                services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+
+            }
 
 
 
