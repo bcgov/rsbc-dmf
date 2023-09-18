@@ -93,7 +93,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
             CLNT driver = null;
-            if (!_cache.TryGetValue(licenseNumber, out driver))
+            if (licenseNumber!= null && licenseNumber != "00000000" && !_cache.TryGetValue(licenseNumber, out driver))
             {
                 // get the history from ICBC
                 driver = _icbcClient.GetDriverHistory(licenseNumber);
@@ -180,10 +180,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
             }
             else  // fallback, just check Dynamics.
-            {
-                _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
-                DebugUtils.SaveDebug("IcbcError", $"{licenseNumber}-{surcode}");
-
+            {                
                 result = _cmsAdapterClient.GetCaseId(licenseNumber, surcode);
             }
 
