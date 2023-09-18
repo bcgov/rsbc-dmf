@@ -200,54 +200,65 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
             licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
+
             string caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
+
+
 
             if (caseId == null) // create it
             {
-                try
+                if (String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"])) // create it
                 {
-                    CLNT driver = null;
-
-                    if (!_cache.TryGetValue(licenseNumber, out driver))
+                    try
                     {
-                        // get the history from ICBC
-                        driver = _icbcClient.GetDriverHistory(licenseNumber);
-                        // Key not in cache, so get data.
-                        //cacheEntry = DateTime.Now;
-                        if (driver != null)
-                        {
-                            // Set cache options.
-                            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                                // Keep in cache for this time, reset time if accessed.
-                                .SetSlidingExpiration(TimeSpan.FromHours(6));
+                        CLNT driver = null;
 
-                            // Save data in cache.
-                            _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                        if (!_cache.TryGetValue(licenseNumber, out driver))
+                        {
+                            // get the history from ICBC
+                            driver = _icbcClient.GetDriverHistory(licenseNumber);
+                            // Key not in cache, so get data.
+                            //cacheEntry = DateTime.Now;
+                            if (driver != null)
+                            {
+                                // Set cache options.
+                                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                                    // Keep in cache for this time, reset time if accessed.
+                                    .SetSlidingExpiration(TimeSpan.FromHours(6));
+
+                                // Save data in cache.
+                                _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                            }
+
                         }
-
-                    }
-                    if (driver != null && driver.INAM?.SURN != null)
-                    {
-                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                        if (driver != null && driver.INAM?.SURN != null)
                         {
-                            LicenseNumber = licenseNumber,
-                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty,
-                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
-                        };
-                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                            {
+                                LicenseNumber = licenseNumber,
+                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                                Surname = driver.INAM?.SURN ?? string.Empty,
+                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
+                            };
+                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                        }
+                        else
+                        {
+                            _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
+                        }
                     }
-                    else
+                    catch (Exception e)
                     {
-                        _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
+                        _logger.LogInformation(e, "Error getting driver.");
                     }
+                    caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
                 }
-                catch (Exception e)
+                else
                 {
-                    _logger.LogInformation(e, "Error getting driver.");
+                    caseId = Guid.Empty.ToString();
                 }
-                caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
             }
+
 
             return Json(caseId);
         }
