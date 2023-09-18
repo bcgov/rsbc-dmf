@@ -99,6 +99,13 @@ namespace Pssg.Interfaces
         /// <returns></returns>
         public CLNT GetDriverHistory(string dlNumber)
         {
+            if (dlNumber != null && dlNumber == "00000000")
+            {
+                return new CLNT();                
+            }
+            else
+            {
+
             
             // do a basic HTTP request
             var request = new HttpRequestMessage(HttpMethod.Get, "tombstone/" + dlNumber);
@@ -215,7 +222,7 @@ namespace Pssg.Interfaces
             }
 
             return result?.CLNT;
-
+            }
         }
 
 
