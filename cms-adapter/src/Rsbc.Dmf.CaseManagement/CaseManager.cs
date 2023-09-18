@@ -1917,104 +1917,48 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-            /// <summary>
-            /// Create Legacy Case Document
-            /// </summary>
-            /// <param name="request"></param>
-            /// <returns></returns>
-            public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
+        /// <summary>
+        /// Create Legacy Case Document
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<CreateStatusReply> CreateLegacyCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
             // get the driver
             bool secondCandidateCreate = true;
 
+
+
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
                 var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
+
                 await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-1");
                 secondCandidateCreate = false;
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
 
-            incident driverCase = GetIncidentById(request.CaseId);
 
-            bool driverMismatch = false;
+            if (driver != null && driver.dfp_licensenumber == "00000000") // bypass normal logic
 
-            if (driverCase != null && driver.dfp_driverid != driverCase._dfp_driverid_value)
             {
-                // driver mismatch
-                driverMismatch = true;
-            }
+
+                // document type ID
+                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
 
-            // document type ID
-            var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
 
-            if (driverCase == null)
-            {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                if (secondCandidateCreate)
-                {
-                    // create it.                    
-                    await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-2");
 
-                }
-
-                var newCaseId = await GetNewestCaseIdForDriver(newDriver);
-
-                if (newCaseId != null)
-                {
-                    driverCase = GetIncidentById(newCaseId.Value.ToString());
-                }
-            }
-
-            if (driverCase != null)
-            {
-                bool found = false;
-                bcgov_documenturl bcgovDocumentUrl = null;
-
-                if (request.SubmittalStatus == "Reject")
-                {
-                    // Create a new document with the reject status attached to the driver
-
-                    found = false;
-
-                }
-
-                else
-                {
-                    // scan through the documents to see if there is document in open pending status
-                    // ensure we have the documents.
-                    await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
-
-                    if (documentTypeId != null)
-                    {
-                        foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
-                        {
-                            await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
-                            if (doc.statecode == 0 // active
-                                && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid
-                                && doc.dfp_submittalstatus == 100000000)
-                            {
-                                bcgovDocumentUrl = doc;
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-
-                }
                 // find the owner.
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
 
 
-                if (bcgovDocumentUrl == null)
-                {
-                    bcgovDocumentUrl = new bcgov_documenturl();
-                }
+                var bcgovDocumentUrl = new bcgov_documenturl();
+
 
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
@@ -2036,101 +1980,226 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
 
-                // assign the owner to DPSR if the docuemnttype = "DMER" and submittalStatus = "ManualPass"
-               
-
-                if (found) // update
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+                var saveResult = await dynamicsContext.SaveChangesAsync();
+                var tempId = GetCreatedId(saveResult);
+                if (tempId != null)
                 {
-                    try
+                    bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                }
+
+                if (documentTypeId != null)
+                {
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                }
+
+                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
+
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+                result.Id = tempId.ToString();
+            }
+            else
+            {
+
+
+                incident driverCase = GetIncidentById(request.CaseId);
+
+                bool driverMismatch = false;
+
+                if (driverCase != null && driver.dfp_driverid != driverCase._dfp_driverid_value)
+                {
+                    // driver mismatch
+                    driverMismatch = true;
+                }
+
+
+                // document type ID
+                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+
+
+                if (driverCase == null)
+                {
+                    var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
+                    if (secondCandidateCreate)
                     {
-                        dynamicsContext.UpdateObject(bcgovDocumentUrl);
+                        // create it.                    
+                        await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-2");
 
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
-
-
-                    
-                        await dynamicsContext.SaveChangesAsync();
-                        result.Success = true;
-                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                     }
-                    catch (Exception ex)
+
+                    var newCaseId = await GetNewestCaseIdForDriver(newDriver);
+
+                    if (newCaseId != null)
                     {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
-                        result.Success = false;
+                        driverCase = GetIncidentById(newCaseId.Value.ToString());
                     }
                 }
-                else // insert
+
+                if (driverCase != null)
                 {
-                    try
+                    bool found = false;
+                    bcgov_documenturl bcgovDocumentUrl = null;
+
+                    if (request.SubmittalStatus == "Reject")
                     {
-                        await dynamicsContext.SaveChangesAsync();
-                        dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-                        var saveResult = await dynamicsContext.SaveChangesAsync();
-                        var tempId = GetCreatedId(saveResult);
-                        if (tempId != null)
-                        {
-                            bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
-                        }
+                        // Create a new document with the reject status attached to the driver
+
+                        found = false;
+
+                    }
+
+                    else
+                    {
+                        // scan through the documents to see if there is document in open pending status
+                        // ensure we have the documents.
+                        await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         if (documentTypeId != null)
                         {
+                            foreach (var doc in driverCase.bcgov_incident_bcgov_documenturl)
+                            {
+                                await dynamicsContext.LoadPropertyAsync(doc, nameof(bcgovDocumentUrl.dfp_DocumentTypeID));
+                                if (doc.statecode == 0 // active
+                                    && doc.dfp_DocumentTypeID?.dfp_submittaltypeid == documentTypeId.dfp_submittaltypeid
+                                    && doc.dfp_submittalstatus == 100000000)
+                                {
+                                    bcgovDocumentUrl = doc;
+                                    found = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                    }
+                    // find the owner.
+                    var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+
+
+
+                    if (bcgovDocumentUrl == null)
+                    {
+                        bcgovDocumentUrl = new bcgov_documenturl();
+                    }
+
+                    bcgovDocumentUrl.dfp_batchid = request.BatchId;
+                    bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
+                    bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
+                    bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                    bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
+                    bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
+                    bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                    bcgovDocumentUrl.dfp_importid = request.ImportId;
+                    bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
+                    bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
+                    bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
+                    bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                    bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+
+                    if (!string.IsNullOrEmpty(request.DocumentUrl))
+                    {
+                        bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                        bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    }
+
+                    // assign the owner to DPSR if the docuemnttype = "DMER" and submittalStatus = "ManualPass"
+
+
+                    if (found) // update
+                    {
+                        try
+                        {
+                            dynamicsContext.UpdateObject(bcgovDocumentUrl);
+
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
-                        }
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
 
-                        if (!driverMismatch && driverCase != null)
+
+
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                            result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                        }
+                        catch (Exception ex)
                         {
-                            dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                            Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                            result.Success = false;
                         }
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
-                       
-                        await dynamicsContext.SaveChangesAsync();
-                        result.Success = true;
-                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        
                     }
-
-                    
-
-                    catch (Exception ex)
+                    else // insert
                     {
-                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
-                        result.Success = false;
-                    }
-                }
-
-                if (request.SubmittalStatus == "Manual Pass" || request.SubmittalStatus == "Clean Pass")
-                {
-                    
-                    try
-                    {
-                        var validationPrevious = request.ValidationPrevious;
-                        if (!validationPrevious.StartsWith("IDIR\\"))
+                        try
                         {
-                            validationPrevious = $"IDIR\\" + validationPrevious;
+                            await dynamicsContext.SaveChangesAsync();
+                            dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+                            var saveResult = await dynamicsContext.SaveChangesAsync();
+                            var tempId = GetCreatedId(saveResult);
+                            if (tempId != null)
+                            {
+                                bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                            }
+
+                            if (documentTypeId != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                            }
+
+                            if (!driverMismatch && driverCase != null)
+                            {
+                                dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                            }
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
+
+                            await dynamicsContext.SaveChangesAsync();
+                            result.Success = true;
+                            result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+
                         }
 
-                        systemuser manualPassOwner = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
 
-                        // set the owner to DPSR
-                        //var manualPassOwner = dynamicsContext.systemusers.FirstOrDefault(u => u.domainname == request.ValidationPrevious);
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), manualPassOwner);
+
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                            result.Success = false;
+                        }
                     }
-                    catch (Exception ex)
+
+                    if (request.SubmittalStatus == "Manual Pass" || request.SubmittalStatus == "Clean Pass")
                     {
-                        Serilog.Log.Error(ex, "Failed to get the user value");
+
+                        try
+                        {
+                            var validationPrevious = request.ValidationPrevious;
+                            if (!validationPrevious.StartsWith("IDIR\\"))
+                            {
+                                validationPrevious = $"IDIR\\" + validationPrevious;
+                            }
+
+                            systemuser manualPassOwner = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
+
+                            // set the owner to DPSR
+                            //var manualPassOwner = dynamicsContext.systemusers.FirstOrDefault(u => u.domainname == request.ValidationPrevious);
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), manualPassOwner);
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Error(ex, "Failed to get the user value");
+                        }
+                    }
+                    else
+                    {
+                        if (newOwner != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), newOwner);
+
+                        }
                     }
                 }
-                else
-                {
-                    if (newOwner != null)
-                    {
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.ownerid), newOwner);
-                        
-                    }
-                }
+                await dynamicsContext.SaveChangesAsync();
+
             }
-            await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
 
             return result;
