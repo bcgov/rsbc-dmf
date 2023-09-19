@@ -669,7 +669,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 ValidationPrevious = validationPrevious ?? string.Empty,
                                 Priority = priority ?? string.Empty,
                                 Owner = assign ?? string.Empty,
-                                SubmittalStatus = submittalStatus ?? string.Empty,
+                                SubmittalStatus = "Uploaded",
 
                             };
 
