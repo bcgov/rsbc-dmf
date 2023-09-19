@@ -28,6 +28,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
 
+        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
+
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
         Task<LegacyDocument> GetLegacyDocument(string documentId);
