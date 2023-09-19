@@ -637,7 +637,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 if (originRestrictions == CaseManagement.OriginRestrictions.SystemOnly)
                 {
-                    result = await _caseManager.GetDriverLegacyComments(request.CaseId, false, originRestrictions);
+                    result = await _caseManager.GetDriverLegacyComments(request.DriverId, false, originRestrictions);
                 }
                 else
                 {
