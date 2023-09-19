@@ -569,11 +569,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var c = await _caseManager.GetCaseDetail(request.CaseId);
                 if (c != null)
                 {
-                    
-
                     reply.Item = new CaseDetail();
                     reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;
+                    reply.Item.DriverId = c.DriverId;
                     reply.Item.Title = c.Title ?? string.Empty;
                     reply.Item.IdCode = c.IdCode ?? string.Empty;
                     reply.Item.OpenedDate = Timestamp.FromDateTimeOffset(c.OpenedDate);
@@ -614,7 +613,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetCommentsReply> GetCaseComments(CaseCommentsRequest request, ServerCallContext context)
+        public async override Task<GetCommentsReply> GetComments(CommentsRequest request, ServerCallContext context)
         {
             var reply = new GetCommentsReply();
             try
@@ -634,7 +633,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 }
 
-                var result = await _caseManager.GetCaseLegacyComments(request.CaseId, false, originRestrictions);
+                IEnumerable<CaseManagement.LegacyComment> result;
+
+                if (originRestrictions == CaseManagement.OriginRestrictions.SystemOnly)
+                {
+                    result = await _caseManager.GetDriverLegacyComments(request.CaseId, false, originRestrictions);
+                }
+                else
+                {
+                    result = await _caseManager.GetCaseLegacyComments(request.CaseId, false, originRestrictions);
+                }
+
+              
 
                 foreach (var item in result)
                 {

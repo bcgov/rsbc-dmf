@@ -8,6 +8,8 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
 
+        public string DriverId { get; set; }
+
         /// <summary>
         /// Indicates system title of the case
         /// </summary>
