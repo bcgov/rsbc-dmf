@@ -431,6 +431,84 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+
+        /// <summary>
+        /// Get Case Legacy Comments
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <param name="allComments"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverId, bool allComments, OriginRestrictions originRestrictions)
+        {
+            List<LegacyComment> result = new List<LegacyComment>();
+            // start by the driver
+
+
+            var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == Guid.Parse(driverId))
+            .ToList();
+
+            foreach (var comment in comments)
+            {
+                // ensure related data is loaded.
+
+                
+                // determine if there is a match.
+
+                bool originMatch = false;
+
+                switch (originRestrictions)
+                {
+                    case OriginRestrictions.None:
+                        originMatch = true;
+                        break;
+                    case OriginRestrictions.UserOnly:
+                        if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.User)
+                        {
+                            originMatch = true;
+                        }
+                        break;
+                    case OriginRestrictions.SystemOnly:
+                        if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.System)
+                        {
+                            originMatch = true;
+                        }
+                        break;
+                }
+
+                // ignore inactive and system generated
+                if ((comment.statecode != null && comment.statecode == 0) && originMatch)
+                {
+                    await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                    if (allComments || comment.dfp_icbc.GetValueOrDefault())
+                    {
+                        int sequenceNumber = 0;
+                        int.TryParse(comment.dfp_caseidguid, out sequenceNumber);
+
+                        LegacyComment legacyComment = new LegacyComment
+                        {                            
+                            CommentDate = comment.createdon.GetValueOrDefault(),
+                            CommentId = comment.dfp_commentid.ToString(),
+                            CommentText = comment.dfp_commentdetails,
+                            CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
+                            SequenceNumber = sequenceNumber,
+                            UserId = comment.dfp_userid
+                        };
+
+                        if (comment._dfp_caseid_value != null)
+                        {
+                            legacyComment.CaseId = comment._dfp_caseid_value.ToString();
+                        }
+
+                        result.Add(legacyComment);
+                    }
+                }
+
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// Get Case Legacy Documents
         /// </summary>
@@ -919,11 +997,14 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var fetchedCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(caseId)).FirstOrDefault();
-                if (fetchedCase != null)
+                
+                if (fetchedCase != null)                
                 {
+                    dynamicsContext.LoadProperty(fetchedCase, nameof(incident.dfp_DriverId));
                     result = new CaseDetail
                     {
                         CaseId = fetchedCase.incidentid.ToString(),
+                        DriverId = fetchedCase.dfp_DriverId.dfp_driverid.ToString(),
                         Title = fetchedCase.title,
                         IdCode = fetchedCase.ticketnumber,
                         OpenedDate = fetchedCase.createdon.Value,
@@ -973,16 +1054,7 @@ namespace Rsbc.Dmf.CaseManagement
                         await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.owningteam));
                         result.AssigneeTitle = fetchedCase.owningteam.name;
                     }
-                    /*
-                    else
-                   {
-                       if (fetchedCase._owninguser_value.HasValue)
-                       {
-                           await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.owninguser));
-                           result.AssigneeTitle = fetchedCase.owninguser.fullname;
-                       }
-                   }
-                   */
+                   
 
                     // get the related decisions.
 

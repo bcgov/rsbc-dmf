@@ -262,8 +262,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
         /// <summary>
         /// Get Case
-        /// </summary>
-        /// <param name="licenseNumber"></param>
+        /// </summary>        
         [HttpGet("{caseId}")]
         [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
@@ -296,7 +295,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
-                result.Comments = GetCommentsForCase(caseId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
+                result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
             }
 
             // set to null if no decision has been made.
@@ -309,10 +308,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
 
-        private List<Comment> GetCommentsForCase(string caseId, OriginRestrictions originRestrictions)
+        private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions)
         {
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            var reply = _cmsAdapterClient.GetCaseComments(new CaseCommentsRequest() { CaseId = caseId, OriginRestrictions = originRestrictions });
+            var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, DriverId = driverId,  OriginRestrictions = originRestrictions });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -363,7 +362,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             // call the back end
 
-            var reply = _cmsAdapterClient.GetCaseComments(new CaseCommentsRequest() { CaseId = caseId, OriginRestrictions = OriginRestrictions.UserOnly });
+            var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, OriginRestrictions = OriginRestrictions.UserOnly });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {

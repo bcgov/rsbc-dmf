@@ -172,8 +172,8 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
 
 
             mockClient
-                .Setup(m => m.GetCaseComments(It.IsAny<CaseCommentsRequest>(), null, null, CancellationToken.None))
-                .Returns<CaseCommentsRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
+                .Setup(m => m.GetComments(It.IsAny<CommentsRequest>(), null, null, CancellationToken.None))
+                .Returns<CommentsRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
                 {
                     GetCommentsReply reply = new() { ResultStatus = ResultStatus.Success };
                     Driver driver = new Driver
