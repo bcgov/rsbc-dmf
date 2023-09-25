@@ -3308,8 +3308,8 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Reject",  100000004 }, // Rejected
                 { "Clean Pass" ,  100000009}, // Clean Pass
                 { "Manual Pass", 100000012 }, // Manual Pass
-                { "Open-Required", 100000000 } // Open required
-                
+                { "Open-Required", 100000000 }, // Open required
+                { "Uploaded", 100000010  } // Uploaded
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
