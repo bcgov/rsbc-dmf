@@ -341,37 +341,45 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
             using (var resultPDF = new PdfDocument())
+            {
+                foreach (var pdf in srcPDFs)
                 {
-                    foreach (var pdf in srcPDFs)
+                    using (var src = new MemoryStream(pdf))
                     {
-                        using (var src = new MemoryStream(pdf))
+                        try
                         {
-                            try
+                            using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                             {
-                                using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
+                                for (var i = 0; i < srcPDF.PageCount; i++)
                                 {
-                                    for (var i = 0; i < srcPDF.PageCount; i++)
-                                    {
-                                        resultPDF.AddPage(srcPDF.Pages[i]);
-                                    }
+                                    resultPDF.AddPage(srcPDF.Pages[i]);
+
                                 }
-                            }
-                            catch (Exception e)
-                            {
-                                _logger.LogError(e,"Error reading from PDF stream");
+
+                                // If pdf document has odd pages then add an empty page
+                                if (srcPDF.PageCount % 2 != 0)
+                                {
+                                    resultPDF.AddPage(new PdfPage());
+                                }
+
                             }
                         }
+                        catch (Exception e)
+                        {
+                            _logger.LogError(e, "Error reading from PDF stream");
+                        }
                     }
+                }
                 using (var resposeStream = new MemoryStream())
                 {
                     resultPDF.Save(resposeStream, false);
                     result = resposeStream.ToArray();
                 }
-                
-                
+
+
                 return result;
-        }
-            
+            }
+
         }
 
       
