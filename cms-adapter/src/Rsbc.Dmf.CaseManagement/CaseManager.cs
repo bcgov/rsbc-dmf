@@ -280,7 +280,7 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
-    internal class CaseManager : ICaseManager
+    internal partial class CaseManager : ICaseManager
     {
         internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
@@ -2005,9 +2005,14 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-1");
+                var driverResult = await CreateDriver(new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    BirthDate = request.Driver.BirthDate,
+                    SequenceNumber = request.SequenceNumber,
+                    Surname = request.Driver.Surname
+                });
+                
                 secondCandidateCreate = false;
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
@@ -2217,7 +2222,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                             }
 
-                            if (!driverMismatch && driverCase != null)
+                            if (driverCase != null)
                             {
                                 dynamicsContext.AddLink(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
                             }
@@ -3171,7 +3176,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public principal LookupTeam(string name, string ValidationPrevious)
+        public principal LookupTeam(string name, string validationPrevious)
         {
             // name can be username IDIR\name or a Team Name like "Adjudicators"
             // this would need to check team first and then the systemuser entity
@@ -3189,18 +3194,19 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 else
                 {
-                    
-                    if (!ValidationPrevious.StartsWith("IDIR\\"))
+                    if (validationPrevious != null)
                     {
-                        ValidationPrevious = $"IDIR\\" + ValidationPrevious;
-                    }
-                    systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == ValidationPrevious).FirstOrDefault();
-                    if (lookupUser != null)
-                    {
-                        result = lookupUser;
-                    }
-                }  
-                
+                        if (!validationPrevious.StartsWith("IDIR\\"))
+                        {
+                            validationPrevious = $"IDIR\\" + validationPrevious;
+                        }
+                        systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
+                        if (lookupUser != null)
+                        {
+                            result = lookupUser;
+                        }
+                    }                    
+                }                  
             }
             catch (Exception e)
             {
