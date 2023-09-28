@@ -1836,6 +1836,9 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
+                bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
+                // bcgovDocumentUrl.dpsQueue
+
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
                     bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
@@ -2051,11 +2054,9 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
-                // Set dfp_dpsstatus
-
-               // dfp_dpspriority
-                //bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
-               // bcgovDocumentUrl.dps
+               
+                bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
+               // bcgovDocumentUrl.dpsQueue
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
