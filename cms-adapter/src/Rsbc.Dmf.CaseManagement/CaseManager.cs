@@ -75,6 +75,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Priority { get; set; }
         public string Owner { get; set; }
         public string SubmittalStatus { get; set; }
+
+        public string Queue { get; set; }
     }
 
     public class CreateStatusReply
@@ -1838,7 +1840,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_documentorigin = 100000014;
-                // bcgovDocumentUrl.dpsQueue
+                bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
@@ -2058,6 +2060,7 @@ namespace Rsbc.Dmf.CaseManagement
                 // bcgovDocumentUrl.dpsQueue
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
@@ -2184,7 +2187,8 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
                     bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
                     bcgovDocumentUrl.dfp_documentorigin = 100000014;
-                   // bcgovDocumentUrl.dfp_queue = 
+                    bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
+
                     if (!string.IsNullOrEmpty(request.DocumentUrl))
                     {
                         bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
@@ -3339,7 +3343,29 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="priorityCode"></param>
+        /// <returns></returns>
+        private int TranslateQueueCode(string queueCode)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                {  "Team - Intake", 100000000 },
+                { "Team _ Adjudicators",  100000001 },
+                { "Team - Case Managers" ,  100000002},
+            };
 
+            if (queueCode != null && statusMap.ContainsKey(queueCode))
+            {
+                return statusMap[queueCode];
+            }
+            else
+            {
+                return 100000000;
+            }
+        }
 
         /// <summary>
         ///  convert the owner from the value provided by the legacy system to Dynamics CRM

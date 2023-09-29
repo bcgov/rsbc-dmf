@@ -521,7 +521,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
             [FromForm] string surcode = null,         // Driver -> Lastname
-            [FromForm] string envelopeId = null
+            [FromForm] string envelopeId = null,
+            [FromForm] string queue = "Team-Intake"
             )
         {
             if (!string.IsNullOrEmpty(driversLicense))
@@ -548,7 +549,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         priority = priority,
                         assign = assign,
                         submittalStatus = submittalStatus,
-                        surcode = surcode
+                        surcode = surcode,
+                        queue = queue,
                     };
 
                     Log.Information(JsonConvert.SerializeObject(debugObject));
@@ -665,10 +667,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Driver = driver,
                                 ValidationMethod = validationMethod ?? string.Empty,
                                 ValidationPrevious = validationPrevious ?? string.Empty,
-                                Priority = priority,
+                                Priority = priority ?? string.Empty,
                                 Owner = "Client Services" ?? string.Empty,
                                 SubmittalStatus = "Uploaded" ?? string.Empty,
-
+                                Queue = queue ?? string.Empty,
                             };
 
                             CreateStatusReply result;
@@ -746,6 +748,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                         Priority = "Regular",
                                         Owner = "Client Services",
                                         SubmittalStatus = "Received",
+                                        Queue = "Team - Intake"
                                     };
 
                                     var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
@@ -755,9 +758,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             // Path 2 : Check if the document is classified
                             else if (documentType != null && documentType == legacyDocumentType)
                             {
-                                // Add the document
-                                result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
-
+                                // Add the document to a driver instead of a case
+                                result = _cmsAdapterClient.CreateDocumentOnDriver(document);
                                 var actionName = nameof(AddCaseDocument);
                                 var routeValues = new
                                 {
