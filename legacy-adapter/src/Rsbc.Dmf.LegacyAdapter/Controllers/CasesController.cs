@@ -519,7 +519,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file,
             [FromForm] string priority,
-            [FromForm] string queue,
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
             [FromForm] string surcode = null,         // Driver -> Lastname
@@ -551,16 +550,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         assign = assign,
                         submittalStatus = submittalStatus,
                         surcode = surcode,
-                        queue = queue,
                     };
 
                     Log.Information(JsonConvert.SerializeObject(debugObject));
                 }
                 
-                if(queue == null)
-                {
-                    queue = "Team - Intake";
-                }
 
                 if(priority == null)
                 {
@@ -758,7 +752,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                         Priority = "Regular",
                                         Owner = "Client Services",
                                         SubmittalStatus = "Received",
-                                        Queue = assign
+                                        Queue = assign ?? string.Empty,
                                     };
 
                                     var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
