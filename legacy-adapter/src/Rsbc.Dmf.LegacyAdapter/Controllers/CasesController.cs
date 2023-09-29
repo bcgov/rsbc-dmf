@@ -680,7 +680,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Priority = priority ?? string.Empty,
                                 Owner = "Client Services" ?? string.Empty,
                                 SubmittalStatus = "Uploaded" ?? string.Empty,
-                                Queue = queue ?? string.Empty,
+                                Queue = assign ?? string.Empty,
                             };
 
                             CreateStatusReply result;
@@ -758,7 +758,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                         Priority = "Regular",
                                         Owner = "Client Services",
                                         SubmittalStatus = "Received",
-                                        Queue = "Team - Intake"
+                                        Queue = assign
                                     };
 
                                     var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
