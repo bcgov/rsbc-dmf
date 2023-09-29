@@ -500,6 +500,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// <param name="submittalStatus"></param>
         /// <param name="surcode"></param>
         /// <param name="envelopeId"></param>
+        /// <param name="queue"></param>
         /// <returns></returns>
         [HttpPost("{caseId}/Documents")]
         // allow large uploads
@@ -517,12 +518,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string validationMethod, // add to document entity
             [FromForm] string validationPrevious, // add to document entity
             [FromForm] IFormFile file,
-            [FromForm] string priority = "Regular",
+            [FromForm] string priority,
+            [FromForm] string queue,
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
             [FromForm] string surcode = null,         // Driver -> Lastname
-            [FromForm] string envelopeId = null,
-            [FromForm] string queue = "Team-Intake"
+            [FromForm] string envelopeId = null           
             )
         {
             if (!string.IsNullOrEmpty(driversLicense))
@@ -556,6 +557,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     Log.Information(JsonConvert.SerializeObject(debugObject));
                 }
                 
+                if(queue == null)
+                {
+                    queue = "Team - Intake";
+                }
+
+                if(priority == null)
+                {
+                    priority = "Regular";
+                }
 
                 var driver = new CaseManagement.Service.Driver()
                 {

@@ -3352,8 +3352,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                {  "Team - Intake", 100000000 },
-                { "Team _ Adjudicators",  100000001 },
+                { "Team - Intake", 100000000 },
+                { "Team - Adjudicators",  100000001 },
                 { "Team - Case Managers" ,  100000002},
             };
 
