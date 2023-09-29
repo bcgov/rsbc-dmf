@@ -211,6 +211,7 @@ message LegacyDocument {
 	string Priority = 18;
 	string Owner = 19;
 	string SubmittalStatus = 20;
+	string Queue = 21;
 }
 
 message GetDocumentRequest {	

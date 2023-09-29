@@ -195,6 +195,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Priority = request.Priority ?? string.Empty,
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+                Queue = request.Queue ?? string.Empty,
             };
 
             if (request.FaxReceivedDate != null)
@@ -262,6 +263,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Priority = request.Priority ?? string.Empty,
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+                Queue = request.Queue ?? string.Empty,
             };
 
             if (request.FaxReceivedDate != null)
@@ -327,6 +329,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Priority = request.Priority ?? string.Empty,
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+                Queue = request.Queue ?? string.Empty,
             };
 
             if(request.FaxReceivedDate != null)
@@ -392,6 +395,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Priority = request.Priority ?? string.Empty,
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
+                //Queue = request.Queue ?? string.Empty
             };
 
             if (request.FaxReceivedDate != null)

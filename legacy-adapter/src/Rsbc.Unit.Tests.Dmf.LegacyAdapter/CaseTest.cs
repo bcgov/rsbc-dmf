@@ -1,10 +1,12 @@
 using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
@@ -380,6 +382,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string priority = "Expedited";
                 string assign = "Adjudicators";
                 string submittalStatus = "Uploaded";
+                string queue = "Team - Intake";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -398,6 +401,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(priority), "priority");
                 multiPartContent.Add(new StringContent(assign), "assign");
                 multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
+                multiPartContent.Add(new StringContent(queue), "queue");
+
 
                 // create a new request object for the upload, as we will be using multipart form submission.
                 request.Content = multiPartContent;
@@ -451,6 +456,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string priority = "Expedited";
                 string assign = "Client Services";
                 string submittalStatus = "Uploaded";
+                string queue = "Team _ Adjudicators";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -469,7 +475,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(priority), "priority");
                 multiPartContent.Add(new StringContent(assign), "assign");
                 multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
-
+                multiPartContent.Add(new StringContent(queue), "queue");
                 // create a new request object for the upload, as we will be using multipart form submission.
                 request.Content = multiPartContent;
 
@@ -549,10 +555,11 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 /*                string documentType = documentType1;
                 string documentTypeCode = documentTypeCode;*/
                 string validationMethod = "Single User";
-                string validationPrevious = " ";
+                string validationPrevious = string.Empty;
                 string priority = "Expedited";
                 string assign = "Client Services";
                 string submittalStatus = "Received";
+                string queue = "Team - Intake";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -571,7 +578,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(priority), "priority");
                 multiPartContent.Add(new StringContent(assign), "assign");
                 multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
-
+                multiPartContent.Add(new StringContent(queue), "queue");
+                
                 // create a new request object for the upload, as we will be using multipart form submission.
                 request.Content = multiPartContent;
 
