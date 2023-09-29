@@ -3356,6 +3356,10 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Team - Intake", 100000000 },
                 { "Team - Adjudicators",  100000001 },
                 { "Team - Case Managers" ,  100000002},
+                { "Team Leads Review", 100000000 },
+                { "Nurse Case Managers", 100000002 },
+                { "Adjudicators", 100000001 },
+                { "Client Services",100000000 },
             };
 
             if (queueCode != null && statusMap.ContainsKey(queueCode))
