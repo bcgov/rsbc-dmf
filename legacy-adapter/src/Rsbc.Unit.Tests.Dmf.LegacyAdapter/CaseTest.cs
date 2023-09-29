@@ -549,9 +549,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 /*                string documentType = documentType1;
                 string documentTypeCode = documentTypeCode;*/
                 string validationMethod = "Single User";
-                string validationPrevious = "BHAMMED";
+                string validationPrevious = " ";
                 string priority = "Expedited";
-                string assign = "Adjudicators";
+                string assign = "Client Services";
                 string submittalStatus = "Received";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");

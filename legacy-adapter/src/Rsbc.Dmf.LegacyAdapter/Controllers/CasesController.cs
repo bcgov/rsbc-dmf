@@ -665,7 +665,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Driver = driver,
                                 ValidationMethod = validationMethod ?? string.Empty,
                                 ValidationPrevious = validationPrevious ?? string.Empty,
-                                Priority = "Regular" ?? string.Empty,
+                                Priority = priority,
                                 Owner = "Client Services" ?? string.Empty,
                                 SubmittalStatus = "Uploaded" ?? string.Empty,
 
@@ -743,9 +743,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                         Driver = driver,
                                         ValidationMethod = validationMethod ?? string.Empty,
                                         ValidationPrevious = validationPrevious ?? string.Empty,
-                                        Priority = "Regular" ?? string.Empty,
-                                        Owner = "Team-Intake" ?? string.Empty,
-                                        SubmittalStatus = "Received" ?? string.Empty,
+                                        Priority = "Regular",
+                                        Owner = "Client Services",
+                                        SubmittalStatus = "Received",
                                     };
 
                                     var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
