@@ -651,7 +651,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             var document = new LegacyDocument()
                             {
-                                BatchId = batchId ?? String.Empty,
+                                BatchId = batchId ?? string.Empty,
                                 DocumentPages = documentPages ?? 1,
                                 DocumentType = legacyDocumentType,
                                 DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
@@ -665,16 +665,95 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Driver = driver,
                                 ValidationMethod = validationMethod ?? string.Empty,
                                 ValidationPrevious = validationPrevious ?? string.Empty,
-                                Priority = priority ?? string.Empty,
-                                Owner = assign ?? string.Empty,
-                                SubmittalStatus = "Uploaded",
+                                Priority = "Regular" ?? string.Empty,
+                                Owner = "Client Services" ?? string.Empty,
+                                SubmittalStatus = "Uploaded" ?? string.Empty,
 
                             };
 
                             CreateStatusReply result;
 
-                            // Check if the document is classified
-                            if (documentType != null && documentType == legacyDocumentType)
+                            string[] documentTypes = {
+                            "Ignition Interlock Incident",
+                            "Ignition Interlock MIA",
+                            "RDP Registration",
+                            "Remedial Reconsideration",
+                            "Ignition Interlock Extension",
+                            "Ignition Interlock Reconsideration",
+                            "RDP and IIP Reconsideration",
+                            "Ignition Interlock Medical Exemption",
+                            "RDP Application For Extension",
+                            "High Risk Driving Incident Report",
+                            "Indefinite IIP",
+                            "OOP Certificate",
+                            "Client Letter Out DIP",
+                            "IIP Waiver",
+                            "OOP Document",
+                            "OOP Registration"
+                           };
+                            string[] documentTypeCodes = {
+               
+                                "080",
+                                "081",
+                                "110",
+                                "120",
+                                "121",
+                                "122",
+                                "123",
+                                "124",
+                                "250",
+                                "210",
+                                "125",
+                                "212",
+                                "320",
+                                "211",
+                                "213",
+                                "214"
+
+                             };
+
+                            var documentTypeindex = Array.IndexOf(documentTypes, documentType);
+
+                            if(documentType != null && documentTypeindex != -1)
+                            {
+                                var findDocumentTypeCode = documentTypeCodes.ElementAt(documentTypeindex);
+
+                                if (documentTypeCode != findDocumentTypeCode)
+                                {
+                                    Log.Error("Unable to find the document type code");
+                                   
+                                } 
+                                else
+                                {
+                                    //  If document is remedial Type 
+
+                                    var remedialdDocument = new LegacyDocument()
+                                    {
+                                        BatchId = batchId ?? string.Empty,
+                                        DocumentPages = documentPages ?? 1,
+                                        DocumentType = legacyDocumentType,
+                                        DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
+                                        DocumentUrl = fileReply.FileName,
+                                        CaseId = caseId ?? string.Empty,
+                                        FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
+                                        ImportDate = Timestamp.FromDateTimeOffset(importDate),
+                                        ImportId = importID ?? string.Empty,
+
+                                        OriginatingNumber = originatingNumber ?? string.Empty,
+                                        Driver = driver,
+                                        ValidationMethod = validationMethod ?? string.Empty,
+                                        ValidationPrevious = validationPrevious ?? string.Empty,
+                                        Priority = "Regular" ?? string.Empty,
+                                        Owner = "Team-Intake" ?? string.Empty,
+                                        SubmittalStatus = "Received" ?? string.Empty,
+                                    };
+
+                                    var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
+                                }
+
+                            } 
+                            // Path 2 : Check if the document is classified
+                            else if (documentType != null && documentType == legacyDocumentType)
                             {
                                 // Add the document
                                 result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
@@ -688,17 +767,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 return CreatedAtAction(actionName, routeValues, document);
                             }
 
-                            else
+                            // Path 3: If the document is unclassified
+                            // Attach the documents to the driver 00000000 
+
+                            else if (documentType != null || documentType == "UnClassified")
                             {
-                                if (documentType != null || documentType == "UnClassified" || documentType == "Remedial")
-                                {
-                                    // Path 2: If the document is unclassified
-                                    // Attach the documents to the driver 00000000 
-                                    if (documentType != null && documentType == "UnClassified")
-                                    {
-                                        var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
-                                    }
-                                }
+                                var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
+
                             }
                         }
                     }

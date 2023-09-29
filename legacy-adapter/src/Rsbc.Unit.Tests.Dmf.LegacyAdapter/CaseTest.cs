@@ -339,8 +339,251 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             }
         }
 
+        [Fact]
+        public async Task AddUnclassifiedCaseDocument()
+        {
+            Login();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseIdByDl();
+                Assert.True(caseId != null);
+
+                string testData = "This is just a test.";
+                string fileName = "fax.pdf";
+                byte[] bytes = Encoding.ASCII.GetBytes(testData);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
+
+                MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
+                var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "File",
+                    FileName = fileName
+                };
+                multiPartContent.Add(fileContent);
+                // add the various string parameters.
+                string driversLicense = testDl;
+                string surcode = testSurcode;
+                string batchId = "1001111";
+                string faxReceivedDate = "2022-05-19T23:11:53Z";
+                string importDate = "2022-05-19";
+                string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
+                string originatingNumber = "";
+                int documentPages = 1;
+                string documentType = "Unclassified";
+                string documentTypeCode = "999";
+                string validationMethod = "Single User";
+                string validationPrevious = "BHAMMED";
+                string priority = "Expedited";
+                string assign = "Adjudicators";
+                string submittalStatus = "Uploaded";
+
+                multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
+                multiPartContent.Add(new StringContent(surcode), "surcode");
+                multiPartContent.Add(new StringContent(batchId), "batchId");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
+                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(importID), "importID");
+
+                multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
+                multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
+                multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
+                multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
+                multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+
+                multiPartContent.Add(new StringContent(priority), "priority");
+                multiPartContent.Add(new StringContent(assign), "assign");
+                multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
+
+                // create a new request object for the upload, as we will be using multipart form submission.
+                request.Content = multiPartContent;
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+            }
+        }
 
         [Fact]
+        public async Task AddClassifiedCaseDocument()
+        {
+            Login();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseIdByDl();
+                Assert.True(caseId != null);
+
+                string testData = "This is just a test.";
+                string fileName = "fax.pdf";
+                byte[] bytes = Encoding.ASCII.GetBytes(testData);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
+
+                MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
+                var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "File",
+                    FileName = fileName
+                };
+                multiPartContent.Add(fileContent);
+                // add the various string parameters.
+                string driversLicense = testDl;
+                string surcode = testSurcode;
+                string batchId = "1001111";
+                string faxReceivedDate = "2022-05-19T23:11:53Z";
+                string importDate = "2022-05-19";
+                string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
+                string originatingNumber = "";
+                int documentPages = 1;
+                string documentType = "DMER";
+                string documentTypeCode = "001";
+                string validationMethod = "Single User";
+                string validationPrevious = "";
+                string priority = "Expedited";
+                string assign = "Client Services";
+                string submittalStatus = "Uploaded";
+
+                multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
+                multiPartContent.Add(new StringContent(surcode), "surcode");
+                multiPartContent.Add(new StringContent(batchId), "batchId");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
+                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(importID), "importID");
+
+                multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
+                multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
+                multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
+                multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
+                multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+
+                multiPartContent.Add(new StringContent(priority), "priority");
+                multiPartContent.Add(new StringContent(assign), "assign");
+                multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
+
+                // create a new request object for the upload, as we will be using multipart form submission.
+                request.Content = multiPartContent;
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task AddRemedialRDPCaseDocument()
+        {
+            string documentType = "RDP Registration";
+            string documentTypeCode = "110";
+
+            TestRemedialDocumentCode(documentType, documentTypeCode);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [Fact]
+        public async Task AddRemedialIgnitionCaseDocument()
+        {
+            string documentType = "Ignition Interlock Incident";
+            string documentTypeCode = "080";
+
+            TestRemedialDocumentCode(documentType, documentTypeCode);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="documentType"></param>
+        /// <param name="documentTypeCode"></param>
+        private void TestRemedialDocumentCode(string documentType, string documentTypeCode)
+        {
+           
+            Login();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseIdByDl();
+                Assert.True(caseId != null);
+
+                string testData = "This is just a test.";
+                string fileName = "fax.pdf";
+                byte[] bytes = Encoding.ASCII.GetBytes(testData);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
+
+                MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
+                var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "File",
+                    FileName = fileName
+                };
+                multiPartContent.Add(fileContent);
+                // add the various string parameters.
+                string driversLicense = testDl;
+                string surcode = testSurcode;
+                string batchId = "1001111";
+                string faxReceivedDate = "2022-05-19T23:11:53Z";
+                string importDate = "2022-05-19";
+                string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
+                string originatingNumber = "";
+                int documentPages = 1;
+/*                string documentType = documentType1;
+                string documentTypeCode = documentTypeCode;*/
+                string validationMethod = "Single User";
+                string validationPrevious = "BHAMMED";
+                string priority = "Expedited";
+                string assign = "Adjudicators";
+                string submittalStatus = "Received";
+
+                multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
+                multiPartContent.Add(new StringContent(surcode), "surcode");
+                multiPartContent.Add(new StringContent(batchId), "batchId");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
+                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(importID), "importID");
+
+                multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
+                multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
+                multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
+                multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
+                multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+
+                multiPartContent.Add(new StringContent(priority), "priority");
+                multiPartContent.Add(new StringContent(assign), "assign");
+                multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
+
+                // create a new request object for the upload, as we will be using multipart form submission.
+                request.Content = multiPartContent;
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+            [Fact]
         public async void AddCaseDocumentSparse()
         {
             if (!string.IsNullOrEmpty(testDl))
