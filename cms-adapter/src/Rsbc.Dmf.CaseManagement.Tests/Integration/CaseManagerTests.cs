@@ -590,9 +590,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             // Act : Create the driver
             var request = new CreateDriverRequest()
             {
-                DriverLicenseNumber = "01234111",
+                DriverLicenseNumber = "01234119",
                 BirthDate = DateTimeOffset.UtcNow,
-                Surname = "TestUser"
+                Surname = "TestDriver"
 
             };
 
@@ -732,25 +732,31 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             string documentUrl = $"DMER-TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
 
-
-            LegacyDocument legacyDocumentRequest = new LegacyDocument
+            if(driverLicenseNumber != null)
             {
-                BatchId = "1",
-                //CaseId = caseId,
-                DocumentType = "DMER",
-                DocumentTypeCode = "001",
-                Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
-                // FaxReceivedDate = DateTime.MinValue,
-                ImportDate = DateTimeOffset.UtcNow,
-                FileSize = 10,
-                DocumentPages = 1,
-                OriginatingNumber = "1",
-                SequenceNumber = 1,
-                DocumentUrl = documentUrl,
-                SubmittalStatus = "Uploaded"
-            };
+                LegacyDocument legacyDocumentRequest = new LegacyDocument
+                {
+                    BatchId = "1",
+                    //CaseId = caseId,
+                    DocumentType = "DMER",
+                    DocumentTypeCode = "001",
+                    Driver = new Driver { DriverLicenseNumber = driverLicenseNumber, Surname = "Test", BirthDate = new DateTime(1994, 02, 16), GivenName = "Driver" },
+                    // FaxReceivedDate = DateTime.MinValue,
+                    ImportDate = DateTimeOffset.UtcNow,
+                    FileSize = 10,
+                    DocumentPages = 1,
+                    OriginatingNumber = "1",
+                    SequenceNumber = 1,
+                    DocumentUrl = documentUrl,
+                    SubmittalStatus = "Uploaded"
+                };
 
-            await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+                await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+
+            }
+
+
+
 
 
         }        
