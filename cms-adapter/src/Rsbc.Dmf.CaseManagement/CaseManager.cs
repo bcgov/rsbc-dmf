@@ -253,6 +253,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string Surname { get; set; }
 
+        public string GivenName { get; set; }
+
         public DateTimeOffset? BirthDate { get; set; }
 
         public int? SequenceNumber { get; set; }
@@ -1798,23 +1800,52 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply();
             // Search for triage driver
+            //bool secondCandidateCreate = true;
 
-            var triagedriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            var searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
 
+            if (searchdriver == null)
+            {
+                var newDriver = new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    Surname = request.Driver.Surname ?? string.Empty,
+                    SequenceNumber = request.SequenceNumber,
+                    //BirthDate = request.Driver.BirthDate,
+                    GivenName = request.Driver.GivenName ?? string.Empty,
+                };
+
+                var birthDate = request.Driver.BirthDate;
+
+                // Check DOB is null and also verify if DOB is not less 1753 and greater than today
+
+                if (birthDate != null && !(birthDate.Year < 1753 || birthDate > DateTime.Now.AddHours(-1)))
+                {
+                    newDriver.BirthDate = request.Driver.BirthDate; 
+                }
+
+                
+
+                await CreateDriver(newDriver);
+
+                searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
             //dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == "01234111");
 
             // Get Document Type
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
-            if (triagedriver != null)
+            if (searchdriver != null)
             {
                
                 bcgov_documenturl bcgovDocumentUrl = null;
                
                 // Load Driver lookup from the documents entity
-                await dynamicsContext.LoadPropertyAsync(triagedriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+                await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+
+               
 
                 // Create the document 
 
@@ -1865,7 +1896,7 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                     }
 
-                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), triagedriver);
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
 
 
                     if (newOwner != null)
@@ -2942,7 +2973,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                driverContact = dynamicsContext.contacts.ByKey(contactId).GetValue();
+                driverContact = dynamicsContext.contacts.Where(x => x.contactid == contactId).FirstOrDefault();
             }
             catch (Exception)
             {
@@ -2954,7 +2985,8 @@ namespace Rsbc.Dmf.CaseManagement
                 driverContact = new contact()
                 {
                     contactid = contactId,
-                    lastname = request.Surname
+                    lastname = request.Surname,
+                    firstname = request.GivenName,
                 };
 
                 if (request.BirthDate != null)
@@ -2962,9 +2994,7 @@ namespace Rsbc.Dmf.CaseManagement
                     driverContact.birthdate = new Microsoft.OData.Edm.Date(request.BirthDate.Value.Year,
                         request.BirthDate.Value.Month, request.BirthDate.Value.Day);
                 }
-                try
-                {
-                    await dynamicsContext.SaveChangesAsync();
+                
                     dynamicsContext.AddTocontacts(driverContact);
                     var saveResult2 = await dynamicsContext.SaveChangesAsync();
                     var tempId2 = GetCreatedId(saveResult2);
@@ -2973,11 +3003,7 @@ namespace Rsbc.Dmf.CaseManagement
                         contactId = tempId2.Value;
                         driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
                     }
-                }
-                catch (Exception e)
-                {
-                    Log.Error(e, "Create Case ERROR CREATING Contact - " + e.Message);
-                }
+                              
             }
 
             // Step 2 : Create Driver
