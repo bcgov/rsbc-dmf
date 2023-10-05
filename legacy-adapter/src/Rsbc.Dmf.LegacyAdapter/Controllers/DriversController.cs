@@ -523,13 +523,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                         try
                         {
-                            importDate = item.ImportDate.ToDateTimeOffset();
-
-                            if (importDate.Offset == TimeSpan.Zero)
+                            if (item.ImportDate != null)
                             {
-                                importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
-                            }
+                                importDate = item.ImportDate.ToDateTimeOffset();
 
+                                if (importDate.Offset == TimeSpan.Zero)
+                                {
+                                    importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                                }
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -541,23 +543,25 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                         try
                         {
-                            faxReceivedDate = item.ImportDate.ToDateTimeOffset();
-
-                            if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                            if (item.FaxReceivedDate != null)
                             {
-                                faxReceivedDate = DateTimeOffset.Now;
-                            }
+                                faxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
 
-                            if (faxReceivedDate.Offset == TimeSpan.Zero)
-                            {
-                                faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
-                            }
+                                if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                                {
+                                    faxReceivedDate = DateTimeOffset.Now;
+                                }
+
+                                if (faxReceivedDate.Offset == TimeSpan.Zero)
+                                {
+                                    faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
+                                }
+                            }                            
 
                         }
                         catch (Exception ex)
                         {
-                            Serilog.Log.Information(ex, "Error parsing faxReceivedDate date");
-                            faxReceivedDate = DateTimeOffset.Now;
+                            Serilog.Log.Information(ex, "Error parsing faxReceivedDate date");                            
                         }
 
 
