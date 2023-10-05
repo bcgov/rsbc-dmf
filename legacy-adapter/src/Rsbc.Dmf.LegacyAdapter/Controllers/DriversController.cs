@@ -517,10 +517,25 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             caseId = item.CaseId;
                         }
 
+                        
+                        DateTimeOffset importDate = DateTimeOffset.Now;
+
+                        try
+                        {
+                            importDate = item.ImportDate.ToDateTimeOffset();
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Information(ex, "Error parsing import date");
+                            importDate = DateTimeOffset.Now;
+                        }
+
+
+
                         var newDocument = new ViewModels.Document
                         {
                             CaseId = caseId,
-                            ImportDate = item.ImportDate.ToDateTimeOffset(),
+                            ImportDate = importDate,
                             DocumentId = item.DocumentId,
                             DocumentType = item.DocumentType,
                             DocumentTypeCode = item.DocumentTypeCode,
