@@ -31,6 +31,14 @@ namespace Rsbc.Dmf.LegacyAdapter
                     }
 
                 }
+
+                // handle invalid dates
+
+                if (result < new DateTimeOffset(1970,1,1,0,0,0,0,TimeSpan.Zero))
+                {
+                    result = DateTimeOffset.Now;
+                }
+
             }
             else
             {
