@@ -927,7 +927,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                     if(newDocument.ImportDate != null)
                     {
-                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
+                        newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
                     }
                     reply.Items.Add(newDocument);
 
