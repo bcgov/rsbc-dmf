@@ -525,6 +525,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string envelopeId = null           
             )
         {
+
+            var actionName = nameof(AddCaseDocument);
+            var routeValues = new
+            {
+                driversLicence = driversLicense
+            };
+
             if (!string.IsNullOrEmpty(driversLicense))
             {
                 string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
@@ -605,7 +612,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
                 // New workflow for the DPS mitigation 
-                if (!String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]) || caseId == Guid.Empty.ToString())
+                if (!String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]))
                 {
                     // check if driver exsists 
                     if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
@@ -764,12 +771,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             {
                                 // Add the document to a driver instead of a case
                                 result = _cmsAdapterClient.CreateDocumentOnDriver(document);
-                                var actionName = nameof(AddCaseDocument);
-                                var routeValues = new
-                                {
-                                    driversLicence = licenseNumber
-                                };
-
                                 return CreatedAtAction(actionName, routeValues, document);
                             }
 
@@ -779,7 +780,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             else if (documentType != null || documentType == "UnClassified")
                             {
                                 var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
-
+                                return CreatedAtAction(actionName, routeValues, document);
                             }
                         }
                     }
@@ -894,12 +895,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                         _cmsAdapterClient.UpdateManualPassFlag(new CaseIdRequest { CaseId = caseId });
                                     }
                                 }
-
-                                var actionName = nameof(AddCaseDocument);
-                                var routeValues = new
-                                {
-                                    driversLicence = licenseNumber
-                                };
+                                
 
                                 return CreatedAtAction(actionName, routeValues, document);
                             }
