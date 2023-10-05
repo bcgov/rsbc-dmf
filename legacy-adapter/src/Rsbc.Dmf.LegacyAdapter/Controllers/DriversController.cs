@@ -517,17 +517,47 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             caseId = item.CaseId;
                         }
 
-                        
+                        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
                         DateTimeOffset importDate = DateTimeOffset.Now;
 
                         try
                         {
                             importDate = item.ImportDate.ToDateTimeOffset();
+
+                            if (importDate.Offset == TimeSpan.Zero)
+                            {
+                                importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                            }
+
                         }
                         catch (Exception ex)
                         {
                             Serilog.Log.Information(ex, "Error parsing import date");
                             importDate = DateTimeOffset.Now;
+                        }
+
+                        DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
+
+                        try
+                        {
+                            faxReceivedDate = item.ImportDate.ToDateTimeOffset();
+
+                            if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                            {
+                                faxReceivedDate = DateTimeOffset.Now;
+                            }
+
+                            if (faxReceivedDate.Offset == TimeSpan.Zero)
+                            {
+                                faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Information(ex, "Error parsing faxReceivedDate date");
+                            faxReceivedDate = DateTimeOffset.Now;
                         }
 
 
@@ -542,26 +572,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             BusinessArea = item.BusinessArea,
                             Driver = driver,
                             SequenceNumber = item.SequenceNumber,
+                            FaxReceivedDate = faxReceivedDate,
                             UserId = item.UserId,
                             BcMailSent = isBcMailSent
                         };
-
-                        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-
-                        if (newDocument.ImportDate.Value.Offset == TimeSpan.Zero)
-                        {
-                            newDocument.ImportDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.ImportDate.Value.DateTime, pacificZone);
-                        }
-
-                        if (item.FaxReceivedDate.ToDateTimeOffset() > new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
-                        {
-                            newDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
-                        }
-
-                        if (newDocument.FaxReceivedDate.Value.Offset == TimeSpan.Zero)
-                        {
-                            newDocument.FaxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(newDocument.FaxReceivedDate.Value.DateTime, pacificZone);
-                        }
 
                         result.Add(newDocument);
 
