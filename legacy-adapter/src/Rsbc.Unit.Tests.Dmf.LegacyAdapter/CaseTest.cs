@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -144,6 +145,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             {
                 // start by getting the case.
                 var caseId = GetCaseIdByDl();
+
+                caseId = Guid.Empty.ToString();
+
                 Assert.True(caseId != null);
 
                 string testData = "This is just a test.";

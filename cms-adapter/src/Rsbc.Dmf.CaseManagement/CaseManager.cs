@@ -1326,11 +1326,21 @@ namespace Rsbc.Dmf.CaseManagement
             incident result = null;
             if (!string.IsNullOrEmpty(id))
             {
+
+                
+
                 try
                 {
-                    result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
-                    // ensure the driver is fetched.
-                    LazyLoadProperties(result).GetAwaiter().GetResult();
+
+                    Guid idGuid = Guid.Parse(id);
+
+                    if (idGuid != Guid.Empty)
+                    {
+                        result = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(id)).FirstOrDefault();
+                        // ensure the driver is fetched.
+                        LazyLoadProperties(result).GetAwaiter().GetResult();
+                    }
+                    
                 }
                 catch (Exception ex)
                 {
@@ -2989,11 +2999,12 @@ namespace Rsbc.Dmf.CaseManagement
                     firstname = request.GivenName,
                 };
 
-                if (request.BirthDate != null)
+                if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 {
                     driverContact.birthdate = new Microsoft.OData.Edm.Date(request.BirthDate.Value.Year,
-                        request.BirthDate.Value.Month, request.BirthDate.Value.Day);
+                    request.BirthDate.Value.Month, request.BirthDate.Value.Day);
                 }
+
                 
                     dynamicsContext.AddTocontacts(driverContact);
                     var saveResult2 = await dynamicsContext.SaveChangesAsync();
@@ -3021,7 +3032,7 @@ namespace Rsbc.Dmf.CaseManagement
                 statuscode = 1,
             };
 
-            if (request.BirthDate != null)
+            if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
             {
                 driver.dfp_dob = request.BirthDate.Value;
             }
