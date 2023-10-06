@@ -1518,24 +1518,41 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }
                 }
 
-                if (isChange)
+                if (!isChange)  // create
                 {
-                   
-                   
-                    var createDriver = await _caseManager.CreateDriver(new CaseManagement.CreateDriverRequest
+                    var createDriverRequest = new CaseManagement.CreateDriverRequest
                     {
                         DriverLicenseNumber = request.DriverLicenseNumber,
-                        BirthDate = request.BirthDate.ToDateTime(),
-                        Surname = request.Surname
-                    });
-                    if (createDriver.Success)
+                        Surname = request.Surname,
+                        GivenName = request.GivenName
+                    };
+                    if (request.BirthDate != null)
+                    {
+                        try
+                        {
+                            createDriverRequest.BirthDate = request.BirthDate.ToDateTime();
+                        }
+                        catch (Exception e)
+                        {
+                            createDriverRequest.BirthDate = null;
+                        }
+                        
+                    }
+                    var createDriverResult = await _caseManager.CreateDriver(createDriverRequest);
+
+
+                    if (createDriverResult.Success)
                     {
                         reply.ResultStatus = ResultStatus.Success;
                     }
                     else
                     {
-                        reply.ErrorDetail = createDriver.ErrorDetail ?? "unknown error";
+                        reply.ErrorDetail = createDriverResult.ErrorDetail ?? "unknown error";
                     }
+                }
+                else // update
+                {
+                    
                 }
 
             }

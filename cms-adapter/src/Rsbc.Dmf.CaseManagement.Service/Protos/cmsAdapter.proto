@@ -378,6 +378,7 @@ message CreateDriverRequest {
 	string driverLicenseNumber = 1;
 	google.protobuf.Timestamp birthDate = 2;
 	string surname = 3;
+	string givenName = 4;
 }
 
 message CreateCaseRequest {

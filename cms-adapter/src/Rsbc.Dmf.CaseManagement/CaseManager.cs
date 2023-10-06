@@ -2971,7 +2971,8 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<ResultStatusReply> CreateDriver(CreateDriverRequest request)
         {
 
-            ResultStatusReply result = null;
+            ResultStatusReply result = new ResultStatusReply();
+            result.Success = false;
 
             contact driverContact;
 
@@ -3006,14 +3007,14 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 
-                    dynamicsContext.AddTocontacts(driverContact);
-                    var saveResult2 = await dynamicsContext.SaveChangesAsync();
-                    var tempId2 = GetCreatedId(saveResult2);
-                    if (tempId2 != null)
-                    {
-                        contactId = tempId2.Value;
-                        driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
-                    }
+                dynamicsContext.AddTocontacts(driverContact);
+                var saveResult2 = await dynamicsContext.SaveChangesAsync();
+                var tempId2 = GetCreatedId(saveResult2);
+                if (tempId2 != null)
+                {
+                    contactId = tempId2.Value;
+                    driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
+                }
                               
             }
 
@@ -3027,17 +3028,22 @@ namespace Rsbc.Dmf.CaseManagement
             dfp_driver driver = new dfp_driver()
             {
                 dfp_driverid = driverId,
-                dfp_licensenumber = request.DriverLicenseNumber,
-                dfp_PersonId = driverContact,
+                dfp_licensenumber = request.DriverLicenseNumber,                
                 statuscode = 1,
             };
+
+            
 
             if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
             {
                 driver.dfp_dob = request.BirthDate.Value;
             }
+
+            
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.AddTodfp_drivers(driver);
+            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+
             var saveResult = await dynamicsContext.SaveChangesAsync();
             var tempId = GetCreatedId(saveResult);
             if (tempId != null)
@@ -3045,11 +3051,11 @@ namespace Rsbc.Dmf.CaseManagement
                 driverId = tempId.Value;
                 driver = dynamicsContext.dfp_drivers.ByKey(tempId).GetValue();
             }
-            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+            //dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
 
             // this save is necessary so that the create incident will work.
             await dynamicsContext.SaveChangesAsync();
-
+            result.Success = true;
             return result;
         }
     
