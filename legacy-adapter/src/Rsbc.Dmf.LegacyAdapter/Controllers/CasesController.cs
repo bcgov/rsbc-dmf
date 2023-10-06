@@ -11,6 +11,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.Icbc.ViewModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using Serilog;
@@ -187,6 +188,69 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(result);
         }
 
+        private void IcbcCreate(string licenseNumber, bool legacyOnly)
+        {
+            try
+            {
+                CLNT driver = null;
+
+                if (!_cache.TryGetValue(licenseNumber, out driver))
+                {
+                    // get the history from ICBC
+                    driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    // Key not in cache, so get data.
+                    //cacheEntry = DateTime.Now;
+                    if (driver != null)
+                    {
+                        // Set cache options.
+                        var cacheEntryOptions = new MemoryCacheEntryOptions()
+                            // Keep in cache for this time, reset time if accessed.
+                            .SetSlidingExpiration(TimeSpan.FromHours(6));
+
+                        // Save data in cache.
+                        _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                    }
+
+                }
+                if (driver != null && driver.INAM?.SURN != null)
+                {                     
+
+                    if (legacyOnly)
+                    {
+                        LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
+                        {
+                            LicenseNumber = licenseNumber,
+                            EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
+                            Surname = driver.INAM?.SURN ?? string.Empty,                            
+                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
+                        };
+                        _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
+                    }
+                    else
+                    {
+                        CreateDriverRequest createDriverRequest = new CreateDriverRequest() { DriverLicenseNumber = licenseNumber,  
+                            Surname = driver.INAM?.SURN ?? string.Empty, 
+                            GivenName = driver.INAM?.GIV1 ?? string.Empty,
+                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now) };
+
+                        // attempt to get the driver from ICBC.
+
+                        _cmsAdapterClient.CreateDriver(createDriverRequest);                        
+                        
+                    }
+                    
+                }
+                else
+                {
+                    _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogInformation(e, "Error getting driver.");
+            }
+        }
+
         /// <summary>
         /// DoesCaseExist
         /// </summary>
@@ -206,48 +270,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 if (String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"])) // create it
                 {
-                    try
-                    {
-                        CLNT driver = null;
-
-                        if (!_cache.TryGetValue(licenseNumber, out driver))
-                        {
-                            // get the history from ICBC
-                            driver = _icbcClient.GetDriverHistory(licenseNumber);
-                            // Key not in cache, so get data.
-                            //cacheEntry = DateTime.Now;
-                            if (driver != null)
-                            {
-                                // Set cache options.
-                                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                                    // Keep in cache for this time, reset time if accessed.
-                                    .SetSlidingExpiration(TimeSpan.FromHours(6));
-
-                                // Save data in cache.
-                                _cache.Set(licenseNumber, driver, cacheEntryOptions);
-                            }
-
-                        }
-                        if (driver != null && driver.INAM?.SURN != null)
-                        {
-                            LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
-                            {
-                                LicenseNumber = licenseNumber,
-                                EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                                Surname = driver.INAM?.SURN ?? string.Empty,
-                                BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
-                            };
-                            _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
-                        }
-                        else
-                        {
-                            _logger.LogError("ICBC ERROR - Unable to get driver from ICBC");
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        _logger.LogInformation(e, "Error getting driver.");
-                    }
+                    IcbcCreate(licenseNumber, true);
                     caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
                 }
                 else
@@ -603,16 +626,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 else
                 {
                     // create the driver.
-                    CreateDriverRequest createDriverRequest = new CreateDriverRequest() {  DriverLicenseNumber = licenseNumber , Surname = surcode };
-                    var createResult = _cmsAdapterClient.CreateDriver(createDriverRequest);
-                    if (createResult.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+
+                    IcbcCreate(licenseNumber, false);
+
+                    driverReply = _cmsAdapterClient.GetDriver(driverRequest);
+                    if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
                     {
-                        driverReply = _cmsAdapterClient.GetDriver(driverRequest);                       
-                        if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
-                        {
-                            driverId = driverReply.Items.FirstOrDefault()?.Id;
-                        }
+                        driverId = driverReply.Items.FirstOrDefault()?.Id;
                     }
+                    
                 }
 
                 if (faxReceivedDate == null)
