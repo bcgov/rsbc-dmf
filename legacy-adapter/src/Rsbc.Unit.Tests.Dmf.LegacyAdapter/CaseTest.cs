@@ -137,6 +137,83 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             Assert.True(caseId != null);
         }
 
+        //   {"driversLicense":"01000115","batchId":"1007172","faxReceivedDate":"2023-10-06T21:14:28.0326378+00:00","importDate":"2023-10-06T21:14:28.0326451+00:00",
+        //   "importID":"220a1883-c173-408c-812b-9c65769fb0ed","originatingNumber":null,"documentPages":2,"documentType":"(PDR)PriorityDoctorsReport","documentTypeCode":"160","validationMethod":"DPS Migration","validationPrevious":"System","priority":"Critical Review","assign":"Adjudicators","submittalStatus":"Uploaded","surcode":"PEL"}
+
+
+        [Fact]
+        public async Task AddCaseDocumentWithPerson()
+        {
+            Login();
+            
+            // start by getting the case.
+            var caseId = GetCaseIdByDl();
+
+            caseId = Guid.Empty.ToString();
+
+            Assert.True(caseId != null);
+
+            string testData = "This is just a test.";
+            string fileName = "fax.pdf";
+            byte[] bytes = Encoding.ASCII.GetBytes(testData);
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
+
+            MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
+            var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "File",
+                FileName = fileName
+            };
+            multiPartContent.Add(fileContent);
+            // add the various string parameters.
+            string driversLicense = "01000115";
+            string surcode = "PEL";
+            string batchId = "1007172";
+            string faxReceivedDate = "2023-10-05T23:11:53Z";
+            string importDate = "2022-05-19";
+            string importID = "220a1883-c173-408c-812b-9c65769fb0ed";
+            string originatingNumber = "";
+            int documentPages = 2;
+            string documentType = "(PDR)PriorityDoctorsReport";
+            string documentTypeCode = "160";
+            string validationMethod = "DPS Migration";
+            string validationPrevious = "System";
+            string priority = "Critical Review";
+            string assign = "Adjudicators";
+            string submittalStatus = "Uploaded";
+
+            multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
+            multiPartContent.Add(new StringContent(surcode), "surcode");
+            multiPartContent.Add(new StringContent(batchId), "batchId");
+            multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
+            multiPartContent.Add(new StringContent(importDate), "importDate");
+            multiPartContent.Add(new StringContent(importID), "importID");
+
+            multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
+            multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
+            multiPartContent.Add(new StringContent(documentType), "documentType");
+            multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
+            multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
+            multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+
+            multiPartContent.Add(new StringContent(priority), "priority");
+            multiPartContent.Add(new StringContent(assign), "assign");
+            multiPartContent.Add(new StringContent(submittalStatus), "submittalStatus");
+
+            // create a new request object for the upload, as we will be using multipart form submission.
+            request.Content = multiPartContent;
+
+            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            response.EnsureSuccessStatusCode();
+            
+        }
+
         [Fact]
         public async Task AddCaseDocument()
         {

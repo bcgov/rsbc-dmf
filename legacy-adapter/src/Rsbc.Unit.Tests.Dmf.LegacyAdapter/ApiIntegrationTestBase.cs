@@ -31,7 +31,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             _client = fixture.Client;
             Configuration = fixture.Configuration;
 
-            testDl = Configuration["ICBC_TEST_DL"] ?? "2222222";
+            testDl = Configuration["ICBC_TEST_DL"] ?? "02222222";
             testSurcode = Configuration["ICBC_TEST_SURCODE"] ?? "TST";
         }
 
