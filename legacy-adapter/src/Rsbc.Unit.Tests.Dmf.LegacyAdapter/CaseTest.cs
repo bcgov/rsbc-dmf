@@ -247,7 +247,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string surcode = testSurcode;
                 string batchId = "1001111";
                 string faxReceivedDate = "2022-05-19T23:11:53Z";
-                string importDate = "2022-05-19";
+                string importDate = "2022-05-29";
                 string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
                 string originatingNumber = "";
                 int documentPages = 1;
@@ -262,8 +262,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
                 multiPartContent.Add(new StringContent(batchId), "batchId");
-                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
-                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDateString");
+                multiPartContent.Add(new StringContent(importDate), "importDateString");
                 multiPartContent.Add(new StringContent(importID), "importID");
 
                 multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
