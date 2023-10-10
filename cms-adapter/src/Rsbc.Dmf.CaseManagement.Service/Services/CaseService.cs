@@ -920,12 +920,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                     };
 
-                    if (newDocument.FaxReceivedDate != null)
+                    if (item.FaxReceivedDate != null)
                     {
                         newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
                     }
 
-                    if(newDocument.ImportDate != null)
+                    if(item.ImportDate != null)
                     {
                         newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
                     }
