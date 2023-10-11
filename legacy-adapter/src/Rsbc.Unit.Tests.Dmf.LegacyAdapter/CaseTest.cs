@@ -249,7 +249,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string surcode = testSurcode;
                 string batchId = "1001111";
                 string faxReceivedDate = "2022-05-19T23:11:53Z";
-                string importDate = "2022-05-19";
+                string importDate = "2022-05-29";
                 string importID = "b86a6b22-7e9d-4e99-8347-cc0e63681da0";
                 string originatingNumber = "";
                 int documentPages = 1;
@@ -264,8 +264,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
                 multiPartContent.Add(new StringContent(batchId), "batchId");
-                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
-                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDateString");
+                multiPartContent.Add(new StringContent(importDate), "importDateString");
                 multiPartContent.Add(new StringContent(importID), "importID");
 
                 multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
@@ -420,6 +420,73 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
                 var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+
+        [Fact]
+        public async void AddCaseDocumentNoSurcode()
+        {
+            Login();
+            if (!string.IsNullOrEmpty(testDl))
+            {
+                // start by getting the case.
+                var caseId = GetCaseId();
+                Assert.True(caseId != null);
+
+                string testData = "This is just a test.";
+                string fileName = "fax.pdf";
+                byte[] bytes = Encoding.ASCII.GetBytes(testData);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, $"/Cases/{caseId}/Documents");
+
+                MultipartFormDataContent multiPartContent = new MultipartFormDataContent("----TestBoundary");
+                var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    Name = "File",
+                    FileName = fileName
+                };
+                multiPartContent.Add(fileContent);
+                
+                // add the various string parameters.
+                string driversLicense = testDl;
+                string surcode = ""; // intentionally blank to simulate DPS sending BC Mail
+                string batchId = "BCMD";
+                string faxReceivedDate = "2023-10-11T21:23:15.6925395+00:00";
+                string importDate = "2023-10-11T21:23:15.6925413+00:00";
+                string importID = "";
+                string originatingNumber = "";
+                int documentPages = 1;
+                string documentType = "";
+                string validationMethod = "";
+                string validationPrevious = "";
+
+                multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
+                multiPartContent.Add(new StringContent(surcode), "surcode");
+                multiPartContent.Add(new StringContent(batchId), "batchId");
+                multiPartContent.Add(new StringContent(faxReceivedDate), "faxReceivedDate");
+                multiPartContent.Add(new StringContent(importDate), "importDate");
+                multiPartContent.Add(new StringContent(importID), "importID");
+                multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
+                multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
+                multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent("181"), "documentTypeCode");
+                multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
+                multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+                multiPartContent.Add(new StringContent(""), "assign");
+                multiPartContent.Add(new StringContent(""), "priority");
+                multiPartContent.Add(new StringContent(""), "submittalStatus");
+
+                // create a new request object for the upload, as we will be using multipart form submission.
+                request.Content = multiPartContent;
+
+                var response = _client.SendAsync(request).GetAwaiter().GetResult();
+
+                var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                
                 response.EnsureSuccessStatusCode();
             }
         }

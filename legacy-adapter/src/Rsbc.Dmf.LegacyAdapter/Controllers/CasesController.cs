@@ -555,6 +555,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driversLicence = driversLicense
             };
 
+            if (documentType == null)
+            {
+                documentType = documentTypeCode;
+            }
+
             if (!string.IsNullOrEmpty(driversLicense))
             {
                 string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
@@ -609,7 +614,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     Name = String.Empty,
                     Seck = String.Empty,
                     Sex = String.Empty,
-                    Surname = surcode,
+                    Surname = surcode ?? String.Empty,
                     Weight = 0.0
                 };
 
@@ -693,7 +698,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
                         }
 
-                        string legacyDocumentType = documentType ?? String.Empty;
+                        string legacyDocumentType = documentTypeCode ?? documentType ?? String.Empty;
 
                         var document = new LegacyDocument()
                         {
@@ -758,9 +763,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             };
 
-                        var documentTypeindex = Array.IndexOf(documentTypes, documentType);
+                        var documentTypeindex = Array.IndexOf(documentTypes, documentTypeCode);
 
-                        if (documentType != null && documentTypeindex != -1)
+                        if (documentTypeCode != null && documentTypeindex != -1)
                         {
                             var findDocumentTypeCode = documentTypeCodes.ElementAt(documentTypeindex);
 
