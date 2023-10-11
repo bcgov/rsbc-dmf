@@ -740,7 +740,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     //CaseId = caseId,
                     DocumentType = "DMER",
                     DocumentTypeCode = "001",
-                    Driver = new Driver { DriverLicenseNumber = driverLicenseNumber, Surname = "Test", BirthDate = new DateTime(1994, 02, 16), GivenName = "Driver" },
+                    Driver = new Driver { DriverLicenseNumber = driverLicenseNumber, Surname = "WAVE1", BirthDate = new DateTime(1994, 02, 16), GivenName = "Test" },
                     // FaxReceivedDate = DateTime.MinValue,
                     ImportDate = DateTimeOffset.UtcNow,
                     FileSize = 10,
@@ -754,10 +754,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
 
             }
-
-
-
-
 
         }        
     

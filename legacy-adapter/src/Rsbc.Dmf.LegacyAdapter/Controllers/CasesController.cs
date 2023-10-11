@@ -810,7 +810,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         // Path 3: If the document is unclassified
                         // Attach the documents to the driver 00000000 
 
-                        else if (documentType != null || documentType == "UnClassified")
+                        else if (documentType != null || documentType == "Unclassified")
                         {
                             var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
                             return CreatedAtAction(actionName, routeValues, document);

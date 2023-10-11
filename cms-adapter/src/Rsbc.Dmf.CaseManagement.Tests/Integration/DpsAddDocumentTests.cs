@@ -192,6 +192,137 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         
 
         }
-    
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanCreateDocumentOnTriageDriver()
+        {
+            string[] documentTypes = {
+                "Legacy Review",
+                "Ignition Interlock Incident",
+                "Ignition Interlock MIA",
+                "RDP Registration",
+                "Remedial Reconsideration",
+                "Ignition Interlock Extension",
+                "Ignition Interlock Reconsideration",
+                "RDP and IIP Reconsideration",
+                "Ignition Interlock Medical Exemption",
+                "RDP Application For Extension",
+                "High Risk Driving Incident Report",
+                "Indefinite IIP",
+                "OOP Certificate",
+                "Client Letter Out DIP",
+                "IIP Waiver",
+                "OOP Document",
+                "OOP Registration"
+            };
+            string[] documentTypeCodes = {
+                "LegacyReview",
+                "080",
+                "081",
+                "110",
+                "120",
+                "121",
+                "122",
+                "123",
+                "124",
+                "250",
+                "210",
+                "125",
+                "212",
+                "320",
+                "211",
+                "213",
+                "214"
+
+            };
+
+            for (int i = 0; i < documentTypes.Length; i++)
+            {
+              
+
+                string dl = "00000000";
+/*
+                string temp = i.ToString();
+
+                dl = dl.Substring(0, dl.Length - temp.Length) + temp;*/
+
+                string name = $"TEST DRIVER";
+
+               // var driverId = ((CaseManager)caseManager).AddDriver(name, dl);
+
+                string documentUrl = $"TEST-DOCUMENT-{i}-{DateTime.Now.ToFileTimeUtc()}";
+
+                // add a document
+
+                LegacyDocument legacyDocumentRequest = new LegacyDocument
+                {
+                    BatchId = $"{i}",
+                    //CaseId = caseId.ToString(),
+                    DocumentType = "Legacy Review",
+                    DocumentTypeCode = "LegacyReview",
+                    Driver = new Driver { DriverLicenseNumber = dl },
+                    FaxReceivedDate = DateTimeOffset.UtcNow.AddDays(-1),
+                    ImportDate = DateTimeOffset.UtcNow.AddDays(-1),
+                    FileSize = 10,
+                    DocumentPages = 1,
+                    OriginatingNumber = "1",
+                    SequenceNumber = 1,
+                    DocumentUrl = documentUrl
+                };
+
+                await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+
+                // confirm it is present
+
+                var docs = await caseManager.GetDriverLegacyDocuments(dl);
+
+                bool found = false;
+
+                string documentId = null;
+
+                foreach (var doc in docs)
+                {
+                    if (doc.DocumentUrl == documentUrl)
+                    {
+                        found = true;
+                        documentId = doc.DocumentId;
+                        break;
+                    }
+                }
+
+                Assert.True(found);
+
+                // delete it
+
+                await caseManager.DeleteLegacyDocument(documentId);
+
+                // confirm that it is deleted
+
+                found = false;
+
+                docs = await caseManager.GetDriverLegacyDocuments(dl);
+
+                foreach (var doc in docs)
+                {
+                    if (doc.DocumentUrl == documentUrl)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                Assert.False(found);
+
+                // cleanup
+
+
+                //((CaseManager)caseManager).DeleteDriver(driverId.Value);
+
+
+
+            }
+
+
+        }
     }
 }
