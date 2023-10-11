@@ -609,7 +609,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     Name = String.Empty,
                     Seck = String.Empty,
                     Sex = String.Empty,
-                    Surname = surcode,
+                    Surname = surcode ?? String.Empty,
                     Weight = 0.0
                 };
 
