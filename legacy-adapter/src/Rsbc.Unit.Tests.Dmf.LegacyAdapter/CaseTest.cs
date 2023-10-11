@@ -448,19 +448,19 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                     FileName = fileName
                 };
                 multiPartContent.Add(fileContent);
+                
                 // add the various string parameters.
                 string driversLicense = testDl;
                 string surcode = ""; // intentionally blank to simulate DPS sending BC Mail
-                string batchId = "591";
-                string faxReceivedDate = "2022-05-19T23:11:53Z";
-                string importDate = "2022-05-19";
-                string importID = "{b86a6b22-7e9d-4e99-8347-cc0e63681da0}";
+                string batchId = "BCMD";
+                string faxReceivedDate = "2023-10-11T21:23:15.6925395+00:00";
+                string importDate = "2023-10-11T21:23:15.6925413+00:00";
+                string importID = "";
                 string originatingNumber = "";
                 int documentPages = 1;
-                string documentType = "002";
-                documentType = "Clean Pass";
-                string validationMethod = "Single User";
-                string validationPrevious = "TESTUSER";
+                string documentType = "";
+                string validationMethod = "";
+                string validationPrevious = "";
 
                 multiPartContent.Add(new StringContent(driversLicense), "driversLicense");
                 multiPartContent.Add(new StringContent(surcode), "surcode");
@@ -470,9 +470,13 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(importID), "importID");
                 multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
                 multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
-                multiPartContent.Add(new StringContent(documentType), "002");
+                multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent("181"), "documentTypeCode");
                 multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
                 multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
+                multiPartContent.Add(new StringContent(""), "assign");
+                multiPartContent.Add(new StringContent(""), "priority");
+                multiPartContent.Add(new StringContent(""), "submittalStatus");
 
                 // create a new request object for the upload, as we will be using multipart form submission.
                 request.Content = multiPartContent;
@@ -480,7 +484,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 var response = _client.SendAsync(request).GetAwaiter().GetResult();
 
                 var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
+                
                 response.EnsureSuccessStatusCode();
             }
         }
