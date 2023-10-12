@@ -25,30 +25,35 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
-services.AddAuthentication(options =>
+if (builder.Configuration["OIDC_CLIENT_ID"] != null)
 {
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
-})
-.AddCookie(options =>
-{
-    options.LoginPath = "/";
-})
-.AddOpenIdConnect(options =>
-{
-    options.Authority = builder.Configuration["OIDC_AUTHORITY"];
-    options.ClientId = builder.Configuration["OIDC_CLIENT_ID"];
-    options.ClientSecret = builder.Configuration["OIDC_CLIENT_SECRET"];
-    options.ResponseType = "code";
-    options.SaveTokens = true;
-    options.Scope.Add("openid");
-    options.Scope.Add("profile");
-    options.TokenValidationParameters = new TokenValidationParameters
+    services.AddAuthentication(options =>
     {
-        NameClaimType = "preferred_username",
-        RoleClaimType = "roles"
-    };
-});
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/";
+    })
+    .AddOpenIdConnect(options =>
+    {
+        options.Authority = builder.Configuration["OIDC_AUTHORITY"];
+        options.ClientId = builder.Configuration["OIDC_CLIENT_ID"];
+        options.ClientSecret = builder.Configuration["OIDC_CLIENT_SECRET"];
+        options.ResponseType = "code";
+        options.SaveTokens = true;
+        options.Scope.Add("openid");
+        options.Scope.Add("profile");
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = "preferred_username",
+            RoleClaimType = "roles"
+        };
+    });
+}
+
+
 
 services.AddCors();
 services.AddControllersWithViews().AddJsonOptions(x =>
@@ -124,12 +129,23 @@ app.UseSwaggerUI();
 
 app.MapSwagger();
 
-app.UseHttpLogging();
+// only log when not health check.
+
+app.UseWhen(ctx => !ctx.Request.Path.StartsWithSegments("/hc"), 
+ appBuilder => appBuilder.UseHttpLogging());
+
+
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+
+if (builder.Configuration["OIDC_CLIENT_ID"] != null)
+{
+    app.UseAuthentication();
+    app.UseAuthorization();
+}
+
+    
 
 app.MapControllerRoute(
     name: "default",
