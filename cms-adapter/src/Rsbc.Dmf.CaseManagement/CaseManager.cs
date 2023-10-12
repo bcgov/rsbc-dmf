@@ -575,7 +575,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
-
+        
         /// <summary>
         /// Convert Pages To Int
         /// </summary>
@@ -1844,11 +1844,50 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (searchdriver != null)
             {
-               
+
+                bool found = false;
+
                 bcgov_documenturl bcgovDocumentUrl = null;
+
+                if (request.SubmittalStatus == "Reject")
+                {
+                    //Create a new document with the reject status attached to the driver
+
+                    found = false;
+
+                }
+
+                else
+                {
+                   
+                    // scan through the documents to see if there is document in open pending status
+                    // ensure we have the documents.
+                    await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+
+
+                    if (documentTypeId != null && request.DocumentType != "Unclassified")
+                    {
+                       // Query the documents entity to get the open required envelope for the given driver
+                        var docs = dynamicsContext.bcgov_documenturls.Where(x => x.statecode == 0 
+                        && x._dfp_driverid_value == searchdriver.dfp_driverid
+                        && x._dfp_documenttypeid_value == documentTypeId.dfp_submittaltypeid
+                        && x.dfp_submittalstatus == 100000000).FirstOrDefault();
+
+                        // check the result and set found to true if there is document
+                        if(docs != null)
+                        {
+                            bcgovDocumentUrl = docs;
+                            found = true;
+                        }
+ 
+                    }
+
+                }
+
+               
                
                 // Load Driver lookup from the documents entity
-                await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+               // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
@@ -1887,41 +1926,68 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                 }
 
-                try
-                {
-                    await dynamicsContext.SaveChangesAsync();
-                    dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
-                    var saveResult = await dynamicsContext.SaveChangesAsync();
-                    var tempId = GetCreatedId(saveResult);
-                    if (tempId != null)
-                    {
-                        bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
-                    }
 
-                    if (documentTypeId != null)
+                if (found) // update
+                {
+                    try
                     {
+                        dynamicsContext.UpdateObject(bcgovDocumentUrl);
+
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), searchdriver);
+
+
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                     }
-
-                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
-
-
-                    if (newOwner != null)
+                    catch (Exception ex)
                     {
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                        Serilog.Log.Error(ex, "CreateLegacyCaseDocument");
+                        result.Success = false;
                     }
-
-                    await dynamicsContext.SaveChangesAsync();
-                    result.Success = true;
-                    result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                    dynamicsContext.DetachAll();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Serilog.Log.Error(ex, "Cannot create a Document");
-                    result.Success = false;
+
+
+
+                    try
+                    {
+                        await dynamicsContext.SaveChangesAsync();
+                        dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
+                        var saveResult = await dynamicsContext.SaveChangesAsync();
+                        var tempId = GetCreatedId(saveResult);
+                        if (tempId != null)
+                        {
+                            bcgovDocumentUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
+                        }
+
+                        if (documentTypeId != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        }
+
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
+
+
+                        if (newOwner != null)
+                        {
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                        }
+
+                        await dynamicsContext.SaveChangesAsync();
+                        result.Success = true;
+                        result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
+                        dynamicsContext.DetachAll();
+                    }
+                    catch (Exception ex)
+                    {
+                        Serilog.Log.Error(ex, "Cannot create a Document");
+                        result.Success = false;
+                    }
                 }
-            
 
             }
             return result;
@@ -1990,8 +2056,10 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
 
+
                 try
                 {
+
                     await dynamicsContext.SaveChangesAsync();
                     dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
                     var saveResult = await dynamicsContext.SaveChangesAsync();
