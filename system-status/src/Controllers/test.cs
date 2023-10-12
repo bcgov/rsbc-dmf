@@ -5,7 +5,7 @@ namespace SystemStatus.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-   // [Authorize]
+    [Authorize]
     public class TestController : ControllerBase
     {
         [HttpGet]
@@ -15,15 +15,5 @@ namespace SystemStatus.Controllers
             return Ok("TEST");
         }
 
-        [HttpPost]
-        public IActionResult Post([FromBody] string data) {
-            
-            // log to tmp
-            string fname = "/tmp/" + DateTime.Now.Ticks.ToString() + ".txt";
-            System.IO.File.WriteAllText(fname, data);
-
-            return Ok();
-
-            }
     }
 }
