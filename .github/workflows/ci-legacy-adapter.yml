@@ -9,7 +9,8 @@ on:
 
 env:
   IMAGE_NAME: legacy-adapter
-  solution-folder: legacy-adapter/src/   
+  solution-folder: legacy-adapter/src/
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/legacy-adapter   
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
@@ -17,8 +18,10 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       GIT_BRANCH: "${{github.ref}}"
     steps:
-      
       - uses: actions/checkout@v2
         
       - name: Log into registry
