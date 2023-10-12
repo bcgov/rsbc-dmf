@@ -920,7 +920,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
 
-                        if (result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                        if (result != null && result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                         {
 
                             if (!String.IsNullOrEmpty(_configuration["CLEAN_PASS_DOCUMENT"]))
@@ -940,7 +940,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         }
                         else
                         {
-                            Serilog.Log.Error(result.ErrorDetail);
+                            Serilog.Log.Error(result?.ErrorDetail);
                             return StatusCode(500, result.ErrorDetail);
                         }
                     }
