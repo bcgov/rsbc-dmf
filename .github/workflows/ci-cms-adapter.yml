@@ -17,7 +17,6 @@ env:
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -76,7 +75,12 @@ jobs:
           # Specify whether or not CI build should fail if Codecov runs into an error during upload
           #fail_ci_if_error: false
 
+      - name: Log into registry
+        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
 
+      - name: Pull image
+        run: docker pull $IMAGE_ID || true
+        
       - name: Build image
         working-directory: ./cms-adapter/src
         run: docker build . --file Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
