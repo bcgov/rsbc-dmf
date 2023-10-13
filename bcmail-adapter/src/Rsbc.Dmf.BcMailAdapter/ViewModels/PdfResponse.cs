@@ -1,0 +1,22 @@
+﻿namespace Rsbc.Dmf.BcMailAdapter.ViewModels
+{
+    public class PdfResponse
+    {
+
+
+        /// Name of the file with extension 
+        /// </summary>
+        public string FileName { get; set; }
+
+
+        /// <summary>
+        /// Base 64 encoded string
+        /// </summary>
+        public byte[] Body { get; set; }
+
+        /// <summary>
+        /// ContentType of the file
+        /// </summary>
+        public string ContentType { get; set; }
+    }
+}

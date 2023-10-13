@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Features;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
+using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using Rsbc.Interfaces;
-using Rsbc.Interfaces.CdgsModels;
+
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
     {
         private readonly IConfiguration Configuration;
         private readonly ILogger<DocumentsController> _logger;
-        private readonly ICdgsClient _cdgsClient;
         private readonly IConverter Converter;
 
         /// <summary>
@@ -42,11 +42,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// <param name="logger"></param>
         /// <param name="configuration"></param>
         /// <param name="cdgsClient"></param>
-        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, ICdgsClient cdgsClient, IConverter converter)
+        public DocumentsController(ILogger<DocumentsController> logger, IConfiguration configuration, IConverter converter)
         {
             Configuration = configuration;
             _logger = logger;
-            _cdgsClient = cdgsClient;
             Converter = converter;
             Converter.Error += Converter_Error;
         }
@@ -64,6 +63,21 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             SftpUtils sfg = new SftpUtils(Configuration, null, null);
             sfg.CheckConnection();
             return Ok("Test complete.");
+
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{documentId}/GetPageCount")]
+        public int GetPageCount([FromRoute] Guid documentId)
+        {
+            return 20;
+        }
+
+        [AllowAnonymous]
+        [HttpPost("{documentId}/Split")]
+        public ActionResult SplitDocument([FromBody] SplitDetails splitDetails)
+        {            
+            return Ok();
 
         }
 
@@ -181,23 +195,23 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             switch (attachment.Unit)
                             {
                                 case "inch":
-                                    margins.Unit = Unit.Inches;
+                                    margins.Unit = WkHtmlToPdfDotNet.Unit.Inches;
                                     break;
                                 case "cm":
-                                    margins.Unit = Unit.Centimeters;
+                                    margins.Unit = WkHtmlToPdfDotNet.Unit.Centimeters;
                                     break;
                                 case "mm":
-                                    margins.Unit = Unit.Millimeters;
+                                    margins.Unit = WkHtmlToPdfDotNet.Unit.Millimeters;
                                     break;
                                 default:
-                                    margins.Unit = Unit.Inches;
+                                    margins.Unit = WkHtmlToPdfDotNet.Unit.Inches;
                                     break;
                             }
                             
                         }
                         else
                         {
-                            margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };                            
+                            margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = WkHtmlToPdfDotNet.Unit.Inches };                            
                         }
 
                        

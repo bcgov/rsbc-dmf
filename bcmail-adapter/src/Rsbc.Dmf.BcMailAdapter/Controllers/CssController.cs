@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Features;
+﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +11,7 @@ using PdfSharpCore.Pdf.IO;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Interfaces;
-using Rsbc.Interfaces.CdgsModels;
+
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
