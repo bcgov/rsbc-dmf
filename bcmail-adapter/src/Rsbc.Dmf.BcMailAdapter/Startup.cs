@@ -234,12 +234,6 @@ namespace Rsbc.Dmf.BcMailAdapter
 
             services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 
-            if (Configuration["CDGS_SERVICE_URI"] != null)
-            {
-                ICdgsClient cdgsClient = new CdgsClient(Configuration);
-                services.AddTransient(_ => cdgsClient);
-            }
-
             // Add Document Storage Adapter
 
             string documentStorageAdapterURI = Configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
@@ -351,6 +345,7 @@ namespace Rsbc.Dmf.BcMailAdapter
             }
             //app.UseHttpLogging();
             app.UseProblemDetails();
+            app.UseStaticFiles();
             app.UseForwardedHeaders();
             app.UseHsts();
             

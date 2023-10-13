@@ -7,7 +7,7 @@ using System.Net.Http;
 using Xunit;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using Rsbc.Dmf.CaseManagement.Helpers;
-using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+
 using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
