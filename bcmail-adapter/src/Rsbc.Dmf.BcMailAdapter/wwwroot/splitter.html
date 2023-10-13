@@ -6,5 +6,71 @@
 </head>
 <body>
     <h1>Document Splitter</h1>
+    <div id="PageCheckboxes">
+
+    </div>
+    
+    <br>
+    <button onclick="splitPdf()"> Split Document </button>
+    <button onclick="cancelpdf()"> Cancel</button>
+
+
+
+
 </body>
+
+<script type="text/javascript">
+
+    const baseUrl = "https://localhost:5015/Documents"
+
+    const documentId = "58907ab6-f65b-ee11-b846-00505683fbf4";
+
+    const splitUrl = `${baseUrl}/${documentId}/Split`;
+    const pageCountUrl = `${baseUrl}/${documentId}/GetPageCount`;
+
+    const pageCheckboxesElem = document.getElementById("PageCheckboxes");
+
+    // Get Page count and create checkboxes based on page count
+    function getPageCount() {
+       
+        fetch(pageCountUrl).then(response => response.json()).then(pageCount => {
+            console.log(pageCount);
+            const pageCountInt = parseInt(pageCount);
+            // loop page count times and create checkboxes
+            for (let i = 0; i < pageCountInt; i++) {
+                console.log("Count:", i);
+
+                const divElem = document.createElement('div');
+
+                const labelElem = document.createElement('label');
+                labelElem.innerHTML = `Page ${i + 1}`;
+                const checkboxElem = document.createElement('input');
+
+                checkboxElem.setAttribute('type', 'checkbox');
+                checkboxElem.setAttribute('name', `page${i + 1}`);
+
+                divElem.appendChild(checkboxElem);  
+
+                divElem.appendChild(labelElem);
+                pageCheckboxesElem.appendChild(divElem);
+            } 
+        });
+    }
+
+    // Split pdf button Click
+    function splitPdf() {
+        console.log("Test Split PDF button Click")
+        fetch(splitUrl).then(response => response.json()).then(response => console.log(response));
+    }
+
+    // cancel button click
+    function cancelpdf() {
+
+    }
+
+
+   
+</script>
 </html>
+
+
