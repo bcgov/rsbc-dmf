@@ -24,15 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         
-      - name: Log into registry
-        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
-
-      - name: Pull image
-        run: docker pull $IMAGE_ID || true
-
-      - name: Build image
-        run: docker build . --file ./legacy-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
-
       - uses: rlespinasse/git-commit-data-action@v1.x
       - name: Extract Branch Name
         shell: bash
