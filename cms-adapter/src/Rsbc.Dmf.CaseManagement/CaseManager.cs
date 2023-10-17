@@ -3820,16 +3820,15 @@ namespace Rsbc.Dmf.CaseManagement
 
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                &&(document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject)
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject))
                             {
 
                                 
                                 outputArray.Add(item);
                             }
-                            else
+/*                            else
                             {
                                 //condition : Check for
                                 //1. DMER type
@@ -3837,17 +3836,14 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 if(document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass
+                                &&( document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                                 )
                                 {
                                     outputArray.Add(item);
                                 }
-                            }
+                            }*/
 
-                           
-
-                            // 
                         }
 
 
