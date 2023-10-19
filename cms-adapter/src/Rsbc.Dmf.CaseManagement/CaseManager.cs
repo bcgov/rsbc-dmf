@@ -3434,7 +3434,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                { "Accept", 100000001 }, // Received
+                { "Received", 100000001 }, // Received
                 { "Reject",  100000004 }, // Rejected
                 { "Clean Pass" ,  100000009}, // Clean Pass
                 { "Manual Pass", 100000012 }, // Manual Pass
@@ -3940,11 +3940,14 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task ResolveCaseStatusUpdates()
         {
-            var dpsProcessingDate = GetDpsProcessingDate();
+            // var dpsProcessingDate = GetDpsProcessingDate();
+            var currentDate = DateTimeOffset.UtcNow;
 
             var query = from incident
                         in dynamicsContext.incidents
-                        where incident.dfp_caseresolvedate < dpsProcessingDate && incident.statecode == 0
+                        where incident.dfp_caseresolvedate != null
+                        && incident.dfp_caseresolvedate <= currentDate 
+                        && incident.statecode == 0
                         select incident;
 
             DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);

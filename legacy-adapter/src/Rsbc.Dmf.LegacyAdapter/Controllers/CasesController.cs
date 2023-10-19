@@ -765,7 +765,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             };
 
-                        var documentTypeindex = Array.IndexOf(documentTypes, documentTypeCode);
+                        var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
 
                         if (documentTypeCode != null && documentTypeindex != -1)
                         {

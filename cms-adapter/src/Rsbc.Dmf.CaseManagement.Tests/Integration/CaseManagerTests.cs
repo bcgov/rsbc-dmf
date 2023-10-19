@@ -294,7 +294,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var caseId = dmerCase.Id;
 
             // set the Case Resolve Date to get past date
-            DateTimeOffset caseResolveDate = DateTimeOffset.UtcNow.AddDays(-500);     
+            //DateTimeOffset caseResolveDate = DateTimeOffset.UtcNow.AddDays(-500);     
+            DateTimeOffset caseResolveDate = DateTimeOffset.UtcNow;
 
             // Get the case and Set the dfp_caseresolvedate to date in past
 
