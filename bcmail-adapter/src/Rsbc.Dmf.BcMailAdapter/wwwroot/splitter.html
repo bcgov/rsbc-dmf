@@ -9,7 +9,13 @@
     <div id="PageCheckboxes">
 
     </div>
-    
+    <hr />
+    <div id="SelectedPages">
+        <b>Selected Pages:</b>
+        <ul id="SelectedPagesList">
+            
+        </ul>
+    </div>
     <br>
     <button onclick="splitPdf()"> Split Document </button>
     <button onclick="cancelpdf()"> Cancel</button>
@@ -30,6 +36,9 @@
 
     const pageCheckboxesElem = document.getElementById("PageCheckboxes");
 
+    const PageSelectorCheckboxClassName = 'page-selector-checkbox';
+    const DataPageAttribute = 'data-page';
+
     // Get Page count and create checkboxes based on page count
     function getPageCount() {
        
@@ -38,8 +47,7 @@
             const pageCountInt = parseInt(pageCount);
             // loop page count times and create checkboxes
             for (let i = 0; i < pageCountInt; i++) {
-                console.log("Count:", i);
-
+                // console.log("Count:", i);
                 const divElem = document.createElement('div');
 
                 const labelElem = document.createElement('label');
@@ -48,6 +56,9 @@
 
                 checkboxElem.setAttribute('type', 'checkbox');
                 checkboxElem.setAttribute('name', `page${i + 1}`);
+                checkboxElem.setAttribute(DataPageAttribute, i + 1);
+                // add class name
+                checkboxElem.classList.add(PageSelectorCheckboxClassName);
 
                 divElem.appendChild(checkboxElem);  
 
@@ -61,8 +72,24 @@
 
     // Split pdf button Click
     function splitPdf() {
-        console.log("Test Split PDF button Click")
-        fetch(splitUrl).then(response => response.json()).then(response => console.log(response));
+        console.log("Test Split PDF button Click");
+        const checkboxes = document.getElementsByClassName(PageSelectorCheckboxClassName);
+        // console.log(checkboxes);
+
+        const checked = Array.from(checkboxes).filter((elm) => elm.checked);
+
+        const selectedPages = checked.map((c) => c.getAttribute('data-page'));
+        console.log("Selected Pages:", selectedPages);
+        const ul = document.getElementById('SelectedPagesList');
+        ul.innerHTML = '';
+        selectedPages.forEach((num) => {
+            const li = document.createElement('li');
+            li.innerHTML = num;
+
+            ul.appendChild(li);    
+        })
+
+        //fetch(splitUrl).then(response => response.json()).then(response => console.log(response));
     }
 
     // cancel button click
