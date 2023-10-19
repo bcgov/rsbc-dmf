@@ -188,19 +188,19 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             return Json(result);
         }
 
-        private void IcbcCreate(string licenseNumber, bool legacyOnly)
+        private void IcbcCreate(string licenseNumber, bool legacyOnly, CaseManagement.Service.Driver driver)
         {
             try
             {
-                CLNT driver = null;
+                CLNT icbcDriver = null;
 
-                if (!_cache.TryGetValue(licenseNumber, out driver))
+                if (!_cache.TryGetValue(licenseNumber, out icbcDriver))
                 {
                     // get the history from ICBC
-                    driver = _icbcClient.GetDriverHistory(licenseNumber);
+                    icbcDriver = _icbcClient.GetDriverHistory(licenseNumber);
                     // Key not in cache, so get data.
                     //cacheEntry = DateTime.Now;
-                    if (driver != null)
+                    if (icbcDriver != null)
                     {
                         // Set cache options.
                         var cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -208,30 +208,35 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             .SetSlidingExpiration(TimeSpan.FromHours(6));
 
                         // Save data in cache.
-                        _cache.Set(licenseNumber, driver, cacheEntryOptions);
+                        _cache.Set(licenseNumber, icbcDriver, cacheEntryOptions);
                     }
 
                 }
-                if (driver != null && driver.INAM?.SURN != null)
+                if (icbcDriver != null && icbcDriver.INAM?.SURN != null)
                 {                     
-
+                    if (driver != null) // update driver if it exists
+                    {
+                        driver.Surname = icbcDriver.INAM?.SURN ?? string.Empty;
+                        driver.GivenName = icbcDriver.INAM?.GIV1 ?? string.Empty;
+                        driver.BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now);
+                    }
                     if (legacyOnly)
                     {
                         LegacyCandidateRequest legacyCandidateRequest = new LegacyCandidateRequest
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = driver.INAM?.SURN ?? string.Empty,                            
-                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now)
+                            Surname = icbcDriver.INAM?.SURN ?? string.Empty,                            
+                            BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now)
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                     }
                     else
                     {
                         CreateDriverRequest createDriverRequest = new CreateDriverRequest() { DriverLicenseNumber = licenseNumber,  
-                            Surname = driver.INAM?.SURN ?? string.Empty, 
-                            GivenName = driver.INAM?.GIV1 ?? string.Empty,
-                            BirthDate = Timestamp.FromDateTimeOffset(driver.BIDT ?? DateTime.Now) };
+                            Surname = icbcDriver.INAM?.SURN ?? string.Empty, 
+                            GivenName = icbcDriver.INAM?.GIV1 ?? string.Empty,
+                            BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now) };
 
                         // attempt to get the driver from ICBC.
 
@@ -264,13 +269,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             string caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
 
-
-
             if (caseId == null) // create it
             {
                 if (String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"])) // create it
                 {
-                    IcbcCreate(licenseNumber, true);
+                    IcbcCreate(licenseNumber, true, null);
                     caseId = _cmsAdapterClient.GetCaseId(licenseNumber);
                 }
                 else
@@ -278,7 +281,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     caseId = Guid.Empty.ToString();
                 }
             }
-
 
             return Json(caseId);
         }
@@ -632,7 +634,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     // create the driver.
 
-                    IcbcCreate(licenseNumber, false);
+                    IcbcCreate(licenseNumber, false, driver);
 
                     driverReply = _cmsAdapterClient.GetDriver(driverRequest);
                     if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
@@ -778,7 +780,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             {
                                 //  If document is remedial Type 
 
-                                var remedialdDocument = new LegacyDocument()
+                                var remedialDocument = new LegacyDocument()
                                 {
                                     BatchId = batchId ?? string.Empty,
                                     DocumentPages = documentPages ?? 1,
@@ -800,7 +802,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                     Queue = assign ?? string.Empty,
                                 };
 
-                                var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialdDocument);
+                                var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
                             }
 
                         }
