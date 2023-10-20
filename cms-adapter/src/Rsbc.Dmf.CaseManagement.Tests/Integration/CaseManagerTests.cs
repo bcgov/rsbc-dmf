@@ -396,18 +396,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanDeleteLegacyDocument()
         {
             var driverLicenseNumber = configuration["ICBC_TEST_DL"];
-            // get the case
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
-
-            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
-            var caseId = dmerCase.Id;
+            
 
             string documentUrl = $"TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
 
             // add a document
 
-            LegacyDocument legacyDocumentRequest = new LegacyDocument { BatchId = "1", 
-                CaseId = caseId,
+            LegacyDocument legacyDocumentRequest = new LegacyDocument { BatchId = "1",                 
                 DocumentType = "Legacy Review",
                 DocumentTypeCode = "LegacyReview",
                 Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
@@ -420,11 +415,11 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 DocumentUrl = documentUrl                
             };
 
-            await caseManager.CreateLegacyCaseDocument(legacyDocumentRequest);
+            await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
 
             // confirm it is present
 
-            var docs = await caseManager.GetCaseLegacyDocuments(caseId);
+            var docs = await caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             bool found = false;
 
@@ -444,17 +439,17 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // delete it
 
-            await caseManager.DeleteLegacyCaseDocument(documentId);
+            await caseManager.DeactivateLegacyDocument(documentId);
 
             // confirm that it is deleted
 
             found = false;
 
-            docs = await caseManager.GetCaseLegacyDocuments(caseId);
+            docs = await caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             foreach (var doc in docs)
             {
-                if (doc.DocumentUrl == documentUrl)
+                if (doc.DocumentId == documentId)
                 {
                     found = true;                    
                     break;
