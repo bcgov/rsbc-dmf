@@ -294,7 +294,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
                 // delete it
 
-                await caseManager.DeleteLegacyCaseDocument(documentId);
+                await caseManager.DeleteLegacyDocument(documentId);
 
                 // confirm that it is deleted
 
