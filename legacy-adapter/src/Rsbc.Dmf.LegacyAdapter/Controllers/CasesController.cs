@@ -479,16 +479,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now
                     };
 
-                    result.Add(new ViewModels.Document
+                    var resultDocument = new ViewModels.Document
                     {
-                        CaseId = item.CaseId,
-                        FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset(),
-                        ImportDate = item.ImportDate.ToDateTimeOffset(),
+                        CaseId = item.CaseId,                        
                         DocumentId = item.DocumentId,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
-                    });
+                        
+                    };
+
+                    if (item.FaxReceivedDate != null)
+                    {
+                        resultDocument.FaxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                    }
+
+                    if (item.ImportDate != null)
+                    {
+                        resultDocument.ImportDate = item.ImportDate.ToDateTimeOffset();
+                    }
+
+                    result.Add(resultDocument);
                 }
                 return Json(result);
             }
@@ -803,6 +814,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 };
 
                                 var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
+                                return CreatedAtAction(actionName, routeValues, remedialDocument);
                             }
 
                         }

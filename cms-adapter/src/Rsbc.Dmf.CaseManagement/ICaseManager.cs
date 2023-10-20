@@ -16,6 +16,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<bool> DeleteComment(string commentId);
 
+        Task<bool> DeactivateLegacyDocument(string documentId);
+
         Task<bool> DeleteLegacyDocument(string documentId);
 
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);

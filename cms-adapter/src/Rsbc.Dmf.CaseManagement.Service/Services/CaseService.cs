@@ -544,7 +544,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var d = await _caseManager.GetLegacyDocument(request.DocumentId);
                 if (d != null)
                 {
-                    if (await _caseManager.DeleteLegacyDocument(request.DocumentId))
+                    if (await _caseManager.DeactivateLegacyDocument(request.DocumentId))
                     {
                         reply.ResultStatus = ResultStatus.Success;
                     }

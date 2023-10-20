@@ -2452,17 +2452,36 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
-        public async Task<bool> DeleteLegacyDocument(string documentId)
+        public async Task<bool> DeactivateLegacyDocument(string documentId)
         {
             bool result = false;
 
-            var document = dynamicsContext.bcgov_documenturls.ByKey(Guid.Parse(documentId)).GetValue();
+            var document = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
                 dynamicsContext.DeactivateObject(document, 2);
                 // set to inactive.                
-                await dynamicsContext.SaveChangesAsync();
-                dynamicsContext.DetachAll();
+                await dynamicsContext.SaveChangesAsync();                
+                result = true;
+            }
+            else
+            {
+                Log.Error($"Could not find document {documentId}");
+            }
+            return result;
+
+        }
+
+        public async Task<bool> DeleteLegacyDocument(string documentId)
+        {
+            bool result = false;
+
+            var document = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            if (document != null)
+            {
+                dynamicsContext.DeleteObject(document);
+                // set to inactive.                
+                await dynamicsContext.SaveChangesAsync();                
                 result = true;
             }
             else
