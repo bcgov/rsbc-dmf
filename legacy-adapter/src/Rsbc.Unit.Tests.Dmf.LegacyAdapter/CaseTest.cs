@@ -733,7 +733,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         [Fact]
         public async Task AddRemedialRDPCaseDocument()
         {
-            string documentType = "RDP Registration";
+            string documentType = "RDPRegistration";
             string documentTypeCode = "110";
 
             TestRemedialDocumentCode(documentType, documentTypeCode);
@@ -826,7 +826,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
                 var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-                response.EnsureSuccessStatusCode();
+                Assert.Equal(response.StatusCode, System.Net.HttpStatusCode.Created);
             }
         }
 
