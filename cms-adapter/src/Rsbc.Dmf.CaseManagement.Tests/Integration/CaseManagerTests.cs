@@ -437,6 +437,11 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             Assert.True(found);
 
+            var getDocument = await caseManager.GetLegacyDocument(documentId);
+
+            Assert.NotNull(getDocument.Driver.Id);
+
+
             // delete it
 
             await caseManager.DeactivateLegacyDocument(documentId);

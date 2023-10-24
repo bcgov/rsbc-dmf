@@ -1220,7 +1220,7 @@ namespace Rsbc.Dmf.CaseManagement
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
                     SequenceNumber = null,
-                    Driver = null
+                    Driver = new Driver { Id = document._dfp_driverid_value.ToString() }
                 };
             }
 
