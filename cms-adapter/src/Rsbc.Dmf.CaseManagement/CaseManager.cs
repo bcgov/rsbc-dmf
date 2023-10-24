@@ -1205,6 +1205,7 @@ namespace Rsbc.Dmf.CaseManagement
             var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
+                dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
                 legacyDocument = new LegacyDocument
                 {
                     BatchId = document.dfp_batchid ?? string.Empty,
@@ -1219,9 +1220,16 @@ namespace Rsbc.Dmf.CaseManagement
                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                    SequenceNumber = null,
-                    Driver = new Driver { Id = document._dfp_driverid_value.ToString() }
+                    SequenceNumber = null                    
                 };
+                if (document.dfp_DriverId != null)
+                {
+                    legacyDocument.Driver = new Driver
+                    {
+                        Id = document.dfp_DriverId.dfp_driverid.ToString(),
+                        DriverLicenseNumber = document.dfp_DriverId.dfp_licensenumber
+                    };
+                }
             }
 
             return legacyDocument;
