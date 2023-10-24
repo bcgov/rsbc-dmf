@@ -2030,6 +2030,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
                     DocumentUrl = d.DocumentUrl ?? string.Empty,
+                    Driver = new Driver { Id = d.Driver.Id },
                     ImportId = d.ImportId ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
                     ValidationMethod = d.ValidationMethod ?? string.Empty,
