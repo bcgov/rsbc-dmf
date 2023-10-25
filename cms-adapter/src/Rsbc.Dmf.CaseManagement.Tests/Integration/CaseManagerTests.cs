@@ -441,6 +441,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             Assert.NotNull(getDocument.Driver.Id);
 
+            Assert.NotNull(getDocument.Driver.DriverLicenseNumber);
 
             // delete it
 
