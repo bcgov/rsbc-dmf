@@ -127,8 +127,48 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
 
                 var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
-            }
-            }
+                if (item != null)
+                {
+
+                    string responseContent = _icbcClient.SendMedicalUpdate(item);
+
+                    if (responseContent.Contains("SUCCESS"))
+                    {
+                        // mark it as sent
+                        MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
+                    }
+
+                    else
+                    {
+                        var bringForwardRequest = new BringForwardRequest
+                        {
+                            CaseId = unsentItemAdjudication.CaseId,
+                            Subject = "ICBC Error",
+                            Description = responseContent,
+                            Assignee = string.Empty,
+                            Priority = BringForwardPriority.Normal
+
+                        };
+
+                        _caseManagerClient.CreateBringForward(bringForwardRequest);
+
+                        // Mark ICBC error 
+
+                        var icbcError = new IcbcErrorRequest
+                        {
+                            ErrorMessage = "ICBC Error"
+                        };
+
+                        _caseManagerClient.MarkMedicalUpdateError(icbcError);
+
+                        Log.Logger.Error($"ICBC Error {responseContent}");
+                    }
+                }
+
+                }
+
+
+           }
 
             private void MarkMedicalUpdateSent ( string caseId)
         {            
