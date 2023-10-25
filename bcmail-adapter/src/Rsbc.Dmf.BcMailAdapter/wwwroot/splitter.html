@@ -29,8 +29,21 @@
 
     const baseUrl = "https://localhost:5015/Documents"
 
-    const documentId = "58907ab6-f65b-ee11-b846-00505683fbf4";
+    //var extractParamsFromQueryString = (location) => {
+    //    var query = location.search.substring(1)
+    //    var paramsAsArray = query.split('&').map((item) => { var parts = item.split('='); return { key: parts[0], value: parts[1] } })
+    //    var params = paramsAsArray.reduce((acc, param) => { acc[param.key] = param.value; return acc; }, {})
 
+    //    return params
+    //}
+
+    //var params = extractParamsFromQueryString(window.top.location);
+    //var appid = params.appid;
+    //var documentId = params.data; // id
+    //var entityName = params.etn;
+
+    const documentId = "0573e30d-ef6d-ee11-b846-00505683fbf4";
+    
     const splitUrl = `${baseUrl}/${documentId}/Split`;
     const pageCountUrl = `${baseUrl}/${documentId}/GetPageCount`;
 
@@ -89,7 +102,7 @@
             ul.appendChild(li);    
         })
 
-        //fetch(splitUrl).then(response => response.json()).then(response => console.log(response));
+        fetch(splitUrl, { method: "POST", body: JSON.stringify({ pagesToRemove: selectedPages }), headers: new Headers({ 'content-type': 'application/json' }) }).then(response => response.json()).then(response => console.log(response));
     }
 
     // cancel button click
