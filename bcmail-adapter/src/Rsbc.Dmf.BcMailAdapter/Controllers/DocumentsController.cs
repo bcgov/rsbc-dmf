@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Cms;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Pssg.DocumentStorageAdapter;
@@ -129,7 +130,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 // get the URL
                 string serverRelativeUrl = documentResponse.Document.DocumentUrl;
 
+                string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
+
+               
+
                 string filename = serverRelativeUrl.Substring(serverRelativeUrl.LastIndexOf('/') + 1);
+
+                string originalId = serverRelativeUrl.Substring(originalEntity.Length + 1 , serverRelativeUrl.Length - originalEntity.Length - filename.Length -2);
 
                 string newExtension = Path.GetExtension(filename);
 
@@ -238,12 +245,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             {
                                 ContentType = "application/pdf",
                                 Data = ByteString.CopyFrom(keepStream.ToArray()),
-                                EntityName = "dfp_driver",
+                                EntityName = originalEntity,
                                 FileName = filename,
-                                FolderName = documentResponse.Document.Driver.Id
+                                FolderName = originalId
                             };
 
-                            _documentStorageAdapterClient.UploadFile(keepFileRequest);
+                            var keepSaveResult = _documentStorageAdapterClient.UploadFile(keepFileRequest);
 
                         }
                     }
