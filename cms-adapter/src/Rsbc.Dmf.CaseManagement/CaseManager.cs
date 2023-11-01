@@ -3851,29 +3851,29 @@ namespace Rsbc.Dmf.CaseManagement
 
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                &&(document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject))
                             {
 
-                                
+
                                 outputArray.Add(item);
                             }
-/*                            else
+                            else
                             {
                                 //condition : Check for
                                 //1. DMER type
                                 //2. Submital status is manual pass or clean pass and is in review state
 
-                                if(document.dfp_DocumentTypeID != null
+                                if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                &&( document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                                 )
                                 {
                                     outputArray.Add(item);
                                 }
-                            }*/
+                            }
 
                         }
 
