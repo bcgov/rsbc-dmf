@@ -22,6 +22,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
@@ -169,6 +170,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                     var src = new MemoryStream(fileResult.Data.ToByteArray());
 
+                    int newPageCount = 0;
+
                     using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                     {
                         for (int i = 0; i < srcPDF.PageCount; i++)
@@ -181,6 +184,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             if (splitDetails.PagesToRemove.Contains(pageNumber))
                             {
                                 newPdf.Pages.Add(pageData);
+                                newPageCount++;
                             }
                             else
                             {
@@ -188,64 +192,105 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             }
                         }
 
-                        // save the new document.
+                        // save the new document.  only touch the documents if a change has been made.
 
-                        using (var newStream = new MemoryStream())
+                        if (newPageCount > 0)
                         {
-                            newPdf.Save(newStream, false);
-
-                            // add the page data
-                            var newFileRequest = new UploadFileRequest
+                            using (var newStream = new MemoryStream())
                             {
-                                ContentType = "application/pdf",
-                                Data = ByteString.CopyFrom(newStream.ToArray()),
-                                EntityName = "dfp_driver",
-                                FileName = newFilename,
-                                FolderName = documentResponse.Document.Driver.Id
-                            };
+                                newPdf.Save(newStream, false);
 
-                            var newFileResult = _documentStorageAdapterClient.UploadFile(newFileRequest);
-
-                            // now create a document for this.
-
-                            if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
-                            {
-                                _caseManagerClient.CreateDocumentOnDriver(new LegacyDocument
+                                // add the page data
+                                var newFileRequest = new UploadFileRequest
                                 {
-                                    BatchId = documentResponse.Document.BatchId,
-                                    DocumentUrl = newFileResult.FileName,
-                                    Driver = documentResponse.Document.Driver,
-                                    DocumentType = "Unclassified",
-                                    FaxReceivedDate = documentResponse.Document.FaxReceivedDate,
-                                    ImportDate = documentResponse.Document.ImportDate,
-                                    ValidationMethod = documentResponse.Document.ValidationMethod,
-                                    ValidationPrevious = documentResponse.Document.ValidationPrevious,
-                                    BusinessArea = documentResponse.Document.BusinessArea,
+                                    ContentType = "application/pdf",
+                                    Data = ByteString.CopyFrom(newStream.ToArray()),
+                                    EntityName = "dfp_driver",
+                                    FileName = newFilename,
+                                    FolderName = documentResponse.Document.Driver.Id
+                                };
 
-                                });
+                                var newFileResult = _documentStorageAdapterClient.UploadFile(newFileRequest);
+
+                                // now create a document for this.
+
+                                if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                                {
+                                    var newLegacyDocument = new LegacyDocument
+                                    {
+                                        BatchId = documentResponse.Document.BatchId,
+                                        DocumentUrl = newFileResult.FileName,
+                                        Driver = documentResponse.Document.Driver,
+                                        DocumentType = "Unclassified",
+                                        FaxReceivedDate = documentResponse.Document.FaxReceivedDate,
+                                        ImportDate = documentResponse.Document.ImportDate,
+                                        ValidationMethod = documentResponse.Document.ValidationMethod,
+                                        ValidationPrevious = documentResponse.Document.ValidationPrevious,
+                                        BusinessArea = documentResponse.Document.BusinessArea,
+
+                                    };
+
+                                    DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
+                                    DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
+                                    TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+
+                                    if (importDate.DateTime != DateTimeOffset.MinValue)
+                                    {
+                                        if (importDate.Offset == TimeSpan.Zero)
+                                        {
+                                            importDate = TimeZoneInfo.ConvertTimeToUtc(importDate.DateTime, pacificZone);
+                                        }
+                                        newLegacyDocument.ImportDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(importDate);
+                                    }
+                                    else
+                                    {
+                                        newLegacyDocument.ImportDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
+                                    }
+
+
+                                    if (faxReceivedDate.DateTime != DateTimeOffset.MinValue)
+                                    {
+                                        if (faxReceivedDate.Offset == TimeSpan.Zero)
+                                        {
+                                            faxReceivedDate = TimeZoneInfo.ConvertTimeToUtc(faxReceivedDate.DateTime, pacificZone);
+                                        }
+                                        newLegacyDocument.FaxReceivedDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(faxReceivedDate);
+                                    }
+                                    else
+                                    {
+                                        newLegacyDocument.FaxReceivedDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
+                                    }
+
+                                    _caseManagerClient.CreateDocumentOnDriver(newLegacyDocument);
+                                }
+
                             }
 
-                        }
+                            // save the keep document.
 
-                        // save the keep document.
-
-                        using (var keepStream = new MemoryStream())
-                        {
-                            keepPdf.Save(keepStream, false);
-
-                            // update the page data
-                            var keepFileRequest = new UploadFileRequest
+                            using (var keepStream = new MemoryStream())
                             {
-                                ContentType = "application/pdf",
-                                Data = ByteString.CopyFrom(keepStream.ToArray()),
-                                EntityName = "dfp_driver",
-                                FileName = filename,
-                                FolderName = documentResponse.Document.Driver.Id
-                            };
+                                keepPdf.Save(keepStream, false);
 
-                            _documentStorageAdapterClient.UploadFile(keepFileRequest);
+                                // update the page data
+                                var keepFileRequest = new UploadFileRequest
+                                {
+                                    ContentType = "application/pdf",
+                                    Data = ByteString.CopyFrom(keepStream.ToArray()),
+                                    EntityName = "dfp_driver",
+                                    FileName = filename,
+                                    FolderName = documentResponse.Document.Driver.Id
+                                };
 
+                                _documentStorageAdapterClient.UploadFile(keepFileRequest);
+
+                            }
                         }
+
+                        
+
+                        
                     }
                 }
             }

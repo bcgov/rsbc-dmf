@@ -413,7 +413,7 @@ namespace Rsbc.Dmf.CaseManagement
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
-                            int sequenceNumber = 0;
+                            int sequenceNumber = 1;
                             int.TryParse(comment.dfp_caseidguid, out sequenceNumber);
 
                             LegacyComment legacyComment = new LegacyComment
@@ -1913,8 +1913,19 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
                 bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
                 bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
-                bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
-                bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+
+                if (request.ImportDate != null && request.ImportDate.Value.Year > 1 )
+                {
+                    bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
+                    bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
+                }
+                else
+                {
+                    bcgovDocumentUrl.dfp_uploadeddate = DateTimeOffset.Now; 
+                    bcgovDocumentUrl.dfp_dpsprocessingdate = DateTimeOffset.Now;
+                }
+
+
                 bcgovDocumentUrl.dfp_importid = request.ImportId;
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
@@ -1940,11 +1951,8 @@ namespace Rsbc.Dmf.CaseManagement
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
-
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), searchdriver);
-
-
 
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
@@ -1958,9 +1966,6 @@ namespace Rsbc.Dmf.CaseManagement
                 }
                 else
                 {
-
-
-
                     try
                     {
                         await dynamicsContext.SaveChangesAsync();
@@ -1978,7 +1983,6 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
-
 
                         if (newOwner != null)
                         {
