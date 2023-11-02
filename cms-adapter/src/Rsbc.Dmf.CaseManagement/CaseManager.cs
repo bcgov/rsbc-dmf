@@ -3899,13 +3899,13 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset GetDpsProcessingDate()
         {
             var mostRecentRecord = dynamicsContext.bcgov_documenturls
-                .OrderByDescending(i => i.dfp_dpsprocessingdate)
+                .OrderByDescending(i => i.dfp_processdate)
                 .Take(1)
                 .FirstOrDefault();
 
-            if (mostRecentRecord != null && mostRecentRecord.dfp_dpsprocessingdate != null)
+            if (mostRecentRecord != null && mostRecentRecord.dfp_processdate != null)
             {
-                return mostRecentRecord.dfp_dpsprocessingdate.Value;
+                return mostRecentRecord.dfp_processdate.Value;
             } 
             else
             {
@@ -3976,9 +3976,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             var query = from incident
                         in dynamicsContext.incidents
-                        where incident.dfp_caseresolvedate != null
+                        where( incident.dfp_caseresolvedate != null
                         && incident.dfp_caseresolvedate <= currentDate 
-                        && incident.statecode == 0
+                        && incident.statecode == 0)
+                        || incident.dfp_immediateclosure == true
                         select incident;
 
             DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
@@ -4205,7 +4206,7 @@ namespace Rsbc.Dmf.CaseManagement
                                          document.dfp_DocumentTypeID.dfp_name != null &&
                                          document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
-                                                                               bool detach = dynamicsContext.Detach(currentCase);
+                                        bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,

@@ -2074,6 +2074,7 @@
         <Property Name="dfp_dayspastduedate" Type="Edm.Int32" />
         <Property Name="bcgov_receiveddate" Type="Edm.DateTimeOffset" />
         <Property Name="_owningbusinessunit_value" Type="Edm.Guid" />
+        <Property Name="_bcgov_caseid_value" Type="Edm.Guid" />
         <Property Name="_bcgov_tag1id_value" Type="Edm.Guid" />
         <Property Name="dfp_attachmentnumber" Type="Edm.Int32" />
         <Property Name="dfp_solicited" Type="Edm.Boolean" />
@@ -2116,6 +2117,7 @@
         <Property Name="dfp_issuedate" Type="Edm.DateTimeOffset" />
         <Property Name="_bcgov_tag2id_value" Type="Edm.Guid" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
+        <Property Name="_dfp_parentdocumentid_value" Type="Edm.Guid" />
         <Property Name="_dfp_driverid_value" Type="Edm.Guid" />
         <Property Name="_bcgov_faxid_value" Type="Edm.Guid" />
         <Property Name="dfp_extensionrequestedon" Type="Edm.DateTimeOffset" />
@@ -2158,7 +2160,6 @@
         <Property Name="_dfp_documentsubtype_value" Type="Edm.Guid" />
         <Property Name="dfp_processdate" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_solicitedreason" Type="Edm.String" Unicode="false" />
-        <Property Name="_bcgov_caseid_value" Type="Edm.Guid" />
         <Property Name="_dfp_lettercreatedby_value" Type="Edm.Guid" />
         <NavigationProperty Name="createdby" Type="mscrm.systemuser" Nullable="false" Partner="lk_bcgov_documenturl_createdby">
           <ReferentialConstraint Property="_createdby_value" ReferencedProperty="systemuserid" />
@@ -2261,6 +2262,10 @@
         <NavigationProperty Name="dfp_Processor" Type="mscrm.systemuser" Nullable="false" Partner="dfp_systemuser_bcgov_documenturl_Processor">
           <ReferentialConstraint Property="_dfp_processor_value" ReferencedProperty="systemuserid" />
         </NavigationProperty>
+        <NavigationProperty Name="dfp_ParentDocumentId" Type="mscrm.bcgov_documenturl" Nullable="false" Partner="dfp_documenturl_bcgov_documenturl">
+          <ReferentialConstraint Property="_dfp_parentdocumentid_value" ReferencedProperty="bcgov_documenturlid" />
+        </NavigationProperty>
+        <NavigationProperty Name="dfp_documenturl_bcgov_documenturl" Type="Collection(mscrm.bcgov_documenturl)" Partner="dfp_ParentDocumentId" />
       </EntityType>
       <EntityType Name="bcgov_field" BaseType="mscrm.crmbaseentity">
         <Key>
@@ -7924,6 +7929,7 @@
         <Property Name="overriddencreatedon" Type="Edm.DateTimeOffset" />
         <Property Name="dfp_dpspriority" Type="Edm.Int32" />
         <Property Name="_owninguser_value" Type="Edm.Guid" />
+        <Property Name="dfp_dpsprioritytext" Type="Edm.String" Unicode="false" />
         <Property Name="utcconversiontimezonecode" Type="Edm.Int32" />
         <Property Name="dfp_submittaltypeid" Type="Edm.Guid" />
         <Property Name="dfp_code" Type="Edm.String" Unicode="false" />
@@ -10875,6 +10881,7 @@
         <Property Name="modifiedon" Type="Edm.DateTimeOffset" />
         <Property Name="title" Type="Edm.String" Unicode="false" />
         <Property Name="incidentstagecode" Type="Edm.Int32" />
+        <Property Name="dfp_immediateclosure" Type="Edm.Boolean" />
         <Property Name="importsequencenumber" Type="Edm.Int32" />
         <Property Name="_dfp_documenttypeid_value" Type="Edm.Guid" />
         <Property Name="merged" Type="Edm.Boolean" />
@@ -30519,6 +30526,8 @@
           <NavigationPropertyBinding Path="dfp_DocumentSubType" Target="dfp_documentsubtypes" />
           <NavigationPropertyBinding Path="dfp_UserUploaded" Target="systemusers" />
           <NavigationPropertyBinding Path="dfp_Processor" Target="systemusers" />
+          <NavigationPropertyBinding Path="dfp_ParentDocumentId" Target="bcgov_documenturls" />
+          <NavigationPropertyBinding Path="dfp_documenturl_bcgov_documenturl" Target="bcgov_documenturls" />
         </EntitySet>
         <EntitySet Name="bcgov_fields" EntityType="Microsoft.Dynamics.CRM.bcgov_field">
           <NavigationPropertyBinding Path="createdby" Target="systemusers" />
