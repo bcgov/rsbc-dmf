@@ -3470,7 +3470,8 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Clean Pass" ,  100000009}, // Clean Pass
                 { "Manual Pass", 100000012 }, // Manual Pass
                 { "Open-Required", 100000000 }, // Open required
-                { "Uploaded", 100000010  } // Uploaded
+                { "Uploaded", 100000010  }, // Uploaded
+                { "Sent", 100000008}
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
@@ -4487,17 +4488,17 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(x => x.dfp_licensenumber == driverRequest.DriverLicenseNumber);
 
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
-            dfp_driver[] driverResults = data.ToArray();
+  
 
             try
             {
 
-                if (driverResults.Length > 0)
+                foreach (var driver in data)
                 {
-                    dfp_driver driver;
+                    dynamicsContext.LoadProperty(driver, nameof(dfp_driver.dfp_PersonId));
+                    
                     contact driverContact;
-
-                    driver = driverResults[0];
+                    
                     if (driver.dfp_PersonId != null)
                     {
                         driverContact = driver.dfp_PersonId;
@@ -4507,10 +4508,10 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Success = true;
                     }
 
-
+                    dynamicsContext.Detach(driver);
                 }
 
-                dynamicsContext.DetachAll();
+                
             }
             catch (Exception e)
             {

@@ -94,7 +94,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
             CLNT driver = null;
-            if (licenseNumber!= null && licenseNumber != "00000000" && !_cache.TryGetValue(licenseNumber, out driver))
+            if (licenseNumber != null && licenseNumber != "00000000" && !_cache.TryGetValue(licenseNumber, out driver))
             {
                 // get the history from ICBC
                 driver = _icbcClient.GetDriverHistory(licenseNumber);
@@ -181,7 +181,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
             }
             else  // fallback, just check Dynamics.
-            {                
+            {
                 result = _cmsAdapterClient.GetCaseId(licenseNumber, surcode);
             }
 
@@ -213,7 +213,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 }
                 if (icbcDriver != null && icbcDriver.INAM?.SURN != null)
-                {                     
+                {
                     if (driver != null) // update driver if it exists
                     {
                         driver.Surname = icbcDriver.INAM?.SURN ?? string.Empty;
@@ -226,24 +226,27 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         {
                             LicenseNumber = licenseNumber,
                             EffectiveDate = Timestamp.FromDateTimeOffset(DateTimeOffset.Now),
-                            Surname = icbcDriver.INAM?.SURN ?? string.Empty,                            
+                            Surname = icbcDriver.INAM?.SURN ?? string.Empty,
                             BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now)
                         };
                         _cmsAdapterClient.ProcessLegacyCandidate(legacyCandidateRequest);
                     }
                     else
                     {
-                        CreateDriverRequest createDriverRequest = new CreateDriverRequest() { DriverLicenseNumber = licenseNumber,  
-                            Surname = icbcDriver.INAM?.SURN ?? string.Empty, 
+                        CreateDriverRequest createDriverRequest = new CreateDriverRequest()
+                        {
+                            DriverLicenseNumber = licenseNumber,
+                            Surname = icbcDriver.INAM?.SURN ?? string.Empty,
                             GivenName = icbcDriver.INAM?.GIV1 ?? string.Empty,
-                            BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now) };
+                            BirthDate = Timestamp.FromDateTimeOffset(icbcDriver.BIDT ?? DateTime.Now)
+                        };
 
                         // attempt to get the driver from ICBC.
 
-                        _cmsAdapterClient.CreateDriver(createDriverRequest);                        
-                        
+                        _cmsAdapterClient.CreateDriver(createDriverRequest);
+
                     }
-                    
+
                 }
                 else
                 {
@@ -336,7 +339,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions)
         {
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
-            var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, DriverId = driverId,  OriginRestrictions = originRestrictions });
+            var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, DriverId = driverId, OriginRestrictions = originRestrictions });
 
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -481,12 +484,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     var resultDocument = new ViewModels.Document
                     {
-                        CaseId = item.CaseId,                        
+                        CaseId = item.CaseId,
                         DocumentId = item.DocumentId,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.UserId
-                        
+
                     };
 
                     if (item.FaxReceivedDate != null)
@@ -558,7 +561,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string assign = null,
             [FromForm] string submittalStatus = null,
             [FromForm] string surcode = null,         // Driver -> Lastname
-            [FromForm] string envelopeId = null           
+            [FromForm] string envelopeId = null
             )
         {
 
@@ -602,9 +605,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     Log.Information(JsonConvert.SerializeObject(debugObject));
                 }
-                
 
-                if(priority == null)
+
+                if (priority == null)
                 {
                     priority = "Regular";
                 }
@@ -652,7 +655,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     {
                         driverId = driverReply.Items.FirstOrDefault()?.Id;
                     }
-                    
+
                 }
 
                 if (faxReceivedDate == null)
@@ -665,79 +668,82 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     importDate = DateTimeOffset.Now;
                 }
 
-                // New workflow for the DPS mitigation 
-                if (!String.IsNullOrEmpty(_configuration["BYPASS_CASE_CREATION"]))
+                if (driverId != null)
                 {
-
-
-                    if (driverId != null)
+                    // Check if the document is classified or not classified
+                    // add the document
+                    var ms = new MemoryStream();
+                    if (file != null)
                     {
-                        // Check if the document is classified or not classified
-                        // add the document
-                        var ms = new MemoryStream();
-                        if (file != null)
-                        {
-                            file.OpenReadStream().CopyTo(ms);
-                        }
-                        else
-                        {
-                            DebugUtils.SaveDebug("AddCaseDocument", "File is empty");
-                        }
+                        file.OpenReadStream().CopyTo(ms);
+                    }
+                    else
+                    {
+                        DebugUtils.SaveDebug("AddCaseDocument", "File is empty");
+                    }
 
-                        var data = ms.ToArray();
-                        string fileName = file?.FileName ?? "UnknownFile.pdf";
+                    var data = ms.ToArray();
+                    string fileName = file?.FileName ?? "UnknownFile.pdf";
 
-                        // ensure there are no invalid characters.
+                    // ensure there are no invalid characters.
 
-                        fileName = DocumentUtils.SanitizeKeyFilename(fileName);
+                    fileName = DocumentUtils.SanitizeKeyFilename(fileName);
 
-                        string fileImportDateString = importDate.ToString("yyyyMMddHHmmss");
-                        string fileKey = DocumentUtils.SanitizeKeyFilename($"D{fileImportDateString}-{fileName}");
+                    string fileImportDateString = importDate.ToString("yyyyMMddHHmmss");
+                    string fileKey = DocumentUtils.SanitizeKeyFilename($"D{fileImportDateString}-{fileName}");
 
-                        UploadFileRequest pdfData = new UploadFileRequest()
-                        {
-                            ContentType = DocumentUtils.GetMimeType(fileName),
-                            Data = ByteString.CopyFrom(data),
-                            EntityName = "dfp_driver",
-                            FileName = fileKey,
-                            FolderName = driverId,
-                        };
-                        var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
+                    UploadFileRequest pdfData = new UploadFileRequest()
+                    {
+                        ContentType = DocumentUtils.GetMimeType(fileName),
+                        Data = ByteString.CopyFrom(data),
+                        EntityName = "dfp_driver",
+                        FileName = fileKey,
+                        FolderName = driverId,
+                    };
+                    var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
 
 
-                        if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
-                            || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
-                        {
-                            return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
-                        }
+                    if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
+                        || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
+                    {
+                        return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
+                    }
 
-                        string legacyDocumentType = documentTypeCode ?? documentType ?? String.Empty;
+                    string legacyDocumentType = documentTypeCode ?? documentType ?? String.Empty;
 
-                        var document = new LegacyDocument()
-                        {
-                            BatchId = batchId ?? string.Empty,
-                            DocumentPages = documentPages ?? 1,
-                            DocumentType = legacyDocumentType,
-                            DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
-                            DocumentUrl = fileReply.FileName,
-                            CaseId = caseId ?? string.Empty,
-                            FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
-                            ImportDate = Timestamp.FromDateTimeOffset(importDate),
-                            ImportId = importID ?? string.Empty,
+                    string documentSubmittalStatus = "Uploaded";
 
-                            OriginatingNumber = originatingNumber ?? string.Empty,
-                            Driver = driver,
-                            ValidationMethod = validationMethod ?? string.Empty,
-                            ValidationPrevious = validationPrevious ?? string.Empty,
-                            Priority = priority ?? string.Empty,
-                            Owner = "Client Services" ?? string.Empty,
-                            SubmittalStatus = "Uploaded" ?? string.Empty,
-                            Queue = assign ?? string.Empty,
-                        };
+                    // New workflow for the DPS mitigation 
+                    if (!String.IsNullOrEmpty(_configuration["FORCE_RECEIVED"]))
+                    {
+                        documentSubmittalStatus = "Received";
+                    }
 
-                        CreateStatusReply result;
+                    var document = new LegacyDocument()
+                    {
+                        BatchId = batchId ?? string.Empty,
+                        DocumentPages = documentPages ?? 1,
+                        DocumentType = legacyDocumentType,
+                        DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
+                        DocumentUrl = fileReply.FileName,
+                        CaseId = caseId ?? string.Empty,
+                        FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
+                        ImportDate = Timestamp.FromDateTimeOffset(importDate),
+                        ImportId = importID ?? string.Empty,
 
-                        string[] documentTypes = {
+                        OriginatingNumber = originatingNumber ?? string.Empty,
+                        Driver = driver,
+                        ValidationMethod = validationMethod ?? string.Empty,
+                        ValidationPrevious = validationPrevious ?? string.Empty,
+                        Priority = priority ?? string.Empty,
+                        Owner = "Client Services" ?? string.Empty,
+                        SubmittalStatus = documentSubmittalStatus ?? string.Empty,
+                        Queue = assign ?? string.Empty,
+                    };
+
+                    CreateStatusReply result;
+
+                    string[] documentTypes = {
                         "Ignition Interlock Incident",
                         "Ignition Interlock MIA",
                         "RDP Registration",
@@ -755,7 +761,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         "OOP Document",
                         "OOP Registration"
                         };
-                        string[] documentTypeCodes = {
+                    string[] documentTypeCodes = {
 
                             "080",
                             "081",
@@ -776,197 +782,65 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             };
 
-                        var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
+                    var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
 
-                        if (documentTypeCode != null && documentTypeindex != -1)
+                    if (documentTypeCode != null && documentTypeindex != -1)
+                    {
+                        var findDocumentTypeCode = documentTypeCodes.ElementAt(documentTypeindex);
+
+                        if (documentTypeCode != findDocumentTypeCode)
                         {
-                            var findDocumentTypeCode = documentTypeCodes.ElementAt(documentTypeindex);
+                            Log.Error("Unable to find the document type code");
 
-                            if (documentTypeCode != findDocumentTypeCode)
+                        }
+                        else
+                        {
+                            //  If document is remedial Type 
+
+                            var remedialDocument = new LegacyDocument()
                             {
-                                Log.Error("Unable to find the document type code");
+                                BatchId = batchId ?? string.Empty,
+                                DocumentPages = documentPages ?? 1,
+                                DocumentType = legacyDocumentType,
+                                DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
+                                DocumentUrl = fileReply.FileName,
+                                CaseId = caseId ?? string.Empty,
+                                FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
+                                ImportDate = Timestamp.FromDateTimeOffset(importDate),
+                                ImportId = importID ?? string.Empty,
 
-                            }
-                            else
-                            {
-                                //  If document is remedial Type 
+                                OriginatingNumber = originatingNumber ?? string.Empty,
+                                Driver = driver,
+                                ValidationMethod = validationMethod ?? string.Empty,
+                                ValidationPrevious = validationPrevious ?? string.Empty,
+                                Priority = "Regular",
+                                Owner = "Client Services",
+                                SubmittalStatus = "Received",
+                                Queue = assign ?? string.Empty,
+                            };
 
-                                var remedialDocument = new LegacyDocument()
-                                {
-                                    BatchId = batchId ?? string.Empty,
-                                    DocumentPages = documentPages ?? 1,
-                                    DocumentType = legacyDocumentType,
-                                    DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
-                                    DocumentUrl = fileReply.FileName,
-                                    CaseId = caseId ?? string.Empty,
-                                    FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
-                                    ImportDate = Timestamp.FromDateTimeOffset(importDate),
-                                    ImportId = importID ?? string.Empty,
-
-                                    OriginatingNumber = originatingNumber ?? string.Empty,
-                                    Driver = driver,
-                                    ValidationMethod = validationMethod ?? string.Empty,
-                                    ValidationPrevious = validationPrevious ?? string.Empty,
-                                    Priority = "Regular",
-                                    Owner = "Client Services",
-                                    SubmittalStatus = "Received",
-                                    Queue = assign ?? string.Empty,
-                                };
-
-                                var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
-                                return CreatedAtAction(actionName, routeValues, remedialDocument);
-                            }
-
-                        }
-                        // Path 2 : Check if the document is classified
-                        else if (documentType != null && documentType == legacyDocumentType)
-                        {
-                            // Add the document to a driver instead of a case
-                            result = _cmsAdapterClient.CreateDocumentOnDriver(document);
-                            return CreatedAtAction(actionName, routeValues, document);
+                            var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
+                            return CreatedAtAction(actionName, routeValues, remedialDocument);
                         }
 
-                        // Path 3: If the document is unclassified
-                        // Attach the documents to the driver 00000000 
+                    }
+                    // Path 2 : Check if the document is classified
+                    else if (documentType != null && documentType == legacyDocumentType)
+                    {
+                        // Add the document to a driver instead of a case
+                        result = _cmsAdapterClient.CreateDocumentOnDriver(document);
+                        return CreatedAtAction(actionName, routeValues, document);
+                    }
 
-                        else if (documentType != null || documentType == "Unclassified")
-                        {
-                            var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
-                            return CreatedAtAction(actionName, routeValues, document);
-                        }
+                    // Path 3: If the document is unclassified
+                    // Attach the documents to the driver 00000000 
+
+                    else if (documentType != null || documentType == "Unclassified")
+                    {
+                        var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(document);
+                        return CreatedAtAction(actionName, routeValues, document);
                     }
                 }
-
-
-                else // Feature Flag not set: Use the old code DPS flow
-                {
-                    SearchReply reply;
-                    if (caseId != null)
-                    {
-                        reply = _cmsAdapterClient.Search(new SearchRequest { CaseId = caseId });
-                    }
-                    else
-                    {
-                        reply = _cmsAdapterClient.Search(new SearchRequest { DriverLicenseNumber = licenseNumber });
-                    }
-
-                    if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                    {
-                        // add the document
-                        var ms = new MemoryStream();
-                        if (file != null)
-                        {
-                            file.OpenReadStream().CopyTo(ms);
-
-                            string jsonFile = JsonConvert.SerializeObject(file);
-                            //DebugUtils.SaveDebug("AddCaseDocument",jsonFile);
-                        }
-                        else
-                        {
-                            DebugUtils.SaveDebug("AddCaseDocument", "File is empty");
-                        }
-
-                        var data = ms.ToArray();
-                        string fileName = file?.FileName ?? "UnknownFile.pdf";
-
-                        // ensure there are no invalid characters.
-
-                        fileName = DocumentUtils.SanitizeKeyFilename(fileName);
-
-                        string fileImportDateString = importDate.ToString("yyyyMMddHHmmss");
-                        string fileKey = DocumentUtils.SanitizeKeyFilename($"D{fileImportDateString}-{fileName}");
-
-                        UploadFileRequest pdfData = new UploadFileRequest()
-                        {
-                            ContentType = DocumentUtils.GetMimeType(fileName),
-                            Data = ByteString.CopyFrom(data),
-                            EntityName = "dfp_driver",
-                            FileName = fileKey,
-                            FolderName = driverId,
-                        };
-                        var fileReply = _documentStorageAdapterClient.UploadFile(pdfData);
-
-
-                        if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success
-                            || string.IsNullOrEmpty(fileReply.FileName)) // do not proceed if the URL is empty
-                        {
-                            return StatusCode(500, $"S3 Error - Filename is '{fileReply.FileName}', error is '{fileReply.ErrorDetail}'");
-                        }
-
-                        string legacyDocumentType = documentType ?? String.Empty;
-
-                        var document = new LegacyDocument()
-                        {
-                            BatchId = batchId ?? String.Empty,
-                            DocumentPages = documentPages ?? 1,
-                            DocumentType = legacyDocumentType,
-                            DocumentTypeCode = documentTypeCode ?? legacyDocumentType,
-                            DocumentUrl = fileReply.FileName,
-                            CaseId = caseId ?? string.Empty,
-                            FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
-                            ImportDate = Timestamp.FromDateTimeOffset(importDate),
-                            ImportId = importID ?? string.Empty,
-
-                            OriginatingNumber = originatingNumber ?? string.Empty,
-                            Driver = driver,
-                            ValidationMethod = validationMethod ?? string.Empty,
-                            ValidationPrevious = validationPrevious ?? string.Empty,
-                            Priority = priority ?? string.Empty,
-                            Owner = assign ?? string.Empty,
-                            SubmittalStatus = submittalStatus ?? string.Empty,
-
-                        };
-
-                        // Check the document is PDR, POlice report, Unsolisitated document
-
-                        CreateStatusReply result;
-
-                        if (document.DocumentType == "PDR" || document.DocumentType == "Police Report" || document.DocumentType == "Unsolicited Report of Concern"
-                            || document.DocumentType == "(PDR)PriorityDoctorsReport" || document.DocumentType == "UnsolicitedReportofConcern" || document.DocumentType == "(POL)-PoliceReport")
-                        {
-                            result = _cmsAdapterClient.CreateUnsolicitedCaseDocument(document);
-
-                        }
-                        else
-                        {
-                            result = _cmsAdapterClient.CreateLegacyCaseDocument(document);
-                        }
-
-
-
-                        if (result != null && result.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                        {
-
-                            if (!String.IsNullOrEmpty(_configuration["CLEAN_PASS_DOCUMENT"]))
-                            {
-                                if (submittalStatus == "Clean Pass")
-                                {
-                                    _cmsAdapterClient.UpdateCleanPassFlag(new CaseIdRequest { CaseId = caseId });
-                                }
-                                else if (submittalStatus == "Manual Pass")
-                                {
-                                    _cmsAdapterClient.UpdateManualPassFlag(new CaseIdRequest { CaseId = caseId });
-                                }
-                            }
-
-
-                            return CreatedAtAction(actionName, routeValues, document);
-                        }
-                        else
-                        {
-                            Serilog.Log.Error(result?.ErrorDetail);
-                            return StatusCode(500, result.ErrorDetail);
-                        }
-                    }
-                    else
-                    {
-                        Serilog.Log.Error("Unable to fetch Case details " + reply.ErrorDetail);
-                        return StatusCode(500, reply.ErrorDetail);
-                    }
-
-                }
-                    
-                
             }
             return Ok();
         }

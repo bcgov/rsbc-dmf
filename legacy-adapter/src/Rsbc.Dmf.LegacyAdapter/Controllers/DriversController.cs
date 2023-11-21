@@ -494,95 +494,99 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     foreach (var item in reply.Items)
                     {
 
-                        // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
-                        ViewModels.Driver driver = new ViewModels.Driver()
+                        if (item.SubmittalStatus != "Uploaded")
                         {
-                            LicenseNumber = licenseNumber,
-                            Flag51 = false,
-                            LastName = "LASTNAME",
-                            LoadedFromICBC = false,
-                            MedicalIssueDate = DateTimeOffset.Now
-                        };
 
-                        bool isBcMailSent = false;
-
-                        if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
-                        {
-                            isBcMailSent = true;
-                        }
-
-                        string caseId = string.Empty;
-                        if (item.CaseId != null && item.CaseId != "none")
-                        {
-                            caseId = item.CaseId;
-                        }
-
-                        TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-
-                        DateTimeOffset importDate = DateTimeOffset.Now;
-
-                        try
-                        {
-                            if (item.ImportDate != null)
+                            // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
+                            ViewModels.Driver driver = new ViewModels.Driver()
                             {
-                                importDate = item.ImportDate.ToDateTimeOffset();
+                                LicenseNumber = licenseNumber,
+                                Flag51 = false,
+                                LastName = "LASTNAME",
+                                LoadedFromICBC = false,
+                                MedicalIssueDate = DateTimeOffset.Now
+                            };
 
-                                if (importDate.Offset == TimeSpan.Zero)
+                            bool isBcMailSent = false;
+
+                            if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
+                            {
+                                isBcMailSent = true;
+                            }
+
+                            string caseId = string.Empty;
+                            if (item.CaseId != null && item.CaseId != "none")
+                            {
+                                caseId = item.CaseId;
+                            }
+
+                            TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+
+                            DateTimeOffset importDate = DateTimeOffset.Now;
+
+                            try
+                            {
+                                if (item.ImportDate != null)
                                 {
-                                    importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                                    importDate = item.ImportDate.ToDateTimeOffset();
+
+                                    if (importDate.Offset == TimeSpan.Zero)
+                                    {
+                                        importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                                    }
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            Serilog.Log.Information(ex, "Error parsing import date");
-                            importDate = DateTimeOffset.Now;
-                        }
-
-                        DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
-
-                        try
-                        {
-                            if (item.FaxReceivedDate != null)
+                            catch (Exception ex)
                             {
-                                faxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                                Serilog.Log.Information(ex, "Error parsing import date");
+                                importDate = DateTimeOffset.Now;
+                            }
 
-                                if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                            DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
+
+                            try
+                            {
+                                if (item.FaxReceivedDate != null)
                                 {
-                                    faxReceivedDate = DateTimeOffset.Now;
+                                    faxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+
+                                    if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                                    {
+                                        faxReceivedDate = DateTimeOffset.Now;
+                                    }
+
+                                    if (faxReceivedDate.Offset == TimeSpan.Zero)
+                                    {
+                                        faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
+                                    }
                                 }
 
-                                if (faxReceivedDate.Offset == TimeSpan.Zero)
-                                {
-                                    faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
-                                }
-                            }                            
+                            }
+                            catch (Exception ex)
+                            {
+                                Serilog.Log.Information(ex, "Error parsing faxReceivedDate date");
+                            }
+
+
+
+                            var newDocument = new ViewModels.Document
+                            {
+                                CaseId = caseId,
+                                ImportDate = importDate,
+                                DocumentId = item.DocumentId,
+                                DocumentType = item.DocumentType,
+                                DocumentTypeCode = item.DocumentTypeCode,
+                                BusinessArea = item.BusinessArea,
+                                Driver = driver,
+                                SequenceNumber = item.SequenceNumber,
+                                FaxReceivedDate = faxReceivedDate,
+                                UserId = item.UserId,
+                                BcMailSent = isBcMailSent
+                            };
+
+                            result.Add(newDocument);
 
                         }
-                        catch (Exception ex)
-                        {
-                            Serilog.Log.Information(ex, "Error parsing faxReceivedDate date");                            
-                        }
-
-
-
-                        var newDocument = new ViewModels.Document
-                        {
-                            CaseId = caseId,
-                            ImportDate = importDate,
-                            DocumentId = item.DocumentId,
-                            DocumentType = item.DocumentType,
-                            DocumentTypeCode = item.DocumentTypeCode,
-                            BusinessArea = item.BusinessArea,
-                            Driver = driver,
-                            SequenceNumber = item.SequenceNumber,
-                            FaxReceivedDate = faxReceivedDate,
-                            UserId = item.UserId,
-                            BcMailSent = isBcMailSent
-                        };
-
-                        result.Add(newDocument);
-
                     }
 
                     // sort the result by date.
@@ -691,7 +695,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     ValidationMethod = string.Empty,
                     ValidationPrevious = string.Empty,
                     ImportId = string.Empty,
-                    OriginatingNumber = string.Empty
+                    OriginatingNumber = string.Empty,
+                    SubmittalStatus = "Sent",
                 };
 
                 // Convert the 

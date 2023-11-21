@@ -95,7 +95,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             foreach (var item in newCandidates)
             {
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
-                {
+                {                    
                     LicenseNumber = item.DlNumber,
                     Surname = item.LastName ?? string.Empty,
                     ClientNumber = string.Empty,
