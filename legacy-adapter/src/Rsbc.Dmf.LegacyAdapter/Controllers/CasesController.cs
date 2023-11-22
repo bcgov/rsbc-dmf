@@ -305,11 +305,18 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
+                string caseType = "Unsolicited";
+
+                if (c.Item.CaseType == "DMER")
+                {
+                    caseType = "Solicited";
+                }
+
                 result.CaseId = c.Item.CaseId;
                 result.Title = c.Item.Title;
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
-                result.CaseType = c.Item.CaseType;
+                result.CaseType = caseType;
                 result.DmerType = c.Item.DmerType;
                 result.Status = c.Item.Status;
                 result.AssigneeTitle = c.Item.AssigneeTitle;
