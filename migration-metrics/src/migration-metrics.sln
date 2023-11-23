@@ -7,6 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "migration-metrics", "migrat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{241C2203-AADF-46D6-B0A1-EB6E98C28B7D}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.github\workflows\ci-migration-metrics-api.yml = ..\..\.github\workflows\ci-migration-metrics-api.yml
+		..\..\.github\workflows\ci-migration-metrics-ui.yml = ..\..\.github\workflows\ci-migration-metrics-ui.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
