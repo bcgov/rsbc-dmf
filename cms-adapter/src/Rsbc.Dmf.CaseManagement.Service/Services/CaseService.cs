@@ -916,8 +916,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ValidationMethod = item.ValidationMethod ?? string.Empty,
                         ValidationPrevious = item.ValidationPrevious ?? string.Empty,
                         SequenceNumber = item.SequenceNumber ?? -1,
-                        Driver = driver
-
+                        Driver = driver,
+                        SubmittalStatus = item.SubmittalStatus ?? string.Empty,
                     };
 
                     if (item.FaxReceivedDate != null)
