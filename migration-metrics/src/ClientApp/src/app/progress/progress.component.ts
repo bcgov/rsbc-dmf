@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Inject, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-progress',
