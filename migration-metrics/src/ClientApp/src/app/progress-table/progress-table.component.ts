@@ -1,6 +1,8 @@
-import { Component, Inject, ElementRef, Input } from '@angular/core';
+import { Component, Inject, ElementRef, Input, InjectionToken } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OnInit } from '@angular/core';
+
+export const BASE_URL = new InjectionToken<string>('BASE_URL');
 
 @Component({
   selector: 'app-progress-table',
@@ -18,7 +20,7 @@ export class ProgressTableComponent {
   baseUrl: string;
 
   velocityData: any;
-  constructor(private http: HttpClient, private elementRef: ElementRef, @Inject('BASE_URL') baseUrl: string) {
+  constructor(private http: HttpClient, private elementRef: ElementRef, @Inject(BASE_URL) baseUrl: string) {
     this.baseUrl = baseUrl;
     this.velocityData = {};
 
