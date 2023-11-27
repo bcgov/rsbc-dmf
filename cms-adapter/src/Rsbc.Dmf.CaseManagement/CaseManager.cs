@@ -1911,7 +1911,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
                 bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
-                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.bcgov_receiveddate = request.FaxReceivedDate;
                 bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
 
                 if (request.ImportDate != null && request.ImportDate.Value.Year > 1 )
