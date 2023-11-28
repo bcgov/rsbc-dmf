@@ -587,7 +587,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             {
                 string licenseNumber = _icbcClient.NormalizeDl(driversLicense, _configuration);
 
-                DateTimeOffset faxReceivedDate = DocumentUtils.ParseDpsDate(faxReceivedDateString);
+                if (!string.IsNullOrEmpty(_configuration["VERBOSE_LOGS"]))
+                {
+                    Log.Information($"{faxReceivedDateString} {importDateString}");
+                }
+
+                    DateTimeOffset faxReceivedDate = DocumentUtils.ParseDpsDate(faxReceivedDateString);
                 DateTimeOffset importDate = DocumentUtils.ParseDpsDate(importDateString);
                 if (!string.IsNullOrEmpty(_configuration["VERBOSE_LOGS"]))
                 {
