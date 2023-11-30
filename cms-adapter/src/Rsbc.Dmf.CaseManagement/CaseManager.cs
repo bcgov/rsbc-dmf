@@ -767,7 +767,7 @@ namespace Rsbc.Dmf.CaseManagement
                                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-
+                                    SubmittalStatus = TranslateSubmittalStatusInt( document.dfp_submittalstatus)
                                 };
 
                                 Driver caseDriver = new Driver()
@@ -1911,7 +1911,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
                 bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
-                bcgovDocumentUrl.bcgov_receiveddate = DateTimeOffset.Now;
+                bcgovDocumentUrl.bcgov_receiveddate = request.FaxReceivedDate;
                 bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
 
                 if (request.ImportDate != null && request.ImportDate.Value.Year > 1 )
@@ -1930,7 +1930,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusString(request.SubmittalStatus);
                 //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
@@ -2056,7 +2056,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusString(request.SubmittalStatus);
                 //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
@@ -2173,7 +2173,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_faxnumber = request.OriginatingNumber;
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusString(request.SubmittalStatus);
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
                 // bcgovDocumentUrl.dpsQueue
@@ -2301,7 +2301,7 @@ namespace Rsbc.Dmf.CaseManagement
                     newDocument.dfp_faxnumber = request.OriginatingNumber;
                     newDocument.dfp_validationmethod = request.ValidationMethod;
                     newDocument.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
-                    newDocument.dfp_submittalstatus = TranslateSubmittalStatusCode(request.SubmittalStatus);
+                    newDocument.dfp_submittalstatus = TranslateSubmittalStatusString(request.SubmittalStatus);
                     newDocument.dfp_priority = TranslatePriorityCode(request.Priority);
                     newDocument.dfp_issuedate = DateTimeOffset.Now;
                     newDocument.dfp_dpspriority = TranslatePriorityCode(request.Priority);
@@ -3461,7 +3461,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        private int TranslateSubmittalStatusCode(string submittalStatusCode)
+        private int TranslateSubmittalStatusString(string submittalStatusCode)
         {
             var statusMap = new Dictionary<string, int>()
             {
@@ -3470,7 +3470,8 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Clean Pass" ,  100000009}, // Clean Pass
                 { "Manual Pass", 100000012 }, // Manual Pass
                 { "Open-Required", 100000000 }, // Open required
-                { "Uploaded", 100000010  } // Uploaded
+                { "Uploaded", 100000010  }, // Uploaded
+                { "Sent", 100000008}
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
@@ -3480,6 +3481,34 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 return 100000001;
+            }
+        }
+
+        /// <summary>
+        /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private string TranslateSubmittalStatusInt(int? submittalStatusCode)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000001, "Received" }, // Received
+                { 100000004, "Reject" }, // Rejected
+                { 100000009, "Clean Pass"  }, // Clean Pass
+                { 100000012, "Manual Pass"  }, // Manual Pass
+                { 100000000, "Open-Required"  }, // Open required
+                { 100000010, "Uploaded" }, // Uploaded
+                { 100000008,"Sent" }
+            };
+
+            if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))
+            {
+                return statusMap[submittalStatusCode.Value];
+            }
+            else
+            {
+                return "Received";
             }
         }
 
@@ -4488,17 +4517,17 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(x => x.dfp_licensenumber == driverRequest.DriverLicenseNumber);
 
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
-            dfp_driver[] driverResults = data.ToArray();
+  
 
             try
             {
 
-                if (driverResults.Length > 0)
+                foreach (var driver in data)
                 {
-                    dfp_driver driver;
+                    dynamicsContext.LoadProperty(driver, nameof(dfp_driver.dfp_PersonId));
+                    
                     contact driverContact;
-
-                    driver = driverResults[0];
+                    
                     if (driver.dfp_PersonId != null)
                     {
                         driverContact = driver.dfp_PersonId;
@@ -4508,10 +4537,10 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Success = true;
                     }
 
-
+                    dynamicsContext.Detach(driver);
                 }
 
-                dynamicsContext.DetachAll();
+                
             }
             catch (Exception e)
             {
