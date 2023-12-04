@@ -865,7 +865,8 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 string importID = "{b86a6b22-7e9d-4e99-8347-cc0e63681da0}";
                 string originatingNumber = "";
                 int documentPages = 1;
-                string documentType = "";
+                string documentType = "(DMER)(KMC)";
+                string documentTypeCode = "001";
 
                 string validationMethod = "";
                 string validationPrevious = "";
@@ -879,6 +880,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 multiPartContent.Add(new StringContent(originatingNumber), "originatingNumber");
                 multiPartContent.Add(new StringContent(documentPages.ToString()), "documentPages");
                 multiPartContent.Add(new StringContent(documentType), "documentType");
+                multiPartContent.Add(new StringContent(documentTypeCode), "documentTypeCode");
                 multiPartContent.Add(new StringContent(validationMethod), "validationMethod");
                 multiPartContent.Add(new StringContent(validationPrevious), "validationPrevious");
 
