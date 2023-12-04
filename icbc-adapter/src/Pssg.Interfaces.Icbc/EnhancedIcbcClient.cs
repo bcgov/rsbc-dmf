@@ -123,6 +123,7 @@ namespace Pssg.Interfaces
             }
             catch (Exception e)
             {
+                    Serilog.Log.Error($"No response received from ICBC - parsing error on {rawData}");
                 icbcClient = null;
             }
             
