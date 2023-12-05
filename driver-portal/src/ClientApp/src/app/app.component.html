@@ -1,12 +1,12 @@
-<header *ngIf="!isLoading">
-  <app-header [showProfile]="showProfile()"></app-header>
+<header>
+  <app-header></app-header>
 </header>
-<nav *ngIf="!isLoading">
+<nav >
   <app-nav-menu></app-nav-menu>
 </nav>
-<main *ngIf="!isLoading">
+<main>
   <router-outlet></router-outlet>
 </main>
-<footer *ngIf="!isLoading">
+<footer>
   <app-footer></app-footer>
 </footer>
