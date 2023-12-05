@@ -23,3 +23,27 @@ table {
   table td {
     border: 1px solid #808080;
   }
+
+
+  
+  .mat-form-field {
+    width: 100%;
+  }
+  
+  .mat-dialog-actions {
+    padding-bottom: 30px;
+  }
+
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  opacity: 1 !important;
+  color:rgb(0, 51, 102) !important;
+}
+
+.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
+  background-color: #F2F2F2 !important;
+}
+
+.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: black;
+}  
