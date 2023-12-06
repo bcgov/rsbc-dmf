@@ -65,11 +65,17 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         [HttpPost("download")]
         public async Task<ActionResult> Download([FromBody] ViewModels.Download download)
         {
+            string fileName = download.FileUrl;
+            if (fileName.StartsWith("https://"))
+            {
+                fileName = fileName.Substring(8);
+            }
+
             try
             {
                 var _S3 = new S3(_configuration);
                 Dictionary<string, string> metaData = new Dictionary<string, string>();
-                var fileContents = _S3.DownloadFile(download.FileUrl, ref metaData);
+                var fileContents = _S3.DownloadFile(fileName, ref metaData);
                 if (fileContents == null)
                 {
                     _logger.LogError($"Error during file download for file {download.FileUrl} - no file data.");
@@ -77,7 +83,6 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 }
                 //return new FileContentResult(fileContents, "application/octet-stream");
 
-                string fileName = download.FileUrl;
                 string contentType = "application/octet-stream";
                 string body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty;
                 string entityName =
