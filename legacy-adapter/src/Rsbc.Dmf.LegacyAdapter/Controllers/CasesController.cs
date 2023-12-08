@@ -558,6 +558,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string importDateString,  // dfp_dpsprocessingdate
             [FromForm] string importID, // add to document entity
             [FromForm] string originatingNumber, // dfp_faxnumber
+            [FromForm] int? documentId, // maps to dfp_attachmentnumber
             [FromForm] int? documentPages, // add to document entity
             [FromForm] string documentType, // dfp_documenttypeid
             [FromForm] string documentTypeCode, // "form type" in DPS; the code that will be used for a lookup.
@@ -613,6 +614,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         assign = assign,
                         submittalStatus = submittalStatus,
                         surcode = surcode,
+                        documentId = documentId,
                     };
 
                     Log.Information(JsonConvert.SerializeObject(debugObject));
@@ -751,6 +753,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Owner = "Client Services" ?? string.Empty,
                         SubmittalStatus = documentSubmittalStatus ?? string.Empty,
                         Queue = assign ?? string.Empty,
+                        DpsDocumentId = documentId ?? -1
                     };
 
                     CreateStatusReply result;
