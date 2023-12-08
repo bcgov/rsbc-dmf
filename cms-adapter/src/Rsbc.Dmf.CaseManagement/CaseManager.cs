@@ -78,6 +78,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string SubmittalStatus { get; set; }
 
         public string Queue { get; set; }
+        public long DpsDocumentId { get; set; }
     }
 
     public class CreateStatusReply
@@ -1907,6 +1908,8 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     bcgovDocumentUrl = new bcgov_documenturl();
                 }
+
+                bcgovDocumentUrl.dfp_attachmentnumber = (int) request.DpsDocumentId;
 
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();

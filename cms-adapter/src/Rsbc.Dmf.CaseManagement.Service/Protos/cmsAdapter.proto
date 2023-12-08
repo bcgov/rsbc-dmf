@@ -198,7 +198,7 @@ message LegacyDocument {
 	string DocumentUrl = 5;
 	string UserId = 6;
 	string CaseId = 7;
-	string DocumentId = 8;
+	string DocumentId = 8;	
 	google.protobuf.Timestamp FaxReceivedDate = 9;
 	google.protobuf.Timestamp ImportDate = 10;
 	string ImportId = 11;
@@ -212,6 +212,7 @@ message LegacyDocument {
 	string Owner = 19;
 	string SubmittalStatus = 20;
 	string Queue = 21;
+	int64 DpsDocumentId = 22;
 }
 
 message GetDocumentRequest {	
