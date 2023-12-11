@@ -3,6 +3,7 @@ using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -118,8 +119,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
             return result;
         }
-
-        [AllowAnonymous]
+        
         [HttpPost("{documentId}/Split")]
         public ActionResult SplitDocument([FromBody] SplitDetails splitDetails, [FromRoute] Guid documentId)
         {
@@ -306,15 +306,98 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
         }
 
+        /// <summary>
+        /// Merge documents
+        /// </summary>
+        /// <param name="documentsToMerge"></param>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        [HttpPost("{documentId}/Merge")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public ActionResult MergeDocuments([FromBody] List<Guid> documentsToMerge, [FromRoute] Guid documentId)
+        {
+            List<Guid> documentIds = new List<Guid>();
+            documentIds.Add(documentId);
+
+            foreach (var id in documentsToMerge)
+            {
+                documentIds.Add(id);
+            }
+
+            var newPdf = new PdfSharpCore.Pdf.PdfDocument(); // the new document.
+
+            foreach (var id in documentIds)
+            {
+                var mergeDocumentResponse = _caseManagerClient.GetLegacyDocument(new LegacyDocumentRequest { DocumentId = id.ToString() });
+
+                if (mergeDocumentResponse.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                {                    
+                    // fetch it
+                    var fileResult = _documentStorageAdapterClient.DownloadFile(new DownloadFileRequest()
+                    {
+                        // ServerRelativeUrl = doc.PdfDocumentId
+                        // Are we storing the document url in pdfDocument 
+                        ServerRelativeUrl = mergeDocumentResponse.Document.DocumentUrl,
+                    });
+
+                    var src = new MemoryStream(fileResult.Data.ToByteArray());
+
+                    int newPageCount = 0;
+
+                    using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
+                    {
+                        for (int i = 0; i < srcPDF.PageCount; i++)
+                        {
+                            // get this page.
+                            var pageData = srcPDF.Pages[i];
+
+                            newPdf.Pages.Add(pageData);
+                        }
+                    }
+                }
+            }
+
+            // save the document
+            var documentResponse = _caseManagerClient.GetLegacyDocument(new LegacyDocumentRequest { DocumentId = documentId.ToString() });
+            // get the details for the original
+            string serverRelativeUrl = documentResponse.Document.DocumentUrl;
+            string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
+            string filename = serverRelativeUrl.Substring(serverRelativeUrl.LastIndexOf('/') + 1);
+
+            using (var newStream = new MemoryStream())
+            {
+                newPdf.Save(newStream, false);
+
+                // add the page data
+                var newFileRequest = new UploadFileRequest
+                {
+                    ContentType = "application/pdf",
+                    Data = ByteString.CopyFrom(newStream.ToArray()),
+                    EntityName = originalEntity,
+                    FileName = filename,
+                    FolderName = documentResponse.Document.Driver.Id
+                };
+                var newFileResult = _documentStorageAdapterClient.UploadFile(newFileRequest);
+            }
+
+            // now remove the other documents.
+            foreach (var deleteId in documentsToMerge)
+            {
+                _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
+            }
+
+            return Ok(newPdf);
+        }
+
         // POST: /Documents/BcMail}
         [HttpPost("BcMail")]
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)  // add a model here for the payload
-
+        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)  
         {
-
             // this could put the HTML file and attachments in a particular location.
 
             return BcMailDocumentPreview(bcmail).GetAwaiter().GetResult();
