@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Pssg.DocumentStorageAdapter.ViewModels;
 using Pssg.Interfaces;
 using Serilog;
 
@@ -194,10 +195,16 @@ namespace Pssg.DocumentStorageAdapter.Services
             var logUrl = WordSanitizer.Sanitize(request.ServerRelativeUrl);
             var _S3 = new S3(_configuration);
 
+            string fileName = request.ServerRelativeUrl;
+            if (fileName.StartsWith("https://"))
+            {
+                fileName = fileName.Substring(8);
+            }
+
             try
             {
                 Dictionary<string, string> metaData = new Dictionary<string, string>();
-                var data = _S3.DownloadFile(request.ServerRelativeUrl, ref metaData);
+                var data = _S3.DownloadFile(fileName, ref metaData);
 
                 if (data != null)
                 {
