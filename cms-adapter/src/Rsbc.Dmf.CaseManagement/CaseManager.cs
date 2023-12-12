@@ -4426,15 +4426,19 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 string returnId = null;
 
-                var tempId = saveResult.First().Headers["OData-EntityId"];
-
-                int bracketLeft = tempId.IndexOf("(");
-                int bracketRight = tempId.IndexOf(")");
-                if (bracketLeft != -1 && bracketRight != -1)
+                if(saveResult.Count() > 0)
                 {
-                    returnId = tempId.Substring(bracketLeft + 1, bracketRight - bracketLeft - 1);
-                    result = Guid.Parse(returnId);
+                    var tempId = saveResult.First().Headers["OData-EntityId"];
+
+                    int bracketLeft = tempId.IndexOf("(");
+                    int bracketRight = tempId.IndexOf(")");
+                    if (bracketLeft != -1 && bracketRight != -1)
+                    {
+                        returnId = tempId.Substring(bracketLeft + 1, bracketRight - bracketLeft - 1);
+                        result = Guid.Parse(returnId);
+                    }
                 }
+               
             }
             catch (Exception)
             { }

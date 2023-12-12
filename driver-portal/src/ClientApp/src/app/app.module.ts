@@ -12,12 +12,16 @@ import { SharedModule } from './shared/shared.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { ApiModule } from './shared/api/api.module';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
+import { AccountComponent } from './account/account.component';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent
+    NavMenuComponent,
+    AccountComponent
   ],
 
   schemas: [
@@ -25,9 +29,10 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
   ],
   
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),    
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),   
+    BrowserAnimationsModule,
+    AppRoutingModule, 
     HttpClientModule,
-    
     FormsModule,
     LayoutModule,
     SharedModule,
@@ -40,6 +45,7 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
     RouterModule.forRoot([
       
     ]),
+    AppRoutingModule,
     
     
   ],
