@@ -12,22 +12,14 @@
     </div>
   </div>
   
-  <div>
-
-  </div>
-
 
   <div class="container">
-  <div class="list">
-  <h2>Personal Information</h2>
-  <p>
-
-  </p>
+  <h2 class="title">Personal Information</h2>
   <div>
-    <div style="display: flex; gap: 48px">
+    <div class="flex-row" >
         <div>
-          <label class="form-label">First Name</label><br />
-          <mat-form-field appearance="outline">
+          <label class="form-label">First Name</label>
+          <mat-form-field appearance="outline" fxFlex="50px">
             <input
               matInput
               name="firstName"
@@ -37,7 +29,7 @@
           </mat-form-field>
         </div>
         <div>
-            <label class="form-label">Middle Name</label><br />
+            <label class="form-label">Middle Name</label>
             <mat-form-field appearance="outline">
               <input
                 matInput
@@ -48,7 +40,7 @@
             </mat-form-field>
           </div>
         <div>
-          <label class="form-label">Last Name</label><br />
+          <label class="form-label">Last Name</label>
           <mat-form-field appearance="outline">
             <input
               matInput
@@ -62,8 +54,8 @@
 
       <div fxLayout="row">
         <div>
-          <label class="form-label">Email Address</label><br />
-          <mat-form-field appearance="outline">
+          <label class="form-label">Email Address</label>
+          <mat-form-field appearance="outline" style="width:40%">
             <input matInput name="email" placeholder="Email Address "/>
           </mat-form-field>
         </div>
@@ -74,13 +66,11 @@
          Email address is required to create an account profile. After submitting this form you are consenting to receiving an email which will ask you to verify your account creation
       </div>
   </div>
-  </div>
+  
   </div>
   
-<div>
   <div class="container" >
-    <div class="list">
-    <h2 style="padding-top: 32px;">ICBC  Identification</h2>
+    <h2 class="title">ICBC  Identification</h2>
     <p>
         Providing the following Insurance Corporation of British Columbia (ICBC) information allows the Driver's portal to display your active and historical cases. 
     </p>
@@ -88,9 +78,9 @@
         Your ICBC secret keyword is typically your mother's maiden name.  However if you do not know your ICBC secret keyword you will need to visit an ICBC office to obtain it.
     </p>
     <div>
-      <div >
+
           <div>
-            <label class="form-label">Driver's License Number (required)</label><br />
+            <label class="form-label">Driver's License Number (required)</label>
             <mat-form-field appearance="outline">
               <input
                 matInput
@@ -101,7 +91,7 @@
             </mat-form-field>
           </div>
           <div>
-              <label class="form-label">ICBC Secret Keyword (required)</label><br />
+              <label class="form-label">ICBC Secret Keyword (required)</label>
               <mat-form-field appearance="outline">
                 <input
                   matInput
@@ -113,49 +103,39 @@
             </div>  
     </div>
     </div>
-    </div>
-    </div>
 
-    <div class="page-desc">
-        <div class="container">
-          <div class="list">
-            <h2>Notification Preferences</h2>
-            <b>Select one or more ways to receive RSBC notifications (required)</b>
-            <div>
-                <label > 
-                    <input type="checkbox">  
-                    Email (as seen above)
-                </label> 
-          
-                <label> 
-                    <input type="checkbox">  
-                   Text/ SMS
-                </label> 
-
-                <label> 
-                    <input type="checkbox">  
-                   Mail <br>
-                  <p>
-                    Be environmentally friendly.  Leaving the Mail option unchecked means you are opting out of receiving notification by mail.  Certain decision documents will still be mailed to you for your records.
-                  </p>
-
-                </label>
-                
-                <label>
-                    <input type="checkbox">
-                    I acknowledge my selected notification preferences.  I give consent to receive communications from RSBC in this manner.
-
-                    Note: You can update your notification settings at any time in the Driver Portal under Account Management.
-                </label> 
-            </div>
-          </div>
-
-       
-            
-        
-        </div>
-      </div>
-      
+  
+  <div class="container" style="padding-bottom: 50px;">
+      <h2 class="title">Notification Preferences</h2>
+      <b>Select one or more ways to receive RSBC notifications (required)</b>
       <div>
+          <label class="notification"> 
+              <input type="checkbox">  
+              Email (as seen above)
+          </label> 
     
+          <label class="notification"> 
+              <input type="checkbox">  
+             Text/ SMS
+          </label> 
+
+          <label class="notification"> 
+              <input type="checkbox">  
+             Mail <br>
+            <p>
+              Be environmentally friendly.  Leaving the Mail option unchecked means you are opting out of receiving notification by mail.  Certain decision documents will still be mailed to you for your records.
+            </p>
+
+          </label>
+          
+          <label>
+              <input type="checkbox">
+              I acknowledge my selected notification preferences.  I give consent to receive communications from RSBC in this manner.
+
+              Note: You can update your notification settings at any time in the Driver Portal under Account Management.
+          </label> 
       </div>
+    </div>     
+
+      
+  

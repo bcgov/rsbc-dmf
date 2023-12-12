@@ -11,6 +11,28 @@
     font-size: 18px;
   }
 
+  .title{
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 48px;
+    justify-content: space-between;
+
+  }
+  
+  .flex-row > div {
+    width: 100%;
+  }
+
+  .flex-row > div > mat-form-field {
+    width:100%
+  }
+    
+  
+
   
   .mat-card-content{
     background-color: #ffffff;
@@ -20,7 +42,7 @@
     background-color: #ffffff;
     width: 100%;
     padding-top: 50px;
-    padding-bottom: 50px;
+    //padding-bottom: 50px;
     padding-left: 10px;;
   
     h1 {
@@ -33,14 +55,16 @@
     }
   }
 
-  
-  .dmer-type {
-    background-color: #fff;
-    border: 2px solid #fcba19;
-    padding: 2px;
-    border-radius: 4px;
+  .myaccount{
+      font-weight: bold;
+      color: #003366;
+      font-size: 31px;
+      border-left: 3px solid #fcba19;
+      padding-left: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
   }
-  
+
   .list {
     h2 {
       font-weight: bold;
@@ -57,8 +81,18 @@
       font-size: 18px;
       line-height: 1.6;
     }
+  
+  }
+
+  
+  .dmer-type {
+    background-color: #fff;
+    border: 2px solid #fcba19;
+    padding: 2px;
+    border-radius: 4px;
   }
   
+ 
  
   .form-label {
     font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
@@ -76,3 +110,7 @@
 label { 
     display: block; 
 } 
+
+.notification{
+  margin-bottom: 10px;
+}
