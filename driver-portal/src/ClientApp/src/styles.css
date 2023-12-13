@@ -11,8 +11,8 @@ code {
 
 .btn-primary {
   color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+  background-color: #003366;
+  border-color: #003366;
 }
 
 table {
@@ -34,11 +34,11 @@ table {
     padding-bottom: 30px;
   }
 
-
+/* 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   opacity: 1 !important;
   color:rgb(0, 51, 102) !important;
-}
+} */
 
 .mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
   background-color: #F2F2F2 !important;

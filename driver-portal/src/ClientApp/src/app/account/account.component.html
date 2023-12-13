@@ -2,12 +2,27 @@
     <div class="container">
       <div class="list">
         <h2>My Account</h2>
-        <p>    
-       You can access and modify your account details on this page. However, please note that some fields cannot be edited as they are linked to your BC Services Card.
-        </p>
-        <p>
-            If the address on your ICBC record is incorrect, you will need to visit the official ICBC website to <a href="https://www.icbc.com/driver-licensing/getting-licensed/Change-your-address-or-name"  target="_blank">update your address information</a>.
-        </p>
+        <div style="display: flex;">
+          <div>
+            <p>    
+              You can access and modify your account details on this page. However, please note that some fields cannot be edited as they <br/> are linked to your BC Services Card.
+               </p>
+               <p>
+                   If the address on your ICBC record is incorrect, you will need to visit the official ICBC website to <a href="https://www.icbc.com/driver-licensing/getting-licensed/Change-your-address-or-name"  target="_blank">update your address information</a>.
+               </p>
+          </div>
+         
+
+             <button
+             mat-flat-button
+             color="primary"
+             class="edit-profile"
+             (click)="onEdit()"
+           >
+            Edit Profile
+           </button>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -15,37 +30,39 @@
 
   <div class="container">
   <h2 class="title">Personal Information</h2>
-  <div>
+  <form>
     <div class="flex-row" >
         <div>
           <label class="form-label">First Name</label>
-          <mat-form-field appearance="outline" fxFlex="50px">
+          <mat-form-field appearance="outline" fxFlex="50px" class="disabledInput">
             <input
               matInput
               name="firstName"
               placeholder="First Name"
+              [disabled]="true"
              
             />
           </mat-form-field>
         </div>
         <div>
             <label class="form-label">Middle Name</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="disabledInput">
               <input
                 matInput
                 name="middleName"
-                placeholder="Middle Name "
-                
+                placeholder="Middle Name"
+                [disabled]="true"
               />
             </mat-form-field>
           </div>
         <div>
           <label class="form-label">Last Name</label>
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="disabledInput">
             <input
               matInput
               name="lastName"
-              placeholder="Last Name "
+              placeholder="Last Name"
+              [disabled]="true"
               
             />
           </mat-form-field>
@@ -53,50 +70,54 @@
       </div>
 
       <div fxLayout="row">
-        <div>
+        <div style="padding-top: 16px;">
           <label class="form-label">Email Address</label>
-          <mat-form-field appearance="outline" style="width:40%">
-            <input matInput name="email" placeholder="Email Address "/>
+          <mat-form-field appearance="outline" style="width:40%" class="disabledInput">
+            <input matInput name="email" placeholder="Email Address"  [disabled]="setEmailAddress"/>
           </mat-form-field>
         </div>
       </div>
-      <div>
+    </form>
+      <div class="disclaimer">
         <b>Disclaimer:</b> <br>
 
-         Email address is required to create an account profile. After submitting this form you are consenting to receiving an email which will ask you to verify your account creation
+         Email address is required to create an account profile. After submitting this form you are consenting to receiving an email which will ask you <br/> to verify your account creation
       </div>
-  </div>
+ 
   
   </div>
   
   <div class="container" >
     <h2 class="title">ICBC  Identification</h2>
     <p>
-        Providing the following Insurance Corporation of British Columbia (ICBC) information allows the Driver's portal to display your active and historical cases. 
+        Providing the following Insurance Corporation of British Columbia (ICBC) information allows the Driver's portal to display your active and <br/>
+        historical cases. 
     </p>
     <p>
-        Your ICBC secret keyword is typically your mother's maiden name.  However if you do not know your ICBC secret keyword you will need to visit an ICBC office to obtain it.
+        Your ICBC secret keyword is typically your mother's maiden name.  However if you do not know your ICBC secret keyword you will need to<br>
+         visit an <a href="https://www.icbc.com/driver-licensing/visit-dl-office" target="_blank">ICBC office</a> to obtain it.
     </p>
     <div>
-
           <div>
             <label class="form-label">Driver's License Number (required)</label>
-            <mat-form-field appearance="outline">
+            <mat-form-field appearance="outline" class="disabledInput">
               <input
                 matInput
                 name="driverLicenseNumber"
                 placeholder="Driver License Number"
+                [disabled]="true"
                
               />
             </mat-form-field>
           </div>
-          <div>
+          <div style="padding-top: 16px;">
               <label class="form-label">ICBC Secret Keyword (required)</label>
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" class="disabledInput">
                 <input
                   matInput
                   name="icbcKeyword"
                   placeholder="ICBC Secret Keyword"
+                  [disabled]="true"
                   
                 />
               </mat-form-field>
@@ -123,14 +144,14 @@
               <input type="checkbox">  
              Mail <br>
             <p>
-              Be environmentally friendly.  Leaving the Mail option unchecked means you are opting out of receiving notification by mail.  Certain decision documents will still be mailed to you for your records.
+              Be environmentally friendly.  Leaving the Mail option unchecked means you are opting out of receiving notification by mail. <br/>  Certain decision documents will still be mailed to you for your records.
             </p>
 
           </label>
           
           <label>
               <input type="checkbox">
-              I acknowledge my selected notification preferences.  I give consent to receive communications from RSBC in this manner.
+              I acknowledge my selected notification preferences.  I give consent to receive communications from RSBC in this manner. <br/>
 
               Note: You can update your notification settings at any time in the Driver Portal under Account Management.
           </label> 

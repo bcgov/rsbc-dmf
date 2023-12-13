@@ -18,7 +18,7 @@
 
   .flex-row {
     display: flex;
-    gap: 48px;
+    gap: 72px;
     justify-content: space-between;
 
   }
@@ -114,3 +114,35 @@ label {
 .notification{
   margin-bottom: 10px;
 }
+
+.edit-profile {
+  margin-left: 50px;
+  width: 20%;
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.disabledInput{
+    width: 350px;
+    height: 58px;
+    background-color: rgba(240, 240, 240, 1);
+    box-sizing: border-box;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(96, 96, 96, 1);
+    border-radius: 4px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    font-family: 'BC Sans', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+}
+
+.disclaimer{
+  padding-top: 24px;
+}
+

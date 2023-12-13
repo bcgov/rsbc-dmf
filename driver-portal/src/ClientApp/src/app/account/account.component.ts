@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class AccountComponent {
 
+  setEmailAddress = true
+  onEdit(){
+      this.setEmailAddress = false;
+  }
+
 }
