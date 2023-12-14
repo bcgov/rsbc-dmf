@@ -1203,10 +1203,10 @@ namespace Rsbc.Dmf.CaseManagement
         {
             LegacyDocument legacyDocument = null;
 
-            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            var document = dynamicsContext.bcgov_documenturls.Expand(x => x.dfp_DriverId).Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
-                dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
+                //dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
                 legacyDocument = new LegacyDocument
                 {
                     BatchId = document.dfp_batchid ?? string.Empty,
@@ -1222,7 +1222,7 @@ namespace Rsbc.Dmf.CaseManagement
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
                     SequenceNumber = null                    
-                };
+                };                
                 if (document.dfp_DriverId != null)
                 {
                     legacyDocument.Driver = new Driver

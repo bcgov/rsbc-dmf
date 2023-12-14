@@ -2042,7 +2042,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 if (d.Driver != null)
                 {
-                    d.Driver = new CaseManagement.Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
+                    reply.Document.Driver = new Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
                 }
 
                 if(d.FaxReceivedDate != null)
