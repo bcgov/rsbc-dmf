@@ -79,6 +79,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string FilenameOverride { get; set; }
         public string Queue { get; set; }
         public long DpsDocumentId { get; set; }
+        public string Origin { get; set; }
     }
 
     public class CreateStatusReply
@@ -1939,7 +1940,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
-                bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                
                 bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
                 if (!string.IsNullOrEmpty(request.FilenameOverride))
                 {
@@ -1953,6 +1954,26 @@ namespace Rsbc.Dmf.CaseManagement
                         bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
                         bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                     }
+                }
+
+                if (!string.IsNullOrEmpty(request.Origin))
+                {
+                    switch (request.Origin)
+                    {
+                        case "Migration":
+                            bcgovDocumentUrl.dfp_documentorigin = 100000015;
+                            break;
+                        case "DPS/KOFAX":
+                            bcgovDocumentUrl.dfp_documentorigin = 100000017;
+                            break;
+                        default:
+                            bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                            break;
+                    }
+                }
+                else
+                {
+                    bcgovDocumentUrl.dfp_documentorigin = 100000014;
                 }
 
                 if (found) // update
