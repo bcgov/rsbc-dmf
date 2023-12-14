@@ -76,7 +76,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Priority { get; set; }
         public string Owner { get; set; }
         public string SubmittalStatus { get; set; }
-
+        public string FilenameOverride { get; set; }
         public string Queue { get; set; }
         public long DpsDocumentId { get; set; }
     }
@@ -1941,13 +1941,19 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_documentorigin = 100000014;
                 bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
-
-                if (!string.IsNullOrEmpty(request.DocumentUrl))
+                if (!string.IsNullOrEmpty(request.FilenameOverride))
                 {
-                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
-                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.FilenameOverride);
+                    bcgovDocumentUrl.bcgov_filename = request.FilenameOverride;
                 }
-
+                else
+                {
+                    if (!string.IsNullOrEmpty(request.DocumentUrl))
+                    {
+                        bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                        bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    }
+                }
 
                 if (found) // update
                 {

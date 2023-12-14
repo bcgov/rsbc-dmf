@@ -186,6 +186,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentType = request.DocumentType ?? string.Empty,
                 BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
+                FilenameOverride = request.FilenameOverride ?? string.Empty,
                 ImportId = request.ImportId ?? string.Empty,
                 OriginatingNumber = request.OriginatingNumber ?? string.Empty,
                 ValidationMethod = request.ValidationMethod ?? string.Empty,
