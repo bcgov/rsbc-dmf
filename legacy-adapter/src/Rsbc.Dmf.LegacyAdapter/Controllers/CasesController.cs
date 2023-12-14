@@ -729,10 +729,13 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     string documentSubmittalStatus = "Uploaded";
 
+                    string origin = "DPS/Kofax";
+
                     // New workflow for the DPS mitigation 
                     if (!String.IsNullOrEmpty(_configuration["FORCE_RECEIVED"]))
                     {
                         documentSubmittalStatus = "Received";
+                        origin = "Migration";
                     }
 
                     string extension = System.IO.Path.GetExtension(fileReply.FileName);
@@ -758,7 +761,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Owner = "Client Services" ?? string.Empty,
                         SubmittalStatus = documentSubmittalStatus ?? string.Empty,
                         Queue = assign ?? string.Empty,
-                        DpsDocumentId = documentId ?? -1
+                        DpsDocumentId = documentId ?? -1,
+                        Origin = origin ?? string.Empty,
                     };
 
                     CreateStatusReply result;
