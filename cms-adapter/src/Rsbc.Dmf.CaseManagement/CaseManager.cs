@@ -1956,15 +1956,21 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
+                bool isDPS = false;
+
                 if (!string.IsNullOrEmpty(request.Origin))
                 {
                     switch (request.Origin)
                     {
                         case "Migration":
                             bcgovDocumentUrl.dfp_documentorigin = 100000015;
+                            bcgovDocumentUrl.dfp_solicited = true; // DFTHG-664 Documents received by DPS default to true
+
+
                             break;
                         case "DPS/KOFAX":
                             bcgovDocumentUrl.dfp_documentorigin = 100000017;
+                            
                             break;
                         default:
                             bcgovDocumentUrl.dfp_documentorigin = 100000014;
@@ -1976,8 +1982,29 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl.dfp_documentorigin = 100000014;
                 }
 
-                if (found) // update
+                bool isDmer = false;
+
+                if (isDPS)
                 {
+                    if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
+                    {
+                        // DMER
+                        bcgovDocumentUrl.dfp_solicited = false; // DMER does not default to solicited
+                        isDmer = true;
+                    }
+                    else
+                    {
+                        bcgovDocumentUrl.dfp_solicited = true; // DFTHG-664 Documents received by DPS default to true if not DMER
+                    }
+
+                }
+
+                if (found) // update
+                {    
+                    if (isDmer) // if DMER matches an existing envelope, it is solicited.
+                    {
+                        bcgovDocumentUrl.dfp_solicited = true;
+                    }
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
