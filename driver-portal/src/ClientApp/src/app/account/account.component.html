@@ -129,6 +129,7 @@
   <div class="container" style="padding-bottom: 50px;">
       <h2 class="title">Notification Preferences</h2>
       <b>Select one or more ways to receive RSBC notifications (required)</b>
+      
       <div>
           <label class="notification"> 
               <input type="checkbox">  
@@ -140,14 +141,96 @@
              Text/ SMS
           </label> 
 
+          <div *ngIf = "isEditView">
+            <label class="form-label">Phone Number</label>
+            <mat-form-field appearance="outline" class="inputWidth">
+              <input
+                matInput
+                name="phoneNumber"
+                placeholder="Phone Number"
+              />
+            </mat-form-field>
+          </div>
+
           <label class="notification"> 
-              <input type="checkbox">  
+              <input type="checkbox" [formControl]="accountForm.controls.mail">  
              Mail <br>
             <p>
               Be environmentally friendly.  Leaving the Mail option unchecked means you are opting out of receiving notification by mail. <br/>  Certain decision documents will still be mailed to you for your records.
             </p>
-
           </label>
+
+          <div *ngIf="accountForm.controls.mail.value === true">
+            <p>
+              <b>Where do you want RSBC to send you mail regarding your cases?</b> <br/>
+              The address below is from your BC Services Card record.
+            </p>
+            <label class="notification"> 
+              <input type="checkbox">  
+              Use a different address <br>
+            <p>
+              Note:This will not update the address on your BC Services Card or your driver's <br/> license with ICBC. 
+            </p>
+          </label>
+         <form>
+          <div>
+            <label class="form-label">Street Address</label>
+            <mat-form-field appearance="outline" class="inputWidth">
+              <input
+                matInput
+                name="phoneNumber"
+                placeholder="Phone Number"
+              />
+            </mat-form-field>
+          </div>
+          <div style="display: flex; gap: 48px;" >
+            <div>
+              <label class="form-label">City or Locality</label>
+              <mat-form-field appearance="outline" >
+                <input
+                  matInput
+                  name="city"
+                  placeholder="City or Locality"
+                 
+                />
+              </mat-form-field>
+            </div>
+            <div>
+                <label class="form-label">State or Province</label>
+                <mat-form-field appearance="outline" >
+                  <input
+                    matInput
+                    name="state"
+                    placeholder = "State or Province"
+                  />
+                </mat-form-field>
+              </div>
+          </div>
+          <div style="display: flex; gap: 48px;" >
+            <div>
+              <label class="form-label">Postal Code</label>
+              <mat-form-field appearance="outline" >
+                <input
+                  matInput
+                  name="postalCode"
+                  placeholder="Postal Code"
+                 
+                />
+              </mat-form-field>
+            </div>
+            <div>
+                <label class="form-label">Country</label>
+                <mat-form-field appearance="outline" >
+                  <input
+                    matInput
+                    name="country"
+                    placeholder = "Country"
+                  />
+                </mat-form-field>
+              </div>
+          </div>
+        </form>
+          </div>
           
           <label>
               <input type="checkbox">
