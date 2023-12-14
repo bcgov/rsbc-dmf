@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
+using static System.Net.WebRequestMethods;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -2030,8 +2031,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     DocumentId = d.DocumentId ?? string.Empty,
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
-                    DocumentUrl = d.DocumentUrl ?? string.Empty,
-                    Driver = new Driver { Id = d.Driver.Id, DriverLicenseNumber = d.Driver.DriverLicenseNumber },
+                    DocumentUrl = d.DocumentUrl ?? string.Empty,                    
                     ImportId = d.ImportId ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
                     ValidationMethod = d.ValidationMethod ?? string.Empty,
@@ -2039,6 +2039,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     SequenceNumber = (int)(d.SequenceNumber ?? -1),
                     UserId = d.UserId ?? string.Empty,                    
                 };
+
+                if (d.Driver != null)
+                {
+                    d.Driver = new CaseManagement.Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
+                }
 
                 if(d.FaxReceivedDate != null)
                 {
