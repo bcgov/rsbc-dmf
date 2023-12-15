@@ -22,11 +22,11 @@ export class ProfileManagementService {
   }
 
   public updateProfilePractitionerRoles(params: Parameters<ProfileService['apiProfilePractitionerRolesPut$Response']>[0]) {
-    return this.profileService.apiProfilePractitionerRolesPut$Response({...params}).pipe(map((res) => res.body));;
+    return this.profileService.apiProfilePractitionerRolesPut$Response({...params}).pipe(map((res) => res.body));
   }
 
   public deleteProfilePractitionerRoles(params: Parameters<ProfileService['apiProfilePractitionerRolesDelete$Response']>[0]) {
-    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body));;
+    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body
   }
 
 }

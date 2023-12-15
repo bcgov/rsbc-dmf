@@ -14,7 +14,7 @@ export class CaseManagementService {
   constructor(private casesService: CasesService) { }
 
   public getCases(params: DMERSearchCases): Observable<DMERCase[]> {
-    let searchParams = {
+    const searchParams = {
       ByTitle: params.byTitle,
       ByDriverLicense: params.byDriverLicense,
       ByPatientName: params.byPatientName,
@@ -26,7 +26,7 @@ export class CaseManagementService {
   }
 }
 
-export interface DMERCase extends DmerCaseListItem { }
+export type DMERCase = DmerCaseListItem
 
 export interface DMERSearchCases {
   byTitle?: string,

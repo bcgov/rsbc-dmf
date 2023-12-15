@@ -14,8 +14,6 @@ export class PhsaFormViewerComponent implements OnInit {
   @Input() submissionId: string | null = null;
   @Input() sessionId: string | null = null;
 
-  constructor() { }
-
   public ngOnInit(): void {
     return;
   }
