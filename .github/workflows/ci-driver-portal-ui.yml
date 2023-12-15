@@ -54,6 +54,3 @@ jobs:
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
           env_vars: javascript
 
-      - name: Build image
-        working-directory: ./driver-portal/src/ClientApp
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
