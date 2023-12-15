@@ -1986,17 +1986,13 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (isDPS)
                 {
+                    bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
+
                     if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
                     {
-                        // DMER
-                        bcgovDocumentUrl.dfp_solicited = false; // DMER does not default to solicited
+                        // DMER                        
                         isDmer = true;
-                    }
-                    else
-                    {
-                        bcgovDocumentUrl.dfp_solicited = true; // DFTHG-664 Documents received by DPS default to true if not DMER
-                    }
-
+                    }                    
                 }
 
                 if (found) // update
