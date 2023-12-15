@@ -3,11 +3,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
-import { LayoutModule } from './layout/layout.module';
-import { HeaderComponent } from './layout/header/header.component';
 import { SharedModule } from './shared/shared.module';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { ApiModule } from './shared/api/api.module';
@@ -15,12 +11,11 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { AccountComponent } from './account/account.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import {CoreUiModule, LayoutModule} from '@shared/core-ui'
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavMenuComponent,
     AccountComponent
   ],
 
@@ -42,6 +37,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
         //customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
       }
     }),
+    CoreUiModule,
     RouterModule.forRoot([
       
     ]),

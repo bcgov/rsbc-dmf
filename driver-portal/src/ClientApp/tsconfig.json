@@ -8,6 +8,14 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "paths": {
+      "@shared/core-ui": [
+        "../../../shared-portal-ui/projects/core-ui/src/public-api",
+      ] ,
+      "@angular/*": [
+        "./node_modules/@angular/*"
+     ],
+    }, 
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,

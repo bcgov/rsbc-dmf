@@ -19,6 +19,7 @@
           "options": {
             "progress": false,
             "outputPath": "dist",
+            "preserveSymlinks": true,
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
