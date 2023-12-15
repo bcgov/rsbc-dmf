@@ -1,6 +1,9 @@
 FROM trion/ng-cli-karma AS ng-builder
-WORKDIR /src
+WORKDIR /driver-portal/src/ClientApp
 COPY ./package*.json ./
+
+COPY ../../../shared-portal-ui ../../../shared-portal-ui
+
 RUN npm install
 COPY ./ .
 #RUN npm run lint
