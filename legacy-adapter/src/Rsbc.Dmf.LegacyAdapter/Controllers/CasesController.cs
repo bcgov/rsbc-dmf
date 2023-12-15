@@ -739,7 +739,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     }
 
                     string extension = System.IO.Path.GetExtension(fileReply.FileName);
-                    string filenameOverride = $"{documentType}-{driversLicense}-{surname}.{extension}";                     
+                    string filenameOverride = $"{documentType}-{driversLicense}-{surname}{extension}";                     
 
                     var document = new LegacyDocument()
                     {

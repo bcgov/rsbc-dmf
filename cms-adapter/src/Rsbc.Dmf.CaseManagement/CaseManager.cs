@@ -1993,6 +1993,7 @@ namespace Rsbc.Dmf.CaseManagement
                     }                    
                 }
 
+
                 if (found) // update
                 {    
                     if (isDmer) // if DMER matches an existing envelope, it is solicited.
