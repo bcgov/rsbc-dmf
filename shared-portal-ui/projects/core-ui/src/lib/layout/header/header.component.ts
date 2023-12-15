@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, OnInit, Input } from '@angular/core';
-import { tap } from 'rxjs/operators';
 
 
 @Component({
