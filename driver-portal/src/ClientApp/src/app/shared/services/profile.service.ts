@@ -26,7 +26,7 @@ export class ProfileManagementService {
   }
 
   public deleteProfilePractitionerRoles(params: Parameters<ProfileService['apiProfilePractitionerRolesDelete$Response']>[0]) {
-    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body
+    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body));
   }
 
 }
