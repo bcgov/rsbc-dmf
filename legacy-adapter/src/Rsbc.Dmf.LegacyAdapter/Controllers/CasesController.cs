@@ -729,7 +729,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     string documentSubmittalStatus = "Uploaded";
 
-                    string origin = "DPS/Kofax";
+                    string origin = "DPS/KOFAX";
 
                     // New workflow for the DPS mitigation 
                     if (!String.IsNullOrEmpty(_configuration["FORCE_RECEIVED"]))
