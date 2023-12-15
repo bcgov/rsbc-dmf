@@ -213,6 +213,8 @@ message LegacyDocument {
 	string SubmittalStatus = 20;
 	string Queue = 21;
 	int64 DpsDocumentId = 22;
+	string FilenameOverride = 23;
+	string Origin = 24;
 }
 
 message GetDocumentRequest {	

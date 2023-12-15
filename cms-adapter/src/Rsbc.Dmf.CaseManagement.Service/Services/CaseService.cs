@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
+using static System.Net.WebRequestMethods;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -185,6 +186,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 DocumentType = request.DocumentType ?? string.Empty,
                 BusinessArea = request.BusinessArea ?? string.Empty,
                 DocumentUrl = request.DocumentUrl ?? string.Empty,
+                FilenameOverride = request.FilenameOverride ?? string.Empty,
                 ImportId = request.ImportId ?? string.Empty,
                 OriginatingNumber = request.OriginatingNumber ?? string.Empty,
                 ValidationMethod = request.ValidationMethod ?? string.Empty,
@@ -196,7 +198,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
                 Queue = request.Queue ?? string.Empty,
-                DpsDocumentId = request.DpsDocumentId
+                DpsDocumentId = request.DpsDocumentId,
+                Origin = request.Origin ?? string.Empty
             };
 
             if (request.FaxReceivedDate != null)
@@ -2030,8 +2033,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     DocumentId = d.DocumentId ?? string.Empty,
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
-                    DocumentUrl = d.DocumentUrl ?? string.Empty,
-                    Driver = new Driver { Id = d.Driver.Id, DriverLicenseNumber = d.Driver.DriverLicenseNumber },
+                    DocumentUrl = d.DocumentUrl ?? string.Empty,                    
                     ImportId = d.ImportId ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
                     ValidationMethod = d.ValidationMethod ?? string.Empty,
@@ -2039,6 +2041,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     SequenceNumber = (int)(d.SequenceNumber ?? -1),
                     UserId = d.UserId ?? string.Empty,                    
                 };
+
+                if (d.Driver != null)
+                {
+                    reply.Document.Driver = new Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
+                }
 
                 if(d.FaxReceivedDate != null)
                 {

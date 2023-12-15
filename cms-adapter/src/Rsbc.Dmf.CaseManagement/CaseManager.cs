@@ -76,9 +76,10 @@ namespace Rsbc.Dmf.CaseManagement
         public string Priority { get; set; }
         public string Owner { get; set; }
         public string SubmittalStatus { get; set; }
-
+        public string FilenameOverride { get; set; }
         public string Queue { get; set; }
         public long DpsDocumentId { get; set; }
+        public string Origin { get; set; }
     }
 
     public class CreateStatusReply
@@ -1203,10 +1204,10 @@ namespace Rsbc.Dmf.CaseManagement
         {
             LegacyDocument legacyDocument = null;
 
-            var document = dynamicsContext.bcgov_documenturls.Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            var document = dynamicsContext.bcgov_documenturls.Expand(x => x.dfp_DriverId).Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
-                dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
+                //dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
                 legacyDocument = new LegacyDocument
                 {
                     BatchId = document.dfp_batchid ?? string.Empty,
@@ -1222,7 +1223,7 @@ namespace Rsbc.Dmf.CaseManagement
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
                     SequenceNumber = null                    
-                };
+                };                
                 if (document.dfp_DriverId != null)
                 {
                     legacyDocument.Driver = new Driver
@@ -1939,18 +1940,66 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
-                bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                
                 bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
-
-                if (!string.IsNullOrEmpty(request.DocumentUrl))
+                if (!string.IsNullOrEmpty(request.FilenameOverride))
                 {
-                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
-                    bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.FilenameOverride);
+                    bcgovDocumentUrl.bcgov_filename = request.FilenameOverride;
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(request.DocumentUrl))
+                    {
+                        bcgovDocumentUrl.bcgov_fileextension = Path.GetExtension(request.DocumentUrl);
+                        bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
+                    }
+                }
+
+                bool isDPS = false;
+
+                if (!string.IsNullOrEmpty(request.Origin))
+                {
+                    switch (request.Origin)
+                    {
+                        case "Migration":
+                            bcgovDocumentUrl.dfp_documentorigin = 100000015;
+                            isDPS = true;
+                            break;
+                        case "DPS/KOFAX":
+                            bcgovDocumentUrl.dfp_documentorigin = 100000017;
+                            isDPS = true;
+                            break;
+                        default:
+                            bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                            break;
+                    }
+                }
+                else
+                {
+                    bcgovDocumentUrl.dfp_documentorigin = 100000014;
+                }
+
+                bool isDmer = false;
+
+                if (isDPS)
+                {
+                    bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
+
+                    if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
+                    {
+                        // DMER                        
+                        isDmer = true;
+                    }                    
                 }
 
 
                 if (found) // update
-                {
+                {    
+                    if (isDmer) // if DMER matches an existing envelope, it is solicited.
+                    {
+                        bcgovDocumentUrl.dfp_solicited = true;
+                    }
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);

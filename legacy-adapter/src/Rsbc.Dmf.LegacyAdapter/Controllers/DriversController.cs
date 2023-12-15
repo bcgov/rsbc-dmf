@@ -670,8 +670,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     faxReceivedDate = TimeZoneInfo.ConvertTimeToUtc(faxReceivedDate.DateTime, pacificZone);
                 }
 
-
-
                 long sequenceNumber = document.SequenceNumber ?? 0;
                 string caseId = string.Empty;
                 if (document.CaseId != null && document.CaseId != "none")

@@ -572,7 +572,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             [FromForm] string envelopeId = null
             )
         {
-
+            string surname = surcode;
             var actionName = nameof(AddCaseDocument);
             var routeValues = new
             {
@@ -667,7 +667,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     driverReply = _cmsAdapterClient.GetDriver(driverRequest);
                     if (driverReply.ResultStatus == CaseManagement.Service.ResultStatus.Success && driverReply.Items != null && driverReply.Items.Count > 0)
                     {
-                        driverId = driverReply.Items.FirstOrDefault()?.Id;
+                        var returnedDriver = driverReply.Items.FirstOrDefault();
+                        driverId = returnedDriver?.Id;
+                        surname = returnedDriver?.Surname;
                     }
 
                 }
@@ -727,11 +729,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     string documentSubmittalStatus = "Uploaded";
 
+                    string origin = "DPS/KOFAX";
+
                     // New workflow for the DPS mitigation 
                     if (!String.IsNullOrEmpty(_configuration["FORCE_RECEIVED"]))
                     {
                         documentSubmittalStatus = "Received";
+                        origin = "Migration";
                     }
+
+                    string extension = System.IO.Path.GetExtension(fileReply.FileName);
+                    string filenameOverride = $"{documentType}-{driversLicense}-{surname}{extension}";                     
 
                     var document = new LegacyDocument()
                     {
@@ -744,7 +752,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                         ImportDate = Timestamp.FromDateTimeOffset(importDate),
                         ImportId = importID ?? string.Empty,
-
+                        FilenameOverride = filenameOverride ?? string.Empty,
                         OriginatingNumber = originatingNumber ?? string.Empty,
                         Driver = driver,
                         ValidationMethod = validationMethod ?? string.Empty,
@@ -753,7 +761,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         Owner = "Client Services" ?? string.Empty,
                         SubmittalStatus = documentSubmittalStatus ?? string.Empty,
                         Queue = assign ?? string.Empty,
-                        DpsDocumentId = documentId ?? -1
+                        DpsDocumentId = documentId ?? -1,
+                        Origin = origin ?? string.Empty,
                     };
 
                     CreateStatusReply result;
@@ -823,7 +832,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                                 ImportDate = Timestamp.FromDateTimeOffset(importDate),
                                 ImportId = importID ?? string.Empty,
-
+                                FilenameOverride = filenameOverride ?? string.Empty,
                                 OriginatingNumber = originatingNumber ?? string.Empty,
                                 Driver = driver,
                                 ValidationMethod = validationMethod ?? string.Empty,

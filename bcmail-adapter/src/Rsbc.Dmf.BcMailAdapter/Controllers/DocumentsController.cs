@@ -241,7 +241,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
                                     TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
-
                                     if (importDate.DateTime != DateTimeOffset.MinValue)
                                     {
                                         if (importDate.Offset == TimeSpan.Zero)
