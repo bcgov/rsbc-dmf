@@ -1964,13 +1964,11 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         case "Migration":
                             bcgovDocumentUrl.dfp_documentorigin = 100000015;
-                            bcgovDocumentUrl.dfp_solicited = true; // DFTHG-664 Documents received by DPS default to true
-
-
+                            isDPS = true;
                             break;
                         case "DPS/KOFAX":
                             bcgovDocumentUrl.dfp_documentorigin = 100000017;
-                            
+                            isDPS = true;
                             break;
                         default:
                             bcgovDocumentUrl.dfp_documentorigin = 100000014;
