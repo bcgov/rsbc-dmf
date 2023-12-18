@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace RSBC.DMF.DriverPortal.API.Controllers
+namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

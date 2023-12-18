@@ -1010,8 +1010,8 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.LoadProperty(fetchedCase, nameof(incident.dfp_DriverId));
                     result = new CaseDetail
                     {
-                        CaseId = fetchedCase.incidentid.ToString(),
-                        DriverId = fetchedCase.dfp_DriverId.dfp_driverid.ToString(),
+                        CaseId = fetchedCase.incidentid.ToString(),                         
+                        DriverId = fetchedCase.dfp_DriverId?.dfp_driverid.ToString() ?? string.Empty,
                         Title = fetchedCase.title,
                         IdCode = fetchedCase.ticketnumber,
                         OpenedDate = fetchedCase.createdon.Value,
