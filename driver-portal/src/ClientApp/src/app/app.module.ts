@@ -11,12 +11,14 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { AccountComponent } from './account/account.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {CoreUiModule, LayoutModule} from '@shared/core-ui'
+import {CoreUiModule, LayoutModule} from '@shared/core-ui';
+import { DashboardComponent } from './dashboard/dashboard.component'
 
 @NgModule({
   declarations: [
     AppComponent,
-    AccountComponent
+    AccountComponent,
+    DashboardComponent
   ],
 
   schemas: [

@@ -2,7 +2,9 @@
     <div class="container">
     <mat-toolbar class="top-nav">
       <div>
-        <a routerLinkActive="active"> Account </a>
+        <a routerLinkActive="active" [routerLink]="'/dashboard'">Dashboard</a>
+        <a routerLinkActive="active" [routerLink]="'/account'"> Account </a>
+      
         <!-- <a routerLinkActive="active" [routerLink]="'/cases'"> Clinic DMERs </a> -->
     <!--
         <a routerLinkActive="active" [routerLink]="'/notifications'"> Notifications </a>
