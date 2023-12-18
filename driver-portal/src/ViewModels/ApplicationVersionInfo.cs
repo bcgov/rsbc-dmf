@@ -1,4 +1,4 @@
-﻿namespace DriverPortal.Models
+﻿namespace Rsbc.Dmf.DriverPortal.ViewModels
 {
     public class ApplicationVersionInfo
     {

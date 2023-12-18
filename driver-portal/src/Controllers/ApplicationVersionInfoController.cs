@@ -1,4 +1,4 @@
-using DriverPortal.Models;
+using Rsbc.Dmf.DriverPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -6,7 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace RSBC.DMF.DriverPortal.API.Controllers
+namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
