@@ -3,6 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Moq", "..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj", "{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{12418AB0-4406-4AEB-9376-0DBCA8970CBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
@@ -13,6 +21,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3D94BE-AC5D-4316-A604-5D45AFBF22D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BC79C2F-52EF-4EAA-B166-A09BDFC13513}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12418AB0-4406-4AEB-9376-0DBCA8970CBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12418AB0-4406-4AEB-9376-0DBCA8970CBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12418AB0-4406-4AEB-9376-0DBCA8970CBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12418AB0-4406-4AEB-9376-0DBCA8970CBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77E2FD4A-7762-4A1F-B24E-B052B61350D6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48DE0C53-610C-456D-A2C1-6F774B4A7235}.Release|Any CPU.ActiveCfg = Release|Any CPU
