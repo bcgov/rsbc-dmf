@@ -21,20 +21,6 @@ namespace pdipadapter.Infrastructure.Auth
             services.ThrowIfNull(nameof(services));
             config.ThrowIfNull(nameof(config));
 
-            //var producerConfig = new ProducerConfig
-            //{
-            //    BootstrapServers = config.KafkaCluster.BoostrapServers,
-            //    Acks = Acks.All,               
-            //    SaslMechanism = SaslMechanism.Plain,
-            //    SecurityProtocol = SecurityProtocol.SaslSsl,
-            //    SaslUsername = config.KafkaCluster.ClientId,
-            //    SaslPassword = config.KafkaCluster.ClientSecret,
-            //    EnableIdempotence = true
-            //};
-
-            //services.AddSingleton(producerConfig);
-            //services.AddSingleton(typeof(IKafkaProducer<,>), typeof(KafkaProducer<,>));
-
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(option =>
@@ -128,7 +114,7 @@ namespace pdipadapter.Infrastructure.Auth
                     .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
                 options.AddPolicy(Policies.DmftEnroledUser, policy => policy
                     .RequireAuthenticatedUser()
-                    .RequireRole(Claims.IdentityProvider, Roles.DfmtEnroledRole, Roles.DmftEnroledOld));
+                    .RequireRole(Claims.IdentityProvider, Roles.DfmtEnroledRole));
             });
             return services;
             

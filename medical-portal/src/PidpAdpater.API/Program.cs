@@ -1,6 +1,5 @@
 namespace pdipadapter;
 
-using pdipadapter.Data.Extensions;
 using pdipadapter.Infrastructure.Auth;
 using Serilog;
 using Serilog.Events;
@@ -20,7 +19,7 @@ public class Program
             var builder = CreateHostBuilder(args);
             if (args.Contains("/seed"))
             {
-                builder.EnsureSeedData(args).Wait();
+                //builder.EnsureSeedData(args).Wait();
                 return 0;
             }
             builder

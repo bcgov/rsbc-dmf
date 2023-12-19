@@ -1,0 +1,120 @@
+# Default values for pidp-adapter-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: image-registry.apps.silver.devops.gov.bc.ca/0137d5-dev
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+  name: pidp-adapter
+
+keycloak:
+  realmUrl: "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications"
+  administrationUrl: "https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications"
+  administrationClientId: "DMFT-SERVICE"
+  administrationClientSecret: "<redacted>"
+
+dynamics:
+  adfs:
+    serviceAccountDomain: "IDIR"
+    serviceAccountName: "DFP_OSD"
+    clientId: "<redacted>"
+    serviceAccountPassword: "<redacted>"
+    resourceName: "https://rsbc-dfp.dev.jag.gov.bc.ca/api/data/v9.0/"
+    clientSecret: "<redacted>"
+    oAuth2TokenEndpoint: "https://ststest.gov.bc.ca/adfs/oauth2/token"
+  dynamicsApiBaseUri: "https://rsbc-dfp.dev.jag.gov.bc.ca/api/data/v9.0/"
+  dynamicsApiEndpoint: "https://wsgw.dev.jag.gov.bc.ca/driverFitness/crm"
+  dynamicsApiEndpoint1: "https://rsbc-dfp.dev.jag.gov.bc.ca/"
+
+jwtTokenKey: "<redacted>"
+jwtValidIssuer: "IDIR"
+jwtValidAudience: "https://localhost"
+
+ldapClient:
+  url: "https://common-logon-dev.hlth.gov.bc.ca/"
+
+pidpEndorsementAPI:
+  url: "https://test.healthprovideridentityportal.gov.bc.ca"
+  clientId: "DMFT-SERVICE"
+  clientSecret: "xxxxxxxxxxxxx"
+  tokenUrl: "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"
+
+cms:
+  serverUrl: "http://new-cms-adapter.0137d5-dev.svc.cluster.local:8080"
+  clientSecret: "xxxxxxxxxxxxxx"
+  validateServerCertificate: "false"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

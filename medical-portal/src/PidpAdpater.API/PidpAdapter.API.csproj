@@ -52,6 +52,7 @@
     <PackageReference Include="MediatR.Extensions.FluentValidation.AspNetCore" Version="3.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="MicroElements.Swashbuckle.FluentValidation" Version="5.7.0" />
+    <PackageReference Include="Microsoft.AspNet.SignalR.Core" Version="2.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
@@ -94,10 +95,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\Models\" />
-    <Folder Include="Features\DigitalParticipants\Controllers\" />
-    <Folder Include="Features\Participants\Controllers\" />
-    <Folder Include="Features\Persons\Controllers\" />
+    <Folder Include="Features\Users\Services\" />
+    <Folder Include="Models\Lookups\" />
   </ItemGroup>
 
   <ItemGroup>

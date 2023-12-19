@@ -1,13 +1,7 @@
-﻿using AutoMapper;
-using pdipadapter.Data.Security;
-using pdipadapter.Features.Participants.Models;
-using pdipadapter.Features.Participants.Queries;
-using pdipadapter.Infrastructure.Auth;
-using pdipadapter.Policies;
+﻿using pdipadapter.Infrastructure.Auth;
 using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Rsbc.Dmf.CaseManagement;
 
 namespace MedicalPortal.API.Features.Endorsement
 {

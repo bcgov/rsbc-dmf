@@ -1,9 +1,9 @@
-﻿using FluentValidation;
-using pdipadapter.Data.Exceptions;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using SendGrid.Helpers.Errors.Model;
 using ValidationException = FluentValidation.ValidationException;
+using Microsoft.AspNet.SignalR.Hubs;
+using System.Net;
 
 namespace pdipadapter.Controllers
 {
@@ -45,6 +45,7 @@ namespace pdipadapter.Controllers
           BadRequestException => StatusCodes.Status400BadRequest,
           NotFoundException => StatusCodes.Status404NotFound,
           KeyNotFoundException => StatusCodes.Status404NotFound,
+          UnauthorizedAccessException => StatusCodes.Status403Forbidden,
           NotAuthorizedException => StatusCodes.Status401Unauthorized,
           ValidationException => StatusCodes.Status422UnprocessableEntity,
           _ => StatusCodes.Status500InternalServerError

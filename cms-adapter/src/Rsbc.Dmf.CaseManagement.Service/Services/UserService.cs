@@ -56,7 +56,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Birthdate = request.Birthdate.ToDateTime(),
                     Role = request.Role,
                     Gender = request.Gender,
-                    IdpId =request.IdpId,
+                    IdpId = request.IdpId,
 
                 });
                 return new PractitionerContactReply

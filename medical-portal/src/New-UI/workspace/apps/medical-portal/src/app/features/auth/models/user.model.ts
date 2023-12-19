@@ -8,6 +8,7 @@ export interface User extends BaseUser, KeycloakUser<IdentityProvider> {
   // Optional properties applied to the User model
   // in an attempt to normalize between users
   email?: string;
+  pidp_email?: string;
   birthdate?: string;
   idpId: string;
   roles: string[];

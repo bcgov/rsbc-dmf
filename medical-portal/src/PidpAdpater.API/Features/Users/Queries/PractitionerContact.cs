@@ -1,11 +1,7 @@
-﻿using pdipadapter.Data.ef;
-using pdipadapter.Features.Users.Queries;
-using pdipadapter.Features.Users.Services;
-using MediatR;
-using Rsbc.Dmf.CaseManagement;
+﻿using MediatR;
+using pdipadapter.Extensions;
 using PidpAdapter.API.Features.Users.Models;
 using Rsbc.Dmf.CaseManagement.Service;
-using Google.Protobuf.WellKnownTypes;
 
 namespace MedicalPortal.API.Features.Users.Queries;
 public class PractitionerContactQuery
@@ -19,9 +15,11 @@ public class PractitionerContactQuery
     public class QueryHandler : IRequestHandler<Query, List<Model>>
     {
         private readonly UserManager.UserManagerClient userManager;
-        public QueryHandler(UserManager.UserManagerClient userManager)
+        readonly IHttpContextAccessor accessor;
+        public QueryHandler(UserManager.UserManagerClient userManager, IHttpContextAccessor accessor)
         {
             this.userManager = userManager;
+            this.accessor = accessor;
         }
 
         public async Task<List<Model>> Handle(Query request, CancellationToken cancellationToken)
@@ -37,6 +35,10 @@ public class PractitionerContactQuery
 
             }
 
+            if (pReponse.Email != accessor.HttpContext.User.GetPidpEmail())
+            {
+                //update contact with new email when email change
+            }
             var g = new Model
             {
                 Id = pReponse.ContactId

@@ -89,6 +89,15 @@ public static class ClaimsPrincipalExtensions
 
         return gender;
     }
+    public static string? GetPidpEmail(this ClaimsPrincipal user)
+    {
+        var pidpEmail = user.FindFirstValue(Claims.PidpEmail);
+
+        if (string.IsNullOrEmpty(pidpEmail))
+            return null;
+
+        return pidpEmail;
+    }
     public static IEnumerable<string> GetRoles(this ClaimsPrincipal principal)
     {
         return principal.Identities.SelectMany(i =>

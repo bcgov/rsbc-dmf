@@ -1,0 +1,261 @@
+[21:59:45 INF] HTTP OPTIONS /api/contacts responded 204 in 1.1692 ms
+[22:01:04 INF] HTTP GET /api/contacts responded 200 in 78850.6806 ms
+[22:01:04 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.0543 ms
+[22:01:06 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 2637.5417 ms
+[22:01:16 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0726 ms
+[22:01:18 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1980.3136 ms
+[22:02:27 INF] HTTP GET /api/contacts responded 401 in 44.5243 ms
+[22:03:00 WRN] User "73b5daa2-fa32-49f8-a87c-cee520610298" is not authorized to perform this operation
+[22:03:00 ERR] HTTP GET /api/contacts responded 500 in 9877.2086 ms
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[22:03:00 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:03:00 WRN] The response has already started, the error handler will not be executed.
+[22:03:00 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[22:03:00 WRN] The response has already started, the error page middleware will not be executed.
+[22:03:00 ERR] Connection id "0HMVQQ7NB1Q17", Request id "0HMVQQ7NB1Q17:00000003": An unhandled exception was thrown by the application.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+[22:18:27 WRN] User "73b5daa2-fa32-49f8-a87c-cee520610298" is not authorized to perform this operation
+[22:18:27 ERR] HTTP GET /api/contacts responded 500 in 824604.0940 ms
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[22:18:27 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[22:18:27 WRN] The response has already started, the error handler will not be executed.
+[22:18:27 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[22:18:27 WRN] The response has already started, the error page middleware will not be executed.
+[22:18:27 ERR] Connection id "0HMVQQ7NB1Q17", Request id "0HMVQQ7NB1Q17:00000004": An unhandled exception was thrown by the application.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 41
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 44
+   at lambda_method117(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)
+[22:20:12 INF] HTTP GET /api/contacts responded 200 in 45799.6235 ms
+[22:22:28 INF] HTTP GET /api/contacts responded 200 in 20533.3910 ms
+[22:22:37 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 1.6871 ms
+[22:22:53 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1531.3327 ms
+[22:24:10 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0432 ms
+[22:24:32 INF] HTTP GET /api/contacts responded 200 in 22127.5271 ms
+[22:24:33 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.0549 ms
+[22:24:35 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 2069.2710 ms
+[22:24:37 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0459 ms
+[22:24:38 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1376.3566 ms
+[22:27:30 INF] HTTP OPTIONS /api/contacts responded 204 in 0.1163 ms
+[22:27:41 INF] HTTP GET /api/contacts responded 200 in 10711.4423 ms
+[22:27:41 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.0539 ms
+[22:27:41 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0901 ms
+[22:27:43 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 1875.2453 ms
+[22:27:43 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2257.0561 ms
+[22:29:04 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0566 ms
+[22:29:17 INF] HTTP GET /api/contacts responded 200 in 13479.1233 ms
+[22:29:17 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.0740 ms
+[22:29:17 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0382 ms
+[22:29:20 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 2244.2554 ms
+[22:29:20 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2537.8618 ms
+[22:34:08 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0732 ms
+[22:34:30 INF] HTTP GET /api/contacts responded 200 in 21622.9421 ms
+[22:34:30 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.1626 ms
+[22:34:30 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0610 ms
+[22:34:32 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 2115.7407 ms
+[22:34:32 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 2458.2163 ms
+[22:45:06 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 254675.9778 ms
+[22:46:33 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 52007.6557 ms
+[22:55:06 INF] Starting web host
+[22:55:09 INF] ### App Version:1.0.0.0 ###
+[22:55:09 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:55:18 INF] Now listening on: https://localhost:7215
+[22:55:18 INF] Now listening on: http://localhost:5050
+[22:55:18 INF] Application started. Press Ctrl+C to shut down.
+[22:55:18 INF] Hosting environment: Development
+[22:55:18 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:07:43 INF] Starting web host
+[23:07:45 INF] ### App Version:1.0.0.0 ###
+[23:07:45 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:07:48 INF] Now listening on: https://localhost:7215
+[23:07:48 INF] Now listening on: http://localhost:5050
+[23:07:48 INF] Application started. Press Ctrl+C to shut down.
+[23:07:48 INF] Hosting environment: Development
+[23:07:48 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:08:14 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 19782.3557 ms
+[23:08:39 INF] HTTP OPTIONS /api/contacts responded 204 in 1.5043 ms
+[23:08:55 INF] HTTP GET /api/contacts responded 200 in 15915.1106 ms
+[23:08:55 INF] HTTP OPTIONS /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 204 in 0.4686 ms
+[23:08:55 INF] HTTP OPTIONS /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 204 in 0.0498 ms
+[23:08:59 INF] HTTP GET /api/73b5daa2-fa32-49f8-a87c-cee520610298/contacts responded 200 in 3409.2604 ms
+[23:09:01 INF] HTTP GET /api/Contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 5723.4861 ms
+[23:10:47 INF] HTTP OPTIONS /api/contacts responded 204 in 0.0660 ms
+[23:10:47 INF] HTTP GET /api/contacts responded 403 in 3.8631 ms
+[23:10:47 INF] HTTP GET /api/contacts responded 403 in 1.2678 ms
+[23:11:15 INF] HTTP OPTIONS /api/contacts responded 204 in 0.5292 ms
+[23:11:15 INF] HTTP GET /api/contacts responded 403 in 1.2408 ms
+[23:11:15 INF] HTTP GET /api/contacts responded 403 in 9.5131 ms
+[23:12:11 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 3764.3125 ms

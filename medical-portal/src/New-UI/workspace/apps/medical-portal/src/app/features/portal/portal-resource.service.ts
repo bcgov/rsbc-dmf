@@ -14,7 +14,7 @@ export class PortalResource {
   public constructor(private apiResource: ApiHttpClient) {}
 
   public getProfileStatus(contactId: string): Observable<any | null> {
-    return this.apiResource.get<any>(`${contactId}/Contacts`, {}).pipe(
+    return this.apiResource.get<any>(`${contactId}/contacts`, {}).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === HttpStatusCode.NotFound) {
           return of(null);

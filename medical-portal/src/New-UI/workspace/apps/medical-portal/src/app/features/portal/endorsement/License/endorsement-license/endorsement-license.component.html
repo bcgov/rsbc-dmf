@@ -10,10 +10,18 @@
     <tr>
       <td>{{ rowData.identifierType }}</td>
       <td>
-        <p-tag
-          icon="pi pi-check"
-          [value]="rowData.statusCode"
-          [severity]="'success'"></p-tag>
+        <span *ngIf="rowData.statusCode === 'MOA'">
+          <p-tag
+            icon="pi pi-info-circle"
+            [value]="rowData.statusCode"
+            [severity]="'info'"></p-tag>
+        </span>
+        <span *ngIf="rowData.statusCode !== 'MOA'">
+          <p-tag
+            icon="pi pi-check"
+            [value]="rowData.statusCode"
+            [severity]="'success'"></p-tag
+        ></span>
       </td>
       <td>{{ rowData.statusReasonCode }}</td>
     </tr>

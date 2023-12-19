@@ -6,10 +6,8 @@ using pdipadapter.Infrastructure.Auth;
 using pdipadapter.Infrastructure.HttpClients.Keycloak;
 using pdipadapter.Infrastructure.HttpClients.Mail;
 using pdipadapter.Extensions;
-using pdipadapter.Infrastructure.HttpClients.JustinParticipant;
 using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
 using MedicalPortal.API.Features.Endorsement.Services;
-using Microsoft.Identity.Client;
 
 public static class HttpClientSetup
 {
@@ -44,8 +42,6 @@ public static class HttpClientSetup
                 ClientId = config.Keycloak.AdministrationClientId,
                 ClientSecret = config.Keycloak.AdministrationClientSecret
             });
-
-        services.AddHttpClientWithBaseAddress<IJustinParticipantClient, JustinParticipantClient>(config.JustinParticipantClient.Url);
 
         services.AddTransient<ISmtpEmailClient, SmtpEmailClient>();
 

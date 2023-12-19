@@ -22,10 +22,17 @@ public class AuthConstant
         // PIdP Role Placeholders
         public const string Practitoner = "PRACTITIONER";
         public const string Moa = "MOA";
+        public const string Dmft = "DMFT_ENROLLED";
     }
     public static class Policies
     {
         public const string MedicalPractitioner = "medical-practitioner";
+
+        public const string Enrolled = "dmft-enrolled";
+    }
+    public static class Clients
+    {
+        public const string License = "LICENCE-STATUS";
     }
 }
 

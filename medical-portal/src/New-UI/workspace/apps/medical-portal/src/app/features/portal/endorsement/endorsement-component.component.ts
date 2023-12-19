@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-member-accessibility */
 
 /* eslint-disable @typescript-eslint/no-inferrable-types */
+import { newArray } from '@angular/compiler/src/util';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 
@@ -26,6 +27,7 @@ export class EndorsementComponentComponent implements OnInit {
   public dataSource: MatTableDataSource<EndorsementList>;
   public endorsements: EndorsementList[] = [];
   public Licenses: Licenses[] = [];
+  public Moa: Licenses[] = [];
   public contact: Contact;
   moaLicense: string;
   usersRoles: string;
@@ -83,12 +85,37 @@ export class EndorsementComponentComponent implements OnInit {
     }
   }
   getUserLicense(hpdid: string): void {
-    this.Licenses = this.endorsements.filter(
-      (e) => e.hpdid === hpdid
-    )[0].licences;
-    if (this.Licenses === undefined || this.Licenses.length === 0) {
-      this.display = true;
+    const endorsement = this.endorsements.filter((e) => e.hpdid === hpdid)[0];
+
+    if (
+      this.Licenses === undefined ||
+      (this.Licenses.length === 0 &&
+        endorsement.contact.role.toUpperCase() === 'MOA')
+    ) {
+      const moaLicense: Licenses = {
+        identifierType: 'N/A',
+        statusCode: 'MOA',
+        statusReasonCode: 'N/A',
+      };
+      this.Licenses.push(moaLicense);
+      this.ref = this.dialogService.open(EndorsementLicenseComponent, {
+        header: 'License Information',
+        style: {
+          'margin-left': 'auto',
+          'margin-right': 'var(--spacing-xxl)',
+          'background-color': 'green !important',
+          color: 'var(--highlight-text-color)',
+        },
+        data: this.Licenses,
+        closable: true,
+        modal: true,
+        dismissableMask: true,
+        contentStyle: { overflow: 'auto', 'max-height': '200px' },
+        baseZIndex: 10000,
+      });
+      //this.display = true;
     } else {
+      this.Licenses = endorsement.licences;
       this.ref = this.dialogService.open(EndorsementLicenseComponent, {
         header: 'License Information',
         style: {

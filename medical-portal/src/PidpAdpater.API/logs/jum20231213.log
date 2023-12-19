@@ -1,0 +1,2 @@
+[15:38:18 INF] HTTP GET /api/contacts responded 401 in 339.4029 ms
+[15:38:30 INF] HTTP GET /api/contacts responded 200 in 2612.5130 ms

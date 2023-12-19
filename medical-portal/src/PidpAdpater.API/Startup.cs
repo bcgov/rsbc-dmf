@@ -1,9 +1,7 @@
 ﻿using FluentValidation.AspNetCore;
-using pdipadapter.Data;
 using pdipadapter.Infrastructure;
 using pdipadapter.Infrastructure.Auth;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
@@ -20,23 +18,16 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using pdipadapter.Core.Http;
 using MediatR;
-using pdipadapter.Features.Players;
-using pdipadapter.PipelineBehaviours;
 using MediatR.Extensions.FluentValidation.AspNetCore;
-using pdipadapter.Features.Participants.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using pdipadapter.Common;
-using pdipadapter.Features.DigitalParticipants.Services;
-using pdipadapter.Features.Persons.Services;
-using pdipadapter.Features.Users.Services;
 using pdipadapter.Infrastructure.HttpClients;
-using pdipadapter.Data.Seed;
 using pdipadapter.Helpers.Mapping;
-using Rsbc.Dmf.CaseManagement;
 using PidpAdapter.API.Infrastructure;
-using Rsbc.Dmf.CaseManagement.Service;
 using MediatR.Registration;
-using pdipadapter.Features.Users.Commands;
+using Mapster;
+using static MedicalPortal.API.Features.Users.Commands.CreateUser;
+using pdipadapter.Infrastructure.Services;
 
 namespace pdipadapter;
 public class Startup
@@ -52,7 +43,8 @@ public class Startup
           .AddAutoMapper(typeof(Startup))
           .AddHttpClients(config)
           .AddKeycloakAuth(config)
-          .AddSingleton<IClock>(NodaTime.SystemClock.Instance).AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<CreateUserCommandHandler>>());
+          .AddScoped<IPidpAdapterAuthorizationService, PidpAdapterAuthorizationService>()
+          .AddSingleton<IClock>(NodaTime.SystemClock.Instance).AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<CommandHandler>>());
 
         services.AddMapster(options =>
         {
@@ -69,24 +61,16 @@ public class Startup
 
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("Administrator", policy => policy.Requirements.Add(new RealmAccessRoleRequirement("administrator")));
-            options.AddPolicy(Infrastructure.Auth.Policies.MedicalPractitioner, policy => policy
-            .RequireAuthenticatedUser()
-            .RequireRole(Roles.Practitoner, Roles.Moa));
-            options.AddPolicy(Infrastructure.Auth.Policies.DmftEnroledUser, policy => policy
-            .RequireAuthenticatedUser()
-            .RequireRole(Roles.DfmtEnroledRole));
-        });
-
-
-
-        services.AddScoped<IPlayersService, PlayersService>();
-        services.AddScoped<IPartyTypeService, PartyTypeService>();
-        services.AddScoped<IDigitalParticipantService, DigitalParticipantService>();
-        services.AddScoped<IPersonService, PersonService>();
-        services.AddScoped<IUserService, UserService>();
+        //services.AddAuthorization(options =>
+        //{
+        //    options.AddPolicy("Administrator", policy => policy.Requirements.Add(new RealmAccessRoleRequirement("administrator")));
+        //    options.AddPolicy(Infrastructure.Auth.Policies.MedicalPractitioner, policy => policy
+        //    .RequireAuthenticatedUser()
+        //    .RequireRole(Roles.Practitoner, Roles.Moa));
+        //    options.AddPolicy(Infrastructure.Auth.Policies.DmftEnroledUser, policy => policy
+        //    .RequireAuthenticatedUser()
+        //    .RequireRole(Roles.DfmtEnroledRole));
+        //});
 
         services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
             .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
@@ -94,9 +78,9 @@ public class Startup
             .AddHybridModelBinder();
         services.AddHttpClient();
 
-        services.AddDbContext<JumDbContext>(options => options
-            .UseSqlServer(config.ConnectionStrings.JumDatabase, sql => sql.UseNodaTime())
-            .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
+        //services.AddDbContext<JumDbContext>(options => options
+        //    .UseSqlServer(config.ConnectionStrings.JumDatabase, sql => sql.UseNodaTime())
+        //    .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
 
         var serviceConfig = new MediatRServiceConfiguration();
         ServiceRegistrar.AddRequiredServices(services, serviceConfig);
@@ -119,7 +103,6 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddTransient<ClaimsPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         services.AddScoped<IProxyRequestClient, ProxyRequestClient>();
-        services.AddScoped<IdentityProviderDataSeeder>();
         //services.AddScoped<IOpenIdConnectRequestClient, OpenIdConnectRequestClient>();
 
        // services.AddMediatR(typeof(MedicalPortal.API.Features.Users.Commands.CreateUser).GetTypeInfo().Assembly);

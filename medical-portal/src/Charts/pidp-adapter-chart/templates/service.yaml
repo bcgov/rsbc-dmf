@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "pidp-adapter-chart.fullname" . }}
+  labels:
+    app: {{ include "pidp-adapter-chart.name" . }}
+spec:
+  selector:
+    app: {{ include "pidp-adapter-chart.name" . }}
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP

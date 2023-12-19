@@ -14,11 +14,9 @@ export const environment: AppEnvironment = {
   production: true,
   pidpAdapterApiEndpoint:
     'https://pidp-adapter-0137d5-dev.apps.silver.devops.gov.bc.ca/api',
-  medicalPortalApiEndpoint:
-    'https://medical-portal-api-0137d5-dev.apps.silver.devops.gov.bc.ca',
+  medicalPortalApiEndpoint: 'http://localhost:3020',
   environmentName: EnvironmentName.LOCAL,
-  applicationUrl:
-    'https://medical-portal-pidp-0137d5-dev.apps.silver.devops.gov.bc.ca',
+  applicationUrl: 'http://localhost:4200',
   pidpPortalUrl: 'https://test.healthprovideridentityportal.gov.bc.ca',
   featureFlags: {
     isLayoutV2Enabled: false,

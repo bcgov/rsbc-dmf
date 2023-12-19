@@ -55,6 +55,70 @@ namespace RSBC.DMF.MedicalPortal.API
             var config = this.InitializeConfiguration(services);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.AddAuthentication()
+                //JWT tokens handling
+                .AddJwtBearer("token", options =>
+                {
+                    options.BackchannelHttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+
+                    configuration.GetSection("auth:token").Bind(options);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+
+                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+                    options.ForwardDefaultSelector = ctx =>
+                    {
+                        var authHeader = (string)ctx.Request.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        }
+                    };
+                })
+                //reference tokens handling
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    options.EnableCaching = true;
+                    options.CacheDuration = TimeSpan.FromMinutes(1);
+                    configuration.GetSection("auth:introspection").Bind(options);
+                    options.Events = new OAuth2IntrospectionEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        },
+                        OnUpdateClientAssertion =
+                        async ctx =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("OAuth", policy =>
+                {
+                    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
+                    policy.RequireClaim("scope", "doctors-portal-api");
+                });
+            });
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                        //JWT tokens handling
                        .AddJwtBearer(options =>
@@ -76,7 +140,11 @@ namespace RSBC.DMF.MedicalPortal.API
                     options.AddPolicy(Policies.MedicalPractitioner, policy => policy
                     .RequireAuthenticatedUser()
                     .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
-                
+
+                options.AddPolicy(Policies.Enrolled, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireRole(Claims.IdentityProvider, Roles.Dmft));
+
             });
 
 
@@ -196,10 +264,8 @@ namespace RSBC.DMF.MedicalPortal.API
             if (context.Principal?.Identity is ClaimsIdentity identity
             && identity.IsAuthenticated)
             {
-                var f = identity.GetResourceAccessRoles("LICENCE-STATUS")
-                    .Select(role => new Claim(ClaimTypes.Role, role));
                 // Flatten the Resource Access claim
-                identity.AddClaims(identity.GetResourceAccessRoles("LICENCE-STATUS")
+                identity.AddClaims(identity.GetResourceAccessRoles(Clients.License)
                     .Select(role => new Claim(ClaimTypes.Role, role)));
             }
 
@@ -272,7 +338,7 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization(Policies.MedicalPractitioner)
+                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled)
                     ;
             });
 

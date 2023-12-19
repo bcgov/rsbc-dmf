@@ -1,0 +1,628 @@
+[16:41:46 INF] Starting web host
+[16:41:51 INF] ### App Version:1.0.0.0 ###
+[16:41:51 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:41:59 FTL] Host terminated unexpectedly
+Grpc.Core.RpcException: Status(StatusCode="Unavailable", Detail="Error starting gRPC call. HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020) SocketException: No connection could be made because the target machine actively refused it.", DebugException="System.Net.Http.HttpRequestException: No connection could be made because the target machine actively refused it. (localhost:4020)
+ ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
+   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
+   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|277_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at System.Net.Http.HttpConnectionPool.ConnectToTcpHostAsync(String host, Int32 port, HttpRequestMessage initialRequest, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.ConnectAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.AddHttp2ConnectionAsync(HttpRequestMessage request)
+   at System.Threading.Tasks.TaskCompletionSourceWithCancellation`1.WaitWithCancellationAsync(CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.GetHttp2ConnectionAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpConnectionPool.SendWithVersionDetectionAndRetryAsync(HttpRequestMessage request, Boolean async, Boolean doRequestAuth, CancellationToken cancellationToken)
+   at System.Net.Http.DiagnosticsHandler.SendAsyncCore(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.RedirectHandler.SendAsync(HttpRequestMessage request, Boolean async, CancellationToken cancellationToken)
+   at System.Net.Http.HttpClient.<SendAsync>g__Core|83_0(HttpRequestMessage request, HttpCompletionOption completionOption, CancellationTokenSource cts, Boolean disposeCts, CancellationTokenSource pendingRequestsCts, CancellationToken originalCancellationToken)
+   at Grpc.Net.Client.Internal.GrpcCall`2.RunCall(HttpRequestMessage request, Nullable`1 timeout)")
+   at Grpc.Net.Client.Internal.HttpClientCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.<BlockingUnaryCall>b__3_0[TRequest,TResponse](TRequest req, ClientInterceptorContext`2 ctx)
+   at Grpc.Core.ClientBase.ClientBaseConfiguration.ClientBaseConfigurationInterceptor.BlockingUnaryCall[TRequest,TResponse](TRequest request, ClientInterceptorContext`2 context, BlockingUnaryCallContinuation`2 continuation)
+   at Grpc.Core.Interceptors.InterceptingCallInvoker.BlockingUnaryCall[TRequest,TResponse](Method`2 method, String host, CallOptions options, TRequest request)
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, CallOptions options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 690
+   at Rsbc.Dmf.CaseManagement.Service.CaseManager.CaseManagerClient.GetToken(TokenRequest request, Metadata headers, Nullable`1 deadline, CancellationToken cancellationToken) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\CmsAdapterGrpc.cs:line 679
+   at PidpAdapter.API.Infrastructure.CmsAdapterConfiguration.AddCmsAdapterGrpcService(IServiceCollection services, PdipadapterConfiguration config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\CmsAdapterConfiguration.cs:line 47
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 128
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+[16:42:55 INF] Starting web host
+[16:42:57 INF] ### App Version:1.0.0.0 ###
+[16:42:57 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:42:59 INF] Error getting token for Case Management Service
+[16:42:59 FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+ ---> (Inner Exception #1) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #2) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #3) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+[16:43:22 INF] Starting web host
+[16:43:24 INF] ### App Version:1.0.0.0 ###
+[16:43:24 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:43:27 INF] Error getting token for Case Management Service
+[16:43:27 FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+ ---> (Inner Exception #1) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #2) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #3) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+[16:46:55 INF] Starting web host
+[16:46:56 INF] ### App Version:1.0.0.0 ###
+[16:46:56 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:46:59 INF] Error getting token for Case Management Service
+[16:46:59 FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+ ---> (Inner Exception #1) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #2) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #3) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+[16:48:34 INF] Starting web host
+[16:48:37 INF] ### App Version:1.0.0.0 ###
+[16:48:37 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:48:41 INF] Now listening on: https://localhost:7215
+[16:48:41 INF] Now listening on: http://localhost:5050
+[16:48:41 INF] Application started. Press Ctrl+C to shut down.
+[16:48:41 INF] Hosting environment: Development
+[16:48:41 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:48:53 INF] HTTP GET /api/contacts responded 403 in 1352.9842 ms
+[16:51:22 INF] HTTP GET /api/contacts responded 403 in 11.1038 ms
+[16:53:53 INF] Starting web host
+[16:53:55 INF] ### App Version:1.0.0.0 ###
+[16:53:55 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:53:57 INF] Now listening on: https://localhost:7215
+[16:53:57 INF] Now listening on: http://localhost:5050
+[16:53:57 INF] Application started. Press Ctrl+C to shut down.
+[16:53:57 INF] Hosting environment: Development
+[16:53:57 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:54:19 INF] HTTP GET /api/contacts responded 200 in 9652.5376 ms
+[16:55:11 INF] Starting web host
+[16:55:12 INF] ### App Version:1.0.0.0 ###
+[16:55:13 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:55:15 INF] Now listening on: https://localhost:7215
+[16:55:15 INF] Now listening on: http://localhost:5050
+[16:55:15 INF] Application started. Press Ctrl+C to shut down.
+[16:55:15 INF] Hosting environment: Development
+[16:55:15 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:55:28 INF] HTTP GET /api/contacts responded 403 in 556.4091 ms
+[16:57:52 INF] Starting web host
+[16:57:53 INF] ### App Version:1.0.0.0 ###
+[16:57:54 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[16:57:56 INF] Now listening on: https://localhost:7215
+[16:57:56 INF] Now listening on: http://localhost:5050
+[16:57:56 INF] Application started. Press Ctrl+C to shut down.
+[16:57:56 INF] Hosting environment: Development
+[16:57:56 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[16:58:09 INF] HTTP GET /api/contacts responded 200 in 5020.2879 ms
+[16:58:35 INF] Application is shutting down...
+[19:38:46 INF] Starting web host
+[19:38:49 INF] ### App Version:1.0.0.0 ###
+[19:38:49 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[19:38:52 INF] Now listening on: https://localhost:7215
+[19:38:52 INF] Now listening on: http://localhost:5050
+[19:38:52 INF] Application started. Press Ctrl+C to shut down.
+[19:38:52 INF] Hosting environment: Development
+[19:38:52 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[19:39:54 INF] Starting web host
+[19:39:55 INF] ### App Version:1.0.0.0 ###
+[19:39:55 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[19:39:57 INF] Error getting token for Case Management Service
+[19:39:57 FTL] Host terminated unexpectedly
+System.AggregateException: Some services are not able to be constructed (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.) (Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.)
+ ---> System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[PidpAdapter.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'PidpAdapter.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(IServiceCollection services, ServiceProviderOptions options)
+   at Microsoft.Extensions.DependencyInjection.DefaultServiceProviderFactory.CreateServiceProvider(IServiceCollection containerBuilder)
+   at Microsoft.Extensions.Hosting.Internal.ServiceFactoryAdapter`1.CreateServiceProvider(Object containerBuilder)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 26
+ ---> (Inner Exception #1) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Query,System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #2) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Queries.ContactQuery+Query,PidpAdapter.API.Features.Users.Models.PractitionerContactResponse] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Queries.ContactQuery+QueryHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+ ---> (Inner Exception #3) System.InvalidOperationException: Error while validating the service descriptor 'ServiceType: MediatR.IRequestHandler`2[MedicalPortal.API.Features.Users.Commands.CreateUser+Command,System.String] Lifetime: Transient ImplementationType: MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler': Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+ ---> System.InvalidOperationException: Unable to resolve service for type 'Rsbc.Dmf.CaseManagement.Service.UserManager+UserManagerClient' while attempting to activate 'MedicalPortal.API.Features.Users.Commands.CreateUser+CommandHandler'.
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateArgumentCallSites(Type implementationType, CallSiteChain callSiteChain, ParameterInfo[] parameters, Boolean throwIfCallSiteNotFound)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.CreateConstructorCallSite(ResultCache lifetime, Type serviceType, Type implementationType, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.TryCreateExact(ServiceDescriptor descriptor, Type serviceType, CallSiteChain callSiteChain, Int32 slot)
+   at Microsoft.Extensions.DependencyInjection.ServiceLookup.CallSiteFactory.GetCallSite(ServiceDescriptor serviceDescriptor, CallSiteChain callSiteChain)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   --- End of inner exception stack trace ---
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider.ValidateService(ServiceDescriptor descriptor)
+   at Microsoft.Extensions.DependencyInjection.ServiceProvider..ctor(ICollection`1 serviceDescriptors, ServiceProviderOptions options)<---
+
+[20:40:28 INF] Starting web host
+[20:40:34 INF] ### App Version:1.0.0.0 ###
+[20:40:34 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[20:40:39 INF] Now listening on: https://localhost:7215
+[20:40:39 INF] Now listening on: http://localhost:5050
+[20:40:39 INF] Application started. Press Ctrl+C to shut down.
+[20:40:39 INF] Hosting environment: Development
+[20:40:39 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[20:43:16 INF] Starting web host
+[20:43:24 INF] ### App Version:1.0.0.0 ###
+[20:43:24 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[20:43:33 INF] Now listening on: https://localhost:7215
+[20:43:33 INF] Now listening on: http://localhost:5050
+[20:43:33 INF] Application started. Press Ctrl+C to shut down.
+[20:43:33 INF] Hosting environment: Development
+[20:43:33 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[21:36:04 INF] Starting web host
+[21:36:10 INF] ### App Version:1.0.0.0 ###
+[21:36:10 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:36:15 INF] Now listening on: https://localhost:7215
+[21:36:15 INF] Now listening on: http://localhost:5050
+[21:36:15 INF] Application started. Press Ctrl+C to shut down.
+[21:36:15 INF] Hosting environment: Development
+[21:36:15 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[21:43:01 INF] Starting web host
+[21:43:08 INF] ### App Version:1.0.0.0 ###
+[21:43:08 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:43:08 FTL] Host terminated unexpectedly
+System.ArgumentException: Allow only member access (eg. obj => obj.Child.Name) (Parameter 'lambda')
+   at Mapster.Utils.ExpressionEx.GetMemberPath(LambdaExpression lambda, Boolean firstLevelOnly, Boolean noError)
+   at Mapster.TypeAdapterSetter`2.Map[TDestinationMember,TSourceMember](Expression`1 member, Expression`1 source, Expression`1 shouldMap)
+   at pdipadapter.Mapping.ContactMap.Register(TypeAdapterConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Mapping\ContactMap.cs:line 11
+   at Mapster.TypeAdapterConfig.Apply(IEnumerable`1 registers)
+   at Mapster.TypeAdapterConfig.Scan(Assembly[] assemblies)
+   at pdipadapter.Helpers.Mapping.ServiceCollectionExtensions.AddMapster(IServiceCollection services, Action`1 options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Helpers\Mapping\ServiceCollectionExtensions.cs:line 13
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 47
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 25
+[21:48:52 INF] Starting web host
+[21:48:56 INF] ### App Version:1.0.0.0 ###
+[21:48:56 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:48:57 FTL] Host terminated unexpectedly
+System.ArgumentException: Allow only member access (eg. obj => obj.Child.Name) (Parameter 'lambda')
+   at Mapster.Utils.ExpressionEx.GetMemberPath(LambdaExpression lambda, Boolean firstLevelOnly, Boolean noError)
+   at Mapster.TypeAdapterSetter`2.Map[TDestinationMember,TSourceMember](Expression`1 member, Expression`1 source, Expression`1 shouldMap)
+   at pdipadapter.Mapping.ContactMap.Register(TypeAdapterConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Mapping\ContactMap.cs:line 11
+   at Mapster.TypeAdapterConfig.Apply(IEnumerable`1 registers)
+   at Mapster.TypeAdapterConfig.Scan(Assembly[] assemblies)
+   at pdipadapter.Helpers.Mapping.ServiceCollectionExtensions.AddMapster(IServiceCollection services, Action`1 options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Helpers\Mapping\ServiceCollectionExtensions.cs:line 13
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 47
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 25
+[21:55:12 INF] Starting web host
+[21:55:18 INF] ### App Version:1.0.0.0 ###
+[21:55:18 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:55:19 FTL] Host terminated unexpectedly
+System.ArgumentException: Allow only member access (eg. obj => obj.Child.Name) (Parameter 'lambda')
+   at Mapster.Utils.ExpressionEx.GetMemberPath(LambdaExpression lambda, Boolean firstLevelOnly, Boolean noError)
+   at Mapster.TypeAdapterSetter`2.Map[TDestinationMember,TSourceMember](Expression`1 member, Expression`1 source, Expression`1 shouldMap)
+   at pdipadapter.Mapping.ContactMap.Register(TypeAdapterConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Mapping\ContactMap.cs:line 11
+   at Mapster.TypeAdapterConfig.Apply(IEnumerable`1 registers)
+   at Mapster.TypeAdapterConfig.Scan(Assembly[] assemblies)
+   at pdipadapter.Helpers.Mapping.ServiceCollectionExtensions.AddMapster(IServiceCollection services, Action`1 options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Helpers\Mapping\ServiceCollectionExtensions.cs:line 13
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 47
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 25
+[21:56:17 INF] Starting web host
+[21:56:25 INF] ### App Version:1.0.0.0 ###
+[21:56:25 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:56:32 INF] Now listening on: https://localhost:7215
+[21:56:32 INF] Now listening on: http://localhost:5050
+[21:56:32 INF] Application started. Press Ctrl+C to shut down.
+[21:56:32 INF] Hosting environment: Development
+[21:56:32 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[21:57:46 INF] Starting web host
+[21:57:53 INF] ### App Version:1.0.0.0 ###
+[21:57:53 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:57:53 FTL] Host terminated unexpectedly
+System.ArgumentException: Allow only member access (eg. obj => obj.Child.Name) (Parameter 'lambda')
+   at Mapster.Utils.ExpressionEx.GetMemberPath(LambdaExpression lambda, Boolean firstLevelOnly, Boolean noError)
+   at Mapster.TypeAdapterSetter`2.Map[TDestinationMember,TSourceMember](Expression`1 member, Expression`1 source, Expression`1 shouldMap)
+   at pdipadapter.Mapping.ContactMap.Register(TypeAdapterConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Mapping\ContactMap.cs:line 11
+   at Mapster.TypeAdapterConfig.Apply(IEnumerable`1 registers)
+   at Mapster.TypeAdapterConfig.Scan(Assembly[] assemblies)
+   at pdipadapter.Helpers.Mapping.ServiceCollectionExtensions.AddMapster(IServiceCollection services, Action`1 options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Helpers\Mapping\ServiceCollectionExtensions.cs:line 13
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 47
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 25
+[21:58:13 INF] Starting web host
+[21:58:16 INF] ### App Version:1.0.0.0 ###
+[21:58:16 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[21:58:16 FTL] Host terminated unexpectedly
+System.ArgumentException: Allow only member access (eg. obj => obj.Child.Name) (Parameter 'lambda')
+   at Mapster.Utils.ExpressionEx.GetMemberPath(LambdaExpression lambda, Boolean firstLevelOnly, Boolean noError)
+   at Mapster.TypeAdapterSetter`2.Map[TDestinationMember,TSourceMember](Expression`1 member, Expression`1 source, Expression`1 shouldMap)
+   at pdipadapter.Mapping.ContactMap.Register(TypeAdapterConfig config) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Mapping\ContactMap.cs:line 11
+   at Mapster.TypeAdapterConfig.Apply(IEnumerable`1 registers)
+   at Mapster.TypeAdapterConfig.Scan(Assembly[] assemblies)
+   at pdipadapter.Helpers.Mapping.ServiceCollectionExtensions.AddMapster(IServiceCollection services, Action`1 options) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Helpers\Mapping\ServiceCollectionExtensions.cs:line 13
+   at pdipadapter.Startup.ConfigureServices(IServiceCollection services) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Startup.cs:line 47
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.InvokeCore(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass9_0.<Invoke>g__Startup|0(IServiceCollection serviceCollection)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.Invoke(Object instance, IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.ConfigureServicesBuilder.<>c__DisplayClass8_0.<Build>b__0(IServiceCollection services)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.UseStartup(Type startupType, HostBuilderContext context, IServiceCollection services, Object instance)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostBuilder.<>c__DisplayClass13_0.<UseStartup>b__0(HostBuilderContext context, IServiceCollection services)
+   at Microsoft.Extensions.Hosting.HostBuilder.CreateServiceProvider()
+   at Microsoft.Extensions.Hosting.HostBuilder.Build()
+   at pdipadapter.Program.Main(String[] args) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Program.cs:line 25
+[22:01:32 INF] Starting web host
+[22:01:35 INF] ### App Version:1.0.0.0 ###
+[22:01:35 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[22:01:45 INF] Now listening on: https://localhost:7215
+[22:01:45 INF] Now listening on: http://localhost:5050
+[22:01:45 INF] Application started. Press Ctrl+C to shut down.
+[22:01:45 INF] Hosting environment: Development
+[22:01:45 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[22:02:46 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 401 in 2909.8988 ms
+[22:03:11 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 13981.4539 ms
+[22:03:27 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 4252.8165 ms
+[22:03:39 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 6251.5355 ms
+[22:03:54 INF] HTTP GET /api/contacts/kkpqtjseoyaygbqxmjq7kltol7wffrn6/endorsements responded 200 in 1300.0884 ms
+[23:39:16 INF] Starting web host
+[23:39:23 INF] ### App Version:1.0.0.0 ###
+[23:39:23 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:39:29 INF] Now listening on: https://localhost:7215
+[23:39:29 INF] Now listening on: http://localhost:5050
+[23:39:29 INF] Application started. Press Ctrl+C to shut down.
+[23:39:29 INF] Hosting environment: Development
+[23:39:29 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:39:47 INF] HTTP GET /api/contacts responded 401 in 1061.9551 ms
+[23:40:22 ERR] HTTP GET /api/contacts responded 500 in 94.3782 ms
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Infrastructure.Services.IPidpAdapterAuthorizationService' while attempting to activate 'pdipadapter.Features.Users.Controllers.ContactsController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method122(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+[23:40:22 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Unable to resolve service for type 'pdipadapter.Infrastructure.Services.IPidpAdapterAuthorizationService' while attempting to activate 'pdipadapter.Features.Users.Controllers.ContactsController'.
+   at Microsoft.Extensions.DependencyInjection.ActivatorUtilities.GetService(IServiceProvider sp, Type type, Type requiredBy, Boolean isDefaultParameterRequired)
+   at lambda_method122(Closure , IServiceProvider , Object[] )
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerActivatorProvider.<>c__DisplayClass7_0.<CreateActivator>b__0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:40:22 ERR] HTTP GET /error responded 500 in 546.1009 ms
+[23:43:37 INF] Starting web host
+[23:43:41 INF] ### App Version:1.0.0.0 ###
+[23:43:41 INF] ### Pidp Adapter Configuration:{"AddressAutocompleteClient":{"ApiKey":"","Url":""},"ConnectionStrings":{"JumDatabase":""},"ChesClient":{"Enabled":false,"Url":"","ClientId":"","ClientSecret":"","TokenUrl":""},"JustinParticipantClient":{"Url":""},"KafkaCluster":{"Url":"","ClientId":"","ClientSecret":"","BoostrapServers":"","TopicName":""},"Keycloak":{"RealmUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications","WellKnownConfig":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/.well-known/openid-configuration","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token","AdministrationUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/admin/realms/moh_applications","AdministrationClientId":"DMFT-SERVICE","AdministrationClientSecret":"\u003Credacted\u003E","HcimClientId":"HCIMWEB"},"MailServer":{"Url":"","Port":0},"CMS":{"SERVER_URL":"https://localhost:4020","CLIENTSECRET":"wFD{PXu\u002B].!\u00229Nk}","VALIDATESERVERCERTIFICATE":false},"PidpEndorsementAPI":{"Url":"https://test.healthprovideridentityportal.gov.bc.ca","ClientId":"DMFT-SERVICE","ClientSecret":"TSq7EALXSLYY7509Hxzkn7upSPYA1JKy","TokenUrl":"https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token"}} ###
+[23:43:44 INF] Now listening on: https://localhost:7215
+[23:43:44 INF] Now listening on: http://localhost:5050
+[23:43:44 INF] Application started. Press Ctrl+C to shut down.
+[23:43:44 INF] Hosting environment: Development
+[23:43:44 INF] Content root path: C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API
+[23:48:40 ERR] HTTP GET /api/contacts responded 500 in 287758.4284 ms
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 36
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 42
+   at lambda_method115(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:48:40 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 36
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 42
+   at lambda_method115(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+[23:48:40 WRN] The response has already started, the error handler will not be executed.
+[23:48:40 ERR] An unhandled exception has occurred while executing the request.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 36
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 42
+   at lambda_method115(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+[23:48:40 WRN] The response has already started, the error page middleware will not be executed.
+[23:48:40 ERR] Connection id "0HMQCDBJTVFBP", Request id "0HMQCDBJTVFBP:00000002": An unhandled exception was thrown by the application.
+System.InvalidCastException: Unable to cast object of type 'Microsoft.AspNetCore.Mvc.UnauthorizedResult' to type 'System.Collections.Generic.List`1[MedicalPortal.API.Features.Users.Queries.PractitionerContactQuery+Model]'.
+   at PidpAdapter.API.Infrastructure.PidpAdapterControllerBase.AuthorizeContactBeforeHandleAsync[TRequest,TResponse](String contactId, TRequest request) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Infrastructure\PidpAdapterControllerBase.cs:line 36
+   at pdipadapter.Features.Users.Controllers.ContactsController.GetContacts(Query query) in C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\Features\Users\Controllers\ContactsController.cs:line 42
+   at lambda_method115(Closure , Object )
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.Policy.AuthorizationMiddlewareResultHandler.HandleAsync(RequestDelegate next, HttpContext context, AuthorizationPolicy policy, PolicyAuthorizationResult authorizeResult)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Serilog.AspNetCore.RequestLoggingMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.HandleException(HttpContext context, ExceptionDispatchInfo edi)
+   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddleware.<Invoke>g__Awaited|6_0(ExceptionHandlerMiddleware middleware, HttpContext context, Task task)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserRefreshMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)

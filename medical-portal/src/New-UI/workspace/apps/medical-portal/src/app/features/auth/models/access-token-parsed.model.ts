@@ -20,6 +20,7 @@ export interface AccessTokenParsed extends KeycloakTokenParsed {
   family_name: string;
   given_name: string;
   email: string;
+  pidp_email: string;
   name: string;
   preferred_username: string;
   birthdate: string;

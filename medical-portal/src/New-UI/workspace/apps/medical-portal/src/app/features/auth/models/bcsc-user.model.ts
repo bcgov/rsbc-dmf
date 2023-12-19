@@ -9,6 +9,7 @@ export class BcscUser implements User {
   public firstName: string;
   public lastName: string;
   public email?: string | undefined;
+  public pidp_email?: string;
   public birthdate: string;
   public gender?: string;
   public roles: string[];
@@ -22,6 +23,7 @@ export class BcscUser implements User {
       given_name: firstName,
       preferred_username: idpId,
       email: email,
+      pidp_email: pidp_email,
       birthdate: birthDate,
     } = accessTokenParsed;
 
@@ -30,6 +32,7 @@ export class BcscUser implements User {
     this.idpId = idpId;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.pidp_email = pidp_email;
     this.email = email ? email : `${firstName}.${lastName}@abc.com`;
     this.birthdate = birthDate;
     this.roles = Object.values(KeycloakRoles || {}).flatMap(

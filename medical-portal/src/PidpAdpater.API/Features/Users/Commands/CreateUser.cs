@@ -21,7 +21,7 @@ public class CreateUser
         public DateTime? Birthdate { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
+        public string PidpEmail { get; set; } = string.Empty;
         public string Gender { get; set; } = string.Empty;
         public string[] Roles { get; set; } = new string[] { };
     }
@@ -40,7 +40,7 @@ public class CreateUser
             ////    role.Must(r => (bool)(user?.GetRoles().ToList().Contains(r.ToString())));
             ////});
 
-            ////this.RuleFor(x => x.Gender).NotEmpty().Equal(user?.GetGender()).WithMessage($"Must match the \"gender\" Claim on the current User");
+            this.RuleFor(x => x.PidpEmail).NotEmpty().MatchesUserClaim(user, Claims.PidpEmail);
 
             this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
             ////this.RuleFor(x => x.Gender).NotEmpty().MatchesUserClaim(user, Claims.Gender);
@@ -78,7 +78,7 @@ public class CreateUser
             //}
             var pReply = await userManager.CreatePractitionerContactAsync(new PractitionerContactRequest
             {
-                Email = command.Email,
+                Email = command.PidpEmail,
                 Birthdate = Timestamp.FromDateTime(command.Birthdate!.Value.ToUniversalTime()),
                 FirstName = command.FirstName,
                 LastName = command.LastName,
@@ -87,6 +87,7 @@ public class CreateUser
                 IdpId = command.IdpId,
                 Role = command.Roles.Contains("MOA") ? "MOA" : command.Roles.Contains("PRACTITIONER") ? "PRACTITIONER" : string.Empty
             });
+            this.logger.LogInformation($"Contact {pReply.ContactId} created");
             return pReply.ContactId.ToString();
 
         }
