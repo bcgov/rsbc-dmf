@@ -3,18 +3,17 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
-
-
-
+import {RouterModule, Router} from '@angular/router'
 
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    NavMenuComponent
-  ],
+    NavMenuComponent,
+    ],
   imports: [
     CommonModule,
+    RouterModule,
   ],
   exports:[
     HeaderComponent,
