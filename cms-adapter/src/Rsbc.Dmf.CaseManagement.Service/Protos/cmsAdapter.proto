@@ -264,6 +264,8 @@ message CaseDetail {
 	google.protobuf.Timestamp dpsProcessingDate = 13;
 	int64 caseSequence = 14;
 	string driverId = 15;
+	int64 outstandingDocuments = 16;
+	string eligibleLicenseClass = 17;
 }
 
 
