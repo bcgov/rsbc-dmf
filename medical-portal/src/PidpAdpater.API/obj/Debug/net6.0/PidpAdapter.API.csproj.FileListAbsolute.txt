@@ -352,3 +352,4 @@ C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\obj\Debug\net6.0\re
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20230504.json
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20231211.json
 C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20231212.json
+C:\Users\sookeke\rsbc-dmf\medical-portal\src\PidpAdpater.API\bin\Debug\net6.0\logs\jum20231213.json
