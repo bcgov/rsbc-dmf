@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { DmerCaseListItem } from '../../api/models';
 import { CasesService } from '../../api/services';
 
 @Injectable({
@@ -9,29 +6,9 @@ import { CasesService } from '../../api/services';
 })
 export class CaseManagementService {
 
-  selectedCase!: DMERCase;
-
   constructor(private casesService: CasesService) { }
 
-  public getCases(params: DMERSearchCases): Observable<DMERCase[]> {
-    const searchParams = {
-      ByTitle: params.byTitle,
-      ByDriverLicense: params.byDriverLicense,
-      ByPatientName: params.byPatientName,
-      ByStatus: params.byStatus,
-      ByClinicId: params.byClinicId
-    };
-    console.debug(searchParams);
-    return this.casesService.apiCasesGet$Json(searchParams).pipe(map(cases => cases.map(c => c)));
+  public getCaseById(params: Parameters<CasesService['apiCasesCaseIdGet$Json']>[0]) {
+    return this.casesService.apiCasesCaseIdGet$Json(params);
   }
-}
-
-export type DMERCase = DmerCaseListItem
-
-export interface DMERSearchCases {
-  byTitle?: string,
-  byDriverLicense?: string,
-  byPatientName?: string,
-  byClinicId?: string,
-  byStatus?: string[]
 }

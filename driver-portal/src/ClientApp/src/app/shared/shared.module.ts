@@ -4,7 +4,6 @@ import { MaterialModule } from './material.module';
 import { PhsaFormViewerComponent } from './components/phsa-form-viewer/phsa-form-viewer.component';
 import { SafePipe } from './pipes/safe.pipe';
 import { VersionInfoComponent } from './components/version-info/version-info.component';
-import { LoginService } from './services/login.service';
 
 @NgModule({
   declarations: [    
@@ -23,7 +22,7 @@ import { LoginService } from './services/login.service';
     SafePipe
   ],
   providers: [
-    LoginService
+ 
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

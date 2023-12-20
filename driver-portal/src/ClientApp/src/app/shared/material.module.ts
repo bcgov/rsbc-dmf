@@ -27,6 +27,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   imports: [
@@ -62,7 +63,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatChipsModule,
     MatSnackBarModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatStepperModule
   ],
   exports: [
     CommonModule,
@@ -97,7 +99,8 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     MatChipsModule,
     MatSnackBarModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

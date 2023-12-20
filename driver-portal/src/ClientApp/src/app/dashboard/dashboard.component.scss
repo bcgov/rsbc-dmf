@@ -56,3 +56,53 @@
     margin-bottom: 10px;
     margin-top: 10px;
   }
+
+  .p{
+    font-family: "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    text-align: left;
+  }
+
+ 
+
+  
+
+  .recentCaseContent{
+    display: flex;
+    gap: 50px;
+  }
+
+ 
+
+  .cardSpacing{
+    margin-top: 24px;
+    margin-bottom: 24px;
+  }
+
+  .mat-mdc-card  {
+    background-color:#f1f1f3;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 32px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  
+    .mat-mdc-card-content {
+      padding: 5px 10px;
+    }
+    .mat-mdc-card-actions {
+      padding: 8px !important;
+      margin: 8px !important;
+      display: flex;
+      flex-flow: row-reverse nowrap;
+    }
+  }
