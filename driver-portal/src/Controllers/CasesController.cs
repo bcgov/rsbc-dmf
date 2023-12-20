@@ -12,6 +12,7 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -24,7 +25,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public CasesController(IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public CasesController(IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient,
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
@@ -39,7 +41,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCase")]
-        public ActionResult GetCase([Required][FromRoute] string caseId)
+        public ActionResult GetCase([Required] [FromRoute] string caseId)
         {
             var result = new ViewModels.CaseDetail();
 
@@ -69,8 +71,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 {
                     result.CaseSequence = (int)c.Item.CaseSequence;
                 }
+
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-                
+
             }
 
             // set to null if no decision has been made.
@@ -78,9 +81,25 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             {
                 result.DecisionDate = null;
             }
+
             return Json(result);
         }
 
+        /// <summary>
+        /// Returns the current user's cases
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet()]
+        [ProducesResponseType(typeof(List<ViewModels.CaseDetail>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetCases")]
+        public ActionResult GetCases()
+        {
+            var result = new List<ViewModels.CaseDetail>();
+            result.Add(new CaseDetail() { Title = "Test-Title", CaseId = Guid.Empty.ToString(), DmerType = "DMER" });
+            return Json(result);
+        }
     }
-    
+
 }
