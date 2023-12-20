@@ -80,6 +80,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Queue { get; set; }
         public long DpsDocumentId { get; set; }
         public string Origin { get; set; }
+        public bool Solicited { get; set; }
     }
 
     public class CreateStatusReply
@@ -1793,7 +1794,8 @@ namespace Rsbc.Dmf.CaseManagement
               
                 ImportDate = request.ImportDate,
                 DocumentId = request.DocumentId,
-                SequenceNumber = request.SequenceNumber
+                SequenceNumber = request.SequenceNumber,
+                Solicited = true
                 
             };
 
@@ -1989,17 +1991,14 @@ namespace Rsbc.Dmf.CaseManagement
                     if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
                     {
                         // DMER                        
-                        isDmer = true;
+                        isDmer = true;                        
                     }                    
                 }
 
 
                 if (found) // update
                 {    
-                    if (isDmer) // if DMER matches an existing envelope, it is solicited.
-                    {
-                        bcgovDocumentUrl.dfp_solicited = true;
-                    }
+                    // 12-20-2023 - Removed code to set solicited on a found document envelope; as it will be set by the ICBC service receiving candidates
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
@@ -2112,6 +2111,7 @@ namespace Rsbc.Dmf.CaseManagement
                 //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
+                bcgovDocumentUrl.dfp_solicited = request.Solicited;
 
                 if (!string.IsNullOrEmpty(request.DocumentUrl))
                 {
