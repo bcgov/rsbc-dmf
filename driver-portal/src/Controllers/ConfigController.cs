@@ -33,7 +33,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Configuration), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
         public ActionResult<Configuration> Get()
         {
             var config = new Configuration

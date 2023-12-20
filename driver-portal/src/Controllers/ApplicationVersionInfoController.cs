@@ -11,7 +11,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     // public API
-    public class ApplicationVersionInfoController : ControllerBase
+    public class ApplicationVersionInfoController : Controller
     {
         private readonly IConfiguration _configuration;
 
@@ -26,6 +26,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <returns>The version of the running application</returns>
         [HttpGet]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(ViewModels.ApplicationVersionInfo), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetCase")]
         public ActionResult GetApplicationVersionInfo()
         {
             Assembly assembly = GetType().GetTypeInfo().Assembly;
@@ -42,7 +46,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 ProductVersion = productVersion
             };
 
-            return new JsonResult(avi);
+            return Json(avi);
         }
 
     }
