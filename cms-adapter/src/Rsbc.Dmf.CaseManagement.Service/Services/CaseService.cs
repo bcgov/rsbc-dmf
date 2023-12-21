@@ -2095,7 +2095,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     ValidationMethod = d.ValidationMethod ?? string.Empty,
                     ValidationPrevious = d.ValidationPrevious ?? string.Empty,
                     SequenceNumber = (int)(d.SequenceNumber ?? -1),
-                    UserId = d.UserId ?? string.Empty,                    
+                    UserId = d.UserId ?? string.Empty,  
+                    Priority = d.Priority ?? string.Empty,
+                    Queue = d.Queue ?? string.Empty,
+                    DpsDocumentId = d.DpsDocumentId 
                 };
 
                 if (d.Driver != null)

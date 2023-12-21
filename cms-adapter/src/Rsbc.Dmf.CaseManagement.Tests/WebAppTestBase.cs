@@ -8,15 +8,8 @@ using Xunit.Abstractions;
 
 namespace Rsbc.Dmf.CaseManagement.Tests
 {
-    public class WebAppTestBase
+    public class WebAppTestBase : TestBase
     {
-        //set to null to run tests in this class, requires to be on VPN and Dynamics params configured in secrets.xml
-#if RELEASE
-        protected const string RequiresDynamics = "Integration tests that requires Dynamics connection via VPN";
-#else
-        protected const string RequiresDynamics = null;
-#endif
-
         //private readonly LoggerFactory loggerFactory;
         protected readonly XUnitWebAppFactory<Startup> webApplicationFactory;
 

@@ -25,6 +25,22 @@ namespace Rsbc.Dmf.BcMailAdapter.Tests
             
         }
 
+        [Fact]
+        public void TestUrlSplit()
+        {
+            string serverRelativeUrl = "dfp_driver/1234/test.txt";
+            string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
+
+            int firstSlashPos = serverRelativeUrl.IndexOf('/') + 1;
+            int lastSlashPos = serverRelativeUrl.LastIndexOf('/') + 1;
+
+            string folderName = serverRelativeUrl.Substring(firstSlashPos, lastSlashPos - firstSlashPos - 1);
+            string filename = serverRelativeUrl.Substring(lastSlashPos);
+
+            Assert.Equal("dfp_driver",originalEntity);
+            Assert.Equal("1234",folderName);
+            Assert.Equal("test.txt", filename);
+        }
 
 
         /// <summary>

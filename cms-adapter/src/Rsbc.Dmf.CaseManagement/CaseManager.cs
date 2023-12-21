@@ -6,6 +6,7 @@ using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -1318,11 +1319,9 @@ namespace Rsbc.Dmf.CaseManagement
             var document = dynamicsContext.bcgov_documenturls.Expand(x => x.dfp_DriverId).Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
-                //dynamicsContext.LoadProperty(document, nameof(bcgov_documenturl.dfp_DriverId));
                 legacyDocument = new LegacyDocument
                 {
                     BatchId = document.dfp_batchid ?? string.Empty,
-                    CaseId = null,
                     DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
                     DocumentId = document.bcgov_documenturlid.ToString(),
                     DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
@@ -1333,8 +1332,35 @@ namespace Rsbc.Dmf.CaseManagement
                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                    SequenceNumber = null                    
-                };                
+                    
+                    SequenceNumber = null
+                };
+
+                if (document.dfp_attachmentnumber != null)
+                {
+                    legacyDocument.DpsDocumentId = document.dfp_attachmentnumber.Value;
+                }
+
+                if (document._bcgov_caseid_value != null)
+                {
+                    legacyDocument.CaseId = document._bcgov_caseid_value.ToString();
+                }
+
+                if (document.dfp_queue != null)
+                {
+                    legacyDocument.Queue = TranslateQueueCodeInt(document.dfp_queue.Value);
+                }
+
+                if (document.dfp_priority != null)
+                {
+                    legacyDocument.Priority = TranslatePriorityCode(document.dfp_priority.Value);
+                }
+
+                if (document.dfp_documentorigin != null)
+                {
+                    legacyDocument.Origin = TranslateDocumentOrigin(document.dfp_documentorigin.Value);
+                }
+
                 if (document.dfp_DriverId != null)
                 {
                     legacyDocument.Driver = new Driver
@@ -3618,8 +3644,53 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
+        private string TranslateDocumentOrigin(int documentOrigin)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000014,"Mercury Uploaded RSBC" },
+                { 100000015,"Migration" },
+                { 100000017, "DPS/KOFAX" },
+            };
+
+            if (documentOrigin != null && statusMap.ContainsKey(documentOrigin))
+            {
+                return statusMap[documentOrigin];
+            }
+            else
+            {
+                return statusMap[100000014];
+            }
+
+        }
+
         /// <summary>
         /// Translate the Dynamics Priority (status reason) field to text
+        /// </summary>
+        /// <param name="statusCode"></param>
+        /// <returns></returns>
+        private string TranslatePriorityCode(int priorityCode)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000000,"Regular" },
+                { 100000001,"Urgent / Immediate" },
+                { 100000002, "Expedited" },
+                { 100000003, "Critical Review" },
+            };
+
+            if (priorityCode != null && statusMap.ContainsKey(priorityCode))
+            {
+                return statusMap[priorityCode];
+            }
+            else
+            {
+                return statusMap[100000000];
+            }
+        }
+
+        /// <summary>
+        /// Translate the Submittal Status field to text
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
@@ -3699,6 +3770,30 @@ namespace Rsbc.Dmf.CaseManagement
             else
             {
                 return 100000000;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="priorityCode"></param>
+        /// <returns></returns>
+        private string TranslateQueueCodeInt(int queueCode)
+        {
+            var statusMap = new Dictionary<int, string>()
+            {
+                { 100000002, "Nurse Case Managers" },
+                { 100000001, "Adjudicators" },
+                { 100000000, "Client Services" },
+            };
+
+            if (queueCode != null && statusMap.ContainsKey(queueCode))
+            {
+                return statusMap[queueCode];
+            }
+            else
+            {
+                return statusMap[100000000];
             }
         }
 
