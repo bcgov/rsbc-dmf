@@ -40,7 +40,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                 .Setup(m => m.GetDriver(
                     It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
                 .Returns(mockDriverResult);
-         
+
             mockClient
                 .Setup(m => m.ProcessLegacyCandidate(
                     It.IsAny<LegacyCandidateRequest>(), null, null, CancellationToken.None))
@@ -128,7 +128,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     return reply;
                 });
 
-            
+
 
             mockClient
                 .Setup(m => m.GetDriverComments(It.IsAny<DriverLicenseRequest>(), null, null, CancellationToken.None))
@@ -202,8 +202,8 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                .Returns<LegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
                {
 
-                   LegacyDocument legacyDocument = new LegacyDocument() { DocumentUrl = a.DocumentId};
-                   GetLegacyDocumentReply reply = new() { ResultStatus = ResultStatus.Success , Document = legacyDocument };
+                   LegacyDocument legacyDocument = new LegacyDocument() { DocumentUrl = a.DocumentId };
+                   GetLegacyDocumentReply reply = new() { ResultStatus = ResultStatus.Success, Document = legacyDocument };
 
                    return reply;
                });
@@ -211,7 +211,7 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
             mockClient
                .Setup(m => m.DeleteLegacyCaseDocument(It.IsAny<LegacyDocumentRequest>(), null, null, CancellationToken.None))
                .Returns<LegacyDocumentRequest, Metadata, DateTime?, CancellationToken>((a, b, c, d) =>
-               {                   
+               {
                    ResultStatusReply reply = new() { ResultStatus = ResultStatus.Success };
                    return reply;
                });
@@ -227,10 +227,10 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                .Returns(new SearchReply { ResultStatus = ResultStatus.Success });
 
 
-           mockClient
-                .Setup(m => m.MarkMedicalUpdateError(
-                    It.IsAny<IcbcErrorRequest>(), null, null, CancellationToken.None))
-                .Returns(new ResultStatusReply { ResultStatus = ResultStatus.Success });
+            mockClient
+                 .Setup(m => m.MarkMedicalUpdateError(
+                     It.IsAny<IcbcErrorRequest>(), null, null, CancellationToken.None))
+                 .Returns(new ResultStatusReply { ResultStatus = ResultStatus.Success });
 
             mockClient
                 .Setup(m => m.ProcessLegacyCandidate(
@@ -245,6 +245,10 @@ namespace Rsbc.Dmf.CaseManagement.Helpers
                     return result;
                 });
 
+            mockClient
+                .Setup(m => m.GetCaseDetail(
+                    It.IsAny<CaseIdRequest>(), null, null, CancellationToken.None))
+                .Returns(new GetCaseDetailReply { ResultStatus = ResultStatus.Success, ErrorDetail = string.Empty });
 
             return mockClient.Object;
         }
