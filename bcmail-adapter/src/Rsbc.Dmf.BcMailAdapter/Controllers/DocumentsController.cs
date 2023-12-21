@@ -234,7 +234,9 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         ValidationMethod = documentResponse.Document.ValidationMethod,
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
                                         BusinessArea = documentResponse.Document.BusinessArea,
-                                        SubmittalStatus = "Uploaded"
+                                        SubmittalStatus = "Uploaded",
+                                        Queue = documentResponse.Document.Queue,
+                                        Priority = documentResponse.Document.Priority
                                     };
 
                                     DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
@@ -363,7 +365,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             // get the details for the original
             string serverRelativeUrl = documentResponse.Document.DocumentUrl;
             string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
-            string filename = serverRelativeUrl.Substring(serverRelativeUrl.LastIndexOf('/') + 1);
+
+            int firstSlashPos = serverRelativeUrl.IndexOf('/') + 1;
+            int lastSlashPos = serverRelativeUrl.LastIndexOf('/') + 1;
+
+            string folderName = serverRelativeUrl.Substring(firstSlashPos, lastSlashPos - firstSlashPos - 1);
+            string filename = serverRelativeUrl.Substring(lastSlashPos);
 
             using (var newStream = new MemoryStream())
             {
