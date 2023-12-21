@@ -1,29 +1,28 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Shouldly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.Abstractions;
-using System;
-using NuGet.Frameworks;
-using Rsbc.Dmf.CaseManagement.Dynamics;
-using System.Reflection.Metadata;
-using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
-    public class CaseManagerTests : WebAppTestBase
+    /// <summary>
+    /// CaseManagerTests using XUnit dependency injection
+    /// </summary>
+    public class CaseManagerTests : TestBase
     {
-        private readonly ICaseManager caseManager;
+        private readonly ICaseManager _caseManager;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger _logger = new NullLogger<CaseManagerTests>();
 
-          public CaseManagerTests(ITestOutputHelper output) : base(output)
+        public CaseManagerTests(ICaseManager caseManager, IConfiguration configuration)
         {
-           
-            caseManager = services.GetRequiredService<ICaseManager>();
-
-            
+            _caseManager = caseManager;
+            _configuration = configuration;
         }
 
         [Fact(Skip = RequiresDynamics)]
@@ -31,7 +30,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             var title = "222";
             // first do a search to get this case by title.
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
             if (queryResults.Count() > 0)
             {
                 var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
@@ -42,10 +41,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
                     new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
                 };
-                var result = await caseManager.SetCaseFlags(caseId, false, flags, testLogger);
+                var result = await _caseManager.SetCaseFlags(caseId, false, flags, _logger);
                 result.ShouldNotBeNull().Success.ShouldBe(true);
 
-                var actualCase = (await caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
+                var actualCase = (await _caseManager.CaseSearch(new CaseSearchRequest { CaseId = caseId })).Items.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
 
                 actualCase.Flags.Count().ShouldBe(flags.Count);
                 foreach (var actualFlag in actualCase.Flags)
@@ -62,28 +61,24 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanSetCleanPassValue()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
             if (queryResults.Count() > 0)
             {
-
                 queryResults.ShouldNotBeEmpty();
                 foreach (var dmerCase in queryResults)
                 {
                     dmerCase.ShouldBeAssignableTo<DmerCase>().Driver.DriverLicenseNumber.ShouldBe(driverLicenseNumber);
                     List<Flag> flags = new List<Flag>()
-                {
-                    new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
-                    new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
-                };
-                    await caseManager.SetCaseFlags(dmerCase.Id, true, flags, testLogger);
+                    {
+                        new Flag(){Description  = "testFlag - 1", Id = "flagTestItem1"},
+                        new Flag(){Description  = "testFlag - 2", Id = "flagTestItem2"},
+                    };
+                    await _caseManager.SetCaseFlags(dmerCase.Id, true, flags, _logger);
                 }
-
             }
-
         }
-
 
         /// <summary>
         /// CanSetCleanPassValue
@@ -92,9 +87,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateCleanPassValue()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
             if (queryResults.Count() > 0)
             {
                 queryResults.ShouldNotBeEmpty();
@@ -102,18 +97,18 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 {
                     var caseId = dmerCase.Id;
                     // set the value to true
-                    await caseManager.SetCleanPassFlag(caseId, false);
+                    await _caseManager.SetCleanPassFlag(caseId, false);
 
                     // Update Clean Pass Flag
 
-                    await caseManager.UpdateCleanPassFlag(caseId);
+                    await _caseManager.UpdateCleanPassFlag(caseId);
                 }
 
                 // verify in dynamics wether this is updated
 
             }
 
-            
+
         }
 
         /// <summary>
@@ -123,9 +118,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanSetManualPassValue()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
             if (queryResults.Count() > 0)
             {
                 queryResults.ShouldNotBeEmpty();
@@ -133,10 +128,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 {
                     var caseId = dmerCase.Id;
                     // set the value to true
-                    await caseManager.SetManualPassFlag(caseId, false);
+                    await _caseManager.SetManualPassFlag(caseId, false);
 
                     // Update Manaul Pass Flag
-                    await caseManager.UpdateManualPassFlag(caseId);
+                    await _caseManager.UpdateManualPassFlag(caseId);
                 }
 
                 // verify in dynamics wether this is updated
@@ -157,13 +152,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             var title = "222";
             // first do a search to get this case by title.
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
             if (queryResults.Count() > 0)
             {
                 var dmerCase = queryResults.ShouldHaveSingleItem().ShouldBeAssignableTo<DmerCase>();
                 var caseId = dmerCase.Id;
 
-                await caseManager.SetCasePractitionerClinic (caseId, "", "");
+                await _caseManager.SetCasePractitionerClinic(caseId, "", "");
             }
 
         }
@@ -172,7 +167,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanQueryCasesByTitle()
         {
             var title = "222";
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
 
             if (queryResults.Count() > 0)
             {
@@ -189,9 +184,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanQueryCasesByDriverLicense()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
 
             if (queryResults.Count() > 0)
             {
@@ -215,7 +210,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var newDriver = new LegacyCandidateSearchRequest()
 
             {
-                DriverLicenseNumber = "999" + (DateTime.Now.Year % 10).ToString() 
+                DriverLicenseNumber = "999" + (DateTime.Now.Year % 10).ToString()
                     + (DateTime.Now.Hour % 10).ToString() + (DateTime.Now.Minute % 10).ToString()
                     + (DateTime.Now.Second % 10).ToString() + (DateTime.Now.Millisecond % 10).ToString(),
                 Surname = "TEST",
@@ -223,10 +218,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             };
             DateTime testDate = DateTime.Now;
 
-            await caseManager.LegacyCandidateCreate(newDriver, testDate, testDate);
-            await caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now);
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, testDate);
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now);
 
-            var newCaseId = await caseManager.GetNewestCaseIdForDriver(newDriver);
+            var newCaseId = await _caseManager.GetNewestCaseIdForDriver(newDriver);
 
             Assert.True(newCaseId.HasValue);
 
@@ -237,14 +232,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanQueryCasesByClinicId()
         {
             var title = "222";
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { Title = title })).Items;
             if (queryResults.Count() > 0)
             {
                 var testItem = queryResults.First().ShouldBeAssignableTo<DmerCase>();
 
                 var expectedClinicId = testItem.ClinicId;
 
-                queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { ClinicId = expectedClinicId })).Items;
+                queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { ClinicId = expectedClinicId })).Items;
 
                 queryResults.ShouldNotBeEmpty();
                 foreach (var dmerCase in queryResults)
@@ -252,7 +247,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     dmerCase.ShouldBeAssignableTo<DmerCase>().ClinicId.ShouldBe(expectedClinicId);
                 }
             }
-            
+
         }
 
 
@@ -260,34 +255,34 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanGetFlags()
         {
 
-            var queryResults = await caseManager.GetAllFlags();
+            var queryResults = await _caseManager.GetAllFlags();
 
             queryResults.ShouldNotBeEmpty();
-            
+
         }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanDoDpsProcessingDate()
         {
-            var queryResults = caseManager.GetDpsProcessingDate();
+            var queryResults = _caseManager.GetDpsProcessingDate();
 
-            Assert.NotEqual (queryResults, DateTimeOffset.MinValue );
+            Assert.NotEqual(queryResults, DateTimeOffset.MinValue);
         }
 
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateNonComplyDocuments()
         {
-            await caseManager.UpdateNonComplyDocuments();
+            await _caseManager.UpdateNonComplyDocuments();
         }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateResolveCaseStatus()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
             // first do a search to get this case by title.
-            var queryResults1 = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
-                
+            var queryResults1 = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items;
+
             var queryResults = queryResults1.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
@@ -299,34 +294,34 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // Get the case and Set the dfp_caseresolvedate to date in past
 
-            await caseManager.SetCaseResolveDate(caseId, caseResolveDate);
+            await _caseManager.SetCaseResolveDate(caseId, caseResolveDate);
 
             // Set the case status to false
-            
-            await caseManager.SetCaseStatus(caseId, false);
+
+            await _caseManager.SetCaseStatus(caseId, false);
 
             // Act
-            await caseManager.ResolveCaseStatusUpdates();
+            await _caseManager.ResolveCaseStatusUpdates();
 
             // Assert
 
-           // Manually verify the case status is set
+            // Manually verify the case status is set
         }
 
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanResolveCaseStatusUpdates()
         {
-            await caseManager.ResolveCaseStatusUpdates();
+            await _caseManager.ResolveCaseStatusUpdates();
         }
 
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanDeleteComment()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
             // get the case
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
             var caseId = dmerCase.Id;
@@ -343,14 +338,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 CommentDate = DateTimeOffset.UtcNow.AddDays(-1),
                 CommentText = "AUTOMATED TEST COMMENT",
                 CommentTypeCode = "W",
-                UserId = "TEST"                
+                UserId = "TEST"
             };
 
-            await caseManager.CreateLegacyCaseComment(legacyCommentRequest);
+            await _caseManager.CreateLegacyCaseComment(legacyCommentRequest);
 
             // confirm it is present
 
-            var comments = await caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
+            var comments = await _caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
 
             bool found = false;
 
@@ -369,16 +364,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.True(found);
 
             // test the get
-            var c = await caseManager.GetComment(commentId);
+            var c = await _caseManager.GetComment(commentId);
             // delete it            
 
-            await caseManager.DeleteComment(commentId);
+            await _caseManager.DeleteComment(commentId);
 
             // confirm that it is deleted
 
             found = false;
 
-            comments = await caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
+            comments = await _caseManager.GetCaseLegacyComments(caseId, true, OriginRestrictions.None);
 
             foreach (var comment in comments)
             {
@@ -395,14 +390,16 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanDeleteLegacyDocument()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
-            
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
+
 
             string documentUrl = $"TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
 
             // add a document
 
-            LegacyDocument legacyDocumentRequest = new LegacyDocument { BatchId = "1",                 
+            LegacyDocument legacyDocumentRequest = new LegacyDocument
+            {
+                BatchId = "1",
                 DocumentType = "Legacy Review",
                 DocumentTypeCode = "LegacyReview",
                 Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
@@ -412,14 +409,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 DocumentPages = 1,
                 OriginatingNumber = "1",
                 SequenceNumber = 1,
-                DocumentUrl = documentUrl                
+                DocumentUrl = documentUrl
             };
 
-            await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+            await _caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
 
             // confirm it is present
 
-            var docs = await caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            var docs = await _caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             bool found = false;
 
@@ -437,7 +434,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             Assert.True(found);
 
-            var getDocument = await caseManager.GetLegacyDocument(documentId);
+            var getDocument = await _caseManager.GetLegacyDocument(documentId);
 
             Assert.NotNull(getDocument.Driver.Id);
 
@@ -445,19 +442,19 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // delete it
 
-            await caseManager.DeactivateLegacyDocument(documentId);
+            await _caseManager.DeactivateLegacyDocument(documentId);
 
             // confirm that it is deleted
 
             found = false;
 
-            docs = await caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            docs = await _caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             foreach (var doc in docs)
             {
                 if (doc.DocumentId == documentId)
                 {
-                    found = true;                    
+                    found = true;
                     break;
                 }
             }
@@ -469,9 +466,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateBringForward()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
             // first do a search to get this case by title.
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
             var caseId = dmerCase.Id;
@@ -486,7 +483,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 Subject = "ICBC Error Test",
                 Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.High
             };
-            var result = await caseManager.CreateBringForward(bringForwardRequest);
+            var result = await _caseManager.CreateBringForward(bringForwardRequest);
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }
@@ -494,22 +491,21 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task SwitchTo8Dl()
         {
-            //await caseManager.SwitchTo8Dl();
+            //await _caseManager.SwitchTo8Dl();
         }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task MakeFakeDls()
         {
-            //await caseManager.MakeFakeDls();
+            //await _caseManager.MakeFakeDls();
         }
-
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateIcbcError()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
             // first do a search to get this case by title.
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
             var caseId = dmerCase.Id;
@@ -521,39 +517,38 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 ErrorMessage = "Icbc Error Testing"
 
             };
-            var result = await caseManager.MarkMedicalUpdateError(icbcErrorRequest);
+            var result = await _caseManager.MarkMedicalUpdateError(icbcErrorRequest);
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }
 
-
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
         {
-//            var queryResults = await caseManager.GetUnsentMedicalPass();
-//            queryResults.Items.ShouldNotBeEmpty();
+            //            var queryResults = await _caseManager.GetUnsentMedicalPass();
+            //            queryResults.Items.ShouldNotBeEmpty();
         }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdatesAdjudication()
         {
-            var queryResults = await caseManager.GetUnsentMedicalAdjudication();
+            var queryResults = await _caseManager.GetUnsentMedicalAdjudication();
             queryResults.Items.ShouldNotBeEmpty();
         }
 
         [Fact(Skip = RequiresDynamics)]
         public async Task CanUpdateDriverBirthDate()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
-             var request = new UpdateDriverRequest()
+            var request = new UpdateDriverRequest()
             {
-                BirthDate = new DateTime(1994,02,16),
+                BirthDate = new DateTime(1994, 02, 16),
                 DriverLicenseNumber = driverLicenseNumber
             };
             // Get the driver
 
-           var result = await caseManager.UpdateBirthDate(request);
+            var result = await _caseManager.UpdateBirthDate(request);
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }
@@ -562,8 +557,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetListOfPdfDocuments()
         {
-            
-           await caseManager.GetPdfDocuments();
+
+            await _caseManager.GetPdfDocuments();
 
         }
 
@@ -572,14 +567,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanUpdatePdfDocumentStatus()
         {
 
-            var pdfDocumentId = await caseManager.CreatePdfDocument(new PdfDocument { StatusCode = StatusCodeOptionSet.SendToBCMail });
+            var pdfDocumentId = await _caseManager.CreatePdfDocument(new PdfDocument { StatusCode = StatusCodeOptionSet.SendToBCMail });
             var request = new PdfDocument()
             {
-                
-                    PdfDocumentId = pdfDocumentId.ToString(),
-                    StatusCode = StatusCodeOptionSet.Sent                
+
+                PdfDocumentId = pdfDocumentId.ToString(),
+                StatusCode = StatusCodeOptionSet.Sent
             };
-            var result = await caseManager.UpdatePdfDocumentStatus(request);
+            var result = await _caseManager.UpdatePdfDocumentStatus(request);
             result.ShouldNotBeNull();
             Assert.True(result.Success);
         }
@@ -588,7 +583,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateDriver()
         {
-            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
+            var dynamicsContext = ((CaseManager)_caseManager).dynamicsContext;
             // Act : Create the driver
             var request = new CreateDriverRequest()
             {
@@ -600,21 +595,21 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // check to driver exsists and delete 
             var driverExists = dynamicsContext.dfp_drivers.Expand(c => c.dfp_PersonId).Where(x => x.dfp_licensenumber == request.DriverLicenseNumber).FirstOrDefault();
-            
+
 
             if (driverExists != null)
             {
                 // Delete if driver exsists
-               bool result = false;
-               dynamicsContext.DeleteObject(driverExists);                
-               await dynamicsContext.SaveChangesAsync();
-               dynamicsContext.DetachAll();
+                bool result = false;
+                dynamicsContext.DeleteObject(driverExists);
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.DetachAll();
                 result = true;
             }
 
-            
+
             // Create Driver
-            var createDriver = await caseManager.CreateDriver(request);
+            var createDriver = await _caseManager.CreateDriver(request);
 
             // Query dynamics to check if the driver is created
 
@@ -629,9 +624,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         public async Task CanCreateCase()
         {
 
-            var dynamicsContext = ((CaseManager)caseManager).dynamicsContext;
+            var dynamicsContext = ((CaseManager)_caseManager).dynamicsContext;
 
-             // Arrange
+            // Arrange
             var request = new CreateCaseRequest()
             {
                 DriverLicenseNumber = "01234571",
@@ -659,10 +654,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     result = true;
 
                 }
- 
+
                 // Create a case  
 
-                var createCase = await caseManager.CreateCase(request);
+                var createCase = await _caseManager.CreateCase(request);
 
                 // Search for the case id 
 
@@ -676,9 +671,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateDocumentEnvelope()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
             // get the case
-            var queryResults = (await caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
 
             var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
             var caseId = dmerCase.Id;
@@ -694,7 +689,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 DocumentType = "DMER",
                 DocumentTypeCode = "001",
                 Driver = new Driver { DriverLicenseNumber = driverLicenseNumber },
-               // FaxReceivedDate = DateTime.MinValue,
+                // FaxReceivedDate = DateTime.MinValue,
                 ImportDate = DateTimeOffset.UtcNow,
                 FileSize = 10,
                 DocumentPages = 1,
@@ -704,11 +699,11 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 SubmittalStatus = "Open-Required"
             };
 
-            await caseManager.CreateICBCDocumentEnvelope(legacyDocumentRequest);
+            await _caseManager.CreateICBCDocumentEnvelope(legacyDocumentRequest);
 
             // confirm it is present
 
-            var docs = await caseManager.GetCaseLegacyDocuments(caseId);
+            var docs = await _caseManager.GetCaseLegacyDocuments(caseId);
 
             bool found = false;
 
@@ -730,11 +725,11 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanCreateDocumentOnDriver()
         {
-            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
 
             string documentUrl = $"DMER-TEST-DOCUMENT-{DateTime.Now.ToFileTimeUtc()}";
 
-            if(driverLicenseNumber != null)
+            if (driverLicenseNumber != null)
             {
                 LegacyDocument legacyDocumentRequest = new LegacyDocument
                 {
@@ -753,11 +748,18 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     SubmittalStatus = "Uploaded"
                 };
 
-                await caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
+                await _caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
 
             }
 
-        }        
-    
+        }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetCaseDetails()
+        {
+            var caseId = _configuration["ICBC_TEST_CASEID"];
+            var c = await _caseManager.GetCaseDetail(caseId);
+            Assert.NotNull(c);
+        }
     }
 }
