@@ -1,273 +1,374 @@
 <div class="page-desc">
-    <div class="container">
-      <h1>Portal Dashboard</h1>
-      <p> 
-        The portal lets you easily view your cases, review their status, and provide necessary documents when required.
+  <div class="container">
+    <h1>Portal Dashboard</h1>
+    <p>
+      The portal lets you easily view your cases, review their status, and
+      provide necessary documents when required.
     </p>
-    </div>
-   
+  </div>
+</div>
+
+<div class="container">
+  <div class="list">
+    <h2>Most Recent Case</h2>
   </div>
 
-  <div class="container">
-    <div class="list">
-        <h2>Most Recent Case</h2>
-    </div>
+  <div class="cardSpacing">
+    <mat-card>
+      <mat-card-content class="recentCaseContent">
+        <div>
+          <label>Case ID</label>
+          <div>XXXX</div>
+        </div>
+
+        <div>
+          <label>Case Type</label>
+          <div>XXXXX</div>
+        </div>
+
+        <div>
+          <label>DMER Type</label>
+          <div>XXXXX</div>
+        </div>
+        <div>
+          <label>Outstanding Documents</label>
+          <div>XXXXX</div>
+        </div>
+
+        <div>
+          <label> Decision Outcome </label>
+          <div>XXXX</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <div class="container">
+  <div>
+    <mat-stepper labelPosition="bottom" #stepper>
+      <mat-step state="phone">
+        <ng-template matStepLabel>Opened:</ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Open Pending Submission</ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Under Review</ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Decision rendered</ng-template>
+      </mat-step>
+      <mat-step>
+        <ng-template matStepLabel>Resolved</ng-template>
+      </mat-step>
 
+      <ng-template matStepperIcon="phone">
+        <mat-icon>adjust</mat-icon>
+      </ng-template>
+    </mat-stepper>
+  </div>
+  <div>
+    <mat-card class="caseStatus">
+      <div>
+        <p><b>Understanding Case Statuses</b></p>
+        <br />
+        <p>
+          <b>Opened – </b>This is the date your case was opened at RoadSafetyBC.
+          <br />
+        </p>
+        <p>
+          <b>Open Pending Submission –</b> This case has been opened by
+          requesting a document (as opposed to receiving a submission), and has
+          not yet had any documents submitted to it. <br />
+        </p>
+        <p>
+          <b>Under Review –</b> The case has at least one document submitted to
+          it, and has not yet rendered a decision.<br />
+        </p>
+        <p>
+          <b>Decision Rendered –</b> A decision has been rendered, and a
+          (usually) 30 day timer is underway for follow-ups, challenges, or
+          additional documents that might change things.
+        </p>
+        <p>
+          <b>Resolved –</b> The case is now closed. If new information is
+          received, a new case will be opened rather than adding to this case.
+        </p>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<div class="container">
   <div class="list">
     <h2>Definitions</h2>
     <ng-container>
-    
       <mat-accordion multi>
-    
-        <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Case Type </mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>           
-             Find below the various case types.
-              <ul>
-                <li>
-                  <b>Driver's Medical Examination Report –</b> Cases opened because a Driver's Medical Examination Report was issued.
-                </li>
-                <li>
-                  <b>Reported Medical Condition - </b>Cases opened due to receiving a high-priority medical report.
-                </li>
-                <li>
-                  <b>Police Report –</b> Cases opened due to receiving a police report related to medical fitness to drive.
-
-                </li>
-                <li>
-                  <b>Unsolicited Report - </b> Cases opened due to receiving a report from a member of the public raising road safety concerns.
-                </li>
-                <li>
-                  <b>Other - </b> Cases opened due to receiving other documents not noted above
-                </li>
-                <li>
-                  <b>RSBC - </b>Cases manually created/opened by RoadSafetyBC staff
-                </li>
-                <li>
-                  <b>Legacy - </b> Legacy cases migrated from the old legacy system
-                </li>
-              </ul>
-            </div>
-          </mat-expansion-panel>
-
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title"> Case Status </mat-panel-title>
+            <mat-panel-title class="accordian-Title">
+              Case Type
+            </mat-panel-title>
           </mat-expansion-panel-header>
 
           <div>
-            Find below the various types of case statuses.
+            Find below the various case types.
             <ul>
               <li>
-                <b>Opened - </b>This case has been opened by requesting a document (as opposed to receiving a submission), and has not yet had any documents submitted to it.
+                <b>Driver's Medical Examination Report –</b> Cases opened
+                because a Driver's Medical Examination Report was issued.
               </li>
               <li>
-                <b>Open Pending Submission – </b> – DMER has been started by a medical
-                practitioner, but it has not been submitted to RoadSafetyBC.
+                <b>Reported Medical Condition - </b>Cases opened due to
+                receiving a high-priority medical report.
               </li>
               <li>
-                <b>Under Review – </b> The case has at least one document submitted to it, and has not yet rendered a decision.
+                <b>Police Report –</b> Cases opened due to receiving a police
+                report related to medical fitness to drive.
               </li>
               <li>
-                <b>Decision Rendered – </b> A decision has been rendered, and a (usually) 30 day timer is underway for follow-ups, challenges, or additional documents that might change things.
+                <b>Unsolicited Report - </b> Cases opened due to receiving a
+                report from a member of the public raising road safety concerns.
               </li>
               <li>
-                <b>Resolved – </b> The case is now closed.  If new information is received, a new case will be opened rather than adding to this case.
+                <b>Other - </b> Cases opened due to receiving other documents
+                not noted above
+              </li>
+              <li>
+                <b>RSBC - </b>Cases manually created/opened by RoadSafetyBC
+                staff
+              </li>
+              <li>
+                <b>Legacy - </b> Legacy cases migrated from the old legacy
+                system
               </li>
             </ul>
           </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
-                <mat-expansion-panel-header class="panel-header">
-                  <mat-panel-title class="accordian-Title"> DMER Type </mat-panel-title>
-                </mat-expansion-panel-header>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div>
+            Find below the various types of case statuses.
+            <ul>
+              <li>
+                <b>Opened - </b>This case has been opened by requesting a
+                document (as opposed to receiving a submission), and has not yet
+                had any documents submitted to it.
+              </li>
+              <li>
+                <b>Open Pending Submission – </b> – DMER has been started by a
+                medical practitioner, but it has not been submitted to
+                RoadSafetyBC.
+              </li>
+              <li>
+                <b>Under Review – </b> The case has at least one document
+                submitted to it, and has not yet rendered a decision.
+              </li>
+              <li>
+                <b>Decision Rendered – </b> A decision has been rendered, and a
+                (usually) 30 day timer is underway for follow-ups, challenges,
+                or additional documents that might change things.
+              </li>
+              <li>
+                <b>Resolved – </b> The case is now closed. If new information is
+                received, a new case will be opened rather than adding to this
+                case.
+              </li>
+            </ul>
+          </div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Decision outcome </mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>
-                
-              Find below the various types of decision outcomes
-              <ul>
-                <li>
-                  <b>Fit to Drive –  </b>Driver is fit to driveext to come
-                </li>
-                <li>
-                  <b>Unfit to Drive – </b> Driver is not fit to drive
-                </li>
-                <li>
-                  <b>FDE Referral – </b> Driver has been referred for a Functional Driving Evaluation (FDE)
-                </li>
-                <li>
-                  <b>Non-comply – </b> Driver has not complied to requirements
-                </li>
-                <li>
-                  <b>Deceased –</b> Associated Driver is deceased
-                </li>
-                <li>
-                    <b>No Action taken –</b>  Case has been reviewed and no action is required
-                  <li>
-                    <b>Voluntary Surrender - </b>All Privileges indicates the driver has voluntarily chosen to surrender his/her licence class, rather than complete the DMER or other fitness requirement. If they want to re-licence, he/she must first complete the outstanding requirement.
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              DMER Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        </mat-expansion-panel>
 
-                  </li>
-              </ul>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Eligible License Class </mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>
-                License classes include:
-              <ul>
-                <li>
-                  <b>None – </b>Information to come
-                </li>
-                <li>
-                  <b>Class 1 - </b> Any motor vehicle or combination of motor vehicles, except motorcycles
-                </li>
-                <li>
-                  <b>Class 2 – </b> All class 5 vehicles plus all public passenger-carrying vehicles
-                </li>
-                <li>
-                  <b>Class 3 – </b>All class 5 vehicles plus any motor vehicle with 3 or more axles, but not public passenger-carrying vehicles; towed vehicles cannot exceed 4600 kg
-                </li>
-                <li>
-                  <b>Class 4 unrestricted –</b>All class 5 vehicles, plus an ambulance, taxi, or school bus, special activity bus with seating capacity of not more than 25 persons, including driver
-                </li>
-                <li>
-                    <b>Class 5/7 –</b>Any 2-axle motor vehicles (other than a motorcycle), motorhomes, construction vehicles, may tow vehicles up to 4600 kg
-                  <li>
-                    <b>Class 6 - </b> Motorcycles, all terrain cycles or vehicle
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Decision outcome
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-                  </li>
-              </ul>
-            </div>
-          </mat-expansion-panel>
+          <div>
+            Find below the various types of decision outcomes
+            <ul>
+              <li><b>Fit to Drive – </b>Driver is fit to driveext to come</li>
+              <li><b>Unfit to Drive – </b> Driver is not fit to drive</li>
+              <li>
+                <b>FDE Referral – </b> Driver has been referred for a Functional
+                Driving Evaluation (FDE)
+              </li>
+              <li>
+                <b>Non-comply – </b> Driver has not complied to requirements
+              </li>
+              <li><b>Deceased –</b> Associated Driver is deceased</li>
+              <li>
+                <b>No Action taken –</b> Case has been reviewed and no action is
+                required
+              </li>
 
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> RSBC case assignment</mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>        
-              There are 4 RSBC case assignment groups:
-              <ul>
-                <li>
-                  <b>Client Services Group –  </b>Text to come
-                </li>
-                <li>
-                  <b>Case Adjudication Group – </b>Text to come
-                <li>
-                  <b>Case Manager Group –  </b> Text to come
-                </li>
-                <li>
-                  <b>Other –  </b> Text to come
-                </li>
-               
-              </ul>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Submission Type</mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>        
-                Listed below are the definintions for the various submission types.
-              <ul>
-                <li>
-                  <b>Diabetic Package  –  </b>Text to come
-                </li>
-                <li>
-                  <b>Fax-Medical Rationale – </b>Text to come
-                <li>
-                  <b>DMER  –  </b> Driver's Medical Examination Report
-                </li>
-                <li>
-                  <b>Hearing Report  –  </b> Text to come
-                </li>
-               
-              </ul>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Document subtype</mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>        
-              There are 4 RSBC case assignment groups:
-              <ul>
-                <li>
-                  <b>Client Services Group –  </b>Text to come
-                </li>
-                <li>
-                  <b>Case Adjudication Group – </b>Text to come
-                <li>
-                  <b>Case Manager Group –  </b> Text to come
-                </li>
-                <li>
-                  <b>Other –  </b> Text to come
-                </li>
-               
-              </ul>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Submission Status</mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>        
+              <li>
+                <b>Voluntary Surrender - </b>All Privileges indicates the driver
+                has voluntarily chosen to surrender his/her licence class,
+                rather than complete the DMER or other fitness requirement. If
+                they want to re-licence, he/she must first complete the
+                outstanding requirement.
+              </li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Eligible License Class
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div>
+            License classes include:
+            <ul>
+              <li><b>None – </b>Information to come</li>
+              <li>
+                <b>Class 1 - </b> Any motor vehicle or combination of motor
+                vehicles, except motorcycles
+              </li>
+              <li>
+                <b>Class 2 – </b> All class 5 vehicles plus all public
+                passenger-carrying vehicles
+              </li>
+              <li>
+                <b>Class 3 – </b>All class 5 vehicles plus any motor vehicle
+                with 3 or more axles, but not public passenger-carrying
+                vehicles; towed vehicles cannot exceed 4600 kg
+              </li>
+              <li>
+                <b>Class 4 unrestricted –</b>All class 5 vehicles, plus an
+                ambulance, taxi, or school bus, special activity bus with
+                seating capacity of not more than 25 persons, including driver
+              </li>
+              <li>
+                <b>Class 5/7 –</b>Any 2-axle motor vehicles (other than a
+                motorcycle), motorhomes, construction vehicles, may tow vehicles
+                up to 4600 kg
+              </li>
+
+              <li>
+                <b>Class 6 - </b> Motorcycles, all terrain cycles or vehicle
+              </li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              RSBC case assignment</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div>
+            There are 4 RSBC case assignment groups:
+            <ul>
+              <li><b>Client Services Group – </b>Text to come</li>
+              <li><b>Case Adjudication Group – </b>Text to come</li>
+
+              <li><b>Case Manager Group – </b> Text to come</li>
+              <li><b>Other – </b> Text to come</li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Type</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div>
+            Listed below are the definintions for the various submission types.
+            <ul>
+              <li><b>Diabetic Package – </b>Text to come</li>
+              <li><b>Fax-Medical Rationale – </b>Text to come</li>
+
+              <li><b>DMER – </b> Driver's Medical Examination Report</li>
+              <li><b>Hearing Report – </b> Text to come</li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Document subtype</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div>
+            There are 4 RSBC case assignment groups:
+            <ul>
+              <li><b>Client Services Group – </b>Text to come</li>
+              <li><b>Case Adjudication Group – </b>Text to come</li>
+
+              <li><b>Case Manager Group – </b> Text to come</li>
+              <li><b>Other – </b> Text to come</li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Status</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div>
             Listed below are the various submissions statuses.
-              <ul>
-                <li>
-                  <b>Open Required –  </b>RSBC has requested for a doucment and waiting for submission
-                </li>
-                <li>
-                  <b>Received – </b>RSBC has received this document and it is under review
-                <li>
-                  <b>Rejected – </b>Submitted document has been rejected by RSBC.
-                </li>
-                <li>
-                  <b>Non-comply – </b>Requested document was not submitted by the submittal deadline
-                </li>
-               
-              </ul>
-            </div>
-          </mat-expansion-panel>
-          <mat-expansion-panel>
-            <mat-expansion-panel-header class="panel-header">
-              <mat-panel-title class="accordian-Title"> Letter Topic</mat-panel-title>
-            </mat-expansion-panel-header>
-  
-            <div>        
-              Find below descriptions of the various letter topics.
-              <ul>
-                <li>
-                  <b>Diabetic Package – </b>Text to come
-                </li>
-                <li>
-                  <b>Topic name – </b>Text to come
-                <li>
-                  <b>Topic name –  </b> Text to come
-               
-              </ul>
-            </div>
-          </mat-expansion-panel>
+            <ul>
+              <li>
+                <b>Open Required – </b>RSBC has requested for a doucment and
+                waiting for submission
+              </li>
+              <li>
+                <b>Received – </b>RSBC has received this document and it is
+                under review
+              </li>
+
+              <li>
+                <b>Rejected – </b>Submitted document has been rejected by RSBC.
+              </li>
+              <li>
+                <b>Non-comply – </b>Requested document was not submitted by the
+                submittal deadline
+              </li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Letter Topic</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+
+          <div>
+            Find below descriptions of the various letter topics.
+            <ul>
+              <li><b>Diabetic Package – </b>Text to come</li>
+              <li><b>Topic name – </b>Text to come</li>
+
+              <li><b>Topic name – </b> Text to come</li>
+            </ul>
+          </div>
+        </mat-expansion-panel>
       </mat-accordion>
     </ng-container>
   </div>
-  </div>
+</div>

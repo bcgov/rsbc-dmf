@@ -1,13 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-import { EFormsOptions } from './e-forms-options';
-import { OidcOptions } from './oidc-options';
-
-/**
- * Client configuration settings
- */
+import { EFormsOptions } from '../models/e-forms-options';
+import { OidcOptions } from '../models/oidc-options';
 export interface Configuration {
   eformsConfiguration?: EFormsOptions;
-  environment?: null | string;
+  environment?: string | null;
   oidcConfiguration?: OidcOptions;
 }

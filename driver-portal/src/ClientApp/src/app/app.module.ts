@@ -13,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CoreUiModule, LayoutModule} from '@shared/core-ui';
 import { DashboardComponent } from './dashboard/dashboard.component'
+import { MaterialModule } from './shared/material.module';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { DashboardComponent } from './dashboard/dashboard.component'
       
     ]),
     AppRoutingModule,
+    MaterialModule
     
     
   ],

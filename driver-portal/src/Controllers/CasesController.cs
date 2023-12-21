@@ -67,6 +67,60 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 result.LatestDecision = c.Item.LatestDecision;
                 result.DecisionForClass = c.Item.DecisionForClass;
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                result.OutstandingDocuments = (int)c.Item.OutstandingDocuments;
+                if (c.Item.CaseSequence > -1)
+                {
+                    result.CaseSequence = (int)c.Item.CaseSequence;
+                }
+
+                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+            }
+
+            // set to null if no decision has been made.
+            if (result.DecisionDate == DateTimeOffset.MinValue)
+            {
+                result.DecisionDate = null;
+            }
+
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Get Most Recent Case
+        /// </summary>        
+        [HttpGet("{caseId}")]
+        [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetCase")]
+        public ActionResult GetMostRecentCase([Required][FromRoute] string driverLicenseNumber)
+        {
+            var result = new ViewModels.CaseDetail();
+
+            var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverLicenseRequest { DriverLicenseNumber = driverLicenseNumber});
+            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                string caseType = "Unsolicited";
+
+                if (c.Item.CaseType == "DMER")
+                {
+                    caseType = "Solicited";
+                }
+
+                result.CaseId = c.Item.CaseId;
+                result.Title = c.Item.Title;
+                result.IdCode = c.Item.IdCode;
+                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
+                result.CaseType = caseType;
+                result.DmerType = c.Item.DmerType;
+                result.Status = c.Item.Status;
+                result.AssigneeTitle = c.Item.AssigneeTitle;
+                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
+                result.LatestDecision = c.Item.LatestDecision;
+                result.DecisionForClass = c.Item.DecisionForClass;
+                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                result.OutstandingDocuments = (int)c.Item.OutstandingDocuments;
                 if (c.Item.CaseSequence > -1)
                 {
                     result.CaseSequence = (int)c.Item.CaseSequence;
