@@ -5,6 +5,7 @@ import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes:Routes = [
+  { path: '', component: DashboardComponent },
   { path: 'account', component: AccountComponent },
   { path: 'dashboard', component: DashboardComponent },
 ];

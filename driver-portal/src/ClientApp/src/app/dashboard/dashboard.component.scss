@@ -65,21 +65,18 @@
     text-align: left;
   }
 
- 
-
-  
 
   .recentCaseContent{
     display: flex;
     gap: 50px;
   }
 
- 
-
   .cardSpacing{
     margin-top: 24px;
     margin-bottom: 24px;
   }
+
+ 
 
   .mat-mdc-card  {
     background-color:#f1f1f3;
@@ -105,4 +102,17 @@
       display: flex;
       flex-flow: row-reverse nowrap;
     }
+
+   
+  }
+
+  .mat-mdc-card.caseStatus{
+    background-color: white;
+    border: 1px solid #c3cddc;
+  }
+
+  mat-stepper{
+    background-color: rgba(236, 245, 255, 1);
+    border-radius: 5px;
+    padding: 8px;
   }

@@ -73,8 +73,10 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         public DateTimeOffset DpsProcessingDate { get; set; }
 
+        public string EligibleLicenseClass { get; set; }
+
+        public int OutstandingDocuments { get; set; }
 
     }
-
 
 }
