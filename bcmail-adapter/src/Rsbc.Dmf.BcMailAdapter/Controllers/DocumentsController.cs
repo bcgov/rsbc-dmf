@@ -234,7 +234,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         ValidationMethod = documentResponse.Document.ValidationMethod,
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
                                         BusinessArea = documentResponse.Document.BusinessArea,
-
+                                        SubmittalStatus = "Uploaded"
                                     };
 
                                     DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();

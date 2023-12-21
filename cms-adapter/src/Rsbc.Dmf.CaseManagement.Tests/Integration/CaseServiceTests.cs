@@ -82,5 +82,50 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             var size = unsentItems.Items.Count;
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async void CheckAddGetDocument()
+        {
+            var driverLicenseNumber = configuration["ICBC_TEST_DL"];
+            var newDocument = new Service.LegacyDocument
+            {
+                DpsDocumentId = 88,
+                Driver = new Service.Driver{ DriverLicenseNumber = driverLicenseNumber },
+                BatchId = "1234",
+                CaseId = string.Empty,
+                DocumentId = string.Empty,
+                DocumentPages = 4,
+                DocumentTypeCode = "001", // DMER
+                DocumentUrl = "http://localhost",
+                ImportId = "4321",
+                OriginatingNumber = "123-123-1234",
+                ValidationMethod = "TEST",
+                ValidationPrevious = "TEST1",
+                SequenceNumber = -1,
+                UserId = "SYSTEM",
+                Priority = "Critical Review",
+                Queue = "Nurse Case Managers"
+            };
+
+            var newDocumentResponse = await caseService.CreateDocumentOnDriver(newDocument, null);
+
+            Assert.True(newDocumentResponse.ResultStatus == ResultStatus.Success);
+            
+            var response = await caseService.GetLegacyDocument(
+                new LegacyDocumentRequest() { DocumentId = newDocumentResponse.Id }, null);
+
+            Assert.True(response.ResultStatus == ResultStatus.Success);
+
+            Assert.Equal(newDocument.DpsDocumentId, response.Document.DpsDocumentId);
+            Assert.Equal(newDocument.BatchId, response.Document.BatchId);
+            Assert.Equal(newDocument.DocumentPages, response.Document.DocumentPages);
+            Assert.Equal(newDocument.DocumentUrl, response.Document.DocumentUrl);
+            Assert.Equal(newDocument.ImportId, response.Document.ImportId);
+            Assert.Equal(newDocument.ValidationMethod, response.Document.ValidationMethod);
+            Assert.Equal(newDocument.ValidationPrevious, response.Document.ValidationPrevious);
+            Assert.Equal(newDocument.Priority, response.Document.Priority);
+            Assert.Equal(newDocument.Queue, response.Document.Queue);
+
+        }
     }
 }

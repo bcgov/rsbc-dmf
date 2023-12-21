@@ -109,7 +109,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     await caseManager.UpdateCleanPassFlag(caseId);
                 }
 
-                // verify in dynamics wether this is updated
+                // verify in dynamics whether this is updated
 
             }
 
