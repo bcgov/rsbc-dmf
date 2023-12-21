@@ -313,7 +313,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
                 result.CaseId = c.Item.CaseId;
-                result.Title = c.Item.Title;
+                result.Title = c.Item.CaseSequence.ToString();
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
                 result.CaseType = caseType;
