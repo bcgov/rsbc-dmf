@@ -39,6 +39,8 @@ service CaseManager {
 
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
+  rpc GetMostRecentCaseDetail (DriverLicenseRequest) returns (GetCaseDetailReply);
+
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);

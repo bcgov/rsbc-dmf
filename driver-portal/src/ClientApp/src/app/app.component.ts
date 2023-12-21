@@ -1,6 +1,5 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
 import { Component, Inject, OnInit } from '@angular/core';
-import { LoginService } from './shared/services/login.service';
 import { ConfigurationService } from './shared/services/configuration.service';
 import { Router } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
@@ -18,7 +17,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     @Inject(APP_BASE_HREF) public baseHref: string,
-    private loginService: LoginService,
+    //private loginService: LoginService,
     private configService: ConfigurationService,
     private router: Router
   ) { }
@@ -48,11 +47,11 @@ export class AppComponent implements OnInit {
     //}
   }
 
-  public showNavigation(): boolean {
-    return this.loginService.isLoggedIn();
-  }
+  // public showNavigation(): boolean {
+  //   return this.loginService.isLoggedIn();
+  // }
 
-  public showProfile(): boolean {
-    return this.loginService.isLoggedIn();
-  }
+  // public showProfile(): boolean {
+  //   return this.loginService.isLoggedIn();
+  // }
 }

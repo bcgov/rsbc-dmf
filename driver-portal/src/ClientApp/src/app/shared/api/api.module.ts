@@ -7,7 +7,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
-import { ProfileService } from './services/profile.service';
+import { UserService } from './services/user.service';
 
 /**
  * Module that provides all services and configuration.
@@ -20,7 +20,7 @@ import { ProfileService } from './services/profile.service';
     ApplicationVersionInfoService,
     CasesService,
     ConfigService,
-    ProfileService,
+    UserService,
     ApiConfiguration
   ],
 })

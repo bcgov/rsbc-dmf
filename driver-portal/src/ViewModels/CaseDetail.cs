@@ -80,6 +80,9 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
 
         public List<Comment> Comments { get; set; }
 
+        public string EligibleLicenseClass { get; set; }
+
+        public int OutstandingDocuments { get; set; }
 
     }
 }
