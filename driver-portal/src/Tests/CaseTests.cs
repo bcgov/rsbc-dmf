@@ -25,5 +25,20 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
             Assert.Equal(clientResult.CaseId, caseId);
         }
+
+        [Fact]
+        public async Task GetMostRecentCase()
+        {
+            var licenseNumber = Configuration["ICBC_TEST_DL"];
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/Cases/GetMostRecentCase/" + licenseNumber);
+
+            var response = await _client.SendAsync(request);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+
+            var clientResult = JsonConvert.DeserializeObject<CaseDetail>(jsonString);
+
+            Assert.NotNull(clientResult);
+        }
     }
 }
