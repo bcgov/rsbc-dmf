@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Rsbc.Dmf.DriverPortal.Api.Controllers;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,11 +12,14 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     {
         public CaseTests(HttpClientFixture fixture): base(fixture) { }
 
+        private const string CASE_API = "/api/Cases";
+
         [Fact]
         public async Task GetCase()
         {
             var caseId = Configuration["ICBC_TEST_CASEID"];
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/Cases/GetCase/" + caseId);
+            var request = new HttpRequestMessage(HttpMethod.Get, 
+                $"{CASE_API}/{nameof(CasesController.GetCase)}/ " + caseId);
 
             var response = await _client.SendAsync(request);
             var jsonString = await response.Content.ReadAsStringAsync();
@@ -30,7 +34,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetMostRecentCase()
         {
             var licenseNumber = Configuration["ICBC_TEST_DL"];
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/Cases/GetMostRecentCase/" + licenseNumber);
+            var request = new HttpRequestMessage(HttpMethod.Get, 
+                $"{CASE_API}/{nameof(CasesController.GetMostRecentCase)}/" + licenseNumber);
 
             var response = await _client.SendAsync(request);
             var jsonString = await response.Content.ReadAsStringAsync();
