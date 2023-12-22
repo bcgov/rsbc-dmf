@@ -14,7 +14,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetCase()
         {
             var caseId = Configuration["ICBC_TEST_CASEID"];
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetCase/ " + caseId);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetCase/" + caseId);
 
             var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
