@@ -14,12 +14,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CoreUiModule, LayoutModule} from '@shared/core-ui';
 import { DashboardComponent } from './dashboard/dashboard.component'
 import { MaterialModule } from './shared/material.module';
+import { RecentCaseComponent } from './recent-case/recent-case.component';
+import { CaseComponent } from './case/case.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountComponent,
-    DashboardComponent
+    DashboardComponent,
+    RecentCaseComponent,
+    CaseComponent
   ],
 
   schemas: [
