@@ -8,13 +8,13 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     public abstract class ApiIntegrationTestBase
     {
         protected HttpClient _client { get; }
-        protected readonly IConfiguration Configuration;
-        protected const string CASE_API = "/api/Cases";
+        protected readonly IConfiguration _configuration;
+        protected const string CASE_API_BASE = "/api/Cases";
 
         public ApiIntegrationTestBase(HttpClientFixture fixture)
         {
             _client = fixture.Client;
-            Configuration = fixture.Configuration;
+            _configuration = fixture.Configuration;
         }
 
         protected async Task<T> HttpClientSendRequest<T>(HttpRequestMessage request)
