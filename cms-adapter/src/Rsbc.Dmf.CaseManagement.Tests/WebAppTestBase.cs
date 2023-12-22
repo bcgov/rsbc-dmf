@@ -11,7 +11,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests
     public class WebAppTestBase : TestBase
     {
         //private readonly LoggerFactory loggerFactory;
-        protected readonly XUnitWebAppFactory<Startup> webApplicationFactory;
+        protected readonly XUnitWebAppFactory<Service.Startup> webApplicationFactory;
 
         private readonly ITestOutputHelper output;
 
@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests
 
         public WebAppTestBase(ITestOutputHelper output)
         {
-            this.webApplicationFactory = new XUnitWebAppFactory<Startup>(output);
+            this.webApplicationFactory = new XUnitWebAppFactory<Service.Startup>(output);
             this.output = output;
 
             var client = webApplicationFactory.CreateDefaultClient();
