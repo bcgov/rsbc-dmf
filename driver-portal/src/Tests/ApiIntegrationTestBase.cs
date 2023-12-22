@@ -1,15 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net.Http;
-using System.Text;
-using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json;
-using Xunit;
-using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using System.Web;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
@@ -42,6 +35,14 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                     _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
                 }
             }
+        }
+
+        protected async Task<T> Send<T>(HttpRequestMessage request)
+        {
+            var response = await _client.SendAsync(request);
+            var jsonString = await response.Content.ReadAsStringAsync();
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<T>(jsonString);
         }
     }
 }

@@ -1,4 +1,3 @@
-using Newtonsoft.Json;
 using Rsbc.Dmf.DriverPortal.Api.Controllers;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net.Http;
@@ -21,11 +20,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             var request = new HttpRequestMessage(HttpMethod.Get, 
                 $"{CASE_API}/{nameof(CasesController.GetCase)}/ " + caseId);
 
-            var response = await _client.SendAsync(request);
-            var jsonString = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
-
-            var clientResult = JsonConvert.DeserializeObject<CaseDetail>(jsonString);
+            var clientResult = await Send<CaseDetail>(request);
 
             Assert.Equal(clientResult.CaseId, caseId);
         }
@@ -37,11 +32,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             var request = new HttpRequestMessage(HttpMethod.Get, 
                 $"{CASE_API}/{nameof(CasesController.GetMostRecentCase)}/" + licenseNumber);
 
-            var response = await _client.SendAsync(request);
-            var jsonString = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
-
-            var clientResult = JsonConvert.DeserializeObject<CaseDetail>(jsonString);
+            var clientResult = await Send<CaseDetail>(request);
 
             Assert.NotNull(clientResult);
         }
