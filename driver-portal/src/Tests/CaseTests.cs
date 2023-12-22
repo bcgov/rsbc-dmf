@@ -10,15 +10,13 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     {
         public CaseTests(HttpClientFixture fixture): base(fixture) { }
 
-        private const string CASE_API = "/api/Cases";
-
         [Fact]
         public async Task GetCase()
         {
             var caseId = Configuration["ICBC_TEST_CASEID"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetCase/ " + caseId);
 
-            var clientResult = await Send<CaseDetail>(request);
+            var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
             Assert.Equal(clientResult.CaseId, caseId);
         }
@@ -29,7 +27,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             var licenseNumber = Configuration["ICBC_TEST_DL"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetMostRecentCase/" + licenseNumber);
 
-            var clientResult = await Send<CaseDetail>(request);
+            var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
             Assert.NotNull(clientResult);
         }
