@@ -1,18 +1,9 @@
-
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Reflection;
-using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
+using Pssg.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -25,8 +16,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
 
-        public CasesController(IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient,
-            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+        public CasesController(IConfiguration configuration, 
+            CaseManager.CaseManagerClient cmsAdapterClient,
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient
+            )
         {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
@@ -89,14 +82,23 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get Most Recent Case
         /// </summary>        
-        [HttpGet("{caseId}")]
+        [HttpGet("MostRecent")]
         [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetCase")]
+        [ActionName("MostRecent")]
         public ActionResult GetMostRecentCase()
         {
             var result = new ViewModels.CaseDetail();
+
+            result = new CaseDetail() {
+                Title = "A1A1A1",
+                CaseId = Guid.Empty.ToString(),
+                DmerType = "Scheduled Age",
+                CaseType = "Driver’s Medical Examination Report",
+                LatestDecision = "Under review",
+                OutstandingDocuments = 3
+            };
             /*
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverLicenseRequest { DriverLicenseNumber = driverLicenseNumber});
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
