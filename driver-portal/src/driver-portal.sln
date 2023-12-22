@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
