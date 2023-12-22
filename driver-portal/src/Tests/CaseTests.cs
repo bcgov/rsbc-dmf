@@ -17,8 +17,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetCase()
         {
             var caseId = Configuration["ICBC_TEST_CASEID"];
-            var request = new HttpRequestMessage(HttpMethod.Get, 
-                $"{CASE_API}/{nameof(CasesController.GetCase)}/ " + caseId);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetCase/ " + caseId);
 
             var clientResult = await Send<CaseDetail>(request);
 
@@ -29,8 +28,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetMostRecentCase()
         {
             var licenseNumber = Configuration["ICBC_TEST_DL"];
-            var request = new HttpRequestMessage(HttpMethod.Get, 
-                $"{CASE_API}/{nameof(CasesController.GetMostRecentCase)}/" + licenseNumber);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API}/GetMostRecentCase/" + licenseNumber);
 
             var clientResult = await Send<CaseDetail>(request);
 
