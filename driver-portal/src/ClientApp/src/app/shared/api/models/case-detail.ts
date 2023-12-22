@@ -13,10 +13,12 @@ export interface CaseDetail {
   dmerType?: string | null;
   documents?: Array<Document> | null;
   dpsProcessingDate?: string;
+  eligibleLicenseClass?: string | null;
   idCode?: string | null;
   lastActivityDate?: string;
   latestDecision?: string | null;
   openedDate?: string;
+  outstandingDocuments?: number;
   status?: string | null;
   title?: string | null;
 }
