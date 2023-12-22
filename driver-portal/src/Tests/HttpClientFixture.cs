@@ -17,7 +17,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 .AddEnvironmentVariables()
                 .Build();
 
-            Client = new CustomWebApplicationFactory<Program>().CreateClient();
+            Client = new CustomWebApplicationFactory().CreateClient();
         }
     }
 }

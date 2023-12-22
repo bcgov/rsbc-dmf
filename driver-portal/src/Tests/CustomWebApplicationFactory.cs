@@ -8,11 +8,10 @@ using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using System.Net.Http;
 using Rsbc.Dmf.CaseManagement.Helpers;
-using Rsbc.Dmf.DriverPortal;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
-    public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Program>
+    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         public IConfiguration Configuration;
 
@@ -48,14 +47,13 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
-                    var tokenRequest = new CaseManagement.Service.TokenRequest
+                    var tokenRequest = new TokenRequest
                     {
                         Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
                     };
 
                     var tokenReply = initialClient.GetToken(tokenRequest);
-
-                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+                    if (tokenReply != null && tokenReply.ResultStatus == ResultStatus.Success)
                     {
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");

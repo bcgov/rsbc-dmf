@@ -1,4 +1,3 @@
-using Rsbc.Dmf.DriverPortal.Api.Controllers;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net.Http;
 using System.Threading.Tasks;
