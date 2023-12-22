@@ -94,10 +94,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCase")]
-        public ActionResult GetMostRecentCase([Required][FromRoute] string driverLicenseNumber)
+        public ActionResult GetMostRecentCase()
         {
             var result = new ViewModels.CaseDetail();
-
+            /*
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverLicenseRequest { DriverLicenseNumber = driverLicenseNumber});
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -135,7 +135,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             {
                 result.DecisionDate = null;
             }
-
+            */
             return Json(result);
         }
 
