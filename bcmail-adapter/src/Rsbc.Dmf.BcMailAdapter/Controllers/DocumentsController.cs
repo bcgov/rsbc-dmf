@@ -236,7 +236,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         BusinessArea = documentResponse.Document.BusinessArea,
                                         SubmittalStatus = "Uploaded",
                                         Queue = documentResponse.Document.Queue,
-                                        Priority = documentResponse.Document.Priority
+                                        Priority = documentResponse.Document.Priority, 
+                                        Owner = "Team - Intake"
                                     };
 
                                     DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
