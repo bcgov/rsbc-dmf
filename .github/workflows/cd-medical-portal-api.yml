@@ -23,7 +23,7 @@ jobs:
     if: github.event_name == 'push'
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Log into registry
         run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
