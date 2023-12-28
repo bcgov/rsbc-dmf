@@ -22,7 +22,7 @@ jobs:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        GIT_BRANCH: "${{github.ref}}"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         
       - uses: rlespinasse/git-commit-data-action@v1.x
       - name: Extract Branch Name
