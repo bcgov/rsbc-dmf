@@ -2037,9 +2037,8 @@ namespace Rsbc.Dmf.CaseManagement
                 // Load Driver lookup from the documents entity
                // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
-                var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+               principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
-               
 
                 // Create the document 
 
@@ -3819,7 +3818,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else
             {
-                return null;
+                return owner;
             }
         }
 
