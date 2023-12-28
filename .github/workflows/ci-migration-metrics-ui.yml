@@ -27,9 +27,9 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
-          node-version: '18.16'
+          node-version: '20.10'
       - run: npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
