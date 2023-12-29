@@ -1,0 +1,20 @@
+<h2>{{ title }}</h2>
+
+<table border="1" width="80%" *ngIf="tableData">
+  <tr>
+    <th>Date</th>
+    <th>Oracle</th>
+    <th>Dynamics</th>
+    <th>Gap</th>
+    <th>Percent</th>
+  </tr>
+  <tr *ngFor="let v of tableData">
+    <td>{{ v.label }}</td>
+    <td>{{ v.oracleCount }}</td>
+    <td>{{ v.dynamicsCount }}</td>
+    <td>{{ v.difference }}</td>
+    <td>{{ v.percentage | number:'1.2-2' }}</td>
+  </tr>
+
+
+</table>
