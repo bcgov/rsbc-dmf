@@ -36,8 +36,8 @@ public class MonthlyCountStatsController : ControllerBase
     [HttpGet("{category}")]
     public IActionResult GetByCategory(string category)
     {
-        var users = _monthlyCountStatService.GetByCategory(category);
-        return Ok(users);
+        var data = _monthlyCountStatService.GetByCategory(category);
+        return Ok(data);
     }
 
     
@@ -68,6 +68,15 @@ public class MonthlyCountStatsController : ControllerBase
         _monthlyCountStatService.Delete(id);
         return Ok(new { message = "MonthlyCountStat deleted" });
     }
+
+    [HttpGet("CaseProgress")]
+    public IActionResult GetCaseProgress()
+    {
+
+        var data = _monthlyCountStatService.GetCaseProgress();        
+        return Ok(data);
+    }
+
 }
 
 

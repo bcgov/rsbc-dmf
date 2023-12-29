@@ -19,7 +19,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: rlespinasse/git-commit-data-action@v1.x
@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         with:
           node-version: '18.16'
       - run: npm ci
@@ -54,6 +54,3 @@ jobs:
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
           env_vars: javascript
 
-      - name: Build image
-        working-directory: ./medical-portal/src/UI
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME

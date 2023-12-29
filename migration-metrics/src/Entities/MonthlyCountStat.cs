@@ -6,7 +6,11 @@ using SQLite;
 
 namespace MigrationMetrics.Entities;
 
-    [Index(nameof(RecordedTime))]
+[Index(nameof(RecordedTime))]
+[Index(nameof(Category))]
+[Index(nameof(Start))]
+[Index(nameof(End))]
+
 public class MonthlyCountStat
     {
     [Key]

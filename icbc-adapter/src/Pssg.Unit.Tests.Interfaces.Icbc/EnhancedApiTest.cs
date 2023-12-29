@@ -107,6 +107,12 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
             var unsentItems = CaseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
         }
 
+        [Fact]
+        public void GetUnsentAdjudications()
+        {
+            var unsentItems = CaseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
+        }
+
 
         [Fact]
         public async void BasicConnectionTest()
