@@ -1,3 +1,4 @@
+using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -26,12 +27,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
         private readonly ILogger<CaseService> _logger;
         private readonly ICaseManager _caseManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration)
+        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _logger = logger;
             _caseManager = caseManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -954,48 +957,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 foreach (var item in result)
                 {
-                    // TODO create mapper
-                    var newDocument = new LegacyDocument
-                    {
-                        BatchId = item.BatchId,
-                        BusinessArea = item.BusinessArea,
-                        CaseId = item.CaseId ?? string.Empty,
-                        DocumentPages = item.DocumentPages,
-                        DocumentId = item.DocumentId,
-                        DocumentType = item.DocumentType ?? string.Empty,
-                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
-                        DocumentUrl = item.DocumentUrl ?? string.Empty,
-                        ImportId = item.ImportId ?? string.Empty,
-                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
-                        ValidationMethod = item.ValidationMethod ?? string.Empty,
-                        ValidationPrevious = item.ValidationPrevious ?? string.Empty,
-                        SequenceNumber = item.SequenceNumber ?? -1,
-                        SubmittalStatus = item.SubmittalStatus ?? string.Empty,
-                        // odd logic but I followed same convention as DecisionDate above
-                        // TODO should DueDate be nullable?
-                        CreateDate = Timestamp.FromDateTimeOffset(item.CreateDate),
-                        Description = item.Description ?? string.Empty,
-                        // TODO
-                        // submission type, submitted date
-                    };
-
-                    if (item.DueDate.HasValue) 
-                    {
-                        newDocument.DueDate = Timestamp.FromDateTimeOffset(item.DueDate.Value);
-                    }
-
-                    if (item.FaxReceivedDate != null)
-                    {
-                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
-                    }
-
-                    if (item.ImportDate != null)
-                    {
-                        newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
-                    }
-                    reply.Items.Add(newDocument);
-
-
+                    var document = _mapper.Map<LegacyDocument>(item);
+                    reply.Items.Add(document);
                 }
                 reply.ResultStatus = ResultStatus.Success;
             }

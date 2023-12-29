@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.CaseManagement.Tests
 {
@@ -17,6 +18,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests
             services.AddDynamics(configuration);
             services.AddTransient<ICaseManager, CaseManager>();
             services.AddSingleton<IConfiguration>(configuration);
+            services.AddAutoMapper();
         }
     }
 }
