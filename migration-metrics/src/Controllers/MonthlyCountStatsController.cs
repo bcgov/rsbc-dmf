@@ -72,7 +72,6 @@ public class MonthlyCountStatsController : ControllerBase
     [HttpGet("CaseProgress")]
     public IActionResult GetCaseProgress()
     {
-
         var data = _monthlyCountStatService.GetCaseProgress();        
         return Ok(data);
     }
