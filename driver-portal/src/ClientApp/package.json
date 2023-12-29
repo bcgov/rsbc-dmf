@@ -17,17 +17,17 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^16.2.11",
+    "@angular/animations": "^17.0.8",
     "@angular/cdk": "~16.0.1",
-    "@angular/common": "^16.2.11",
-    "@angular/compiler": "^16.2.11",
-    "@angular/core": "^16.2.11",
-    "@angular/forms": "^16.2.11",
+    "@angular/common": "^17.0.8",
+    "@angular/compiler": "^17.0.8",
+    "@angular/core": "^17.0.8",
+    "@angular/forms": "^17.0.8",
     "@angular/material": "~16.0.1",
-    "@angular/platform-browser": "^16.2.11",
-    "@angular/platform-browser-dynamic": "^16.2.11",
-    "@angular/platform-server": "^16.2.11",
-    "@angular/router": "^16.2.11",
+    "@angular/platform-browser": "^17.0.8",
+    "@angular/platform-browser-dynamic": "^17.0.8",
+    "@angular/platform-server": "^17.0.8",
+    "@angular/router": "^17.0.8",
     "angular-oauth2-oidc": "^15.0.1",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.3.0",
@@ -37,7 +37,7 @@
     "run-script-os": "^1.1.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.5.0",
-    "zone.js": "~0.13.3"
+    "zone.js": "~0.14.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.0.8",
@@ -47,7 +47,7 @@
     "@angular-eslint/schematics": "16.2.0",
     "@angular-eslint/template-parser": "16.2.0",
     "@angular/cli": "^16.2.9",
-    "@angular/compiler-cli": "^16.2.11",
+    "@angular/compiler-cli": "^17.0.8",
     "@types/jasmine": "~4.3.1",
     "@types/jasminewd2": "~2.0.10",
     "@types/node": "^18.14.0",
@@ -63,7 +63,7 @@
     "karma-typescript": "^5.5.4",
     "karma-typescript-angular2-transform": "^5.5.4",
     "ng-openapi-gen": "^0.51.0",
-    "typescript": "~4.9.5"
+    "typescript": "~5.2.2"
   },
   "overrides": {
     "autoprefixer": "10.4.5"
