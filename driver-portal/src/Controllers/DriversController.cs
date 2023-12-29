@@ -40,26 +40,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 {
                     if (item.SubmittalStatus != "Uploaded")
                     {
-                        //// todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
-                        //ViewModels.Driver driver = new ViewModels.Driver()
-                        //{
-                        //    Id = Guid.Parse(driverId),
-                        //    Flag51 = false,
-                        //    LoadedFromICBC = false,
-                        //    MedicalIssueDate = DateTimeOffset.Now
-                        //};
-
                         bool isBcMailSent = false;
                         if (item.DocumentType != null && item.DocumentType == "Letter Out BCMail" && item.ImportDate != null)
                         {
                             isBcMailSent = true;
                         }
-
-                        //string caseId = string.Empty;
-                        //if (item.CaseId != null && item.CaseId != "none")
-                        //{
-                        //    caseId = item.CaseId;
-                        //}
 
                         TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
                         DateTimeOffset importDate = DateTimeOffset.Now;
@@ -105,8 +90,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
                         var newDocument = new Document
                         {
-                            //CaseId = caseId,
-                            //Driver = driver,
                             ImportDate = importDate,
                             DocumentId = item.DocumentId,
                             DocumentType = item.DocumentType,
@@ -123,14 +106,34 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                             SubmittalStatus = item.SubmittalStatus
                         };
 
-                        // TODO use switch statement
-                        if (newDocument.SubmittalStatus == "Received")
-                            result.CaseSubmissions.Add(newDocument);
-                        if (newDocument.SubmittalStatus == "Open-Required")
-                            result.SubmissionRequirements.Add(newDocument);
-                        if (newDocument.SubmittalStatus == "Sent")
-                            result.LettersToDriver.Add(newDocument);
+                        switch (newDocument.SubmittalStatus)
+                        {
+                            case "Received":
+                                result.CaseSubmissions.Add(newDocument);
+                                break;
+                            case "Open-Required":
+                                result.SubmissionRequirements.Add(newDocument);
+                                break;
+                            case "Sent":
+                                result.LettersToDriver.Add(newDocument);
+                                break;
+                        }
                     }
+                }
+
+                if (result.CaseSubmissions.Count > 0)
+                {
+                    result.CaseSubmissions = result.CaseSubmissions.OrderByDescending(cs => cs.ImportDate).ToList();
+                }
+
+                if (result.SubmissionRequirements.Count > 0)
+                {
+                    result.SubmissionRequirements = result.SubmissionRequirements.OrderByDescending(cs => cs.ImportDate).ToList();
+                }
+
+                if (result.LettersToDriver.Count > 0)
+                {
+                    result.LettersToDriver = result.LettersToDriver.OrderByDescending(cs => cs.ImportDate).ToList();
                 }
 
                 return Json(result);

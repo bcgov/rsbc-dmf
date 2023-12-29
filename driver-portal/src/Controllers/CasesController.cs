@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ActionName("GetCase")]
         public ActionResult GetCase([Required] [FromRoute] string caseId)
         {
-            var result = new ViewModels.CaseDetail();
+            var result = new CaseDetail();
 
             var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)

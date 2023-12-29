@@ -707,11 +707,7 @@ namespace Rsbc.Dmf.CaseManagement
                         SubmittalStatus = TranslateSubmittalStatusInt(document.dfp_submittalstatus),
                         DueDate = document.dfp_duedate,
                         Description = document.dfp_description,
-                        // TODO
-                        //SubmittedDate
-                        // TODO Check that if other code uses this service that createdon is never null
                         CreateDate = document.createdon.GetValueOrDefault(),
-                        //LetterTopic
                     };
 
                         //Driver caseDriver = new Driver()
@@ -2047,7 +2043,7 @@ namespace Rsbc.Dmf.CaseManagement
                // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
                principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
-
+               
 
                 // Create the document 
 
