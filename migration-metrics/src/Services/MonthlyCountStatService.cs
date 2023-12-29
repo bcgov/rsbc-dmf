@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using MigrationMetrics.Entities;
 using MigrationMetrics.Models.MonthlyCountStat;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using MigrationMetrics.Models;
 
 namespace MigrationMetrics.Services;
 
@@ -27,7 +28,7 @@ public interface IMonthlyCountStatService
 
     IEnumerable<MonthlyCountStat> GetDataByRecordedDateCategory(DateTime recordedDate, string category);
 
-    IEnumerable<MonthlyCountStat> GetCaseProgress();
+    IEnumerable<ProgressData> GetCaseProgress();
 }
 
 public class MonthlyCountStatService : IMonthlyCountStatService
@@ -48,9 +49,9 @@ public class MonthlyCountStatService : IMonthlyCountStatService
         return _context.MonthlyCountStats;
     }
 
-    public IEnumerable<MonthlyCountStat> GetCaseProgress()
+    public IEnumerable<ProgressData> GetCaseProgress()
     {
-        List<MonthlyCountStat> result = new List<MonthlyCountStat>();
+        List<ProgressData> result = new List<ProgressData>();
 
         var oracleTime = _context.MonthlyCountStats.Where(x => x.Category == "OracleCaseCount")
             .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
@@ -60,24 +61,61 @@ public class MonthlyCountStatService : IMonthlyCountStatService
         var dynamicsTime = _context.MonthlyCountStats.Where(x => x.Category == "DynamicsCaseCount")
             .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
         var dynamicsStats = _context.MonthlyCountStats
-            .Where(x => x.Category == "DynamicsCaseCount" && x.RecordedTime == oracleTime).ToArray();
+            .Where(x => x.Category == "DynamicsCaseCount" && x.RecordedTime == dynamicsTime).ToArray();
+
+        long runningTotalDynamics = 0;
+        long runningTotalOracle = 0;
 
         for (var i = 0; i < oracleStats.Length; i++)
         {
-            MonthlyCountStat monthlyCountStat = new MonthlyCountStat();
-            monthlyCountStat.RecordedTime = oracleStats[i].RecordedTime;
-            monthlyCountStat.Start = oracleStats[i].Start;
-            monthlyCountStat.Category = "CaseCount";
-            monthlyCountStat.End = oracleStats[i].End;
-            monthlyCountStat.SourceCount = oracleStats[i].SourceCount;
+            ProgressData newData = new ProgressData();
+            newData.Label = oracleStats[i].Start.ToShortDateString();
+            newData.OracleCount = oracleStats[i].SourceCount;
             if (i < dynamicsStats.Length)
             {
-                monthlyCountStat.DestinationCount = dynamicsStats[i].DestinationCount;
-            }
+                newData.DynamicsCount = dynamicsStats[i].DestinationCount;
+
+                newData.Difference = dynamicsStats[i].DestinationCount - oracleStats[i].SourceCount;
+                if (oracleStats[i].SourceCount > 0 && dynamicsStats[i].DestinationCount > 0)
+                {
+                    newData.Percentage = ((dynamicsStats[i].DestinationCount * 1.0) / (oracleStats[i].SourceCount * 1.0)) * 100  ;
+                }
+                else
+                {
+                    newData.Percentage = 0;
+                }
                 
+            }
+            else
+            {
+                newData.Difference = oracleStats[i].SourceCount;
+                newData.Percentage = 0.0;
+            }
+
+            runningTotalDynamics += newData.DynamicsCount;
+            runningTotalOracle += newData.OracleCount;
+
+            
+
+            result.Add(newData);    
+
+
         }
 
-
+        ProgressData summary = new ProgressData()
+        {
+            Label = "TOTAL", OracleCount = runningTotalOracle, DynamicsCount = runningTotalDynamics
+        };
+        if (runningTotalOracle > 0 && runningTotalDynamics > 0)
+        {
+            summary.Percentage = ((runningTotalDynamics * 1.0) / (runningTotalOracle * 1.0)) * 100;
+            summary.Difference = runningTotalDynamics - runningTotalOracle;
+        }
+        else
+        {
+            summary.Percentage = 0;
+        }
+        result.Insert(0,summary);
         return result;
     }
 
