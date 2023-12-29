@@ -55,5 +55,11 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         /// True if sent to BC Mail
         /// </summary>
         public bool? BcMailSent { get; set; }
+
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
+        public string Description { get; set; }
+        public string DocumentUrl { get; set; }
+        public string SubmittalStatus { get; set; }
     }
 }

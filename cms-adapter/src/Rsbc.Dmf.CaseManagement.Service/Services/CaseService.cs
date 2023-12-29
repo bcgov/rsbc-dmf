@@ -945,6 +945,74 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
+        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
+
+                foreach (var item in result)
+                {
+                    // TODO create mapper
+                    var newDocument = new LegacyDocument
+                    {
+                        BatchId = item.BatchId,
+                        BusinessArea = item.BusinessArea,
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentPages = item.DocumentPages,
+                        DocumentId = item.DocumentId,
+                        DocumentType = item.DocumentType ?? string.Empty,
+                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty,
+                        ImportId = item.ImportId ?? string.Empty,
+                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
+                        ValidationMethod = item.ValidationMethod ?? string.Empty,
+                        ValidationPrevious = item.ValidationPrevious ?? string.Empty,
+                        SequenceNumber = item.SequenceNumber ?? -1,
+                        SubmittalStatus = item.SubmittalStatus ?? string.Empty,
+                        // odd logic but I followed same convention as DecisionDate above
+                        // TODO should DueDate be nullable?
+                        CreateDate = Timestamp.FromDateTimeOffset(item.CreateDate),
+                        Description = item.Description ?? string.Empty,
+                        // TODO
+                        // submission type, submitted date
+                    };
+
+                    if (item.DueDate.HasValue) 
+                    {
+                        newDocument.DueDate = Timestamp.FromDateTimeOffset(item.DueDate.Value);
+                    }
+
+                    if (item.FaxReceivedDate != null)
+                    {
+                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
+                    }
+
+                    if (item.ImportDate != null)
+                    {
+                        newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
+                    }
+                    reply.Items.Add(newDocument);
+
+
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+        /// <summary>
+        /// Get Driver Documents
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
@@ -1923,8 +1991,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
                 }));
 */
-                
-                return newCase;
+
+                    return newCase;
             }));
 
             return reply;

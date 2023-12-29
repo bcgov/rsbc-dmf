@@ -1,8 +1,4 @@
-﻿using Org.BouncyCastle.Bcpg;
-using System;
-using System.Collections.Generic;
-
-namespace Rsbc.Dmf.DriverPortal.ViewModels
+﻿namespace Rsbc.Dmf.DriverPortal.ViewModels
 {
     public class CaseDetail
     {
@@ -11,6 +7,10 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         /// </summary>
         public string CaseId { get; set; }
 
+        /// <summary>
+        /// The GUID that is the primary key for the driver, sent as a string
+        /// </summary>
+        public string DriverId { get; set; }
         /// <summary>
         /// Indicates system title of the case
         /// </summary>

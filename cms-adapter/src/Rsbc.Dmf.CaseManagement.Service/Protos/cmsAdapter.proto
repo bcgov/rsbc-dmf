@@ -45,6 +45,8 @@ service CaseManager {
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
+  rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
+
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
   rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
@@ -88,32 +90,31 @@ service CaseManager {
   // Resolve a case
   rpc ResolveCaseStatusUpdates(EmptyRequest) returns (ResultStatusReply);
 
-   // Update Birth Date
+  // Update Birth Date
   rpc UpdateBirthDate(UpdateDriverRequest) returns (ResultStatusReply);
 
   //Update Clean Pass Flag
-   rpc UpdateCleanPassFlag(CaseIdRequest) returns (ResultStatusReply);
+  rpc UpdateCleanPassFlag(CaseIdRequest) returns (ResultStatusReply);
 
-    //Update Manual Pass Flag
-   rpc UpdateManualPassFlag(CaseIdRequest) returns (ResultStatusReply);
+  //Update Manual Pass Flag
+  rpc UpdateManualPassFlag(CaseIdRequest) returns (ResultStatusReply);
 
-   // Send To BC mail
-   rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
+  // Send To BC mail
+  rpc GetPdfDocuments(EmptyRequest) returns (PdfDocumentReply);
 
-   rpc UpdateDocumentStatus(PdfDocument) returns (PdfDocumentReply);
+  rpc UpdateDocumentStatus(PdfDocument) returns (PdfDocumentReply);
 
-   // Update Non Comply documents
-   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
-
-   // 
-
- 
- 
+  // Update Non Comply documents
+  rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
 message UpdateDriverRequest{
 	string driverLicenseNumber=1;
 	google.protobuf.Timestamp birthDate = 2;
+}
+
+message DriverIdRequest {
+	string id = 1;
 }
 
 message DriverLicenseRequest {
@@ -123,7 +124,6 @@ message DriverLicenseRequest {
 message CaseIdRequest {
 	string caseId= 1;
 }
-
 
 enum OriginRestrictions {
 	None = 0;
@@ -217,6 +217,9 @@ message LegacyDocument {
 	int64 DpsDocumentId = 22;
 	string FilenameOverride = 23;
 	string Origin = 24;
+	google.protobuf.Timestamp CreateDate = 25;
+	google.protobuf.Timestamp DueDate = 26;
+	string Description = 27;
 }
 
 message GetDocumentRequest {	
@@ -559,7 +562,6 @@ message Clinic {
 
 message DriverProfile {
 	string id = 1;
-
 }
 
 enum UserType {
@@ -596,4 +598,3 @@ message BringForwardRequest {
 	string description = 4;	
 	BringForwardPriority priority = 5;
 }
-
