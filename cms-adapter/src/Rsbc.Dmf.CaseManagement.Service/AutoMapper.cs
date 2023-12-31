@@ -2,6 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -14,20 +15,15 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ConvertUsing(x => x == null ? null : Timestamp.FromDateTimeOffset(x.Value));
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
-            // TODO this should only be done on grpc mappings
-            CreateMap<string, string>().ConvertUsing<NullStringConverter>();
-            CreateMap<CaseManagement.Address, Address>();
-            CreateMap<CaseManagement.Driver, Driver>();
-            CreateMap<CaseManagement.LegacyDocument, LegacyDocument>();
-        }
+            CreateMap<CaseManagement.Address, Address>()
+                .AddTransform(NullToEmptyStringConverter);
+            CreateMap<CaseManagement.Driver, Driver>()
+                .AddTransform(NullToEmptyStringConverter);
+            CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
+                .AddTransform(NullToEmptyStringConverter);
     }
 
-    public class NullStringConverter : ITypeConverter<string, string>
-    {
-        public string Convert(string source, string destination, ResolutionContext context)
-        {
-            return source ?? string.Empty;
-        }
+        private Expression<Func<string, string>> NullToEmptyStringConverter = x => x ?? string.Empty;
     }
 
     public static class AutoMapper

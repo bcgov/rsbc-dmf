@@ -710,29 +710,6 @@ namespace Rsbc.Dmf.CaseManagement
                         CreateDate = document.createdon.GetValueOrDefault(),
                     };
 
-                        //Driver caseDriver = new Driver()
-                        //{
-                        //    //DriverLicenseNumber = driverId,
-                        //    Id = driverId
-                        //};
-
-                        //if (document._bcgov_caseid_value != null)
-                        //{
-                        //    var @case = dynamicsContext.incidents.Where(i => i.incidentid == document._bcgov_caseid_value).FirstOrDefault();
-
-                        //    if (@case != null)
-                        //    {
-                        //        legacyDocument.CaseId = @case.incidentid.ToString();
-                        //        if (@case.dfp_DriverId != null)
-                        //        {
-                        //            await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
-                        //            caseDriver.Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty;
-                        //        }
-                        //    }
-                        //}
-
-                        //legacyDocument.Driver = caseDriver;
-
                         result.Add(legacyDocument);
                 }
             }

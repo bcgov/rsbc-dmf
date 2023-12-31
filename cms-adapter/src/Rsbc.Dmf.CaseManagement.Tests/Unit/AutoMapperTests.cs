@@ -14,7 +14,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         }
 
         [Fact]
-        public void Map_LegacyDocument()
+        public void Map_Service_LegacyDocument()
         {
             var document = new LegacyDocument();
             document.BatchId = "BatchId";

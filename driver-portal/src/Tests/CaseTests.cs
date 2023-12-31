@@ -38,9 +38,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetLettersToDriver()
         {
             // get case detail with driver id
-            //var caseId = _configuration["ICBC_TEST_CASEID"];
-            var caseId = "407f23fb-5500-ec11-b82b-fbf002001732";
-            var driverId = "e27d7c69-3913-4116-a360-f5e990200173";
+            var caseId = _configuration["DOCS_CASE_ID"];
+            var driverId = _configuration["DOCS_DRIVER_ID"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/{caseId}");
             var caseResult = await HttpClientSendRequest<CaseDetail>(request);
 

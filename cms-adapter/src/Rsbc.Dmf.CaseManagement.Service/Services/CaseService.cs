@@ -1953,9 +1953,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Outcome = ConvertDecisionOutcome(d.Outcome),
                     CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
                 }));
-*/
+                */
 
-                    return newCase;
+                return newCase;
             }));
 
             return reply;
