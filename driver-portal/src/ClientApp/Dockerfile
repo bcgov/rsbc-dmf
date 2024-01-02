@@ -1,11 +1,13 @@
 FROM trion/ng-cli-karma AS ng-builder
-WORKDIR /driver-portal/src/ClientApp
 COPY ./package*.json ./
 
-COPY ../../../shared-portal-ui/ ../../../shared-portal-ui
+COPY ./shared-portal-ui/ ./shared-portal-ui
+COPY ./driver-portal/src/ClientApp ./driver-portal/src/ClientApp
+
+WORKDIR ./driver-portal/src/ClientApp
 
 RUN npm install
-COPY ./ .
+
 #RUN npm run lint
 #RUN npm run test -- --no-watch --no-progress
 
