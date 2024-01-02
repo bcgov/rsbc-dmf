@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ActionName("GetCase")]
         public ActionResult GetCase([Required] [FromRoute] string caseId)
         {
-            var result = new ViewModels.CaseDetail();
+            var result = new CaseDetail();
 
             var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
@@ -49,6 +49,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 }
 
                 result.CaseId = c.Item.CaseId;
+                result.DriverId = c.Item.DriverId;
                 result.Title = c.Item.Title;
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
@@ -65,9 +66,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 {
                     result.CaseSequence = (int)c.Item.CaseSequence;
                 }
-
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-
+            }
+            else
+            {
+                return StatusCode(500, c?.ErrorDetail ?? "GetCaseDetail failed.");
             }
 
             // set to null if no decision has been made.

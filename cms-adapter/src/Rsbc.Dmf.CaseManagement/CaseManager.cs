@@ -82,6 +82,9 @@ namespace Rsbc.Dmf.CaseManagement
         public long DpsDocumentId { get; set; }
         public string Origin { get; set; }
         public bool Solicited { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
+        public string Description { get; set; }
     }
 
     public class CreateStatusReply
@@ -668,16 +671,60 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        // TODO move common code with this method and method under it e.g. mapper
         /// <summary>
-        /// Get Driver Legacy Documents
+        /// Get Driver Legacy Documents by driver id
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId)
+        {
+            var result = new List<LegacyDocument>();
+            var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driverId && d.statecode == 0).ToList();
+            foreach (var document in driverDocuments)
+            {
+                // only include documents that have a URL
+                if (!string.IsNullOrEmpty(document.bcgov_url))
+                {
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
+                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
+
+                    var legacyDocument = new LegacyDocument
+                    {
+                        BatchId = document.dfp_batchid ?? string.Empty,
+                        DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
+                        DocumentId = document.bcgov_documenturlid.ToString(),
+                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
+                        DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
+                        BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
+                        DocumentUrl = document.bcgov_url ?? string.Empty,
+                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
+                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
+                        ImportId = document.dfp_importid ?? string.Empty,
+                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
+                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
+                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
+                        SubmittalStatus = TranslateSubmittalStatusInt(document.dfp_submittalstatus),
+                        DueDate = document.dfp_duedate,
+                        Description = document.dfp_description,
+                        CreateDate = document.createdon.GetValueOrDefault(),
+                    };
+
+                        result.Add(legacyDocument);
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get Driver Legacy Documents by driver license
         /// </summary>
         /// <param name="driverLicenceNumber"></param>
         /// <returns></returns>
         public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber)
         {
-            List<LegacyDocument> result = new List<LegacyDocument>();
-            // start by the driver
-
+            var result = new List<LegacyDocument>();
             var driversRaw = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statecode == 0);
 
             if (driversRaw != null)
@@ -687,64 +734,6 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     if (@driver != null)
                     {
-                        /*
-                        // .Expand(x => x.dfp_incident_dfp_comment)
-                        // get the cases for that driver.
-                        var @cases = dynamicsContext.incidents.Where(i => i._dfp_driverid_value == @driver.dfp_driverid
-                        ).ToList();
-
-                        foreach (var @case in @cases)
-                        {
-                            // ensure related data is loaded.
-                            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-
-                            if (@case.dfp_DriverId != null)
-                            {
-                                await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
-                            }
-
-                            Driver caseDriver = new Driver()
-                            {
-                                DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
-                                Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty
-                            };
-
-                            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
-                            foreach (var document in @case.bcgov_incident_bcgov_documenturl)
-                            {
-                                // only include documents that have a URL
-                                if (! string.IsNullOrEmpty(document.bcgov_url))                               
-                                {
-                                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                                    LegacyDocument legacyDocument = new LegacyDocument
-                                    {
-                                        BatchId = document.dfp_batchid ?? string.Empty,
-                                        CaseId = @case.incidentid.ToString(),
-                                        DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                                        DocumentId = document.bcgov_documenturlid.ToString(),
-                                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
-                                        DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                        BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
-                                        DocumentUrl = document.bcgov_url ?? string.Empty,
-                                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                                        ImportId = document.dfp_importid ?? string.Empty,
-                                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                        SequenceNumber = @case.importsequencenumber.GetValueOrDefault(),
-                                        Driver = caseDriver
-                                    };
-
-                                    result.Add(legacyDocument);
-                                }                       
-                            }
-                        }
-                        */
-
-
                         var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driver.dfp_driverid && d.statecode == 0).ToList();
                         foreach (var document in driverDocuments)
                         {
@@ -754,11 +743,9 @@ namespace Rsbc.Dmf.CaseManagement
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
-
-                                LegacyDocument legacyDocument = new LegacyDocument
+                                var legacyDocument = new LegacyDocument
                                 {
                                     BatchId = document.dfp_batchid ?? string.Empty,
-
                                     DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
                                     DocumentId = document.bcgov_documenturlid.ToString(),
                                     DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
@@ -785,7 +772,6 @@ namespace Rsbc.Dmf.CaseManagement
                                     var @case = dynamicsContext.incidents.Where(i => i.incidentid == document._bcgov_caseid_value).FirstOrDefault();
 
                                     if (@case != null)
-
                                     {
                                         legacyDocument.CaseId = @case.incidentid.ToString();
                                         if (@case.dfp_DriverId != null)
@@ -798,16 +784,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 legacyDocument.Driver = caseDriver;
 
-                                //if (! result.Contains(legacyDocument))
-                                //{
                                 result.Add(legacyDocument);
-                                //}
                             }
                         }
                     }
                 }
             }
-
 
             return result;
         }
@@ -2038,7 +2020,7 @@ namespace Rsbc.Dmf.CaseManagement
                // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
                principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
-
+               
 
                 // Create the document 
 
@@ -3731,7 +3713,7 @@ namespace Rsbc.Dmf.CaseManagement
                 { 100000012, "Manual Pass"  }, // Manual Pass
                 { 100000000, "Open-Required"  }, // Open required
                 { 100000010, "Uploaded" }, // Uploaded
-                { 100000008,"Sent" }
+                { 100000008, "Sent" }
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))

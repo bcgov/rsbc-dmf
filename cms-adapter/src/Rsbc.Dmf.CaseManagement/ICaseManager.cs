@@ -36,6 +36,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
+        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId);
+
         Task<LegacyDocument> GetLegacyDocument(string documentId);
 
         Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);

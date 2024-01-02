@@ -21,8 +21,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             var logger = services.GetRequiredService<ILogger<CaseService>>();
             var caseManager = services.GetRequiredService<ICaseManager>();
-            caseService =
-                new CaseService(logger, caseManager, configuration); 
+            caseService = new CaseService(logger, caseManager, configuration, null); 
         }
         
 
