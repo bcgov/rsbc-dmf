@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Google.Protobuf.Collections;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Unit
@@ -7,16 +9,13 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
     public class AutoMapperTests
     {
         private readonly IMapper _mapper;
+        private readonly LegacyDocument document;
 
         public AutoMapperTests(IMapper mapper)
         {
             _mapper = mapper;
-        }
 
-        [Fact]
-        public void Map_Service_LegacyDocument()
-        {
-            var document = new LegacyDocument();
+            document = new LegacyDocument();
             document.BatchId = "BatchId";
             document.BusinessArea = "BusinessArea";
             document.CaseId = "CaseId";
@@ -39,10 +38,28 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             driver.Surname = "Surname";
             driver.BirthDate = DateTime.Now;
             document.Driver = driver;
+        }
 
+        [Fact]
+        public void Map_Service_LegacyDocument()
+        {
             var mappedDocument = _mapper.Map<Service.LegacyDocument>(document);
 
             Assert.NotNull(mappedDocument);
+        }
+
+        [Fact]
+        public void Map_Service_LegacyDocuments()
+        {
+            var documents = new List<LegacyDocument>();
+            for (int i = 0; i < 10; i++)
+            {
+                documents.Add(document);
+            }
+
+            var mappedDocuments = _mapper.Map<RepeatedField<LegacyDocument>>(documents);
+
+            Assert.NotNull(mappedDocuments);
         }
     }
 }

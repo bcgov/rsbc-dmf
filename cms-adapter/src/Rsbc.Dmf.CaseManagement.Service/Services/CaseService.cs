@@ -954,12 +954,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
-
-                foreach (var item in result)
-                {
-                    var document = _mapper.Map<LegacyDocument>(item);
-                    reply.Items.Add(document);
-                }
+                var documents = _mapper.Map<IEnumerable<LegacyDocument>>(result);
+                reply.Items.AddRange(documents);
                 reply.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)
