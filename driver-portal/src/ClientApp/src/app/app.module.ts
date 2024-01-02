@@ -16,6 +16,9 @@ import { DashboardComponent } from './dashboard/dashboard.component'
 import { MaterialModule } from './shared/material.module';
 import { RecentCaseComponent } from './recent-case/recent-case.component';
 import { CaseComponent } from './case/case.component';
+import { CaseTypeComponent } from './case-definations/case-type/case-type.component';
+import { CaseStatusComponent } from './case-definations/case-status/case-status.component';
+import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +26,10 @@ import { CaseComponent } from './case/case.component';
     AccountComponent,
     DashboardComponent,
     RecentCaseComponent,
-    CaseComponent
+    CaseComponent,
+    CaseTypeComponent,
+    CaseStatusComponent,
+    DmerTypeComponent
   ],
 
   schemas: [
