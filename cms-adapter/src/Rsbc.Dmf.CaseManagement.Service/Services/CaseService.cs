@@ -1,3 +1,4 @@
+using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -26,12 +27,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
         private readonly ILogger<CaseService> _logger;
         private readonly ICaseManager _caseManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration)
+        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _logger = logger;
             _caseManager = caseManager;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -945,6 +948,30 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
+        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
+                var documents = _mapper.Map<IEnumerable<LegacyDocument>>(result);
+                reply.Items.AddRange(documents);
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+        /// <summary>
+        /// Get Driver Documents
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetDocumentsReply> GetDriverDocuments(DriverLicenseRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
@@ -961,6 +988,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         driver.Surname = item.Driver.Surname ?? string.Empty;
                     } 
 
+                    // TODO use automapper, see CaseService.GetDriverDocumentsById
                     var newDocument = new LegacyDocument
                     {
                         BatchId = item.BatchId,
@@ -1922,8 +1950,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Outcome = ConvertDecisionOutcome(d.Outcome),
                     CreatedOn = Timestamp.FromDateTime(d.CreatedOn.DateTime.ToUniversalTime())
                 }));
-*/
-                
+                */
+
                 return newCase;
             }));
 
