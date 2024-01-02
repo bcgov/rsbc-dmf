@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public async Task GetCase()
         {
-            var caseId = Configuration["ICBC_TEST_CASEID"];
+
             var caseId = _configuration["ICBC_TEST_CASEID"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/" + caseId);
 
@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public async Task GetMostRecentCase()
         {
-            var licenseNumber = Configuration["ICBC_TEST_DL"];
+
             //var licenseNumber = _configuration["ICBC_TEST_DL"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/MostRecent/");
 
