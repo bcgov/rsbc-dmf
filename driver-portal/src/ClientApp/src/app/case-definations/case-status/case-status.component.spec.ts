@@ -9,14 +9,14 @@ describe('CaseStatusComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [CaseStatusComponent]
+      declarations: [CaseStatusComponent],
     });
     fixture = TestBed.createComponent(CaseStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create', () => {
+    //   expect(component).toBeTruthy();
+  });
 });

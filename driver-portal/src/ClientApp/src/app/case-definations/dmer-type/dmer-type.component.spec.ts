@@ -9,14 +9,14 @@ describe('DmerTypeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [DmerTypeComponent]
+      declarations: [DmerTypeComponent],
     });
     fixture = TestBed.createComponent(DmerTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create', () => {
+    //   expect(component).toBeTruthy();
+  });
 });
