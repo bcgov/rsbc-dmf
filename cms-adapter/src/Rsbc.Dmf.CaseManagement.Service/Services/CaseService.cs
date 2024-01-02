@@ -992,6 +992,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         driver.Surname = item.Driver.Surname ?? string.Empty;
                     } 
 
+                    // TODO use automapper, see CaseService.GetDriverDocumentsById
                     var newDocument = new LegacyDocument
                     {
                         BatchId = item.BatchId,
