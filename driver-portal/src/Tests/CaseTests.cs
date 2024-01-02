@@ -13,13 +13,15 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public async Task GetCase()
         {
-
             var caseId = _configuration["ICBC_TEST_CASEID"];
+            if (!string.IsNullOrEmpty(caseId))
+            {
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/" + caseId);
 
             var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
             Assert.Equal(clientResult.CaseId, caseId);
+        }
         }
 
         [Fact]
@@ -37,9 +39,12 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public async Task GetLettersToDriver()
         {
-            // get case detail with driver id
             var caseId = _configuration["DOCS_CASE_ID"];
+            if (!string.IsNullOrEmpty(caseId))
+            {
             var driverId = _configuration["DOCS_DRIVER_ID"];
+
+                // get case details
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/{caseId}");
             var caseResult = await HttpClientSendRequest<CaseDetail>(request);
 
@@ -53,4 +58,5 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             Assert.NotNull(caseDocuments);
         }
     }
+}
 }
