@@ -15,7 +15,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [AllowAnonymous]
-    public class ConfigController : ControllerBase
+    public class ConfigController : Controller
     {
         private readonly ILogger<ConfigController> _logger;
         private readonly IHostEnvironment env;
@@ -33,6 +33,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(Configuration), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -41,7 +42,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var config = new Configuration
             {
                 Environment = env.EnvironmentName,
-                EformsConfiguration = configuration.GetSection("eforms").Get<EFormsOptions>(),
                 OidcConfiguration = configuration.GetSection("auth:oidc").Get<OidcOptions>()
             };
 
@@ -54,29 +54,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public class Configuration
         {
             public string Environment { get; set; }
-            public EFormsOptions EformsConfiguration { get; set; }
             public OidcOptions OidcConfiguration { get; set; }
-        }
-
-        public class EFormsOptions
-        {
-            public string FormServerUrl { get; set; }
-
-            public string EmrVendorId { get; set; }
-
-            public string FhirServerUrl { get; set; }
-            public string FormsMap { get; set; }
-
-            public EFormDetails[] Forms =>
-                string.IsNullOrEmpty(FormsMap)
-                ? Array.Empty<EFormDetails>()
-                : JsonSerializer.Deserialize<EFormDetails[]>(FormsMap, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }
-
-        public class EFormDetails
-        {
-            public string Id { get; set; }
-            public string Name { get; set; }
         }
 
         public class OidcOptions

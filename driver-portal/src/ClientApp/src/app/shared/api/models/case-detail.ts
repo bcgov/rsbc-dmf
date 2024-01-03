@@ -13,6 +13,7 @@ export interface CaseDetail {
   dmerType?: string | null;
   documents?: Array<Document> | null;
   dpsProcessingDate?: string;
+  driverId?: string | null;
   eligibleLicenseClass?: string | null;
   idCode?: string | null;
   lastActivityDate?: string;
