@@ -228,9 +228,9 @@ namespace OAuthServer
             app.UseForwardedHeaders(forwardedHeadersOptions);
 
 
-            if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+            if (!string.IsNullOrEmpty(configuration["PROXY_URI"]))
             {
-                app.UseMiddleware<PublicFacingMiddleware>(configuration["ISSUER_URI"]);
+                app.UseMiddleware<PublicFacingMiddleware>(configuration["PROXY_URI"]);
             }
 
             if (environment.IsDevelopment())
