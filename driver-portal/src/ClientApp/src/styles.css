@@ -247,3 +247,11 @@ body {
   text-align: left;
   line-height: 24px;
 }
+
+.definationCard{
+  margin-top: 12px;
+}
+
+.definationContent{
+  margin-left: 12px;
+}

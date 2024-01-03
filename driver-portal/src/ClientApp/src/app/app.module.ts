@@ -19,6 +19,12 @@ import { CaseComponent } from './case/case.component';
 import { CaseTypeComponent } from './case-definations/case-type/case-type.component';
 import { CaseStatusComponent } from './case-definations/case-status/case-status.component';
 import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.component';
+import { DecisionOutcomeComponent } from './case-definations/decision-outcome/decision-outcome.component';
+import { EligibleLicenseClassComponent } from './case-definations/eligible-license-class/eligible-license-class.component';
+import { SubmissionTypeComponent } from './case-definations/submission-type/submission-type.component';
+import { SubmissionStatusComponent } from './case-definations/submission-status/submission-status.component';
+import { RsbcCaseAssignmentComponent } from './case-definations/rsbc-case-assignment/rsbc-case-assignment.component';
+import { LetterTopicComponent } from './case-definations/letter-topic/letter-topic.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +36,12 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
     CaseTypeComponent,
     CaseStatusComponent,
     DmerTypeComponent,
+    DecisionOutcomeComponent,
+    EligibleLicenseClassComponent,
+    SubmissionTypeComponent,
+    SubmissionStatusComponent,
+    RsbcCaseAssignmentComponent,
+    LetterTopicComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

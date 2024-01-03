@@ -90,3 +90,8 @@ mat-stepper {
   border-radius: 5px;
   padding: 8px;
 }
+
+.mat-accordion .mat-expansion-panel:not(.mat-expanded),
+.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+  margin-bottom: 12px;
+}
