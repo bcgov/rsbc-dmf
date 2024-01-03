@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Router } from '@angular/router';
+import { MatAccordion } from '@angular/material/expansion'; 
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +9,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+
   constructor(
     private caseManagementService: CaseManagementService,
     private router: Router

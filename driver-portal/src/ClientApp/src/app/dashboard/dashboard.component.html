@@ -18,6 +18,15 @@
   <div class="container">
     <div class="list">
       <h2>Definitions</h2>
+      <div class="accordion-btn-container">
+        <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+          >Expand All</a
+        >
+        <span class="accordion-bar">&nbsp;|&nbsp;</span>
+        <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+          >Collapse All</a
+        >
+      </div>
       <div style="padding-bottom: 30px">
         <mat-accordion multi>
           <mat-expansion-panel>
