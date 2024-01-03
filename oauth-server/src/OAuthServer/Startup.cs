@@ -70,6 +70,7 @@ namespace OAuthServer
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"), new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
             var builder = services
                 .AddIdentityServer(options =>
                 {
@@ -82,6 +83,7 @@ namespace OAuthServer
                     options.UserInteraction.LogoutUrl = "~/logout";
 
                     if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
+                    
                 })
 
                 .AddOperationalStore(options =>
@@ -199,7 +201,7 @@ namespace OAuthServer
                };
            });
 
-            services.AddHealthChecks().AddCheck("OAuth Server ", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
@@ -210,7 +212,16 @@ namespace OAuthServer
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseForwardedHeaders();
+
+            var forwardedHeadersOptions = new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            };
+            forwardedHeadersOptions.KnownNetworks.Clear();
+            forwardedHeadersOptions.KnownProxies.Clear();
+
+            app.UseForwardedHeaders(forwardedHeadersOptions);
+
             if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
