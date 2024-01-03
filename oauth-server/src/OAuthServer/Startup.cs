@@ -82,7 +82,12 @@ namespace OAuthServer
                     options.UserInteraction.LoginUrl = "~/login";
                     options.UserInteraction.LogoutUrl = "~/logout";
 
-                    if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
+                    if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+                    {
+                        options.IssuerUri = configuration["ISSUER_URI"];
+                        
+                        
+                    }
                     
                 })
 
@@ -215,12 +220,18 @@ namespace OAuthServer
 
             var forwardedHeadersOptions = new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedHost | ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+                ForwardedHeaders = ForwardedHeaders.All
             };
             forwardedHeadersOptions.KnownNetworks.Clear();
             forwardedHeadersOptions.KnownProxies.Clear();
 
             app.UseForwardedHeaders(forwardedHeadersOptions);
+
+
+            if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+            {
+                app.UseMiddleware<PublicFacingMiddleware>(configuration["ISSUER_URI"]);
+            }
 
             if (environment.IsDevelopment())
             {
