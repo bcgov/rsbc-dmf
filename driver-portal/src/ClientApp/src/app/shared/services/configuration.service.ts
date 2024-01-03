@@ -27,18 +27,6 @@ export class ConfigurationService {
     );
   }
 
-  public getEFormsServerOptions(): EFormsServerOptions {
-    if (!this.isConfigured() || !this.config?.eformsConfiguration) { throw Error('EForms server configuration is missing'); }
-    return {
-      emrVendorId: this.config.eformsConfiguration.emrVendorId || '',
-      fhirServerUrl: this.config.eformsConfiguration.fhirServerUrl || '',
-      formServerUrl: this.config.eformsConfiguration.formServerUrl || ''
-    };
-  }
-
-  public getEFormsFormId(name: string): string {
-    return this.config?.eformsConfiguration?.forms?.find(f => f.name?.toLowerCase() === name.toLowerCase())?.id || '';
-  }
 
   public isConfigured(): boolean {
     return this.config !== null;

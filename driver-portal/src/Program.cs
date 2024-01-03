@@ -1,12 +1,17 @@
-using System.Text.Json.Serialization;
-using Microsoft.OpenApi.Models;
+using Grpc.Net.Client;
+using HealthChecks.UI.Client;
+using IdentityModel.AspNetCore.OAuth2Introspection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Net;
-using HealthChecks.UI.Client;
-using Grpc.Net.Client;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api.Services;
+using System.Net;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +26,78 @@ builder.WebHost
 
 var services = builder.Services;
 var env = builder.Environment;
+
+services.AddAuthentication("token")
+                //JWT tokens handling
+                .AddJwtBearer("token", options =>
+                {
+                    options.BackchannelHttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+
+                    builder.Configuration.GetSection("auth:token").Bind(options);
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+
+                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+                    options.ForwardDefaultSelector = ctx =>
+                    {
+                        var authHeader = (string)ctx.Request.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        }
+                    };
+                })
+                //reference tokens handling
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    options.EnableCaching = true;
+                    options.CacheDuration = TimeSpan.FromMinutes(1);
+                    builder.Configuration.GetSection("auth:introspection").Bind(options);
+                    options.Events = new OAuth2IntrospectionEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        },
+                        OnUpdateClientAssertion =
+                        async ctx =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                    };
+
+                });
+
+            services.AddAuthorization(options =>
+            {
+                
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                    JwtBearerDefaults.AuthenticationScheme,
+                    "OIDC");
+                defaultAuthorizationPolicyBuilder =
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "doctors-portal-api");
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
+
+                options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
+
 
 services.AddCors();
 services.AddControllersWithViews().AddJsonOptions(x =>
@@ -132,6 +209,7 @@ if (!string.IsNullOrEmpty(cmsAdapterURI))
 
     var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
+    services.AddTransient(_ => new UserManager.UserManagerClient(channel));
 }
 
 
@@ -140,7 +218,8 @@ services.AddHealthChecks()
     .AddCheck("driver-portal", () => HealthCheckResult.Healthy("OK"));
 
 services.AddHttpClient();
-
+services.AddHttpContextAccessor();
+services.AddTransient<IUserService, UserService>();
 
 var app = builder.Build();
 
@@ -158,6 +237,7 @@ app.UseHealthChecks("/hc/live", new HealthCheckOptions
 
 // configure HTTP request pipeline
 
+
 // global cors policy
 app.UseCors(x => x
     .AllowAnyOrigin()
@@ -166,20 +246,22 @@ app.UseCors(x => x
 
 app.UseHsts();
 
-app.UseRouting();
-
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+    pattern: "{controller}/{action=Index}/{id?}")
+    .RequireAuthorization(); 
 
 app.MapFallbackToFile("index.html");
 app.MapSwagger();
 
 app.Run();
+
+
 
 public partial class Program { } // so you can reference it from tests

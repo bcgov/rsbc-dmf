@@ -60,9 +60,6 @@ namespace OAuthServer
                             "https://test.roadsafetybc.gov.bc.ca",
                             "https://roadsafetybc.gov.bc.ca",
                             "https://www.roadsafetybc.gov.bc.ca",
-                            "https://roadsafetybcportal-dev.apps.silver.devops.gov.bc.ca",
-                                            "https://roadsafetybcportal-test.apps.silver.devops.gov.bc.ca",
-                                            "https://roadsafetybcportal-train.apps.silver.devops.gov.bc.ca",
                                             "https://localhost:3020",
                                             "http://localhost:3020")
                                .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
