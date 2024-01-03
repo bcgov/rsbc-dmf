@@ -26,41 +26,7 @@
                 Case Type
               </mat-panel-title>
             </mat-expansion-panel-header>
-
-            <div>
-              Find below the various case types.
-              <ul>
-                <li>
-                  <b>Driver's Medical Examination Report –</b> Cases opened
-                  because a Driver's Medical Examination Report was issued.
-                </li>
-                <li>
-                  <b>Reported Medical Condition - </b>Cases opened due to
-                  receiving a high-priority medical report.
-                </li>
-                <li>
-                  <b>Police Report –</b> Cases opened due to receiving a police
-                  report related to medical fitness to drive.
-                </li>
-                <li>
-                  <b>Unsolicited Report - </b> Cases opened due to receiving a
-                  report from a member of the public raising road safety
-                  concerns.
-                </li>
-                <li>
-                  <b>Other - </b> Cases opened due to receiving other documents
-                  not noted above
-                </li>
-                <li>
-                  <b>RSBC - </b>Cases manually created/opened by RoadSafetyBC
-                  staff
-                </li>
-                <li>
-                  <b>Legacy - </b> Legacy cases migrated from the old legacy
-                  system
-                </li>
-              </ul>
-            </div>
+            <app-case-type></app-case-type>
           </mat-expansion-panel>
 
           <mat-expansion-panel>
@@ -69,36 +35,7 @@
                 Case Status
               </mat-panel-title>
             </mat-expansion-panel-header>
-
-            <div>
-              Find below the various types of case statuses.
-              <ul>
-                <li>
-                  <b>Opened - </b>This case has been opened by requesting a
-                  document (as opposed to receiving a submission), and has not
-                  yet had any documents submitted to it.
-                </li>
-                <li>
-                  <b>Open Pending Submission – </b> – DMER has been started by a
-                  medical practitioner, but it has not been submitted to
-                  RoadSafetyBC.
-                </li>
-                <li>
-                  <b>Under Review – </b> The case has at least one document
-                  submitted to it, and has not yet rendered a decision.
-                </li>
-                <li>
-                  <b>Decision Rendered – </b> A decision has been rendered, and
-                  a (usually) 30 day timer is underway for follow-ups,
-                  challenges, or additional documents that might change things.
-                </li>
-                <li>
-                  <b>Resolved – </b> The case is now closed. If new information
-                  is received, a new case will be opened rather than adding to
-                  this case.
-                </li>
-              </ul>
-            </div>
+            <app-case-status></app-case-status>
           </mat-expansion-panel>
 
           <mat-expansion-panel>
@@ -107,6 +44,7 @@
                 DMER Type
               </mat-panel-title>
             </mat-expansion-panel-header>
+            <app-dmer-type></app-dmer-type>
           </mat-expansion-panel>
 
           <mat-expansion-panel>

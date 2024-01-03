@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,9 +25,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatGridListModule } from '@angular/material/grid-list';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   imports: [
@@ -64,7 +64,7 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatSnackBarModule,
     ReactiveFormsModule,
     FormsModule,
-    MatStepperModule
+    MatStepperModule,
   ],
   exports: [
     CommonModule,
@@ -100,7 +100,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatSnackBarModule,
     ReactiveFormsModule,
     FormsModule,
-    MatStepperModule
-  ]
+    MatStepperModule,
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class MaterialModule { }
+export class MaterialModule {}

@@ -1,13 +1,15 @@
-describe('RecentCaseComponent', () => {
+
+
+describe('CaseTypeComponent', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // let component: RecentCaseComponent;
-  // let fixture: ComponentFixture<RecentCaseComponent>;
+  // let component: CaseTypeComponent;
+  // let fixture: ComponentFixture<CaseTypeComponent>;
 
   // beforeEach(() => {
   //   TestBed.configureTestingModule({
-  //     declarations: [RecentCaseComponent],
+  //     declarations: [CaseTypeComponent],
   //   });
-  //   fixture = TestBed.createComponent(RecentCaseComponent);
+  //   fixture = TestBed.createComponent(CaseTypeComponent);
   //   component = fixture.componentInstance;
   //   fixture.detectChanges();
   // });
