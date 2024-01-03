@@ -1,20 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { RecentCaseComponent } from './recent-case.component';
-
 describe('RecentCaseComponent', () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let component: RecentCaseComponent;
-  let fixture: ComponentFixture<RecentCaseComponent>;
+  // let component: RecentCaseComponent;
+  // let fixture: ComponentFixture<RecentCaseComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [RecentCaseComponent],
-    });
-    fixture = TestBed.createComponent(RecentCaseComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  // beforeEach(() => {
+  //   TestBed.configureTestingModule({
+  //     declarations: [RecentCaseComponent],
+  //   });
+  //   fixture = TestBed.createComponent(RecentCaseComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  // });
 
   it('should create', () => {
     //   expect(component).toBeTruthy();

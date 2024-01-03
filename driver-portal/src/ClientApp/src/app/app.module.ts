@@ -11,8 +11,8 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { AccountComponent } from './account/account.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {CoreUiModule, LayoutModule} from '@shared/core-ui';
-import { DashboardComponent } from './dashboard/dashboard.component'
+import { CoreUiModule, LayoutModule } from '@shared/core-ui';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './shared/material.module';
 import { RecentCaseComponent } from './recent-case/recent-case.component';
 import { CaseComponent } from './case/case.component';
@@ -29,17 +29,15 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
     CaseComponent,
     CaseTypeComponent,
     CaseStatusComponent,
-    DmerTypeComponent
+    DmerTypeComponent,
   ],
 
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA
-  ],
-  
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),   
+    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     BrowserAnimationsModule,
-    AppRoutingModule, 
+    AppRoutingModule,
     HttpClientModule,
     FormsModule,
     LayoutModule,
@@ -48,28 +46,27 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
       resourceServer: {
         sendAccessToken: false,
         //customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
-      }
+      },
     }),
     CoreUiModule,
-    RouterModule.forRoot([
-      
-    ]),
+    RouterModule.forRoot([]),
     AppRoutingModule,
-    MaterialModule
-    
-    
+    MaterialModule,
   ],
   providers: [
-    { provide: APP_BASE_HREF, useFactory: (s: PlatformLocation) => {
-      let result = s.getBaseHrefFromDOM()
-      const hasTrailingSlash = result[result.length-1] === '/';
-      if(hasTrailingSlash) {
-        result = result.substr(0, result.length - 1);
-      }
-      return result;
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (s: PlatformLocation) => {
+        let result = s.getBaseHrefFromDOM();
+        const hasTrailingSlash = result[result.length - 1] === '/';
+        if (hasTrailingSlash) {
+          result = result.substr(0, result.length - 1);
+        }
+        return result;
+      },
+      deps: [PlatformLocation],
     },
-      deps: [PlatformLocation] }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
