@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
 using Pssg.DocumentStorageAdapter;
