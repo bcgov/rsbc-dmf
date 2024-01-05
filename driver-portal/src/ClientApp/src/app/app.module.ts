@@ -26,6 +26,9 @@ import { SubmissionStatusComponent } from './case-definations/submission-status/
 import { RsbcCaseAssignmentComponent } from './case-definations/rsbc-case-assignment/rsbc-case-assignment.component';
 import { LetterTopicComponent } from './case-definations/letter-topic/letter-topic.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
+import { SubmissionRequirementsComponent } from './submission-requirements/submission-requirements.component';
+import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
+import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
     RsbcCaseAssignmentComponent,
     LetterTopicComponent,
     CaseDetailsComponent,
+    SubmissionRequirementsComponent,
+    CaseSubmissionsComponent,
+    LettersToDriverComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
