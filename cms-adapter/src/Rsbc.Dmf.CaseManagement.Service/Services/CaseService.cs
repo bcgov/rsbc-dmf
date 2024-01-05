@@ -17,11 +17,9 @@ using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
-using static System.Net.WebRequestMethods;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-    //[Authorize]
     public class CaseService : CaseManager.CaseManagerBase
     {
         private readonly ILogger<CaseService> _logger;
@@ -939,6 +937,33 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
+            return reply;
+        }
+
+        /// <summary>
+        /// Get Driver Documents
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetDriverCallbacksReply> GetDriverCallbacks(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriverCallbacksReply();
+
+            try
+            {
+                var result = await _caseManager.GetDriverCallbacks(Guid.Parse(request.Id));
+                var callbacks = _mapper.Map<IEnumerable<Callback>>(result);
+                reply.Items.AddRange(callbacks);
+                reply.DriverId = request.Id;
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
             return reply;
         }
 

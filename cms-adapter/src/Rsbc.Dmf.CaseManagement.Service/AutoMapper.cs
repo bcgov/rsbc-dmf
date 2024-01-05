@@ -6,7 +6,9 @@ using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-    public class MappingProfile : Profile {
+
+    public class MappingProfile : Profile 
+    {
         public MappingProfile()
         {
             CreateMap<DateTimeOffset, Timestamp>()
@@ -16,19 +18,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
             CreateMap<CaseManagement.Address, Address>()
-                .AddTransform(NullToEmptyStringConverter);
+                .AddTransform(NullConverter);
             CreateMap<CaseManagement.Driver, Driver>()
-                .AddTransform(NullToEmptyStringConverter);
+                .AddTransform(NullConverter);
             CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
-                .AddTransform(NullToEmptyStringConverter);
+                .AddTransform(NullConverter);
+            CreateMap<CaseManagement.Callback, Callback>()
+                .AddTransform(NullConverter);
     }
 
-        private Expression<Func<string, string>> NullToEmptyStringConverter = x => x ?? string.Empty;
+        private Expression<Func<string, string>> NullConverter = x => x ?? string.Empty;
     }
 
-    public static class AutoMapper
+    public static class AutoMapperEx
     {
-        public static void AddAutoMapper(this IServiceCollection services)
+        public static void AddAutoMapperSingleton(this IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(mc =>
             {

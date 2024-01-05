@@ -108,7 +108,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
 
             */
-            services.AddAutoMapper();
+            services.AddAutoMapperSingleton();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

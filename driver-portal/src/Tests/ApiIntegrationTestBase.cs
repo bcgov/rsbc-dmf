@@ -2,6 +2,7 @@
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
@@ -11,11 +12,14 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         protected readonly IConfiguration _configuration;
         protected const string CASE_API_BASE = "/api/Cases";
         protected const string DRIVER_API_BASE = "/api/Drivers";
+        protected const string CALLBACK_API_BASE = "/api/Callback";
+        protected IMapper _mapper { get; }
 
         public ApiIntegrationTestBase(HttpClientFixture fixture)
         {
             _client = fixture.Client;
             _configuration = fixture.Configuration;
+            _mapper = fixture.Mapper;
         }
 
         protected async Task<T> HttpClientSendRequest<T>(HttpRequestMessage request)

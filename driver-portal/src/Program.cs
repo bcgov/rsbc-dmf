@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
 using System.Text.Json.Serialization;
@@ -210,6 +211,7 @@ if (!string.IsNullOrEmpty(cmsAdapterURI))
     var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
     services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+    services.AddAutoMapperSingleton();
 }
 
 

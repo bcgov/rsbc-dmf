@@ -11,6 +11,7 @@ using Rsbc.Dmf.CaseManagement.Helpers;
 using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Pssg.DocumentStorageAdapter.Helpers;
+using Rsbc.Dmf.DriverPortal.Api;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
@@ -119,6 +120,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                         {
                             services.AddTransient(_ => documentStorageAdapterClient);
                         }
+                        services.AddAutoMapperSingleton();
                     });
         }
     }

@@ -23,7 +23,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             }
         }
 
-
         [Fact]
         public async Task GetLettersToDriver()
         {

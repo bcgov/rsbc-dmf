@@ -18,7 +18,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests
             services.AddDynamics(configuration);
             services.AddTransient<ICaseManager, CaseManager>();
             services.AddSingleton<IConfiguration>(configuration);
-            services.AddAutoMapper();
+            services.AddAutoMapperSingleton();
         }
     }
 }

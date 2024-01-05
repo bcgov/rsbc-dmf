@@ -1,24 +1,17 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
-using Microsoft.OData.Client.ALinq.UriParser;
-using Microsoft.OData.UriParser;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.CaseManagement.Utilities;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-
-
     public class CaseSearchRequest
     {
         public string CaseId { get; set; }
@@ -140,6 +133,28 @@ namespace Rsbc.Dmf.CaseManagement
         public double Height { get; set; }
         public Address Address { get; set; }
         public string DriverLicenseNumber { get; set; }
+    }
+
+    // TODO sync with GRPC models?
+    public enum CallbackTopic
+    {
+        View = 0,
+        Upload = 1
+    }
+
+    public enum CallbackCallStatus
+    {
+        Open = 0,
+        Closed = 1
+    }
+
+    public class Callback
+    {
+        public Guid Id { get; set; }
+        public DateTimeOffset RequestCallback { get; set; }
+        public CallbackTopic Topic { get; set; }
+        public CallbackCallStatus CallStatus { get; set; }
+        public DateTimeOffset Closed { get; set; }
     }
 
     public class Provider
@@ -671,7 +686,42 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        // TODO move common code with this method and method under it e.g. mapper
+        ///<summary>
+        ///Get Driver Callbacks
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Callback>> GetDriverCallbacks(Guid driverId)
+        {
+            // get cases and include callbacks
+            var cases = dynamicsContext.incidents
+                .Expand(c => c.Incident_Tasks)
+                .Where(c => c._dfp_driverid_value == driverId && c.statecode == 0);
+
+            // compile a list of callbacks from each case
+            var results = new List<Callback>();
+            foreach (var @case in cases) 
+            {
+                // skip if tasks is null or has no active task
+                if (!@case.Incident_Tasks?.Any(task => task.statecode == 0) ?? false)
+                    break;
+
+                foreach (var callback in @case.Incident_Tasks.Where(task => task.statecode == 0)) 
+                {
+                    results.Add(new Callback
+                    {
+                        Id = callback.activityid ?? Guid.NewGuid(),
+                        RequestCallback = callback.scheduledend.GetValueOrDefault(),
+                        Topic = CallbackTopic.Upload,//Enum.Parse<CallbackTopic>(callback.activitytypecode), e.g. "task"
+                        CallStatus = (CallbackCallStatus)callback.statecode,
+                        Closed = callback.actualend.GetValueOrDefault()
+                    });
+                }
+            }
+
+            return results;
+        }
+
         /// <summary>
         /// Get Driver Legacy Documents by driver id
         /// </summary>
@@ -710,7 +760,7 @@ namespace Rsbc.Dmf.CaseManagement
                         CreateDate = document.createdon.GetValueOrDefault(),
                     };
 
-                        result.Add(legacyDocument);
+                    result.Add(legacyDocument);
                 }
             }
 
@@ -1385,44 +1435,35 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // Get the case
                 var @case = GetIncidentById(caseId);
-                // load owner
 
-                
-               
+                // load owner
                 if (string.IsNullOrEmpty(request.Assignee))
-                 {
-                    
-                   if(@case._owningteam_value != null)
-                    {
+                {
+                   if (@case._owningteam_value != null)
+                   {
                         // create a reference to team
                         var caseTeam = dynamicsContext.teams.ByKey(@case._owningteam_value.Value).GetValue();
-
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
                     }
-                    else {
-                        //create a reference to system user
-
+                    else 
+                    {
+                        // create a reference to system user
                         var caseUser = dynamicsContext.systemusers.ByKey(@case._owninguser_value).GetValue();
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseUser);
                     }
-
-                   
                 }
                 else
                 {
                     // set the BF owner to request assignee
                     if (@case._ownerid_value != null)
-
                     {
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
-
                     };
                 }
-
-               
+         
                 // Create a bring Forward
                 try
                 {
