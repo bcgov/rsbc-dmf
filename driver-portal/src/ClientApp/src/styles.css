@@ -247,3 +247,55 @@ body {
   text-align: left;
   line-height: 24px;
 }
+
+.definationCard{
+  margin-top: 12px;
+}
+
+.definationContent{
+  margin-left: 12px;
+}
+
+a.accordion-btn {
+  background-color: #f1f1f3;
+  border: none;
+  padding: 5px 8px;
+  color: #1c5a97;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.accordion-bar {
+  background-color: #f1f1f1;
+  padding: 5px 0px;
+}
+
+.accordion-btn-container {
+  padding-bottom: 10px;
+}
+
+.panel-header {
+  background-color: #f1f1f3;
+  border-color: #f1f1f3;
+  padding-left: 8px;
+  cursor: pointer;
+}
+
+.accordian-Title {
+  font-weight: bold;
+  color: #003366;
+  max-width: 95%;
+  font-size: 16px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.accordian-types {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.mat-accordion .mat-expansion-panel:not(.mat-expanded),
+.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+  margin-bottom: 12px;
+}

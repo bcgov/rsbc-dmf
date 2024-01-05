@@ -4,12 +4,14 @@ import { Route, RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CaseComponent } from './case/case.component';
+import { CaseDetailsComponent } from './case-details/case-details.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
   { path: 'account', component: AccountComponent },
   { path: 'dashboard', component: DashboardComponent },
   { path: 'cases', component: CaseComponent },
+  { path: 'caseDetails', component: CaseDetailsComponent },
 ];
 
 @NgModule({

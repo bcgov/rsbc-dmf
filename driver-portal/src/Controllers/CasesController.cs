@@ -51,7 +51,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
                 result.CaseId = c.Item.CaseId;
                 result.DriverId = c.Item.DriverId;
-                result.Title = c.Item.Title;
+                result.Title = c.Item.Title;  //Change this to case sequence 
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
                 result.CaseType = caseType;
@@ -68,6 +68,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     result.CaseSequence = (int)c.Item.CaseSequence;
                 }
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+                // Last Assignee Title - 
             }
             else
             {
@@ -158,6 +160,29 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         {
             var result = new List<ViewModels.CaseDetail>();
             result.Add(new CaseDetail() { Title = "Test-Title", CaseId = Guid.Empty.ToString(), DmerType = "DMER" });
+            return Json(result);
+        }
+
+        /// <summary>
+        /// Returns the current Closed Cases
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet()]
+        [ProducesResponseType(typeof(List<ViewModels.CaseDetail>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetClosedCases")]
+        public ActionResult GetClosedCases()
+        {
+            var result = new List<ViewModels.CaseDetail>();
+            result.Add(new CaseDetail() { 
+                CaseId = Guid.Empty.ToString(),
+                CaseType = "Driver’s Medical Examination Report",
+                LatestDecision =    "Fit To Drive",
+                EligibleLicenseClass = "5",
+                OpenedDate = DateTime.Now,
+                DecisionDate = DateTime.Now.AddDays(5),
+            });
             return Json(result);
         }
     }
