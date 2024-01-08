@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
-using static System.Net.WebRequestMethods;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -948,12 +947,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
+        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverDocumentRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
+                var documentStatus = (CaseManagement.ActiveStatus)(int)request.DocumentStatus;
+                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id), documentStatus);
                 var documents = _mapper.Map<IEnumerable<LegacyDocument>>(result);
                 reply.Items.AddRange(documents);
                 reply.ResultStatus = ResultStatus.Success;
