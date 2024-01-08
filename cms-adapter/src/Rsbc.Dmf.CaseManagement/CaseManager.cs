@@ -1314,9 +1314,31 @@ namespace Rsbc.Dmf.CaseManagement
                     OriginatingNumber = document.dfp_faxsender ?? string.Empty,
                     ValidationMethod = document.dfp_validationmethod ?? string.Empty,
                     ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                    
                     SequenceNumber = null
                 };
+
+                if (document.createdon != null)
+                {
+                    legacyDocument.CreateDate = document.createdon.Value;
+                }
+
+                if (document.dfp_documentorigin != null)
+                {
+                    switch (document.dfp_documentorigin.Value)
+                    {
+                        case 100000015:
+                            legacyDocument.Origin = "Migration";
+                            break;
+                        case 100000017:
+                            legacyDocument.Origin = "DPS/KOFAX";
+                            break;
+                    }
+                }
+
+                if (document._bcgov_caseid_value != null)
+                {
+                    legacyDocument.CaseId = document._bcgov_caseid_value.ToString();
+                }
 
                 if (document.dfp_attachmentnumber != null)
                 {
