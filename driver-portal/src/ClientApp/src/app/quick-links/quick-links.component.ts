@@ -9,7 +9,8 @@ import { Component } from '@angular/core';
 export class QuickLinksComponent {
   constructor(private viewportScroller: ViewportScroller) {}
 
-  public onClick(elementId: string): void {
+  public onClick(event: any, elementId: string): void {
+    event.preventDefault();
     this.viewportScroller.scrollToAnchor(elementId);
   }
 }

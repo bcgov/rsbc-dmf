@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 
@@ -23,6 +24,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="licenseNumber">The drivers licence</param>
         /// <returns></returns>
         [HttpGet("{driverId}/Documents")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

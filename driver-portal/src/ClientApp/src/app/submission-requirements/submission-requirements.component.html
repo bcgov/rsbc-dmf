@@ -18,6 +18,38 @@
       <app-quick-links></app-quick-links>
     </div>
   </div>
+  <div>
+    <mat-card *ngFor="let document of driverDocuments">
+      <mat-card-content class="submissionRequirement">
+        <div>
+          <label>Due Date</label>
+          <div>
+            <b>{{ document.dueDate }}</b>
+          </div>
+        </div>
+
+        <div>
+          <label>Submission Type</label>
+          <div>
+            <b>{{ document.submittalStatus }}</b>
+          </div>
+        </div>
+        <div>
+          <label>Description</label>
+          <div>
+            <b>{{ document.description }}</b>
+          </div>
+        </div>
+
+        <div>
+          <label></label>
+          <div>
+            <button mat-falt-button color="primary">View Letter</button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
   <div class="list" id="definitions">
     <h2>Definitions</h2>
@@ -84,15 +116,6 @@
             >
           </mat-expansion-panel-header>
           <app-submission-status></app-submission-status>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Letter Topic</mat-panel-title
-            >
-          </mat-expansion-panel-header>
-          <app-letter-topic></app-letter-topic>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
