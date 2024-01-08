@@ -201,8 +201,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
                 Queue = request.Queue ?? string.Empty,
-                DpsDocumentId = request.DpsDocumentId,
-                Origin = request.Origin ?? string.Empty
+                DpsDocumentId = request.DpsDocumentId
             };
 
             if (request.FaxReceivedDate != null)
@@ -2113,28 +2112,33 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.Document = new LegacyDocument
                 {
                     BatchId = d.BatchId ?? string.Empty,
+                    BusinessArea = d.BusinessArea ?? string.Empty,
                     CaseId = d.CaseId ?? string.Empty,
+                    CreateDate = Timestamp.FromDateTimeOffset(d.CreateDate),
                     DocumentId = d.DocumentId ?? string.Empty,
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
-                    DocumentUrl = d.DocumentUrl ?? string.Empty,                    
+                    DocumentUrl = d.DocumentUrl ?? string.Empty,
+                    DpsDocumentId = d.DpsDocumentId,
                     ImportId = d.ImportId ?? string.Empty,
+                    Origin = d.Origin ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
-                    ValidationMethod = d.ValidationMethod ?? string.Empty,
-                    ValidationPrevious = d.ValidationPrevious ?? string.Empty,
-                    SequenceNumber = (int)(d.SequenceNumber ?? -1),
-                    UserId = d.UserId ?? string.Empty,  
                     Priority = d.Priority ?? string.Empty,
                     Queue = d.Queue ?? string.Empty,
-                    DpsDocumentId = d.DpsDocumentId 
+                    SequenceNumber = (int)(d.SequenceNumber ?? -1),
+                    SubmittalStatus = d.SubmittalStatus ?? string.Empty,
+                    UserId = d.UserId ?? string.Empty,
+                    ValidationMethod = d.ValidationMethod ?? string.Empty,
+                    ValidationPrevious = d.ValidationPrevious ?? string.Empty,
+                    
                 };
 
-                if (d.Driver != null)
+                    if (d.Driver != null)
                 {
                     reply.Document.Driver = new Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
                 }
 
-                if(d.FaxReceivedDate != null)
+                if (d.FaxReceivedDate != null)
                 {
                     reply.Document.FaxReceivedDate = Timestamp.FromDateTimeOffset(d.FaxReceivedDate.Value);
                 }
