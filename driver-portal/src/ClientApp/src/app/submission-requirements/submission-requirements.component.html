@@ -1,1 +1,100 @@
-<p>submission-requirements works!</p>
+<div class="container">
+  <div class="submissions">
+    <div>
+      <p>
+        RSBC is asking for specific submissions to conduct their evaluation.
+        These submissions can be documents or reports that you or your medical
+        practitioner can provide. Once you upload a document or report, the
+        requirement will be moved to the Document History tab.
+      </p>
+      <br />
+      <p>
+        Please be aware that if your medical practitioner or you have sent a
+        document by fax, it may take some time for it to be removed from this
+        list.
+      </p>
+    </div>
+    <div>
+      <app-quick-links></app-quick-links>
+    </div>
+  </div>
+
+  <div class="list" id="definitions">
+    <h2>Definitions</h2>
+    <div class="accordion-btn-container">
+      <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+        >Expand All</a
+      >
+      <span class="accordion-bar">&nbsp;|&nbsp;</span>
+      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+        >Collapse All</a
+      >
+    </div>
+    <div style="padding-bottom: 30px">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-type></app-case-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-status></app-case-status>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              DMER Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-dmer-type></app-dmer-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Decision outcome
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <app-decision-outcome></app-decision-outcome>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Type</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-type></app-submission-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Status</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-status></app-submission-status>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Letter Topic</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-letter-topic></app-letter-topic>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

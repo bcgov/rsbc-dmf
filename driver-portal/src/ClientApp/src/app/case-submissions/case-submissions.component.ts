@@ -10,9 +10,5 @@ import { MatAccordion } from '@angular/material/expansion';
 export class CaseSubmissionsComponent {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  constructor(private viewportScroller: ViewportScroller) {}
-
-  public onClick(elementId: string): void {
-    this.viewportScroller.scrollToAnchor(elementId);
-  }
+ 
 }

@@ -2,60 +2,20 @@
   <div class="submissions">
     <div>
       <p>
-        RSBC is asking for specific submissions to conduct their evaluation.
-        These submissions can be documents or reports that <br />
-        you or your medical practitioner can provide. Once you upload a document
-        or report, the requirement will be moved to the <br />Document History
-        tab.
+        The Document History tab displays the documents and reports that RSBC
+        has received regarding your case. Unfortunately, you cannot download a
+        copy of these submissions. tab.
       </p>
       <br />
       <p>
-        Please be aware that if your medical practitioner or you have sent a
-        document by fax, it may take some time for it to be <br />
-        removed from this list.
+        Please note that if your medical practitioner or you have sent a
+        document through fax, it might take a while for it to appear in the
+        Document History tab from the Submission Requirements tab.
       </p>
     </div>
-    <div class="quicklink">
-      <div class="text">
-        Quick Links
-        <ul>
-          <li><a (click)="onClick('definitions')"> Definitions </a></li>
-          <li>Get Assistance</li>
-        </ul>
-      </div>
+    <div>
+      <app-quick-links></app-quick-links>
     </div>
-  </div>
-  <div>
-    <mat-card>
-      <mat-card-content class="submissionRequirement">
-        <div>
-          <label>Due Date</label>
-          <div>
-            <b>XXX</b>
-          </div>
-        </div>
-
-        <div>
-          <label>Submission Type</label>
-          <div>
-            <b>XXXX</b>
-          </div>
-        </div>
-        <div>
-          <label>Description</label>
-          <div>
-            <b>XXX</b>
-          </div>
-        </div>
-
-        <div>
-          <label></label>
-          <div>
-            <button mat-falt-button color="primary">View Letter</button>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
   </div>
 
   <div class="list" id="definitions">
@@ -107,6 +67,25 @@
 
           <app-decision-outcome></app-decision-outcome>
         </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Eligible License Class
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-eligible-license-class></app-eligible-license-class>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              RSBC Case Assignment
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-rsbc-case-assignment></app-rsbc-case-assignment>
+        </mat-expansion-panel>
+
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">
@@ -114,6 +93,14 @@
             >
           </mat-expansion-panel-header>
           <app-submission-type></app-submission-type>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Document SubType
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>Upwards of 90 subtypes</div>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
