@@ -226,19 +226,22 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     var newLegacyDocument = new LegacyDocument
                                     {
                                         BatchId = documentResponse.Document.BatchId,
+                                        BusinessArea = documentResponse.Document.BusinessArea,
+                                        CaseId = documentResponse.Document.CaseId,
+                                        CreateDate = documentResponse.Document.CreateDate,
+                                        DocumentType = "Unclassified",
                                         DocumentUrl = newFileResult.FileName,
                                         Driver = documentResponse.Document.Driver,
-                                        DocumentType = "Unclassified",
                                         FaxReceivedDate = documentResponse.Document.FaxReceivedDate,
-                                        ImportDate = documentResponse.Document.ImportDate, 
+                                        ImportDate = documentResponse.Document.ImportDate,
                                         Origin = documentResponse.Document.Origin,
+                                        Owner = "Team - Intake",
+                                        Priority = documentResponse.Document.Priority,
+                                        Queue = documentResponse.Document.Queue,
+                                        SubmittalStatus = "Uploaded",
+                                        UserId = documentResponse.Document.UserId,
                                         ValidationMethod = documentResponse.Document.ValidationMethod,
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
-                                        BusinessArea = documentResponse.Document.BusinessArea,
-                                        SubmittalStatus = "Uploaded",
-                                        Queue = documentResponse.Document.Queue,
-                                        Priority = documentResponse.Document.Priority, 
-                                        Owner = "Team - Intake"
                                     };
 
                                     DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
