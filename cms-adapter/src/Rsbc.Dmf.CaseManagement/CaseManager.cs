@@ -681,11 +681,11 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="driverId"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId, ActiveStatus documentStatus = ActiveStatus.Active)
+        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId)
         {
             var result = new List<LegacyDocument>();
             var driverDocuments = dynamicsContext.bcgov_documenturls
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)documentStatus)
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)ActiveStatus.Active)
                 .ToList();
 
             foreach (var document in driverDocuments)
