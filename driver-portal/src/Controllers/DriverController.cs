@@ -85,41 +85,5 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
-
-        /// <summary>
-        /// Get closed documents for a given driver
-        /// </summary>
-        /// <param name="licenseNumber">The drivers licence</param>
-        /// <returns></returns>
-        [HttpGet("{driverId}/ClosedDocuments")]
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetClosedDocuments")]
-        public ActionResult GetClosedDocuments([FromRoute] string driverId)
-        {
-            var driverDocumentRequest = new DriverDocumentRequest() { Id = driverId, DocumentStatus = ActiveStatus.Closed };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverDocumentRequest);
-            if (reply.ResultStatus == ResultStatus.Success)
-            {
-                var result = new List<Document>();
-                result = _mapper
-                    .Map<IEnumerable<Document>>(reply.Items)
-                    .ToList();
-
-                if (result.Count > 0)
-                {
-                    result = result.OrderByDescending(cs => cs.ImportDate).ToList();
-                }
-
-                return Json(result);
-            }
-            else
-            {
-                _logger.LogError($"{nameof(GetClosedDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
-            }
-        }
     }
 }
