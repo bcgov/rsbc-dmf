@@ -114,6 +114,8 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     await dynamicsContext.LoadPropertyAsync(user.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
                 }
+
+                /*
                 if (request.ByType == UserType.MedicalPractitioner)
                 {
                     await dynamicsContext.LoadPropertyAsync(user, nameof(dfp_login.dfp_login_dfp_role));     
@@ -123,6 +125,7 @@ namespace Rsbc.Dmf.CaseManagement
                         .Expand(d => d.dfp_ClinicId)                        
                         .Where(d => d._dfp_loginid_value == user.dfp_loginid))).ToList());                    
                 }
+                */
             }
            
             dynamicsContext.DetachAll();
