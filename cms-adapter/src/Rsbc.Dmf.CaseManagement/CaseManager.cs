@@ -1,3 +1,4 @@
+﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
 using Microsoft.OData.Client.ALinq.UriParser;
