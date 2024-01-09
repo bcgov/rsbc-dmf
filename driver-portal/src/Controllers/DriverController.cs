@@ -24,8 +24,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get documents for a given driver
         /// </summary>
-        /// <param name="licenseNumber">The drivers licence</param>
-        /// <returns></returns>
+        /// <param name="driverId">The driver id</param>
+        /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/Documents")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ActionName("GetDocuments")]
         public ActionResult GetDocuments([FromRoute] string driverId)
         {
-            var driverIdRequest = new DriverDocumentRequest() { Id = driverId, DocumentStatus = ActiveStatus.Active };
+            var driverIdRequest = new DriverIdRequest() { Id = driverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
