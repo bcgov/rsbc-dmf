@@ -41,12 +41,12 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
     HttpClientModule,
     FormsModule,
     LayoutModule,
-    SharedModule,
+    SharedModule,    
     OAuthModule.forRoot({
       resourceServer: {
-        sendAccessToken: false,
-        //customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
-      },
+        sendAccessToken: true,
+        customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
+      }
     }),
     CoreUiModule,
     RouterModule.forRoot([]),
