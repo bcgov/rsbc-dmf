@@ -946,13 +946,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverDocumentRequest request, ServerCallContext context)
+        public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
+
             try
             {
-                var documentStatus = (CaseManagement.ActiveStatus)(int)request.DocumentStatus;
-                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id), documentStatus);
+                var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
                 var documents = _mapper.Map<IEnumerable<LegacyDocument>>(result);
                 reply.Items.AddRange(documents);
                 reply.ResultStatus = ResultStatus.Success;
@@ -962,6 +962,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
+
             return reply;
         }
 

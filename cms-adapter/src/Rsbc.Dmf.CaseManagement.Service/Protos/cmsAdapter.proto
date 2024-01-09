@@ -45,7 +45,7 @@ service CaseManager {
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
-  rpc GetDriverDocumentsById (DriverDocumentRequest) returns (GetDocumentsReply);
+  rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
@@ -118,9 +118,8 @@ message UpdateDriverRequest{
 	google.protobuf.Timestamp birthDate = 2;
 }
 
-message DriverDocumentRequest {
+message DriverIdRequest {
 	string id = 1;
-	ActiveStatus documentStatus = 2;
 }
 
 message DriverLicenseRequest {
