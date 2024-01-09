@@ -63,12 +63,12 @@ import { QuickLinksComponent } from './quick-links/quick-links.component';
     HttpClientModule,
     FormsModule,
     LayoutModule,
-    SharedModule,
+    SharedModule,    
     OAuthModule.forRoot({
       resourceServer: {
-        sendAccessToken: false,
-        //customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
-      },
+        sendAccessToken: true,
+        customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
+      }
     }),
     CoreUiModule,
     RouterModule.forRoot([]),
