@@ -25,6 +25,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Serilog;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
@@ -376,7 +377,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
             string folderName = serverRelativeUrl.Substring(firstSlashPos, lastSlashPos - firstSlashPos - 1);
             string filename = serverRelativeUrl.Substring(lastSlashPos);
-
+            bool updated = false;
             using (var newStream = new MemoryStream())
             {
                 newPdf.Save(newStream, false);
@@ -388,17 +389,28 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     Data = ByteString.CopyFrom(newStream.ToArray()),
                     EntityName = originalEntity,
                     FileName = filename,
-                    FolderName = documentResponse.Document.Driver.Id
+                    FolderName = folderName
                 };
                 var newFileResult = _documentStorageAdapterClient.UploadFile(newFileRequest);
+                if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    updated = true;
+                }
+                else
+                {
+                    Log.Error($"Error uploading file - detail is {newFileResult.ErrorDetail}");
+                }
             }
 
-            // now remove the other documents.
-            foreach (var deleteId in documentsToMerge)
+            if (updated)
             {
-                _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
+                // now remove the other documents.
+                foreach (var deleteId in documentsToMerge)
+                {
+                    _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
+                }
             }
-
+            
             return Ok(newPdf);
         }
 
