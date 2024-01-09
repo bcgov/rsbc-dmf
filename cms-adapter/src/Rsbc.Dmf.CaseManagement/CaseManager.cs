@@ -8,6 +8,7 @@ using Serilog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -215,7 +216,8 @@ namespace Rsbc.Dmf.CaseManagement
         CleanPass=  100000009,
         ManualPass = 100000012,
         OpenRequired = 100000000,
-        Reviewed = 100000003
+        Reviewed = 100000003,
+        Uploaded = 100000010
     }
 
     public enum BringForwardPriority
@@ -4047,9 +4049,10 @@ namespace Rsbc.Dmf.CaseManagement
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
                 .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
-                        && i.dfp_datesenttoicbc == null);
+                        && i.dfp_datesenttoicbc == null
+                        && i.dfp_bpfstage == 100000003); // Case should be in File End Tasks (FET)
            
-
+    
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
 
             do
@@ -4070,9 +4073,25 @@ namespace Rsbc.Dmf.CaseManagement
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
+                        // Load documents
+                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        foreach (var document in item.bcgov_incident_bcgov_documenturl)
+                        {
+                            // Condition Check if the document is DMER 
+                            if(document.dfp_DocumentTypeID != null
+                                && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                                )
+                            {
+                                outputArray.Add(item);
+                            }
 
-                        //load decisions
-                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
+                        }
+
+
+                            //load decisions
+                            await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
                         if (item.dfp_incident_dfp_decision.Count > 0)
                         {
                             foreach (var decision in item.dfp_incident_dfp_decision)
@@ -4141,7 +4160,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            // condition : check for
+                            // condition 1: check for
                             // 1. DMER type
                             // 2. submital status is in review and not in  Rejected, Clean Pass, or Manual Pass 
 
@@ -4149,34 +4168,45 @@ namespace Rsbc.Dmf.CaseManagement
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject))
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                             {
 
 
                                 outputArray.Add(item);
                             }
-                            else
-                            {
-                                //condition : Check for
-                                //1. DMER type
-                                //2. Submital status is manual pass or clean pass and is in review state
 
-                                if (document.dfp_DocumentTypeID != null
+                            //condition 2: Check for
+                            //1. DMER type
+                            //2. Submital status is manual pass or clean pass and is in review state
+
+                            else if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                                 )
-                                {
-                                    outputArray.Add(item);
-                                }
+                            {
+                                outputArray.Add(item);
                             }
 
-                        }
+                            else
+                            {
+                                // condition 3 : Check for 
+                                // 1. Document type is DMER
+                                // 2. Submital status is Uploaded
 
+                                if (document.dfp_DocumentTypeID != null
+                                      && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                      && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
+                                      )
+                                {
+                                    // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag 
+                                    //outputArray.Add(item);
+                                }
 
+                            }   
 
-
-                      
+                        }               
                     }
                 }
             }
