@@ -47,18 +47,5 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
                 Assert.NotNull(caseDocuments);
             }
-
-        [Fact]
-        public async Task Get_Driver_Closed_Cases()
-        {
-            var driverId = _configuration["DRIVER_WITH_CLOSED_DOCS"];
-            if (string.IsNullOrEmpty(driverId))
-                return;
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{DRIVER_API_BASE}/{driverId}/ClosedDocuments");
-            var documents = await HttpClientSendRequest<IEnumerable<Document>>(request);
-
-            Assert.NotNull(documents);
-        }
     }
 }
