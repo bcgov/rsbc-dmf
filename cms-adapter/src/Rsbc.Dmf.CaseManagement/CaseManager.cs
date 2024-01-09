@@ -2081,7 +2081,7 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
                 bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
-                
+                bcgovDocumentUrl.dfp_documentorigin = TranslateDocumentOrigin(request.Origin);
                 bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
                 if (!string.IsNullOrEmpty(request.FilenameOverride))
                 {
@@ -2096,35 +2096,12 @@ namespace Rsbc.Dmf.CaseManagement
                         bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                     }
                 }
-
-                bool isDPS = false;
-
-                if (!string.IsNullOrEmpty(request.Origin))
-                {
-                    switch (request.Origin)
-                    {
-                        case "Migration":
-                            bcgovDocumentUrl.dfp_documentorigin = 100000015;
-                            isDPS = true;
-                            break;
-                        case "DPS/KOFAX":
-                            bcgovDocumentUrl.dfp_documentorigin = 100000017;
-                            isDPS = true;
-                            break;
-                        default:
-                            bcgovDocumentUrl.dfp_documentorigin = 100000014;
-                            break;
-                    }
-                }
-                else
-                {
-                    bcgovDocumentUrl.dfp_documentorigin = 100000014;
-                }
-
+                
                 bool isDmer = false;
 
-                if (isDPS)
+                if (!string.IsNullOrEmpty(request.Origin) && request.Origin == "DPS/KOFAX")
                 {
+                    
                     bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
 
                     if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
@@ -2177,6 +2154,15 @@ namespace Rsbc.Dmf.CaseManagement
                         if (newOwner != null)
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
+                        }
+
+                        if (request.CaseId != null)
+                        {
+                            var theCase = await GetCaseDetail(request.CaseId);
+                            if (theCase != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                            }
                         }
 
                         await dynamicsContext.SaveChangesAsync();
@@ -3656,13 +3642,34 @@ namespace Rsbc.Dmf.CaseManagement
                 { 100000017, "DPS/KOFAX" },
             };
 
-            if (documentOrigin != null && statusMap.ContainsKey(documentOrigin))
+            if (statusMap.ContainsKey(documentOrigin))
             {
                 return statusMap[documentOrigin];
             }
             else
             {
                 return statusMap[100000014];
+            }
+
+        }
+
+
+        private int TranslateDocumentOrigin(string documentOrigin)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "Mercury Uploaded RSBC", 100000014 },
+                { "Migration", 100000015 },
+                { "DPS/KOFAX", 100000017 },
+            };
+
+            if (documentOrigin != null && statusMap.ContainsKey(documentOrigin))
+            {
+                return statusMap[documentOrigin];
+            }
+            else
+            {
+                return statusMap["Mercury Uploaded RSBC"];
             }
 
         }
