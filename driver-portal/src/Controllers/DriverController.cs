@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ActionName("GetDocuments")]
         public ActionResult GetDocuments([FromRoute] string driverId)
         {
-            var driverIdRequest = new DriverDocumentRequest() { Id = driverId, DocumentStatus = ActiveStatus.Active };
+            var driverIdRequest = new DriverIdRequest() { Id = driverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
