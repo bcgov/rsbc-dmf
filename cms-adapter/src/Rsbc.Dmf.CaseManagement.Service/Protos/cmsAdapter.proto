@@ -37,6 +37,8 @@ service CaseManager {
 
   rpc GetComments (CommentsRequest) returns (GetCommentsReply);
 
+  rpc GetCases (DriverIdRequest) returns (GetCasesReply);
+
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
   rpc GetMostRecentCaseDetail (DriverLicenseRequest) returns (GetCaseDetailReply);
@@ -130,6 +132,11 @@ message CaseIdRequest {
 	string caseId= 1;
 }
 
+message CaseStatusRequest {
+	string driverId = 1;
+	ActiveStatus status = 2;
+}
+
 enum OriginRestrictions {
 	None = 0;
 	UserOnly = 1;
@@ -140,7 +147,6 @@ message CommentsRequest {
 	string caseId= 1;
 	string driverId= 2;
 	OriginRestrictions originRestrictions =3;
-
 }
 
 message CommentIdRequest {
@@ -156,6 +162,11 @@ message LegacyDocumentStatusRequest{
 	int64 status = 2;
 }
 
+message GetCasesReply {
+	repeated CaseDetail items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
 
 message GetCaseDetailReply {
 	CaseDetail item = 1;

@@ -911,69 +911,12 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private string TranslateCaseTypeToString(int? optionSetValue)
-        {
-            string result = null;
-            switch (optionSetValue)
-            {
-                case 100000004:
-                    result = "OTHR";
-                    break;
-                case 100000002:
-                    result = "POL";
-                    break;
-                case 100000001:
-                    result = "LEG";
-                    break;
-                case 2:
-                    result = "DMER";
-                    break;
-                case 100000003:
-                    result = "RSBC";
-                    break;
-                case 3:
-                    result = "PDR";
-                    break;
-                case 100000005:
-                    result = "UNSL";
-                    break;
-            }
-            return result;
-        }
-
-
-        private string TranslateDmerTypeRaw(int? optionSetValue)
-        {
-            string result = null;
-            switch (optionSetValue)
-            {
-                case 100000000:
-                    result = "Commercial/NSC";
-                    break;
-                case 100000001:
-                    result = "Age";
-                    break;
-                case 100000002:
-                    result = "Industrial Road";
-                    break;
-                case 100000003:
-                    result = "Known Medical";
-                    break;
-                case 100000006:
-                    result = "Suspected Medical";
-                    break;
-                case 100000005:
-                    result = "No DMER";
-                    break;
-            }
-            return result;
-        }
 
         /// <summary>
-        /// Get Legacy Document
+        /// Get Case Detail
         /// </summary>
-        /// <param name="commentId"></param>
-        /// <returns></returns>
+        /// <param name="caseId"></param>
+        /// <returns>CaseDetail</returns>
         public async Task<CaseDetail> GetCaseDetail(string caseId)
         {
             CaseDetail result = null;
@@ -983,94 +926,7 @@ namespace Rsbc.Dmf.CaseManagement
                 
                 if (fetchedCase != null)                
                 {
-                    dynamicsContext.LoadProperty(fetchedCase, nameof(incident.dfp_DriverId));
-                    result = new CaseDetail
-                    {
-                        CaseId = fetchedCase.incidentid.ToString(),                         
-                        DriverId = fetchedCase.dfp_DriverId?.dfp_driverid.ToString() ?? string.Empty,
-                        Title = fetchedCase.title,
-                        IdCode = fetchedCase.ticketnumber,
-                        OpenedDate = fetchedCase.createdon.Value,
-                        LastActivityDate = fetchedCase.modifiedon.Value,
-                        LatestDecision = null
-                    };
-
-                    if (fetchedCase.dfp_dfcmscasesequencenumber == null)
-                    {
-                        result.CaseSequence = -1;
-                    }
-                    else
-                    {
-                        result.CaseSequence = fetchedCase.dfp_dfcmscasesequencenumber.Value;
-                    }
-
-
-                    // get the case type.
-
-                    if (fetchedCase.casetypecode != null)
-                    {
-                        result.CaseType = TranslateCaseTypeToString(fetchedCase.casetypecode);
-                    }
-
-                    if (fetchedCase.dfp_dmertype != null)
-                    {
-                        result.DmerType = TranslateDmerTypeRaw(fetchedCase.dfp_dmertype);
-                    }
-
-                    await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.stageid_processstage));
-
-                    var bpf = dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == fetchedCase.incidentid).FirstOrDefault();
-
-                    if (bpf != null)
-                    {
-                        await dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
-                        result.Status = bpf.activestageid.stagename;
-                    }
-
-
-
-
-                    // case assignment
-
-                    if (fetchedCase._owningteam_value.HasValue)
-                    {
-                        await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.owningteam));
-                        result.AssigneeTitle = fetchedCase.owningteam.name;
-                    }
-                   
-
-                    // get the related decisions.
-
-                    await dynamicsContext.LoadPropertyAsync(fetchedCase, nameof(incident.dfp_incident_dfp_decision));
-                    if (fetchedCase.dfp_incident_dfp_decision != null && fetchedCase.dfp_incident_dfp_decision.Count > 0)
-                    {
-                        foreach (var decision in fetchedCase.dfp_incident_dfp_decision)
-                        {                            
-                            if ((result.DecisionDate == null || decision.createdon > result.DecisionDate) && decision.statecode == 0)
-                            {
-                                result.LatestDecision = "";
-
-                                await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
-                                if (decision.dfp_OutcomeStatus != null)
-                                {
-                                    result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
-                                }
-
-                                // now try and get the sub type
-                                await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
-                                if (decision.dfp_OutcomeSubStatus != null)
-                                {
-                                    result.LatestDecision += " - " + decision.dfp_OutcomeSubStatus.dfp_name;
-                                }
-
-
-                                result.DecisionDate = decision.createdon;
-                                result.DecisionForClass = TranslateDecisionForClass(decision.dfp_eligibledlclass);
-                            }
-                        }
-                    }
-
-                    result.DpsProcessingDate = GetDpsProcessingDate();
+                    result = MapCase(fetchedCase);
                 }
             }
             catch (Exception ex)
@@ -1078,9 +934,7 @@ namespace Rsbc.Dmf.CaseManagement
                 Log.Logger.Error(ex, $"Error getting case {caseId}");
             }
 
-
             return result;
-
         }
 
         public async Task<CaseDetail> GetMostRecentCaseDetail(string driverLicenseNumber)
@@ -1091,7 +945,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_licensenumber == driverLicenseNumber)
                     .OrderByDescending(x => x.createdon).FirstOrDefault();
-
 
                 if(fetchedCase != null)
                 {
@@ -1116,22 +969,18 @@ namespace Rsbc.Dmf.CaseManagement
                         result.CaseSequence = fetchedCase.dfp_dfcmscasesequencenumber.Value;
                     }
 
-
                     // get the case type.
-
                     if (fetchedCase.casetypecode != null)
                     {
-                        result.CaseType = TranslateCaseTypeToString(fetchedCase.casetypecode);
+                        result.CaseType = CaseMapper.TranslateCaseTypeToString(fetchedCase.casetypecode);
                     }
 
                     if (fetchedCase.dfp_dmertype != null)
                     {
-                        result.DmerType = TranslateDmerTypeRaw(fetchedCase.dfp_dmertype);
+                        result.DmerType = CaseMapper.TranslateDmerTypeRaw(fetchedCase.dfp_dmertype);
                     }
 
-
                     // get the related decisions.
-
                     dynamicsContext.LoadProperty(fetchedCase, nameof(incident.dfp_incident_dfp_decision));
                     if (fetchedCase.dfp_incident_dfp_decision != null && fetchedCase.dfp_incident_dfp_decision.Count > 0)
                     {
@@ -1156,7 +1005,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 result.DecisionDate = decision.createdon;
-                                result.DecisionForClass = TranslateDecisionForClass(decision.dfp_eligibledlclass);
+                                result.DecisionForClass = CaseMapper.TranslateDecisionForClass(decision.dfp_eligibledlclass);
                             }
                         }
                     }
@@ -1165,7 +1014,6 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.LoadProperty(fetchedCase, nameof(incident.bcgov_incident_bcgov_documenturl));
 
                     // Find the documents that are outstanding
-
                     if( fetchedCase.bcgov_incident_bcgov_documenturl != null)
                     {
                         foreach(var document in fetchedCase.bcgov_incident_bcgov_documenturl)
@@ -1178,62 +1026,14 @@ namespace Rsbc.Dmf.CaseManagement
                         }
                     }
                 }
-
             }
-
-
             catch (Exception ex)
             {
                 Log.Logger.Error(ex, $"Error getting driver {driverLicenseNumber}");
             }
 
-
-            return result;
-
-        }
-
-
-        private string TranslateDecisionForClass(string data)
-        {
-            string result = null;
-            if (data != null)
-            {
-                var items = data.Split(",");
-                result = "";
-                foreach (var item in items)
-                {
-                    if (result.Length > 0)
-                    {
-                        result += ", ";
-                    }
-                    switch (item)
-                    {
-                        case "100000001":
-                            result += "C1";
-                            break;
-                        case "100000002":
-                            result += "C2";
-                            break;
-                        case "100000003":
-                            result += "C3";
-                            break;
-                        case "100000004":
-                            result += "C4";
-                            break;
-                        case "100000005":
-                            result += "C5/C7";
-                            break;
-                        case "100000006":
-                            result += "C6";
-                            break;
-                    }
-
-                }
-            }
-
             return result;
         }
-
 
         /// <summary>
         /// Get Legacy Document
@@ -1276,9 +1076,7 @@ namespace Rsbc.Dmf.CaseManagement
                 Log.Logger.Error(ex, $"Error getting comment {commentId}");
             }
 
-
             return legacyComment;
-
         }
 
         /// <summary>

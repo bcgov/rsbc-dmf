@@ -24,8 +24,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get documents for a given driver
         /// </summary>
-        /// <param name="licenseNumber">The drivers licence</param>
-        /// <returns></returns>
+        /// <param name="driverId">The driver id</param>
+        /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/Documents")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(CaseDocuments), 200)]

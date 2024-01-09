@@ -569,6 +569,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public async override Task<GetCasesReply> GetCases(CaseStatusRequest caseStatusRequest, ServerCallContext context)
+        {
+            var cases = await _caseManager.GetCases(caseStatusRequest.DriverId, caseStatusRequest.Status);
+        }
+
         public async override Task<GetCaseDetailReply> GetCaseDetail(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };

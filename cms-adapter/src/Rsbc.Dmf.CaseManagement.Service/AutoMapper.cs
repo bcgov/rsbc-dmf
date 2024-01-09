@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
+using Rsbc.Dmf.CaseManagement.Dynamics;
 using System;
 using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-    public class MappingProfile : Profile {
+    public class MappingProfile : Profile 
+    {
         public MappingProfile()
         {
             CreateMap<DateTimeOffset, Timestamp>()
@@ -21,7 +23,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullToEmptyStringConverter);
             CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
                 .AddTransform(NullToEmptyStringConverter);
-    }
+        }
 
         private Expression<Func<string, string>> NullToEmptyStringConverter = x => x ?? string.Empty;
     }
@@ -33,6 +35,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new AutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

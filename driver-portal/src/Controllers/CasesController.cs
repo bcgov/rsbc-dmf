@@ -86,6 +86,42 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         /// <summary>
+        /// Get closed documents for a given driver
+        /// </summary>
+        /// <param name="licenseNumber">The drivers licence</param>
+        /// <returns></returns>
+        [HttpGet("{driverId}/Cases")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetClosedCases")]
+        public ActionResult GetClosedCases([FromRoute] string driverId)
+        {
+            var caseStatusRequest = new CaseStatusRequest() { DriverId = driverId, Status = ActiveStatus.Closed };
+            var reply = _cmsAdapterClient.GetDriverDocumentsById(caseStatusRequest);
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            {
+                var result = new List<Document>();
+                result = _mapper
+                    .Map<IEnumerable<Document>>(reply.Items)
+                    .ToList();
+
+                if (result.Count > 0)
+                {
+                    result = result.OrderByDescending(cs => cs.ImportDate).ToList();
+                }
+
+                return Json(result);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(GetClosedDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+        /// <summary>
         /// Get Most Recent Case
         /// </summary>        
         [HttpGet("MostRecent")]
