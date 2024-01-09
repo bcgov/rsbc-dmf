@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
 using Microsoft.OData.Client.ALinq.UriParser;
 using Microsoft.OData.UriParser;
@@ -18,7 +19,7 @@ using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-
+    #region Model
 
     public class CaseSearchRequest
     {
@@ -294,15 +295,19 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
+    #endregion Model
+
     internal partial class CaseManager : ICaseManager
     {
         internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
+        private readonly IMapper _mapper;
 
-        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger)
+        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper)
         {
             this.dynamicsContext = dynamicsContext;
             this.logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -590,7 +595,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        private int ConvertPagesToInt(string data)
+        public static int ConvertPagesToInt(string data)
         {
             int result = 0;
             if (!int.TryParse(data, out result))
@@ -673,7 +678,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        // TODO move common code with this method and method under it e.g. mapper
         /// <summary>
         /// Get Driver Legacy Documents by driver id
         /// </summary>
@@ -682,7 +686,10 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId)
         {
             var result = new List<LegacyDocument>();
-            var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driverId && d.statecode == 0).ToList();
+            var driverDocuments = dynamicsContext.bcgov_documenturls
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)ActiveStatus.Active)
+                .ToList();
+
             foreach (var document in driverDocuments)
             {
                 // only include documents that have a URL
@@ -691,28 +698,8 @@ namespace Rsbc.Dmf.CaseManagement
                     await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
                     await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
-                    var legacyDocument = new LegacyDocument
-                    {
-                        BatchId = document.dfp_batchid ?? string.Empty,
-                        DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                        DocumentId = document.bcgov_documenturlid.ToString(),
-                        DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
-                        DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                        BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
-                        DocumentUrl = document.bcgov_url ?? string.Empty,
-                        FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                        ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                        ImportId = document.dfp_importid ?? string.Empty,
-                        OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                        ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                        ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                        SubmittalStatus = TranslateSubmittalStatusInt(document.dfp_submittalstatus),
-                        DueDate = document.dfp_duedate,
-                        Description = document.dfp_description,
-                        CreateDate = document.createdon.GetValueOrDefault(),
-                    };
-
-                        result.Add(legacyDocument);
+                    var legacyDocument = _mapper.Map<LegacyDocument>(document);
+                    result.Add(legacyDocument);
                 }
             }
 
@@ -745,6 +732,9 @@ namespace Rsbc.Dmf.CaseManagement
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
+                                // TODO replace with
+                                // var legacyDocument = _mapper.Map<LegacyDocument>(document);
+                                // add mapper for Driver to AutoMapperProfile
                                 var legacyDocument = new LegacyDocument
                                 {
                                     BatchId = document.dfp_batchid ?? string.Empty,
@@ -827,9 +817,10 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="businessArea"></param>
         /// <returns></returns>
-        private string ConvertBusinessAreaToString(int? businessArea)
+        public static string ConvertBusinessAreaToString(int? businessArea)
         {
             string result = "";
+
             if (businessArea != null)
             {
                 switch (businessArea)
@@ -845,6 +836,7 @@ namespace Rsbc.Dmf.CaseManagement
                         break;
                 }
             }
+
             return result;
         }
 
@@ -3734,7 +3726,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        private string TranslateSubmittalStatusInt(int? submittalStatusCode)
+        public static string TranslateSubmittalStatusInt(int? submittalStatusCode)
         {
             var statusMap = new Dictionary<int, string>()
             {

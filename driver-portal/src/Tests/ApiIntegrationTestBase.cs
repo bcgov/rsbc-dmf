@@ -10,7 +10,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         protected HttpClient _client { get; }
         protected readonly IConfiguration _configuration;
         protected const string CASE_API_BASE = "/api/Cases";
-        protected const string DRIVER_API_BASE = "/api/Drivers";
+        protected const string DRIVER_API_BASE = "/api/Driver";
 
         public ApiIntegrationTestBase(HttpClientFixture fixture)
         {

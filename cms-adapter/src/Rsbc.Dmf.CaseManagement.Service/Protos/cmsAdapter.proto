@@ -108,6 +108,11 @@ service CaseManager {
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
+enum ActiveStatus {
+	Active = 0;
+	Closed = 1;
+}
+
 message UpdateDriverRequest{
 	string driverLicenseNumber=1;
 	google.protobuf.Timestamp birthDate = 2;

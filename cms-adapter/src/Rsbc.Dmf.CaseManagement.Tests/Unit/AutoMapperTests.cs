@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -60,6 +61,33 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             var mappedDocuments = _mapper.Map<RepeatedField<LegacyDocument>>(documents);
 
             Assert.NotNull(mappedDocuments);
+        }
+
+        [Fact]
+        public void Map_Dynamics_LegacyDocument()
+        {
+            var documentType = new dfp_submittaltype();
+            documentType.dfp_name = "DocumentType";
+            documentType.dfp_apidocumenttype = "DocumentTypeCode";
+            documentType.dfp_businessarea = 100000000;
+
+            var document = new bcgov_documenturl();
+            document.dfp_batchid = "BatchId";
+            document.dfp_documentpages = "1";
+            document.bcgov_documenturlid = Guid.NewGuid();
+            document.dfp_DocumentTypeID = documentType;
+            document.bcgov_url = "DocumentUrl";
+            document.dfp_importid = "ImportId";
+            document.dfp_dpsprocessingdate = new DateTimeOffset();
+            document.dfp_faxreceiveddate = new DateTimeOffset();
+            document.dfp_faxsender = "OriginatingNumber";
+            document.dfp_validationmethod = "ValidationMethod";
+            document.dfp_validationprevious = "ValidationPrevious";
+            document.dfp_submittalstatus = 1;
+
+            var mappedDocument = _mapper.Map<LegacyDocument>(document);
+
+            Assert.NotNull(mappedDocument);
         }
     }
 }
