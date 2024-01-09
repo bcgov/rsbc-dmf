@@ -2158,7 +2158,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (request.CaseId != null)
                         {
-                            var theCase = await GetCaseDetail(request.CaseId);
+                            var theCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault(); ;
                             if (theCase != null)
                             {
                                 dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
