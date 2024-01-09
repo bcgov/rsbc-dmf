@@ -89,6 +89,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get Most Recent Case
         /// </summary>        
         [HttpGet("MostRecent")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -167,7 +168,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Returns the current Closed Cases
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
+      /*  [HttpGet()]
         [ProducesResponseType(typeof(List<ViewModels.CaseDetail>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -184,7 +185,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 DecisionDate = DateTime.Now.AddDays(5),
             });
             return Json(result);
-        }
+        }*/
     }
 
 }

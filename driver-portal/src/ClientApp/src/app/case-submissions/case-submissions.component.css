@@ -1,0 +1,13 @@
+.submissions {
+  display: flex;
+  flex-direction: row;
+  padding-top: 24px;
+  gap: 100px;
+}
+.submissionRequirement {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+
