@@ -9,12 +9,12 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
 builder.WebHost
     .UseUrls()
     .UseKestrel(options =>
@@ -23,7 +23,6 @@ builder.WebHost
     });
 
 // add services to DI container
-
 var services = builder.Services;
 var env = builder.Environment;
 
@@ -97,7 +96,6 @@ services.AddAuthentication("token")
                     .RequireAuthenticatedUser()
                     .Build();
             });
-
 
 services.AddCors();
 services.AddControllersWithViews().AddJsonOptions(x =>
@@ -220,6 +218,11 @@ services.AddHealthChecks()
 services.AddHttpClient();
 services.AddHttpContextAccessor();
 services.AddTransient<IUserService, UserService>();
+// NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+    .AddConsole());
+services.AddAutoMapperSingleton(loggerFactory);
 
 var app = builder.Build();
 
@@ -261,7 +264,5 @@ app.MapFallbackToFile("index.html");
 app.MapSwagger();
 
 app.Run();
-
-
 
 public partial class Program { } // so you can reference it from tests

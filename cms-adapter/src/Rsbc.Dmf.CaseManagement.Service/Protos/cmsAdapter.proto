@@ -45,7 +45,7 @@ service CaseManager {
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
-  rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
+  rpc GetDriverDocumentsById (DriverDocumentRequest) returns (GetDocumentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
@@ -108,13 +108,19 @@ service CaseManager {
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
+enum ActiveStatus {
+	Active = 0;
+	Closed = 1;
+}
+
 message UpdateDriverRequest{
 	string driverLicenseNumber=1;
 	google.protobuf.Timestamp birthDate = 2;
 }
 
-message DriverIdRequest {
+message DriverDocumentRequest {
 	string id = 1;
+	ActiveStatus documentStatus = 2;
 }
 
 message DriverLicenseRequest {

@@ -36,7 +36,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
 
-        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId);
+        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId, ActiveStatus documentStatus = ActiveStatus.Active);
 
         Task<LegacyDocument> GetLegacyDocument(string documentId);
 
