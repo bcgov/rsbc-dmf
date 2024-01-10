@@ -19,10 +19,11 @@ namespace Rsbc.Dmf.DriverPortal.Api
             CreateMap<LegacyDocument, ViewModels.Document>()
                 .ForMember(dest => dest.ImportDate, opt => opt.MapFrom(src => ImportDateConverter(src)))
                 .ForMember(dest => dest.BcMailSent, opt => opt.MapFrom(src => src.DocumentType == "Letter Out BCMail" && src.ImportDate != null))
-                .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => FaxReceivedDateConverter(src)))
-                .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToDateTimeOffset()))
-                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate.ToDateTimeOffset()));
+                .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => FaxReceivedDateConverter(src)));
             CreateMap<CaseDetail, ViewModels.CaseDetail>()
+                .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => src.CaseType == "DMER" ? "Solicited" : "Unsolicited"))
+                .ForMember(dest => dest.DecisionDate, opt => opt.MapFrom(src => src.DpsProcessingDate.ToDateTimeOffset()))
+                .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate) 
                 .AddTransform(NullStringConverter);
         }
 
