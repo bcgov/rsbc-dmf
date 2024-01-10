@@ -529,85 +529,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
-        /// <summary>
-        /// Get Case Legacy Documents
-        /// </summary>
-        /// <param name="caseId"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId)
-        {
-            List<LegacyDocument> result = new List<LegacyDocument>();
-
-            var casesRaw = dynamicsContext.incidents.Where(i => i.incidentid == Guid.Parse(caseId));
-            if (casesRaw != null)
-            {
-                var @cases = casesRaw.ToList();
-                foreach (var @case in @cases)
-                {
-                    // ensure related data is loaded.
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
-
-                    Driver driver = new Driver()
-                    {
-                        DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber ?? string.Empty,
-                    };
-                    if (@case.bcgov_incident_bcgov_documenturl != null)
-                    {
-                        foreach (var document in @case.bcgov_incident_bcgov_documenturl)
-                        {
-                            // ignore inactive.
-                            if (document.statecode == 0)
-                            {
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                                LegacyDocument legacyDocument = new LegacyDocument
-                                {
-                                    BatchId = document.dfp_batchid ?? string.Empty,
-                                    CaseId = @case.incidentid.ToString(),
-                                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                                    DocumentId = document.bcgov_documenturlid.ToString(),
-                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                    DocumentUrl = document.bcgov_url ?? string.Empty,
-                                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                                    ImportId = document.dfp_importid ?? string.Empty,
-                                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                    SequenceNumber = @case.dfp_dfcmscasesequencenumber.GetValueOrDefault(),
-                                    Driver = driver
-                                };
-
-                                result.Add(legacyDocument);
-                            }
-
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-        
-        /// <summary>
-        /// Convert Pages To Int
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        public static int ConvertPagesToInt(string data)
-        {
-            int result = 0;
-            if (!int.TryParse(data, out result))
-            {
-                result = 0;
-            }
-            return result;
-
-        }
-
         /// <summary>
         /// Get Driver Legacy Comments
         /// </summary>
@@ -703,141 +624,7 @@ namespace Rsbc.Dmf.CaseManagement
                     var legacyDocument = _mapper.Map<LegacyDocument>(document);
                     result.Add(legacyDocument);
                 }
-            }
-
-            return result;
         }
-
-        /// <summary>
-        /// Get Driver Legacy Documents by driver license
-        /// </summary>
-        /// <param name="driverLicenceNumber"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber)
-        {
-            var result = new List<LegacyDocument>();
-            var driversRaw = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statecode == 0);
-
-            if (driversRaw != null)
-            {
-                var drivers = driversRaw.ToList();
-                foreach (var @driver in drivers)
-                {
-                    if (@driver != null)
-                    {
-                        var driverDocuments = dynamicsContext.bcgov_documenturls.Where(d => d._dfp_driverid_value == driver.dfp_driverid && d.statecode == 0).ToList();
-                        foreach (var document in driverDocuments)
-                        {
-                            // only include documents that have a URL
-                            if (!string.IsNullOrEmpty(document.bcgov_url))
-                            {
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
-                                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                                // TODO replace with
-                                // var legacyDocument = _mapper.Map<LegacyDocument>(document);
-                                // add mapper for Driver to AutoMapperProfile
-                                var legacyDocument = new LegacyDocument
-                                {
-                                    BatchId = document.dfp_batchid ?? string.Empty,
-                                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                                    DocumentId = document.bcgov_documenturlid.ToString(),
-                                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_apidocumenttype ?? string.Empty,
-                                    DocumentType = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                                    BusinessArea = ConvertBusinessAreaToString(document.dfp_DocumentTypeID?.dfp_businessarea),
-                                    DocumentUrl = document.bcgov_url ?? string.Empty,
-                                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                                    ImportId = document.dfp_importid ?? string.Empty,
-                                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                                    SubmittalStatus = TranslateSubmittalStatusInt( document.dfp_submittalstatus)
-                                };
-
-                                Driver caseDriver = new Driver()
-                                {
-                                    DriverLicenseNumber = driverLicenceNumber,
-
-                                };
-
-                                if (document._bcgov_caseid_value != null)
-                                {
-                                    var @case = dynamicsContext.incidents.Where(i => i.incidentid == document._bcgov_caseid_value).FirstOrDefault();
-
-                                    if (@case != null)
-                                    {
-                                        legacyDocument.CaseId = @case.incidentid.ToString();
-                                        if (@case.dfp_DriverId != null)
-                                        {
-                                            await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(dfp_driver.dfp_PersonId));
-                                            caseDriver.Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty;
-                                        }
-                                    }
-                                }
-
-                                legacyDocument.Driver = caseDriver;
-
-                                result.Add(legacyDocument);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Convert String To Business Area
-        /// </summary>
-        /// <param name="businessArea"></param>
-        /// <returns></returns>
-        private int? ConvertStringToBusinessArea(string businessArea)
-        {
-            int? result = null;
-            if (businessArea != null)
-            {
-                switch (businessArea)
-                {
-                    case "Driver Fitness":
-                        result = 100000000;
-                        break;
-                    case "Remedial":
-                        result = 100000001;
-                        break;
-                    case "Client Services":
-                        result = 100000002;
-                        break;
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Convert Business Area To String
-        /// </summary>
-        /// <param name="businessArea"></param>
-        /// <returns></returns>
-        public static string ConvertBusinessAreaToString(int? businessArea)
-        {
-            string result = "";
-
-            if (businessArea != null)
-            {
-                switch (businessArea)
-                {
-                    case 100000000:
-                        result = "Driver Fitness";
-                        break;
-                    case 100000001:
-                        result = "Remedial";
-                        break;
-                    case 100000002:
-                        result = "Client Services";
-                        break;
-                }
-            }
 
             return result;
         }
@@ -947,17 +734,17 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// Get Case Detail
+        /// Get Case
         /// </summary>
         /// <param name="caseId"></param>
         /// <returns>CaseDetail</returns>
         public async Task<CaseDetail> GetCaseDetail(string caseId)
         {
             CaseDetail result = null;
+
             try
             {
                 var fetchedCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(caseId)).FirstOrDefault();
-                
                 if (fetchedCase != null)                
                 {
                     result = await _caseMapper.Map(fetchedCase);
@@ -1114,88 +901,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return legacyComment;
-        }
-
-        /// <summary>
-        /// Get Legacy Document
-        /// </summary>
-        /// <param name="documentId"></param>
-        /// <returns></returns>
-        public async Task<LegacyDocument> GetLegacyDocument(string documentId)
-        {
-            LegacyDocument legacyDocument = null;
-
-            var document = dynamicsContext.bcgov_documenturls.Expand(x => x.dfp_DriverId).Where(d => d.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
-            if (document != null)
-            {
-                legacyDocument = new LegacyDocument
-                {
-                    BatchId = document.dfp_batchid ?? string.Empty,
-                    DocumentPages = ConvertPagesToInt(document.dfp_documentpages),
-                    DocumentId = document.bcgov_documenturlid.ToString(),
-                    DocumentTypeCode = document.dfp_DocumentTypeID?.dfp_name ?? string.Empty,
-                    DocumentUrl = document.bcgov_url ?? string.Empty,
-                    FaxReceivedDate = document.dfp_faxreceiveddate.GetValueOrDefault(),
-                    ImportDate = document.dfp_dpsprocessingdate.GetValueOrDefault(),
-                    ImportId = document.dfp_importid ?? string.Empty,
-                    OriginatingNumber = document.dfp_faxsender ?? string.Empty,
-                    ValidationMethod = document.dfp_validationmethod ?? string.Empty,
-                    ValidationPrevious = document.dfp_validationprevious ?? string.Empty,
-                    SequenceNumber = null
-                };
-
-                if (document.createdon != null)
-                {
-                    legacyDocument.CreateDate = document.createdon.Value;
-                }
-
-                if (document.dfp_documentorigin != null)
-                {
-                    legacyDocument.Origin = TranslateDocumentOrigin(document.dfp_documentorigin.Value);
-                }
-
-                if (document._bcgov_caseid_value != null)
-                {
-                    legacyDocument.CaseId = document._bcgov_caseid_value.ToString();
-                }
-
-                if (document.dfp_attachmentnumber != null)
-                {
-                    legacyDocument.DpsDocumentId = document.dfp_attachmentnumber.Value;
-                }
-
-                if (document._bcgov_caseid_value != null)
-                {
-                    legacyDocument.CaseId = document._bcgov_caseid_value.ToString();
-                }
-
-                if (document.dfp_queue != null)
-                {
-                    legacyDocument.Queue = TranslateQueueCodeInt(document.dfp_queue.Value);
-                }
-
-                if (document.dfp_priority != null)
-                {
-                    legacyDocument.Priority = TranslatePriorityCode(document.dfp_priority.Value);
-                }
-
-                if (document.dfp_documentorigin != null)
-                {
-                    legacyDocument.Origin = TranslateDocumentOrigin(document.dfp_documentorigin.Value);
-                }
-
-                if (document.dfp_DriverId != null)
-                {
-                    legacyDocument.Driver = new Driver
-                    {
-                        Id = document.dfp_DriverId.dfp_driverid.ToString(),
-                        DriverLicenseNumber = document.dfp_DriverId.dfp_licensenumber
-                    };
-                }
-            }
-
-            return legacyDocument;
-
         }
 
         /// <summary>
@@ -1975,7 +1680,7 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
 
-                        if (request.CaseId != null)
+                        if (!string.IsNullOrEmpty(request.CaseId))
                         {
                             var theCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault(); ;
                             if (theCase != null)
@@ -2484,6 +2189,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             bool result = false;
 
+            try
+            {
             var document = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
@@ -2496,6 +2203,12 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Log.Error($"Could not find document {documentId}");
             }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Error deleting document {documentId}");
+            }
+            
             return result;
 
         }
@@ -2560,6 +2273,32 @@ namespace Rsbc.Dmf.CaseManagement
                 result += firstname.ToUpper();
             }
 
+            return result;
+        }
+
+        /// <summary>
+        /// Convert String To Business Area
+        /// </summary>
+        /// <param name="businessArea"></param>
+        /// <returns></returns>
+        protected int? ConvertStringToBusinessArea(string businessArea)
+        {
+            int? result = null;
+            if (businessArea != null)
+            {
+                switch (businessArea)
+                {
+                    case "Driver Fitness":
+                        result = 100000000;
+                        break;
+                    case "Remedial":
+                        result = 100000001;
+                        break;
+                    case "Client Services":
+                        result = 100000002;
+                        break;
+                }
+            }
             return result;
         }
 
@@ -3452,27 +3191,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        private string TranslateDocumentOrigin(int documentOrigin)
-        {
-            var statusMap = new Dictionary<int, string>()
-            {
-                { 100000014,"Mercury Uploaded RSBC" },
-                { 100000015,"Migration" },
-                { 100000017, "DPS/KOFAX" },
-            };
-
-            if (statusMap.ContainsKey(documentOrigin))
-            {
-                return statusMap[documentOrigin];
-            }
-            else
-            {
-                return statusMap[100000014];
-            }
-
-        }
-
-
         private int TranslateDocumentOrigin(string documentOrigin)
         {
             var statusMap = new Dictionary<string, int>()
@@ -3491,31 +3209,6 @@ namespace Rsbc.Dmf.CaseManagement
                 return statusMap["Mercury Uploaded RSBC"];
             }
 
-        }
-
-        /// <summary>
-        /// Translate the Dynamics Priority (status reason) field to text
-        /// </summary>
-        /// <param name="statusCode"></param>
-        /// <returns></returns>
-        private string TranslatePriorityCode(int priorityCode)
-        {
-            var statusMap = new Dictionary<int, string>()
-            {
-                { 100000000,"Regular" },
-                { 100000001,"Urgent / Immediate" },
-                { 100000002, "Expedited" },
-                { 100000003, "Critical Review" },
-            };
-
-            if (priorityCode != null && statusMap.ContainsKey(priorityCode))
-            {
-                return statusMap[priorityCode];
-            }
-            else
-            {
-                return statusMap[100000000];
-            }
         }
 
         /// <summary>
@@ -3547,34 +3240,6 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
-        /// Translate the Dynamics Priority (status reason) field to text
-        /// </summary>
-        /// <param name="statusCode"></param>
-        /// <returns></returns>
-        public static string TranslateSubmittalStatusInt(int? submittalStatusCode)
-        {
-            var statusMap = new Dictionary<int, string>()
-            {
-                { 100000001, "Received" }, // Received
-                { 100000004, "Reject" }, // Rejected
-                { 100000009, "Clean Pass"  }, // Clean Pass
-                { 100000012, "Manual Pass"  }, // Manual Pass
-                { 100000000, "Open-Required"  }, // Open required
-                { 100000010, "Uploaded" }, // Uploaded
-                { 100000008, "Sent" }
-            };
-
-            if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))
-            {
-                return statusMap[submittalStatusCode.Value];
-            }
-            else
-            {
-                return "Received";
-            }
-        }
-
-        /// <summary>
         /// 
         /// </summary>
         /// <param name="priorityCode"></param>
@@ -3602,29 +3267,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="priorityCode"></param>
-        /// <returns></returns>
-        private string TranslateQueueCodeInt(int queueCode)
-        {
-            var statusMap = new Dictionary<int, string>()
-            {
-                { 100000002, "Nurse Case Managers" },
-                { 100000001, "Adjudicators" },
-                { 100000000, "Client Services" },
-            };
-
-            if (queueCode != null && statusMap.ContainsKey(queueCode))
-            {
-                return statusMap[queueCode];
-            }
-            else
-            {
-                return statusMap[100000000];
-            }
-        }
 
         /// <summary>
         ///  convert the owner from the value provided by the legacy system to Dynamics CRM
