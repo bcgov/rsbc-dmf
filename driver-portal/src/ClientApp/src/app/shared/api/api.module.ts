@@ -7,7 +7,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
-import { DriversService } from './services/drivers.service';
+import { DriverService } from './services/driver.service';
 import { ProfileService } from './services/profile.service';
 import { UserService } from './services/user.service';
 
@@ -22,7 +22,7 @@ import { UserService } from './services/user.service';
     ApplicationVersionInfoService,
     CasesService,
     ConfigService,
-    DriversService,
+    DriverService,
     ProfileService,
     UserService,
     ApiConfiguration
