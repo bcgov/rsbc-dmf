@@ -569,6 +569,34 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public async override Task<GetCasesReply> GetCases(CaseStatusRequest caseStatusRequest, ServerCallContext context)
+        {
+            var reply = new GetCasesReply();
+
+            try
+            {
+                var driverId = Guid.Parse(caseStatusRequest.DriverId);
+                var activeStatus = caseStatusRequest.Status.Convert<ActiveStatus, CaseManagement.ActiveStatus>();
+                var cases = await _caseManager.GetCases(driverId, activeStatus);
+                if (cases == null)
+                {
+                    reply.ErrorDetail = "No cases match driver ID";
+                    return reply;
+                }
+
+                var mappedCases = _mapper.Map<IEnumerable<CaseDetail>>(cases);
+                reply.Items.AddRange(mappedCases);
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
         public async override Task<GetCaseDetailReply> GetCaseDetail(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
@@ -578,6 +606,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var c = await _caseManager.GetCaseDetail(request.CaseId);
                 if (c != null)
                 {
+                    // TODO use automapper
+                    // add null DateTimeOffset converter in AutoMapper (null to DateTimeOffset.MinValue)
                     reply.Item = new CaseDetail();
                     reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;

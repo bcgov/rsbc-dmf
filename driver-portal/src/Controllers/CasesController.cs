@@ -5,84 +5,86 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
 using Pssg.DocumentStorageAdapter;
+using AutoMapper;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // public API
     public class CasesController : Controller
     {
         private readonly IConfiguration _configuration;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        private readonly IMapper _mapper;
+        private readonly ILogger<CasesController> _logger;
 
-        public CasesController(IConfiguration configuration, 
+        public CasesController(
+            IConfiguration configuration, 
             CaseManager.CaseManagerClient cmsAdapterClient,
-            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient
-            )
-        {
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, 
+            IMapper mapper, 
+            ILoggerFactory loggerFactory
+        ) {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
+            _mapper = mapper;
+            _logger = loggerFactory.CreateLogger<CasesController>();
         }
 
         /// <summary>
         /// Get Case
         /// </summary>        
         [HttpGet("{caseId}")]
-        [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
+        [ProducesResponseType(typeof(CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCase")]
         public ActionResult GetCase([Required] [FromRoute] string caseId)
         {
-            var result = new CaseDetail();
-
             var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                string caseType = "Unsolicited";
-
-                if (c.Item.CaseType == "DMER")
-                {
-                    caseType = "Solicited";
-                }
-
-                result.CaseId = c.Item.CaseId;
-                result.DriverId = c.Item.DriverId;
-                result.Title = c.Item.Title;  //Change this to case sequence 
-                result.IdCode = c.Item.IdCode;
-                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
-                result.CaseType = caseType;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.AssigneeTitle = c.Item.AssigneeTitle;
-                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
-                result.LatestDecision = c.Item.LatestDecision;
-                result.DecisionForClass = c.Item.DecisionForClass;
-                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                result.OutstandingDocuments = (int)c.Item.OutstandingDocuments;
-                if (c.Item.CaseSequence > -1)
-                {
-                    result.CaseSequence = (int)c.Item.CaseSequence;
-                }
-                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-
-                // Last Assignee Title - 
+                var result = _mapper.Map<CaseDetail>(c.Item);
+                return Json(result);
             }
             else
             {
                 return StatusCode(500, c?.ErrorDetail ?? "GetCaseDetail failed.");
             }
+        }
 
-            // set to null if no decision has been made.
-            if (result.DecisionDate == DateTimeOffset.MinValue)
+        /// <summary>
+        /// Get closed documents for a given driver
+        /// </summary>
+        /// <param name="driverId">The driver id</param>
+        /// <returns></returns>
+        [HttpGet("{driverId}/Closed")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetClosedCases")]
+        public ActionResult GetClosedCases([FromRoute] string driverId)
+        {
+            var caseStatusRequest = new CaseStatusRequest() { DriverId = driverId, Status = ActiveStatus.Closed };
+            var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                result.DecisionDate = null;
-            }
+                var result = new List<CaseDetail>();
+                result = _mapper
+                    .Map<IEnumerable<CaseDetail>>(reply.Items)
+                    .ToList();
 
-            return Json(result);
+                return Json(result);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {driverId}", reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
+            }
         }
 
         /// <summary>
