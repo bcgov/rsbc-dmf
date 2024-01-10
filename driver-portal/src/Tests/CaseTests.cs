@@ -1,4 +1,5 @@
 using Rsbc.Dmf.DriverPortal.ViewModels;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -28,8 +29,9 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task GetLettersToDriver()
         {
             var caseId = _configuration["DOCS_CASE_ID"];
-            if (!string.IsNullOrEmpty(caseId))
-            {
+            if (string.IsNullOrEmpty(caseId))
+                return;
+
                 var driverId = _configuration["DOCS_DRIVER_ID"];
 
                 // get case details
@@ -45,6 +47,5 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
                 Assert.NotNull(caseDocuments);
             }
-        }
     }
 }

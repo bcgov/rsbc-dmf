@@ -3,6 +3,7 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq.Expressions;
+using Rsbc.Dmf.CaseManagement.Dynamics;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -33,6 +34,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new AutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();
