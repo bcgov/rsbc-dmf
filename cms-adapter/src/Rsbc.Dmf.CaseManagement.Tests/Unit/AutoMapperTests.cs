@@ -89,5 +89,30 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
 
             Assert.NotNull(mappedDocument);
         }
+
+        [Fact]
+        public void Map_CaseDetail()
+        {
+            var caseDetail = new CaseDetail();
+            caseDetail.CaseSequence = 1;
+            caseDetail.CaseId = "CaseId";
+            caseDetail.DriverId = "DriverId";
+            caseDetail.Title = "Title";
+            caseDetail.IdCode = "IdCode";
+            caseDetail.OpenedDate = DateTimeOffset.Now;
+            caseDetail.CaseType = "CaseType";
+            caseDetail.DmerType = "DmerType";
+            caseDetail.Status = "Status";
+            caseDetail.AssigneeTitle = "AssigneeTitle";
+            caseDetail.LastActivityDate = DateTimeOffset.Now;
+            caseDetail.DecisionDate = DateTimeOffset.Now;
+            caseDetail.LatestDecision = "LatestDecision";
+            caseDetail.DecisionForClass = "DecisionForClass";
+            caseDetail.DpsProcessingDate = DateTimeOffset.Now;
+
+            var mappedCaseDetail = _mapper.Map<Service.CaseDetail>(caseDetail);
+
+            Assert.NotNull(mappedCaseDetail);
+        }
     }
 }

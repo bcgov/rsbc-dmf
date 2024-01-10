@@ -1,25 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.OData.Client;
-using Microsoft.OData.UriParser;
-using Rsbc.Dmf.CaseManagement.Dynamics;
-using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using Serilog;
+﻿using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-
-
     internal partial class CaseManager : ICaseManager
     {
-
         public Guid? AddDriver(string name, string dl)
         {
             dynamicsContext.SaveChanges();
@@ -56,10 +44,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-
         public Guid? AddCase(Guid driverId, int caseSequence)
         {
-
             var driver = dynamicsContext.dfp_drivers.ByKey(driverId).GetValue();
             dynamicsContext.LoadProperty(driver, nameof(dfp_driver.dfp_PersonId));
             var contact = driver.dfp_PersonId;
@@ -69,7 +55,6 @@ namespace Rsbc.Dmf.CaseManagement
                 //customerid_contact = contact,
                 dfp_dfcmscasesequencenumber = caseSequence
             };
-
 
             dynamicsContext.AddToincidents(newCase);
             dynamicsContext.SetLink(newCase, nameof(incident.customerid_contact), contact);
@@ -86,7 +71,6 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.Detach(driver);
 
             return caseId;
-
         }
 
         public void DeleteDriver(Guid driverId)
@@ -95,8 +79,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == driverId).FirstOrDefault();
                 dynamicsContext.LoadProperty(driver, nameof(dfp_driver.dfp_PersonId));
-
-
 
                 dynamicsContext.DeleteObject(driver);
                 dynamicsContext.SaveChanges();
@@ -112,7 +94,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Console.WriteLine(ex.ToString());
             }
-
         }
 
         public void DeleteCase(Guid id)
@@ -125,11 +106,5 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
         }
-
     }
-
-    
-
-  
-
 }
