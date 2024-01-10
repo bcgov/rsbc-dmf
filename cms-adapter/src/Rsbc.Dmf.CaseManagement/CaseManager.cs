@@ -1151,15 +1151,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (document.dfp_documentorigin != null)
                 {
-                    switch (document.dfp_documentorigin.Value)
-                    {
-                        case 100000015:
-                            legacyDocument.Origin = "Migration";
-                            break;
-                        case 100000017:
-                            legacyDocument.Origin = "DPS/KOFAX";
-                            break;
-                    }
+                    legacyDocument.Origin = TranslateDocumentOrigin(document.dfp_documentorigin.Value);
                 }
 
                 if (document._bcgov_caseid_value != null)
