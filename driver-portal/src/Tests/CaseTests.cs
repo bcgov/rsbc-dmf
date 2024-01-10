@@ -52,6 +52,9 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public async Task Get_Closed_Cases()
         {
             var driverId = _configuration["DOCS_DRIVER_ID"];
+            if (string.IsNullOrEmpty(driverId))
+                return;
+
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/{driverId}/Closed");
             var result = await HttpClientSendRequest<IEnumerable<CaseDetail>>(request);
 
