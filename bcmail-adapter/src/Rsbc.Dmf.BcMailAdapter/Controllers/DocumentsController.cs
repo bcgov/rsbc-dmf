@@ -222,6 +222,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                                 // now create a document for this.
 
+
                                 if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                                 {
                                     var newLegacyDocument = new LegacyDocument
@@ -233,8 +234,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         DocumentType = "Unclassified",
                                         DocumentUrl = newFileResult.FileName,
                                         Driver = documentResponse.Document.Driver,
-                                        FaxReceivedDate = documentResponse.Document.FaxReceivedDate,
-                                        ImportDate = documentResponse.Document.ImportDate,
                                         Origin = documentResponse.Document.Origin,
                                         Owner = "Team - Intake",
                                         Priority = documentResponse.Document.Priority,
@@ -245,8 +244,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
                                     };
 
-                                    DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
-                                    DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
+                                    // DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
+                                    // DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
+
+                                    newLegacyDocument.ImportDate = documentResponse.Document.ImportDate;
+                                    newLegacyDocument.FaxReceivedDate = documentResponse.Document.FaxReceivedDate;
+
+
+                                    /*
                                     TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
                                     if (importDate.DateTime != DateTimeOffset.MinValue)
@@ -275,6 +280,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     {
                                         newLegacyDocument.FaxReceivedDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
                                     }
+
+                                    */
 
                                     _caseManagerClient.CreateDocumentOnDriver(newLegacyDocument);
                                 }
