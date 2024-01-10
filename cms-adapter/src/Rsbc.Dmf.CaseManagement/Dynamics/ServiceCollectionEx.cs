@@ -7,7 +7,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
     {
         public static void AddDynamicsServices(this IServiceCollection services)
         {
-            services.AddTransient<IMapper<incident, CaseDetail>, CaseMapper>();
+            services.AddTransient<IMapperAsync<incident, CaseDetail>, CaseMapper>();
         }
     }
 }

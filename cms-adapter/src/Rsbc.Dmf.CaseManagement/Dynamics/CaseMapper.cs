@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-    internal class CaseMapper : IMapper<incident, CaseDetail>
+    internal class CaseMapper : IMapperAsync<incident, CaseDetail>
     {
         private readonly DynamicsContext _dynamicsContext;
 

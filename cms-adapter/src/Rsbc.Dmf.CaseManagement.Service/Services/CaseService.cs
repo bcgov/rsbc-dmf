@@ -607,6 +607,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 if (c != null)
                 {
                     // TODO use automapper
+                    // add null DateTimeOffset converter in AutoMapper (null to DateTimeOffset.MinValue)
                     reply.Item = new CaseDetail();
                     reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;

@@ -300,9 +300,9 @@ namespace Rsbc.Dmf.CaseManagement
         internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
         private readonly IMapper _mapper;
-        private readonly IMapper<incident, CaseDetail> _caseMapper;
+        private readonly IMapperAsync<incident, CaseDetail> _caseMapper;
 
-        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapper<incident, CaseDetail> caseMapper)
+        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
         {
             this.dynamicsContext = dynamicsContext;
             this.logger = logger;
@@ -981,6 +981,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if(fetchedCase != null)
                 {
+                    // TODO use CaseMapper.Map instead after consolidating
+                    // and then make the CaseManager public static methods private non-static
                     dynamicsContext.LoadProperty(fetchedCase, nameof(incident.dfp_DriverId));
                     result = new CaseDetail
                     {
