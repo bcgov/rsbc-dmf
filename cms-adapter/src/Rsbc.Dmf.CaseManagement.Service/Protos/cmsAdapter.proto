@@ -37,7 +37,7 @@ service CaseManager {
 
   rpc GetComments (CommentsRequest) returns (GetCommentsReply);
 
-  rpc GetCases (DriverIdRequest) returns (GetCasesReply);
+  rpc GetCases (CaseStatusRequest) returns (GetCasesReply);
 
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 

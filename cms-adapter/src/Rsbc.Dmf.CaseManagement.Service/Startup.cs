@@ -20,6 +20,7 @@ using Serilog.Filters;
 using Serilog.Sinks.Splunk;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Rsbc.Dmf.CaseManagement.Dynamics;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -108,7 +109,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
 
             */
-            services.AddAutoMapper();
+            services.AddAutoMapperSingleton();
+            services.AddDynamicsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

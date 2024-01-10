@@ -1,24 +1,32 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Rsbc.Dmf.CaseManagement.Service;
+using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {
     public class MappingProfile : Profile
     {
         private readonly ILogger<MappingProfile> _logger;
-        private TimeZoneInfo _pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+        private readonly TimeZoneInfo _pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
         public MappingProfile(ILoggerFactory loggingFactory)
         {
             _logger = loggingFactory.CreateLogger<MappingProfile>();
 
+            CreateMap<Timestamp, DateTimeOffset>()
+                .ConvertUsing(src => src.ToDateTimeOffset());
             CreateMap<LegacyDocument, ViewModels.Document>()
                 .ForMember(dest => dest.ImportDate, opt => opt.MapFrom(src => ImportDateConverter(src)))
                 .ForMember(dest => dest.BcMailSent, opt => opt.MapFrom(src => src.DocumentType == "Letter Out BCMail" && src.ImportDate != null))
                 .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => FaxReceivedDateConverter(src)))
                 .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.CreateDate.ToDateTimeOffset()))
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate.ToDateTimeOffset()));
+            CreateMap<CaseDetail, ViewModels.CaseDetail>()
+                .AddTransform(NullStringConverter);
         }
+
+        private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
 
         private DateTimeOffset ImportDateConverter(LegacyDocument src)
         {     

@@ -1,19 +1,24 @@
-﻿using Rsbc.Dmf.CaseManagement.Utilities;
+﻿using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace Rsbc.Dmf.CaseManagement.Dynamics
+namespace Rsbc.Dmf.CaseManagement
 {
-    public static class CaseMapper
+    internal class CaseMapper : IMapper<incident, CaseDetail>
     {
-        public static async Task<CaseDetail> Map(incident @case)
+        private readonly DynamicsContext _dynamicsContext;
+
+        public CaseMapper(DynamicsContext dynamicsContext)
+        {
+            _dynamicsContext = dynamicsContext;
+        }
+
+        public async Task<CaseDetail> Map(incident @case)
         {
             var result = new CaseDetail();
 
-            dynamicsContext.LoadProperty(@case, nameof(incident.dfp_DriverId));
+            _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_DriverId));
             result = new CaseDetail
             {
                 CaseId = @case.incidentid.ToString(),
@@ -45,25 +50,25 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 result.DmerType = TranslateDmerTypeRaw(@case.dfp_dmertype);
             }
 
-            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.stageid_processstage));
+            await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.stageid_processstage));
 
-            var bpf = dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+            var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
 
             if (bpf != null)
             {
-                await dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+                await _dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
                 result.Status = bpf.activestageid.stagename;
             }
 
             // case assignment
             if (@case._owningteam_value.HasValue)
             {
-                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
+                await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
                 result.AssigneeTitle = @case.owningteam.name;
             }
 
             // get the related decisions.
-            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
+            await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
             if (@case.dfp_incident_dfp_decision != null && @case.dfp_incident_dfp_decision.Count > 0)
             {
                 foreach (var decision in @case.dfp_incident_dfp_decision)
@@ -72,14 +77,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     {
                         result.LatestDecision = "";
 
-                        await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+                        await _dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
                         if (decision.dfp_OutcomeStatus != null)
                         {
                             result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
                         }
 
                         // now try and get the sub type
-                        await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
+                        await _dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
                         if (decision.dfp_OutcomeSubStatus != null)
                         {
                             result.LatestDecision += " - " + decision.dfp_OutcomeSubStatus.dfp_name;
@@ -91,7 +96,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 }
             }
 
-            result.DpsProcessingDate = GetDpsProcessingDate();
+            return result;
         }
 
         public static string TranslateCaseTypeToString(int? optionSetValue)

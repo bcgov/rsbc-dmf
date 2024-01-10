@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
 using Pssg.DocumentStorageAdapter;
+using AutoMapper;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -16,15 +17,21 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly IConfiguration _configuration;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient _documentStorageAdapterClient;
+        private readonly IMapper _mapper;
+        private readonly ILogger<CasesController> _logger;
 
-        public CasesController(IConfiguration configuration, 
+        public CasesController(
+            IConfiguration configuration, 
             CaseManager.CaseManagerClient cmsAdapterClient,
-            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient
-            )
-        {
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, 
+            IMapper mapper, 
+            ILoggerFactory loggerFactory
+        ) {
             _configuration = configuration;
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
+            _mapper = mapper;
+            _logger = loggerFactory.CreateLogger<CasesController>();
         }
 
         /// <summary>
@@ -88,9 +95,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get closed documents for a given driver
         /// </summary>
-        /// <param name="licenseNumber">The drivers licence</param>
+        /// <param name="driverId">The driver id</param>
         /// <returns></returns>
-        [HttpGet("{driverId}/Cases")]
+        [HttpGet("{driverId}/Closed")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
         [ProducesResponseType(401)]
@@ -99,24 +106,19 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public ActionResult GetClosedCases([FromRoute] string driverId)
         {
             var caseStatusRequest = new CaseStatusRequest() { DriverId = driverId, Status = ActiveStatus.Closed };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(caseStatusRequest);
+            var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                var result = new List<Document>();
+                var result = new List<CaseDetail>();
                 result = _mapper
-                    .Map<IEnumerable<Document>>(reply.Items)
+                    .Map<IEnumerable<CaseDetail>>(reply.Items)
                     .ToList();
-
-                if (result.Count > 0)
-                {
-                    result = result.OrderByDescending(cs => cs.ImportDate).ToList();
-                }
 
                 return Json(result);
             }
             else
             {
-                _logger.LogError($"{nameof(GetClosedDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {driverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }

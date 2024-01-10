@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using System;
 using System.Linq.Expressions;
-using Rsbc.Dmf.CaseManagement.Dynamics;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -24,6 +23,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
                 .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.CaseDetail, CaseDetail>()
+                .AddTransform(NullStringConverter);
     }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
@@ -31,7 +32,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
     public static class AutoMapper
     {
-        public static void AddAutoMapper(this IServiceCollection services)
+        public static void AddAutoMapperSingleton(this IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(mc =>
             {

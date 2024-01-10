@@ -300,12 +300,14 @@ namespace Rsbc.Dmf.CaseManagement
         internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<CaseManager> logger;
         private readonly IMapper _mapper;
+        private readonly IMapper<incident, CaseDetail> _caseMapper;
 
-        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper)
+        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapper<incident, CaseDetail> caseMapper)
         {
             this.dynamicsContext = dynamicsContext;
             this.logger = logger;
             _mapper = mapper;
+            _caseMapper = caseMapper;
         }
 
         /// <summary>
@@ -911,6 +913,36 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Cases by driver
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <param name="activeStatus"></param>
+        /// <returns>IEnumerable<CaseDetail></returns>
+        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, ActiveStatus activeStatus)
+        {
+            List<CaseDetail> result = new List<CaseDetail>();
+
+            try
+            {
+                var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+                if (cases != null)
+                {
+                    foreach (var @case in cases)
+                    {
+                        var mappedCase = await _caseMapper.Map(@case);
+                        mappedCase.DpsProcessingDate = GetDpsProcessingDate();
+                        result.Add(mappedCase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting cases for driver {driverId}");
+            }
+
+            return result;
+        }
 
         /// <summary>
         /// Get Case Detail
@@ -926,7 +958,8 @@ namespace Rsbc.Dmf.CaseManagement
                 
                 if (fetchedCase != null)                
                 {
-                    result = MapCase(fetchedCase);
+                    result = await _caseMapper.Map(fetchedCase);
+                    result.DpsProcessingDate = GetDpsProcessingDate();
                 }
             }
             catch (Exception ex)
