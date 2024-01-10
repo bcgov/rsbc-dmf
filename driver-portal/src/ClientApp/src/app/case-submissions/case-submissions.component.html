@@ -18,6 +18,67 @@
     </div>
   </div>
 
+  <div class="list">
+    <div>
+      <mat-card *ngFor="let caseDocument of submissionDocuments">
+        <mat-card-content class="closedCaseContent">
+          <div class="row1">
+            <mat-icon (click)="toggleisExpandable('1')">
+              expand_circle_down
+            </mat-icon>
+          </div>
+          <div class="row2">
+            <div class="caseDetailRow">
+              <div>
+                <label>Submission type </label>
+                <div>
+                  <b>{{ caseDocument.documentType }}</b>
+                </div>
+              </div>
+
+              <div>
+                <label>Submission status</label>
+                <div>
+                  <b>{{ caseDocument.submittalStatus }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Submission date</label>
+                <div>
+                  <b>{{ caseDocument.importDate }}</b>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="caseDetailRow"
+              *ngIf="isExpanded['1']"
+              style="
+                border-top: 2px solid gray;
+                padding-top: 20px;
+                padding-bottom: 20px;
+              "
+            >
+              <div>
+                <label>Created Date</label>
+                <div>
+                  <b>{{ caseDocument?.createDate }}</b>
+                </div>
+              </div>
+
+              <div>
+                <label>Description</label>
+                <div>
+                  <b>{{ caseDocument.description }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">
@@ -110,6 +171,14 @@
             >
           </mat-expansion-panel-header>
           <app-submission-status></app-submission-status>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Letter Topic</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-letter-topic></app-letter-topic>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

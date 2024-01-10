@@ -22,7 +22,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   getSubmissionRequireDocuments(driverId: string) {
     this.caseManagementService
       .getDriverDocuments({ driverId })
-      .subscribe((documents) => {
+      .subscribe((documents: any) => {
         if (
           documents?.caseSubmissions &&
           documents?.caseSubmissions?.length > 0
