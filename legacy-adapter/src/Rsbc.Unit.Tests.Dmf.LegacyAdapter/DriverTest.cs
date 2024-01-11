@@ -51,14 +51,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         }
 
-
-
-
-
-
-
-
-
         [Fact]
         public async void DfwebSubmitComment()
         {
@@ -364,9 +356,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
 
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            var response = await _client.SendAsync(request);
 
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             response.EnsureSuccessStatusCode();
         }
