@@ -1535,29 +1535,31 @@ namespace Rsbc.Dmf.CaseManagement
 
                 else
                 {
-                   
-                    // scan through the documents to see if there is document in open pending status
-                    // ensure we have the documents.
-                    await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
-
-                    if (documentTypeId != null && request.DocumentType != "Unclassified")
+                    if (request.Driver.DriverLicenseNumber != "00000000")
                     {
-                       // Query the documents entity to get the open required envelope for the given driver
-                        var docs = dynamicsContext.bcgov_documenturls.Where(x => x.statecode == 0 
-                        && x._dfp_driverid_value == searchdriver.dfp_driverid
-                        && x._dfp_documenttypeid_value == documentTypeId.dfp_submittaltypeid
-                        && x.dfp_submittalstatus == 100000000).FirstOrDefault();
+                        // scan through the documents to see if there is document in open pending status
+                        // ensure we have the documents.
+                        await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
-                        // check the result and set found to true if there is document
-                        if(docs != null)
+
+                        if (documentTypeId != null && request.DocumentType != "Unclassified")
                         {
-                            bcgovDocumentUrl = docs;
-                            found = true;
-                        }
- 
-                    }
+                            // Query the documents entity to get the open required envelope for the given driver
+                            var docs = dynamicsContext.bcgov_documenturls.Where(x => x.statecode == 0
+                                && x._dfp_driverid_value == searchdriver.dfp_driverid
+                                && x._dfp_documenttypeid_value == documentTypeId.dfp_submittaltypeid
+                                && x.dfp_submittalstatus == 100000000).FirstOrDefault();
 
+                            // check the result and set found to true if there is document
+                            if (docs != null)
+                            {
+                                bcgovDocumentUrl = docs;
+                                found = true;
+                            }
+
+                        }
+                    }
                 }
 
                
