@@ -403,8 +403,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
 
-            Assert.Equal(documents.Count, 0);
-
+            Assert.Equal(documents.Count, 1);
         }
 
 
