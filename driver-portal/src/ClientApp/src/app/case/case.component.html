@@ -8,35 +8,33 @@
     <h2>Closed Cases</h2>
 
     <div>
-      <mat-card>
+      <mat-card *ngFor="let closedCase of closedCaseDetails">
         <mat-card-content class="closedCaseContent">
           <div class="row1">
             <mat-icon (click)="toggleisExpandable('1')">
               expand_circle_down
             </mat-icon>
           </div>
+          <div style="border-left: 2px solid grey"></div>
           <div class="row2">
             <div class="caseDetailRow">
               <div>
                 <label>Created Date</label>
                 <div>
-                  <b>February 12, 2021</b>
-                  <!-- <b>{{ caseDetails?.caseType }}</b> -->
+                  <b>{{ closedCase?.openedDate | date : "longDate" }}</b>
                 </div>
               </div>
 
               <div>
                 <label>Case Type</label>
                 <div>
-                  <b>Police Report</b>
-                  <!-- <b>{{ caseDetails?.dmerType }}</b> -->
+                  <b>{{ closedCase?.caseType }}</b>
                 </div>
               </div>
               <div>
                 <label>Decision Outcome</label>
                 <div>
-                  <b>Fit To Drive</b>
-                  <!-- <b>{{ caseDetails?.outstandingDocuments }}</b> -->
+                  <b>{{ closedCase?.latestDecision }}</b>
                 </div>
               </div>
             </div>
@@ -53,15 +51,14 @@
               <div>
                 <label> Decision date </label>
                 <div>
-                  <b>February 12, 2021</b>
-                  <!-- <b>{{ caseDetails?.latestDecision }}</b> -->
+                  <b>{{ closedCase?.decisionDate | date : "longDate" }}</b>
                 </div>
               </div>
 
               <div>
                 <label>Eligible License Class</label>
                 <div>
-                  <b>5</b>
+                  <b>{{ closedCase?.eligibleLicenseClass }}</b>
                 </div>
               </div>
             </div>

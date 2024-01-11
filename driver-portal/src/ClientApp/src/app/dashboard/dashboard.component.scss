@@ -1,4 +1,3 @@
-
 .p {
   font-family: "BC Sans", sans-serif;
   font-weight: 400;
@@ -7,9 +6,9 @@
   text-align: left;
 }
 
-.recentCaseContent {
+.recentCase {
   display: flex;
-  gap: 50px;
+  justify-content: space-between;
 }
 
 .cardSpacing {
@@ -53,4 +52,3 @@ mat-stepper {
   border-radius: 5px;
   padding: 8px;
 }
-
