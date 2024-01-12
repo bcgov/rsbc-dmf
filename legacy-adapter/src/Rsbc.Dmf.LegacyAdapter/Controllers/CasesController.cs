@@ -370,7 +370,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentId = item.CommentId,
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
-                        Driver = driver,
+                        Driver = driver, 
                         SequenceNumber = item.SequenceNumber,
                         UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
                     });
