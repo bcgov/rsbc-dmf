@@ -48,6 +48,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string CommentId { get; set; }
         public Driver Driver { get; set; }
         public string Assignee { get; set; }
+        public string SignatureName { get; set; }
     }
 
 
@@ -427,6 +428,7 @@ namespace Rsbc.Dmf.CaseManagement
                     if ((comment.statecode != null && comment.statecode == 0) && originMatch)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                        await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.owninguser));
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
                             int sequenceNumber = 1;
@@ -442,6 +444,11 @@ namespace Rsbc.Dmf.CaseManagement
                                 SequenceNumber = sequenceNumber,
                                 UserId = comment.dfp_userid
                             };
+
+                            if (comment.owninguser != null)
+                            {
+                                legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
+                            }
                             result.Add(legacyComment);
                         }
                     }
@@ -500,6 +507,7 @@ namespace Rsbc.Dmf.CaseManagement
                 if ((comment.statecode != null && comment.statecode == 0) && originMatch)
                 {
                     await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                    await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.owninguser));
                     if (allComments || comment.dfp_icbc.GetValueOrDefault())
                     {
                         int sequenceNumber = 0;
@@ -519,6 +527,12 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             legacyComment.CaseId = comment._dfp_caseid_value.ToString();
                         }
+
+                        if (comment.owninguser != null)
+                        {
+                            legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
+                        }
+
 
                         result.Add(legacyComment);
                     }
