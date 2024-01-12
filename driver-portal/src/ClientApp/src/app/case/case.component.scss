@@ -26,9 +26,27 @@
 }
 
 .row1 {
-  width: 20%;
+  min-width: 100px;
 }
 
 .row2 {
-  width: 80%;
+  width: auto;
+  padding-left: 24px;
+}
+
+.mat-mdc-card {
+  border: 1px solid gray;
+  box-shadow: none !important;
+  margin: 30px 0 30px 0;
+  padding: 32px;
+  margin-bottom: 24px;
+
+  .mat-mdc-card-header {
+    padding-top: 12px;
+
+    .mat-mdc-card-header-text {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
 }

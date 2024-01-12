@@ -22,6 +22,12 @@ export class CaseManagementService {
     return this.casesService.apiCasesMostRecentGet$Json(params);
   }
 
+  public getClosedCases(
+    params: Parameters<CasesService['apiCasesDriverIdClosedGet$Json']>[0]
+  ) {
+    return this.casesService.apiCasesDriverIdClosedGet$Json(params);
+  }
+
   public getDriverDocuments(
     params: Parameters<DriverService['apiDriverDriverIdDocumentsGet$Json']>[0]
   ) {
