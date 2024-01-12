@@ -324,10 +324,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 result.LatestDecision = c.Item.LatestDecision;
                 result.DecisionForClass = c.Item.DecisionForClass;
                 result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                if (c.Item.CaseSequence > -1)
-                {
-                    result.CaseSequence = (int)c.Item.CaseSequence;
-                }
+                result.CaseSequence = (int)Math.Abs(c.Item.CaseSequence);
+                
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
                 result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
@@ -374,7 +372,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentTypeCode = item.CommentTypeCode,
                         Driver = driver,
                         SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
+                        UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
                     });
                 }
 
