@@ -94,15 +94,11 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(l => l.dfp_login_dfp_role)
                 .Where(l => l.statecode == (int)EntityState.Active);
 
-            
             if (!string.IsNullOrEmpty(request.ByUserId)) query = query.Where(l => l.dfp_loginid == Guid.Parse(request.ByUserId));
             if (request.ByExternalUserId.HasValue) query = query.Where(l => l.dfp_userid == request.ByExternalUserId.Value.externalUserId &&
                 l.dfp_type == (int)ParseExternalSystem(request.ByExternalUserId.Value.externalSystem));
 
             var users = (await ((DataServiceQuery<dfp_login>)query).GetAllPagesAsync()).ToArray();
-
-            
-
 
             foreach (var user in users)
             {
@@ -193,7 +189,6 @@ namespace Rsbc.Dmf.CaseManagement
                         throw new ArgumentException();
             }
                         
-
             return new SearchUsersResponse
             {
                 Items = mappedUsers.ToArray()

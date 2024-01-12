@@ -32,15 +32,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
 
-        Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
-
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
 
-        Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
-
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId);
-
-        Task<LegacyDocument> GetLegacyDocument(string documentId);
 
         Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
 

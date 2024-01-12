@@ -16,7 +16,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests
 
             services.AddDistributedMemoryCache();
             services.AddDynamics(configuration);
+            services.AddDynamicsServices();
             services.AddTransient<ICaseManager, CaseManager>();
+            services.AddTransient<IDocumentManager, DocumentManager>();
             services.AddSingleton<IConfiguration>(configuration);
             services.AddAutoMapperSingleton();
         }

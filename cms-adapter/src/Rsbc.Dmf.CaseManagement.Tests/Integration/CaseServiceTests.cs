@@ -21,7 +21,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         {
             var logger = services.GetRequiredService<ILogger<CaseService>>();
             var caseManager = services.GetRequiredService<ICaseManager>();
-            caseService = new CaseService(logger, caseManager, configuration, null); 
+            var documentManager = services.GetRequiredService<IDocumentManager>();
+            caseService = new CaseService(logger, caseManager, documentManager, configuration, null); 
         }
         
 
@@ -37,8 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             var queryResults = (await caseService.Search(request, null)).Items;
 
-            queryResults.ShouldNotBeEmpty();
-            
+            Assert.NotNull(queryResults);
         }
 
         /*

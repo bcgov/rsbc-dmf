@@ -2,16 +2,13 @@ using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
@@ -20,19 +17,20 @@ using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-    //[Authorize]
     public class CaseService : CaseManager.CaseManagerBase
     {
         private readonly ILogger<CaseService> _logger;
         private readonly ICaseManager _caseManager;
+        private readonly IDocumentManager _documentManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration, IMapper mapper)
+        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IDocumentManager documentManager, IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _logger = logger;
             _caseManager = caseManager;
+            _documentManager = documentManager;
             _mapper = mapper;
         }
 
@@ -546,7 +544,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             // fetch the document.
             try
             {
-                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                var d = await _documentManager.GetLegacyDocument(request.DocumentId);
                 if (d != null)
                 {
                     if (await _caseManager.DeactivateLegacyDocument(request.DocumentId))
@@ -785,7 +783,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _caseManager.GetCaseLegacyDocuments(request.CaseId);
+                var result = await _documentManager.GetCaseLegacyDocuments(request.CaseId);
 
                 foreach (var item in result)
                 {
@@ -1007,7 +1005,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _caseManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
 
                 foreach (var item in result)
                 {
@@ -2139,7 +2137,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             // fetch the document.
             try
             {
-                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                var d = await _documentManager.GetLegacyDocument(request.DocumentId);
                 reply.Document = new LegacyDocument
                 {
                     BatchId = d.BatchId ?? string.Empty,

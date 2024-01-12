@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
-using Rsbc.Dmf.CaseManagement.Dynamics;
 using System;
 using System.Linq.Expressions;
+using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -37,7 +37,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
-                mc.AddProfile(new AutoMapperProfile());
+                mc.AddProfile(new DocumentAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

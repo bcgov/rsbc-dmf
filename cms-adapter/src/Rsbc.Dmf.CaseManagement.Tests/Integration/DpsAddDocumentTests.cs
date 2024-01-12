@@ -23,10 +23,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
     public class DpsAddDocumentTests : WebAppTestBase
     {
         private readonly ICaseManager caseManager;
+        private readonly IDocumentManager documentManager;
 
         public DpsAddDocumentTests(ITestOutputHelper output) : base(output)
         {           
             caseManager = services.GetRequiredService<ICaseManager>();            
+            documentManager = services.GetRequiredService<IDocumentManager>();
         }
 
         /* Problematic routines
@@ -142,7 +144,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
                 // confirm it is present
 
-                var docs = await caseManager.GetCaseLegacyDocuments(caseId.ToString());
+                var docs = await documentManager.GetCaseLegacyDocuments(caseId.ToString());
 
                 bool found = false;
 
@@ -168,7 +170,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
                 found = false;
 
-                docs = await caseManager.GetCaseLegacyDocuments(caseId.ToString());
+                docs = await documentManager.GetCaseLegacyDocuments(caseId.ToString());
 
                 foreach (var doc in docs)
                 {
@@ -274,7 +276,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
                 // confirm it is present
 
-                var docs = await caseManager.GetDriverLegacyDocuments(dl);
+                var docs = await documentManager.GetDriverLegacyDocuments(dl);
 
                 bool found = false;
 
@@ -300,7 +302,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
                 found = false;
 
-                docs = await caseManager.GetDriverLegacyDocuments(dl);
+                docs = await documentManager.GetDriverLegacyDocuments(dl);
 
                 foreach (var doc in docs)
                 {
