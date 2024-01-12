@@ -313,7 +313,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
                 result.CaseId = c.Item.CaseId;
-                result.Title = c.Item.CaseSequence.ToString();
+                result.Title = Math.Abs(c.Item.CaseSequence).ToString();
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
                 result.CaseType = caseType;
@@ -371,7 +371,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
                         Driver = driver, 
-                        SequenceNumber = item.SequenceNumber,
+                        SequenceNumber = Math.Abs(item.SequenceNumber),
                         UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
                     });
                 }
@@ -422,7 +422,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
                         Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
+                        SequenceNumber = Math.Abs(item.SequenceNumber),
                         UserId = item.UserId
                     });
                 }
