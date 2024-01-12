@@ -865,7 +865,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)(item.SequenceNumber ?? 0),
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     };
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -912,7 +913,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)item.SequenceNumber,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -956,7 +958,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)item.SequenceNumber,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;

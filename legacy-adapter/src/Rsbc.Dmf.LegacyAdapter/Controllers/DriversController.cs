@@ -130,8 +130,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentText = item.CommentText,
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
-                            SequenceNumber = item.SequenceNumber,
-                            UserId = item.UserId
+                            SequenceNumber = Math.Abs(item.SequenceNumber),
+                            UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
                         });
                     }
                 }
@@ -234,7 +234,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentText = item.CommentText,
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
-                            SequenceNumber = item.SequenceNumber,
+                            SequenceNumber = Math.Abs(item.SequenceNumber),
                             UserId = item.UserId
                         });
                     }
@@ -424,7 +424,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     CaseId = caseId ?? string.Empty,
                     CommentText = comment.CommentText ?? string.Empty,
                     CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
-                    SequenceNumber = comment.SequenceNumber ?? 1,
+                    SequenceNumber = Math.Abs(comment.SequenceNumber ?? 1),
                     UserId = comment.UserId ?? string.Empty,
                     CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                     Driver = driver,

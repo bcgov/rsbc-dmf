@@ -578,6 +578,8 @@ namespace Rsbc.Dmf.CaseManagement
                     foreach (var comment in comments)
                     {
                         await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.dfp_commentid));
+                        await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.owninguser));
+
                         if (allComments || comment.dfp_icbc.GetValueOrDefault())
                         {
                             if (comment.statuscode == 1)
@@ -604,6 +606,12 @@ namespace Rsbc.Dmf.CaseManagement
                                     UserId = comment.dfp_userid,
                                     Driver = driver
                                 };
+
+                                if (comment.owninguser != null)
+                                {
+                                    legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
+                                }
+
                                 result.Add(legacyComment);
                             }
 
@@ -884,6 +892,8 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
+                await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.owninguser));
+
                 if (comment != null)
                 {
                     // fetch the driver
@@ -907,6 +917,11 @@ namespace Rsbc.Dmf.CaseManagement
                         UserId = comment.dfp_userid,
                         Driver = driver
                     };
+
+                    if (comment.owninguser != null)
+                    {
+                        legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
+                    }
                 }
             }
             catch (Exception ex)
