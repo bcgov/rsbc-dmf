@@ -1,37 +1,15 @@
-// .closedCaseContent {
-//   display: flex;
-//   //gap: 70px;
-//   flex-wrap: wrap;
-// }
-
-// .closedCaseContent > div:first-child {
-//   border-right: 2px solid grey;
-// }
-
-// .closedCaseContent > div {
-//   flex: 1 1 120px;
-//   padding-right: 24px;
-// }
-
 .caseDetailRow {
   display: flex;
   justify-content: start;
   gap: 180px;
   line-height: 32px;
+  padding-bottom: 24px;
 }
 
 .closedCaseContent {
   display: flex;
   flex-direction: row;
-}
-
-.row1 {
-  min-width: 100px;
-}
-
-.row2 {
-  width: auto;
-  padding-left: 24px;
+  gap: 60px;
 }
 
 .mat-mdc-card {
@@ -49,4 +27,13 @@
       vertical-align: middle;
     }
   }
+}
+
+.recentCase {
+  display: flex;
+  justify-content: space-between;
+  display: flex;
+    // flex-direction: row;
+    // padding-top: 24px;
+    // gap: 100px;
 }

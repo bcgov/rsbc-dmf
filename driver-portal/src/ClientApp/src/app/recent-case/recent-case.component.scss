@@ -8,7 +8,7 @@
 
 .recentCaseContent {
   display: flex;
-  gap: 50px;
+  gap: 35px;
 }
 
 .recentCaseContent > div {
@@ -55,4 +55,8 @@ mat-stepper {
   background-color: rgba(236, 245, 255, 1);
   border-radius: 5px;
   padding: 8px;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+   pointer-events: none !important;
 }

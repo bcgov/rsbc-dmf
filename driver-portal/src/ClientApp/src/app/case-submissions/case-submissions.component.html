@@ -22,12 +22,18 @@
     <div>
       <mat-card *ngFor="let caseDocument of caseSubmissionDocuments">
         <mat-card-content class="closedCaseContent">
-          <div class="row1">
+          <div>
             <mat-icon (click)="toggleisExpandable('1')">
               expand_circle_down
             </mat-icon>
           </div>
-          <div class="row2">
+          <div style="display: flex; flex-direction: column">
+            <div style="border-left: 2px solid #808080; height: 40%">
+              &nbsp;
+            </div>
+            <div>&nbsp;</div>
+          </div>
+          <div>
             <div class="caseDetailRow">
               <div>
                 <label>Submission type </label>
