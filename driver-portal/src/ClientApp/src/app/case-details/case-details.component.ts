@@ -10,8 +10,6 @@ import { CaseDocuments } from '../shared/api/models';
 export class CaseDetailsComponent implements OnInit {
   caseDocuments!: CaseDocuments;
 
-  
-
   // public caseDocuments: Document[] = [];
 
   constructor(private caseManagementService: CaseManagementService) {}

@@ -73,13 +73,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         {
             var statusMap = new Dictionary<int, string>()
             {
-                { 100000001, "Received" }, // Received
-                { 100000004, "Reject" }, // Rejected
-                { 100000009, "Clean Pass"  }, // Clean Pass
-                { 100000012, "Manual Pass"  }, // Manual Pass
-                { 100000000, "Open-Required"  }, // Open required
-                { 100000010, "Uploaded" }, // Uploaded
-                { 100000008, "Sent" }
+                { 100000000, "Open-Required"  },
+                { 100000001, "Received" }, 
+                { 100000003, "Reviewed" },
+                { 100000004, "Reject" },
+                { 100000008, "Sent" },
+                { 100000009, "Clean Pass"  },
+                { 100000010, "Uploaded" },
+                { 100000012, "Manual Pass"  }, 
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))

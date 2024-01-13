@@ -3,6 +3,6 @@
     public enum ActiveStatus
     {
         Active = 0,
-        Closed
+        Closed = 1
     }
 }

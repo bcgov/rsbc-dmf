@@ -44,27 +44,61 @@
 
 <div>
   <mat-stepper labelPosition="bottom" #stepper>
-    <mat-step state="phone">
+    <mat-step state="circle">
       <ng-template matStepLabel>Opened:</ng-template>
     </mat-step>
-    <mat-step>
+    <mat-step state="circle">
       <ng-template matStepLabel>Open Pending Submission</ng-template>
     </mat-step>
-    <mat-step>
+    <mat-step state="circle">
       <ng-template matStepLabel>Under Review</ng-template>
     </mat-step>
-    <mat-step>
+    <mat-step state="circle">
       <ng-template matStepLabel>Decision rendered</ng-template>
     </mat-step>
-    <mat-step>
+    <mat-step state="circle">
       <ng-template matStepLabel>Resolved</ng-template>
     </mat-step>
-
-    <ng-template matStepperIcon="phone">
-      <mat-icon>adjust</mat-icon>
+    <!-- Icon overrides. -->
+    <ng-template matStepperIcon="edit">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="active">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="done">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="number">
+      <mat-icon>circle</mat-icon>
     </ng-template>
   </mat-stepper>
 </div>
+
+<!-- 
+<div>
+  <mat-horizontal-stepper>
+    <mat-step label="Step 1" state="minus">
+      <p>Minus</p>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+    <mat-step label="Step 2" state="plus">
+      <p>Plus</p>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+
+    <ng-template matStepperIcon="minus">
+      <mat-icon>remove</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="plus">
+      <mat-icon>add</mat-icon>
+    </ng-template>
+  </mat-horizontal-stepper>
+</div> -->
 <div>
   <mat-card class="caseStatus">
     <div>

@@ -640,7 +640,6 @@ namespace Rsbc.Dmf.CaseManagement
                 // only include documents that have a URL
                 if (!string.IsNullOrEmpty(document.bcgov_url))
                 {
-                    await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
                     await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
 
                     var legacyDocument = _mapper.Map<LegacyDocument>(document);
