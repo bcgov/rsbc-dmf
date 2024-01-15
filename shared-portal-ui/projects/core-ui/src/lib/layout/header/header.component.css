@@ -80,7 +80,6 @@
     }
   
     .profile {
-      width: 30%;
       display: flex;
       flex-flow: row;
       justify-content: end;
@@ -89,15 +88,11 @@
       * {
         margin: 0 3px;
       }
-  
-      .avatar {
-        line-height: 50px;
-        background-color: #e7b855;
-        border-radius: 100%;
-        height: 50px;
-        width: 50px;
-        text-align: center;
-      }
+
     }
+
+    .icon-display {
+      transform: scale(2);
+   }
   }
   
