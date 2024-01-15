@@ -642,7 +642,6 @@ namespace Rsbc.Dmf.CaseManagement
                 var legacyDocument = _mapper.Map<LegacyDocument>(document);
                 result.Add(legacyDocument);
             }
-        }
 
             return result;
         }
