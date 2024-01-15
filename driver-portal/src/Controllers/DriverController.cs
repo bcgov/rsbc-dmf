@@ -49,13 +49,22 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         switch (document.SubmittalStatus)
                         {
                             case "Received":
-                                result.CaseSubmissions.Add(document);
+                                // exclude documents with no key
+                                if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                {
+                                    result.CaseSubmissions.Add(document);
+                                }
                                 break;
                             case "Open-Required":
+                                // this category by design has documents with no key
                                 result.SubmissionRequirements.Add(document);
                                 break;
                             case "Sent":
-                                result.LettersToDriver.Add(document);
+                                // exclude documents with no key
+                                if (!string.IsNullOrEmpty(document.DocumentUrl))
+                                {
+                                    result.LettersToDriver.Add(document);
+                                }
                                 break;
                         }
                     }

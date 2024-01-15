@@ -494,7 +494,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     foreach (var item in reply.Items)
                     {
 
-                        if (item.SubmittalStatus != "Uploaded")
+                        if (item.SubmittalStatus != "Uploaded" && !string.IsNullOrEmpty(item.DocumentUrl))
                         {
 
                             // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
