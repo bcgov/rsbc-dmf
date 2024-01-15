@@ -13,14 +13,7 @@
 .closedCaseContent {
   display: flex;
   flex-direction: row;
-}
-
-.row1 {
-  width: 20%;
-}
-
-.row2 {
-  width: 80%;
+  gap:60px;
 }
 
 .caseDetailRow {
@@ -28,6 +21,7 @@
   justify-content: start;
   gap: 180px;
   line-height: 32px;
+  padding-bottom: 24px;
 }
 
 .mat-mdc-card {

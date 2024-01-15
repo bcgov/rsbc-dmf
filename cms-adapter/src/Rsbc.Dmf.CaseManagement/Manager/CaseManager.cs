@@ -1719,6 +1719,27 @@ namespace Rsbc.Dmf.CaseManagement
            
         }
 
+
+
+        protected int TranslateDocumentOrigin(string documentOrigin)
+        {
+            var statusMap = new Dictionary<string, int>()
+            {
+                { "Mercury Uploaded RSBC", 100000014 },
+                { "Migration",  100000015 },
+                { "DPS/KOFAX", 100000017 },
+            };
+
+            if (statusMap.ContainsKey(documentOrigin))
+            {
+                return statusMap[documentOrigin];
+            }
+            else
+            {
+                return statusMap["Mercury Uploaded RSBC"];
+            }
+        }
+
         /// <summary>
         /// Create Case Document
         /// </summary>
@@ -3201,26 +3222,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 return 100000000;
             }
-        }
-
-        private int TranslateDocumentOrigin(string documentOrigin)
-        {
-            var statusMap = new Dictionary<string, int>()
-            {
-                { "Mercury Uploaded RSBC", 100000014 },
-                { "Migration", 100000015 },
-                { "DPS/KOFAX", 100000017 },
-            };
-
-            if (documentOrigin != null && statusMap.ContainsKey(documentOrigin))
-            {
-                return statusMap[documentOrigin];
-            }
-            else
-            {
-                return statusMap["Mercury Uploaded RSBC"];
-            }
-
         }
 
         /// <summary>

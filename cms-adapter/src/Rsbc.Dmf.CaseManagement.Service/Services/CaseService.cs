@@ -198,7 +198,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Owner = request.Owner ?? string.Empty,
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
                 Queue = request.Queue ?? string.Empty,
-                DpsDocumentId = request.DpsDocumentId
+                DpsDocumentId = request.DpsDocumentId,
+                Origin = request.Origin
             };
 
             if (request.FaxReceivedDate != null)
