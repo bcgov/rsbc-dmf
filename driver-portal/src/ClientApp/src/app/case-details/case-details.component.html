@@ -11,17 +11,17 @@
   <mat-tab-group>
     <mat-tab label="Submission Requirements">
       <app-submission-requirements
-        [submissionRequirementDocuments]="caseDocuments.submissionRequirements"
+        [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
       ></app-submission-requirements
     ></mat-tab>
     <mat-tab label="Case Submissions">
       <app-case-submissions
-        [caseSubmissionDocuments]="caseDocuments.caseSubmissions"
+        [caseSubmissionDocuments]="caseDocuments?.caseSubmissions"
       ></app-case-submissions>
     </mat-tab>
     <mat-tab label="Letters to Driver">
       <app-letters-to-driver
-        [letterDocuments]="caseDocuments.lettersToDriver"
+        [letterDocuments]="caseDocuments?.lettersToDriver"
       ></app-letters-to-driver
     ></mat-tab>
   </mat-tab-group>
