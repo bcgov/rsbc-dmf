@@ -1,21 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Microsoft.OData.Client;
-using Microsoft.OData.Client.ALinq.UriParser;
-using Microsoft.OData.UriParser;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using Serilog;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -630,26 +623,17 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId)
         {
-            var result = new List<LegacyDocument>();
             var driverDocuments = dynamicsContext.bcgov_documenturls
+                .Expand(d => d.dfp_DocumentTypeID)
                 .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)ActiveStatus.Active)
                 .ToList();
 
-            foreach (var document in driverDocuments)
-            {
-                await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));
-
-                var legacyDocument = _mapper.Map<LegacyDocument>(document);
-                result.Add(legacyDocument);
-            }
-
-            return result;
+            return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
         }
 
         public IEnumerable<dfp_driver> GetDriverObjects(string licensenumber)
         {
-            var result = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
-            return result;
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
         }
 
         /// <summary>
@@ -727,17 +711,19 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns>IEnumerable<CaseDetail></returns>
         public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, ActiveStatus activeStatus)
         {
-            List<CaseDetail> result = new List<CaseDetail>();
+            var result = new List<CaseDetail>();
 
             try
             {
                 var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
                 if (cases != null)
                 {
+                    var mostRecentProcessingDate = GetDpsProcessingDate();
+
                     foreach (var @case in cases)
                     {
                         var mappedCase = await _caseMapper.Map(@case);
-                        mappedCase.DpsProcessingDate = GetDpsProcessingDate();
+                        mappedCase.DpsProcessingDate = mostRecentProcessingDate;
                         result.Add(mappedCase);
                     }
                 }
