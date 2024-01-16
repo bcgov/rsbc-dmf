@@ -1133,7 +1133,8 @@ namespace Rsbc.Dmf.CaseManagement
                     comment.overriddencreatedon = request.CommentDate;
 
                     dynamicsContext.UpdateObject(comment);
-                    await dynamicsContext.SaveChangesAsync();
+                    dynamicsContext.SaveChanges();
+                    
                     result.Success = true;
                     result.Id = comment.dfp_commentid.ToString();
                     
@@ -1148,19 +1149,29 @@ namespace Rsbc.Dmf.CaseManagement
             
             if (!string.IsNullOrEmpty(request.CaseId))
             {
-                try
+                if (!string.IsNullOrEmpty(request.CaseId))
                 {
-                    incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId)).GetValue();
-                    dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
-                    await dynamicsContext.SaveChangesAsync();
+                    Guid caseId;
+                    if (Guid.TryParse(request.CaseId, out caseId))
+                    {
+                        if (caseId != Guid.Empty)
+                        {
+                            try
+                            {
+                                incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId))
+                                    .GetValue();
+                                dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+                                dynamicsContext.SaveChanges();
+                            }
+                            catch (Exception ex)
+                            {
+                                Serilog.Log.Warning(ex, "Unable to link comment to case");
+                            }
+                        }
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Serilog.Log.Warning(ex, "Unable to link comment to case");                    
-                }
-            }
 
-            dynamicsContext.DetachAll();
+            dynamicsContext.Detach(comment);
             return result;
         }
 
@@ -1692,19 +1703,32 @@ namespace Rsbc.Dmf.CaseManagement
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
 
+                        
+
                         if (!string.IsNullOrEmpty(request.CaseId))
                         {
-                            var theCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault(); ;
-                            if (theCase != null)
+                            Guid caseId;
+                            if (Guid.TryParse(request.CaseId, out caseId))
                             {
-                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                if (caseId != Guid.Empty)
+                                {
+                                    var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
+                                    if (theCase != null)
+                                    {
+                                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                    }
+                                    dynamicsContext.Detach(theCase);
+                                }
                             }
+                            
                         }
 
-                        await dynamicsContext.SaveChangesAsync();
+                        dynamicsContext.SaveChanges();
+
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
-                        dynamicsContext.DetachAll();
+                        dynamicsContext.Detach(bcgovDocumentUrl);
+                        dynamicsContext.Detach(newOwner);
                     }
                     catch (Exception ex)
                     {
