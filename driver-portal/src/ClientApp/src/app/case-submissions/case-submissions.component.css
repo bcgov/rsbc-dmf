@@ -40,3 +40,8 @@
      }
    }
 }
+
+.expandedIcon{
+  transform: scale(1.5);
+  color: #003366;
+}
