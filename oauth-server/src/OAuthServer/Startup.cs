@@ -126,7 +126,7 @@ namespace OAuthServer
                // See https://github.com/dotnet/aspnetcore/issues/4650 for more information
                // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
                // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
-               options.GetClaimsFromUserInfoEndpoint = true;
+               //options.GetClaimsFromUserInfoEndpoint = true;
 
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
@@ -176,15 +176,21 @@ namespace OAuthServer
                                    var jwe = token as JwtSecurityToken;
                                    ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
                                }
+                               else
+                               {
+                                   Serilog.Log.Error($"Unable to read token {response.Raw}");
+                               }
                            }
                            else
                            {
+                               Serilog.Log.Error(response.Error);
                                //...or fail
                                ctx.Fail(response.Error);
                            }
                        }
                        else if (response.IsError)
                        {
+                           Serilog.Log.Error(response.Error);
                            //handle for all other failures
                            ctx.Fail(response.Error);
                        }
