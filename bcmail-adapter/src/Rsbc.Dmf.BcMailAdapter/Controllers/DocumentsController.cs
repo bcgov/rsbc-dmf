@@ -144,7 +144,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                 string newFilename;
 
-                if (newExtension != null)
+                if (string.IsNullOrEmpty(newExtension))
                 {
                     newFilename = filename.Substring(0, filename.Length - newExtension.Length);
                 }
@@ -153,7 +153,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     newFilename = filename;
                 }
 
-                newFilename += "-2";
+                newFilename += "-" + DateTime.Now.ToString("yyyyMMddHHmmss"); 
 
                 if (newExtension != null)
                 {
