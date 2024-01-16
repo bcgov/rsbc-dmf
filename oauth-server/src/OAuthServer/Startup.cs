@@ -164,6 +164,9 @@ namespace OAuthServer
 
                        //request userinfo claims through the backchannel
                        var response = await ctx.Options.Backchannel.GetUserInfoAsync(userInfoRequest, CancellationToken.None);
+
+                       Serilog.Log.Information($"Read token {response.Raw}");
+
                        if (response.IsError && response.HttpStatusCode == HttpStatusCode.OK)
                        {
                            //handle encrypted userinfo response...
@@ -196,6 +199,7 @@ namespace OAuthServer
                        }
                        else
                        {
+                           Serilog.Log.Information($"Valid token {response.Json.GetRawText()}");
                            //handle non encrypted userinfo response
                            ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
                        }
