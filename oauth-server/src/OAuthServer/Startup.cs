@@ -126,7 +126,7 @@ namespace OAuthServer
                // See https://github.com/dotnet/aspnetcore/issues/4650 for more information
                // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
                // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
-               options.GetClaimsFromUserInfoEndpoint = false;
+               options.GetClaimsFromUserInfoEndpoint = true;
 
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
