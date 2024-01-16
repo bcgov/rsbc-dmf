@@ -1149,27 +1149,25 @@ namespace Rsbc.Dmf.CaseManagement
             
             if (!string.IsNullOrEmpty(request.CaseId))
             {
-                if (!string.IsNullOrEmpty(request.CaseId))
+                Guid caseId;
+                if (Guid.TryParse(request.CaseId, out caseId))
                 {
-                    Guid caseId;
-                    if (Guid.TryParse(request.CaseId, out caseId))
+                    if (caseId != Guid.Empty)
                     {
-                        if (caseId != Guid.Empty)
+                        try
                         {
-                            try
-                            {
-                                incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId))
-                                    .GetValue();
-                                dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
-                                dynamicsContext.SaveChanges();
-                            }
-                            catch (Exception ex)
-                            {
-                                Serilog.Log.Warning(ex, "Unable to link comment to case");
-                            }
+                            incident driverCase = dynamicsContext.incidents.ByKey(Guid.Parse(request.CaseId))
+                                .GetValue();
+                            dynamicsContext.AddLink(driverCase, nameof(incident.dfp_incident_dfp_comment), comment);
+                            dynamicsContext.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            Serilog.Log.Warning(ex, "Unable to link comment to case");
                         }
                     }
                 }
+            }
 
             dynamicsContext.Detach(comment);
             return result;
