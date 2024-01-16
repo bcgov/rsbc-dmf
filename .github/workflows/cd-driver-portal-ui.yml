@@ -24,6 +24,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: test1
+        run: echo "${{ secrets.OCP4_REGISTRY }}"
+
+      - name: test2
+        run: echo "${{ secrets.OCP4_NAMESPACE }}"
+
+      - name: test3
+        run: echo "${{ secrets.OCP4_USERNAME }}"
+
       - name: Log into registry
         run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME }} --password-stdin
 
