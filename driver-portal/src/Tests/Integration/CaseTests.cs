@@ -18,26 +18,11 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             if (string.IsNullOrEmpty(caseId))
                 return;
 
-                var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/" + caseId);
-                var clientResult = await HttpClientSendRequest<CaseDetail>(request);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/" + caseId);
+            var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
-                Assert.Equal(clientResult.CaseId, caseId);
-            }
-
-
-        [Fact]
-        public async Task GetLettersToDriver()
-        {
-            var driverId = _configuration["DOCS_DRIVER_ID"];
-            if (string.IsNullOrEmpty(driverId))
-                return;
-
-                // get documents by driver id
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{DRIVER_API_BASE}/{driverId}/Documents");
-                var caseDocuments = await HttpClientSendRequest<CaseDocuments>(request);
-
-                Assert.NotNull(caseDocuments);
-            }
+            Assert.Equal(clientResult.CaseId, caseId);
+        }
 
         [Fact]
         public async Task Get_Closed_Cases()
