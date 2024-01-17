@@ -60,8 +60,8 @@ namespace OAuthServer
                             "https://test.roadsafetybc.gov.bc.ca",
                             "https://roadsafetybc.gov.bc.ca",
                             "https://www.roadsafetybc.gov.bc.ca",
-                                            "https://localhost:3020",
-                                            "http://localhost:3020")
+                            "https://localhost:3020",
+                            "http://localhost:3020")
                                .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
                     });
             });
@@ -146,6 +146,7 @@ namespace OAuthServer
                {
                    OnTokenValidated = async ctx =>
                    {
+                       Serilog.Log.Information($"**** TOKEN VALIDATED ******");
                        var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
 
                        //set token validation parameters
@@ -164,6 +165,9 @@ namespace OAuthServer
 
                        //request userinfo claims through the backchannel
                        var response = await ctx.Options.Backchannel.GetUserInfoAsync(userInfoRequest, CancellationToken.None);
+
+                       Serilog.Log.Information($"Read token {response.Raw}");
+
                        if (response.IsError && response.HttpStatusCode == HttpStatusCode.OK)
                        {
                            //handle encrypted userinfo response...
@@ -196,12 +200,14 @@ namespace OAuthServer
                        }
                        else
                        {
+                           Serilog.Log.Information($"Valid token {response.Json.GetRawText()}");
                            //handle non encrypted userinfo response
                            ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
                        }
                    },
                    OnUserInformationReceived = async ctx =>
                    {
+                       Serilog.Log.Information($"**** OnUserInformationReceived ******");
                        //handle userinfo claim mapping when options.GetClaimsFromUserInfoEndpoint = true
                        await Task.CompletedTask;
                        ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
