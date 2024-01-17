@@ -11,7 +11,11 @@
     },
     {
       "Name": "offline_access"
+    },
+    {
+      "Name": "userInfo"
     }
+
   ],
   "ApiScopes": [
     {
@@ -34,10 +38,8 @@
       ],
       "Scopes": [
         "driver-portal-api"
-      ],
-      "userClaims": [
-        "userInfo"
       ]
+     
     },
     {
       "Name": "doctors-portal-api",
@@ -88,7 +90,8 @@
         "profile",
         "email",
         "offline_access",
-        "driver-portal-api"        
+        "driver-portal-api",
+        "userInfo"
       ],
       "AllowOfflineAccess": true,
       "AllowedCorsOrigins": [
