@@ -185,7 +185,7 @@ namespace OAuthServer
 
                                    List<Claim> claims = new List<Claim>();
 
-                                   foreach (var i in jwe.Claims)
+                                   foreach (var i in jwe.Payload.Claims)
                                    {
                                        claims.Add(i);
                                    }
@@ -214,7 +214,7 @@ namespace OAuthServer
                        }
                        else
                        {
-                           Serilog.Log.Information($"Valid token {response.Json.GetRawText()}");
+                           Serilog.Log.Information($"Valid raw token {response.Json.GetRawText()}");
                            //handle non encrypted userinfo response
                            ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
                        }
