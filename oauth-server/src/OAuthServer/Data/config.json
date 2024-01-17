@@ -8,10 +8,14 @@
     },
     {
       "Name": "email"
-    },    
+    },
     {
       "Name": "offline_access"
+    },
+    {
+      "Name": "userInfo"
     }
+
   ],
   "ApiScopes": [
     {
