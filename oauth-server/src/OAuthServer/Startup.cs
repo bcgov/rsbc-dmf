@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -187,8 +188,15 @@ namespace OAuthServer
 
                                    foreach (var i in jwe.Payload.Claims)
                                    {
+                                       if (i.Type == "display_name")
+                                       {
+                                           claims.Add(new Claim("name", i.Value));
+                                       }
                                        claims.Add(i);
                                    }
+
+                                   
+
                                    claims.Add(new Claim("userInfo", jwe.Payload.SerializeToJson()));
                                    ctx.Principal.AddIdentity(new ClaimsIdentity( claims  ) );
                                    //ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
