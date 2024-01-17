@@ -138,6 +138,7 @@ namespace OAuthServer
                options.Scope.Add("profile");
                options.Scope.Add("address");
                options.Scope.Add("email");
+               options.Scope.Add("userInfo");
 
                //set the tokens decrypting key
                options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
