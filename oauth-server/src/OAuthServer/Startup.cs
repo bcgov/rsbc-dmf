@@ -178,6 +178,9 @@ namespace OAuthServer
                                {
                                    handler.ValidateToken(response.Raw, validationParameters, out var token);
                                    var jwe = token as JwtSecurityToken;
+
+                                   Serilog.Log.Information($"Add identity {jwe.Payload.SerializeToJson()}");
+
                                    ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
                                }
                                else
