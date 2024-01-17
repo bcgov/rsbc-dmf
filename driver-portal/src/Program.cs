@@ -73,11 +73,12 @@ services.AddAuthentication("token")
                             ctx.Principal = await userService.Login(ctx.Principal);
                             ctx.Success();
                         },
-                        OnUpdateClientAssertion =
+                       /* OnUpdateClientAssertion =
                         async ctx =>
                         {
                             await Task.CompletedTask;
                         }
+                       */
                     };
 
                 });

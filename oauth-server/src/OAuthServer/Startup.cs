@@ -1,4 +1,5 @@
-﻿using IdentityModel.Client;
+﻿using System.Collections.Generic;
+using IdentityModel.Client;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -182,7 +183,16 @@ namespace OAuthServer
 
                                    Serilog.Log.Information($"Add identity {jwe.Payload.SerializeToJson()}");
 
-                                   ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
+                                   List<Claim> claims = new List<Claim>();
+
+                                   foreach (var i in jwe.Claims)
+                                   {
+                                       claims.Add(i);
+                                   }
+                                   claims.Add(new Claim("userInfo", jwe.Payload.SerializeToJson()));
+                                   ctx.Principal.AddIdentity(new ClaimsIdentity( claims  ) );
+                                   //ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
+
                                }
                                else
                                {
