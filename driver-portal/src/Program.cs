@@ -38,10 +38,10 @@ services.AddAuthentication("token")
                     builder.Configuration.GetSection("auth:token").Bind(options);
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidTypes = new[] { "at+jwt" }
                     };
 
-                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
                     // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
                     options.ForwardDefaultSelector = ctx =>
                     {
@@ -62,8 +62,8 @@ services.AddAuthentication("token")
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(1);
+                    //options.EnableCaching = true;
+                    //options.CacheDuration = TimeSpan.FromMinutes(1);
                     builder.Configuration.GetSection("auth:introspection").Bind(options);
                     options.Events = new OAuth2IntrospectionEvents
                     {
@@ -89,7 +89,7 @@ services.AddAuthentication("token")
                     JwtBearerDefaults.AuthenticationScheme,
                     "OIDC");
                 defaultAuthorizationPolicyBuilder =
-                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "doctors-portal-api");
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "driver-portal-api");
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
 
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
