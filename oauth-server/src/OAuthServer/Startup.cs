@@ -60,8 +60,8 @@ namespace OAuthServer
                             "https://test.roadsafetybc.gov.bc.ca",
                             "https://roadsafetybc.gov.bc.ca",
                             "https://www.roadsafetybc.gov.bc.ca",
-                                            "https://localhost:3020",
-                                            "http://localhost:3020")
+                            "https://localhost:3020",
+                            "http://localhost:3020")
                                .WithMethods("PUT", "POST", "DELETE", "GET", "OPTIONS");
                     });
             });
@@ -146,6 +146,7 @@ namespace OAuthServer
                {
                    OnTokenValidated = async ctx =>
                    {
+                       Serilog.Log.Information($"**** TOKEN VALIDATED ******");
                        var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
 
                        //set token validation parameters
@@ -206,6 +207,7 @@ namespace OAuthServer
                    },
                    OnUserInformationReceived = async ctx =>
                    {
+                       Serilog.Log.Information($"**** OnUserInformationReceived ******");
                        //handle userinfo claim mapping when options.GetClaimsFromUserInfoEndpoint = true
                        await Task.CompletedTask;
                        ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
