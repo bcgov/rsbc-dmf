@@ -76,6 +76,8 @@ namespace OAuthServer.Controllers
         [HttpGet("callback")]
         public async Task<IActionResult> Callback()
         {
+            Serilog.Log.Logger.Information("**** REACHED CALLBACK ****");
+
             // read external identity from the temporary cookie
             var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true)
