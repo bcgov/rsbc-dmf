@@ -4,7 +4,7 @@ on:
   push:
     # Publish `master` as Docker `latest` image.
     branches:
-      - features/jebb/dftdp-111-driver-portal-cd
+      - main
 
     # Publish `v1.2.3` tags as releases. 
     tags:
@@ -24,18 +24,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: test1
-        run: echo "${{ secrets.OCP4_REGISTRY }}"
-
-      - name: test2
-        run: echo "${{ secrets.OCP4_NAMESPACE }}"
-
-      - name: test3
-        run: echo "${{ secrets.OCP4_USERNAME }}"
-
-      - name: Log into registry
-        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME }} --password-stdin
-
       - name: Pull image
         run: docker pull $IMAGE_ID || true
       
@@ -43,7 +31,6 @@ jobs:
         run: docker pull caddy:latest
 
       - name: Build image
-        #working-directory: ./driver-portal/src/ClientApp
         working-directory: ./
         run: docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag $IMAGE_NAME 
         # --cache-from=$IMAGE_ID
