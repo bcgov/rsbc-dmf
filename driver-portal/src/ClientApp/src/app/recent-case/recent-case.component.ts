@@ -29,7 +29,7 @@ export class RecentCaseComponent implements OnInit {
   public ngOnInit(): void {
     this.caseManagementService.getMostRecentCase({}).subscribe((recentCase) => {
       this.caseDetails = recentCase;
-      this.stepper.selectedIndex = 2;
+      //this.stepper.selectedIndex = 2;
     });
   }
 }

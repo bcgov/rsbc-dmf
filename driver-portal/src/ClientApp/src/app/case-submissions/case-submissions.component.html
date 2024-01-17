@@ -20,10 +20,18 @@
 
   <div class="list">
     <div>
-      <mat-card *ngFor="let caseDocument of caseSubmissionDocuments">
+      <mat-card
+        *ngFor="let caseDocument of caseSubmissionDocuments"
+        [ngClass]="{
+          open: caseDocument.documentId && isExpanded[caseDocument.documentId]
+        }"
+      >
         <mat-card-content class="closedCaseContent">
           <div>
-            <mat-icon (click)="toggleisExpandable('1')" class="expandedIcon">
+            <mat-icon
+              (click)="toggleIsExpandable(caseDocument.documentId)"
+              class="expandedIcon"
+            >
               expand_circle_down
             </mat-icon>
           </div>
@@ -58,7 +66,7 @@
 
             <div
               class="caseDetailRow"
-              *ngIf="isExpanded['1']"
+              *ngIf="caseDocument.documentId && isExpanded?.[caseDocument.documentId]"
               style="
                 border-top: 2px solid gray;
                 padding-top: 20px;

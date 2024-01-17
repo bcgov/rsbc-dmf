@@ -1,4 +1,11 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
@@ -10,13 +17,11 @@ import { Document } from '../shared/api/models';
 })
 export class SubmissionRequirementsComponent {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
-
-  @Input() selectedIndex = 0;
+  @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   navigateToLetters() {
-    this.selectedIndex = this.selectedIndex + 2;
-    console.log(this.selectedIndex);
+    this.viewLetter.emit();
   }
 }
