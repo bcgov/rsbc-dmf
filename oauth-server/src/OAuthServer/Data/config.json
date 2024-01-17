@@ -8,10 +8,7 @@
     },
     {
       "Name": "email"
-    },
-    {
-      "Name": "userInfo"
-    },
+    },    
     {
       "Name": "offline_access"
     }
@@ -37,10 +34,8 @@
       ],
       "Scopes": [
         "driver-portal-api"
-      ],
-      "userClaims": [
-        "userInfo"
       ]
+     
     },
     {
       "Name": "doctors-portal-api",
