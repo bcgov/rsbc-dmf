@@ -10,6 +10,9 @@
       "Name": "email"
     },
     {
+      "Name": "userInfo"
+    },
+    {
       "Name": "offline_access"
     }
   ],
@@ -88,7 +91,8 @@
         "profile",
         "email",
         "offline_access",
-        "driver-portal-api"        
+        "driver-portal-api",
+        "userInfo"
       ],
       "AllowOfflineAccess": true,
       "AllowedCorsOrigins": [
