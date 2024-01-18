@@ -3,7 +3,11 @@
 ## Run
 
 To start the app on port 3020, which OAuth has a redirect uri entry for, and to run with ssl certificate, use the following:
-npm start
+`npm start`
+
+## Test
+
+`ng t`
 
 ## Development Environment
 
@@ -14,17 +18,19 @@ The Driver Portal application has the following requirements:
 
 ## Docker Build
 
-cd rsbc-dmf
+change directory to the repository root folder 'rsbc-dmf'
 
-# build driver-portal-api backend
-docker build --tag driver-portal-api --build-arg BUILD_ID --build-arg BUILD_VERSION="1.0.2.40" . --file ./driver-portal/src/Dockerfile
+# build driver-portal-api
+`docker build --tag driver-portal-api --build-arg BUILD_ID --build-arg BUILD_VERSION="1.0.2.40" . --file ./driver-portal/src/Dockerfile`
 
-# build driver-portal-api frontend
-docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag driver-portal-api
+# build driver-portal-ui
+`docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag driver-portal-ui`
 
-# to debug docker make sure you add tail -f entrypoint
+# to debug docker
+```bash
 docker run -rm --name driver-portal-api driver-portal-api
+# add tail -f entrypoint to docker otherwise it will not stay running
+# useful if you want to look at folder structure
 docker exec -it driver-portal-api bash
 docker stop driver-portal-api
-docker rm driver-portal-api
-docker image rm driver-portal-api
+```
