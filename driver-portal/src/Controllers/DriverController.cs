@@ -22,7 +22,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         /// <summary>
-        /// Get documents for a given driver
+        /// Get case submissions, submission requirements, and letters to driver documents for a given driver
+        /// NOTE that this retrieves all documents for the driver and there is no guarantee that a document is linked to a case
         /// </summary>
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
@@ -31,8 +32,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetDocuments")]
-        public ActionResult GetDocuments([FromRoute] string driverId)
+        [ActionName("GetCaseDocuments")]
+        public ActionResult GetCaseDocuments([FromRoute] string driverId)
         {
             var driverIdRequest = new DriverIdRequest() { Id = driverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
@@ -90,7 +91,51 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                _logger.LogError($"{nameof(GetDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+
+        /// <summary>
+        /// Get all documents for a given driver but filter out documents without a url
+        /// </summary>
+        /// <param name="driverId">The driver id</param>
+        /// <returns>CaseDocuments</returns>
+        [HttpGet("{driverId}/AllDocuments")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("GetAllDocuments")]
+        public ActionResult GetAllDocuments([FromRoute] string driverId)
+        {
+            var driverIdRequest = new DriverIdRequest() { Id = driverId };
+            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
+            if (reply.ResultStatus == ResultStatus.Success)
+            {
+                var result = new List<Document>();
+
+                foreach (var item in reply.Items)
+                {
+                    var document = _mapper.Map<Document>(item);
+                    if (!string.IsNullOrEmpty(document.DocumentUrl))
+                    {
+                        result.Add(document);
+                    }
+                }
+
+                // sort the documents
+                if (result.Count > 0)
+                {
+                    result = result.OrderByDescending(cs => cs.ImportDate).ToList();
+                }
+
+                return Json(result);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
