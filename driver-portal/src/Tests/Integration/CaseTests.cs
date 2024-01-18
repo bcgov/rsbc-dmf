@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -6,10 +7,9 @@ using Xunit;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
-    [Collection(nameof(HttpClientCollection))]
     public class CaseTests : ApiIntegrationTestBase
     {
-        public CaseTests(HttpClientFixture fixture) : base(fixture) { }
+        public CaseTests(IConfiguration configuration) : base(configuration) { }
 
         [Fact]
         public async Task GetCase()

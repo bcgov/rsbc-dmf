@@ -1,4 +1,5 @@
-﻿using Rsbc.Dmf.DriverPortal.ViewModels;
+﻿using Microsoft.Extensions.Configuration;
+using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -6,10 +7,9 @@ using Xunit;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
-    [Collection(nameof(HttpClientCollection))]
     public class DocumentTests : ApiIntegrationTestBase
     {
-        public DocumentTests(HttpClientFixture fixture) : base(fixture) { }
+        public DocumentTests(IConfiguration configuration) : base(configuration) { }
 
         [Fact]
         public async Task GetLettersToDriver()
