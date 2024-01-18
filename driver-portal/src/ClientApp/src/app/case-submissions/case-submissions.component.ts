@@ -29,12 +29,6 @@ export class CaseSubmissionsComponent {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   toggleIsExpandable(id?: string | null) {
-    console.log(
-      'toggle is expandable',
-      id,
-      this.isExpanded,
-      this.isExpanded[id as string]
-    );
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 

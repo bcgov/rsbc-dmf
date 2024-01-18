@@ -30,6 +30,7 @@ import { SubmissionRequirementsComponent } from './submission-requirements/submi
 import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
 import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 import { QuickLinksComponent } from './quick-links/quick-links.component';
+import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { QuickLinksComponent } from './quick-links/quick-links.component';
     CaseSubmissionsComponent,
     LettersToDriverComponent,
     QuickLinksComponent,
+    SubmissionHistoryComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
