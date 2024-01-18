@@ -2,12 +2,13 @@
   <div class="list">
     <div class="recentCase">
       <h2>Most Recent Case</h2>
-
-      <!-- <app-quick-links></app-quick-links> -->
+      <app-quick-links></app-quick-links>
     </div>
   </div>
 
-  <app-recent-case></app-recent-case>
+  <div>
+    <app-recent-case></app-recent-case>
+  </div>
 
   <div class="list">
     <h2>Closed Cases</h2>
@@ -16,12 +17,12 @@
       <mat-card *ngFor="let closedCase of closedCaseDetails">
         <mat-card-content class="closedCaseContent">
           <div>
-            <mat-icon (click)="toggleisExpandable('1')">
+            <mat-icon (click)="toggleisExpandable('1')" class="expandedIcon">
               expand_circle_down
             </mat-icon>
           </div>
           <div style="display: flex; flex-direction: column">
-            <div style="border-left: 2px solid #808080; height: 40%">
+            <div style="border-left: 2px solid #808080; height: 45%">
               &nbsp;
             </div>
             <div>&nbsp;</div>

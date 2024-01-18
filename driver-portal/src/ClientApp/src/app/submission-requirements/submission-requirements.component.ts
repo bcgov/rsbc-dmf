@@ -11,5 +11,12 @@ import { Document } from '../shared/api/models';
 export class SubmissionRequirementsComponent {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
 
+  @Input() selectedIndex = 0;
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
+
+  navigateToLetters() {
+    this.selectedIndex = this.selectedIndex + 2;
+    console.log(this.selectedIndex);
+  }
 }

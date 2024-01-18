@@ -76,6 +76,8 @@ namespace OAuthServer.Controllers
         [HttpGet("callback")]
         public async Task<IActionResult> Callback()
         {
+            Serilog.Log.Logger.Information("**** REACHED CALLBACK ****");
+
             // read external identity from the temporary cookie
             var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true)
@@ -105,10 +107,15 @@ namespace OAuthServer.Controllers
             if (sessionId != null) additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sessionId));
             additionalClaims.AddRange(externalUser.Claims);
 
+            foreach (var claim in additionalClaims)
+            {
+                Serilog.Log.Logger.Information($"{claim.Type}:{claim.Value}");
+            }
+
             // issue authentication cookie for user
             var user = new IdentityServerUser(userId)
             {
-                DisplayName = externalUser.FindFirstValue("given_name") + " " + externalUser.FindFirstValue("last_name"),
+                DisplayName = externalUser.FindFirstValue("given_name") + " " + externalUser.FindFirstValue("family_name"),
                 IdentityProvider = scheme,
                 AuthenticationTime = DateTime.Now,
                 AdditionalClaims = additionalClaims
@@ -119,8 +126,13 @@ namespace OAuthServer.Controllers
             // delete temporary cookie used during external authentication
             await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
+            Serilog.Log.Logger.Information($"Redirecting to {returnUrl}");
+
             // return back to protocol processing
             return Redirect(returnUrl);
+
+
+
         }
 
         /// <summary>

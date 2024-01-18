@@ -80,7 +80,6 @@ services
                 await Task.CompletedTask;
             }
         };
-
     });
 
 services.AddAuthorization(options =>
@@ -90,7 +89,7 @@ services.AddAuthorization(options =>
                     JwtBearerDefaults.AuthenticationScheme,
                     "OIDC");
                 defaultAuthorizationPolicyBuilder =
-                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "doctors-portal-api");
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "driver-portal-api");
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
 
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()

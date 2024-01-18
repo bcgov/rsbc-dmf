@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDocuments } from '../shared/api/models';
 
@@ -11,6 +11,8 @@ export class CaseDetailsComponent implements OnInit {
   caseDocuments!: CaseDocuments;
 
   // public caseDocuments: Document[] = [];
+
+  selectedIndex = 0;
 
   constructor(private caseManagementService: CaseManagementService) {}
 
