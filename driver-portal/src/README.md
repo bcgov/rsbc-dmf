@@ -27,7 +27,7 @@ change directory to the repository root folder 'rsbc-dmf'
 `docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag driver-portal-ui`
 
 # to debug docker
-```
+```bash
 docker run -rm --name driver-portal-api driver-portal-api
 # add tail -f entrypoint to docker otherwise it will not stay running
 # useful if you want to look at folder structure

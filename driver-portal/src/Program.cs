@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Pssg.DocumentStorageAdapter.Helpers;
 using Rsbc.Dmf.DriverPortal.Api;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
