@@ -10,15 +10,32 @@ import { Document } from '../shared/api/models';
   styleUrls: ['./case-submissions.component.css'],
 })
 export class CaseSubmissionsComponent {
-  @Input() caseSubmissionDocuments?: Document[] | null = [];
+  _caseSubmissionDocuments?: Document[] | null = [];
+  @Input() set caseSubmissionDocuments(
+    documents: Document[] | null | undefined
+  ) {
+    this._caseSubmissionDocuments = documents;
 
-  isExpanded: Record<string, boolean> = {
-    '1': false,
-  };
+    this.caseSubmissionDocuments?.forEach((doc) => {
+      if (doc.documentId) this.isExpanded[doc.documentId] = false;
+    });
+  }
+
+  get caseSubmissionDocuments() {
+    return this._caseSubmissionDocuments;
+  }
+
+  isExpanded: Record<string, boolean> = {};
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  toggleisExpandable(id: string) {
-    this.isExpanded[id] = !this.isExpanded[id];
+  toggleIsExpandable(id?: string | null) {
+    console.log(
+      'toggle is expandable',
+      id,
+      this.isExpanded,
+      this.isExpanded[id as string]
+    );
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 
   constructor(private caseManagementService: CaseManagementService) {}
