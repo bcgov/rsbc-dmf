@@ -1,23 +1,43 @@
 <div class="container">
   <div class="list">
-    <div class="recentCase">
-      <h2>Most Recent Case</h2>
-      <app-quick-links></app-quick-links>
+    <h2>Submission Requirements</h2>
+    <div class="submissions">
+      <div>
+        <p>
+          The Submission History tab displays the documents and reports that
+          RSBC has received to date on all your cases. Unfortunately, you cannot
+          download a copy of these submissions.
+        </p>
+        <p>
+          Please note that if your medical practitioner or you have sent a
+          document through fax, it might take a while for it to appear as
+          recevied and shown in the list below.
+        </p>
+        <p>
+          Find out more about how to resubmit a document as well as if and how
+          to request a copy of a submission.
+        </p>
+      </div>
+      <div>
+        <app-quick-links></app-quick-links>
+      </div>
     </div>
   </div>
 
-  <div>
-    <app-recent-case></app-recent-case>
-  </div>
-
   <div class="list">
-    <h2>Closed Cases</h2>
-
     <div>
-      <mat-card *ngFor="let closedCase of closedCaseDetails">
+      <mat-card
+        *ngFor="let document of allDriverDocuments"
+        [ngClass]="{
+          open: document.documentId && isExpanded[document.documentId]
+        }"
+      >
         <mat-card-content class="closedCaseContent">
           <div>
-            <mat-icon (click)="toggleisExpandable('1')" class="expandedIcon">
+            <mat-icon
+              (click)="toggleIsExpandable(document.documentId)"
+              class="expandedIcon"
+            >
               expand_circle_down
             </mat-icon>
           </div>
@@ -30,57 +50,66 @@
           <div>
             <div class="caseDetailRow">
               <div>
-                <label>Created Date</label>
+                <label>Created Date </label>
                 <div>
-                  <b>{{ closedCase?.openedDate | date : "longDate" }}</b>
+                  <b>{{ document.createDate | date : "longDate" }}</b>
                 </div>
               </div>
 
               <div>
-                <label>Case Type</label>
+                <label>Submission Type</label>
                 <div>
-                  <b>{{ closedCase?.caseType }}</b>
+                  <b>{{ document.documentType }}</b>
                 </div>
               </div>
-
               <div>
-                <label>Decision Outcome</label>
+                <label>Submission status</label>
                 <div>
-                  <b>{{ closedCase?.latestDecision }}</b>
+                  <b>{{ document.submittalStatus }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Submission date</label>
+                <div>
+                  <b>{{ document.importDate | date : "longDate" }}</b>
                 </div>
               </div>
             </div>
 
             <div
               class="caseDetailRow"
-              *ngIf="isExpanded['1']"
+              *ngIf="document.documentId && isExpanded?.[document.documentId]"
               style="
-                border-top: 2px solid #808080;
+                border-top: 2px solid gray;
                 padding-top: 20px;
                 padding-bottom: 20px;
               "
             >
               <div>
-                <label> Decision date </label>
+                <label>Case Type</label>
                 <div>
-                  <b>{{ closedCase?.decisionDate | date : "longDate" }}</b>
+                  <b>DMER</b>
                 </div>
               </div>
 
               <div>
-                <label>Eligible License Class</label>
+                <label>Case Id</label>
                 <div>
-                  <b>{{ closedCase?.eligibleLicenseClass }}</b>
+                  <b>{{ document.caseId }}</b>
                 </div>
               </div>
-              <div></div>
+              <div>
+                <label>Description</label>
+                <div>
+                  <b>{{ document.description }}</b>
+                </div>
+              </div>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
     </div>
   </div>
-
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">
@@ -106,37 +135,19 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">
-              Case Status
-            </mat-panel-title>
+              Submission Type</mat-panel-title
+            >
           </mat-expansion-panel-header>
-          <app-case-status></app-case-status>
+          <app-submission-type></app-submission-type>
         </mat-expansion-panel>
 
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">
-              DMER Type
-            </mat-panel-title>
+              Submission Status</mat-panel-title
+            >
           </mat-expansion-panel-header>
-          <app-dmer-type></app-dmer-type>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Decision outcome
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <app-decision-outcome></app-decision-outcome>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Eligible License Class
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-eligible-license-class></app-eligible-license-class>
+          <app-submission-status></app-submission-status>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

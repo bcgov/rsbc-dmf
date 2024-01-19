@@ -62,7 +62,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="driverId">The driver id</param>
         /// <returns></returns>
         [HttpGet("{driverId}/Closed")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -91,7 +90,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get Most Recent Case
         /// </summary>        
         [HttpGet("MostRecent")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

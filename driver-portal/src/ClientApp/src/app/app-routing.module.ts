@@ -5,6 +5,8 @@ import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CaseComponent } from './case/case.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
+import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
+import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -12,6 +14,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'cases', component: CaseComponent },
   { path: 'caseDetails', component: CaseDetailsComponent },
+  { path: 'submissionHistory', component: SubmissionHistoryComponent },
+  { path: 'lettersToDriver', component: LettersToDriverComponent },
 ];
 
 @NgModule({

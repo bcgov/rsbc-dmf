@@ -8,10 +8,15 @@
     <h2>Case Documentation</h2>
   </div>
 
-  <mat-tab-group>
+  <div class="documentation"></div>
+  <mat-tab-group
+    [selectedIndex]="selectedIndex"
+    (selectedIndexChange)="selectedIndex = $event"
+  >
     <mat-tab label="Submission Requirements">
       <app-submission-requirements
         [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
+        (viewLetter)="onViewLetter()"
       ></app-submission-requirements
     ></mat-tab>
     <mat-tab label="Case Submissions">

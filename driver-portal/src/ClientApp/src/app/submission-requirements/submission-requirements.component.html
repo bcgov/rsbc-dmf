@@ -31,7 +31,7 @@
         <div>
           <label>Submission Type</label>
           <div>
-            <b>{{ document.submittalStatus }}</b>
+            <b>{{ document.documentType }}</b>
           </div>
         </div>
         <div>
@@ -44,7 +44,9 @@
         <div>
           <label></label>
           <div>
-            <button mat-flat-button>View Letter</button>
+            <button mat-flat-button (click)="navigateToLetters()">
+              View Letter
+            </button>
           </div>
         </div>
       </mat-card-content>

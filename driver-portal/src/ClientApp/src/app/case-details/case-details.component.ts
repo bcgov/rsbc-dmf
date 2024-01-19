@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDocuments } from '../shared/api/models';
 
@@ -8,9 +8,11 @@ import { CaseDocuments } from '../shared/api/models';
   styleUrls: ['./case-details.component.css'],
 })
 export class CaseDetailsComponent implements OnInit {
-  caseDocuments!: CaseDocuments;
+  caseDocuments?: CaseDocuments;
 
   // public caseDocuments: Document[] = [];
+
+  selectedIndex = 0;
 
   constructor(private caseManagementService: CaseManagementService) {}
 
@@ -25,5 +27,10 @@ export class CaseDetailsComponent implements OnInit {
         this.caseDocuments = caseDocuments;
         console.log(caseDocuments);
       });
+  }
+
+  onViewLetter() {
+    console.log('OnViewLetter');
+    this.selectedIndex = 2;
   }
 }

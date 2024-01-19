@@ -13,7 +13,7 @@
 .closedCaseContent {
   display: flex;
   flex-direction: row;
-  gap:60px;
+  gap:32px;
 }
 
 .caseDetailRow {
