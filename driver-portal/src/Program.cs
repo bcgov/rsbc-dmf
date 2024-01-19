@@ -23,75 +23,31 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
-services
-    .AddAuthentication("token")
-    //JWT tokens handling
-    .AddJwtBearer("token", options =>
-    {
-        // uncomment for testing http://localhost
-        //options.RequireHttpsMetadata = false;
-        options.BackchannelHttpHandler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-        };
-services.AddAuthentication("introspection")//("token")
-                //JWT tokens handling
-               /* .AddJwtBearer("token", options =>
+
+        services.AddAuthentication("introspection")
+            //reference tokens handling
+            .AddOAuth2Introspection("introspection", options =>
+            {
+                //options.EnableCaching = true;
+                //options.CacheDuration = TimeSpan.FromMinutes(1);
+                builder.Configuration.GetSection("auth:introspection").Bind(options);
+                //options.SkipTokensWithDots = false;
+                options.Events = new OAuth2IntrospectionEvents
                 {
-                    options.BackchannelHttpHandler = new HttpClientHandler
+                    OnTokenValidated = async ctx =>
                     {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
+                        var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        ctx.Principal = await userService.Login(ctx.Principal);
+                        ctx.Success();
+                    },
 
-        builder.Configuration.GetSection("auth:token").Bind(options);
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateAudience = false
-        };
+                    OnUpdateClientAssertion =
+                        async ctx => { await Task.CompletedTask; }
 
-                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
-                    options.ForwardDefaultSelector = ctx =>
-                    {
-                        var authHeader = (string)ctx.Request.Headers["Authorization"];
-                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
-                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
-                    };
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            ctx.Principal = await userService.Login(ctx.Principal);
-                            ctx.Success();
-                        }
-                    };
-                })  */
-                //reference tokens handling
-                .AddOAuth2Introspection("introspection", options =>
-                {
-                    //options.EnableCaching = true;
-                    //options.CacheDuration = TimeSpan.FromMinutes(1);
-                    builder.Configuration.GetSection("auth:introspection").Bind(options);
-                    //options.SkipTokensWithDots = false;
-                    options.Events = new OAuth2IntrospectionEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            ctx.Principal = await userService.Login(ctx.Principal);
-                            ctx.Success();
-                        },
+                };
 
-                        OnUpdateClientAssertion =
-                        async ctx =>
-                        {
-                            await Task.CompletedTask;
-                        }
-                       
-                    };
-
-                });
-
+            });
+    
 services.AddAuthorization(options =>
             {
                 
