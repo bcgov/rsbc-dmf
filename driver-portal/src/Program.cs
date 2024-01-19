@@ -34,6 +34,14 @@ services
         {
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         };
+services.AddAuthentication("introspection")//("token")
+                //JWT tokens handling
+               /* .AddJwtBearer("token", options =>
+                {
+                    options.BackchannelHttpHandler = new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
 
         builder.Configuration.GetSection("auth:token").Bind(options);
         options.TokenValidationParameters = new TokenValidationParameters
@@ -41,54 +49,58 @@ services
             ValidateAudience = false
         };
 
-        options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-        // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
-        options.ForwardDefaultSelector = ctx =>
-        {
-            var authHeader = (string)ctx.Request.Headers["Authorization"];
-            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
-            return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
-        };
-        options.Events = new JwtBearerEvents
-        {
-            OnTokenValidated = async ctx =>
-            {
-                var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                ctx.Principal = await userService.Login(ctx.Principal);
-                ctx.Success();
-            }
-        };
-    })
-    //reference tokens handling
-    .AddOAuth2Introspection("introspection", options =>
-    {
-        options.EnableCaching = true;
-        options.CacheDuration = TimeSpan.FromMinutes(1);
-        builder.Configuration.GetSection("auth:introspection").Bind(options);
-        options.Events = new OAuth2IntrospectionEvents
-        {
-            OnTokenValidated = async ctx =>
-            {
-                var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                ctx.Principal = await userService.Login(ctx.Principal);
-                ctx.Success();
-            },
-            OnUpdateClientAssertion =
-            async ctx =>
-            {
-                await Task.CompletedTask;
-            }
-        };
-    });
+                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+                    options.ForwardDefaultSelector = ctx =>
+                    {
+                        var authHeader = (string)ctx.Request.Headers["Authorization"];
+                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        }
+                    };
+                })  */
+                //reference tokens handling
+                .AddOAuth2Introspection("introspection", options =>
+                {
+                    //options.EnableCaching = true;
+                    //options.CacheDuration = TimeSpan.FromMinutes(1);
+                    builder.Configuration.GetSection("auth:introspection").Bind(options);
+                    //options.SkipTokensWithDots = false;
+                    options.Events = new OAuth2IntrospectionEvents
+                    {
+                        OnTokenValidated = async ctx =>
+                        {
+                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                            ctx.Principal = await userService.Login(ctx.Principal);
+                            ctx.Success();
+                        },
+
+                        OnUpdateClientAssertion =
+                        async ctx =>
+                        {
+                            await Task.CompletedTask;
+                        }
+                       
+                    };
+
+                });
 
 services.AddAuthorization(options =>
             {
                 
                 var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
-                    JwtBearerDefaults.AuthenticationScheme,
+                    //JwtBearerDefaults.AuthenticationScheme,
+                    OAuth2IntrospectionDefaults.AuthenticationScheme,
                     "OIDC");
                 defaultAuthorizationPolicyBuilder =
-                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "driver-portal-api");
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection"); //.RequireClaim("scope", "driver-portal-api");
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
 
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()

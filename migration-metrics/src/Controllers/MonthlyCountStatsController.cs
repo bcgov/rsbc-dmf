@@ -76,6 +76,13 @@ public class MonthlyCountStatsController : ControllerBase
         return Ok(data);
     }
 
+    [HttpGet("CaseDecisionProgress")]
+    public IActionResult GetCaseDecisionProgress()
+    {
+        var data = _monthlyCountStatService.GetCaseDecisionProgress();
+        return Ok(data);
+    }
+
 }
 
 
