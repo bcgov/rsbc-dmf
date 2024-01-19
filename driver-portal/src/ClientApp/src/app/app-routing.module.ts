@@ -7,6 +7,7 @@ import { CaseComponent } from './case/case.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
+import { LetterDetailsComponent } from './letter-details/letter-details.component';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -15,7 +16,7 @@ const routes: Routes = [
   { path: 'cases', component: CaseComponent },
   { path: 'caseDetails', component: CaseDetailsComponent },
   { path: 'submissionHistory', component: SubmissionHistoryComponent },
-  { path: 'lettersToDriver', component: LettersToDriverComponent },
+  { path: 'lettersToDriver', component: LetterDetailsComponent },
 ];
 
 @NgModule({
