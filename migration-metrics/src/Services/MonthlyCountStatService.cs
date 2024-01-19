@@ -29,6 +29,8 @@ public interface IMonthlyCountStatService
     IEnumerable<MonthlyCountStat> GetDataByRecordedDateCategory(DateTime recordedDate, string category);
 
     IEnumerable<ProgressData> GetCaseProgress();
+
+    IEnumerable<ProgressData> GetCaseDecisionProgress();
 }
 
 public class MonthlyCountStatService : IMonthlyCountStatService
@@ -118,6 +120,80 @@ public class MonthlyCountStatService : IMonthlyCountStatService
         result.Insert(0,summary);
         return result;
     }
+
+
+    public IEnumerable<ProgressData> GetCaseDecisionProgress()
+    {
+        List<ProgressData> result = new List<ProgressData>();
+
+        var oracleTime = _context.MonthlyCountStats.Where(x => x.Category == "OracleCaseDecisionCount")
+            .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
+
+        var oracleStats = _context.MonthlyCountStats
+            .Where(x => x.Category == "OracleCaseCount" && x.RecordedTime == oracleTime).ToArray();
+        var dynamicsTime = _context.MonthlyCountStats.Where(x => x.Category == "DynamicsCaseDecisionCount")
+            .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
+        var dynamicsStats = _context.MonthlyCountStats
+            .Where(x => x.Category == "DynamicsCaseCount" && x.RecordedTime == dynamicsTime).ToArray();
+
+        long runningTotalDynamics = 0;
+        long runningTotalOracle = 0;
+
+        for (var i = 0; i < oracleStats.Length; i++)
+        {
+            ProgressData newData = new ProgressData();
+            newData.Label = oracleStats[i].Start.ToShortDateString();
+            newData.OracleCount = oracleStats[i].SourceCount;
+            if (i < dynamicsStats.Length)
+            {
+                newData.DynamicsCount = dynamicsStats[i].DestinationCount;
+
+                newData.Difference = dynamicsStats[i].DestinationCount - oracleStats[i].SourceCount;
+                if (oracleStats[i].SourceCount > 0 && dynamicsStats[i].DestinationCount > 0)
+                {
+                    newData.Percentage = ((dynamicsStats[i].DestinationCount * 1.0) / (oracleStats[i].SourceCount * 1.0)) * 100;
+                }
+                else
+                {
+                    newData.Percentage = 0;
+                }
+
+            }
+            else
+            {
+                newData.Difference = oracleStats[i].SourceCount;
+                newData.Percentage = 0.0;
+            }
+
+            runningTotalDynamics += newData.DynamicsCount;
+            runningTotalOracle += newData.OracleCount;
+
+
+
+            result.Add(newData);
+
+
+        }
+
+        ProgressData summary = new ProgressData()
+        {
+            Label = "TOTAL",
+            OracleCount = runningTotalOracle,
+            DynamicsCount = runningTotalDynamics
+        };
+        if (runningTotalOracle > 0 && runningTotalDynamics > 0)
+        {
+            summary.Percentage = ((runningTotalDynamics * 1.0) / (runningTotalOracle * 1.0)) * 100;
+            summary.Difference = runningTotalDynamics - runningTotalOracle;
+        }
+        else
+        {
+            summary.Percentage = 0;
+        }
+        result.Insert(0, summary);
+        return result;
+    }
+
 
     public IEnumerable<MonthlyCountStat> GetByCategory(string category)
     {

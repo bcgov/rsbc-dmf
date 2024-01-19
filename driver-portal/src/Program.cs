@@ -26,9 +26,9 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
-services.AddAuthentication("token")
+services.AddAuthentication("introspection")//("token")
                 //JWT tokens handling
-                .AddJwtBearer("token", options =>
+               /* .AddJwtBearer("token", options =>
                 {
                     options.BackchannelHttpHandler = new HttpClientHandler
                     {
@@ -58,13 +58,14 @@ services.AddAuthentication("token")
                             ctx.Success();
                         }
                     };
-                })
+                })  */
                 //reference tokens handling
                 .AddOAuth2Introspection("introspection", options =>
                 {
                     //options.EnableCaching = true;
                     //options.CacheDuration = TimeSpan.FromMinutes(1);
                     builder.Configuration.GetSection("auth:introspection").Bind(options);
+                    //options.SkipTokensWithDots = false;
                     options.Events = new OAuth2IntrospectionEvents
                     {
                         OnTokenValidated = async ctx =>
@@ -73,12 +74,13 @@ services.AddAuthentication("token")
                             ctx.Principal = await userService.Login(ctx.Principal);
                             ctx.Success();
                         },
-                       /* OnUpdateClientAssertion =
+
+                        OnUpdateClientAssertion =
                         async ctx =>
                         {
                             await Task.CompletedTask;
                         }
-                       */
+                       
                     };
 
                 });
@@ -87,10 +89,11 @@ services.AddAuthentication("token")
             {
                 
                 var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
-                    JwtBearerDefaults.AuthenticationScheme,
+                    //JwtBearerDefaults.AuthenticationScheme,
+                    OAuth2IntrospectionDefaults.AuthenticationScheme,
                     "OIDC");
                 defaultAuthorizationPolicyBuilder =
-                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("token").RequireClaim("scope", "driver-portal-api");
+                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection"); //.RequireClaim("scope", "driver-portal-api");
                 options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
 
                 options.FallbackPolicy = new AuthorizationPolicyBuilder()
