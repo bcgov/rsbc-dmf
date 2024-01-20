@@ -8,15 +8,15 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 {
     public abstract class ApiIntegrationTestBase : IDisposable
     {
-        protected HttpClient _client { get; }
-        protected IConfiguration _configuration { get; }
+        protected readonly HttpClient _client;
+        protected readonly IConfiguration _configuration;
         protected const string CASE_API_BASE = "/api/Cases";
         protected const string DRIVER_API_BASE = "/api/Driver";
 
-        public ApiIntegrationTestBase(IConfiguration configuration)
+        public ApiIntegrationTestBase(IConfiguration configuration, bool enableAuthorization = false)
         {
             _configuration = configuration;
-            _client = new CustomWebApplicationFactory(configuration)
+            _client = new CustomWebApplicationFactory(configuration, enableAuthorization)
                 .CreateClient();
         }
 

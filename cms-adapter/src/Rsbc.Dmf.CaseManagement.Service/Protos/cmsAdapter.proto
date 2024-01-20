@@ -186,15 +186,11 @@ message GetDocumentsReply {
 	string errorDetail = 3;
 }
 
-
 message GetCommentReply {
 	LegacyComment item = 1;
 	ResultStatus resultStatus = 2;
 	string errorDetail = 3;
 }
-
-
-
 
 message LegacyComment {
 	int64 SequenceNumber = 1;
@@ -257,8 +253,6 @@ message PdfDocumentReply {
 
 message PdfDocument{
   string pdfDocumentId = 1;
-
-  
   enum StatusCodeOptions{
 	  SendToBCMail = 0;
 	  Sent = 1;
@@ -267,7 +261,6 @@ message PdfDocument{
   StatusCodeOptions statusCode = 2;
   string filename = 3;
   string serverUrl = 4;
-  
 }
 
 message CaseDetail {
@@ -289,7 +282,6 @@ message CaseDetail {
 	int64 outstandingDocuments = 16;
 	string eligibleLicenseClass = 17;
 }
-
 
 message CreateStatusReply {	
 	ResultStatus resultStatus = 1;
@@ -323,7 +315,6 @@ message ManualPassRequest{
 	string caseId = 1;
 }
 
-
 message GetAllFlagsReply {
 	repeated FlagItem Flags = 1;
 }
@@ -344,7 +335,6 @@ message DmerCase {
 	repeated FlagItem Flags = 30;
 	repeated DecisionItem Decisions = 35;
 	int64 caseSequence = 40;
-
 }
 
 message Driver {
@@ -417,7 +407,6 @@ message CreateCaseRequest {
 	string SubmittalStatus = 6;
 }
 
-
 message UpdateCaseRequest{
 	string caseId = 1;
 	bool isCleanPass = 2;
@@ -444,14 +433,12 @@ message SetCasePractitionerClinicReply{
 	string errorDetail = 2;
 }
 
-
 message LegacyCandidateRequest{
 	string licenseNumber = 1;
     string clientNumber = 2;
 	string surname = 3;
 	google.protobuf.Timestamp birthDate = 4;
 	google.protobuf.Timestamp effectiveDate = 5;
-
 }
 
 message LegacyCandidateReply{
@@ -459,8 +446,6 @@ message LegacyCandidateReply{
 	string errorDetail = 2;
 	bool isNewCase = 3;
 }
-
-
 
 message FlagItem {
 	string identifier = 1;
@@ -502,11 +487,20 @@ message CssReply {
 	string css = 3; 
 }
 
-
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
+}
+
+message ResultBoolReply {
+	bool result = 1;
+}
+
+message UserDriverAuthorizedRequest {
+	string userId = 1;
+	string driverId = 2;
 }
 
 message UserSetEmailRequest {

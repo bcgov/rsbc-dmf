@@ -15,6 +15,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
             this.userManager = userManager;
         }
 
+        public async override Task<ResultBoolReply> IsDriverAuthorized(UserDriverAuthorizedRequest request, ServerCallContext context) 
+        {
+            var driverId = Guid.Parse(request.DriverId);
+            var result = userManager.IsDriverAuthorized(request.UserId, driverId);
+            return new ResultBoolReply() { Result = result };
+        }
+
         public async override Task<UsersSearchReply> Search(UsersSearchRequest request, ServerCallContext context)
         {
             try
