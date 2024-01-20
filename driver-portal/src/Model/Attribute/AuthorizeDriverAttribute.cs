@@ -8,14 +8,21 @@ namespace Rsbc.Dmf.DriverPortal.Api
     public class AuthorizeDriverAttribute : Attribute, IFilterFactory
     {
         public bool IsReusable => false;
+        public string ParameterName = "driverId";
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
         {
-            return serviceProvider.GetService<AuthorizeDriver>();
+            var authorizeDriverActionFilter = serviceProvider.GetService<AuthorizeDriver>();
+            authorizeDriverActionFilter.ParameterName = ParameterName;
+            return authorizeDriverActionFilter;
         }
+
+
 
         public class AuthorizeDriver : ActionFilterAttribute, IAsyncAuthorizationFilter
         {
+            public string ParameterName = "driverId";
+
             private readonly IUserService _userService;
 
             public AuthorizeDriver(IUserService userService)
@@ -25,14 +32,13 @@ namespace Rsbc.Dmf.DriverPortal.Api
 
             public async Task OnAuthorizationAsync(AuthorizationFilterContext filterContext)
             {
-                if (!filterContext.RouteData.Values.ContainsKey("driverId"))
+                if (!filterContext.RouteData.Values.ContainsKey(ParameterName))
                 {
-                    filterContext.Result = new BadRequestObjectResult("parameter driverId missing.");
+                    filterContext.Result = new BadRequestObjectResult($"parameter {ParameterName} missing.");
                     return;
                 }
 
-                var driverId = filterContext.RouteData.Values["driverId"] as string;
-
+                var driverId = filterContext.RouteData.Values[ParameterName] as string;
                 var isAuthorizedResponse = await _userService.IsDriverAuthorized(driverId);
                 if (!isAuthorizedResponse)
                     filterContext.Result = new UnauthorizedResult();

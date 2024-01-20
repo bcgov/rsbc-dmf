@@ -29,7 +29,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/Documents")]
-        [AuthorizeDriver]
+        [AuthorizeDriver(ParameterName = "driverId")]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -103,7 +103,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/AllDocuments")]
-        [AuthorizeDriver]
+        [AuthorizeDriver(ParameterName = "driverId")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

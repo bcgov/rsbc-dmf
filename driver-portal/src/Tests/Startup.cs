@@ -8,8 +8,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 {
     public class Startup
     {
-
-
         /// <summary>
         /// Register dependencies needed for xunit tests
         /// NOTE to register dependencies used by making calls from HttpClient, use CustomWebApplicationFactory
@@ -21,7 +19,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 .AddUserSecrets<ApplicationVersionInfo>()
                 .AddEnvironmentVariables()
                 .Build();
-            services.AddSingleton(_configuration);
+            services.AddSingleton<IConfiguration>(_configuration);
 
             using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
                 .SetMinimumLevel(LogLevel.Trace)
