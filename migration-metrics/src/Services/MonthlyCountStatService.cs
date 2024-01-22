@@ -126,15 +126,15 @@ public class MonthlyCountStatService : IMonthlyCountStatService
     {
         List<ProgressData> result = new List<ProgressData>();
 
-        var oracleTime = _context.MonthlyCountStats.Where(x => x.Category == "OracleCaseDecisionCount")
+        var oracleTime = _context.MonthlyCountStats.Where(x => x.Category == "OracleDecisionCount")
             .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
 
         var oracleStats = _context.MonthlyCountStats
-            .Where(x => x.Category == "OracleCaseCount" && x.RecordedTime == oracleTime).ToArray();
-        var dynamicsTime = _context.MonthlyCountStats.Where(x => x.Category == "DynamicsCaseDecisionCount")
+            .Where(x => x.Category == "OracleDecisionCount" && x.RecordedTime == oracleTime).ToArray();
+        var dynamicsTime = _context.MonthlyCountStats.Where(x => x.Category == "DynamicsDecisionCount")
             .Select(x => x.RecordedTime).Distinct().OrderByDescending(x => x).FirstOrDefault();
         var dynamicsStats = _context.MonthlyCountStats
-            .Where(x => x.Category == "DynamicsCaseCount" && x.RecordedTime == dynamicsTime).ToArray();
+            .Where(x => x.Category == "DynamicsDecisionCount" && x.RecordedTime == dynamicsTime).ToArray();
 
         long runningTotalDynamics = 0;
         long runningTotalOracle = 0;
