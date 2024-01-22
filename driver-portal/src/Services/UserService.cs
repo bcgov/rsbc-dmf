@@ -14,12 +14,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
     public interface IUserService
     {
         Task<UserContext> GetCurrentUserContext();
-
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
-
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
-
         Task SetEmail(string userId, string email);
+        Task<bool> IsDriverAuthorized(string driverId);
     }
 
     public record UserContext
@@ -59,6 +57,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
                 Email = user.FindFirstValue(ClaimTypes.Email)
             });
+        }
+
+        public async Task<bool> IsDriverAuthorized(string driverId)
+        {
+            var request = new UserDriverAuthorizedRequest();
+            request.UserId = (await GetCurrentUserContext()).Id;
+            request.DriverId = driverId;
+
+            var isAuthorizedResponse = userManager.IsDriverAuthorized(request);
+            return isAuthorizedResponse.Result;
         }
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)

@@ -16,6 +16,8 @@ namespace Rsbc.Dmf.CaseManagement
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
 
         Task<bool> SetUserEmail(string userId, string email);
+
+        bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
     public class SearchUsersRequest
@@ -85,6 +87,18 @@ namespace Rsbc.Dmf.CaseManagement
         public UserManager(DynamicsContext dynamicsContext)
         {
             this.dynamicsContext = dynamicsContext;
+        }
+
+        public bool IsDriverAuthorized(string userId, Guid driverId)
+        {
+            var loggedInDriver = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Where(l => l.dfp_userid == userId && l.statecode == (int)EntityState.Active)
+                .Where(d => d._dfp_driverid_value == driverId && d.dfp_DriverId.statecode == (int)EntityState.Active)
+                .ToList()
+                .SingleOrDefault();
+
+            return loggedInDriver != default;
         }
 
         public async Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request)

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
@@ -28,7 +29,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/Documents")]
-        [AllowAnonymous]
+        [AuthorizeDriver(ParameterName = "driverId")]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -96,14 +97,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
         }
 
-
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
         [HttpGet("{driverId}/AllDocuments")]
-        [AllowAnonymous]
+        [AuthorizeDriver(ParameterName = "driverId")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
