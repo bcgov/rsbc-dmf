@@ -20,11 +20,8 @@ export class ProgressCaseDecisionTableComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.http.get<ProgressData[]>(this.baseUrl + 'api/MonthlyCountStats/CaseProgress').subscribe(result => {
+    this.http.get<ProgressData[]>(this.baseUrl + 'api/MonthlyCountStats/CaseDecisionProgress').subscribe(result => {
 
-      //let htmlRef = this.elementRef.nativeElement.querySelector("#theChart");
-
-      //var ctx = document.getElementById("theChart");
       this.tableData = result;
 
     });
