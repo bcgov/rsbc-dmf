@@ -1478,7 +1478,8 @@ namespace Rsbc.Dmf.CaseManagement
                 ImportDate = request.ImportDate,
                 DocumentId = request.DocumentId,
                 SequenceNumber = request.SequenceNumber,
-                Solicited = true
+                Solicited = true,
+                Owner = request.Owner,
                 
             };
 

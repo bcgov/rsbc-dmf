@@ -698,7 +698,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 OriginatingNumber = "1",
                 SequenceNumber = 1,
                 DocumentUrl = documentUrl,
-                SubmittalStatus = "Open-Required"
+                SubmittalStatus = "Open-Required",
+                Owner = "Team - Intake"
             };
 
             await _caseManager.CreateICBCDocumentEnvelope(legacyDocumentRequest);
@@ -747,7 +748,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     OriginatingNumber = "1",
                     SequenceNumber = 1,
                     DocumentUrl = documentUrl,
-                    SubmittalStatus = "Uploaded"
+                    SubmittalStatus = "Uploaded",
+                    
                 };
 
                 await _caseManager.CreateDocumentOnDriver(legacyDocumentRequest);
