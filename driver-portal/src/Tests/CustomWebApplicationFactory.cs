@@ -50,7 +50,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 var user = new ClaimsPrincipal();
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid, "QPSETRIJEOMSARHBRNRPBVAIFL65V3YI"),
+                    new Claim(ClaimTypes.Sid, _configuration["USER_SUBJECT"] ?? "SubjectId"),
                     new Claim(ClaimTypes.Email, "Email"),
                     new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
                     new Claim(ClaimTypes.GivenName, "FirstName"),

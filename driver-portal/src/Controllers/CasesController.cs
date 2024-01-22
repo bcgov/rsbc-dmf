@@ -62,6 +62,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="driverId">The driver id</param>
         /// <returns></returns>
         [HttpGet("{driverId}/Closed")]
+        [AuthorizeDriver(ParameterName = "driverId")]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
