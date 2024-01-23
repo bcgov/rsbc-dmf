@@ -14,7 +14,6 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using static Rsbc.Dmf.DriverPortal.Api.AuthorizeDriverAttribute;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
@@ -26,10 +25,9 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         private readonly IConfiguration _configuration;
         private readonly bool _isAuthorizationEnabled;
 
-        public CustomWebApplicationFactory(IConfiguration configuration, bool isAuthorizationEnabled)
+        public CustomWebApplicationFactory(IConfiguration configuration)
         {
             _configuration = configuration;
-            _isAuthorizationEnabled = isAuthorizationEnabled;
         }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -48,9 +46,12 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
                 var context = new DefaultHttpContext();
                 var user = new ClaimsPrincipal();
+                var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
+                var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Sid, _configuration["USER_SUBJECT"] ?? "SubjectId"),
+                    new Claim(ClaimTypes.Sid, userId),
+                    new Claim(UserClaimTypes.DriverId, driverId),
                     new Claim(ClaimTypes.Email, "Email"),
                     new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
                     new Claim(ClaimTypes.GivenName, "FirstName"),
@@ -61,19 +62,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
                 services.AddTransient(x => mockHttpContextAccessor.Object);
 
-                if (!_isAuthorizationEnabled)
-                {
-                    var userService = new Mock<IUserService>();
-                    userService.Setup(x => x.IsDriverAuthorized(It.IsAny<string>())).ReturnsAsync(true);
-                    services.AddTransient(x => userService.Object);
-                }
-                else
-                {
                     services.AddTransient<IUserService, UserService>();
-                }
                 
-                services.AddTransient<AuthorizeDriver>();
-
                 // document storage client
                 string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
                 if (true || string.IsNullOrEmpty(documentStorageAdapterURI))

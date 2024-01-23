@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
@@ -12,12 +11,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
         }
@@ -28,15 +29,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// </summary>
         /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
-        [HttpGet("{driverId}/Documents")]
-        [AuthorizeDriver(ParameterName = "driverId")]
+        [HttpGet("Documents")]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCaseDocuments")]
-        public ActionResult GetCaseDocuments([FromRoute] string driverId)
+        public async Task<ActionResult> GetCaseDocuments()
         {
-            var driverIdRequest = new DriverIdRequest() { Id = driverId };
+            var profile = await _userService.GetCurrentUserContext();
+
+            var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
@@ -92,7 +94,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
@@ -100,17 +102,17 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
-        /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
-        [HttpGet("{driverId}/AllDocuments")]
-        [AuthorizeDriver(ParameterName = "driverId")]
+        [HttpGet("AllDocuments")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetAllDocuments")]
-        public ActionResult GetAllDocuments([FromRoute] string driverId)
+        public async Task<ActionResult> GetAllDocuments()
         {
-            var driverIdRequest = new DriverIdRequest() { Id = driverId };
+            var profile = await _userService.GetCurrentUserContext();
+
+            var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
@@ -135,7 +137,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }

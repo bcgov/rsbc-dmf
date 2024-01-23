@@ -13,10 +13,10 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         protected const string CASE_API_BASE = "/api/Cases";
         protected const string DRIVER_API_BASE = "/api/Driver";
 
-        public ApiIntegrationTestBase(IConfiguration configuration, bool enableAuthorization = false)
+        public ApiIntegrationTestBase(IConfiguration configuration)
         {
             _configuration = configuration;
-            _client = new CustomWebApplicationFactory(configuration, enableAuthorization)
+            _client = new CustomWebApplicationFactory(configuration)
                 .CreateClient();
         }
 

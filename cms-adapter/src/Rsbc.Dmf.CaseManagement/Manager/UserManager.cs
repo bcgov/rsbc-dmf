@@ -47,6 +47,7 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string Userid { get; set; }
         public string Email { get; set; }
+        public string DriverId { get; set; }
     }
 
     public abstract class User
@@ -57,6 +58,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public string DriverId { get; set; }
 
         public string[] Roles { get; set;}
     }
@@ -332,7 +334,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
-            return new LoginUserResponse { Userid = login.dfp_loginid.ToString() , Email = userEmail };
+            return new LoginUserResponse { Userid = login.dfp_loginid.ToString() , Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch

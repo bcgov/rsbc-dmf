@@ -625,7 +625,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d => d.dfp_DocumentTypeID)
-                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)ActiveStatus.Active)
+                .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active)
                 .ToList();
 
             return _mapper.Map<IEnumerable<LegacyDocument>>(driverDocuments);
@@ -709,7 +709,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="driverId"></param>
         /// <param name="activeStatus"></param>
         /// <returns>IEnumerable<CaseDetail></returns>
-        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, ActiveStatus activeStatus)
+        public async Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState activeStatus)
         {
             var result = new List<CaseDetail>();
 
@@ -762,13 +762,13 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<CaseDetail> GetMostRecentCaseDetail(string driverLicenseNumber)
+        public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId)
         {
             CaseDetail result = null;
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_licensenumber == driverLicenseNumber)
+                var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId)
                     .OrderByDescending(x => x.createdon).FirstOrDefault();
 
                 if(fetchedCase != null)
@@ -856,7 +856,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, $"Error getting driver {driverLicenseNumber}");
+                Log.Logger.Error(ex, $"Error getting driver {driverId}");
             }
 
             return result;
