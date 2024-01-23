@@ -12,6 +12,10 @@ export class SubmissionHistoryComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
 
+  pageSize = 10;
+
+  filteredDocuments?: Document[] | null = [];
+
   _allDocuments?: Document[] | null = [];
 
   @Input() set allDriverDocuments(documents: Document[] | null | undefined) {
@@ -20,6 +24,8 @@ export class SubmissionHistoryComponent implements OnInit {
     this._allDocuments?.forEach((doc) => {
       if (doc.documentId) this.isExpanded[doc.documentId] = false;
     });
+
+    this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
   }
 
   get allDriverDocuments() {
@@ -37,11 +43,19 @@ export class SubmissionHistoryComponent implements OnInit {
       .getAllDocuments({ driverId })
       .subscribe((allDocuments: any) => {
         this._allDocuments = allDocuments;
+        this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
         console.log(allDocuments);
       });
   }
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
+  viewMore() {
+    const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
+
+    this.filteredDocuments = this._allDocuments?.slice(0, pageSize);
+    console.log(pageSize);
   }
 }

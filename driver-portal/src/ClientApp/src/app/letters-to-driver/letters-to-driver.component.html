@@ -16,7 +16,7 @@
   </div>
 
   <div>
-    <mat-card *ngFor="let letter of letterDocuments">
+    <mat-card *ngFor="let letter of filteredDocuments">
       <mat-card-content class="submissionRequirement">
         <div>
           <label>Created Date</label>
@@ -50,9 +50,23 @@
 
   <div
     class="numberOfItems"
-    *ngIf="letterDocuments && letterDocuments.length > 0"
+    *ngIf="
+      letterDocuments &&
+      letterDocuments.length > 0 &&
+      filteredDocuments &&
+      filteredDocuments.length > 0
+    "
   >
-    Showing {{ letterDocuments.length }} of {{ letterDocuments.length }} records
+    Showing {{ filteredDocuments?.length }} of
+    {{ letterDocuments.length }} records
+    <br />
+    <a
+      *ngIf="filteredDocuments.length < letterDocuments.length"
+      (click)="viewMore()"
+      class="viewMore"
+      ><b style="color: #003366">View more records</b>
+      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+    >
   </div>
 
   <div class="list" id="definitions">

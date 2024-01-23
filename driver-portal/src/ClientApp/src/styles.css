@@ -303,12 +303,24 @@ a.accordion-btn {
 .numberOfItems {
   display: flex;
   justify-content: center;
-  height: 64px;
+  height: 108px;
   background: inherit;
   background-color: rgba(242, 242, 242, 1);
   border: none;
   border-radius: 5px;
   align-items: center;
   color: #003366 ;
+  flex-direction: column;
 }
 
+.viewMore:hover{
+  text-decoration: underline;
+  cursor: pointer;
+  color: #003366;
+}
+
+.ViewMoreIcon{
+  position: absolute;
+  color: #003366;
+
+}

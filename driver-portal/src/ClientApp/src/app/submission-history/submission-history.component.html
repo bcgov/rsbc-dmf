@@ -100,10 +100,23 @@
 
   <div
     class="numberOfItems"
-    *ngIf="allDriverDocuments && allDriverDocuments.length > 0"
+    *ngIf="
+      allDriverDocuments &&
+      allDriverDocuments.length > 0 &&
+      filteredDocuments &&
+      filteredDocuments.length > 0
+    "
   >
-    Showing {{ allDriverDocuments.length }} of
+    Showing {{ filteredDocuments?.length }} of
     {{ allDriverDocuments.length }} records
+    <br />
+    <a
+      *ngIf="filteredDocuments.length < allDriverDocuments.length"
+      (click)="viewMore()"
+      class="viewMore"
+      ><b style="color: #003366">View more records</b>
+      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+    >
   </div>
 
   <div class="list" id="definitions">
