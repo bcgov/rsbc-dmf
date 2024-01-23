@@ -1,20 +1,20 @@
-name: cd-driver-portal-api-artifactory
+name: cd-driver-portal-ui-artifactory
 
 on:
   push:
-    # Publish `main` as Docker `latest` image.
+    # Publish `master` as Docker `latest` image.
     branches:
       - main
-    # Publish `v1.2.3` tags as releases.
+
+    # Publish `v1.2.3` tags as releases. 
     tags:
       - v*
     paths:
-      - "driver-portal/src/**"
-      - ".github/workflows/cd-driver-portal-api-artifactory.yml"
-
+      - "driver-portal/src/ClientApp/**"
+      - ".github/workflows/cd-driver-portal-ui.yml"
 env:
-  IMAGE_NAME: driver-portal-api
-  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/driver-portal-api
+  IMAGE_NAME: driver-portal-ui
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/driver-portal-ui
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-    
+
     steps:
       - uses: actions/checkout@v4
 
@@ -32,12 +32,14 @@ jobs:
 
       - name: Pull image
         run: docker pull $IMAGE_ID || true
+      
+      - name: Pull Caddy from OpenShift
+        run: docker pull caddy:latest
 
       - name: Build image
-        run: |
-          echo "BUILD ID=$BUILD_ID"   
-          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"     
-          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/Dockerfile --cache-from=$IMAGE_ID       
+        working-directory: ./
+        run: docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag $IMAGE_NAME 
+        # --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
