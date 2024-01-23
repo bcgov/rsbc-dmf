@@ -93,6 +93,14 @@
     </div>
   </div>
 
+  <div
+    class="numberOfItems"
+    *ngIf="caseSubmissionDocuments && caseSubmissionDocuments.length > 0"
+  >
+    Showing {{ caseSubmissionDocuments.length }} of
+    {{ caseSubmissionDocuments.length }} records
+  </div>
+
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">

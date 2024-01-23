@@ -53,6 +53,17 @@
     </mat-card>
   </div>
 
+  <div
+    class="numberOfItems"
+    *ngIf="
+      submissionRequirementDocuments &&
+      submissionRequirementDocuments.length > 0
+    "
+  >
+    Showing {{ submissionRequirementDocuments.length }} of
+    {{ submissionRequirementDocuments.length }} records
+  </div>
+
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">

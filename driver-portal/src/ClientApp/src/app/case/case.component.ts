@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDetail } from '../shared/api/models';
@@ -9,12 +9,25 @@ import { CaseDetail } from '../shared/api/models';
   styleUrls: ['./case.component.scss'],
 })
 export class CaseComponent implements OnInit {
-  isExpanded: Record<string, boolean> = {
-    '1': false,
-  };
+  isExpanded: Record<string, boolean> = {};
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  public closedCaseDetails: CaseDetail[] = [];
+  _closedCaseDetails: CaseDetail[] | null = [];
+
+  @Input() set closedCaseDetails(caseDetails: CaseDetail[] | null) {
+    if (caseDetails !== undefined) {
+      this._closedCaseDetails = caseDetails;
+
+      this._closedCaseDetails?.forEach((cases) => {
+        if (cases.caseId) this.isExpanded[cases.caseId] = false;
+      });
+    }
+  }
+
+  get closedCaseDetails() {
+    return this._closedCaseDetails;
+  }
 
   constructor(private caseManagementService: CaseManagementService) {}
 
@@ -30,7 +43,7 @@ export class CaseComponent implements OnInit {
       });
   }
 
-  toggleisExpandable(id: string) {
-    this.isExpanded[id] = !this.isExpanded[id];
+  toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 }

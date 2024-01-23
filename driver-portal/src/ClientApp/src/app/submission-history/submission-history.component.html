@@ -86,19 +86,6 @@
               "
             >
               <div>
-                <label>Case Type</label>
-                <div>
-                  <b>DMER</b>
-                </div>
-              </div>
-
-              <div>
-                <label>Case Id</label>
-                <div>
-                  <b>{{ document.caseId }}</b>
-                </div>
-              </div>
-              <div>
                 <label>Description</label>
                 <div>
                   <b>{{ document.description }}</b>
@@ -110,6 +97,15 @@
       </mat-card>
     </div>
   </div>
+
+  <div
+    class="numberOfItems"
+    *ngIf="allDriverDocuments && allDriverDocuments.length > 0"
+  >
+    Showing {{ allDriverDocuments.length }} of
+    {{ allDriverDocuments.length }} records
+  </div>
+
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">
