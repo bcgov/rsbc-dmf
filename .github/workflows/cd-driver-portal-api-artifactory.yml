@@ -1,4 +1,4 @@
-name: cd-driver-portal-api
+name: cd-driver-portal-api-artifactory
 
 on:
   push:
@@ -10,11 +10,11 @@ on:
       - v*
     paths:
       - "driver-portal/src/**"
-      - ".github/workflows/cd-driver-portal-api.yml"
+      - ".github/workflows/cd-driver-portal-api-artifactory.yml"
 
 env:
   IMAGE_NAME: driver-portal-api
-  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/${{ IMAGE_NAME }}
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/${{ env.IMAGE_NAME }}
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}

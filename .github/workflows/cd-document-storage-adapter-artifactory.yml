@@ -15,7 +15,7 @@ on:
 
 env:
   IMAGE_NAME: document-storage-adapter
-  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/${{ IMAGE_NAME }}
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/document-storage-adapter
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
