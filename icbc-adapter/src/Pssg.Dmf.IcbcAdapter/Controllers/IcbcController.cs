@@ -134,7 +134,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
-
+                        Owner = "Team - Intake"
+                  
                     });
 
                     // If a new case is created on the driver
