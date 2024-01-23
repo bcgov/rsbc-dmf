@@ -1,4 +1,4 @@
-name: cd-cms-adapter
+name: cd-cms-adapter-artifactory
 
 on:
   push:
