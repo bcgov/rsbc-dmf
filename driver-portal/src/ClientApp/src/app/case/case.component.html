@@ -14,10 +14,18 @@
     <h2>Closed Cases</h2>
 
     <div>
-      <mat-card *ngFor="let closedCase of closedCaseDetails">
+      <mat-card
+        *ngFor="let closedCase of closedCaseDetails"
+        [ngClass]="{
+          open: closedCase.caseId && isExpanded[closedCase.caseId]
+        }"
+      >
         <mat-card-content class="closedCaseContent">
           <div>
-            <mat-icon (click)="toggleisExpandable('1')" class="expandedIcon">
+            <mat-icon
+              (click)="toggleIsExpandable(closedCase.caseId)"
+              class="expandedIcon"
+            >
               expand_circle_down
             </mat-icon>
           </div>
@@ -53,9 +61,9 @@
 
             <div
               class="caseDetailRow"
-              *ngIf="isExpanded['1']"
+              *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]"
               style="
-                border-top: 2px solid #808080;
+                border-top: 2px solid grey;
                 padding-top: 20px;
                 padding-bottom: 20px;
               "
@@ -79,6 +87,13 @@
         </mat-card-content>
       </mat-card>
     </div>
+  </div>
+  <div
+    class="numberOfItems"
+    *ngIf="closedCaseDetails && closedCaseDetails.length > 0"
+  >
+    Showing {{ closedCaseDetails.length }} of
+    {{ closedCaseDetails.length }} records
   </div>
 
   <div class="list" id="definitions">
