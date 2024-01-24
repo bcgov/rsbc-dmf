@@ -660,7 +660,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var driverId = Guid.Parse(request.Id);
                 var c = await _caseManager.GetMostRecentCaseDetail(driverId);
-                var c = await _caseManager.GetMostRecentCaseDetail(request.DriverLicenseNumber);
+                
                 if (c != null)
                 {
                     reply.Item = new CaseDetail();

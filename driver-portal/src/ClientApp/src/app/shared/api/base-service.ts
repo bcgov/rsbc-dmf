@@ -22,7 +22,6 @@ export class BaseService {
    * service, will fallback to `ApiConfiguration.rootUrl`.
    */
   get rootUrl(): string {
-    console.log("config", this.config);
     return this._rootUrl || this.config.rootUrl;
   }
 
