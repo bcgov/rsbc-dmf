@@ -33,10 +33,6 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "6.0.x"
-          
-      - name: Clean
-        run: dotnet clean --configuration Release
-        working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Install dependencies
         run: dotnet restore
