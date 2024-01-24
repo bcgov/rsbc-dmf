@@ -86,19 +86,6 @@
               "
             >
               <div>
-                <label>Case Type</label>
-                <div>
-                  <b>DMER</b>
-                </div>
-              </div>
-
-              <div>
-                <label>Case Id</label>
-                <div>
-                  <b>{{ document.caseId }}</b>
-                </div>
-              </div>
-              <div>
                 <label>Description</label>
                 <div>
                   <b>{{ document.description }}</b>
@@ -110,6 +97,28 @@
       </mat-card>
     </div>
   </div>
+
+  <div
+    class="numberOfItems"
+    *ngIf="
+      allDriverDocuments &&
+      allDriverDocuments.length > 0 &&
+      filteredDocuments &&
+      filteredDocuments.length > 0
+    "
+  >
+    Showing {{ filteredDocuments?.length }} of
+    {{ allDriverDocuments.length }} records
+    <br />
+    <a
+      *ngIf="filteredDocuments.length < allDriverDocuments.length"
+      (click)="viewMore()"
+      class="viewMore"
+      ><b style="color: #003366">View more records</b>
+      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+    >
+  </div>
+
   <div class="list" id="definitions">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">

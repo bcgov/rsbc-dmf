@@ -1,24 +1,25 @@
-name: cd-cms-adapter-artifactory
+name: cd-document-storage-adapter-artifactory
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
+    # Publish `main` as Docker `latest` image.
     branches:
       - main
 
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
-    paths:
-      - "cms-adapter/src/**"
-      - ".github/workflows/cd-cms-adapter-artifactory.yml"
+    paths:    
+      - "document-storage-adapter/src/**"
+      - ".github/workflows/cd-document-storage-adapter-artifactory.yml"
 
 env:
-  IMAGE_NAME: cms-adapter
-  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/cms-adapter
+  IMAGE_NAME: document-storage-adapter
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/document-storage-adapter
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
+
 
 jobs:
   build:
@@ -35,8 +36,7 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./cms-adapter/src
-        run: docker build . --file Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: docker build . --file ./document-storage-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID 
 
       - name: Push image
         run: |

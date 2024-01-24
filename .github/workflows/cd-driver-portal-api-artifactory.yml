@@ -1,21 +1,20 @@
-name: cd-cms-adapter-artifactory
+name: cd-driver-portal-api-artifactory
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
+    # Publish `main` as Docker `latest` image.
     branches:
       - main
-
     # Publish `v1.2.3` tags as releases.
     tags:
       - v*
     paths:
-      - "cms-adapter/src/**"
-      - ".github/workflows/cd-cms-adapter-artifactory.yml"
+      - "driver-portal/src/**"
+      - ".github/workflows/cd-driver-portal-api-artifactory.yml"
 
 env:
-  IMAGE_NAME: cms-adapter
-  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/cms-adapter
+  IMAGE_NAME: driver-portal-api
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/${{ env.IMAGE_NAME }}
   RUN_NUMBER: ${{ github.run_number }}
   BUILD_PREFIX: ${{ vars.versionprefix }}
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
@@ -24,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
-
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -35,8 +34,10 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./cms-adapter/src
-        run: docker build . --file Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        run: |
+          echo "BUILD ID=$BUILD_ID"   
+          echo "BUILD VERSION=$BUILD_PREFIX`expr $RUN_NUMBER % 256`"     
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" . --file ./driver-portal/src/Dockerfile --cache-from=$IMAGE_ID       
 
       - name: Push image
         run: |
