@@ -13,10 +13,10 @@ import { apiCasesCaseIdGet$Json } from '../fn/cases/api-cases-case-id-get-json';
 import { ApiCasesCaseIdGet$Json$Params } from '../fn/cases/api-cases-case-id-get-json';
 import { apiCasesCaseIdGet$Plain } from '../fn/cases/api-cases-case-id-get-plain';
 import { ApiCasesCaseIdGet$Plain$Params } from '../fn/cases/api-cases-case-id-get-plain';
-import { apiCasesDriverIdClosedGet$Json } from '../fn/cases/api-cases-driver-id-closed-get-json';
-import { ApiCasesDriverIdClosedGet$Json$Params } from '../fn/cases/api-cases-driver-id-closed-get-json';
-import { apiCasesDriverIdClosedGet$Plain } from '../fn/cases/api-cases-driver-id-closed-get-plain';
-import { ApiCasesDriverIdClosedGet$Plain$Params } from '../fn/cases/api-cases-driver-id-closed-get-plain';
+import { apiCasesClosedGet$Json } from '../fn/cases/api-cases-closed-get-json';
+import { ApiCasesClosedGet$Json$Params } from '../fn/cases/api-cases-closed-get-json';
+import { apiCasesClosedGet$Plain } from '../fn/cases/api-cases-closed-get-plain';
+import { ApiCasesClosedGet$Plain$Params } from '../fn/cases/api-cases-closed-get-plain';
 import { apiCasesGet$Json } from '../fn/cases/api-cases-get-json';
 import { ApiCasesGet$Json$Params } from '../fn/cases/api-cases-get-json';
 import { apiCasesGet$Plain } from '../fn/cases/api-cases-get-plain';
@@ -80,49 +80,49 @@ export class CasesService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiCasesDriverIdClosedGet()` */
-  static readonly ApiCasesDriverIdClosedGetPath = '/api/Cases/{driverId}/Closed';
+  /** Path part for operation `apiCasesClosedGet()` */
+  static readonly ApiCasesClosedGetPath = '/api/Cases/Closed';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiCasesDriverIdClosedGet$Plain()` instead.
+   * To access only the response body, use `apiCasesClosedGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCasesDriverIdClosedGet$Plain$Response(params: ApiCasesDriverIdClosedGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
-    return apiCasesDriverIdClosedGet$Plain(this.http, this.rootUrl, params, context);
+  apiCasesClosedGet$Plain$Response(params?: ApiCasesClosedGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
+    return apiCasesClosedGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiCasesDriverIdClosedGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiCasesClosedGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCasesDriverIdClosedGet$Plain(params: ApiCasesDriverIdClosedGet$Plain$Params, context?: HttpContext): Observable<Array<CaseDetail>> {
-    return this.apiCasesDriverIdClosedGet$Plain$Response(params, context).pipe(
+  apiCasesClosedGet$Plain(params?: ApiCasesClosedGet$Plain$Params, context?: HttpContext): Observable<Array<CaseDetail>> {
+    return this.apiCasesClosedGet$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CaseDetail>>): Array<CaseDetail> => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiCasesDriverIdClosedGet$Json()` instead.
+   * To access only the response body, use `apiCasesClosedGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCasesDriverIdClosedGet$Json$Response(params: ApiCasesDriverIdClosedGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
-    return apiCasesDriverIdClosedGet$Json(this.http, this.rootUrl, params, context);
+  apiCasesClosedGet$Json$Response(params?: ApiCasesClosedGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
+    return apiCasesClosedGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiCasesDriverIdClosedGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiCasesClosedGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCasesDriverIdClosedGet$Json(params: ApiCasesDriverIdClosedGet$Json$Params, context?: HttpContext): Observable<Array<CaseDetail>> {
-    return this.apiCasesDriverIdClosedGet$Json$Response(params, context).pipe(
+  apiCasesClosedGet$Json(params?: ApiCasesClosedGet$Json$Params, context?: HttpContext): Observable<Array<CaseDetail>> {
+    return this.apiCasesClosedGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<CaseDetail>>): Array<CaseDetail> => r.body)
     );
   }

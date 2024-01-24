@@ -23,7 +23,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         private readonly IConfiguration _configuration;
-        private readonly bool _isAuthorizationEnabled;
 
         public CustomWebApplicationFactory(IConfiguration configuration)
         {
@@ -66,7 +65,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 
                 // document storage client
                 string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
-                if (true || string.IsNullOrEmpty(documentStorageAdapterURI))
+                if (string.IsNullOrEmpty(documentStorageAdapterURI))
                 {
                     // add the mock
                     var documentStorageAdapterClient = DocumentStorageHelper.CreateMock(_configuration);

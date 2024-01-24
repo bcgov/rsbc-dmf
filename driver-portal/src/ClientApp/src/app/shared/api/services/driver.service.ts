@@ -9,14 +9,14 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiDriverDriverIdAllDocumentsGet$Json } from '../fn/driver/api-driver-driver-id-all-documents-get-json';
-import { ApiDriverDriverIdAllDocumentsGet$Json$Params } from '../fn/driver/api-driver-driver-id-all-documents-get-json';
-import { apiDriverDriverIdAllDocumentsGet$Plain } from '../fn/driver/api-driver-driver-id-all-documents-get-plain';
-import { ApiDriverDriverIdAllDocumentsGet$Plain$Params } from '../fn/driver/api-driver-driver-id-all-documents-get-plain';
-import { apiDriverDriverIdDocumentsGet$Json } from '../fn/driver/api-driver-driver-id-documents-get-json';
-import { ApiDriverDriverIdDocumentsGet$Json$Params } from '../fn/driver/api-driver-driver-id-documents-get-json';
-import { apiDriverDriverIdDocumentsGet$Plain } from '../fn/driver/api-driver-driver-id-documents-get-plain';
-import { ApiDriverDriverIdDocumentsGet$Plain$Params } from '../fn/driver/api-driver-driver-id-documents-get-plain';
+import { apiDriverAllDocumentsGet$Json } from '../fn/driver/api-driver-all-documents-get-json';
+import { ApiDriverAllDocumentsGet$Json$Params } from '../fn/driver/api-driver-all-documents-get-json';
+import { apiDriverAllDocumentsGet$Plain } from '../fn/driver/api-driver-all-documents-get-plain';
+import { ApiDriverAllDocumentsGet$Plain$Params } from '../fn/driver/api-driver-all-documents-get-plain';
+import { apiDriverDocumentsGet$Json } from '../fn/driver/api-driver-documents-get-json';
+import { ApiDriverDocumentsGet$Json$Params } from '../fn/driver/api-driver-documents-get-json';
+import { apiDriverDocumentsGet$Plain } from '../fn/driver/api-driver-documents-get-plain';
+import { ApiDriverDocumentsGet$Plain$Params } from '../fn/driver/api-driver-documents-get-plain';
 import { CaseDocuments } from '../models/case-documents';
 import { Document } from '../models/document';
 
@@ -26,96 +26,96 @@ export class DriverService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiDriverDriverIdDocumentsGet()` */
-  static readonly ApiDriverDriverIdDocumentsGetPath = '/api/Driver/{driverId}/Documents';
+  /** Path part for operation `apiDriverDocumentsGet()` */
+  static readonly ApiDriverDocumentsGetPath = '/api/Driver/Documents';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverDriverIdDocumentsGet$Plain()` instead.
+   * To access only the response body, use `apiDriverDocumentsGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdDocumentsGet$Plain$Response(params: ApiDriverDriverIdDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocuments>> {
-    return apiDriverDriverIdDocumentsGet$Plain(this.http, this.rootUrl, params, context);
+  apiDriverDocumentsGet$Plain$Response(params?: ApiDriverDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocuments>> {
+    return apiDriverDocumentsGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverDriverIdDocumentsGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverDocumentsGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdDocumentsGet$Plain(params: ApiDriverDriverIdDocumentsGet$Plain$Params, context?: HttpContext): Observable<CaseDocuments> {
-    return this.apiDriverDriverIdDocumentsGet$Plain$Response(params, context).pipe(
+  apiDriverDocumentsGet$Plain(params?: ApiDriverDocumentsGet$Plain$Params, context?: HttpContext): Observable<CaseDocuments> {
+    return this.apiDriverDocumentsGet$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<CaseDocuments>): CaseDocuments => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverDriverIdDocumentsGet$Json()` instead.
+   * To access only the response body, use `apiDriverDocumentsGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdDocumentsGet$Json$Response(params: ApiDriverDriverIdDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocuments>> {
-    return apiDriverDriverIdDocumentsGet$Json(this.http, this.rootUrl, params, context);
+  apiDriverDocumentsGet$Json$Response(params?: ApiDriverDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocuments>> {
+    return apiDriverDocumentsGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverDriverIdDocumentsGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverDocumentsGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdDocumentsGet$Json(params: ApiDriverDriverIdDocumentsGet$Json$Params, context?: HttpContext): Observable<CaseDocuments> {
-    return this.apiDriverDriverIdDocumentsGet$Json$Response(params, context).pipe(
+  apiDriverDocumentsGet$Json(params?: ApiDriverDocumentsGet$Json$Params, context?: HttpContext): Observable<CaseDocuments> {
+    return this.apiDriverDocumentsGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<CaseDocuments>): CaseDocuments => r.body)
     );
   }
 
-  /** Path part for operation `apiDriverDriverIdAllDocumentsGet()` */
-  static readonly ApiDriverDriverIdAllDocumentsGetPath = '/api/Driver/{driverId}/AllDocuments';
+  /** Path part for operation `apiDriverAllDocumentsGet()` */
+  static readonly ApiDriverAllDocumentsGetPath = '/api/Driver/AllDocuments';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverDriverIdAllDocumentsGet$Plain()` instead.
+   * To access only the response body, use `apiDriverAllDocumentsGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdAllDocumentsGet$Plain$Response(params: ApiDriverDriverIdAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
-    return apiDriverDriverIdAllDocumentsGet$Plain(this.http, this.rootUrl, params, context);
+  apiDriverAllDocumentsGet$Plain$Response(params?: ApiDriverAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+    return apiDriverAllDocumentsGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverDriverIdAllDocumentsGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverAllDocumentsGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdAllDocumentsGet$Plain(params: ApiDriverDriverIdAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<Array<Document>> {
-    return this.apiDriverDriverIdAllDocumentsGet$Plain$Response(params, context).pipe(
+  apiDriverAllDocumentsGet$Plain(params?: ApiDriverAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<Array<Document>> {
+    return this.apiDriverAllDocumentsGet$Plain$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDriverDriverIdAllDocumentsGet$Json()` instead.
+   * To access only the response body, use `apiDriverAllDocumentsGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdAllDocumentsGet$Json$Response(params: ApiDriverDriverIdAllDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
-    return apiDriverDriverIdAllDocumentsGet$Json(this.http, this.rootUrl, params, context);
+  apiDriverAllDocumentsGet$Json$Response(params?: ApiDriverAllDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+    return apiDriverAllDocumentsGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDriverDriverIdAllDocumentsGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiDriverAllDocumentsGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiDriverDriverIdAllDocumentsGet$Json(params: ApiDriverDriverIdAllDocumentsGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
-    return this.apiDriverDriverIdAllDocumentsGet$Json$Response(params, context).pipe(
+  apiDriverAllDocumentsGet$Json(params?: ApiDriverAllDocumentsGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
+    return this.apiDriverAllDocumentsGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
     );
   }

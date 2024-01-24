@@ -104,17 +104,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var result = new CaseDetail();
 
             var profile = await _userService.GetCurrentUserContext();
-
-            result = new CaseDetail() {
-                Title = "A1A1A1",
-                CaseId = Guid.Empty.ToString(),
-                DmerType = "Scheduled Age",
-                CaseType = "Driver’s Medical Examination Report",
-                LatestDecision = "Under review",
-                OutstandingDocuments = 3
-            };
-            /*
-            var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverLicenseRequest { DriverLicenseNumber = driverLicenseNumber});
+            
+            var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 string caseType = "Unsolicited";
