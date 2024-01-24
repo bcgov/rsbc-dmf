@@ -27,7 +27,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get case submissions, submission requirements, and letters to driver documents for a given driver
         /// NOTE that this retrieves all documents for the driver and there is no guarantee that a document is linked to a case
         /// </summary>
-        /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
         [HttpGet("Documents")]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
@@ -43,34 +42,31 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (reply.ResultStatus == ResultStatus.Success)
             {
                 var result = new CaseDocuments();
-
-                foreach (var item in reply.Items)
+                var replyItemsExcludingUploaded = reply.Items.Where(i => i.SubmittalStatus != "Uploaded");
+                foreach (var item in replyItemsExcludingUploaded)
                 {
-                    if (item.SubmittalStatus != "Uploaded")
-                    {
-                        var document = _mapper.Map<Document>(item);
+                    var document = _mapper.Map<Document>(item);
 
-                        switch (document.SubmittalStatus)
-                        {
-                            case "Received":
-                                // exclude documents with no key
-                                if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                {
-                                    result.CaseSubmissions.Add(document);
-                                }
-                                break;
-                            case "Open-Required":
-                                // this category by design has documents with no key
-                                result.SubmissionRequirements.Add(document);
-                                break;
-                            case "Sent":
-                                // exclude documents with no key
-                                if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                {
-                                    result.LettersToDriver.Add(document);
-                                }
-                                break;
-                        }
+                    switch (document.SubmittalStatus)
+                    {
+                        case "Received":
+                            // exclude documents with no key
+                            if (!string.IsNullOrEmpty(document.DocumentUrl))
+                            {
+                                result.CaseSubmissions.Add(document);
+                            }
+                            break;
+                        case "Open-Required":
+                            // this category by design has documents with no key
+                            result.SubmissionRequirements.Add(document);
+                            break;
+                        case "Sent":
+                            // exclude documents with no key
+                            if (!string.IsNullOrEmpty(document.DocumentUrl))
+                            {
+                                result.LettersToDriver.Add(document);
+                            }
+                            break;
                     }
                 }
 
@@ -116,16 +112,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
-                var result = new List<Document>();
-
-                foreach (var item in reply.Items)
-                {
-                    var document = _mapper.Map<Document>(item);
-                    if (!string.IsNullOrEmpty(document.DocumentUrl))
-                    {
-                        result.Add(document);
-                    }
-                }
+                var replyItemsWithDocuments = reply.Items.Where(i => !string.IsNullOrEmpty(i.DocumentUrl));
+                var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
 
                 // sort the documents
                 if (result.Count > 0)
