@@ -8,14 +8,12 @@ import { RequestBuilder } from '../../request-builder';
 
 import { CaseDetail } from '../../models/case-detail';
 
-export interface ApiCasesDriverIdClosedGet$Plain$Params {
-  driverId: string;
+export interface ApiCasesClosedGet$Plain$Params {
 }
 
-export function apiCasesDriverIdClosedGet$Plain(http: HttpClient, rootUrl: string, params: ApiCasesDriverIdClosedGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
-  const rb = new RequestBuilder(rootUrl, apiCasesDriverIdClosedGet$Plain.PATH, 'get');
+export function apiCasesClosedGet$Plain(http: HttpClient, rootUrl: string, params?: ApiCasesClosedGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDetail>>> {
+  const rb = new RequestBuilder(rootUrl, apiCasesClosedGet$Plain.PATH, 'get');
   if (params) {
-    rb.path('driverId', params.driverId, {});
   }
 
   return http.request(
@@ -28,4 +26,4 @@ export function apiCasesDriverIdClosedGet$Plain(http: HttpClient, rootUrl: strin
   );
 }
 
-apiCasesDriverIdClosedGet$Plain.PATH = '/api/Cases/{driverId}/Closed';
+apiCasesClosedGet$Plain.PATH = '/api/Cases/Closed';

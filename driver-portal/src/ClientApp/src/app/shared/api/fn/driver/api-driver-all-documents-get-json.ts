@@ -8,18 +8,16 @@ import { RequestBuilder } from '../../request-builder';
 
 import { Document } from '../../models/document';
 
-export interface ApiDriverDriverIdAllDocumentsGet$Plain$Params {
-  driverId: string;
+export interface ApiDriverAllDocumentsGet$Json$Params {
 }
 
-export function apiDriverDriverIdAllDocumentsGet$Plain(http: HttpClient, rootUrl: string, params: ApiDriverDriverIdAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
-  const rb = new RequestBuilder(rootUrl, apiDriverDriverIdAllDocumentsGet$Plain.PATH, 'get');
+export function apiDriverAllDocumentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiDriverAllDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+  const rb = new RequestBuilder(rootUrl, apiDriverAllDocumentsGet$Json.PATH, 'get');
   if (params) {
-    rb.path('driverId', params.driverId, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: 'text/plain', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -28,4 +26,4 @@ export function apiDriverDriverIdAllDocumentsGet$Plain(http: HttpClient, rootUrl
   );
 }
 
-apiDriverDriverIdAllDocumentsGet$Plain.PATH = '/api/Driver/{driverId}/AllDocuments';
+apiDriverAllDocumentsGet$Json.PATH = '/api/Driver/AllDocuments';

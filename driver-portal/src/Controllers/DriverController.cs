@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
@@ -12,12 +11,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
         }
@@ -26,49 +27,46 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get case submissions, submission requirements, and letters to driver documents for a given driver
         /// NOTE that this retrieves all documents for the driver and there is no guarantee that a document is linked to a case
         /// </summary>
-        /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
-        [HttpGet("{driverId}/Documents")]
-        [AuthorizeDriver(ParameterName = "driverId")]
+        [HttpGet("Documents")]
         [ProducesResponseType(typeof(CaseDocuments), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCaseDocuments")]
-        public ActionResult GetCaseDocuments([FromRoute] string driverId)
+        public async Task<ActionResult> GetCaseDocuments()
         {
-            var driverIdRequest = new DriverIdRequest() { Id = driverId };
+            var profile = await _userService.GetCurrentUserContext();
+
+            var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
                 var result = new CaseDocuments();
-
-                foreach (var item in reply.Items)
+                var replyItemsExcludingUploaded = reply.Items.Where(i => i.SubmittalStatus != "Uploaded");
+                foreach (var item in replyItemsExcludingUploaded)
                 {
-                    if (item.SubmittalStatus != "Uploaded")
-                    {
-                        var document = _mapper.Map<Document>(item);
+                    var document = _mapper.Map<Document>(item);
 
-                        switch (document.SubmittalStatus)
-                        {
-                            case "Received":
-                                // exclude documents with no key
-                                if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                {
-                                    result.CaseSubmissions.Add(document);
-                                }
-                                break;
-                            case "Open-Required":
-                                // this category by design has documents with no key
-                                result.SubmissionRequirements.Add(document);
-                                break;
-                            case "Sent":
-                                // exclude documents with no key
-                                if (!string.IsNullOrEmpty(document.DocumentUrl))
-                                {
-                                    result.LettersToDriver.Add(document);
-                                }
-                                break;
-                        }
+                    switch (document.SubmittalStatus)
+                    {
+                        case "Received":
+                            // exclude documents with no key
+                            if (!string.IsNullOrEmpty(document.DocumentUrl))
+                            {
+                                result.CaseSubmissions.Add(document);
+                            }
+                            break;
+                        case "Open-Required":
+                            // this category by design has documents with no key
+                            result.SubmissionRequirements.Add(document);
+                            break;
+                        case "Sent":
+                            // exclude documents with no key
+                            if (!string.IsNullOrEmpty(document.DocumentUrl))
+                            {
+                                result.LettersToDriver.Add(document);
+                            }
+                            break;
                     }
                 }
 
@@ -92,7 +90,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
@@ -100,30 +98,22 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
-        /// <param name="driverId">The driver id</param>
         /// <returns>CaseDocuments</returns>
-        [HttpGet("{driverId}/AllDocuments")]
-        [AuthorizeDriver(ParameterName = "driverId")]
+        [HttpGet("AllDocuments")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetAllDocuments")]
-        public ActionResult GetAllDocuments([FromRoute] string driverId)
+        public async Task<ActionResult> GetAllDocuments()
         {
-            var driverIdRequest = new DriverIdRequest() { Id = driverId };
+            var profile = await _userService.GetCurrentUserContext();
+
+            var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
-                var result = new List<Document>();
-
-                foreach (var item in reply.Items)
-                {
-                    var document = _mapper.Map<Document>(item);
-                    if (!string.IsNullOrEmpty(document.DocumentUrl))
-                    {
-                        result.Add(document);
-                    }
-                }
+                var replyItemsWithDocuments = reply.Items.Where(i => !string.IsNullOrEmpty(i.DocumentUrl));
+                var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
 
                 // sort the documents
                 if (result.Count > 0)
@@ -135,7 +125,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }

@@ -575,7 +575,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try
             {
                 var driverId = Guid.Parse(caseStatusRequest.DriverId);
-                var activeStatus = caseStatusRequest.Status.Convert<ActiveStatus, CaseManagement.ActiveStatus>();
+                var activeStatus = caseStatusRequest.Status.Convert<EntityState, Dynamics.EntityState>();
                 var cases = await _caseManager.GetCases(driverId, activeStatus);
                 if (cases == null)
                 {
@@ -652,15 +652,15 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetCaseDetailReply> GetMostRecentCaseDetail(DriverLicenseRequest request, ServerCallContext context)
+        public async override Task<GetCaseDetailReply> GetMostRecentCaseDetail(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
 
             try
             {
-
-
-                var c = await _caseManager.GetMostRecentCaseDetail(request.DriverLicenseNumber);
+                var driverId = Guid.Parse(request.Id);
+                var c = await _caseManager.GetMostRecentCaseDetail(driverId);
+                
                 if (c != null)
                 {
                     reply.Item = new CaseDetail();

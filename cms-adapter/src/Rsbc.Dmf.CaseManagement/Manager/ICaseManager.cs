@@ -1,4 +1,5 @@
-﻿using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+﻿using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,11 +23,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenseNumber, bool allComments);
 
-        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, ActiveStatus activeStatus);
+        Task<IEnumerable<CaseDetail>> GetCases(Guid driverId, EntityState entityState);
 
         Task<CaseDetail> GetCaseDetail(string caseId);
 
-        Task<CaseDetail> GetMostRecentCaseDetail(string driverLicenseNumber);
+        Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId);
 
         Task<LegacyComment> GetComment(string commentId);
 

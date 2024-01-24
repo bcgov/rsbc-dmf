@@ -1,48 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Rsbc.Dmf.DriverPortal.Api.Services;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeDriverAttribute : Attribute, IFilterFactory
+    // TODO remove this without github build error
+    // NOTE removing this and building locally works, I tried cleaning the github build and building dockers
+    public class AuthorizeDriverAttribute
     {
-        public bool IsReusable => false;
-        public string ParameterName = "driverId";
-
-        public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
+        public class AuthorizeDriver
         {
-            var authorizeDriverActionFilter = serviceProvider.GetService<AuthorizeDriver>();
-            authorizeDriverActionFilter.ParameterName = ParameterName;
-            return authorizeDriverActionFilter;
-        }
-
-
-
-        public class AuthorizeDriver : ActionFilterAttribute, IAsyncAuthorizationFilter
-        {
-            public string ParameterName = "driverId";
-
-            private readonly IUserService _userService;
-
-            public AuthorizeDriver(IUserService userService)
-            {
-                _userService = userService;
-            }
-
-            public async Task OnAuthorizationAsync(AuthorizationFilterContext filterContext)
-            {
-                if (!filterContext.RouteData.Values.ContainsKey(ParameterName))
-                {
-                    filterContext.Result = new BadRequestObjectResult($"parameter {ParameterName} missing.");
-                    return;
-                }
-
-                var driverId = filterContext.RouteData.Values[ParameterName] as string;
-                var isAuthorizedResponse = await _userService.IsDriverAuthorized(driverId);
-                if (!isAuthorizedResponse)
-                    filterContext.Result = new UnauthorizedResult();
-            }
         }
     }
 }

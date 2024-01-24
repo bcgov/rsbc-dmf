@@ -23,22 +23,22 @@ export class CaseManagementService {
   }
 
   public getClosedCases(
-    params: Parameters<CasesService['apiCasesDriverIdClosedGet$Json']>[0]
+    params: Parameters<CasesService['apiCasesClosedGet$Json']>[0]
   ) {
-    return this.casesService.apiCasesDriverIdClosedGet$Json(params);
+    return this.casesService.apiCasesClosedGet$Json(params);
   }
 
   public getDriverDocuments(
-    params: Parameters<DriverService['apiDriverDriverIdDocumentsGet$Json']>[0]
+    params: Parameters<DriverService['apiDriverDocumentsGet$Json']>[0]
   ) {
-    return this.driversService.apiDriverDriverIdDocumentsGet$Json(params);
+    return this.driversService.apiDriverDocumentsGet$Json(params);
   }
 
   public getAllDocuments(
     params: Parameters<
-      DriverService['apiDriverDriverIdAllDocumentsGet$Json']
+      DriverService['apiDriverAllDocumentsGet$Json']
     >[0]
   ) {
-    return this.driversService.apiDriverDriverIdAllDocumentsGet$Json(params);
+    return this.driversService.apiDriverAllDocumentsGet$Json(params);
   }
 }

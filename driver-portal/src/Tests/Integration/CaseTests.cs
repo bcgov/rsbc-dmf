@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             if (string.IsNullOrEmpty(driverId))
                 return;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/{driverId}/Closed");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/Closed");
             var result = await HttpClientSendRequest<IEnumerable<CaseDetail>>(request);
 
             Assert.NotNull(result);

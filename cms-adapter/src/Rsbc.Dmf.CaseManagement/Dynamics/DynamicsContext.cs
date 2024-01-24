@@ -74,7 +74,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         }
     }
 
-    internal enum EntityState
+    public enum EntityState
     {
         Active = 0,
         Inactive = 1

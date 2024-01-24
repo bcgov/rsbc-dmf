@@ -41,7 +41,7 @@ service CaseManager {
 
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
-  rpc GetMostRecentCaseDetail (DriverLicenseRequest) returns (GetCaseDetailReply);
+  rpc GetMostRecentCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
@@ -110,13 +110,13 @@ service CaseManager {
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
-enum ActiveStatus {
-	Active = 0;
-	Closed = 1;
+enum EntityState {
+    Active = 0;
+    Inactive = 1;
 }
 
-message UpdateDriverRequest{
-	string driverLicenseNumber=1;
+message UpdateDriverRequest {
+	string driverLicenseNumber = 1;
 	google.protobuf.Timestamp birthDate = 2;
 }
 
@@ -134,7 +134,7 @@ message CaseIdRequest {
 
 message CaseStatusRequest {
 	string driverId = 1;
-	ActiveStatus status = 2;
+	EntityState status = 2;
 }
 
 enum OriginRestrictions {
@@ -541,6 +541,7 @@ message UserLoginReply {
 	string errorDetail = 2;
 	string userId = 10;
 	string userEmail = 11;
+	string driverId = 12;
 }
 
 message User {

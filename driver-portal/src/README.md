@@ -1,13 +1,9 @@
 #Driver-Portal
 
-## Run
+## Overview
 
-To start the app on port 3020, which OAuth has a redirect uri entry for, and to run with ssl certificate, use the following:
-`npm start`
-
-## Test
-
-`ng t`
+Backend API for the Driver Portal application
+See ClientApp/README.md for more information on the frontend
 
 ## Development Environment
 

@@ -17,7 +17,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
         Task SetEmail(string userId, string email);
-        Task<bool> IsDriverAuthorized(string driverId);
     }
 
     public record UserContext
@@ -26,6 +25,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }        
         public string Email { get; set; }
+        public string DriverId { get; set; }
     }
 
 
@@ -55,18 +55,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 Id = user.FindFirstValue(ClaimTypes.Sid),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
-                Email = user.FindFirstValue(ClaimTypes.Email)
+                Email = user.FindFirstValue(ClaimTypes.Email),
+                DriverId = user.FindFirstValue(UserClaimTypes.DriverId)
             });
-        }
-
-        public async Task<bool> IsDriverAuthorized(string driverId)
-        {
-            var request = new UserDriverAuthorizedRequest();
-            request.UserId = (await GetCurrentUserContext()).Id;
-            request.DriverId = driverId;
-
-            var isAuthorizedResponse = userManager.IsDriverAuthorized(request);
-            return isAuthorizedResponse.Result;
         }
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
@@ -81,10 +72,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
-                UserProfiles = { new UserProfile()
-                { 
-                }
-                }
+                UserProfiles = { new UserProfile() }
             };
             var loginResponse = await userManager.LoginAsync(loginRequest);
             if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
@@ -100,8 +88,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
-            claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));            
-
+            claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+            claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
             user.AddIdentity(new ClaimsIdentity(claims));
 
             logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
