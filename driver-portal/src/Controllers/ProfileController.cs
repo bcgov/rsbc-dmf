@@ -27,10 +27,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 EmailAddress = profile.Email,
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,                
+                DriverId = profile.DriverId
             };
         }
-
-
 
         /// <summary>
         /// set the user's profile email
@@ -64,8 +63,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             public string Id { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
-
+            public string DriverId { get; set; }
         }
-
     }
 }
