@@ -5,6 +5,7 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 namespace Rsbc.Dmf.DriverPortal.Api
 {
     // TODO delete this file without crashing github build
+    // it builds locally and dockerfile, weird bug, clean didn't fix
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class AuthorizeDriverAttribute : Attribute, IFilterFactory
     {
@@ -31,16 +32,16 @@ namespace Rsbc.Dmf.DriverPortal.Api
 
             public async Task OnAuthorizationAsync(AuthorizationFilterContext filterContext)
             {
-                if (!filterContext.RouteData.Values.ContainsKey(ParameterName))
-                {
-                    filterContext.Result = new BadRequestObjectResult($"parameter {ParameterName} missing.");
-                    return;
-                }
+                //if (!filterContext.RouteData.Values.ContainsKey(ParameterName))
+                //{
+                //    filterContext.Result = new BadRequestObjectResult($"parameter {ParameterName} missing.");
+                //    return;
+                //}
 
-                var driverId = filterContext.RouteData.Values[ParameterName] as string;
-                var isAuthorizedResponse = await _userService.IsDriverAuthorized(driverId);
-                if (!isAuthorizedResponse)
-                    filterContext.Result = new UnauthorizedResult();
+                //var driverId = filterContext.RouteData.Values[ParameterName] as string;
+                //var isAuthorizedResponse = await _userService.IsDriverAuthorized(driverId);
+                //if (!isAuthorizedResponse)
+                //    filterContext.Result = new UnauthorizedResult();
             }
         }
     }
