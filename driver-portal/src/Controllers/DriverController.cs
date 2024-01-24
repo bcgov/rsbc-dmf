@@ -112,7 +112,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
-                var replyItemsWithDocuments = reply.Items.Where(i => !string.IsNullOrEmpty(i.DocumentUrl));
+                var replyItemsWithDocuments = reply.Items
+                    .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
+                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Sent");
                 var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
 
                 // sort the documents
