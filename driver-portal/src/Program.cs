@@ -62,7 +62,7 @@ services.AddAuthorization(options =>
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-    options.AddPolicy(Role.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
+    options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
 });
 
 services.AddCors();

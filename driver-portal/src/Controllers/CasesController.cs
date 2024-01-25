@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Closed")]
-        [Authorize(Policy = Role.Driver)]
+        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

@@ -10,7 +10,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Role.Driver)]
+    [Authorize(Policy = Policy.Driver)]
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
