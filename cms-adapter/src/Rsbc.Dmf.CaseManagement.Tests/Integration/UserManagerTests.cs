@@ -92,7 +92,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             actualMedicalPractitioner.ExternalSystemUserId.ShouldBe(userId);
             actualMedicalPractitioner.ExternalSystem.ShouldBe(system, StringCompareShould.IgnoreCase);
             actualMedicalPractitioner.FirstName.ShouldBe(newMedicalPractitioner.FirstName);
-            actualMedicalPractitioner.FirstName.ShouldBe(newMedicalPractitioner.FirstName);
             var actualClinicAssignment = actualMedicalPractitioner.ClinicAssignments.ShouldHaveSingleItem();
             actualClinicAssignment.Roles.ShouldHaveSingleItem().ShouldBe(newMedicalPractitioner.ClinicAssignments.First().Roles.First());
             actualClinicAssignment.Clinic.ShouldNotBeNull();

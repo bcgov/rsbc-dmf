@@ -22,15 +22,4 @@ export class DashboardComponent {
     event.preventDefault();
     this.viewportScroller.scrollToAnchor(elementId);
   }
-  // public  ngOnInit(): void {
-  //     this.getRecentCase('F4B8B3');
-  // }
-
-  // getRecentCase(caseId: string){
-  //   this.caseManagementService.getCaseById({caseId }).subscribe(
-  //     (caseResponse) => {
-  //       console.log(caseResponse);
-  //     }
-  //   );
-  // }
 }
