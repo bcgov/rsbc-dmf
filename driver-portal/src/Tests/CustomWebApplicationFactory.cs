@@ -40,6 +40,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 // add policy but then fake success always, the RequireClaim is bypassed
                 services.AddAuthorization(options =>
                 {
+                    // policy needed to bypass services with attribute [Authorize(Policy = Policy.Driver)]
                     options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
                 });
                 services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
