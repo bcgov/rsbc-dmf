@@ -105,43 +105,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var result = new CaseDetail();
 
             var profile = await _userService.GetCurrentUserContext();
-            
+
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                string caseType = "Unsolicited";
-
-                if (c.Item.CaseType == "DMER")
-                {
-                    caseType = "Solicited";
-                }
-
-                result.CaseId = c.Item.CaseId;
-                result.Title = c.Item.Title;
-                result.IdCode = c.Item.IdCode;
-                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
-                result.CaseType = caseType;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.AssigneeTitle = c.Item.AssigneeTitle;
-                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
-                result.LatestDecision = c.Item.LatestDecision;
-                result.DecisionForClass = c.Item.DecisionForClass;
-                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                result.OutstandingDocuments = (int)c.Item.OutstandingDocuments;
-                if (c.Item.CaseSequence > -1)
-                {
-                    result.CaseSequence = (int)c.Item.CaseSequence;
-                }
-
-                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-
-            }
-
-            // set to null if no decision has been made.
-            if (result.DecisionDate == DateTimeOffset.MinValue)
-            {
-                result.DecisionDate = null;
+                result = _mapper.Map<CaseDetail>(c.Item);
+                // these properties are needed in other mappings but not here, only show minimal information
+                result.DriverId = null;
+                result.EligibleLicenseClass = null;
             }
             
             return Json(result);
