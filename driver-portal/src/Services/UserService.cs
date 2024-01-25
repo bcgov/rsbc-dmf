@@ -28,7 +28,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public string DriverId { get; set; }
     }
 
-
     public class UserService : IUserService
     {
         private readonly UserManager.UserManagerClient userManager;
@@ -89,6 +88,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
             claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+            if (!string.IsNullOrEmpty(loginResponse.DriverId))
             claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
             user.AddIdentity(new ClaimsIdentity(claims));
 

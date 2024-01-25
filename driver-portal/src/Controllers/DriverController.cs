@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api.Model;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 
@@ -8,6 +10,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = Role.Driver)]
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
