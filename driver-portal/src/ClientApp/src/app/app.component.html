@@ -1,12 +1,12 @@
-<header>
+<header style="position: fixed; width: 100%; z-index: 1000">
   <app-header></app-header>
 </header>
-<nav >
+<nav style="position: fixed; width: 100%; z-index: 10000; top: 146px">
   <app-nav-menu></app-nav-menu>
 </nav>
-<main>
+<main style="position: relative; top: 200px">
   <router-outlet></router-outlet>
 </main>
-<footer>
+<footer style="position: relative; top: 200px">
   <app-footer></app-footer>
 </footer>

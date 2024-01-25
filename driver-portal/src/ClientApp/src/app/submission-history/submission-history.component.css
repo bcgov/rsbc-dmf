@@ -7,21 +7,24 @@
 .submissionRequirement {
   display: flex;
   width: 100%;
-  justify-content: space-between;
 }
 
 .closedCaseContent {
   display: flex;
   flex-direction: row;
-  gap:32px;
 }
 
 .caseDetailRow {
   display: flex;
-  justify-content: start;
-  gap: 180px;
+  flex-wrap: wrap;
+  justify-content: space-between;
   line-height: 32px;
   padding-bottom: 24px;
+  align-content: flex-start;
+}
+
+.caseDetailRow > div {
+  flex-basis: 220px;
 }
 
 .mat-mdc-card {
@@ -42,6 +45,7 @@
 .expandedIcon{
   transform: scale(1.5);
   color: #003366;
+  width: 50px;
 }
 
 .open {

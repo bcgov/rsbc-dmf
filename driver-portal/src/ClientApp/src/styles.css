@@ -303,7 +303,7 @@ a.accordion-btn {
 .numberOfItems {
   display: flex;
   justify-content: center;
-  height: 108px;
+  height: 90px;
   background: inherit;
   background-color: rgba(242, 242, 242, 1);
   border: none;
