@@ -43,9 +43,13 @@
 </div>
 
 <div>
-  <mat-stepper labelPosition="bottom" #stepper>
+  <mat-stepper labelPosition="bottom" #stepper [selectedIndex]="selectedIndex">
     <mat-step state="circle">
-      <ng-template matStepLabel>Opened:</ng-template>
+      <ng-template matStepLabel
+        >Opened:<br />{{
+          caseDetails?.openedDate | date : "longDate"
+        }}</ng-template
+      >
     </mat-step>
     <mat-step state="circle">
       <ng-template matStepLabel>Open Pending Submission</ng-template>

@@ -20,6 +20,8 @@ import { LoginService } from '../shared/services/login.service';
 export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
 
+  selectedIndex = 0;
+
   @ViewChild('stepper') stepper!: MatStepper;
 
   constructor(
@@ -33,6 +35,24 @@ export class RecentCaseComponent implements OnInit {
       .getMostRecentCase(this.loginService.userProfile?.id as string)
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
+        if (recentCase.status === 'Opened') {
+          this.selectedIndex = 0;
+        }
+        if (recentCase.status === 'Open Pending Submission') {
+          this.selectedIndex = 1;
+        }
+        if (recentCase.status === 'Under Review') {
+          this.selectedIndex = 2;
+        }
+        if (recentCase.status === 'File End Tasks') {
+          this.selectedIndex = 3;
+        }
+        if (recentCase.status === 'Intake Validation') {
+          this.selectedIndex = 4;
+        }
+        if (recentCase.status === 'Closed') {
+          this.selectedIndex = 5;
+        }
         console.log(recentCase);
       });
   }
