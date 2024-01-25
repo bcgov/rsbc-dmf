@@ -7,7 +7,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.DriverPortal.Api;
-using Rsbc.Dmf.DriverPortal.Api.Model;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
 using System.Text.Json.Serialization;
@@ -62,7 +61,7 @@ services.AddAuthorization(options =>
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-    options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
+    options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
 });
 
 services.AddCors();
