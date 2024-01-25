@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-recent-case',
@@ -23,13 +24,16 @@ export class RecentCaseComponent implements OnInit {
 
   constructor(
     private caseManagementService: CaseManagementService,
+    private loginService: LoginService,
     private router: Router
   ) {}
 
   public ngOnInit(): void {
-    this.caseManagementService.getMostRecentCase({}).subscribe((recentCase) => {
-      this.caseDetails = recentCase;
-      //this.stepper.selectedIndex = 2;
-    });
+    this.caseManagementService
+      .getMostRecentCase(this.loginService.userProfile?.id as string)
+      .subscribe((recentCase) => {
+        this.caseDetails = recentCase;
+        console.log(recentCase);
+      });
   }
 }

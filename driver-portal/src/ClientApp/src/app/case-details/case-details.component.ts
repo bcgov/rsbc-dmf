@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDocuments } from '../shared/api/models';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-case-details',
@@ -14,10 +15,17 @@ export class CaseDetailsComponent implements OnInit {
 
   selectedIndex = 0;
 
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
-    this.getCaseSubmissionDocuments('e27d7c69-3913-4116-a360-f5e990200173');
+    if (this.loginService.userProfile?.id) {
+      this.getCaseSubmissionDocuments(
+        this.loginService.userProfile?.id as string
+      );
+    }
   }
 
   getCaseSubmissionDocuments(driverId: string) {

@@ -35,6 +35,17 @@
 button{
   border : 2px solid #003366;
   color: #003366;
+  /* border-width: 0px;
+    position: absolute;
+    left: 756px;
+    top: 27px;
+    width: 158px;
+    height: 46px;
+    display: flex;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: #003366; */
 }
 
 button:hover{   

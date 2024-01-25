@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDetail } from '../shared/api/models';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-case',
@@ -29,10 +30,17 @@ export class CaseComponent implements OnInit {
     return this._closedCaseDetails;
   }
 
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
-    this.getClosedCases('e27d7c69-3913-4116-a360-f5e990600056');
+    if (this.loginService.userProfile?.id) {
+      this.getClosedCases(this.loginService.userProfile?.id as string);
+    } else {
+      console.log('No user profile');
+    }
   }
 
   getClosedCases(driverId: string) {
