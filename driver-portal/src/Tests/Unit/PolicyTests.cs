@@ -12,11 +12,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 {
     public class PolicyTests
     {
-        // NOTE this must match the policy requirements for UserClaimTypes.DriverId, see Program.cs
-        // [Authorize(Policy = Policy.Driver)]
-        private readonly AuthorizationPolicy _authorizationPolicy = new AuthorizationPolicyBuilder()
-            .RequireClaim(UserClaimTypes.DriverId)
-            .Build();
+        private AuthorizationPolicy _policy = new DriverPolicyFactory().Create();
 
         [Fact]
         public async Task Authorize_Driver_Success()
@@ -26,7 +22,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 new Claim(UserClaimTypes.DriverId, "DriverId")
             };
 
-            var result = await CanAuthorizeUserWithPolicyAsync(claims, _authorizationPolicy);
+            var result = await CanAuthorizeUserWithPolicyAsync(claims, _policy);
+            
             Assert.True(result);
         }
 
@@ -38,7 +35,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 new Claim(ClaimTypes.Name, "New User")
             };
 
-            var result = await CanAuthorizeUserWithPolicyAsync(claims, _authorizationPolicy);
+            var result = await CanAuthorizeUserWithPolicyAsync(claims, _policy);
 
             Assert.False(result);
         }

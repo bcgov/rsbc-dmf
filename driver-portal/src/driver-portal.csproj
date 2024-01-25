@@ -75,6 +75,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
 	  <ProjectReference Include="..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+	  <ProjectReference Include="..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

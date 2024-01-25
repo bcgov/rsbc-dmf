@@ -7,7 +7,6 @@ using Pssg.DocumentStorageAdapter;
 using AutoMapper;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Microsoft.AspNetCore.Authorization;
-using Rsbc.Dmf.DriverPortal.Api.Model;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {

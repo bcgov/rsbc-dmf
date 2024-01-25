@@ -13,7 +13,6 @@ using Moq;
 using Pssg.DocumentStorageAdapter.Helpers;
 using Rsbc.Dmf.CaseManagement.Helpers;
 using Rsbc.Dmf.DriverPortal.Api;
-using Rsbc.Dmf.DriverPortal.Api.Model;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Collections.Generic;
 using System.Security.Claims;

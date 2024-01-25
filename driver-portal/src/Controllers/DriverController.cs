@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.DriverPortal.Api.Model;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 
