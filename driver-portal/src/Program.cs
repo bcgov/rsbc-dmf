@@ -58,10 +58,10 @@ services.AddAuthorization(options =>
     defaultAuthorizationPolicyBuilder =
         defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection"); //.RequireClaim("scope", "driver-portal-api");
     options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
+    options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
 });
 
 services.AddCors();

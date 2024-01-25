@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -14,6 +17,7 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
@@ -33,6 +37,14 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         {
             builder.ConfigureTestServices(services =>
             {
+                // add policy but then fake success always, the RequireClaim is bypassed
+                services.AddAuthorization(options =>
+                {
+                    // policy needed to bypass services with attribute [Authorize(Policy = Policy.Driver)]
+                    options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
+                });
+                services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+
                 services.AddControllersWithViews().AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -61,7 +73,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
                 services.AddTransient(x => mockHttpContextAccessor.Object);
 
-                    services.AddTransient<IUserService, UserService>();
+                services.AddTransient<IUserService, UserService>();
                 
                 // document storage client
                 string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
@@ -94,6 +106,28 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 .UseSolutionRelativeContentRoot("")
                 .UseEnvironment("Staging")
                 .UseConfiguration(_configuration);
+        }
+
+        public class FakePolicyEvaluator : IPolicyEvaluator
+        {
+            public virtual async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+            {
+                var principal = new ClaimsPrincipal();
+                principal.AddIdentity(
+                    new ClaimsIdentity(new[] {
+                        new Claim(UserClaimTypes.DriverId, "DriverId")
+                    }
+                ));
+
+                return await Task.FromResult(
+                    AuthenticateResult.Success(new AuthenticationTicket(principal, new AuthenticationProperties(), null)));
+            }
+
+            public virtual async Task<PolicyAuthorizationResult> AuthorizeAsync(AuthorizationPolicy policy,
+                AuthenticateResult authenticationResult, HttpContext context, object resource)
+            {
+                return await Task.FromResult(PolicyAuthorizationResult.Success());
+            }
         }
     }
 }

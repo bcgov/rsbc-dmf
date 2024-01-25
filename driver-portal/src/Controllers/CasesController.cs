@@ -6,6 +6,7 @@ using CaseDetail = Rsbc.Dmf.DriverPortal.ViewModels.CaseDetail;
 using Pssg.DocumentStorageAdapter;
 using AutoMapper;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -62,9 +63,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get closed documents for a given driver
         /// </summary>
-        /// <param name="driverId">The driver id</param>
         /// <returns></returns>
         [HttpGet("Closed")]
+        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

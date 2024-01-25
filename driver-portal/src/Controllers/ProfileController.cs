@@ -55,11 +55,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             public string Email { get; set; }
         }
 
-
         public record UserProfile
         {
             public string EmailAddress { get; set; }
-
             public string Id { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
