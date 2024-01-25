@@ -22,7 +22,6 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => FaxReceivedDateConverter(src)));
             CreateMap<CaseDetail, ViewModels.CaseDetail>()
                 .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => src.CaseType == "DMER" ? "Solicited" : "Unsolicited"))
-                .ForMember(dest => dest.DecisionDate, opt => opt.MapFrom(src => src.DpsProcessingDate.ToDateTimeOffset()))
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate) 
                 .AddTransform(NullStringConverter);
         }

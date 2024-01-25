@@ -96,10 +96,25 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
+            // Load Documents
+            _dynamicsContext.LoadProperty(@case, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+            // Find the documents that are outstanding
+            if (@case.bcgov_incident_bcgov_documenturl != null)
+            {
+                foreach (var document in @case.bcgov_incident_bcgov_documenturl)
+                {
+                    if (document.dfp_submittalstatus == 100000000)
+                    {
+                        result.OutstandingDocuments++;
+                    }
+                }
+            }
+
             return result;
         }
 
-        public static string TranslateCaseTypeToString(int? optionSetValue)
+        private string TranslateCaseTypeToString(int? optionSetValue)
         {
             string result = null;
             switch (optionSetValue)
@@ -129,7 +144,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public static string TranslateDmerTypeRaw(int? optionSetValue)
+        private string TranslateDmerTypeRaw(int? optionSetValue)
         {
             string result = null;
             switch (optionSetValue)
@@ -156,7 +171,7 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public static string TranslateDecisionForClass(string data)
+        private string TranslateDecisionForClass(string data)
         {
             string result = null;
             if (data != null)
