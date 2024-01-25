@@ -38,29 +38,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         /// <summary>
-        /// Get Case
-        /// </summary>        
-        [HttpGet("{caseId}")]
-        [ProducesResponseType(typeof(CaseDetail), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetCase")]
-        public ActionResult GetCase([Required] [FromRoute] string caseId)
-        {
-            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
-
-            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                var result = _mapper.Map<CaseDetail>(c.Item);
-                return Json(result);
-            }
-            else
-            {
-                return StatusCode(500, c?.ErrorDetail ?? "GetCaseDetail failed.");
-            }
-        }
-
-        /// <summary>
         /// Get closed documents for a given driver
         /// </summary>
         /// <returns></returns>
@@ -96,6 +73,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get Most Recent Case
         /// </summary>        
         [HttpGet("MostRecent")]
+        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -117,45 +95,5 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             
             return Json(result);
         }
-
-        /// <summary>
-        /// Returns the current user's cases
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet()]
-        [ProducesResponseType(typeof(List<ViewModels.CaseDetail>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetCases")]
-        public ActionResult GetCases()
-        {
-            var result = new List<ViewModels.CaseDetail>();
-            result.Add(new CaseDetail() { Title = "Test-Title", CaseId = Guid.Empty.ToString(), DmerType = "DMER" });
-            return Json(result);
-        }
-
-        /// <summary>
-        /// Returns the current Closed Cases
-        /// </summary>
-        /// <returns></returns>
-      /*  [HttpGet()]
-        [ProducesResponseType(typeof(List<ViewModels.CaseDetail>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetClosedCases")]
-        public ActionResult GetClosedCases()
-        {
-            var result = new List<ViewModels.CaseDetail>();
-            result.Add(new CaseDetail() { 
-                CaseId = Guid.Empty.ToString(),
-                CaseType = "Driver’s Medical Examination Report",
-                LatestDecision =    "Fit To Drive",
-                EligibleLicenseClass = "5",
-                OpenedDate = DateTime.Now,
-                DecisionDate = DateTime.Now.AddDays(5),
-            });
-            return Json(result);
-        }*/
     }
-
 }

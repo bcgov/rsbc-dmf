@@ -1,8 +1,6 @@
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -26,10 +24,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <returns>The version of the running application</returns>
         [HttpGet]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ViewModels.ApplicationVersionInfo), 200)]
+        [ProducesResponseType(typeof(ApplicationVersionInfo), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetCase")]
+        [ActionName("ApplicationVersion")]
         public ActionResult GetApplicationVersionInfo()
         {
             Assembly assembly = GetType().GetTypeInfo().Assembly;
@@ -48,6 +46,5 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             return Json(avi);
         }
-
     }
 }
