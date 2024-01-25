@@ -100,8 +100,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 var userId = loginResult.Userid;
                 var userEmail = loginResult.Email;
+                var driverId = loginResult.DriverId;
 
-                return new UserLoginReply { ResultStatus = ResultStatus.Success, UserId = userId, UserEmail = userEmail ?? String.Empty };
+                return new UserLoginReply { ResultStatus = ResultStatus.Success, UserId = userId, DriverId = driverId, UserEmail = userEmail ?? String.Empty };
             }
             catch (Exception e)
             {
