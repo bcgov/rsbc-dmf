@@ -663,29 +663,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 
                 if (c != null)
                 {
-                    reply.Item = new CaseDetail();
-                    reply.Item.CaseSequence = c.CaseSequence;
-                    reply.Item.CaseId = c.CaseId;
-                    reply.Item.DriverId = c.DriverId;
-                    reply.Item.Title = c.Title ?? string.Empty;
-                    reply.Item.IdCode = c.IdCode ?? string.Empty;
-                    reply.Item.OpenedDate = Timestamp.FromDateTimeOffset(c.OpenedDate);
-                    reply.Item.CaseType = c.CaseType ?? string.Empty;
-                    reply.Item.DmerType = c.DmerType ?? string.Empty;
-                    reply.Item.Status = c.Status ?? string.Empty;
-                    reply.Item.AssigneeTitle = c.AssigneeTitle ?? string.Empty;
-                    reply.Item.LastActivityDate = Timestamp.FromDateTimeOffset(c.LastActivityDate);
-                    if (c.DecisionDate == null)
-                    {
-                        reply.Item.DecisionDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
-                    }
-                    else
-                    {
-                        reply.Item.DecisionDate = Timestamp.FromDateTimeOffset(c.DecisionDate.Value);
-                    }
-                    reply.Item.LatestDecision = c.LatestDecision ?? string.Empty;
-                    reply.Item.DecisionForClass = c.DecisionForClass ?? string.Empty;
-                    reply.Item.DpsProcessingDate = Timestamp.FromDateTimeOffset(c.DpsProcessingDate);
+                    reply.Item = _mapper.Map<CaseDetail>(c);
                     reply.ResultStatus = ResultStatus.Success;
                 }
                 else
