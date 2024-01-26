@@ -68,5 +68,31 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             Assert.NotNull(mappedDocument);
             Assert.Equal("Received", mappedDocument.SubmittalStatus);
         }
+
+        [Fact]
+        public void Map_LegacyDocument_To_ViewModel_Document_With_Wrong_SubmittalStatus()
+        {
+            var document = new LegacyDocument
+            {
+                ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                DocumentId = "DocumentId",
+                DocumentType = "DocumentType",
+                DocumentTypeCode = "DocumentTypeCode",
+                BusinessArea = "BusinessArea",
+                SequenceNumber = 1,
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                UserId = "UserId",
+                CreateDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                DueDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                Description = "Description",
+                DocumentUrl = "DocumentUrl",
+                SubmittalStatus = "Wrong SubmittalStatus"
+            };
+
+            var mappedDocument = _mapper.Map<Document>(document);
+
+            Assert.NotNull(mappedDocument);
+            Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
+        }
     }
 }

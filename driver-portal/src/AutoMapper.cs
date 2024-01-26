@@ -84,7 +84,9 @@ namespace Rsbc.Dmf.DriverPortal.Api
 
         private string GroupSubmittalStatus(string submittalStatus)
         {
-            Enums.TryParse<SubmittalStatus>(submittalStatus, true, out var submittalStatusEnum, EnumFormat.Description);
+            var canParseEnum = Enums.TryParse<SubmittalStatus>(submittalStatus, true, out var submittalStatusEnum, EnumFormat.Description);
+            if (!canParseEnum)
+                return submittalStatus;
 
             switch (submittalStatusEnum)
             {
