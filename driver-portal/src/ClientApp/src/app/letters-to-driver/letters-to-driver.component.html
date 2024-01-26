@@ -15,37 +15,86 @@
     </div>
   </div>
 
-  <div>
-    <mat-card *ngFor="let letter of filteredDocuments">
-      <mat-card-content class="submissionRequirement">
-        <div>
-          <label>Created Date</label>
+  <div class="list">
+    <div>
+      <mat-card
+        *ngFor="let letter of filteredDocuments"
+        [ngClass]="{
+          open: letter.documentId && isExpanded[letter.documentId]
+        }"
+      >
+        <mat-card-content class="closedCaseContent">
           <div>
-            <b>{{ letter.createDate | date : "longDate" }}</b>
+            <mat-icon
+              (click)="toggleIsExpandable(letter.documentId)"
+              class="expandedIcon"
+            >
+              expand_circle_down
+            </mat-icon>
           </div>
-        </div>
+          <div style="display: flex; flex-direction: column">
+            <div
+              style="border-left: 2px solid #808080; height: 45%; width: 50px"
+            >
+              &nbsp;
+            </div>
+            <div>&nbsp;</div>
+          </div>
+          <div style="flex: 1">
+            <div class="caseDetailRow">
+              <div>
+                <label>Created Date </label>
+                <div>
+                  <b>{{ letter.createDate | date : "longDate" }}</b>
+                </div>
+              </div>
 
-        <div>
-          <label>Letter Topic</label>
-          <div>
-            <b>{{ letter.documentType }}</b>
-          </div>
-        </div>
-        <div>
-          <label>Description</label>
-          <div>
-            <b>{{ letter.description }}</b>
-          </div>
-        </div>
+              <div>
+                <label>Letter Topic</label>
+                <div>
+                  <b>{{ letter.documentType }}</b>
+                </div>
+              </div>
+              <div>
+                <label></label>
+                <div>
+                  <button mat-flat-button>Download</button>
+                </div>
+              </div>
+            </div>
 
-        <div>
-          <label></label>
-          <div>
-            <button mat-flat-button>Download</button>
+            <div
+              class="caseDetailRow"
+              *ngIf="letter.documentId && isExpanded?.[letter.documentId]"
+              style="
+                border-top: 2px solid gray;
+                padding-top: 20px;
+                padding-bottom: 20px;
+              "
+            >
+              <div>
+                <label>Case Type</label>
+                <div>
+                  <b>{{ letter.caseId }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Case Id</label>
+                <div>
+                  <b>{{ letter.caseId }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Description</label>
+                <div>
+                  <b>{{ letter.description }}</b>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 
   <div
@@ -89,78 +138,6 @@
             </mat-panel-title>
           </mat-expansion-panel-header>
           <app-case-type></app-case-type>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Case Status
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-case-status></app-case-status>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              DMER Type
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-dmer-type></app-dmer-type>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Decision outcome
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-
-          <app-decision-outcome></app-decision-outcome>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Eligible License Class
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-eligible-license-class></app-eligible-license-class>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              RSBC Case Assignment
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-rsbc-case-assignment></app-rsbc-case-assignment>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Submission Type</mat-panel-title
-            >
-          </mat-expansion-panel-header>
-          <app-submission-type></app-submission-type>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Document SubType
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div>Upwards of 90 subtypes</div>
-        </mat-expansion-panel>
-
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Submission Status</mat-panel-title
-            >
-          </mat-expansion-panel-header>
-          <app-submission-status></app-submission-status>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">

@@ -1,12 +1,14 @@
-<header style="position: fixed; width: 100%; z-index: 1000">
-  <app-header></app-header>
-</header>
-<nav style="position: fixed; width: 100%; z-index: 10000; top: 146px">
-  <app-nav-menu></app-nav-menu>
-</nav>
-<main style="position: relative; top: 200px">
-  <router-outlet></router-outlet>
-</main>
-<footer style="position: relative; top: 200px">
-  <app-footer></app-footer>
-</footer>
+<ng-container *ngIf="!isLoading">
+  <header style="position: fixed; width: 100%; z-index: 1">
+    <app-header></app-header>
+  </header>
+  <nav style="position: fixed; width: 100%; z-index: 2; top: 146px">
+    <app-nav-menu></app-nav-menu>
+  </nav>
+  <main style="position: relative; top: 200px">
+    <router-outlet></router-outlet>
+  </main>
+  <footer style="position: relative; top: 200px">
+    <app-footer></app-footer>
+  </footer>
+</ng-container>

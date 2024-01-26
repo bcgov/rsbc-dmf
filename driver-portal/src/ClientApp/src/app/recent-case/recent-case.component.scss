@@ -66,12 +66,12 @@ mat-stepper {
 }
 
 ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
-  color:#003366;
+  color: #003366;
 }
 
 ::ng-deep .mat-step-header .mat-step-label.mat-step-label-selected {
-  color:#003366;
-  font-weight: bold;
+  color: #003366;
+  font-weight: bolder !important;
 }
 
 mat-card:hover {

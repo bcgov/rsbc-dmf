@@ -33,6 +33,7 @@ import { QuickLinksComponent } from './quick-links/quick-links.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,12 +68,14 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
     HttpClientModule,
     FormsModule,
     LayoutModule,
-    SharedModule,    
+    SharedModule,
     OAuthModule.forRoot({
       resourceServer: {
         sendAccessToken: true,
-        customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
-      }
+        customUrlValidation: (url) =>
+          url.toLowerCase().includes('/api/') &&
+          !url.toLowerCase().endsWith('/config'),
+      },
     }),
     CoreUiModule,
     RouterModule.forRoot([]),
