@@ -1,20 +1,37 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.DriverPortal.ViewModels;
 using System;
 using Xunit;
 using CaseDetail = Rsbc.Dmf.CaseManagement.Service.CaseDetail;
+using Document = Rsbc.Dmf.DriverPortal.ViewModels.Document;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
     public class AutoMapperTests
     {
         private readonly IMapper _mapper;
+        private LegacyDocument _document;
 
         public AutoMapperTests(IMapper mapper)
         {
             _mapper = mapper;
+            _document = new LegacyDocument
+            {
+                ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                DocumentId = "DocumentId",
+                DocumentType = "DocumentType",
+                DocumentTypeCode = "DocumentTypeCode",
+                BusinessArea = "BusinessArea",
+                SequenceNumber = 1,
+                FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                UserId = "UserId",
+                CreateDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                DueDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                Description = "Description",
+                DocumentUrl = "DocumentUrl",
+                SubmittalStatus = "Clean Pass"
+            };
         }
 
         [Fact]
@@ -46,24 +63,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public void Map_LegacyDocument_To_ViewModel_Document()
         {
-            var document = new LegacyDocument
-            {
-                ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                DocumentId = "DocumentId",
-                DocumentType = "DocumentType",
-                DocumentTypeCode = "DocumentTypeCode",
-                BusinessArea = "BusinessArea",
-                SequenceNumber = 1,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                UserId = "UserId",
-                CreateDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                DueDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                Description = "Description",
-                DocumentUrl = "DocumentUrl",
-                SubmittalStatus = "Clean Pass"
-            };
-
-            var mappedDocument = _mapper.Map<Document>(document);
+            var mappedDocument = _mapper.Map<Document>(_document);
 
             Assert.NotNull(mappedDocument);
             Assert.Equal("Received", mappedDocument.SubmittalStatus);
@@ -72,27 +72,12 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         [Fact]
         public void Map_LegacyDocument_To_ViewModel_Document_With_Wrong_SubmittalStatus()
         {
-            var document = new LegacyDocument
-            {
-                ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                DocumentId = "DocumentId",
-                DocumentType = "DocumentType",
-                DocumentTypeCode = "DocumentTypeCode",
-                BusinessArea = "BusinessArea",
-                SequenceNumber = 1,
-                FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                UserId = "UserId",
-                CreateDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                DueDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                Description = "Description",
-                DocumentUrl = "DocumentUrl",
-                SubmittalStatus = "Wrong SubmittalStatus"
-            };
+            _document.SubmittalStatus = "Wrong SubmittalStatus";
 
-            var mappedDocument = _mapper.Map<Document>(document);
+            var mappedDocument = _mapper.Map<Document>(_document);
 
             Assert.NotNull(mappedDocument);
-            Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
+            Assert.Equal(_document.SubmittalStatus, mappedDocument.SubmittalStatus);
         }
     }
 }
