@@ -1646,8 +1646,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (!string.IsNullOrEmpty(request.Origin) && request.Origin == "DPS/KOFAX")
                 {
+
+                    if (!found) // only clear the solicited flag if this is a new document; do not clear for "existing envelope"
+                    {
+                        bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
+                    }
                     
-                    bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
 
                     if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
                     {
