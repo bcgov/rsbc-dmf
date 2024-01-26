@@ -9,6 +9,8 @@ import { Document } from '../shared/api/models';
   styleUrls: ['./letters-to-driver.component.css'],
 })
 export class LettersToDriverComponent {
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
+  isExpanded: Record<string, boolean> = {};
   pageSize = 10;
 
   filteredDocuments?: Document[] | null = [];
@@ -19,19 +21,21 @@ export class LettersToDriverComponent {
   }
 
   @Input()
-  set letterDocuments(value) {
-    this._letterDocuments = value;
-    this.filteredDocuments = this._letterDocuments?.slice(
-      0,
-      this.pageSize
-    );
+  set letterDocuments(documents: Document[] | null | undefined) {
+    this._letterDocuments = documents;
+    this._letterDocuments?.forEach((doc) => {
+      if (doc.documentId) this.isExpanded[doc.documentId] = false;
+    });
+
+    this.filteredDocuments = this._letterDocuments?.slice(0, this.pageSize);
   }
 
-  @ViewChild(MatAccordion) accordion!: MatAccordion;
+  toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
 
   viewMore() {
-    const pageSize =
-      (this.filteredDocuments?.length ?? 0) + this.pageSize;
+    const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
 
     this.filteredDocuments = this._letterDocuments?.slice(0, pageSize);
     console.log(pageSize);

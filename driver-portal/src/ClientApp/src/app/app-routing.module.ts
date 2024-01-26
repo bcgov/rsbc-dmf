@@ -10,9 +10,15 @@ import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
-  { path: 'account', component: AccountComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'account',
+    component: AccountComponent,
+  },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+  },
   { path: 'cases', component: CaseComponent },
   { path: 'caseDetails', component: CaseDetailsComponent },
   { path: 'submissionHistory', component: SubmissionHistoryComponent },

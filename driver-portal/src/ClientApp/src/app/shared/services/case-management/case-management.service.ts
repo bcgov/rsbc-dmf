@@ -10,12 +10,6 @@ export class CaseManagementService {
     private driversService: DriverService
   ) {}
 
-  public getCaseById(
-    params: Parameters<CasesService['apiCasesCaseIdGet$Json']>[0]
-  ) {
-    return this.casesService.apiCasesCaseIdGet$Json(params);
-  }
-
   public getMostRecentCase(
     params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]
   ) {
@@ -35,9 +29,7 @@ export class CaseManagementService {
   }
 
   public getAllDocuments(
-    params: Parameters<
-      DriverService['apiDriverAllDocumentsGet$Json']
-    >[0]
+    params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
   ) {
     return this.driversService.apiDriverAllDocumentsGet$Json(params);
   }
