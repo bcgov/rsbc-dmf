@@ -85,6 +85,8 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
   providers: [
     {
       provide: APP_BASE_HREF,
+      useValue: '/driver-portal'
+      /*
       useFactory: (s: PlatformLocation) => {
         let result = s.getBaseHrefFromDOM();
         const hasTrailingSlash = result[result.length - 1] === '/';
@@ -92,7 +94,9 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
           result = result.substr(0, result.length - 1);
         }
         return result;
-      },
+      }
+      */
+     ,
       deps: [PlatformLocation],
     },
   ],
