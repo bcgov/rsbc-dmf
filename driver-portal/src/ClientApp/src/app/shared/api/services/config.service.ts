@@ -22,7 +22,7 @@ export class ConfigService extends BaseService {
   }
 
   /** Path part for operation `apiConfigGet()` */
-  static readonly ApiConfigGetPath = '/api/Config';
+  static readonly ApiConfigGetPath = '/driver-portal/api/Config';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
