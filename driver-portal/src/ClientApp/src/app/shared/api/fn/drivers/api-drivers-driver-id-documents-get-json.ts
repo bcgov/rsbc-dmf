@@ -28,4 +28,4 @@ export function apiDriversDriverIdDocumentsGet$Json(http: HttpClient, rootUrl: s
   );
 }
 
-apiDriversDriverIdDocumentsGet$Json.PATH = '/api/Drivers/{driverId}/Documents';
+apiDriversDriverIdDocumentsGet$Json.PATH = '/driver-portal/api/Drivers/{driverId}/Documents';

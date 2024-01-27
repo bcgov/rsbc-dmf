@@ -26,4 +26,4 @@ export function apiDriverDocumentsGet$Json(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiDriverDocumentsGet$Json.PATH = '/api/Driver/Documents';
+apiDriverDocumentsGet$Json.PATH = '/driver-portal/api/Driver/Documents';
