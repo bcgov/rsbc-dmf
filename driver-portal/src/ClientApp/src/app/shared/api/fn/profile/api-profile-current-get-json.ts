@@ -26,4 +26,4 @@ export function apiProfileCurrentGet$Json(http: HttpClient, rootUrl: string, par
   );
 }
 
-apiProfileCurrentGet$Json.PATH = '/api/Profile/current';
+apiProfileCurrentGet$Json.PATH = '/driver-portal/api/Profile/current';

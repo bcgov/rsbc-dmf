@@ -18,6 +18,16 @@ const PROXY_CONFIG = [
   },
   {
     context: [
+      "/driver-portal/api",
+    ],
+    target: target,
+    secure: false,
+    headers: {
+      Connection: 'Keep-Alive'
+    }
+  },
+  {
+    context: [
       "/swagger",
     ],
     target: target,
