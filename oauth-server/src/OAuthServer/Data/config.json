@@ -100,8 +100,8 @@
         "https://localhost:3020",
         "http://localhost:3020",
         "https://roadsafetybc.gov.bc.ca",
-        "https://dev.roadsafetybc.gov.bc.ca/driver-portal",
-        "https://test.roadsafetybc.gov.bc.ca/driver-portal"
+        "https://dev.roadsafetybc.gov.bc.ca",
+        "https://test.roadsafetybc.gov.bc.ca"
       ],
       "PostLogoutRedirectUris": [
         "http://localhost:3200",
