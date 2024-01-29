@@ -53,7 +53,6 @@ export class RecentCaseComponent implements OnInit {
         if (recentCase.status === 'Closed') {
           this.selectedIndex = 5;
         }
-        console.log(recentCase);
       });
   }
 }

@@ -21,7 +21,7 @@ export class SubmissionRequirementsComponent {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  navigateToLetters() {
-    this.viewLetter.emit();
-  }
+  // navigateToLetters() {
+  //   this.viewLetter.emit();
+  // }
 }
