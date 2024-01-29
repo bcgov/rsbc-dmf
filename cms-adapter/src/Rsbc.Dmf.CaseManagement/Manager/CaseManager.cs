@@ -636,6 +636,11 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
         }
 
+        public IEnumerable<dfp_driver> GetDriverObjectsById(string id)
+        {
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
+        }
+
         /// <summary>
         /// Get Driver
         /// </summary>
@@ -660,6 +665,32 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
+
+        /// <summary>
+        /// Get Driver
+        /// </summary>
+        /// <param name="licensenumber"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<Driver>> GetDriverById(string id)
+        {
+            List<Driver> result = new List<Driver>();
+
+            var @drivers = GetDriverObjectsById(id);
+
+            foreach (var item in @drivers)
+            {
+                Driver d = new Driver()
+                {
+                    Id = item.dfp_driverid.ToString(),
+                    DriverLicenseNumber = item.dfp_licensenumber,
+                    Surname = item.dfp_PersonId?.lastname
+                };
+                result.Add(d);
+            }
+
+            return result;
+        }
+
 
         /// <summary>
         /// Get Drivers
