@@ -7,12 +7,34 @@
         practitioner can provide. Once you upload a document or report, the
         requirement will be moved to the Document History tab.
       </p>
-      <br />
       <p>
         Please be aware that if your medical practitioner or you have sent a
         document by fax, it may take some time for it to be removed from this
         list.
       </p>
+      <p>
+        <b>Uploading Submission Requirements</b> <br />
+        Use the Upload button to upload specific submission requirements.
+      </p>
+
+      <p><b>File Upload Specifications</b></p>
+      <ul>
+        <li>Maximum file size: 20MB</li>
+        <li>Accepted file types: PDF, DOCX, PNG</li>
+      </ul>
+      <div style="padding-bottom: 24px">
+        <button mat-flat-button>Upload File</button>
+      </div>
+      <div class="fileUpload">
+        <b> Upload Your File</b>
+        <br />
+        1. Select the appropriate document type based on the submission
+        requirement below. <br />
+        2. Browse for your file <br />
+        3. Click Upload <br />
+        File button Certain documents cannot be uploaded (e.g., example here).
+        Learn how to submit additional documentation.
+      </div>
     </div>
     <div>
       <app-quick-links></app-quick-links>
@@ -44,7 +66,7 @@
         <div>
           <label></label>
           <div>
-            <button mat-flat-button (click)="navigateToLetters()">
+            <button mat-flat-button routerLink="/lettersToDriver">
               View Letter
             </button>
           </div>
@@ -63,8 +85,6 @@
     Showing {{ submissionRequirementDocuments.length }} of
     {{ submissionRequirementDocuments.length }} records
   </div>
-
-  
 
   <div class="list" id="definitions">
     <h2>Definitions</h2>

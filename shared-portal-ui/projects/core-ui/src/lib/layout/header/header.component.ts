@@ -23,8 +23,8 @@ export class HeaderComponent {
     const profile = this.loginService.userProfile;
 
     if (profile) {
-      const firstName = profile.firstName || 'Not';
-      const lastName = profile.lastName || 'Available';
+      const firstName = profile.firstName;
+      const lastName = profile.lastName;
       this.profileName = firstName + ' ' + lastName;
     }
   }
