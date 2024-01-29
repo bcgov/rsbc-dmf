@@ -1112,7 +1112,42 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        
+
+        /// <summary>
+        /// Get Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetDriversReply> GetDriverById(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriversReply();
+            try
+            {
+                var result = await _caseManager.GetDriverById(request.Id);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item != null && item.DriverLicenseNumber != null)
+                    {
+                        driver.DriverLicenseNumber = item.DriverLicenseNumber;
+                        driver.Surname = item.Surname ?? string.Empty;
+                        driver.Id = item.Id;
+                    }
+                    reply.Items.Add(driver);
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
 
 
         /// <summary>
