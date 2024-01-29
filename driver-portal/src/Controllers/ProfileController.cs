@@ -22,7 +22,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
-            if (userContext == null) return NotFound();
+            if (userContext == null || userContext.DriverId == null) return NotFound();
 
             var driverIdRequest = new DriverIdRequest() { Id = userContext.DriverId };
             var reply = _cmsAdapterClient.GetDriverById(driverIdRequest);

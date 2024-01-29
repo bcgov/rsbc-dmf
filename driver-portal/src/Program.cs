@@ -3,14 +3,17 @@ using IdentityModel.AspNetCore.OAuth2Introspection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.DriverPortal.Api;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json.Serialization;
 using static Rsbc.Dmf.DriverPortal.Api.AuthorizeDriverAttribute;
+using static RSBC.DMF.MedicalPortal.API.Controllers.ConfigController;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
@@ -26,7 +29,40 @@ var env = builder.Environment;
 
 
 services.AddAuthentication("introspection")
-    //reference tokens handling
+             //JWT tokens handling
+             .AddJwtBearer("jwt", options =>
+             {
+                 options.BackchannelHttpHandler = new HttpClientHandler
+                 {
+                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                 };
+
+                 builder.Configuration.GetSection("auth:jwt").Bind(options);
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateAudience = false
+                 };
+
+                 // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+                 options.ForwardDefaultSelector = ctx =>
+                 {
+                     var authHeader = (string)ctx.Request.Headers["Authorization"];
+                     if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+                     return authHeader.Substring("Bearer ".Length).Trim().Contains('.') ? null : "introspection";
+                 };
+                 options.Events = new JwtBearerEvents
+                 {
+                     OnTokenValidated = async ctx =>
+                     {
+                         await Task.CompletedTask;
+                         var userInfo = ctx.Principal.FindFirstValue("userInfo");
+                     },
+                     OnAuthenticationFailed = async ctx =>
+                     {
+                         await Task.CompletedTask;
+                     }
+                 };
+             })
     .AddOAuth2Introspection("introspection", options =>
     {
         //options.EnableCaching = true;
@@ -47,10 +83,24 @@ services.AddAuthentication("introspection")
 
         };
 
-    });
+    })
+    .AddIdentityCookies();
 
 services.AddAuthorization(options =>
 {
+
+    options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
+    {
+        policy
+            .RequireAuthenticatedUser()
+            .AddAuthenticationSchemes("jwt")
+            .RequireClaim("scope", "driver-portal-api");
+    });
+
+    options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
+    options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
+
+    
     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
         //JwtBearerDefaults.AuthenticationScheme,
         OAuth2IntrospectionDefaults.AuthenticationScheme,
@@ -61,7 +111,12 @@ services.AddAuthorization(options =>
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
         .Build();
-    options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
+
+    //options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
+
+    //options..DefaultScheme = "introspection";
+    //options.DefaultChallengeScheme = "introspection";
+
 });
 
 services.AddCors();
