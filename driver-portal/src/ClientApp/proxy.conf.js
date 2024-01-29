@@ -21,10 +21,14 @@ const PROXY_CONFIG = [
       "/driver-portal/api",
     ],
     target: target,
+    pathRewrite: {
+      '^/driver-portal': ''
+    },
     secure: false,
     headers: {
       Connection: 'Keep-Alive'
-    }
+    },
+
   },
   {
     context: [

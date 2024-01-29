@@ -5,10 +5,14 @@
   <app-recent-case></app-recent-case>
 
   <div class="list">
-    <h2>Case Documentation</h2>
+    <h2>Submission Requirements</h2>
+    <app-submission-requirements
+      [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
+      routerLink="/lettersToDriver"
+    ></app-submission-requirements>
   </div>
 
-  <div class="documentation"></div>
+  <!-- <div class="documentation"></div>
   <mat-tab-group
     [selectedIndex]="selectedIndex"
     (selectedIndexChange)="selectedIndex = $event"
@@ -30,4 +34,5 @@
       ></app-letters-to-driver
     ></mat-tab>
   </mat-tab-group>
+</div> -->
 </div>
