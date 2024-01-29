@@ -15,6 +15,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, IUserService userService)
         {
             this.userService = userService;
+            this._cmsAdapterClient = cmsAdapterClient;
         }
 
         [HttpGet("current")]
