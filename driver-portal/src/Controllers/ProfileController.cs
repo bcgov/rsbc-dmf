@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (userContext == null) return NotFound();
 
             var driverIdRequest = new DriverIdRequest() { Id = userContext.DriverId };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
+            var reply = _cmsAdapterClient.GetDriverById(driverIdRequest);
 
             string emailAddress = userContext.Email;
             string firstName = userContext.FirstName;
@@ -36,8 +36,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 var driverRecord = reply.Items.FirstOrDefault();
                 if (driverRecord != null)
                 {
-                    firstName = driverRecord.Driver.GivenName;
-                    lastName = driverRecord.Driver.Surname;
+                    firstName = driverRecord.GivenName;
+                    lastName = driverRecord.Surname;
                 }
             }
 

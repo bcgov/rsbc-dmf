@@ -40,6 +40,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<ResultStatusReply> CreateBringForward(BringForwardRequest request);
 
         Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber);
+        Task<IEnumerable<Driver>> GetDriverById(string id);
 
         Task<IEnumerable<Driver>> GetDrivers();
 
