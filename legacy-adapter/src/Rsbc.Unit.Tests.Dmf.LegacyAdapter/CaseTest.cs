@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using System;
@@ -10,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {

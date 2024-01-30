@@ -1,13 +1,13 @@
 ARG BUILD_ID
 ARG BUILD_VERSION
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 ARG BUILD_ID
 ARG BUILD_VERSION
 
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_ID
 ARG BUILD_VERSION
 
