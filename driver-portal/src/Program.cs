@@ -13,7 +13,6 @@ using System.Net;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using static Rsbc.Dmf.DriverPortal.Api.AuthorizeDriverAttribute;
-using static RSBC.DMF.MedicalPortal.API.Controllers.ConfigController;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
@@ -27,42 +26,41 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
-
 services.AddAuthentication("introspection")
-             //JWT tokens handling
-             .AddJwtBearer("jwt", options =>
-             {
-                 options.BackchannelHttpHandler = new HttpClientHandler
-                 {
-                     ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                 };
+    //JWT tokens handling
+    .AddJwtBearer("jwt", options =>
+    {
+        options.BackchannelHttpHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
 
-                 builder.Configuration.GetSection("auth:jwt").Bind(options);
-                 options.TokenValidationParameters = new TokenValidationParameters
-                 {
-                     ValidateAudience = false
-                 };
+        builder.Configuration.GetSection("auth:jwt").Bind(options);
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false
+        };
 
-                 // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
-                 options.ForwardDefaultSelector = ctx =>
-                 {
-                     var authHeader = (string)ctx.Request.Headers["Authorization"];
-                     if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
-                     return authHeader.Substring("Bearer ".Length).Trim().Contains('.') ? null : "introspection";
-                 };
-                 options.Events = new JwtBearerEvents
-                 {
-                     OnTokenValidated = async ctx =>
-                     {
-                         await Task.CompletedTask;
-                         var userInfo = ctx.Principal.FindFirstValue("userInfo");
-                     },
-                     OnAuthenticationFailed = async ctx =>
-                     {
-                         await Task.CompletedTask;
-                     }
-                 };
-             })
+        // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+        options.ForwardDefaultSelector = ctx =>
+        {
+            var authHeader = (string)ctx.Request.Headers["Authorization"];
+            if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+            return authHeader.Substring("Bearer ".Length).Trim().Contains('.') ? null : "introspection";
+        };
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async ctx =>
+            {
+                await Task.CompletedTask;
+                var userInfo = ctx.Principal.FindFirstValue("userInfo");
+            },
+            OnAuthenticationFailed = async ctx =>
+            {
+                await Task.CompletedTask;
+            }
+        };
+    })
     .AddOAuth2Introspection("introspection", options =>
     {
         //options.EnableCaching = true;
@@ -88,7 +86,6 @@ services.AddAuthentication("introspection")
 
 services.AddAuthorization(options =>
 {
-
     options.AddPolicy(JwtBearerDefaults.AuthenticationScheme, policy =>
     {
         policy
@@ -100,7 +97,6 @@ services.AddAuthorization(options =>
     options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
     options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
 
-    
     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
         //JwtBearerDefaults.AuthenticationScheme,
         OAuth2IntrospectionDefaults.AuthenticationScheme,
@@ -173,6 +169,12 @@ services.AddAutoMapperSingleton(loggerFactory);
 
 var app = builder.Build();
 
+string pathBase = builder.Configuration["BASE_PATH"];
+if (!string.IsNullOrEmpty(pathBase))
+{
+    app.UsePathBase(pathBase);
+}
+
 app.UseHealthChecks("/hc/ready", new HealthCheckOptions
 {
     Predicate = _ => true,
@@ -198,6 +200,9 @@ app.UseHsts();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+// UsePathBase will not work without this, potentially related to this https://github.com/dotnet/aspnetcore/issues/38448
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();

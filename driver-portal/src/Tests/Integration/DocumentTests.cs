@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Rsbc.Dmf.DriverPortal.ViewModels;
-using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
@@ -12,30 +12,64 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
         public DocumentTests(IConfiguration configuration) : base(configuration) { }
 
         [Fact]
-        public async Task GetLettersToDriver()
+        public async Task Download_Document()
         {
-            var driverId = _configuration["DRIVER_WITH_USER"];
-            if (string.IsNullOrEmpty(driverId))
+            var docId = _configuration["DOWNLOAD_DOC_ID"];
+            if (string.IsNullOrEmpty(docId))
                 return;
 
-            // get documents by driver id
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{DRIVER_API_BASE}/Documents");
-            var caseDocuments = await HttpClientSendRequest<CaseDocuments>(request);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/{docId}");
+            var response = await _client.SendAsync(request);
 
-            Assert.NotNull(caseDocuments);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            var input = await response.Content.ReadAsStreamAsync();
+            var memoryStream = new MemoryStream();
+            input.CopyTo(memoryStream);
+
+            Assert.True(memoryStream.Length > 100);
         }
 
         [Fact]
-        public async Task Get_All_Documents()
+        public async Task Download_Document_No_Url()
         {
-            var driverId = _configuration["DOCS_DRIVER_ID"];
-            if (string.IsNullOrEmpty(driverId))
+            var docId = _configuration["NO_DOWNLOAD_DOC_ID"];
+            if (string.IsNullOrEmpty(docId))
                 return;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{DRIVER_API_BASE}/AllDocuments");
-            var result = await HttpClientSendRequest<IEnumerable<Document>>(request);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/{docId}");
+            var response = await _client.SendAsync(request);
 
-            Assert.NotNull(result);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Download_Document_Malformed_Url()
+        {
+            var docId = _configuration["DOWNLOAD_DOC_MALFORMED_URL"];
+            if (string.IsNullOrEmpty(docId))
+                return;
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/{docId}");
+            var response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Download_Document_Fake_Id()
+        {
+            // random guid
+            var docId = "111a5c4c-a23e-ed11-b834-005056830000";
+            if (string.IsNullOrEmpty(_configuration["ICBC_TEST_DL"]))
+                return;
+
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/{docId}");
+            var response = await _client.SendAsync(request);
+
+            // TODO refactor GetLegacyDocument to return NotFound
+            //Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
         }
     }
 }
