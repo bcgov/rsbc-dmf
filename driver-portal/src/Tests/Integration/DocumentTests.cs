@@ -61,7 +61,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
         {
             // random guid
             var docId = "111a5c4c-a23e-ed11-b834-005056830000";
-            if (string.IsNullOrEmpty(docId))
+            if (string.IsNullOrEmpty(_configuration["ICBC_TEST_DL"]))
                 return;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/{docId}");
