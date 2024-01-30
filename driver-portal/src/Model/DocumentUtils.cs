@@ -1,5 +1,7 @@
 ﻿namespace Rsbc.Dmf.DriverPortal.Api
 {
+    // get mime mappings from here
+    // https://github.com/Microsoft/referencesource/blob/master/System.Web/MimeMapping.cs
     public class DocumentUtils
     {
         /// <summary>
