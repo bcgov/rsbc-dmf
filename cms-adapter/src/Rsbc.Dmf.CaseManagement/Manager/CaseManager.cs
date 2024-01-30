@@ -683,7 +683,8 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     Id = item.dfp_driverid.ToString(),
                     DriverLicenseNumber = item.dfp_licensenumber,
-                    Surname = item.dfp_PersonId?.lastname
+                    Surname = item.dfp_PersonId?.lastname,
+                    GivenName = item.dfp_PersonId?.firstname
                 };
                 result.Add(d);
             }

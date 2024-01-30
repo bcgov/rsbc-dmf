@@ -1098,6 +1098,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.DriverLicenseNumber;
                         driver.Surname = item.Surname ?? string.Empty;
+                        driver.GivenName = item.GivenName ?? string.Empty;
                         driver.Id = item.Id;
                     }
                     reply.Items.Add(driver);
@@ -1133,6 +1134,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.DriverLicenseNumber;
                         driver.Surname = item.Surname ?? string.Empty;
+                        driver.GivenName = item.GivenName ?? string.Empty;
                         driver.Id = item.Id;
                     }
                     reply.Items.Add(driver);
