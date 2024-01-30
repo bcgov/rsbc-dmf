@@ -40,6 +40,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System.IO.Pipelines;
 using System.Buffers;
 using System.Collections;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -92,13 +93,19 @@ namespace Rsbc.Dmf.LegacyAdapter
                 {
                     o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
+
+                    var key = new byte[16];
+                    var sourceKey = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    sourceKey.CopyTo(key, 0);
+
+                    var symmetricSecurityKey = new SymmetricSecurityKey(key);
+
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         RequireExpirationTime = false,
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                        IssuerSigningKey = symmetricSecurityKey
                     };
                 })
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>

@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Renci.SshNet;
 using System.IO;
 using Pssg.SharedUtils;

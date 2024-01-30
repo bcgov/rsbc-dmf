@@ -426,7 +426,7 @@ namespace Rsbc.Dmf.BcMailAdapter
         }
 
 
-        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        private void ConfigureProblemDetails(Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options)
         {
             // Only include exception details in a development environment. There's really no need
             // to set this as it's the default behavior. It's just included here for completeness :)

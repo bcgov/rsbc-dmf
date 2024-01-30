@@ -31,8 +31,15 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                var key = new byte[16];
+                var sourceKey = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                sourceKey.CopyTo(key,0);
+
+                var symmetricSecurityKey = new SymmetricSecurityKey(key);
+
+
+                var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     Configuration["JWT_VALID_ISSUER"],
