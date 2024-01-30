@@ -40,6 +40,7 @@ using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 using static Rsbc.Dmf.Scheduler.ScheduledJobs;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.Scheduler
 {

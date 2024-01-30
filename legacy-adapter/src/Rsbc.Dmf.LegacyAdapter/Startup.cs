@@ -40,6 +40,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System.IO.Pipelines;
 using System.Buffers;
 using System.Collections;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
