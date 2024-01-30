@@ -66,7 +66,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         string fileName = Path.GetFileName(reply.Document.DocumentUrl);
                         string mimetype = DocumentUtils.GetMimeType(fileName);
                         Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
-                        //Serilog.Log.Information($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
+                        _logger.LogInformation($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                         return new FileContentResult(fileContents, mimetype)
                         {
                             FileDownloadName = $"{fileName}"
