@@ -58,3 +58,27 @@ button:hover {
   box-shadow: none;
   padding: 24px;
 }
+
+.form-label {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  padding-top: 24px;
+}
+ 
+
+label { 
+  display: block; 
+} 
+
+.uploadbutton{
+  display: flex;
+    gap: 25px;
+    padding: 16px
+}
+
+.file-upload{
+
+  display: block;
+}

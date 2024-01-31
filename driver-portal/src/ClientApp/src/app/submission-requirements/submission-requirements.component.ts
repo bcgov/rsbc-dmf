@@ -21,7 +21,19 @@ export class SubmissionRequirementsComponent {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
+  show = false;
+
   // navigateToLetters() {
   //   this.viewLetter.emit();
   // }
+
+  openUploadFile() {
+    console.log('openUploadFile');
+    this.show = true;
+  }
+
+  closeUploadFile() {
+    console.log('closeUploadFile');
+    this.show = false;
+  }
 }
