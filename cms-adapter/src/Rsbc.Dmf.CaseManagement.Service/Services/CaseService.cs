@@ -174,6 +174,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
                 driver.Surname = request.Driver.Surname ?? string.Empty;
+                driver.Id = request.Driver.Id ?? string.Empty;
             }
 
             var newDocument = new CaseManagement.LegacyDocument()
@@ -228,6 +229,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        [Obsolete("CreateLegacyCaseDocument is deprecated, please use CreateDocumentOnDriver instead.", false)]
 
         /// <summary>
         /// Create Legacy Case Document
