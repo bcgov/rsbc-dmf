@@ -47,6 +47,10 @@ namespace Pssg.DocumentStorageAdapter
                 .AddDefaultTokenProviders();
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
+                Array.Resize(ref secretBytes, 32);
+
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -62,11 +66,14 @@ namespace Pssg.DocumentStorageAdapter
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                            new SymmetricSecurityKey(secretBytes)
                     };
                 });
 
-            services.AddAuthorization();
+                services.AddAuthorization();
+            }
+
+                
 
             // basic REST controller for Dynamics.
 

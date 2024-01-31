@@ -94,11 +94,11 @@ namespace Rsbc.Dmf.LegacyAdapter
                     o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
 
-                    var key = new byte[16];
-                    var sourceKey = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
-                    sourceKey.CopyTo(key, 0);
 
-                    var symmetricSecurityKey = new SymmetricSecurityKey(key);
+                    byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    Array.Resize(ref secretBytes, 32);
+                    
+                    var symmetricSecurityKey = new SymmetricSecurityKey(secretBytes);
 
                     o.TokenValidationParameters = new TokenValidationParameters
                     {

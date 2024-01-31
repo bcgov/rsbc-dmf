@@ -32,10 +32,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             if (configuredSecret.Equals(secret))
             {
 
-                var key = new byte[16];
-                var sourceKey = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
-                sourceKey.CopyTo(key,0);
-
+                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
                 var symmetricSecurityKey = new SymmetricSecurityKey(key);
 
 

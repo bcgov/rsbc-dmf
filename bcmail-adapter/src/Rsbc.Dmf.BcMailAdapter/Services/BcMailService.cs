@@ -73,7 +73,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Services
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(request.Secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
+
+                byte[] secretBytes = Encoding.UTF8.GetBytes(_configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref secretBytes, 32);
+
+                var key = new SymmetricSecurityKey(secretBytes);
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
