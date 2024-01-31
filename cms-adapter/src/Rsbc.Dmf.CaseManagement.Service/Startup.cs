@@ -42,6 +42,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
+                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -57,7 +60,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                            new SymmetricSecurityKey(key)
                     };
                 });
             }

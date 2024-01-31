@@ -2123,10 +2123,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
             result.ResultStatus = ResultStatus.Fail;
 
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
+
+
             if (configuredSecret != null && !string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                byte[] key = Encoding.UTF8.GetBytes(_configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+
+                var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
+                var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     _configuration["JWT_VALID_ISSUER"],

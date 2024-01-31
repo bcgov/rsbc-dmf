@@ -320,13 +320,15 @@ namespace Pssg.DocumentStorageAdapter.Services
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(request.Secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
+                byte[] secretBytes = Encoding.UTF8.GetBytes(configuredSecret);
+                Array.Resize(ref secretBytes, 32);
+                var key = new SymmetricSecurityKey(secretBytes);
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     _configuration["JWT_VALID_ISSUER"],
                     _configuration["JWT_VALID_AUDIENCE"],
-                    expires: DateTime.UtcNow.AddYears(5),
+                    expires: DateTime.UtcNow.AddYears(2),
                     signingCredentials: creds
                 );
                 result.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
