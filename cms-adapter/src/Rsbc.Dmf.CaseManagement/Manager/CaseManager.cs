@@ -1459,7 +1459,16 @@ namespace Rsbc.Dmf.CaseManagement
             // Search for triage driver
             //bool secondCandidateCreate = true;
 
-            var searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            dfp_driver searchdriver;
+
+            if (!string.IsNullOrEmpty(request.Driver.Id))
+            {
+                searchdriver = GetDriverObjectsById(request.Driver.Id).FirstOrDefault();
+            }
+            else
+            {
+                searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
+            }
 
             if (searchdriver == null)
             {
@@ -1481,20 +1490,15 @@ namespace Rsbc.Dmf.CaseManagement
                     newDriver.BirthDate = request.Driver.BirthDate; 
                 }
 
-                
-
                 await CreateDriver(newDriver);
-
                 searchdriver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
-            //dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == "01234111");
 
             // Get Document Type
             var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
             if (searchdriver != null)
             {
-
                 bool found = false;
 
                 bcgov_documenturl bcgovDocumentUrl = null;
@@ -1531,7 +1535,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 bcgovDocumentUrl = docs;
                                 found = true;
                             }
-
                         }
                     }
                 }
@@ -1576,7 +1579,6 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.dfp_validationmethod = request.ValidationMethod;
                 bcgovDocumentUrl.dfp_validationprevious = request.ValidationPrevious ?? request.UserId;
                 bcgovDocumentUrl.dfp_submittalstatus = TranslateSubmittalStatusString(request.SubmittalStatus);
-                //bcgovDocumentUrl.dfp_submittalstatus = 100000000; // Open Required
                 bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
                 bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
 
@@ -1597,8 +1599,6 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
                 
-                bool isDmer = false;
-
                 if (!string.IsNullOrEmpty(request.Origin) && request.Origin == "DPS/KOFAX")
                 {
 
@@ -1606,13 +1606,6 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
                     }
-                    
-
-                    if (request.DocumentTypeCode != null && request.DocumentTypeCode == "001")
-                    {
-                        // DMER                        
-                        isDmer = true;                        
-                    }                    
                 }
 
 
