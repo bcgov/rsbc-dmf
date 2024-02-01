@@ -1,4 +1,7 @@
+﻿using Google.Protobuf;
 ﻿namespace Rsbc.Dmf.DriverPortal.Api
+
+namespace Rsbc.Dmf.DriverPortal.Api
 {
     // get mime mappings from here
     // https://github.com/Microsoft/referencesource/blob/master/System.Web/MimeMapping.cs
@@ -24,6 +27,14 @@
             }
 
             return mimetype;
+        }
+
+        public static ByteString GetByteString(IFormFile file)
+        {
+            var ms = new MemoryStream();
+            file.OpenReadStream().CopyTo(ms);
+            var data = ms.ToArray();
+            return ByteString.CopyFrom(data);
         }
     }
 }

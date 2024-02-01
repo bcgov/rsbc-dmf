@@ -29,12 +29,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         /// <summary>
-        /// Get Document Content
+        /// Download Document Content
         /// </summary>
         /// <param name="documentId"></param>
         /// <returns></returns>
         [HttpGet("{documentId}")]
         [Authorize(Policy = Policy.Driver)]
+        [ProducesResponseType(typeof(FileContentResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDocument))]
@@ -88,6 +89,45 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 _logger.LogError($"Unexpected error - unable to get document meta-data for id {documentId} - {reply.ErrorDetail}");
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
+        }
+        /// <summary>
+        /// Upload Document Content
+        /// </summary>
+        /// <param name="documentId"></param>
+        /// <returns></returns>
+        [HttpPost("upload")]
+        [Authorize(Policy = Policy.Driver)]
+        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(UploadDriverDocument))]
+        public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file)
+        {
+            if (string.IsNullOrEmpty(file?.FileName) || file.Length == 0)
+            {
+                return BadRequest();
+            }
+
+            var profile = await _userService.GetCurrentUserContext();
+
+            // add the document
+            var request = new UploadFileRequest()
+            {
+                ContentType = "application/pdf",
+                Data = DocumentUtils.GetByteString(file),
+                EntityName = "dfp_driver",
+                FileName = file.FileName,
+                FolderName = profile.DriverId,
+            };
+
+            var fileReply = _documentStorageAdapterClient.UploadFile(request);
+
+            if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                return StatusCode(500, fileReply.ErrorDetail);
+            }
+
+            return Ok();
         }
     }
 }

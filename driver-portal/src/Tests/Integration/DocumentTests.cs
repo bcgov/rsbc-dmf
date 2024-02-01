@@ -2,6 +2,8 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -70,6 +72,31 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             // TODO refactor GetLegacyDocument to return NotFound
             //Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Upload_Document()
+        {
+            var caseId = _configuration["DOWNLOAD_DOC_ID"];
+            if (string.IsNullOrEmpty(caseId))
+                return;
+
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/upload");
+            var multiPartContent = new MultipartFormDataContent("----TestBoundary");
+            var bytes = Encoding.ASCII.GetBytes("This is just a test.");
+            var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+            fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+            {
+                Name = "file",
+                FileName = "fax.pdf"
+            };
+            multiPartContent.Add(fileContent);
+            request.Content = multiPartContent;
+
+            var response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }
