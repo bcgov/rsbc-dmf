@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CasesService, DriverService } from '../../api/services';
+import { CasesService, DocumentService, DriverService } from '../../api/services';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +7,8 @@ import { CasesService, DriverService } from '../../api/services';
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService
+    private driversService: DriverService,
+    private documentService: DocumentService
   ) {}
 
   public getMostRecentCase(
@@ -32,5 +33,11 @@ export class CaseManagementService {
     params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
   ) {
     return this.driversService.apiDriverAllDocumentsGet$Json(params);
+  }
+
+  public getUploadDocuments(
+    params: Parameters<DocumentService['apiDocumentUploadPost$Json']>[0]
+  ) {
+    return this.documentService.apiDocumentUploadPost$Json(params);
   }
 }

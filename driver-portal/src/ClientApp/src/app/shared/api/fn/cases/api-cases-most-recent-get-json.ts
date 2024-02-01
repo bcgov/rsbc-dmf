@@ -26,4 +26,4 @@ export function apiCasesMostRecentGet$Json(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiCasesMostRecentGet$Json.PATH = '/driver-portal/api/Cases/MostRecent';
+apiCasesMostRecentGet$Json.PATH = '/api/Cases/MostRecent';

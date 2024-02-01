@@ -26,4 +26,4 @@ export function apiApplicationVersionInfoGet$Json(http: HttpClient, rootUrl: str
   );
 }
 
-apiApplicationVersionInfoGet$Json.PATH = '/driver-portal/api/ApplicationVersionInfo';
+apiApplicationVersionInfoGet$Json.PATH = '/api/ApplicationVersionInfo';

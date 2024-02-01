@@ -26,4 +26,4 @@ export function apiConfigGet$Json(http: HttpClient, rootUrl: string, params?: Ap
   );
 }
 
-apiConfigGet$Json.PATH = '/driver-portal/api/Config';
+apiConfigGet$Json.PATH = '/api/Config';

@@ -20,6 +20,9 @@ export class SubmissionRequirementsComponent {
   @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
+  fileToUpload: File | null = null;
+
+  constructor(private caseManagementService: CaseManagementService) {}
 
   show = false;
 
@@ -35,5 +38,20 @@ export class SubmissionRequirementsComponent {
   closeUploadFile() {
     console.log('closeUploadFile');
     this.show = false;
+  }
+
+  handleFileInput(event: any) {
+    console.log('handleFileInput', event);
+    this.fileToUpload = event.target.files.item(0);
+    this.fileUpload();
+  }
+
+  fileUpload() {
+    console.log('fileUpload');
+    this.caseManagementService
+      .getUploadDocuments({ body: this.fileToUpload as any })
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

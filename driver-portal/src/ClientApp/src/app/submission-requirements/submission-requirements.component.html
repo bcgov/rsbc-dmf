@@ -54,6 +54,7 @@
             type="file"
             class="file-upload"
             onchange="console.log(event.target.files)"
+            (change)="handleFileInput($event)"
           />
         </div>
         <div style="padding-top: 24px">
@@ -63,7 +64,7 @@
           >
         </div>
         <div class="uploadbutton">
-          <button mat-flat-button>Upload File</button>
+          <button mat-flat-button (click)="fileUpload()">Upload File</button>
           <button mat-flat-button (click)="closeUploadFile()">Cancel</button>
         </div>
       </div>
