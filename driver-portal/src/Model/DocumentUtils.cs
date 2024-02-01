@@ -29,11 +29,11 @@ namespace Rsbc.Dmf.DriverPortal.Api
         }
 
         public static ByteString GetByteString(IFormFile file)
+        public static byte[] GetByteArray(IFormFile file)
         {
             var ms = new MemoryStream();
             file.OpenReadStream().CopyTo(ms);
-            var data = ms.ToArray();
-            return ByteString.CopyFrom(data);
+            return ms.ToArray();
         }
     }
 }

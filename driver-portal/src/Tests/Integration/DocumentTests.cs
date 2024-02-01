@@ -3,7 +3,6 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -83,20 +82,22 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             var request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/upload");
             var multiPartContent = new MultipartFormDataContent("----TestBoundary");
-            var bytes = Encoding.ASCII.GetBytes("This is just a test.");
+
+            var bytes = File.ReadAllBytes("Data/edit.png");
             var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
+            fileContent.Add(new ByteArrayContent(bytes));
             fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
             fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
             {
                 Name = "file",
-                FileName = "fax.pdf"
+                FileName = "test.png"
             };
             multiPartContent.Add(fileContent);
             request.Content = multiPartContent;
 
             var response = await _client.SendAsync(request);
 
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
     }
 }

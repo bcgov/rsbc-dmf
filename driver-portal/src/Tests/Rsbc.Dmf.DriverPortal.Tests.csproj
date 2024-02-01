@@ -28,4 +28,10 @@
     <ProjectReference Include="..\driver-portal.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Data\edit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

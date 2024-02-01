@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
+using Winista.Mime;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
@@ -92,6 +94,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
         }
+
         /// <summary>
         /// Upload Document Content
         /// </summary>
@@ -113,18 +116,26 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var profile = await _userService.GetCurrentUserContext();
 
+            var data = DocumentUtils.GetByteArray(file);
+            var mimeTypes = new MimeTypes();
+            var mimeType = mimeTypes.GetMimeType(data);
+            if (mimeType == null || !(mimeType.Name.Equals("image/png") || mimeType.Name.Equals("image/jpeg") ||
+                                     mimeType.Name.Equals("application/pdf")))
+            {
+                _logger.LogError($"ERROR in uploading file due to invalid mime type {mimeType?.Name}");
+                return BadRequest();
+            }
+
             // add the document
             var request = new UploadFileRequest()
             {
-                ContentType = "application/pdf",
-                Data = DocumentUtils.GetByteString(file),
+                ContentType = file.ContentType,
+                Data = ByteString.CopyFrom(data),
                 EntityName = "dfp_driver",
                 FileName = file.FileName,
                 FolderName = profile.DriverId,
             };
-
             var fileReply = _documentStorageAdapterClient.UploadFile(request);
-
             if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 return StatusCode(500, fileReply.ErrorDetail);
