@@ -9,7 +9,7 @@ RUN dotnet test -c Release
 RUN dotnet publish "OAuthServer/OAuthServer.csproj" -c Release -o /app/publish --no-restore
 COPY ["OAuthServer/Data/config.json", "/app/publish/Data/"]
 
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 ENV ASPNETCORE_URLS=http://*:8080
