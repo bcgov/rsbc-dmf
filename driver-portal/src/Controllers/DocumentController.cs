@@ -16,14 +16,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IUserService _userService;
+        private readonly DocumentFactory _documentFactory;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DocumentController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
+        public DocumentController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, DocumentFactory documentFactory, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _userService = userService;
+            _documentFactory = documentFactory;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
         }
@@ -103,6 +105,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ActionName(nameof(UploadDriverDocument))]
         public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file)
         {
+            // sanity check paramters
             if (string.IsNullOrEmpty(file?.FileName) || file.Length == 0)
             {
                 return BadRequest();
@@ -125,6 +128,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 return StatusCode(500, fileReply.ErrorDetail);
+            }
+
+            // create document and then link to driver
+            var driver = new CaseManagement.Service.Driver();
+            driver.Id = profile.DriverId;
+            var document = _documentFactory.Create(driver, profile.Id);
+            var result = _cmsAdapterClient.CreateDocumentOnDriver(document);
+            if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            {
+                return StatusCode(500, result.ErrorDetail);
             }
 
             return Ok();

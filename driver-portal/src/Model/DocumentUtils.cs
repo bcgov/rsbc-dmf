@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf;
-﻿namespace Rsbc.Dmf.DriverPortal.Api
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {
@@ -12,7 +11,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        static public string GetMimeType(string filename)
+        public static string GetMimeType(string filename)
         {
             string mimetype = "application/pdf";
 

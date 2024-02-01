@@ -12,7 +12,6 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 using System.Net;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
-using static Rsbc.Dmf.DriverPortal.Api.AuthorizeDriverAttribute;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
@@ -160,7 +159,7 @@ services.AddHealthChecks()
 services.AddHttpClient();
 services.AddHttpContextAccessor();
 services.AddTransient<IUserService, UserService>();
-services.AddTransient<AuthorizeDriver>();
+services.AddTransient<DocumentFactory>();
 // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
 using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .SetMinimumLevel(LogLevel.Trace)
