@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.DriverPortal.Api;
 using System;
 using Xunit;
 using CaseDetail = Rsbc.Dmf.CaseManagement.Service.CaseDetail;
@@ -78,6 +80,17 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
             Assert.NotNull(mappedDocument);
             Assert.Equal(_document.SubmittalStatus, mappedDocument.SubmittalStatus);
+        }
+
+        [Fact]
+        public void Map_LegacyDocument_To_ViewModel_Document_With_Uploaded_SubmittalStatus()
+        {
+            _document.SubmittalStatus = SubmittalStatus.Uploaded.AsString();
+
+            var mappedDocument = _mapper.Map<Document>(_document);
+
+            Assert.NotNull(mappedDocument);
+            Assert.Equal("Uploaded", mappedDocument.SubmittalStatus);
         }
     }
 }
