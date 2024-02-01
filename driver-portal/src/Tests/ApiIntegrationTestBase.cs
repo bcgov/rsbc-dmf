@@ -26,8 +26,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         protected async Task<T> HttpClientSendRequest<T>(HttpRequestMessage request)
         {
             var response = await _client.SendAsync(request);
-            var jsonString = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
+            var jsonString = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
     }

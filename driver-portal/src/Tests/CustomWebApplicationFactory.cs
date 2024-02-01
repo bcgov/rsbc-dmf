@@ -37,6 +37,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         {
             builder.ConfigureTestServices(services =>
             {
+                services.AddTransient<DocumentFactory>();
+
                 // add policy but then fake success always, the RequireClaim is bypassed
                 services.AddAuthorization(options =>
                 {

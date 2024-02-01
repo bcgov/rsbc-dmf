@@ -9,7 +9,7 @@
         /// </summary>
         /// <param name="filename"></param>
         /// <returns></returns>
-        static public string GetMimeType(string filename)
+        public static string GetMimeType(string filename)
         {
             string mimetype = "application/pdf";
 
@@ -24,6 +24,13 @@
             }
 
             return mimetype;
+        }
+
+        public static byte[] GetByteArray(IFormFile file)
+        {
+            var ms = new MemoryStream();
+            file.OpenReadStream().CopyTo(ms);
+            return ms.ToArray();
         }
     }
 }
