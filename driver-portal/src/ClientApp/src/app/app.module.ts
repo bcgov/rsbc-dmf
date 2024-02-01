@@ -33,7 +33,6 @@ import { QuickLinksComponent } from './quick-links/quick-links.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -81,10 +80,11 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
     RouterModule.forRoot([]),
     AppRoutingModule,
     MaterialModule,
+    ApiModule.forRoot({ rootUrl: '/driver-portal' }),
   ],
   providers: [
     {
-      provide: APP_BASE_HREF,      
+      provide: APP_BASE_HREF,
       useFactory: (s: PlatformLocation) => {
         let result = s.getBaseHrefFromDOM();
         const hasTrailingSlash = result[result.length - 1] === '/';

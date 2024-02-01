@@ -26,4 +26,4 @@ export function apiCasesClosedGet$Json(http: HttpClient, rootUrl: string, params
   );
 }
 
-apiCasesClosedGet$Json.PATH = '/driver-portal/api/Cases/Closed';
+apiCasesClosedGet$Json.PATH = '/api/Cases/Closed';
