@@ -96,12 +96,13 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 case SubmittalStatus.Received:
                 case SubmittalStatus.CleanPass:
                 case SubmittalStatus.ManualPass:
-                case SubmittalStatus.Uploaded:
                 case SubmittalStatus.Reviewed:
                 case SubmittalStatus.UnderReview:
                     return SubmittalStatus.Received.AsString(EnumFormat.Description);
                 case SubmittalStatus.Rejected:
                     return SubmittalStatus.Rejected.AsString(EnumFormat.Description);
+                case SubmittalStatus.Uploaded:
+                    return SubmittalStatus.Uploaded.AsString(EnumFormat.Description);
                 default:
                     _logger.LogError($"Error parsing SubmittalStatus: {submittalStatus}");
                     return submittalStatus;
