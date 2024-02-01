@@ -105,6 +105,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task MakeFakeDls();
 
+        Task<ResultStatusReply> CreateDecision(CreateDecisionRequest request);
+
         Task<ResultStatusReply> CreateDriver(CreateDriverRequest request);
 
         Task<ResultStatusReply> CreateCase(CreateCaseRequest request);

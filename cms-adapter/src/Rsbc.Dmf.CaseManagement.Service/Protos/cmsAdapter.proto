@@ -85,6 +85,8 @@ service CaseManager {
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
 
+  rpc CreateDecision (LegacyDecision) returns (ResultStatusReply);
+
   // Create a Driver
   rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
 
@@ -319,6 +321,14 @@ message ManualPassRequest{
 
 message GetAllFlagsReply {
 	repeated FlagItem Flags = 1;
+}
+
+message LegacyDecision {
+	string caseId = 1;
+	string driverId = 2;
+	string outcomeText = 3;
+	string subOutcomeText = 4;
+	google.protobuf.Timestamp statusDate = 5;
 }
 
 message DmerCase {

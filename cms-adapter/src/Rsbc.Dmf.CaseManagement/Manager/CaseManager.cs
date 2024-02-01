@@ -251,6 +251,17 @@ namespace Rsbc.Dmf.CaseManagement
         public string CaseTypeCode { get; set; }
     }
 
+
+
+    public class CreateDecisionRequest
+    {
+        public string CaseId { get; set; }
+        public string DriverId { get; set; }
+        public string OutcomeText { get; set; }
+        public string SubOutcomeText { get; set; }
+        public DateTimeOffset StatusDate { get; set; }
+    }
+
     public class CreateDriverRequest
     {
         public string DriverLicenseNumber { get; set; }
@@ -297,6 +308,8 @@ namespace Rsbc.Dmf.CaseManagement
         private readonly ILogger<CaseManager> logger;
         private readonly IMapper _mapper;
         private readonly IMapperAsync<incident, CaseDetail> _caseMapper;
+        private readonly Dictionary<string, Guid> OutcomeStatusTypes;
+        private readonly Dictionary<Guid, Dictionary<string, Guid>> OutcomeSubStatusTypes;
 
         public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
         {
@@ -304,6 +317,62 @@ namespace Rsbc.Dmf.CaseManagement
             this.logger = logger;
             _mapper = mapper;
             _caseMapper = caseMapper;
+            OutcomeStatusTypes = GetOutcomeStatusTypes();
+            OutcomeSubStatusTypes = GetOutcomeSubStatusTypes();
+
+        }
+
+        private Dictionary<string, Guid> GetOutcomeStatusTypes()
+        {
+            Dictionary<string, Guid> result = new Dictionary<string, Guid>();
+
+            var outcomestatuses = dynamicsContext.dfp_outcomestatuses.Where(x => x.statecode == 0).ToList();
+
+            foreach (var item in outcomestatuses)
+            {
+                string code = item.dfp_name;
+                Guid id = item.dfp_outcomestatusid.Value;
+
+                if (code != null && !result.ContainsKey(code))
+                {
+                    result.Add(code, id);
+                }
+                dynamicsContext.Detach(item);
+            }
+
+            return result;
+        }
+
+        private Dictionary<Guid, Dictionary<string, Guid>> GetOutcomeSubStatusTypes()
+        {
+            Dictionary<Guid, Dictionary<string, Guid>> result = new Dictionary<Guid, Dictionary<string, Guid>>();
+
+            var outcomesubstatuses = dynamicsContext.dfp_outcomesubstatuses.Where(x => x.statecode == 0).ToList();
+
+            foreach (var item in outcomesubstatuses)
+            {
+                string code = item.dfp_name;
+                Guid id = item.dfp_outcomesubstatusid.Value;
+                if (item._dfp_outcomestatusid_value != null)
+                {
+                    Guid parent = item._dfp_outcomestatusid_value.Value;
+
+                    if (!result.ContainsKey(parent))
+                    {
+                        result.Add(parent, new Dictionary<string, Guid>());
+                    }
+
+                    var subresult = result[parent];
+                    if (code != null && !subresult.ContainsKey(code))
+                    {
+                        subresult.Add(code, id);
+                    }
+                }
+                dynamicsContext.Detach(item);
+
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -2799,6 +2868,206 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             return MapCases(cases);
+        }
+
+        public void DeleteDecision(Guid id)
+        {
+            dfp_decision itemToDelete = dynamicsContext.dfp_decisions.Where(x => x.dfp_decisionid == id).FirstOrDefault();
+            if (itemToDelete != null)
+            {
+                dynamicsContext.DeleteObject(itemToDelete);
+                dynamicsContext.SaveChanges();
+            }
+            
+
+        }
+
+        public async Task<ResultStatusReply> CreateDecision(CreateDecisionRequest request)
+        {
+            ResultStatusReply result = new ResultStatusReply();
+            result.Success = false;
+
+            var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == Guid.Parse(request.DriverId)).FirstOrDefault();
+            var sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault();
+
+            //try
+            //{                
+            if (request.OutcomeText != null)  // only create if there was a decision.
+            {
+
+                dfp_decision newDecision = new dfp_decision
+                {
+                    //createdon = statusDateTime,
+
+                    statecode = 0,
+                    statuscode = 1, //100000000, //Final
+                    dfp_decisiontype = 100000000, // Original
+                    dfp_eligibledlclass = null, // NONE
+                    // do not set dfp_name as there is a workflow that sets it.
+                    dfp_legacydecision = true,
+                };
+
+                if (request.StatusDate != null)
+                {
+                    DateTimeOffset statusDateTime = request.StatusDate.ToUniversalTime();
+                    newDecision.overriddencreatedon = statusDateTime;
+                }
+
+                Guid outcomeStatusTypeId = Guid.Empty;
+                Guid outcomeSubStatusTypeId = Guid.Empty;
+
+                if (request.OutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText))
+                {
+                    outcomeStatusTypeId = OutcomeStatusTypes[request.OutcomeText];
+                }
+
+
+
+                // now check the decisions.
+
+
+                bool createDecision = false;
+                if (sparseCase.dfp_incident_dfp_decision == null || sparseCase.dfp_incident_dfp_decision.Count == 0
+                    )
+                
+                {
+                    createDecision = true;
+                }
+
+                if (!createDecision)
+                {
+
+                    bool firstMatch = true;
+                    List<Guid> itemsToDelete = new List<Guid>();
+
+                    foreach (var item in sparseCase.dfp_incident_dfp_decision)
+                    {
+                        if (item.dfp_decisionid != null)
+                        {
+                            if (item.createdon == newDecision.overriddencreatedon &&
+                            item.statecode == newDecision.statecode &&
+                            item.statuscode == newDecision.statuscode &&
+                            item.dfp_decisiontype == newDecision.dfp_decisiontype &&
+                            item.dfp_eligibledlclass == newDecision.dfp_eligibledlclass &&
+                            item._dfp_outcomestatus_value == outcomeStatusTypeId
+                            )
+                            {
+                                if (firstMatch) // keep the first match
+                                {
+                                    firstMatch = false;
+                                }
+                                else
+                                {
+                                    if (!itemsToDelete.Contains(item.dfp_decisionid.Value))
+                                    {
+                                        itemsToDelete.Add(item.dfp_decisionid.Value);
+                                    }
+
+                                }
+                            }
+                            else // remove it, not a match
+                            {
+                                if (!itemsToDelete.Contains(item.dfp_decisionid.Value))
+                                {
+                                    itemsToDelete.Add(item.dfp_decisionid.Value);
+                                }
+                            }
+                        }
+                        dynamicsContext.Detach(item);
+                    }
+
+                    bool dirty = false;
+                    foreach (var deleteDecision in itemsToDelete)
+                    {
+                        DeleteDecision(deleteDecision);
+                        dirty = true;
+                    }
+
+                    if (firstMatch)
+                    {
+                        createDecision = true;
+                    }
+                    if (dirty)
+                    {
+                        dynamicsContext.SaveChanges();
+                    }
+
+                }
+
+                if (createDecision)
+                {
+                    newDecision = new dfp_decision
+                    {
+                        //createdon = statusDateTime,                        
+                        statecode = 0,
+                        statuscode = 1, //100000000, //Final
+                        dfp_decisiontype = 100000000, // Original
+                        //dfp_eligibledlclass = "100000000", // NONE
+                        // do not set dfp_name as there is a workflow that sets it.
+                        dfp_legacydecision = true,
+                        //dfp_DriverId = driver
+                    };
+                    if (request.StatusDate != null)
+                    {
+                        newDecision.overriddencreatedon = request.StatusDate;
+                    }
+
+                    dfp_outcomestatus outcomeStatus = new dfp_outcomestatus();
+                    dfp_outcomesubstatus outcomeSubStatus = new dfp_outcomesubstatus();
+
+                    dynamicsContext.AddTodfp_decisions(newDecision);
+                    dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_CaseId), sparseCase);
+                    dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_DriverId), driver);
+
+                    bool outcomeStatusSet = false;
+                    if (request.OutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText))
+                    {
+                        outcomeStatusTypeId = OutcomeStatusTypes[request.OutcomeText];
+                        outcomeStatus = dynamicsContext.dfp_outcomestatuses.Where(x => x.dfp_outcomestatusid == outcomeStatusTypeId).FirstOrDefault();
+
+                        dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_OutcomeStatus), outcomeStatus);
+
+                        outcomeStatusSet = true;
+                    }
+
+                    bool outcomeSubStatusSet = false;
+                    if (request.SubOutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText) 
+                                                       && OutcomeSubStatusTypes.ContainsKey(outcomeStatusTypeId) 
+                                                       && OutcomeSubStatusTypes[outcomeStatusTypeId].ContainsKey(request.SubOutcomeText))
+                    {
+                        outcomeSubStatusTypeId = OutcomeSubStatusTypes[outcomeStatusTypeId][request.SubOutcomeText];
+
+                        outcomeSubStatus = dynamicsContext.dfp_outcomesubstatuses.Where(x => x.dfp_outcomesubstatusid == outcomeSubStatusTypeId).FirstOrDefault();
+
+                        dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_OutcomeSubStatus), outcomeSubStatus);
+                        //entity.dfp_OutcomeSubStatus = outcomeSubStatus;
+                        dynamicsContext.SaveChanges();
+                        outcomeSubStatusSet = true;
+                    }
+                    try
+                    {
+                        var saveResult = dynamicsContext.SaveChanges();
+                        var decisionId = GetCreatedId(saveResult);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error adding decision");
+                        Console.WriteLine(ex.ToString());
+                    }
+
+                    if (outcomeStatusSet)
+                    {
+                        dynamicsContext.Detach(outcomeStatus);
+                    }
+                    if (outcomeSubStatusSet)
+                    {
+                        dynamicsContext.Detach(outcomeSubStatus);
+                    }
+                }
+
+            }
+
+            return result;
         }
 
         /// <summary>
