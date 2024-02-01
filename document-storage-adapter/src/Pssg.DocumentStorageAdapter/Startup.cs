@@ -48,7 +48,7 @@ namespace Pssg.DocumentStorageAdapter
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
-                byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
+                byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
                 Array.Resize(ref secretBytes, 32);
 
                 // Configure JWT authentication
