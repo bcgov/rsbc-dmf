@@ -1630,6 +1630,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
+        /// Create Decision
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> CreateDecision(LegacyDecision request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+            try {
+
+                var createDecisionRequest = new CaseManagement.CreateDecisionRequest
+                {
+                    CaseId = request.CaseId,
+                    DriverId = request.DriverId,
+                    OutcomeText = request.OutcomeText,
+                    StatusDate = request.StatusDate.ToDateTimeOffset(),
+                    SubOutcomeText = request.SubOutcomeText
+                };
+
+                var createDecisionResult = await _caseManager.CreateDecision(createDecisionRequest);
+                if (createDecisionResult.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = createDecisionResult.ErrorDetail ?? "unknown error";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
         /// Create Driver
         /// </summary>
         /// <param name="request"></param>
