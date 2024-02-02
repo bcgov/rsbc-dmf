@@ -49,7 +49,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     var jwtSecurityToken = new JwtSecurityToken(
                         Configuration["JWT_VALID_ISSUER"],
                         Configuration["JWT_VALID_ISSUER"],
-                        expires: DateTime.UtcNow.AddMinutes(15),
+                        expires: DateTime.UtcNow.AddMinutes(30),
                         signingCredentials: creds
                         );
                     result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -76,9 +76,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             string token = "";
             
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
+
+            byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+            Array.Resize(ref secretBytes, 32);
+
             if (configuredSecret.Equals(secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
+                var key = new SymmetricSecurityKey(secretBytes);
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var claims = new[] {
