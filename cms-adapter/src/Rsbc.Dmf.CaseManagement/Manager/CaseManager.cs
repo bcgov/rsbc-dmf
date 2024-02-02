@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -2890,6 +2892,15 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == Guid.Parse(request.DriverId)).FirstOrDefault();
             var sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault();
 
+            bool reOpenIncident = sparseCase.statecode != null && sparseCase.statecode == 1; // inactive
+            int? currentStatus = sparseCase.statuscode;
+            if (reOpenIncident)
+            {
+                dynamicsContext.ActivateObject(sparseCase, 2);
+                dynamicsContext.SaveChanges();
+                sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault();
+            }
+
             //try
             //{                
             if (request.OutcomeText != null)  // only create if there was a decision.
@@ -3048,11 +3059,37 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         var saveResult = dynamicsContext.SaveChanges();
                         var decisionId = GetCreatedId(saveResult);
+                        result.Id = decisionId.ToString();
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine("Error adding decision");
                         Console.WriteLine(ex.ToString());
+                    }
+
+                    if (reOpenIncident)
+                    {
+                        // close the incident.
+                        var theIncidentResolution = new incidentresolution { incidentid = sparseCase, subject = "Decision Rendered", description = "Decision Rendered" };
+                        theIncidentResolution._incidentid_value = sparseCase.incidentid;
+                        var closeIncident = dynamicsContext.CloseIncident(theIncidentResolution, 5); // no execute so it does not send the request.
+
+                        // construct a special request to close the incident - required because the OData Client is not sending the right parameters.
+
+                        var closeRequest = new HttpRequestMessage(HttpMethod.Post, closeIncident.RequestUri);
+
+                        closeRequest.Headers.Add("OData-MaxVersion", "4.0");
+                        closeRequest.Headers.Add("OData-Version", "4.0");
+                        closeRequest.Headers.Add("Accept", "application/json");
+
+                        closeRequest.Content = new StringContent(@"{ ""IncidentResolution"": { ""subject"": ""Closed Case - Migration"",
+    ""incidentid@odata.bind"": ""/incidents(" + sparseCase.incidentid.Value.ToString() + @")""}, ""Status"": 5 }", Encoding.UTF8, "application/json");
+
+                        HttpClient httpClient = new HttpClient();
+
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {dynamicsContext._tokenFactory().GetAwaiter().GetResult()}");
+
+                        var response = httpClient.SendAsync(closeRequest).GetAwaiter().GetResult();
                     }
 
                     if (outcomeStatusSet)
