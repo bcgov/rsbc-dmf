@@ -3066,8 +3066,8 @@ namespace Rsbc.Dmf.CaseManagement
                         Console.WriteLine("Error adding decision");
                         Console.WriteLine(ex.ToString());
                     }
-
-                    if (reOpenIncident)
+                    // only close the case if it is open.
+                    if (sparseCase.statecode != 1)
                     {
                         // close the incident.
                         var theIncidentResolution = new incidentresolution { incidentid = sparseCase, subject = "Decision Rendered", description = "Decision Rendered" };
@@ -3100,6 +3100,8 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         dynamicsContext.Detach(outcomeSubStatus);
                     }
+
+                    dynamicsContext.Detach(sparseCase);
                 }
 
             }

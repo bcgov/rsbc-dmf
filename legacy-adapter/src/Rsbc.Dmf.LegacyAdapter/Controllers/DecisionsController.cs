@@ -78,10 +78,10 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var request = new LegacyDecision
             {
-                CaseId = decision.CaseId,
-                DriverId = decision.DriverId,
-                OutcomeText = decision.OutcomeText,
-                SubOutcomeText = decision.SubOutcomeText,
+                CaseId = decision.CaseId ?? string.Empty,
+                DriverId = decision.DriverId ?? string.Empty,
+                OutcomeText = decision.OutcomeText ?? string.Empty,
+                SubOutcomeText = decision.SubOutcomeText ?? string.Empty,
                 StatusDate = Timestamp.FromDateTimeOffset(decision.StatusDate),
             };
             var reply = _cmsAdapterClient.CreateDecision(request);
