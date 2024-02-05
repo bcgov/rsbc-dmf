@@ -79,3 +79,28 @@ mat-card:hover {
   border: 2px solid #003366;
   cursor: pointer;
 }
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .recentCaseContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "A A"
+      "B C"
+      "D E";
+  }
+
+  .recentCaseContent > div:first-child {
+    border-right: none;
+    border-bottom: 2px solid grey;
+  }
+
+  
+
+mat-stepper{
+orientation: "vertical";
+}
+
+}
+

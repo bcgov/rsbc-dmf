@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Router } from '@angular/router';
 import { CaseDetail } from '../shared/api/models';
@@ -27,8 +28,22 @@ export class RecentCaseComponent implements OnInit {
   constructor(
     private caseManagementService: CaseManagementService,
     private loginService: LoginService,
+    private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
+
+  ngAfterViewInit(): void {
+    this.breakpointObserver
+      .observe(['(max-width: 768px)'])
+      .subscribe((result) => {
+        if (result.matches) {
+          // this.stepper._stepsList.toArray()[this.selectedIndex].expanded = true;
+          this.stepper.orientation = 'vertical';
+        } else {
+          this.stepper.orientation = 'horizontal';
+        }
+      });
+  }
 
   public ngOnInit(): void {
     this.caseManagementService
