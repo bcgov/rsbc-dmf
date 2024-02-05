@@ -10,8 +10,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 {
     internal class DynamicsContext : Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM.System
     {
+        public Func<Task<string>> _tokenFactory;
         public DynamicsContext(Uri serviceRoot, Uri url, Func<Task<string>> tokenFactory, ILogger<DynamicsContext> logger) : base(serviceRoot)
         {
+            _tokenFactory = tokenFactory;
             this.HttpRequestTransportMode = HttpRequestTransportMode.HttpClient;
             this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
             MergeOption = MergeOption.OverwriteChanges;

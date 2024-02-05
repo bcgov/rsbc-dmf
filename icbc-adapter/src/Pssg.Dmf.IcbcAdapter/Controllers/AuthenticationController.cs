@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using Serilog;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -40,7 +41,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             {
                 if (configuredSecret.Equals(secret))
                 {
-                    byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    byte[] secretBytes = Encoding.UTF8.GetBytes(configuredSecret);
                     Array.Resize(ref secretBytes, 32);
 
                     var key = new SymmetricSecurityKey(secretBytes);
@@ -53,6 +54,10 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         signingCredentials: creds
                         );
                     result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                }
+                else
+                {
+                    Log.Error("Invalid secret passed.");
                 }
             }
 
@@ -76,20 +81,19 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
             string token = "";
             
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
+
             if (configuredSecret.Equals(secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
+                byte[] secretBytes = Encoding.UTF8.GetBytes(configuredSecret);
+                Array.Resize(ref secretBytes, 32);
+
+                var key = new SymmetricSecurityKey(secretBytes);
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var claims = new[] {
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
-
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     Configuration["JWT_VALID_ISSUER"],
                     Configuration["JWT_VALID_ISSUER"],
-                    expires: DateTime.UtcNow.AddDays(1),
+                    expires: DateTime.UtcNow.AddMinutes(15),
                     signingCredentials: creds
                 );
                 token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
