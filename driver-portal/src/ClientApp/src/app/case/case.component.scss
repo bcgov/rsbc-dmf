@@ -1,5 +1,7 @@
 .caseDetailRow {
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: start;
   gap: 180px;
   line-height: 32px;
@@ -10,6 +12,11 @@
   display: flex;
   flex-direction: row;
   gap: 60px;
+}
+
+.case-details-border {
+  border-left: 2px solid #808080;
+  height: 45%;
 }
 
 .mat-mdc-card {
@@ -46,10 +53,24 @@
   cursor: pointer;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 414px) {
   /* For mobile phones: */
 
   .recentCase {
     display: block;
+  }
+
+  .closedCaseContent {
+    flex-direction: column-reverse;
+  }
+
+  .caseDetailRow {
+    gap: 80px;
+  }
+
+  .case-details-border {
+    border-left: none;
+    border-top: 4px solid #808080;
+    height: 8px;
   }
 }

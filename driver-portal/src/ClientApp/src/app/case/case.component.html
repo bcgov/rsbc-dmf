@@ -21,7 +21,7 @@
         }"
       >
         <mat-card-content class="closedCaseContent">
-          <div style="grid-area: A">
+          <div style="text-align: center">
             <mat-icon
               (click)="toggleIsExpandable(closedCase.caseId)"
               class="expandedIcon"
@@ -30,9 +30,7 @@
             </mat-icon>
           </div>
           <div style="display: flex; flex-direction: column">
-            <div style="border-left: 2px solid #808080; height: 45%">
-              &nbsp;
-            </div>
+            <div class="case-details-border">&nbsp;</div>
             <div>&nbsp;</div>
           </div>
           <div>

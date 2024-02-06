@@ -9,11 +9,13 @@ import { LoginService } from 'src/app/shared/services/login.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
+  styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
   @Input() showProfile = false;
+
+  showMobileMenu = false;
 
   public profileName?: string;
   public profileRole?: string;
@@ -32,4 +34,5 @@ export class HeaderComponent {
   public logOut(): void {
     this.loginService.logout();
   }
+
 }

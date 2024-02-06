@@ -68,10 +68,15 @@ mat-stepper {
 ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
   color: #003366;
 }
-
-::ng-deep .mat-step-header .mat-step-label.mat-step-label-selected {
+::ng-deep
+  .mat-step-label.mat-step-label-active.mat-step-label-selected
+  > .mat-step-text-label {
   color: #003366;
-  font-weight: bolder !important;
+  font-weight: 700;
+  // border: 2px solid #003366;
+  // border-radius: 2px;
+  // background-color: #003366;
+  // padding-top: 20px;
 }
 
 mat-card:hover {
@@ -96,11 +101,7 @@ mat-card:hover {
     border-bottom: 2px solid grey;
   }
 
-  
-
-mat-stepper{
-orientation: "vertical";
+  mat-stepper {
+    orientation: "vertical";
+  }
 }
-
-}
-
