@@ -32,6 +32,7 @@ import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.
 import { QuickLinksComponent } from './quick-links/quick-links.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
     QuickLinksComponent,
     SubmissionHistoryComponent,
     LetterDetailsComponent,
+    UserRegistrationComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
