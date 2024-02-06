@@ -7,7 +7,7 @@ import { Document } from '../shared/api/models';
 @Component({
   selector: 'app-case-submissions',
   templateUrl: './case-submissions.component.html',
-  styleUrls: ['./case-submissions.component.css'],
+  styleUrls: ['./case-submissions.component.scss'],
 })
 export class CaseSubmissionsComponent {
   _caseSubmissionDocuments?: Document[] | null = [];

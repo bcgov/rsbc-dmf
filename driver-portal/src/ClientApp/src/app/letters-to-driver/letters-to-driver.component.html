@@ -58,7 +58,12 @@
               <div>
                 <label></label>
                 <div>
-                  <button mat-flat-button>Download</button>
+                  <button
+                    mat-flat-button
+                    (click)="downloadLetters(letter?.documentId)"
+                  >
+                    Download
+                  </button>
                 </div>
               </div>
             </div>

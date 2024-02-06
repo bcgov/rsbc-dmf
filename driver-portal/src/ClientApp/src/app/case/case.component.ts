@@ -48,6 +48,7 @@ export class CaseComponent implements OnInit {
       .getClosedCases({ driverId })
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
+        console.log(closedCases);
       });
   }
 

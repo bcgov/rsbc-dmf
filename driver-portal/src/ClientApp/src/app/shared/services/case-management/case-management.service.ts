@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CasesService, DocumentService, DriverService } from '../../api/services';
+import {
+  CasesService,
+  DocumentService,
+  DriverService,
+} from '../../api/services';
 
 @Injectable({
   providedIn: 'root',
@@ -39,5 +43,11 @@ export class CaseManagementService {
     params: Parameters<DocumentService['apiDocumentUploadPost$Json']>[0]
   ) {
     return this.documentService.apiDocumentUploadPost$Json(params);
+  }
+
+  public getDownloadDocument(
+    params: Parameters<DocumentService['apiDocumentDocumentIdGet$Json']>[0]
+  ) {
+    return this.documentService.apiDocumentDocumentIdGet$Json(params);
   }
 }

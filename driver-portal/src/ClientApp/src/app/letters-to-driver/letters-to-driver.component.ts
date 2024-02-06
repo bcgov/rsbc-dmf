@@ -9,6 +9,8 @@ import { Document } from '../shared/api/models';
   styleUrls: ['./letters-to-driver.component.css'],
 })
 export class LettersToDriverComponent {
+  constructor(private caseManagementService: CaseManagementService) {}
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
@@ -39,5 +41,21 @@ export class LettersToDriverComponent {
 
     this.filteredDocuments = this._letterDocuments?.slice(0, pageSize);
     console.log(pageSize);
+  }
+
+  downloadLetters(documentId: string | null | undefined) {
+    console.log('downloadLetters');
+    if (!documentId) return;
+    this.caseManagementService
+      .getDownloadDocument({ documentId })
+      .subscribe((res) => {
+        this.downloadFile(res);
+        console.log(res);
+      });
+  }
+
+  downloadFile(data: any) {
+    const url = window.URL.createObjectURL(data);
+    window.open(url);
   }
 }
