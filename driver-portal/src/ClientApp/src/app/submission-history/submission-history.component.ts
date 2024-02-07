@@ -6,7 +6,7 @@ import { Document } from '../shared/api/models';
 @Component({
   selector: 'app-submission-history',
   templateUrl: './submission-history.component.html',
-  styleUrls: ['./submission-history.component.css'],
+  styleUrls: ['./submission-history.component.scss'],
 })
 export class SubmissionHistoryComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;

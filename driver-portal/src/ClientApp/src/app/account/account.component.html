@@ -170,7 +170,7 @@
           The address below is from your BC Services Card record.
         </p>
         <label class="notification">
-          <input type="checkbox" />
+          <input type="checkbox" [formControl]="accountForm.controls.mail" />
           Use a different address <br />
           <p>
             Note:This will not update the address on your BC Services Card or
