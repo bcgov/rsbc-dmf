@@ -70,9 +70,33 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// set the user's profile email
+        /// </summary>
+        /// <param name="newEmail"></param>
+        /// <returns></returns>
+        [HttpPut("driver")]
+        public async Task<ActionResult> UpdateDriver([FromBody] DriverUpdate newEmail)
+        {
+            var profile = await userService.GetCurrentUserContext();
+
+            if (profile == null) return NotFound();
+
+            // update the driver information.
+            
+            return Ok();
+        }
+
         public record EmailUpdate
         {
             public string Email { get; set; }
+        }
+
+        public record DriverUpdate
+        {
+            public string DriverLicense { get; set; }
+            bool NotifyMail {  get; set; }
+            bool NotifyEmail { get; set; }
         }
 
         public record UserProfile
