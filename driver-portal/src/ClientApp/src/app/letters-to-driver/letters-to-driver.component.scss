@@ -45,6 +45,11 @@ button:hover{
   flex-direction: row;
 }
 
+.case-details-border {
+  border-left: 2px solid #808080;
+  height: 45%;
+}
+
 .caseDetailRow {
   display: flex;
   flex-wrap: wrap;
@@ -71,8 +76,23 @@ button:hover{
   cursor: pointer;
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 896px) {
   .submissions{
     display: block;
   }
+
+  .closedCaseContent {
+    flex-direction: column-reverse;
+  }
+
+  .caseDetailRow {
+    gap: 50px;
+  }
+
+  .case-details-border {
+    border-left: none;
+    border-top: 4px solid #808080;
+    height: 8px;
+  }
+
 }

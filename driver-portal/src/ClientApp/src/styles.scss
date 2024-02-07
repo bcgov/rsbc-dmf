@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
+:root{
+  // Mobile max width
+  --media-mobile-max-width: 896px;
+}
+
 a {
   color: #0366d6;
 }

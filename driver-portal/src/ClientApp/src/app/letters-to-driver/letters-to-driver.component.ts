@@ -6,7 +6,7 @@ import { Document } from '../shared/api/models';
 @Component({
   selector: 'app-letters-to-driver',
   templateUrl: './letters-to-driver.component.html',
-  styleUrls: ['./letters-to-driver.component.css'],
+  styleUrls: ['./letters-to-driver.component.scss'],
 })
 export class LettersToDriverComponent {
   constructor(private caseManagementService: CaseManagementService) {}

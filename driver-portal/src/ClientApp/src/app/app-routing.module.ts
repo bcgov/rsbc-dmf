@@ -7,11 +7,16 @@ import { CaseComponent } from './case/case.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   {
     path: 'account',
+    component: AccountComponent,
+  },
+  {
+    path: 'create-profile',
     component: AccountComponent,
   },
   {
@@ -22,6 +27,7 @@ const routes: Routes = [
   { path: 'caseDetails', component: CaseDetailsComponent },
   { path: 'submissionHistory', component: SubmissionHistoryComponent },
   { path: 'lettersToDriver', component: LetterDetailsComponent },
+  { path: 'userRegistration', component: UserRegistrationComponent },
 ];
 
 @NgModule({

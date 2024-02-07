@@ -68,14 +68,14 @@ footer {
     margin-left: 20px;
   }
 
-  @media (min-width: 720px) {
+  @media (min-width: 896px) {
     .footer-divider {
       display: inline-block;
     }
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 896px) {
   footer .site-footer-links {
     flex-direction: column;
   }
