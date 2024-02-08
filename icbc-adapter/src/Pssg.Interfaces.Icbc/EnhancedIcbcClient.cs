@@ -205,18 +205,21 @@ namespace Pssg.Interfaces
 
                             // Medicals
                             DR1MEDN = icbcClient.DriversDetails?.Medicals != null ? icbcClient.DriversDetails.Medicals
-                            .Select(medicals => new DR1MEDNITEM()
+                            .Select(medical => new DR1MEDNITEM()
                             {
-                                MIDT = medicals?.IssueDate,
-                                ISOF = medicals?.IssuingOffice,
-                                ISOFDESC = medicals?.IssuingOfficeDescription,
-                                PGN1 = medicals?.PhysiciansGuide1,
-                                PGN2 = medicals?.PhysiciansGuide2,
-                                MEDT = medicals?.ExamDate,
-                                MDSP = medicals?.MedicalDisposition,
-                                MDSPDESC = medicals?.DispositionDescription,
+                                MIDT = medical?.IssueDate,
+                                ISOF = medical?.IssuingOffice,
+                                ISOFDESC = medical?.IssuingOfficeDescription,
+                                PGN1 = medical?.PhysiciansGuide1,
+                                PGN2 = medical?.PhysiciansGuide2,
+                                MEDT = medical?.ExamDate,
+                                MDSP = medical?.MedicalDisposition,
+                                MDSPDESC = medical?.DispositionDescription,
+                                DocumentNumber = medical?.DocumentNumber,
+                                MedicalType = medical?.MedicalType,
+                                MedicalLevel = medical?.MedicalLevel
 
-                            }).ToList() : null
+    }).ToList() : null
                         }
                     }
                 };
