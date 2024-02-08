@@ -6,7 +6,7 @@ import { LoginService } from '../shared/services/login.service';
 @Component({
   selector: 'app-case-details',
   templateUrl: './case-details.component.html',
-  styleUrls: ['./case-details.component.css'],
+  styleUrls: ['./case-details.component.scss'],
 })
 export class CaseDetailsComponent implements OnInit {
   caseDocuments?: CaseDocuments;

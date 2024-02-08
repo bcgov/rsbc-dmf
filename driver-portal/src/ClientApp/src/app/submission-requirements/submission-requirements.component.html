@@ -76,27 +76,27 @@
   <div>
     <mat-card *ngFor="let document of submissionRequirementDocuments">
       <mat-card-content class="submissionRequirement">
-        <div>
+        <div style="grid-area: A">
           <label>Due Date</label>
           <div>
             <b>{{ document.dueDate }}</b>
           </div>
         </div>
 
-        <div>
+        <div style="grid-area: B">
           <label>Submission Type</label>
           <div>
             <b>{{ document.documentType }}</b>
           </div>
         </div>
-        <div>
+        <div style="grid-area: C">
           <label>Description</label>
           <div>
             <b>{{ document.description }}</b>
           </div>
         </div>
 
-        <div>
+        <div style="grid-area: D">
           <label></label>
           <div>
             <button mat-flat-button routerLink="/lettersToDriver">

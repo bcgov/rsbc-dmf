@@ -3,82 +3,94 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <style>
+        #pdf-viewer {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 800px;
+        }
+
+        .flex-container {
+            display: flex;
+        }
+
+            .flex-container > div {
+                background-color: #f1f1f1;
+                margin: 10px;
+                padding: 20px;
+               
+            }
+      
+
+    </style>
 </head>
+
 <body>
     <h1>Document Splitter</h1>
-    <div id="PageCheckboxes">
+    <div class="flex-container">
+        <div>
+            <div id="PageCheckboxes"></div>
+            <hr />
+            <div id="SelectedPages">
+                <b>Selected Pages:</b>
+                <ul id="SelectedPagesList"></ul>
+            </div>
+            <br />
+            <button onclick="splitPdf()">Split Document</button>
+            <button onclick="cancelpdf()">Cancel</button>
+        </div>
 
+        <div style="flex:3">
+
+            <div id='pdf-viewer'></div>
+        </div>
     </div>
-    <hr />
-    <div id="SelectedPages">
-        <b>Selected Pages:</b>
-        <ul id="SelectedPagesList">
-            
-        </ul>
-    </div>
-    <br>
-    <button onclick="splitPdf()"> Split Document </button>
-    <button onclick="cancelpdf()"> Cancel</button>
-
-
 
 
 </body>
 
 <script type="text/javascript">
-
-    const baseUrl = "https://localhost:5015/Documents"
-
-    //var extractParamsFromQueryString = (location) => {
-    //    var query = location.search.substring(1)
-    //    var paramsAsArray = query.split('&').map((item) => { var parts = item.split('='); return { key: parts[0], value: parts[1] } })
-    //    var params = paramsAsArray.reduce((acc, param) => { acc[param.key] = param.value; return acc; }, {})
-
-    //    return params
-    //}
-
-    //var params = extractParamsFromQueryString(window.top.location);
-    //var appid = params.appid;
-    //var documentId = params.data; // id
-    //var entityName = params.etn;
+    const baseUrl = "https://localhost:5015/Documents";
 
     const documentId = "0573e30d-ef6d-ee11-b846-00505683fbf4";
-    
+
     const splitUrl = `${baseUrl}/${documentId}/Split`;
     const pageCountUrl = `${baseUrl}/${documentId}/GetPageCount`;
 
     const pageCheckboxesElem = document.getElementById("PageCheckboxes");
 
-    const PageSelectorCheckboxClassName = 'page-selector-checkbox';
-    const DataPageAttribute = 'data-page';
+    const PageSelectorCheckboxClassName = "page-selector-checkbox";
+    const DataPageAttribute = "data-page";
 
     // Get Page count and create checkboxes based on page count
     function getPageCount() {
-       
-        fetch(pageCountUrl).then(response => response.json()).then(pageCount => {
-            console.log(pageCount);
-            const pageCountInt = parseInt(pageCount);
-            // loop page count times and create checkboxes
-            for (let i = 0; i < pageCountInt; i++) {
-                // console.log("Count:", i);
-                const divElem = document.createElement('div');
+        fetch(pageCountUrl)
+            .then((response) => response.json())
+            .then((pageCount) => {
+                console.log(pageCount);
+                const pageCountInt = parseInt(pageCount);
+                // loop page count times and create checkboxes
+                for (let i = 0; i < pageCountInt; i++) {
+                    // console.log("Count:", i);
+                    const divElem = document.createElement("div");
 
-                const labelElem = document.createElement('label');
-                labelElem.innerHTML = `Page ${i + 1}`;
-                const checkboxElem = document.createElement('input');
+                    const labelElem = document.createElement("label");
+                    labelElem.innerHTML = `Page ${i + 1}`;
+                    const checkboxElem = document.createElement("input");
 
-                checkboxElem.setAttribute('type', 'checkbox');
-                checkboxElem.setAttribute('name', `page${i + 1}`);
-                checkboxElem.setAttribute(DataPageAttribute, i + 1);
-                // add class name
-                checkboxElem.classList.add(PageSelectorCheckboxClassName);
+                    checkboxElem.setAttribute("type", "checkbox");
+                    checkboxElem.setAttribute("name", `page${i + 1}`);
+                    checkboxElem.setAttribute(DataPageAttribute, i + 1);
+                    // add class name
+                    checkboxElem.classList.add(PageSelectorCheckboxClassName);
 
-                divElem.appendChild(checkboxElem);  
+                    divElem.appendChild(checkboxElem);
 
-                divElem.appendChild(labelElem);
-                pageCheckboxesElem.appendChild(divElem);
-            } 
-        });
+                    divElem.appendChild(labelElem);
+                    pageCheckboxesElem.appendChild(divElem);
+                }
+            });
     }
 
     getPageCount();
@@ -86,33 +98,73 @@
     // Split pdf button Click
     function splitPdf() {
         console.log("Test Split PDF button Click");
-        const checkboxes = document.getElementsByClassName(PageSelectorCheckboxClassName);
+        const checkboxes = document.getElementsByClassName(
+            PageSelectorCheckboxClassName
+        );
         // console.log(checkboxes);
 
         const checked = Array.from(checkboxes).filter((elm) => elm.checked);
 
-        const selectedPages = checked.map((c) => c.getAttribute('data-page'));
-        console.log("Selected Pages:", selectedPages);
-        const ul = document.getElementById('SelectedPagesList');
-        ul.innerHTML = '';
+        const selectedPages = checked.map((c) => c.getAttribute("data-page"));
+
+        const ul = document.getElementById("SelectedPagesList");
+        ul.innerHTML = "";
         selectedPages.forEach((num) => {
-            const li = document.createElement('li');
+            const li = document.createElement("li");
             li.innerHTML = num;
 
-            ul.appendChild(li);    
-        })
+            ul.appendChild(li);
+        });
 
-        fetch(splitUrl, { method: "POST", body: JSON.stringify({ pagesToRemove: selectedPages }), headers: new Headers({ 'content-type': 'application/json' }) }).then(response => response.json()).then(response => console.log(response));
+        fetch(splitUrl, {
+            method: "POST",
+            body: JSON.stringify({ pagesToRemove: selectedPages }),
+            headers: new Headers({ "content-type": "application/json" }),
+        })
+            .then((response) => response.json())
+            .then((response) => console.log(response));
     }
 
     // cancel button click
-    function cancelpdf() {
-
-    }
-
-
-   
+    function cancelpdf() { }
 </script>
+
+<script src="//mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+
+<script type="module">
+    var url = 'https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf'
+    var thePdf = null;
+    var scale = 1;
+    var viewer;
+    var canvas;
+
+    var { pdfjsLib } = globalThis;
+    //console.log('pdfjsLib', pdfjsLib);
+    // The workerSrc property shall be specified.
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+    
+    pdfjsLib.getDocument(url).promise.then(function (pdf) {
+        console.log("Inside Get Document", pdf.numPages)
+        thePdf = pdf;
+        viewer = document.getElementById('pdf-viewer');
+
+        for (var page = 1; page <= pdf.numPages; page++) {
+            canvas = document.createElement("canvas");
+            canvas.className = 'pdf-page-canvas';
+            viewer.appendChild(canvas);
+            renderPage(page, canvas);
+        }
+    });
+
+
+    function renderPage(pageNumber, canvas) {
+        thePdf.getPage(pageNumber).then(function (page) {
+            var viewport = page.getViewport({ scale: scale });
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            page.render({ canvasContext: canvas.getContext('2d'), viewport: viewport });
+        });
+    }
+</script>
+
 </html>
-
-

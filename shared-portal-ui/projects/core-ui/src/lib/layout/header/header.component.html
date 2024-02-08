@@ -87,6 +87,66 @@
           <button mat-menu-item (click)="logOut()">Sign out</button>
         </mat-menu> -->
       </div>
+
+      <div class="mobile-menu">
+        <button mat-button (click)="showMobileMenu = !showMobileMenu">
+          <mat-icon style="color: white; transform: scale(2)">menu</mat-icon>
+        </button>
+        <div
+          style="
+            width: 100vw;
+            position: absolute;
+            left: 0;
+            background: white;
+            border-radius: 4px;
+            margin-top: 24px;
+          "
+          *ngIf="showMobileMenu"
+        >
+          <div class="mobile-menu-content">
+            <h1>RoadSafetyBC (RSBC) Driver Portal</h1>
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/dashboard'"
+              (click)="showMobileMenu = false"
+              >Dashboard</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/cases'"
+              (click)="showMobileMenu = false"
+              >Cases</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/lettersToDriver'"
+              (click)="showMobileMenu = false"
+              >Letters To Driver</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/submissionHistory'"
+              (click)="showMobileMenu = false"
+              >Submission History</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/account'"
+              (click)="showMobileMenu = false"
+            >
+              Account
+            </a>
+            <div style="display: flex; gap: 24px; padding-top: 24px">
+              <button routerLink="/account" (click)="showMobileMenu = false">
+                Get Assistance
+              </button>
+              <button (click)="showMobileMenu = false; logOut()">
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </header>

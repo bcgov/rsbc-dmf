@@ -1,7 +1,7 @@
 <div>
   <mat-card routerLink="/caseDetails" class="caseDetails">
     <mat-card-content class="recentCaseContent">
-      <div>
+      <div style="grid-area: A">
         <label>Case ID</label>
         <div>
           <b>
@@ -12,27 +12,28 @@
         </div>
       </div>
 
-      <div>
+      <div style="grid-area: B">
         <label>Case Type</label>
         <div>
           <b>{{ caseDetails?.caseType }}</b>
         </div>
       </div>
 
-      <div>
+      <div style="grid-area: C">
         <label>DMER Type</label>
         <div>
           <b>{{ caseDetails?.dmerType }}</b>
         </div>
       </div>
-      <div>
+
+      <div style="grid-area: D">
         <label>Outstanding Documents</label>
         <div>
           <b>{{ caseDetails?.outstandingDocuments }}</b>
         </div>
       </div>
 
-      <div>
+      <div style="grid-area: E">
         <label> Decision Outcome </label>
         <div>
           <b>{{ caseDetails?.latestDecision }}</b>
@@ -43,7 +44,12 @@
 </div>
 
 <div>
-  <mat-stepper labelPosition="bottom" #stepper [selectedIndex]="selectedIndex">
+  <mat-stepper
+    labelPosition="bottom"
+    #stepper
+    [selectedIndex]="selectedIndex"
+    orientation="horizontal"
+  >
     <mat-step state="circle">
       <ng-template matStepLabel
         >Opened:<br />{{
