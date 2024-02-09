@@ -7,6 +7,7 @@ export { Comment } from './models/comment';
 export { Configuration } from './models/configuration';
 export { Document } from './models/document';
 export { Driver } from './models/driver';
+export { DriverUpdate } from './models/driver-update';
 export { EmailUpdate } from './models/email-update';
 export { OidcOptions } from './models/oidc-options';
 export { OkResult } from './models/ok-result';

@@ -33,6 +33,7 @@ import { QuickLinksComponent } from './quick-links/quick-links.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { UserRegistrationComponent } from './user-registration/user-registration
     SubmissionHistoryComponent,
     LetterDetailsComponent,
     UserRegistrationComponent,
+    GetAssistanceComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Provide sufficient contrast against white background */
-:root{
+:root {
   // Mobile max width
   --media-mobile-max-width: 896px;
 }
@@ -25,19 +25,17 @@ table {
   border: 1px solid #808080;
 }
 
-  table td {
-    border: 1px solid #808080;
-  }
+table td {
+  border: 1px solid #808080;
+}
 
+.mat-form-field {
+  width: 100%;
+}
 
-  
-  .mat-form-field {
-    width: 100%;
-  }
-  
-  .mat-dialog-actions {
-    padding-bottom: 30px;
-  }
+.mat-dialog-actions {
+  padding-bottom: 30px;
+}
 
 /* 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
@@ -45,13 +43,16 @@ table {
   color:rgb(0, 51, 102) !important;
 } */
 
-.mat-form-field-appearance-outline.mat-form-field-disabled .mat-form-field-outline {
-  background-color: #F2F2F2 !important;
+.mat-form-field-appearance-outline.mat-form-field-disabled
+  .mat-form-field-outline {
+  background-color: #f2f2f2 !important;
 }
 
-.mat-input-element:disabled, .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled
+  .mat-form-field-infix::after {
   color: black;
-}  
+}
 
 .link-underline-reverse {
   text-decoration: none;
@@ -68,7 +69,7 @@ table {
   margin-bottom: 20px;
   padding: 15px;
 
-  font-family: 'BC Sans', 'Noto Sans', Arial, 'sans serif';
+  font-family: "BC Sans", "Noto Sans", Arial, "sans serif";
   color: #313132;
   font-size: 16px;
   line-height: 1.5em;
@@ -76,7 +77,7 @@ table {
 
 .bc-gov-alertbanner:before {
   float: left;
-  font-family: 'Font Awesome 5 Free';
+  font-family: "Font Awesome 5 Free";
   font-size: larger;
   font-style: normal;
   line-height: 1;
@@ -153,12 +154,9 @@ table {
   padding: 0 20px;
 }
 
-
 .navbar-brand {
   text-decoration: none;
 }
-
-
 
 .table-actions {
   margin-top: 10px;
@@ -176,7 +174,7 @@ table {
   text-rendering: optimizeLegibility;
 
   p {
-    font-family: 'BC Sans Regular', 'BC Sans', sans-serif;
+    font-family: "BC Sans Regular", "BC Sans", sans-serif;
     font-weight: 400;
     font-style: normal;
     color: #003366;
@@ -205,7 +203,6 @@ body {
   padding: 0;
 }
 
-
 .page-desc {
   background-color: #ecf5ff;
   width: 100%;
@@ -214,7 +211,7 @@ body {
 
   h1 {
     color: rgb(0, 51, 102);
-    font-family: 'BC Sans Bold', 'BC Sans Regular', 'BC Sans', sans-serif;
+    font-family: "BC Sans Bold", "BC Sans Regular", "BC Sans", sans-serif;
     font-weight: 700;
     font-size: 52px;
     line-height: 60px;
@@ -242,22 +239,22 @@ body {
 }
 
 * {
-   font-family: 'BC Sans Bold', 'BC Sans Regular', 'BC Sans', sans-serif;
-   font-weight: 400;
-   font-size: 16px;
- }
+  font-family: "BC Sans Bold", "BC Sans Regular", "BC Sans", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+}
 
- li{
+li {
   font-size: 16px;
   text-align: left;
   line-height: 24px;
 }
 
-.definationCard{
+.definationCard {
   margin-top: 12px;
 }
 
-.definationContent{
+.definationContent {
   margin-left: 12px;
 }
 
@@ -314,29 +311,33 @@ a.accordion-btn {
   border: none;
   border-radius: 5px;
   align-items: center;
-  color: #003366 ;
+  color: #003366;
   flex-direction: column;
 }
 
-.viewMore:hover{
+.viewMore:hover {
   text-decoration: underline;
   cursor: pointer;
   color: #003366;
 }
 
-.ViewMoreIcon{
+.ViewMoreIcon {
   position: absolute;
   color: #003366;
-
 }
 
-button{
-  border : 2px solid #003366;
+button {
+  border: 2px solid #003366;
   color: #003366;
- 
 }
 
-button:hover{   
-    color: #fff;
-    background-color: #003366;
+button:hover {
+  color: #fff;
+  background-color: #003366;
+}
+
+button:disabled:hover {
+  border: 2px solid #003366;
+  color: #003366;
+  background-color: #fff;
 }

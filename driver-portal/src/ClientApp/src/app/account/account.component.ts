@@ -17,6 +17,7 @@ export class AccountComponent implements OnInit {
     firstName: [''],
     lastName: [''],
     emailAddress: [''],
+    driverLicenceNumber: [''],
   });
 
   isCreateProfile = this.route.snapshot.routeConfig?.path === 'create-profile';
@@ -36,12 +37,12 @@ export class AccountComponent implements OnInit {
 
     if (this.isCreateProfile) {
       this.accountForm.controls.emailAddress.enable();
+      this.accountForm.controls.driverLicenceNumber.enable();
     }
   }
 
   getuserDetails(driverId: string) {
     this.loginService.getUserProfile().subscribe((user) => {
-      console.log(user);
       this.accountForm.patchValue(user);
     });
   }
@@ -49,5 +50,10 @@ export class AccountComponent implements OnInit {
   onEdit() {
     this.accountForm.controls.emailAddress.enable();
     this.isEditView = true;
+  }
+
+  onSubmit() {
+    //this.loginService.
+    console.log(this.accountForm.value);
   }
 }
