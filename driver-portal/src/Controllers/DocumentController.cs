@@ -57,6 +57,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     return StatusCode((int)HttpStatusCode.Unauthorized, $"Not authorized - you are not authorized to view document {documentId}");
                 }
 
+                
                 if (!string.IsNullOrEmpty(reply.Document?.DocumentUrl))
                 {
                     // fetch the file from S3

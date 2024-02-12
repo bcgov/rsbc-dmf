@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -44,6 +45,10 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                     signingCredentials: creds
                     );
                 result = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken); 
+            }
+            else
+            {
+                Log.Error($"Invalid secret supplied - {secret}");
             }
 
             return result;

@@ -145,14 +145,8 @@ namespace Rsbc.Dmf.BcMailAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            
-
-            
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
-                byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
-                Array.Resize(ref secretBytes, 32);
-
                 services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddDefaultTokenProviders();
 
@@ -165,13 +159,19 @@ namespace Rsbc.Dmf.BcMailAdapter
                 {
                     o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
+
+
+                    byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    Array.Resize(ref secretBytes, 32);
+
+                    var symmetricSecurityKey = new SymmetricSecurityKey(secretBytes);
+
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         RequireExpirationTime = false,
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(secretBytes)
+                        IssuerSigningKey = symmetricSecurityKey
                     };
                 })
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
