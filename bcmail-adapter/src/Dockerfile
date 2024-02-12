@@ -8,7 +8,10 @@ USER 0
 
 RUN apt-get -y update && apt install -y libgdiplus
 RUN ln -s /usr/lib/libgdiplus.so /lib/x86_64-linux-gnu/libgdiplus.so
-RUN apt-get install -y --no-install-recommends zlib1g fontconfig libfreetype6 libx11-6 libxext6 libxrender1 wget gdebi libssl1.1
+RUN apt-get install -y --no-install-recommends zlib1g fontconfig libfreetype6 libx11-6 libxext6 libxrender1 wget gdebi
+
+RUN wget http://http.us.debian.org/debian/pool/main/o/openssl/libssl1.1_1.1.1w-0+deb11u1_amd64.deb
+RUN gdebi --n libssl1.1_1.1.1w-0+deb11u1_amd64.deb
 RUN wget https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb
 RUN gdebi --n wkhtmltox_0.12.6.1-2.bullseye_amd64.deb
 RUN apt install -y libssl1.1
