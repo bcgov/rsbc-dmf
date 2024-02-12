@@ -1,3 +1,5 @@
+﻿using System.Collections.Immutable;
+
 ﻿namespace Rsbc.Dmf.DriverPortal.Api
 {
     // get mime mappings from here
@@ -24,6 +26,11 @@
             }
 
             return mimetype;
+        }
+
+        public static bool IsAllowedMimeType(string mimeType)
+        {
+            return new string[] { "application/pdf", "image/png", "image/jpeg" }.Contains(mimeType);
         }
 
         public static byte[] GetByteArray(IFormFile file)

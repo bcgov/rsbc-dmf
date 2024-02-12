@@ -83,21 +83,14 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             var request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/upload");
             var multiPartContent = new MultipartFormDataContent("----TestBoundary");
 
+            // add png file to request
             var bytes = File.ReadAllBytes("Data/edit.png");
-            var fileContent = new MultipartContent { new ByteArrayContent(bytes) };
-            fileContent.Add(new ByteArrayContent(bytes));
-            fileContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-            fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-            {
-                Name = "file",
-                FileName = "test.png"
-            };
-            multiPartContent.Add(fileContent);
+            multiPartContent.Add(new ByteArrayContent(bytes), "file", "test.png");
             request.Content = multiPartContent;
 
             var response = await _client.SendAsync(request);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
         }
     }
-}
