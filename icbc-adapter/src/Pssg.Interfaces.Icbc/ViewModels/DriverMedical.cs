@@ -76,5 +76,9 @@ namespace Pssg.Interfaces.Icbc.ViewModels
         /// </summary>        
         public string PGN1 { get; set; }
 
+        public string DocumentNumber { get; set; }
+        public string MedicalType { get; set; }
+        public int? MedicalLevel { get; set; }
+
     }
 }

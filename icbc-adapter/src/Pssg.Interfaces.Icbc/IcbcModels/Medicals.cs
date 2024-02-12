@@ -14,7 +14,9 @@ namespace Pssg.Interfaces.IcbcModels
        public DateTime ExamDate { get; set; }
        public string MedicalDisposition { get; set; }
        public string DispositionDescription { get; set; }
-
+       public string DocumentNumber { get; set; }
+       public string MedicalType { get; set; }
+       public int MedicalLevel { get; set; }
     }
 }
 
