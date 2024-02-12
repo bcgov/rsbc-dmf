@@ -13,6 +13,8 @@ import { apiProfileCurrentGet$Json } from '../fn/profile/api-profile-current-get
 import { ApiProfileCurrentGet$Json$Params } from '../fn/profile/api-profile-current-get-json';
 import { apiProfileCurrentGet$Plain } from '../fn/profile/api-profile-current-get-plain';
 import { ApiProfileCurrentGet$Plain$Params } from '../fn/profile/api-profile-current-get-plain';
+import { apiProfileDriverPut } from '../fn/profile/api-profile-driver-put';
+import { ApiProfileDriverPut$Params } from '../fn/profile/api-profile-driver-put';
 import { apiProfileEmailPut } from '../fn/profile/api-profile-email-put';
 import { ApiProfileEmailPut$Params } from '../fn/profile/api-profile-email-put';
 import { UserProfile } from '../models/user-profile';
@@ -91,6 +93,31 @@ export class ProfileService extends BaseService {
    */
   apiProfileEmailPut(params?: ApiProfileEmailPut$Params, context?: HttpContext): Observable<void> {
     return this.apiProfileEmailPut$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `apiProfileDriverPut()` */
+  static readonly ApiProfileDriverPutPath = '/api/Profile/driver';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiProfileDriverPut()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileDriverPut$Response(params?: ApiProfileDriverPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiProfileDriverPut(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiProfileDriverPut$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileDriverPut(params?: ApiProfileDriverPut$Params, context?: HttpContext): Observable<void> {
+    return this.apiProfileDriverPut$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
     );
   }

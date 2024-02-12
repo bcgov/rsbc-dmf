@@ -3,6 +3,7 @@ import {
   CasesService,
   DocumentService,
   DriverService,
+  ProfileService,
 } from '../../api/services';
 
 @Injectable({
@@ -12,7 +13,8 @@ export class CaseManagementService {
   constructor(
     private casesService: CasesService,
     private driversService: DriverService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
+    private profileService: ProfileService
   ) {}
 
   public getMostRecentCase(
@@ -49,5 +51,17 @@ export class CaseManagementService {
     params: Parameters<DocumentService['apiDocumentDocumentIdGet$Json']>[0]
   ) {
     return this.documentService.apiDocumentDocumentIdGet$Json(params);
+  }
+
+  public updateEmailAddress(
+    params: Parameters<ProfileService['apiProfileEmailPut']>[0]
+  ) {
+    return this.profileService.apiProfileEmailPut(params);
+  }
+
+  public updateDriverProfile(
+    params: Parameters<ProfileService['apiProfileDriverPut$Response']>[0]
+  ) {
+    return this.profileService.apiProfileDriverPut$Response(params);
   }
 }

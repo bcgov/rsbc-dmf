@@ -1,0 +1,25 @@
+input[type="checkbox"] {
+  transform: scale(1.5);
+  margin: 15px;
+}
+
+@media only screen and (max-width: 896px) {
+  .container {
+    display: block;
+  }
+}
+
+.acceptButton {
+  border-width: 0px;
+  left: 10px;
+  top: 323px;
+  width: 279px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #f2f2f2;
+  background-color: #003366;
+}

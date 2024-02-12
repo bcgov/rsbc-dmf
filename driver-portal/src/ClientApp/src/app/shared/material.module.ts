@@ -28,7 +28,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
-
+import { CdkMenuModule } from '@angular/cdk/menu';
 @NgModule({
   imports: [
     CommonModule,
@@ -65,6 +65,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     ReactiveFormsModule,
     FormsModule,
     MatStepperModule,
+    CdkMenuModule,
   ],
   exports: [
     CommonModule,
@@ -101,6 +102,7 @@ import { MatStepperModule } from '@angular/material/stepper';
     ReactiveFormsModule,
     FormsModule,
     MatStepperModule,
+    CdkMenuModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

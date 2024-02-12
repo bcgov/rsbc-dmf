@@ -8,6 +8,7 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'submissionHistory', component: SubmissionHistoryComponent },
   { path: 'lettersToDriver', component: LetterDetailsComponent },
   { path: 'userRegistration', component: UserRegistrationComponent },
+  { path: 'getAssistance', component: GetAssistanceComponent },
 ];
 
 @NgModule({

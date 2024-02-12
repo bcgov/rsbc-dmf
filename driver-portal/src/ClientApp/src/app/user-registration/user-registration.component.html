@@ -13,9 +13,19 @@
     phone toll free at 1-800-123-1234.
   </p>
   <div>
-    <mat-checkbox>I agree to the collection notice terms</mat-checkbox>
+    <label>
+      <input type="checkbox" #confirmed [formControl]="acceptControl" />I agree
+      to the collection notice terms
+    </label>
   </div>
+
   <div style="padding: 24px">
-    <button routerLink="/create-profile">Accept and Continue</button>
+    <button
+      [disabled]="!confirmed.checked"
+      routerLink="/create-profile"
+      class="acceptButton"
+    >
+      Accept and Continue
+    </button>
   </div>
 </div>
