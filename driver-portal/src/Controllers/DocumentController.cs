@@ -42,8 +42,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(typeof(FileContentResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName(nameof(GetDocument))]
-        public async Task<ActionResult> GetDocument([FromRoute] string documentId)
+        [ActionName(nameof(DownloadDocumentFile))]
+        public async Task<ActionResult> DownloadDocumentFile([FromRoute] string documentId)
         {
             // call the back end
             var reply = _cmsAdapterClient.GetLegacyDocument(new LegacyDocumentRequest() { DocumentId = documentId });
@@ -116,11 +116,15 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var profile = await _userService.GetCurrentUserContext();
 
-            var data = DocumentUtils.GetByteArray(file);
+            // read file stream into byte array
+            var fileStream = new MemoryStream((int)file.Length);
+            file.CopyTo(fileStream);
+            var bytes = fileStream.ToArray();
+
+            // verify mimetype from byte array
             var mimeTypes = new MimeTypes();
-            var mimeType = mimeTypes.GetMimeType(data);
-            if (mimeType == null || !(mimeType.Name.Equals("image/png") || mimeType.Name.Equals("image/jpeg") ||
-                                     mimeType.Name.Equals("application/pdf")))
+            var mimeType = mimeTypes.GetMimeType(bytes);
+            if (!DocumentUtils.IsAllowedMimeType(mimeType.Name))
             {
                 _logger.LogError($"ERROR in uploading file due to invalid mime type {mimeType?.Name}");
                 return BadRequest();
@@ -130,7 +134,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var request = new UploadFileRequest()
             {
                 ContentType = file.ContentType,
-                Data = ByteString.CopyFrom(data),
+                Data = ByteString.CopyFrom(bytes),
                 EntityName = "dfp_driver",
                 FileName = file.FileName,
                 FolderName = profile.DriverId,
