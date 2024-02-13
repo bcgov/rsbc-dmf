@@ -1,7 +1,7 @@
 .help-topics {
   display: inline-flex;
   flex-direction: column;
-  min-width: 180px;
+  min-width: 218px;
   max-width: 280px;
   background-color: rgb(255, 255, 255);
   padding: 6px 0;
@@ -29,4 +29,100 @@
 
 .help-topics-item:active {
   background-color: rgb(170, 170, 170);
+}
+
+.help-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.submissions {
+  display: flex;
+  flex-direction: row;
+  padding-top: 24px;
+  gap: 100px;
+}
+.submissionRequirement {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+button {
+  border: 2px solid #003366;
+  color: #003366;
+}
+
+button:hover {
+  color: #fff;
+  background-color: #003366;
+}
+
+.closedCaseContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.case-details-border {
+  border-left: 2px solid #808080;
+  height: 45%;
+}
+
+.caseDetailRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  line-height: 32px;
+  padding-bottom: 24px;
+  align-content: flex-start;
+}
+
+.callback {
+  width: 831px;
+  height: 156px;
+  background: inherit;
+  background-color: rgba(236, 245, 255, 1);
+  border: none;
+  border-radius: 4px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  color: #81692c;
+}
+
+.caseDetailRow > div {
+  flex-basis: 220px;
+}
+
+.expandedIcon {
+  transform: scale(1.5);
+  color: #003366;
+  width: 50px;
+}
+
+.open {
+  background-color: #f1f1f3;
+  border: 1px solid #003366;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 896px) {
+  .submissions {
+    display: block;
+  }
+
+  .closedCaseContent {
+    flex-direction: column-reverse;
+  }
+
+  .caseDetailRow {
+    gap: 50px;
+  }
+
+  .case-details-border {
+    border-left: none;
+    border-top: 4px solid #808080;
+    height: 8px;
+  }
 }

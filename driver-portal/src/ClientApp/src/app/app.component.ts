@@ -25,13 +25,28 @@ export class AppComponent implements OnInit {
     try {
       //load the configuration from the server
       await firstValueFrom(this.configService.load());
+      
+
       //attempt to log in
       let nextRoute = await firstValueFrom(
         this.loginService.login(location.pathname.substring(1) || 'dashboard')
       );
 
       //get the user's profile
-      await firstValueFrom(this.loginService.getUserProfile());
+
+      const driver = await firstValueFrom(this.loginService.getUserProfile());
+      console.log(driver);
+
+      if(!this.loginService.isLoggedIn()) {
+        return;
+      }
+      
+      if (driver.driverId) {
+        //if the user is logged in, redirect to the dashboard
+        nextRoute = 'dashboard';
+      } else {
+        nextRoute = 'userRegistration';
+      }
 
       //determine the next route
       nextRoute = '/' + decodeURIComponent(nextRoute);
@@ -46,6 +61,9 @@ export class AppComponent implements OnInit {
 
       this.router.navigate([nextRoute]).then(() => (this.isLoading = false));
     } catch (e) {
+      this.router
+        .navigate(['userRegistration'])
+        .then(() => (this.isLoading = false));
       console.error(e);
       throw e;
     }
