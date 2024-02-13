@@ -14,7 +14,11 @@
       <h2>Help Topics</h2>
       <div style="display: flex; gap: 32px">
         <div class="help-topics" cdkMenu>
-          <button class="help-topics-item" cdkMenuItem>
+          <button
+            class="help-topics-item"
+            (click)="recommendedTopics()"
+            cdkMenuItem
+          >
             <b>Recommended topics</b>
           </button>
           <button class="help-topics-item" cdkMenuItem>
@@ -30,8 +34,10 @@
             <b>Letters to Driver</b>
           </button>
         </div>
-        <div>
-          <mat-card>
+        @if (display === 0) {
+
+        <div class="help-cards">
+          <mat-card (click)="helpcard()">
             <mat-card-content
               ><b> Upload a Document </b>
               <div>
@@ -43,60 +49,80 @@
           </mat-card>
           <mat-card>
             <mat-card-content
-              ><b> Upload a Document </b>
+              ><b> View DMER submission </b>
               <div>
-                You have an extra document that you want to submit to RSBC.
-                <br />
-                Learn more about this process.
+                DMERs submitted online by a medical practitioner will not be
+                visible to you. Learn how you can obtain a copy.
               </div>
             </mat-card-content>
           </mat-card>
           <mat-card>
             <mat-card-content
-              ><b> Upload a Document </b>
+              ><b> Received an incorrect letter </b>
               <div>
-                You have an extra document that you want to submit to RSBC.
-                <br />
-                Learn more about this process.
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-        <div>
-          <mat-card>
-            <mat-card-content
-              ><b> Upload a Document </b>
-              <div>
-                You have an extra document that you want to submit to RSBC.
-                <br />
-                Learn more about this process.
-              </div>
-            </mat-card-content>
-          </mat-card>
-          <mat-card>
-            <mat-card-content
-              ><b> Upload a Document </b>
-              <div>
-                You have an extra document that you want to submit to RSBC.
-                <br />
-                Learn more about this process.
-              </div>
-            </mat-card-content>
-          </mat-card>
-          <mat-card>
-            <mat-card-content
-              ><b> Upload a Document </b>
-              <div>
-                You have an extra document that you want to submit to RSBC.
-                <br />
-                Learn more about this process.
+                If you have received a letter from RSBC which does not relate to
+                you find out how to report this to RSBC.
               </div>
             </mat-card-content>
           </mat-card>
         </div>
+        <div class="help-cards">
+          <mat-card>
+            <mat-card-content
+              ><b> Cannot see document in Document History </b>
+              <div>
+                In certain instances you will not immediately see your document
+                requirement appear in Document History.
+              </div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content
+              ><b>Submit a replacement document </b>
+              <div>
+                Uploading an incorrect file can happen. Learn how you can
+                resubmit a document.
+              </div>
+            </mat-card-content>
+          </mat-card>
+          <mat-card>
+            <mat-card-content
+              ><b> Request extension </b>
+              <div>
+                Sometimes life gets in the way. Learn how you can request an
+                extension from RSBC on your case.
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        } @else if (display === 5) {
+        <div>
+          <b style="padding: 12px">Upload an Extra Document</b>
+          <p>
+            Under the Submission Requirements tab on a case page, RSBC lists all
+            the submissions they require from you. If RSBC has not asked for a
+            specific document, they probably do not require it at this time.
+          </p>
+          <p>The Driver Portal does not allow you to upload extra documents.</p>
+          <p>
+            To submit an extra document you need to discuss this with a RSBC
+            agent by requesting a call back. They will be able to provide you
+            with the assistance you need.
+          </p>
+          <div class="callback">
+            <div style="display: flex; gap: 42px; padding: 24px">
+              <b>Still require assistance?</b>
+              <button>Request Call Back</button>
+              <button>Contact RSBC</button>
+            </div>
+          </div>
+        </div>
+
+        }
       </div>
     </div>
-    <div>
+    <div style="padding-top: 24px">
       <h2>Contact RoadSafetyBC</h2>
       <p>
         If the topics above don't give you the answer you're looking for, you
@@ -105,6 +131,87 @@
 
         <b>Phone</b>: 1-855-387-7747
       </p>
+    </div>
+    <div style="padding-top: 24px">
+      <h2>Request Call Back History</h2>
+      <p>
+        Once you've asked for a call back, you will find a record of your
+        request in this table. You can check the status of your request and see
+        any notes added by RSBC customer service representatives. If you no
+        longer need assistance, you have the option to cancel your open request
+        whenever you want.
+      </p>
+      <div>
+        <mat-card>
+          <mat-card-content class="closedCaseContent">
+            <div style="text-align: center">
+              <mat-icon class="expandedIcon"> expand_circle_down </mat-icon>
+            </div>
+            <div style="display: flex; flex-direction: column">
+              <div class="case-details-border">&nbsp;</div>
+              <div>&nbsp;</div>
+            </div>
+            <div style="flex: 1">
+              <div class="caseDetailRow">
+                <div>
+                  <label>Request call back date </label>
+                  <div>
+                    <!-- <b>{{ letter.createDate | date : "longDate" }}</b> -->
+                    <b>April 28, 2023</b>
+                  </div>
+                </div>
+
+                <div>
+                  <label>Topic</label>
+                  <div>
+                    <!-- <b>{{ letter.documentType }}</b> -->
+                    <b>Upload an extra document</b>
+                  </div>
+                </div>
+                <div>
+                  <label>Call Status</label>
+                  <div>
+                    <!-- <b>{{ letter.documentType }}</b> -->
+                    <b>Open</b>
+                  </div>
+                </div>
+                <div>
+                  <label></label>
+                  <div>
+                    <button mat-flat-button (click)="cancelCallback()">
+                      Cancel Callback
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="caseDetailRow"
+                style="
+                  border-top: 2px solid gray;
+                  padding-top: 20px;
+                  padding-bottom: 20px;
+                "
+              >
+                <div>
+                  <label>Preferred callback times</label>
+                  <div>
+                    <!-- <b>{{ letter.caseId }}</b> -->
+                    <b>9:00am and 12:00pm</b>
+                  </div>
+                </div>
+                <div>
+                  <label>RSBC Call details</label>
+                  <div>
+                    <!-- <b>{{ letter.caseId }}</b> -->
+                    <b>April 29 - Call attempt unsuccessful</b>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>
