@@ -53,7 +53,14 @@ export class AccountComponent implements OnInit {
   }
 
   onSubmit() {
-    //this.loginService.
-    console.log(this.accountForm.value);
+    this.caseManagementService
+      .updateEmailAddress({
+        body: {
+          email: this.accountForm.value.emailAddress,
+        },
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }
