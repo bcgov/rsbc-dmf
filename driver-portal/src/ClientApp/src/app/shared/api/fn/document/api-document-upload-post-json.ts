@@ -9,32 +9,36 @@ import { RequestBuilder } from '../../request-builder';
 import { OkResult } from '../../models/ok-result';
 
 export interface ApiDocumentUploadPost$Json$Params {
-      body?: {
-'ContentType'?: string;
-'ContentDisposition'?: string;
-'Headers'?: {
-[key: string]: Array<string>;
-};
-'Length'?: number;
-'Name'?: string;
-'FileName'?: string;
-}
+  body?: {
+    file: Blob;
+  };
 }
 
-export function apiDocumentUploadPost$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentUploadPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
-  const rb = new RequestBuilder(rootUrl, apiDocumentUploadPost$Json.PATH, 'post');
+export function apiDocumentUploadPost$Json(
+  http: HttpClient,
+  rootUrl: string,
+  params?: ApiDocumentUploadPost$Json$Params,
+  context?: HttpContext
+): Observable<StrictHttpResponse<OkResult>> {
+  const rb = new RequestBuilder(
+    rootUrl,
+    apiDocumentUploadPost$Json.PATH,
+    'post'
+  );
   if (params) {
     rb.body(params.body, 'multipart/form-data');
   }
 
-  return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
-  ).pipe(
-    filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
-    map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<OkResult>;
-    })
-  );
+  return http
+    .request(
+      rb.build({ responseType: 'json', accept: 'application/json', context })
+    )
+    .pipe(
+      filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<OkResult>;
+      })
+    );
 }
 
 apiDocumentUploadPost$Json.PATH = '/api/Document/upload';

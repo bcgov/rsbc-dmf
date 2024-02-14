@@ -29,6 +29,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatStepperModule } from '@angular/material/stepper';
 import { CdkMenuModule } from '@angular/cdk/menu';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 @NgModule({
   imports: [
     CommonModule,
@@ -66,6 +67,7 @@ import { CdkMenuModule } from '@angular/cdk/menu';
     FormsModule,
     MatStepperModule,
     CdkMenuModule,
+    NgxDropzoneModule,
   ],
   exports: [
     CommonModule,
@@ -103,6 +105,7 @@ import { CdkMenuModule } from '@angular/cdk/menu';
     FormsModule,
     MatStepperModule,
     CdkMenuModule,
+    NgxDropzoneModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

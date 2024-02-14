@@ -45,7 +45,7 @@ button:hover {
   left: 0px;
   top: 0px;
   width: 960px;
-  height: 676px;
+  height: 600px;
   background: inherit;
   background-color: rgba(255, 255, 255, 1);
   box-sizing: border-box;
@@ -66,25 +66,28 @@ button:hover {
   font-size: 16px;
   padding-top: 24px;
 }
- 
 
-label { 
-  display: block; 
-} 
-
-.uploadbutton{
-  display: flex;
-    gap: 25px;
-    padding: 16px
-}
-
-.file-upload{
-
+label {
   display: block;
 }
 
+.uploadbutton {
+  display: flex;
+  gap: 25px;
+  padding: 16px;
+}
+
+.file-upload {
+  display: block;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+  margin: 15px;
+}
+
 @media only screen and (max-width: 768px) {
-  .submissions{
+  .submissions {
     display: block;
   }
 

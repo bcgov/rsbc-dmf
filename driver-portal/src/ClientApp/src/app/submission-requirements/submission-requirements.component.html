@@ -38,33 +38,61 @@
         3. Click Upload <br />
         File button Certain documents cannot be uploaded (e.g., example here).
         Learn how to submit additional documentation.
-        <div>
-          <label class="form-label">Document Type (Required)</label>
-          <mat-form-field
-            appearance="outline"
-            fxFlex="50px"
-            style="width: 350px"
-          >
-            <input matInput name="documentType" placeholder="DocumentType" />
+        <div style="padding-top: 24px">
+          <mat-form-field appearance="outline" style="width: 350px">
+            <mat-label>Select Document Type</mat-label>
+            <mat-select [(ngModel)]="selectedValue" name="docuemntTypes">
+              @for (docuemntType of docuemntTypes; track docuemntType) {
+              <mat-option [value]="docuemntType.value">{{
+                docuemntType.viewValue
+              }}</mat-option>
+              }
+            </mat-select>
           </mat-form-field>
         </div>
 
-        <div>
-          <input
-            type="file"
-            class="file-upload"
-            onchange="console.log(event.target.files)"
-            (change)="handleFileInput($event)"
-          />
-        </div>
-        <div style="padding-top: 24px">
-          <mat-checkbox
-            >I verify that this document is authentic and
-            unaltered.</mat-checkbox
+        <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+          <ngx-dropzone-label
+            ><div>
+              <mat-icon> file_present </mat-icon>
+              <div>
+                <p>
+                  <a>Brouse</a> your file <br />
+                  File Upload Specifications <br />
+                  Maximum file size: 20MB <br />
+                  Accepted file types: PDF, DOCX, PNG
+                </p>
+              </div>
+            </div></ngx-dropzone-label
           >
+          <ngx-dropzone-preview
+            *ngIf="fileToUpload"
+            [multiple]="false"
+            [removable]="true"
+            (removed)="onRemove()"
+          >
+            <ngx-dropzone-label
+              >{{ fileToUpload.name }} ({{
+                fileToUpload.type
+              }})</ngx-dropzone-label
+            >
+          </ngx-dropzone-preview>
+        </ngx-dropzone>
+        <div style="padding-top: 24px">
+          <label>
+            <input type="checkbox" #confirmed [formControl]="acceptControl" />I
+            verify that this document is authentic and unaltered.
+          </label>
         </div>
+
         <div class="uploadbutton">
-          <button mat-flat-button (click)="fileUpload()">Upload File</button>
+          <button
+            mat-flat-button
+            (click)="fileUpload()"
+            [disabled]="!confirmed.checked"
+          >
+            Upload File
+          </button>
           <button mat-flat-button (click)="closeUploadFile()">Cancel</button>
         </div>
       </div>
