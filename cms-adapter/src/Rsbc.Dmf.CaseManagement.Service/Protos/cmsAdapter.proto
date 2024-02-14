@@ -451,6 +451,7 @@ message LegacyCandidateRequest{
 	string surname = 3;
 	google.protobuf.Timestamp birthDate = 4;
 	google.protobuf.Timestamp effectiveDate = 5;
+	string medicalType = 10;
 }
 
 message LegacyCandidateReply{
