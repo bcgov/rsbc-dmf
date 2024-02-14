@@ -53,9 +53,9 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns>Guid of the created case</returns>
         /// 
         Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate);
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string medicalType);
 
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source);
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType);
 
         Task MarkMedicalUpdatesSent(List<string> ids);
 

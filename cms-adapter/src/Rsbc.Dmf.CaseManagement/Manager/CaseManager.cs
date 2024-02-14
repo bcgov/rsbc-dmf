@@ -2540,9 +2540,9 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string MedicalType)
         {
-            await LegacyCandidateCreate(request, birthDate, effectiveDate, "Unknown");
+            await LegacyCandidateCreate(request, birthDate, effectiveDate, "Unknown", MedicalType);
         }
 
         /// <summary>
@@ -2552,7 +2552,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="birthDate"></param>
         /// <param name="effectiveDate"></param>
         /// <returns></returns>
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType)
         {
             dfp_driver driver = null;
             contact driverContact;
@@ -2765,6 +2765,40 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_progressstatus = 100000000,                
             };
 
+            if (medicalType != null)
+            {
+                /* 
+                   1             Class
+                   2             Age
+                   3             Industrial Road Endorsement
+                   4             Known Condition
+                   5             Suspected Condition
+                 */
+                int? dmerType = null;
+                switch (medicalType)
+                {
+                    case "1": // Class
+                        dmerType = 100000000;
+                        break;
+                    case "2": // Age
+                        dmerType = 100000001;
+                        break;
+                    case "3": // Industrial Road
+                        dmerType = 100000002;
+                        break;
+                    case "4": // Known Condition
+                        dmerType = 100000003;
+                        break;
+                    case "5":
+                        dmerType = 100000006; // Suspected
+                        break;
+                }
+                if (dmerType != null)
+                {
+                    newIncident.dfp_dmertype = dmerType;
+                }
+            }
+
             int? sequenceNumber = request.SequenceNumber;
 
             if (request.SequenceNumber != null)
@@ -2813,7 +2847,7 @@ namespace Rsbc.Dmf.CaseManagement
             */
 
 
-            newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
+                newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
 
             try
             {
