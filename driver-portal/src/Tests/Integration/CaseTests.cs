@@ -18,7 +18,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             if (string.IsNullOrEmpty(caseId))
                 return;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/" + caseId);
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CASE_API_BASE}/{caseId}");
             var clientResult = await HttpClientSendRequest<CaseDetail>(request);
 
             Assert.Equal(clientResult.CaseId, caseId);
