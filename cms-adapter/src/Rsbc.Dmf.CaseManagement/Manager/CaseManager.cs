@@ -1750,7 +1750,9 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                         dynamicsContext.Detach(bcgovDocumentUrl);
                         if (newOwner != null)
+                        {
                             dynamicsContext.Detach(newOwner);
+                        }
                     }
                     catch (Exception ex)
                     {
