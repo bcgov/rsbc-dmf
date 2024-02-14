@@ -105,20 +105,23 @@ label {
   margin-bottom: 10px;
 }
 
-.edit-profile {
-  margin-left: 24px;
-  width: 20%;
-  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 700;
-}
+// .edit-profile {
+//   margin-left: 24px;
+//   width: 20%;
+//   font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+//   font-size: 16px;
+//   font-style: normal;
+//   font-weight: 700;
+//   background-color: #003366;
+//   color: #ffffff;
+// }
 
 .myAccount {
   display: flex;
 }
 
-.disabledInput {
+.disabledInput,
+input[type="text"]:disabled {
   width: 350px;
   height: 58px;
   background-color: rgba(240, 240, 240, 1);
@@ -136,6 +139,13 @@ label {
   font-size: 18px;
 }
 
+input[type="text"]:enabled {
+  background-color: transparent;
+  border-color: none;
+  border-width: none;
+  border-style: none;
+}
+
 .disclaimer {
   padding-top: 24px;
 }
@@ -144,14 +154,33 @@ label {
   width: 40%;
 }
 
-.submitButton {
-  width: 15%;
-  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
-  font-size: 16px;
-  font-style: normal;
+.primaryButton {
+  border-width: 0px;
+  width: 170px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
   font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  color: #f2f2f2;
   background-color: #003366;
-  color: #fff;
+}
+
+.cancelButton {
+  border-width: 0px;
+  width: 123px;
+  height: 48px;
+  font-family: "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.submitButtonContainer {
+  display: flex;
+  gap: 24px;
+  padding-top: 24px;
 }
 
 @media only screen and (max-width: 896px) {

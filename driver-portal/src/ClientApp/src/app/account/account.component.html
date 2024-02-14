@@ -23,7 +23,7 @@
         <button
           mat-flat-button
           color="primary"
-          class="edit-profile"
+          class="primaryButton"
           (click)="onEdit()"
         >
           Edit Profile
@@ -87,9 +87,16 @@
       <div>
         <div style="padding-top: 16px">
           <label class="form-label">Email Address</label>
-          <mat-form-field appearance="outline" class="disabledInput inputWidth">
+          <mat-form-field
+            appearance="outline"
+            class="inputWidth"
+            [ngClass]="{
+              disabledInput: accountForm.controls.emailAddress.disabled
+            }"
+          >
             <input
               matInput
+              type="text"
               name="email"
               placeholder="Email Address"
               [formControl]="accountForm.controls.emailAddress"
@@ -119,11 +126,19 @@
     <div>
       <div>
         <label class="form-label">Driver's License Number (required)</label>
-        <mat-form-field appearance="outline" class="disabledInput">
+        <mat-form-field
+          appearance="outline"
+          class="inputWidth"
+          [ngClass]="{
+            disabledInput: accountForm.controls.driverLicenceNumber.disabled
+          }"
+        >
           <input
             matInput
+            type="text"
             name="driverLicenseNumber"
             placeholder="Driver License Number"
+            [formControl]="accountForm.controls.driverLicenceNumber"
           />
         </mat-form-field>
       </div>
@@ -140,7 +155,7 @@
         Email (as seen above)
       </label>
 
-      <label class="notification">
+      <!-- <label class="notification">
         <input type="checkbox" />
         Text/ SMS
       </label>
@@ -150,10 +165,10 @@
         <mat-form-field appearance="outline" class="inputWidth">
           <input matInput name="phoneNumber" placeholder="Phone Number" />
         </mat-form-field>
-      </div>
+      </div> -->
 
       <label class="notification">
-        <input type="checkbox" [formControl]="accountForm.controls.mail" />
+        <input type="checkbox" />
         Mail <br />
         <p>
           Be environmentally friendly. Leaving the Mail option unchecked means
@@ -163,13 +178,13 @@
         </p>
       </label>
 
-      <div *ngIf="accountForm.controls.mail.value === true">
+      <div *ngIf="isEditView">
         <p>
           <b>Where do you want RSBC to send you mail regarding your cases?</b>
           <br />
           The address below is from your BC Services Card record.
         </p>
-        <label class="notification">
+        <!-- <label class="notification">
           <input type="checkbox" [formControl]="accountForm.controls.mail" />
           Use a different address <br />
           <p>
@@ -177,7 +192,7 @@
             your driver's <br />
             license with ICBC.
           </p>
-        </label>
+        </label> -->
         <form>
           <div>
             <label class="form-label">Street Address</label>
@@ -224,9 +239,11 @@
         Note: You can update your notification settings at any time in the
         Driver Portal under Account Management.
       </label>
-      <div style="display: flex; gap: 24px; padding-top: 24px">
-        <button class="submitButton">Submit</button>
-        <button>Cancel</button>
+      <div class="submitButtonContainer">
+        <button mat-flat-button class="primaryButton" (click)="onSubmit()">
+          Submit
+        </button>
+        <button class="cancelButton">Cancel</button>
       </div>
     </div>
   </div>

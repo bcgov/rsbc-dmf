@@ -220,8 +220,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             };
             DateTime testDate = DateTime.Now;
 
-            await _caseManager.LegacyCandidateCreate(newDriver, testDate, testDate);
-            await _caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now);
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, testDate, null) ;
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now, null );
 
             var newCaseId = await _caseManager.GetNewestCaseIdForDriver(newDriver);
 
