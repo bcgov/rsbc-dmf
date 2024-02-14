@@ -80,7 +80,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 { 100000008, "Sent" },
                 { 100000009, "Clean Pass"  },
                 { 100000010, "Uploaded" },
-                { 100000012, "Manual Pass"  }, 
+                { 100000012, "Manual Pass"  },
+                { 100000011, "Issued" }
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))

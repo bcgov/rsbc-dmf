@@ -62,7 +62,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                             // this category by design has documents with no key
                             result.SubmissionRequirements.Add(document);
                             break;
-                        case "Sent":
+                        case "Issued":
                             // exclude documents with no key
                             if (!string.IsNullOrEmpty(document.DocumentUrl))
                             {
@@ -116,7 +116,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             {
                 var replyItemsWithDocuments = reply.Items
                     .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
-                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Sent");
+                    .Where(i => i.SubmittalStatus != "Open-Required" && (i.SubmittalStatus != "Issued" || i.SubmittalStatus != "Sent" ));
                 var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
 
                 // sort the documents
