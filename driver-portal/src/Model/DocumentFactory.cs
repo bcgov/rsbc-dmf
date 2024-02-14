@@ -5,7 +5,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
 {
     public class DocumentFactory
     {
-        public LegacyDocument Create(Driver driver, string userId, string caseId = "")
+        public LegacyDocument Create(Driver driver, string userId, string documentUrl, string caseId = "")
         {
             var importDate = DateTimeOffset.Now;
             var faxReceivedDate = DateTimeOffset.Now;
@@ -34,7 +34,9 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 DocumentType = "DMER",
                 BusinessArea = "Driver Fitness",
 
+                DocumentUrl = documentUrl,
                 Priority = string.Empty,
+                // TODO
                 Owner = string.Empty,
                 BatchId = string.Empty,
                 ValidationMethod = string.Empty,

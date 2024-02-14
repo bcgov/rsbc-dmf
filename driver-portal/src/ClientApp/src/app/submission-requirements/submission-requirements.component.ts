@@ -9,9 +9,11 @@ import {
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
+import { ApiConfiguration } from '../shared/api/api-configuration';
 
 interface DocumentType {
   value: string;
@@ -39,8 +41,10 @@ export class SubmissionRequirementsComponent {
 
   constructor(
     private caseManagementService: CaseManagementService,
+    private _http: HttpClient,
     private _snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private apiConfig: ApiConfiguration
   ) {}
   public files: any[] = [];
 
@@ -74,12 +78,36 @@ export class SubmissionRequirementsComponent {
     this.show = false;
   }
 
+  handleFileInput(event: any) {
+    console.log('handleFileInput', event);
+    this.fileToUpload = event.target.files[0];
+  }
+
   fileUpload() {
     console.log('fileUpload');
-    this.caseManagementService
-      .getUploadDocuments({ body: { file: this.fileToUpload } as any })
+    // this.caseManagementService
+    //   .({ body: { file: this.fileToUpload } as any })
+    //   .subscribe((res) => {
+    //     console.log(res);
+    //   });
+    if (!this.fileToUpload) {
+      console.log('No file selected');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.fileToUpload as File);
+    // formData.append('documentType', this.selectedValue);
+
+    this._http
+      .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
+        headers: {
+          enctype: 'multipart/form-data',
+        },
+      })
       .subscribe((res) => {
         console.log(res);
+        this._snackBar.open('Successfully uploaded!', 'Close', {});
       });
   }
 }
