@@ -97,6 +97,7 @@ export class SubmissionRequirementsComponent {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
+
     // formData.append('documentType', this.selectedValue);
 
     this._http
