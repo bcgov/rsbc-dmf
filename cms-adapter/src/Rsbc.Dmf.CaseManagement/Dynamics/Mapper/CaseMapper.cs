@@ -112,6 +112,13 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
+            // owner
+            _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
+            if (@case.owninguser != null)
+            {
+                result.AssigneeTitle = @case.owninguser.dfp_signaturename;
+            }
+
             return result;
         }
 
