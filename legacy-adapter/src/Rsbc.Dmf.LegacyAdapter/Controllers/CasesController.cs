@@ -300,8 +300,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
-
-
             var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
@@ -313,7 +311,20 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 }
 
                 result.CaseId = c.Item.CaseId;
-                result.Title = Math.Abs(c.Item.CaseSequence).ToString();
+
+                string title = "";
+                int dashPos = c.Item.Title.LastIndexOf("-");
+                if (dashPos != -1)
+                {
+                    title = c.Item.Title.Substring(dashPos + 1).Trim();
+                }
+                else
+                {
+                    title = Math.Abs(c.Item.CaseSequence).ToString();
+                }
+
+
+                result.Title = title;
                 result.IdCode = c.Item.IdCode;
                 result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
                 result.CaseType = caseType;
@@ -328,7 +339,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 
                 result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
 
-                result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
+                result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly, true).OrderByDescending(x => x.CommentDate).ToList();
             }
 
             // set to null if no decision has been made.
@@ -341,7 +352,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
 
 
-        private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions)
+        private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions, bool maskAuthor)
         {
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
             var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, DriverId = driverId, OriginRestrictions = originRestrictions });
@@ -363,17 +374,19 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now
                     };
 
-                    result.Add(new ViewModels.Comment
+                    var comment = new ViewModels.Comment
                     {
                         CaseId = item.CaseId,
                         CommentDate = item.CommentDate.ToDateTimeOffset(),
                         CommentId = item.CommentId,
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
-                        Driver = driver, 
+                        Driver = driver,
                         SequenceNumber = Math.Abs(item.SequenceNumber),
                         UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
-                    });
+                    };
+
+                    result.Add(comment);
                 }
 
             }
