@@ -50,12 +50,19 @@ export class LettersToDriverComponent {
       .getDownloadDocument({ documentId })
       .subscribe((res) => {
         this.downloadFile(res);
+
         console.log(res);
       });
   }
 
   downloadFile(data: any) {
-    const url = window.URL.createObjectURL(data);
-    window.open(url);
+    const blob = new Blob([data], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    //window.open('https://path/to/file.extenstion', '_blank');
+    //window.open(url, '_blank');
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'LetterOut.pdf';
+    link.click();
   }
 }
