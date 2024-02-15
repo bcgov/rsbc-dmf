@@ -13,11 +13,6 @@ import { apiDocumentDocumentIdGet$Json } from '../fn/document/api-document-docum
 import { ApiDocumentDocumentIdGet$Json$Params } from '../fn/document/api-document-document-id-get-json';
 import { apiDocumentDocumentIdGet$Plain } from '../fn/document/api-document-document-id-get-plain';
 import { ApiDocumentDocumentIdGet$Plain$Params } from '../fn/document/api-document-document-id-get-plain';
-import { apiDocumentUploadPost$Json } from '../fn/document/api-document-upload-post-json';
-import { ApiDocumentUploadPost$Json$Params } from '../fn/document/api-document-upload-post-json';
-import { apiDocumentUploadPost$Plain } from '../fn/document/api-document-upload-post-plain';
-import { ApiDocumentUploadPost$Plain$Params } from '../fn/document/api-document-upload-post-plain';
-import { OkResult } from '../models/ok-result';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService extends BaseService {
@@ -69,53 +64,6 @@ export class DocumentService extends BaseService {
   apiDocumentDocumentIdGet$Json(params: ApiDocumentDocumentIdGet$Json$Params, context?: HttpContext): Observable<Blob> {
     return this.apiDocumentDocumentIdGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Blob>): Blob => r.body)
-    );
-  }
-
-  /** Path part for operation `apiDocumentUploadPost()` */
-  static readonly ApiDocumentUploadPostPath = '/api/Document/upload';
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDocumentUploadPost$Plain()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  apiDocumentUploadPost$Plain$Response(params?: ApiDocumentUploadPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
-    return apiDocumentUploadPost$Plain(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDocumentUploadPost$Plain$Response()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  apiDocumentUploadPost$Plain(params?: ApiDocumentUploadPost$Plain$Params, context?: HttpContext): Observable<OkResult> {
-    return this.apiDocumentUploadPost$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiDocumentUploadPost$Json()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  apiDocumentUploadPost$Json$Response(params?: ApiDocumentUploadPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
-    return apiDocumentUploadPost$Json(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiDocumentUploadPost$Json$Response()` instead.
-   *
-   * This method sends `multipart/form-data` and handles request body of type `multipart/form-data`.
-   */
-  apiDocumentUploadPost$Json(params?: ApiDocumentUploadPost$Json$Params, context?: HttpContext): Observable<OkResult> {
-    return this.apiDocumentUploadPost$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
     );
   }
 

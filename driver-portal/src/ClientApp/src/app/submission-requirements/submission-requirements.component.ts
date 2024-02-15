@@ -9,6 +9,7 @@ import {
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -20,9 +21,9 @@ export class SubmissionRequirementsComponent {
   @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
-  fileToUpload: File | null = null;
+  fileToUpload: Blob | string = "";
 
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(private caseManagementService: CaseManagementService, private _http: HttpClient) {}
 
   show = false;
 
@@ -42,16 +43,19 @@ export class SubmissionRequirementsComponent {
 
   handleFileInput(event: any) {
     console.log('handleFileInput', event);
-    this.fileToUpload = event.target.files.item(0);
-    this.fileUpload();
+    this.fileToUpload = event.target.files[0];
   }
 
   fileUpload() {
     console.log('fileUpload');
-    this.caseManagementService
-      .getUploadDocuments({ body: this.fileToUpload as any })
-      .subscribe((res) => {
-        console.log(res);
-      });
+
+    const formData = new FormData();
+    formData.append("file", this.fileToUpload);
+
+    this._http.post("/api/Document/upload", formData).subscribe({
+      next: (event) => {
+        console.log(event);
+      }
+    });
   }
 }
