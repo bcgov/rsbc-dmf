@@ -10,26 +10,63 @@ import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
 import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { FormControl } from '@angular/forms';
+import { ApiConfiguration } from '../shared/api/api-configuration';
 
+interface DocumentType {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-submission-requirements',
   templateUrl: './submission-requirements.component.html',
-  styleUrls: ['./submission-requirements.component.css'],
+  styleUrls: ['./submission-requirements.component.scss'],
 })
 export class SubmissionRequirementsComponent {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
   @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
-  fileToUpload: Blob | string = "";
+  fileToUpload: File | null = null;
+  selectedValue?: string;
+  acceptControl = new FormControl(false);
 
-  constructor(private caseManagementService: CaseManagementService, private _http: HttpClient) {}
+  docuemntTypes: DocumentType[] = [
+    { value: '310', viewValue: 'Diabetic Doctor Report' },
+    { value: '001', viewValue: 'DMER' },
+    { value: '030', viewValue: 'EVF' },
+  ];
+
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private _http: HttpClient,
+    private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
+    private apiConfig: ApiConfiguration
+  ) {}
+  public files: any[] = [];
+
+  onSelect(event: any) {
+    console.log(event);
+    this.fileToUpload = event.addedFiles[0];
+  }
+
+  onRemove() {
+    this.fileToUpload = null;
+  }
+
+  deleteFile(f: any) {
+    this.files = this.files.filter(function (w) {
+      return w.name != f.name;
+    });
+    this._snackBar.open('Successfully delete!', 'Close', {
+      duration: 2000,
+    });
+  }
 
   show = false;
-
-  // navigateToLetters() {
-  //   this.viewLetter.emit();
-  // }
 
   openUploadFile() {
     console.log('openUploadFile');
@@ -48,14 +85,29 @@ export class SubmissionRequirementsComponent {
 
   fileUpload() {
     console.log('fileUpload');
+    // this.caseManagementService
+    //   .({ body: { file: this.fileToUpload } as any })
+    //   .subscribe((res) => {
+    //     console.log(res);
+    //   });
+    if (!this.fileToUpload) {
+      console.log('No file selected');
+      return;
+    }
 
     const formData = new FormData();
-    formData.append("file", this.fileToUpload);
+    formData.append('file', this.fileToUpload as File);
+    // formData.append('documentType', this.selectedValue);
 
-    this._http.post("/api/Document/upload", formData).subscribe({
-      next: (event) => {
-        console.log(event);
-      }
-    });
+    this._http
+      .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
+        headers: {
+          enctype: 'multipart/form-data',
+        },
+      })
+      .subscribe((res) => {
+        console.log(res);
+        this._snackBar.open('Successfully uploaded!', 'Close', {});
+      });
   }
 }
