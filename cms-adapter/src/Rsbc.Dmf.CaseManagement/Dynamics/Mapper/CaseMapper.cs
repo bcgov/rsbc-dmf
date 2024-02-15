@@ -27,7 +27,8 @@ namespace Rsbc.Dmf.CaseManagement
                 IdCode = @case.ticketnumber,
                 OpenedDate = @case.createdon.Value,
                 LastActivityDate = @case.modifiedon.Value,
-                LatestDecision = null
+                LatestDecision = null,
+                DecisionDate = null
             };
 
             if (@case.dfp_dfcmscasesequencenumber == null)
@@ -50,13 +51,13 @@ namespace Rsbc.Dmf.CaseManagement
                 result.DmerType = TranslateDmerTypeRaw(@case.dfp_dmertype);
             }
 
-            await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.stageid_processstage));
+            _dynamicsContext.LoadProperty(@case, nameof(incident.stageid_processstage));
 
             var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
 
             if (bpf != null)
             {
-                await _dynamicsContext.LoadPropertyAsync(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
+                _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
                 result.Status = bpf.activestageid.stagename;
             }
 
@@ -68,7 +69,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             // get the related decisions.
-            await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
+            _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_decision));
             if (@case.dfp_incident_dfp_decision != null && @case.dfp_incident_dfp_decision.Count > 0)
             {
                 foreach (var decision in @case.dfp_incident_dfp_decision)
@@ -77,14 +78,14 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         result.LatestDecision = "";
 
-                        await _dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+                        _dynamicsContext.LoadProperty(decision, nameof(dfp_decision.dfp_OutcomeStatus));
                         if (decision.dfp_OutcomeStatus != null)
                         {
                             result.LatestDecision = decision.dfp_OutcomeStatus.dfp_name;
                         }
 
                         // now try and get the sub type
-                        await _dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
+                        _dynamicsContext.LoadProperty(decision, nameof(dfp_decision.dfp_OutcomeSubStatus));
                         if (decision.dfp_OutcomeSubStatus != null)
                         {
                             result.LatestDecision += " - " + decision.dfp_OutcomeSubStatus.dfp_name;
