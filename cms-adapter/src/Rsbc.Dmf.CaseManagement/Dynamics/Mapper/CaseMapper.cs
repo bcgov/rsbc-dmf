@@ -91,7 +91,7 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         result.DecisionDate = decision.createdon;
-                        result.DecisionForClass = TranslateDecisionForClass(decision.dfp_eligibledlclass);
+                        result.DecisionForClass = decision.dfp_eligibledriverlicenceclass;
                     }
                 }
             }
@@ -168,46 +168,6 @@ namespace Rsbc.Dmf.CaseManagement
                     result = "No DMER";
                     break;
             }
-            return result;
-        }
-
-        private string TranslateDecisionForClass(string data)
-        {
-            string result = null;
-            if (data != null)
-            {
-                var items = data.Split(",");
-                result = "";
-                foreach (var item in items)
-                {
-                    if (result.Length > 0)
-                    {
-                        result += ", ";
-                    }
-                    switch (item)
-                    {
-                        case "100000001":
-                            result += "C1";
-                            break;
-                        case "100000002":
-                            result += "C2";
-                            break;
-                        case "100000003":
-                            result += "C3";
-                            break;
-                        case "100000004":
-                            result += "C4";
-                            break;
-                        case "100000005":
-                            result += "C5/C7";
-                            break;
-                        case "100000006":
-                            result += "C6";
-                            break;
-                    }
-                }
-            }
-
             return result;
         }
     }

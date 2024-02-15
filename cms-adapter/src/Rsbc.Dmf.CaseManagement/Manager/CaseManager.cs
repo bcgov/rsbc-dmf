@@ -2952,7 +2952,7 @@ namespace Rsbc.Dmf.CaseManagement
                     statecode = 0,
                     statuscode = 1, //100000000, //Final
                     dfp_decisiontype = 100000000, // Original
-                    dfp_eligibledlclass = null, // NONE
+                    dfp_eligibledriverlicenceclass = null, // NONE
                     // do not set dfp_name as there is a workflow that sets it.
                     dfp_legacydecision = true,
                 };
@@ -2998,7 +2998,7 @@ namespace Rsbc.Dmf.CaseManagement
                             item.statecode == newDecision.statecode &&
                             item.statuscode == newDecision.statuscode &&
                             item.dfp_decisiontype == newDecision.dfp_decisiontype &&
-                            item.dfp_eligibledlclass == newDecision.dfp_eligibledlclass &&
+                            item.dfp_eligibledriverlicenceclass == newDecision.dfp_eligibledriverlicenceclass &&
                             item._dfp_outcomestatus_value == outcomeStatusTypeId
                             )
                             {
@@ -5332,7 +5332,4 @@ namespace Rsbc.Dmf.CaseManagement
         FollowUp = 100000002,
         Message = 100000003
     }
-
-  
-
 }

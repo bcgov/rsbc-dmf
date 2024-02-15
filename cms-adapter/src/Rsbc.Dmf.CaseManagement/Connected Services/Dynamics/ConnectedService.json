@@ -1,6 +1,6 @@
 ﻿{
   "ProviderId": "Microsoft.OData.ConnectedService",
-  "Version": "1.0.1.0",
+  "Version": "1.0.2.0",
   "GettingStartedDocument": {
     "Uri": "http://odata.github.io/odata.net/"
   },
