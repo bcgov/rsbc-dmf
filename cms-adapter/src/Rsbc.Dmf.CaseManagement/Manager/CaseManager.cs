@@ -509,7 +509,9 @@ namespace Rsbc.Dmf.CaseManagement
                                 UserId = comment.dfp_userid
                             };
 
-                            if (comment.owninguser != null)
+                            if (comment.owninguser != null &&
+                                comment.owninguser.dfp_signaturename != null &&
+                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                             {
                                 legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                             }
