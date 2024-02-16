@@ -594,7 +594,9 @@ namespace Rsbc.Dmf.CaseManagement
                             legacyComment.CaseId = comment._dfp_caseid_value.ToString();
                         }
 
-                        if (comment.owninguser != null)
+                        if (comment.owninguser != null &&
+                                comment.owninguser.dfp_signaturename != null &&
+                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                         {
                             legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                         }
@@ -673,7 +675,9 @@ namespace Rsbc.Dmf.CaseManagement
                                     Driver = driver
                                 };
 
-                                if (comment.owninguser != null)
+                                if (comment.owninguser != null &&
+                                comment.owninguser.dfp_signaturename != null &&
+                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                                 {
                                     legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                                 }
@@ -926,7 +930,9 @@ namespace Rsbc.Dmf.CaseManagement
                         Driver = driver
                     };
 
-                    if (comment.owninguser != null)
+                    if (comment.owninguser != null &&
+                                comment.owninguser.dfp_signaturename != null &&
+                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                     {
                         legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                     }
