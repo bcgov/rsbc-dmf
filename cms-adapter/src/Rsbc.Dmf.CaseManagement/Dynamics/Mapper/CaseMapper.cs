@@ -1,6 +1,7 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -114,9 +115,23 @@ namespace Rsbc.Dmf.CaseManagement
 
             // owner
             _dynamicsContext.LoadProperty(@case, nameof(incident.owninguser));
-            if (@case.owninguser != null)
+            if (@case.owninguser != null && @case.owninguser.dfp_portalidentity != null)
             {
-                result.AssigneeTitle = @case.owninguser.dfp_signaturename;
+                switch (@case.owninguser.dfp_portalidentity.Value)
+                {
+                    case 100000000:
+                        result.AssigneeTitle = "Client Services Group";
+                        break;
+                    case 100000001:
+                        result.AssigneeTitle = "Case Adjudication Group";
+                        break;
+                    case 100000002:
+                        result.AssigneeTitle = "Case Manager Group";
+                        break;
+                    case 100000003:
+                        result.AssigneeTitle = "Other";
+                        break;
+                }
             }
 
             return result;
