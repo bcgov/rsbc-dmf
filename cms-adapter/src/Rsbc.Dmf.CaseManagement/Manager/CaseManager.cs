@@ -50,11 +50,10 @@ namespace Rsbc.Dmf.CaseManagement
     public class LegacyDocument
     {     
         public int? SequenceNumber { get; set; }    
-        
+        public string IdCode { get; set; }
         public string DocumentTypeCode { get; set; }
-
         public string DocumentType { get; set; }
-
+        public string CaseType { get; set; }
         public string BusinessArea { get; set; }
 
         public string DocumentUrl { get; set; }
@@ -698,6 +697,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var driverDocuments = dynamicsContext.bcgov_documenturls
                 .Expand(d => d.dfp_DocumentTypeID)
+                .Expand(d => d.bcgov_CaseId)
                 .Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)EntityState.Active)
                 .ToList();
 
@@ -1354,14 +1354,14 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-            /// <summary>
-            /// Get Document Type
-            /// </summary>
-            /// <param name="documentTypeCode"></param>
-            /// <param name="documentType"></param>
-            /// <param name="businessArea"></param>
-            /// <returns></returns>
-            private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
+        /// <summary>
+        /// Get Document Type
+        /// </summary>
+        /// <param name="documentTypeCode"></param>
+        /// <param name="documentType"></param>
+        /// <param name="businessArea"></param>
+        /// <returns></returns>
+        private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
         {
             dfp_submittaltype result = null;
             string documentTypeCode = null;
