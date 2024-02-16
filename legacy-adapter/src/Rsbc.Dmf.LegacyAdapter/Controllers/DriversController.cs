@@ -131,7 +131,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
                             SequenceNumber = Math.Abs(item.SequenceNumber),
-                            UserId = item.SignatureName ?? item.UserId // 24-01-12 default to signature name, fallback to UserID if not present.
+                            UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName // 24-01-12 default to signature name, fallback to UserID if not present.
                         });
                     }
                 }
@@ -235,7 +235,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
                             SequenceNumber = Math.Abs(item.SequenceNumber),
-                            UserId = item.UserId
+                            UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName
                         });
                     }
                 }
