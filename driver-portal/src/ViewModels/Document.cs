@@ -32,7 +32,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         /// GUID Case Id from the Case Management System
         /// </summary>
         public string CaseId { get; set; }
-
+        public string IdCode { get; set; }
         /// <summary>
         /// GUID Document Id from the Case Management System
         /// </summary>
@@ -43,6 +43,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         /// </summary>
         public string DocumentTypeCode { get; set; }
         public string DocumentType { get; set; }
+        public string CaseType { get; set; }
         public string BusinessArea { get; set; }
 
         /// <summary>

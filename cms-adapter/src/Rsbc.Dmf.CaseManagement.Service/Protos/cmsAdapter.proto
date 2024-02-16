@@ -237,6 +237,8 @@ message LegacyDocument {
 	google.protobuf.Timestamp CreateDate = 25;
 	google.protobuf.Timestamp DueDate = 26;
 	string Description = 27;
+	string IdCode = 28;
+	string CaseType = 29;
 }
 
 message GetDocumentRequest {	

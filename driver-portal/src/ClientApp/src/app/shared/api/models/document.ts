@@ -5,6 +5,7 @@ export interface Document {
   bcMailSent?: boolean | null;
   businessArea?: string | null;
   caseId?: string | null;
+  caseType?: string | null;
   createDate?: string;
   description?: string | null;
   documentId?: string | null;
@@ -15,6 +16,7 @@ export interface Document {
   dueDate?: string | null;
   faxReceivedDate?: string | null;
   fileContents?: string | null;
+  idCode?: string | null;
   importDate?: string | null;
   sequenceNumber?: number | null;
   submittalStatus?: string | null;

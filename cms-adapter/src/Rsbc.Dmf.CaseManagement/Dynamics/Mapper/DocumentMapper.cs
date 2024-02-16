@@ -13,11 +13,13 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             public DocumentAutoMapperProfile()
             {
                 CreateMap<bcgov_documenturl, LegacyDocument>()
+                    .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.bcgov_CaseId.ticketnumber))
                     .ForMember(dest => dest.BatchId, opt => opt.MapFrom(src => src.dfp_batchid))
                     .ForMember(dest => dest.DocumentPages, opt => opt.MapFrom(src => ConvertPagesToInt(src.dfp_documentpages)))
                     .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .ForMember(dest => dest.DocumentTypeCode, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_apidocumenttype))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
+                    .AfterMap((src, dest) => dest.CaseType = dest.DocumentType == "DMER" ? "Solicited" : "Unsolicited")
                     .ForMember(dest => dest.BusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.GetValueOrDefault()))

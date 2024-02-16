@@ -159,7 +159,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (documentTypeCode == "001") documentType = "DMER";
             if (documentTypeCode == "030") documentType = "EVF";
 
-            var document = _documentFactory.Create(driver, profile.Id, documentType, documentTypeCode, fileReply.FileName);
+            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, documentType, documentTypeCode);
             var result = _cmsAdapterClient.CreateDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
