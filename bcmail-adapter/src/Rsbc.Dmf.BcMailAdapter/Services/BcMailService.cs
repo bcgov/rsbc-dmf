@@ -59,6 +59,22 @@ namespace Rsbc.Dmf.BcMailAdapter.Services
         }
 
         /// <summary>
+        /// SendDocumentsToBcMail
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Task<ResultStatusReply> TestBcMail(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            var sfegUtils = new SftpUtils(_configuration, _caseManagerClient, _documentStorageAdapterClient);
+            sfegUtils.CheckConnection();
+            return Task.FromResult(result);
+
+        }
+
+        /// <summary>
         /// Get Token
         /// </summary>
         /// <param name="request"></param>

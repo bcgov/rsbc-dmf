@@ -248,7 +248,7 @@ namespace Rsbc.Dmf.Scheduler
         [AutomaticRetry(Attempts = 0)]
         public async Task SendToBcMail(PerformContext hangfireContext)
         {
-            LogStatement(hangfireContext, "Starting to check the file status");
+            LogStatement(hangfireContext, "Starting BC Mail Send");
 
             // Call BCMAil Adapter to get the list of files
 
@@ -256,6 +256,22 @@ namespace Rsbc.Dmf.Scheduler
 
 
             LogStatement(hangfireContext, "End of check for the file status");
+        }
+
+        /// <summary>
+        /// Hangfire job fix Birth dates
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task TestBcMail(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting to check BC Mail");
+
+            // Call BCMAil Adapter to test the connection
+
+            _bcMailAdapterClient.TestBcMail(new BcMailAdapter.EmptyRequest());
+
+
+            LogStatement(hangfireContext, "End of check BC Mail");
         }
 
         /// <summary>
