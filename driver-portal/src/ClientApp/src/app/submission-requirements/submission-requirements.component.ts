@@ -97,8 +97,9 @@ export class SubmissionRequirementsComponent {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-
-    // formData.append('documentType', this.selectedValue);
+    if (this.selectedValue) {
+      formData.append('documentTypeCode', this.selectedValue);
+    }
 
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {

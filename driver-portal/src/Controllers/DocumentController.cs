@@ -111,7 +111,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         // to save time, we opted to just write this api call manually on the frontend
         [ApiExplorerSettings(IgnoreApi = true)]
 
-        public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file)
+        public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file, [FromForm] string documentTypeCode)
         {
             // sanity check paramters
             if (string.IsNullOrEmpty(file?.FileName) || file.Length == 0)
@@ -153,7 +153,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // create document and then link to driver
             var driver = new Driver();
             driver.Id = profile.DriverId;
-            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName);
+
+            // TODO temporary code
+            var documentType = "Diabetic Doctor Report";
+            if (documentTypeCode == "001") documentType = "DMER";
+            if (documentTypeCode == "030") documentType = "EVF";
+
+            var document = _documentFactory.Create(driver, profile.Id, documentType, documentTypeCode, fileReply.FileName);
             var result = _cmsAdapterClient.CreateDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {

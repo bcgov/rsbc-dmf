@@ -5,7 +5,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
 {
     public class DocumentFactory
     {
-        public LegacyDocument Create(Driver driver, string userId, string documentUrl, string caseId = "")
+        public LegacyDocument Create(Driver driver, string userId, string documentUrl, string documentType, string documentTypeCode, string caseId = "")
         {
             var importDate = DateTimeOffset.Now;
             var faxReceivedDate = DateTimeOffset.Now;
@@ -27,17 +27,13 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 FaxReceivedDate = Timestamp.FromDateTimeOffset(faxReceivedDate),
                 ImportDate = Timestamp.FromDateTimeOffset(importDate),
                 Driver = driver,
-
-                // TODO if you want to use this function in a more generic way
-                // use CaseManager.GetDocumentType to populate the following 3 lines
-                DocumentTypeCode = "001",
-                DocumentType = "DMER",
-                BusinessArea = "Driver Fitness",
-
+                DocumentTypeCode = documentTypeCode,
+                DocumentType = documentType,
+                BusinessArea = "",
                 DocumentUrl = documentUrl,
                 Priority = string.Empty,
-                // TODO
-                Owner = string.Empty,
+                // maps to "Intake Team"
+                Owner = "Client Services",
                 BatchId = string.Empty,
                 ValidationMethod = string.Empty,
                 ValidationPrevious = string.Empty,
