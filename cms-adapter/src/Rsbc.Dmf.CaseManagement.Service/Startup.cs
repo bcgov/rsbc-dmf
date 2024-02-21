@@ -99,7 +99,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
             services.AddGrpcReflection();
             services.AddDistributedMemoryCache();
-            services.AddCaseManagement(Configuration);
+            services.RegisterServices(Configuration);
             /*
             services.AddHttpClient("adfs_token").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
