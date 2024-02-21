@@ -3961,12 +3961,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                             // condition 1: check for
                             // 1. DMER type
-                            // 2. submital status is in review and not in  Rejected, Clean Pass, or Manual Pass 
+                            // 2. submital status is in review and not in  Rejected, Clean Pass
+                            // 3. Updating code on 2/21/2024 removed the check for manual pass
 
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                             {
@@ -3977,12 +3977,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                             //condition 2: Check for
                             //1. DMER type
-                            //2. Submital status is manual pass or clean pass and is in review state
+                            //2. Submital status is clean pass and is in review state
+                            //3. Updating code on 2/21/2024 removed the check for manual pass
 
                             else if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                                && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 )
                             {
                                 outputArray.Add(item);
