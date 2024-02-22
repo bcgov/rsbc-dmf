@@ -20,5 +20,10 @@ Click next and verify that you can see schema elements.
 
 Click Finish and it should update the client.
 
+# Dynamics Mapping
 
-
+TODO make a table with columns e.g. ViewModel, Service, Dynamics
+Document bcgov_documenturl (LegacyDocument)
+DocumentType ? (dfp_documentsubtype.dfp_DocumentTypeID)
+DocumentSubType dfp_documentsubtype
+Submittal Type dfp_submittaltype

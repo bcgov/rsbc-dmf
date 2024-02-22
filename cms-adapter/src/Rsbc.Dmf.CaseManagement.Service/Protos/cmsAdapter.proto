@@ -209,17 +209,6 @@ message LegacyComment {
 	string SignatureName = 10;
 }
 
-message GetDocumentSubTypesReply {
-	repeated DocumentSubType items = 1;
-	ResultStatus resultStatus = 2;
-	string errorDetail = 3;
-}
-
-message DocumentSubType {
-	int32 id = 1;
-	string name = 2;
-}
-
 message LegacyDocument {
 	int64 SequenceNumber = 1;
 	string DocumentTypeCode = 2;
@@ -498,6 +487,28 @@ message DecisionItem {
 	}
 	DecisionOutcomeOptions outcome = 3;
 }
+
+// START DocumentManager
+service DocumentManager {
+	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
+}
+
+message DocumentTypeRequest {
+	string documentTypeCode = 1;
+}
+
+message DocumentSubType {
+	int32 id = 1;
+	string name = 2;
+}
+
+message GetDocumentSubTypesReply {
+	repeated DocumentSubType items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+// END DocumentManager
 
 service CssManager {
 	rpc GetCss(CssRequest) returns (CssReply);
