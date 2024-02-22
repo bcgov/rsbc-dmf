@@ -9,6 +9,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         {
             public DocumentTypeAutoMapperProfile()
             {
+                // NOTE somehow the id keeps incrementing on each test run, not sure how that is possible
                 int id = 0;
 
                 CreateMap<dfp_documentsubtype, DocumentSubType>()
