@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.CaseManagement.Service.DocumentManagement;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {

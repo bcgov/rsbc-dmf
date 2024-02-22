@@ -7,6 +7,8 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\cmsAdapter.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\common.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\dmsAdapter.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>

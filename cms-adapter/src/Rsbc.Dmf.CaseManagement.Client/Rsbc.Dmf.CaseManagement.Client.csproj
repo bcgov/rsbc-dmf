@@ -19,18 +19,16 @@
 	  <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />		  
   </ItemGroup>
 	
-
-
 	<ItemGroup>
-		<Folder Include="gRPC Prototypes\" />
-	</ItemGroup>
-	
-
-	<ItemGroup>
+		<Protobuf Include="../Rsbc.Dmf.CaseManagement.Service/Protos/common.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\common.proto</Link>
+		</Protobuf>
 		<Protobuf Include="../Rsbc.Dmf.CaseManagement.Service/Protos/cmsAdapter.proto" GrpcServices="Client">
 			<Link>gRPC Prototypes\cmsAdapter.proto</Link>
 		</Protobuf>
+		<Protobuf Include="../Rsbc.Dmf.CaseManagement.Service/Protos/dmsAdapter.proto" GrpcServices="Client">
+			<Link>gRPC Prototypes\dmsAdapter.proto</Link>
+		</Protobuf>
 	</ItemGroup>
-
 
 </Project>

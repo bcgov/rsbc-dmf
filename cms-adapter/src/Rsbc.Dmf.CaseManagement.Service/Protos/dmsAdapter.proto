@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+//import "Protos/common.proto";
+
+option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service.DocumentManagement";
+
+package DocumentManagement;
+
+service DocumentManager {
+	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
+}
+
+message DocumentTypeRequest {
+	string documentTypeCode = 1;
+}
+
+message DocumentSubType {
+	int32 id = 1;
+	string name = 2;
+}
+
+message GetDocumentSubTypesReply {
+	repeated DocumentSubType items = 1;
+	//Common.ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}

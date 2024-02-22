@@ -2,6 +2,7 @@
 using Pssg.DocumentStorageAdapter;
 using System.Net;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.CaseManagement.Service.DocumentManagement;
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {

@@ -7,6 +7,7 @@ using Shouldly;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
+using Rsbc.Dmf.CaseManagement.Service.DocumentManagement;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {

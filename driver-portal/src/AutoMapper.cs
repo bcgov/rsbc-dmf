@@ -3,6 +3,7 @@ using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Linq.Expressions;
+using Rsbc.Dmf.CaseManagement.Service.DocumentManagement;
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {

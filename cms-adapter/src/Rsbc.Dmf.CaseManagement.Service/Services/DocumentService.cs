@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using Rsbc.Dmf.CaseManagement.Service.DocumentManagement;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {

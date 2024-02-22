@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Rsbc.Dmf.CaseManagement.Service.Common";
+
+package Common;
+
+enum ResultStatus {
+	Fail = 0;
+	Success = 1;
+}

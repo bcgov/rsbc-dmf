@@ -123,7 +123,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             documentSubType.Id = 1;
             documentSubType.Name = "Joe";
 
-            var mappedDocumentSubType = _mapper.Map<Service.DocumentSubType>(documentSubType);
+            var mappedDocumentSubType = _mapper.Map<Service.DocumentManagement.DocumentSubType>(documentSubType);
 
             Assert.NotNull(mappedDocumentSubType);
             Assert.Equal(documentSubType.Id, mappedDocumentSubType.Id);
