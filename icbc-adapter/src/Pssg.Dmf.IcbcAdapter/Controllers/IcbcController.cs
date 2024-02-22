@@ -162,7 +162,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                     {
-                        CaseId = caseId,
+                        CaseId = caseId ?? string.Empty,
                         Driver = new CaseManagement.Service.Driver()
                         {
                             DriverLicenseNumber = lcr.LicenseNumber,
@@ -175,6 +175,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
                         Owner = "Team - Intake"
+                         
                   
                     });
 
