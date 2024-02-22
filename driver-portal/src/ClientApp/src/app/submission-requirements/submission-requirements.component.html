@@ -41,7 +41,7 @@
         <div style="padding-top: 24px">
           <mat-form-field appearance="outline" style="width: 350px">
             <mat-label>Select Document Type</mat-label>
-            <mat-select [(ngModel)]="selectedValue" name="docuemntTypes">
+            <mat-select [(ngModel)]="selectedDocumentType" name="docuemntTypes">
               @for (docuemntType of docuemntTypes; track docuemntType) {
               <mat-option [value]="docuemntType.value">{{
                 docuemntType.viewValue

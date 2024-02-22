@@ -137,7 +137,10 @@
               Account
             </a>
             <div style="display: flex; gap: 24px; padding-top: 24px">
-              <button routerLink="/account" (click)="showMobileMenu = false">
+              <button
+                [routerLink]="'/getAssistance'"
+                (click)="showMobileMenu = false"
+              >
                 Get Assistance
               </button>
               <button (click)="showMobileMenu = false; logOut()">
