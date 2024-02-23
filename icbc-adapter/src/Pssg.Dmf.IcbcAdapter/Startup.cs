@@ -205,7 +205,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             // health checks. 
             services.AddHealthChecks()
-                .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
+                .AddCheck("icbc-adapter", () => HealthCheckResult.Healthy("OK"));
             // add ICBC client
             if (Configuration["ICBC_SERVICE_URI"] != null)
             {
@@ -257,11 +257,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
-            }
-
-            if (Configuration["ICBC_SERVICE_URI"] != null)
-            {
-                services.AddTransient(_ => new EnhancedIcbcClient(Configuration));
             }
 
         }

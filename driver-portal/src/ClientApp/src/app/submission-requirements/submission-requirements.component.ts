@@ -30,10 +30,10 @@ export class SubmissionRequirementsComponent {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
-  selectedValue?: string;
+  selectedDocumentType?: string | undefined;
   acceptControl = new FormControl(false);
 
-  docuemntTypes: DocumentType[] = [
+  documentTypes: DocumentType[] = [
     { value: '310', viewValue: 'Diabetic Doctor Report' },
     { value: '001', viewValue: 'DMER' },
     { value: '030', viewValue: 'EVF' },
@@ -97,8 +97,8 @@ export class SubmissionRequirementsComponent {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    if (this.selectedValue) {
-      formData.append('documentTypeCode', this.selectedValue);
+    if (this.selectedDocumentType) {
+      formData.append('documentTypeCode', this.selectedDocumentType);
     }
 
     this._http

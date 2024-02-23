@@ -2,17 +2,34 @@
   <div class="list">
     <h2>Get Assistance</h2>
     <div class="assistance-page">
-      <p>
-        To get answers to your questions, you can look through our Help Topics
-        below. If you need further help, you can ask for a call back from a
-        customer service representative at RSBC. There is a maximum of 1 open
-        call back request at anytime. This is the best way to get support
-        quickly. You can also contact RSBC by phone if you prefer.
-      </p>
+      <div>
+        <p>
+          To get answers to your questions, you can look through our Help Topics
+          below. If you need further help, you can ask for a call back from a
+          customer service representative at RSBC. There is a maximum of 1 open
+          call back request at anytime. This is the best way to get support
+          quickly. You can also contact RSBC by phone if you prefer.
+        </p>
+      </div>
+      <div>
+        <div class="callBackContent">
+          <div class="text">
+            You have 1 open Request Call Back *
+            <ul>
+              <li>
+                <a href="#" (click)="viewRequest($event, 'callBack')">
+                  View Request
+                </a>
+              </li>
+            </ul>
+            <span>* Maximum of 1 open call back request</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div style="padding-top: 24px">
+    <div style="padding-top: 32px">
       <h2>Help Topics</h2>
-      <div style="display: flex; gap: 32px">
+      <div class="help">
         <div class="help-topics" cdkMenu>
           <button
             class="help-topics-item"
@@ -113,27 +130,72 @@
           <div class="callback">
             <div style="display: flex; gap: 42px; padding: 24px">
               <b>Still require assistance?</b>
-              <button>Request Call Back</button>
-              <button>Contact RSBC</button>
+              <button (click)="onRequestCallBack()">Request Call Back</button>
+              <button (click)="viewRequest($event, 'callBack')">
+                Contact RSBC
+              </button>
             </div>
           </div>
-          
+          <div style="padding: 24px" *ngIf="showCallBack">
+            <h3>Request Call Back</h3>
+            <form>
+              <div style="display: flex; flex-direction: column">
+                <div>
+                  <mat-form-field style="width: 300px">
+                    <mat-label>Select Topic</mat-label>
+                    <mat-select
+                      [(ngModel)]="selectedValue"
+                      name="callBackTopic"
+                    >
+                      @for (callBackTopic of callBackTopics; track
+                      callBackTopic) {
+                      <mat-option [value]="callBackTopic.value">{{
+                        callBackTopic.viewValue
+                      }}</mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div>
+                  <label class="form-label">Phone Number</label>
+                  <mat-form-field appearance="outline" class="inputWidth">
+                    <input
+                      matInput
+                      name="phoneNumber"
+                      placeholder="Phone Number"
+                    />
+                  </mat-form-field>
+                </div>
+                <div>
+                  <label class="form-label">Best time to receive a call</label>
+                  <label> <input type="checkbox" />9:00am - 5:00pm </label>
+                  <label> <input type="checkbox" />9:00am and 12:00pm </label>
+                  <label> <input type="checkbox" />12:01am - 5:00pm </label>
+                </div>
+              </div>
+              <div class="submitButtonContainer">
+                <button mat-flat-button class="primaryButton">Submit</button>
+                <button class="cancelButton" (click)="back()">Back</button>
+              </div>
+            </form>
+          </div>
         </div>
 
         }
       </div>
     </div>
-    <div style="padding-top: 24px">
+    <div style="padding-top: 32px">
       <h2>Contact RoadSafetyBC</h2>
       <p>
         If the topics above don't give you the answer you're looking for, you
         can call a client service representative at RSBC. <br />
+        <br />
         <b>Hours of operation</b>: Monday to Friday from 8am to 5pm <br />
 
         <b>Phone</b>: 1-855-387-7747
       </p>
     </div>
-    <div style="padding-top: 24px">
+    <div style="padding-top: 32px" id="callBack">
       <h2>Request Call Back History</h2>
       <p>
         Once you've asked for a call back, you will find a record of your
