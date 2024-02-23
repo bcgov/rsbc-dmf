@@ -33,7 +33,7 @@ export class SubmissionRequirementsComponent {
   selectedDocumentType?: string | undefined;
   acceptControl = new FormControl(false);
 
-  docuemntTypes: DocumentType[] = [
+  documentTypes: DocumentType[] = [
     { value: '310', viewValue: 'Diabetic Doctor Report' },
     { value: '001', viewValue: 'DMER' },
     { value: '030', viewValue: 'EVF' },
