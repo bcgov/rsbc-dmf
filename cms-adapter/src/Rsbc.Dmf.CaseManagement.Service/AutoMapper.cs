@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
+using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -25,7 +26,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
-    }
+            CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
+        }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
     }
@@ -38,6 +40,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 mc.AddProfile(new MappingProfile());
                 mc.AddProfile(new DocumentAutoMapperProfile());
+                mc.AddProfile(new DocumentTypeAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

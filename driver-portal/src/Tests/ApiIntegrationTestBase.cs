@@ -13,6 +13,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         protected const string CASE_API_BASE = "/api/Cases";
         protected const string DRIVER_API_BASE = "/api/Driver";
         protected const string DOCUMENT_API_BASE = "/api/Document";
+        protected const string DOCUMENT_TYPE_API_BASE = "/api/DocumentType";
 
         public ApiIntegrationTestBase(IConfiguration configuration)
         {
