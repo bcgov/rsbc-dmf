@@ -154,8 +154,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
             }
 
-
-
             return reply;
         }
 
@@ -200,7 +198,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
                 Queue = request.Queue ?? string.Empty,
                 DpsDocumentId = request.DpsDocumentId,
-                Origin = request.Origin
+                Origin = request.Origin,
+                DocumentSubTypeId = request.DocumentSubTypeId ?? string.Empty
             };
 
             if (request.FaxReceivedDate != null)
