@@ -193,39 +193,45 @@ namespace Rsbc.Dmf.IcbcAdapter
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
                     var medicalDispositionValue = GetMedicalDisposition(driver);
 
-
-                    if (driver != null && driver.INAM?.SURN != null && medicalDispositionValue != "P"
-                        // Add check driver already has a P in the driver history
-                       
-                        )
+                    if (driver == null || driver.INAM?.SURN == null)
                     {
-                        var newUpdate = new IcbcMedicalUpdate()
-                        {
-                            DlNumber = licenseNumber,
-                            LastName = driver.INAM.SURN,
-                        };
-
-                        var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-
-                        if (firstDecision != null)
-                        {
-                            if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
-                            {
-                                newUpdate.MedicalDisposition = "P";
-                            }                          
-                        }
-
-                        // get most recent Medical Issue Date from the driver.
-
-                        DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
-
-                        newUpdate.MedicalIssueDate = adjustedDate;
-
-                        return newUpdate;
+                        Log.Logger.Error($"Null received for driver history for {licenseNumber}");
                     }
                     else
                     {
-                        Log.Logger.Error("Error getting driver from ICBC.");
+
+                        if ( medicalDispositionValue != "P"
+                           // Add check driver already has a P in the driver history
+                           )
+                        {
+                            var newUpdate = new IcbcMedicalUpdate()
+                            {
+                                DlNumber = licenseNumber,
+                                LastName = driver.INAM.SURN,
+                            };
+
+                            var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+
+                            if (firstDecision != null)
+                            {
+                                if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                                {
+                                    newUpdate.MedicalDisposition = "P";
+                                }
+                            }
+
+                            // get most recent Medical Issue Date from the driver.
+
+                            DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
+
+                            newUpdate.MedicalIssueDate = adjustedDate;
+
+                            return newUpdate;
+                        }
+                        else
+                        {
+                            Log.Logger.Error("medicalDispositionValue already P");
+                        }
                     }
                 }
                 catch (Exception e)
