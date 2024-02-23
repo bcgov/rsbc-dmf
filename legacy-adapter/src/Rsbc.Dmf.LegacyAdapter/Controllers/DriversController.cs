@@ -43,7 +43,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly IIcbcClient _icbcClient;
         private readonly IMemoryCache _cache;
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,IIcbcClient icbcClient,
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient,
             IMemoryCache memoryCache)
         {
             _cache = memoryCache;
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     switch (sort)
                     {
-                        
+
                         case 'T': // - commentTypeCode
                             result = result.OrderBy(x => x.CommentTypeCode).ToList();
                             break;
@@ -346,7 +346,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             }
 
-            if (icbcDriver != null && !string.IsNullOrEmpty(icbcDriver.INAM?.SURN)  && comment.Driver.LastName != icbcDriver.INAM?.SURN)
+            if (icbcDriver != null && !string.IsNullOrEmpty(icbcDriver.INAM?.SURN) && comment.Driver.LastName != icbcDriver.INAM?.SURN)
             {
                 comment.Driver.LastName = icbcDriver.INAM?.SURN;
                 // ensure Dynamics has the most recent data.
@@ -359,12 +359,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 });
             }
 
-                //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
-                // add the comment
+            //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
+            // add the comment
 
-                if (comment.CommentText.Length > 1900 )
+            if (comment.CommentText.Length > 1900)
             {
-                comment.CommentText = comment.CommentText.Substring(0,1900);
+                comment.CommentText = comment.CommentText.Substring(0, 1900);
                 Serilog.Log.Error("Encountered comment longer than 1900 chars");
                 DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
             }
@@ -390,7 +390,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
             }
 
-            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now.AddMinutes(-1); 
+            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now.AddMinutes(-1);
             // Dynamics has a minimum value for a date.
             if (commentDate.Year < 1753)
             {
@@ -411,12 +411,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         // fetch it from the sequence number.
                         caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
                     }
-                    
+
                     if (caseId == null) // try just the DL and Surname.
                     {
                         caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName);
                     }
-                    
+
                 }
 
                 var payload = new LegacyComment()
@@ -461,7 +461,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 return StatusCode(500, "Error in create comment");
             }
-            
+
         }
 
         /// <summary>
@@ -479,7 +479,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (string.IsNullOrEmpty(licenseNumber))
             {
-                Serilog.Log.Error ("Request to Driver Get Documents with no DL");
+                Serilog.Log.Error("Request to Driver Get Documents with no DL");
                 return StatusCode(400, "Bad Request");
             }
             else
@@ -522,42 +522,42 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
-                            DateTimeOffset sentDate = DateTimeOffset.Now;
+                            DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
 
                             try
                             {
                                 if (item.ImportDate != null)
                                 {
-                                    sentDate = item.ImportDate.ToDateTimeOffset();
+                                    faxReceivedDate = item.ImportDate.ToDateTimeOffset();
 
-                                    if (sentDate.Offset == TimeSpan.Zero)
+                                    if (faxReceivedDate.Offset == TimeSpan.Zero)
                                     {
-                                        sentDate = TimeZoneInfo.ConvertTimeFromUtc(sentDate.DateTime, pacificZone);
+                                        faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
                                 Serilog.Log.Information(ex, "Error parsing import date");
-                                sentDate = DateTimeOffset.Now;
+                                faxReceivedDate = DateTimeOffset.Now;
                             }
 
-                            DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
+                            DateTimeOffset importDate = DateTimeOffset.Now;
 
                             try
                             {
                                 if (item.FaxReceivedDate != null)
                                 {
-                                    faxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                                    importDate = item.FaxReceivedDate.ToDateTimeOffset();
 
-                                    if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                                    if (importDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
                                     {
-                                        faxReceivedDate = DateTimeOffset.Now;
+                                        importDate = DateTimeOffset.Now;
                                     }
 
-                                    if (faxReceivedDate.Offset == TimeSpan.Zero)
+                                    if (importDate.Offset == TimeSpan.Zero)
                                     {
-                                        faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
+                                        importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
                                     }
                                 }
 
@@ -572,14 +572,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             var newDocument = new ViewModels.Document
                             {
                                 CaseId = caseId,
-                                ImportDate = faxReceivedDate,
+                                ImportDate = importDate,
                                 DocumentId = item.DocumentId,
                                 DocumentType = item.DocumentType,
                                 DocumentTypeCode = item.DocumentTypeCode,
                                 BusinessArea = item.BusinessArea,
                                 Driver = driver,
                                 SequenceNumber = item.SequenceNumber,
-                                FaxReceivedDate = ,
+                                FaxReceivedDate = faxReceivedDate,
                                 UserId = item.UserId,
                                 BcMailSent = isBcMailSent
                             };
@@ -600,7 +600,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     return StatusCode(500, reply.ErrorDetail);
                 }
             }
-            
+
         }
 
 
