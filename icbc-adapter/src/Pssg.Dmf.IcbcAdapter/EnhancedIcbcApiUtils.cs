@@ -68,7 +68,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             foreach (var unsentItem in unsentItems.Items)
             {
-                
+                Log.Logger.Information($"SENDING {unsentItem.Driver.DriverLicenseNumber}");
                 var item = GetMedicalUpdateDataforPass(unsentItem);
 
                 if (item != null)
@@ -130,11 +130,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
 
                     string responseContent = _icbcClient.SendMedicalUpdate(item);
+                    Log.Logger.Information(responseContent);
 
                     if (responseContent.Contains("SUCCESS"))
                     {
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
+                        
                     }
 
                     else

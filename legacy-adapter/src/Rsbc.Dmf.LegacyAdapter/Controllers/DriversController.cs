@@ -522,24 +522,24 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
-                            DateTimeOffset importDate = DateTimeOffset.Now;
+                            DateTimeOffset sentDate = DateTimeOffset.Now;
 
                             try
                             {
                                 if (item.ImportDate != null)
                                 {
-                                    importDate = item.ImportDate.ToDateTimeOffset();
+                                    sentDate = item.ImportDate.ToDateTimeOffset();
 
-                                    if (importDate.Offset == TimeSpan.Zero)
+                                    if (sentDate.Offset == TimeSpan.Zero)
                                     {
-                                        importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                                        sentDate = TimeZoneInfo.ConvertTimeFromUtc(sentDate.DateTime, pacificZone);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
                                 Serilog.Log.Information(ex, "Error parsing import date");
-                                importDate = DateTimeOffset.Now;
+                                sentDate = DateTimeOffset.Now;
                             }
 
                             DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
@@ -572,14 +572,14 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             var newDocument = new ViewModels.Document
                             {
                                 CaseId = caseId,
-                                ImportDate = importDate,
+                                ImportDate = faxReceivedDate,
                                 DocumentId = item.DocumentId,
                                 DocumentType = item.DocumentType,
                                 DocumentTypeCode = item.DocumentTypeCode,
                                 BusinessArea = item.BusinessArea,
                                 Driver = driver,
                                 SequenceNumber = item.SequenceNumber,
-                                FaxReceivedDate = faxReceivedDate,
+                                FaxReceivedDate = ,
                                 UserId = item.UserId,
                                 BcMailSent = isBcMailSent
                             };
