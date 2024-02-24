@@ -78,13 +78,19 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     City = data.ADDR?.CITY,
                     PostalCode = data.ADDR?.POST,
                     Province = data.ADDR?.PROV,
-                    Country = data.ADDR?.CNTY
+                    Country = data.ADDR?.CNTY,
+                    UnitNumber = data.ADDR?.BUNO
                 };
 
                 // handle address
                 if (data.ADDR != null)
                 {
                     List<string> addressComponents = new List<string>();
+
+                    if (!string.IsNullOrEmpty(data.ADDR.BUNO))
+                    {
+                        addressComponents.Add($"{data.ADDR.BUNO}");
+                    }
 
                     if (!string.IsNullOrEmpty(data.ADDR.APR1))
                     {
@@ -145,6 +151,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     {
                         addressComponents.Add($"{data.ADDR.STDI}");
                     }
+
+
 
                     result.AddressLine1 = string.Join(" ", addressComponents.ToArray());
                 }
