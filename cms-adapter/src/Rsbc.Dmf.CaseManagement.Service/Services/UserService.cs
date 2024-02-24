@@ -110,7 +110,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
         }
 
-
         public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
         {
             ResultStatusReply result = new ResultStatusReply();
@@ -121,6 +120,19 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 result.ResultStatus = ResultStatus.Success;
             }
             
+            return result;
+        }
+
+        public async override Task<ResultStatusReply> SetDriverEmail(UserSetEmailRequest request, ServerCallContext context)
+        {
+            ResultStatusReply result = new ResultStatusReply();
+            result.ResultStatus = ResultStatus.Fail;
+
+            if (userManager.SetDriverEmail(request.UserId, request.Email))
+            {
+                result.ResultStatus = ResultStatus.Success;
+            }
+
             return result;
         }
     }

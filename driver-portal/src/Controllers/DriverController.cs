@@ -13,13 +13,15 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly UserManager.UserManagerClient _userManagerClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _userManagerClient = userManagerClient;
             _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
@@ -130,6 +132,58 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             else
             {
                 _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+        [HttpPost(nameof(UserRegistration))]
+        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("UserRegistration")]
+        public async Task<ActionResult> UserRegistration([FromBody] UserRegistration userRegistration)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+
+            // verify user registration name and birth date
+            // TODO check DOB after Keycloak is implemented
+            var driverLicenseRequest = new DriverLicenseRequest();
+            driverLicenseRequest.DriverLicenseNumber = userRegistration.DriverLicenseNumber;
+            var getDriverReply = _cmsAdapterClient.GetDriverPerson(driverLicenseRequest);
+            if (getDriverReply.ResultStatus != ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(UserRegistration)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", getDriverReply.ErrorDetail);
+                return StatusCode(500, getDriverReply.ErrorDetail);
+            }
+            if (getDriverReply.Items?.Count == 0) {
+                return StatusCode(401, "No driver found.");
+            }
+            CaseManagement.Service.Driver foundDriver = null;
+            foreach (var driver in getDriverReply.Items)
+            {
+                if (userRegistration.FirstName == driver.GivenName && userRegistration.LastName == driver.Surname && userRegistration.BirthDate.Date == driver.BirthDate.ToDateTime().Date)
+                {
+                    foundDriver = driver;
+                }
+            }
+            if (foundDriver == null)
+            {
+                return StatusCode(401, "Driver details do not match.");
+            }
+
+            // driver found and matched user registration
+            // update email in dynamics 
+            var userSetEmailRequest = new UserSetEmailRequest();
+            userSetEmailRequest.UserId = profile.DriverId;
+            userSetEmailRequest.Email = userRegistration.Email;
+            var reply = _userManagerClient.SetDriverEmail(userSetEmailRequest);
+            if (reply.ResultStatus == ResultStatus.Success)
+            {
+                return Ok();
+            }
+            else
+            {
+                _logger.LogError($"{nameof(UserRegistration)} updating email failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
