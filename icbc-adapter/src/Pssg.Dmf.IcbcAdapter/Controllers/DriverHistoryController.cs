@@ -87,74 +87,90 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 {
                     List<string> addressComponents = new List<string>();
 
+                    // Unit Number
                     if (!string.IsNullOrEmpty(data.ADDR.BUNO))
                     {
-                        addressComponents.Add($"{data.ADDR.BUNO}");
+                        addressComponents.Add($"{data.ADDR.BUNO}-");
                     }
 
+                    // AddressPrefix2
                     if (!string.IsNullOrEmpty(data.ADDR.APR1))
                     {
                         addressComponents.Add($"{data.ADDR.APR1}");
                     }
 
+                    //AddressPrefix2
                     if (!string.IsNullOrEmpty(data.ADDR.APR2))
                     {
                         addressComponents.Add($"{data.ADDR.APR2}");
                     }
 
+                    //AddressPrefix3 // Not in ICBC Client
                     if (!string.IsNullOrEmpty(data.ADDR.APR3))
                     {
                         addressComponents.Add($"{data.ADDR.APR3}");
                     }
+
+                    // ???
 
                     if (!string.IsNullOrEmpty(data.ADDR.PSTN))
                     {
                         addressComponents.Add($"STN {data.ADDR.PSTN}");
                     }
 
+                    // Site
                     if (!string.IsNullOrEmpty(data.ADDR.SITE))
                     {
                         addressComponents.Add($"SITE {data.ADDR.SITE}");
                     }
+
+                    // Compound
 
                     if (!string.IsNullOrEmpty(data.ADDR.COMP))
                     {
                         addressComponents.Add($"COMP {data.ADDR.COMP}");
                     }
 
+                    // RuralRoute
                     if (!string.IsNullOrEmpty(data.ADDR.RURR))
                     {
                         addressComponents.Add($"RR# {data.ADDR.RURR}");
                     }
+
+                    // PostOfficeBox
 
                     if (!string.IsNullOrEmpty(data.ADDR.POBX))
                     {
                         addressComponents.Add($"PO BOX {data.ADDR.POBX}");
                     }
 
+                    // Street Number
+
                     if (!string.IsNullOrEmpty(data.ADDR.STNO))
                     {
                         addressComponents.Add($"{data.ADDR.STNO}");
                     }
 
+                    //Street Name
                     if (!string.IsNullOrEmpty(data.ADDR.STNM))
                     {
                         addressComponents.Add($"{data.ADDR.STNM}");
                     }
 
+                    // Street Type
                     if (!string.IsNullOrEmpty(data.ADDR.STTY))
                     {
                         addressComponents.Add($"{data.ADDR.STTY}");
                     }
 
+                    // Street Direction
                     if (!string.IsNullOrEmpty(data.ADDR.STDI))
                     {
                         addressComponents.Add($"{data.ADDR.STDI}");
                     }
 
-
-
-                    result.AddressLine1 = string.Join(" ", addressComponents.ToArray());
+                     result.AddressLine1 = string.Join(" ", addressComponents.ToArray());
+      
                 }
 
                 // handle two middle names, or just one.
