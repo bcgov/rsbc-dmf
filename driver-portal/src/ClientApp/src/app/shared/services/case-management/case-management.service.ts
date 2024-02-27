@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   CasesService,
   DocumentService,
+  DocumentTypeService,
   DriverService,
   ProfileService,
 } from '../../api/services';
@@ -14,7 +15,8 @@ export class CaseManagementService {
     private casesService: CasesService,
     private driversService: DriverService,
     private documentService: DocumentService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private documentTypeService: DocumentTypeService
   ) {}
 
   public getMostRecentCase(
@@ -57,5 +59,11 @@ export class CaseManagementService {
     params: Parameters<ProfileService['apiProfileDriverPut$Response']>[0]
   ) {
     return this.profileService.apiProfileDriverPut$Response(params);
+  }
+
+  public getDocumentSubTypes(
+    params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
+  ) {
+    return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
   }
 }

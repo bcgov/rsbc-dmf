@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   constructor(
     @Inject(APP_BASE_HREF) public baseHref: string,
-    private loginService: LoginService,
+    public loginService: LoginService,
     private configService: ConfigurationService,
     private router: Router
   ) {}

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { Document } from '../shared/api/models';
+import { Document, DocumentSubType } from '../shared/api/models';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,20 +24,20 @@ interface DocumentType {
   templateUrl: './submission-requirements.component.html',
   styleUrls: ['./submission-requirements.component.scss'],
 })
-export class SubmissionRequirementsComponent {
+export class SubmissionRequirementsComponent implements OnInit {
   @Input() submissionRequirementDocuments?: Document[] | null = [];
   @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
-  selectedDocumentType?: string | undefined;
+  documentSubTypes?: DocumentSubType[];
   acceptControl = new FormControl(false);
 
-  documentTypes: DocumentType[] = [
-    { value: '310', viewValue: 'Diabetic Doctor Report' },
-    { value: '001', viewValue: 'DMER' },
-    { value: '030', viewValue: 'EVF' },
-  ];
+  // documentTypes: DocumentType[] = [
+  //   { value: '310', viewValue: 'Diabetic Doctor Report' },
+  //   { value: '001', viewValue: 'DMER' },
+  //   { value: '030', viewValue: 'EVF' },
+  // ];
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -46,6 +46,17 @@ export class SubmissionRequirementsComponent {
     public dialog: MatDialog,
     private apiConfig: ApiConfiguration
   ) {}
+
+  ngOnInit() {
+    //console.log('submission requirements component');
+    this.getDocumentSubtypes();
+  }
+
+  getDocumentSubtypes() {
+    this.caseManagementService.getDocumentSubTypes({}).subscribe((response) => {
+      this.documentSubTypes = response;
+    });
+  }
   public files: any[] = [];
 
   onSelect(event: any) {
@@ -97,9 +108,7 @@ export class SubmissionRequirementsComponent {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    if (this.selectedDocumentType) {
-      formData.append('documentTypeCode', this.selectedDocumentType);
-    }
+    
 
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {

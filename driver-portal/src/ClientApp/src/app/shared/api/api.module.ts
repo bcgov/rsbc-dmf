@@ -8,6 +8,7 @@ import { ApplicationVersionInfoService } from './services/application-version-in
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
+import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
 import { ProfileService } from './services/profile.service';
 import { UserService } from './services/user.service';
@@ -24,6 +25,7 @@ import { UserService } from './services/user.service';
     CasesService,
     ConfigService,
     DocumentService,
+    DocumentTypeService,
     DriverService,
     ProfileService,
     UserService,
