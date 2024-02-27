@@ -144,87 +144,98 @@ namespace Rsbc.Interfaces
             foreach (var doc in documentsResponse.PdfDocuments)
             {
                 // get document from s3
-                var fileResult = _documentStorageAdapterClient.DownloadFile(new DownloadFileRequest()
+
+                var s3request = new DownloadFileRequest()
                 {
                     // ServerRelativeUrl = doc.PdfDocumentId
                     // Are we storing the document url in pdfDocument 
                     ServerRelativeUrl = doc.ServerUrl,
 
-                });
+                };
 
-                // Step 3
-                // After getting the documents put the files on the SFEG Directory
+                var fileResult = _documentStorageAdapterClient.DownloadFile(s3request);
 
-                string username = _configuration["SCP_USER"];
-                string password = _configuration["SCP_PASS"];
-                string host = _configuration["SCP_HOST"];
-                string key = _configuration["SCP_KEY"];
-
-                // Check the folder and file name and confirm
-                string folder = _configuration["SCP_FOLDER"];
-
-                // verify file name
-                var filename = doc.Filename;
-
-                if (CheckScpSettings(host, username, key))
+                if (fileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                 {
-                    Log.Logger.Information("No SCP configuration, skipping check for work.");
 
-                }
-                else
-                {
-                    var connectionInfo = GetConnectionInfo(host, username, key);
+                
 
-                    using (var client = new SftpClient(connectionInfo))
-                    {
-                        client.Connect();
-                        Log.Logger.Information("Connected");
+                    // Step 3
+                    // After getting the documents put the files on the SFEG Directory
 
-                        if (string.IsNullOrEmpty(folder))
+                    string username = _configuration["SCP_USER"];
+                    string password = _configuration["SCP_PASS"];
+                    string host = _configuration["SCP_HOST"];
+                    string key = _configuration["SCP_KEY"];
+
+                    // Check the folder and file name and confirm
+                    string folder = _configuration["SCP_FOLDER"];
+
+                    // verify file name
+                    var filename = doc.Filename;
+
+                        if (CheckScpSettings(host, username, key))
                         {
-                            folder = client.WorkingDirectory;
+                            Log.Logger.Information("No SCP configuration, skipping check for work.");
+
                         }
-
-                        var stream = new MemoryStream(fileResult.Data.ToByteArray());
-
-                        var filePath = Path.Combine(folder, filename);
-
-                        try
+                        else
                         {
-                            client.UploadFile(stream, filePath);
-                            // Update the status to SEND and attach the document
+                            var connectionInfo = GetConnectionInfo(host, username, key);
 
-                            Log.Information($"SFTP Upload complete for {filePath}");
-
-                            var pdfDocument = new PdfDocument()
+                            using (var client = new SftpClient(connectionInfo))
                             {
-                                PdfDocumentId = doc.PdfDocumentId,
-                                StatusCode = PdfDocument.Types.StatusCodeOptions.Sent
-                            };
+                                client.Connect();
+                                Log.Logger.Information("Connected");
+
+                                if (string.IsNullOrEmpty(folder))
+                                {
+                                    folder = client.WorkingDirectory;
+                                }
+
+                                var stream = new MemoryStream(fileResult.Data.ToByteArray());
+
+                                var filePath = Path.Combine(folder, filename);
+
+                                try
+                                {
+                                    client.UploadFile(stream, filePath);
+                                    // Update the status to SEND and attach the document
+
+                                    Log.Information($"SFTP Upload complete for {filePath}");
+
+                                    var pdfDocument = new PdfDocument()
+                                    {
+                                        PdfDocumentId = doc.PdfDocumentId,
+                                        StatusCode = PdfDocument.Types.StatusCodeOptions.Sent
+                                    };
 
 
-                            _caseManagerClient.UpdateDocumentStatus(pdfDocument);
-                        }
+                                    _caseManagerClient.UpdateDocumentStatus(pdfDocument);
+                                }
 
-                        catch (Exception ex)
+                                catch (Exception ex)
 
-                        {
-                            // set the status to Fail To 
-                            result.ResultStatus = Dmf.BcMailAdapter.ResultStatus.Fail;
-                            Log.Error(ex, "Send Documents to BC mail : Set the status to Failed to send ");
+                                {
+                                    // set the status to Fail To 
+                                    result.ResultStatus = Dmf.BcMailAdapter.ResultStatus.Fail;
+                                    Log.Error(ex, "Send Documents to BC mail : Set the status to Failed to send ");
 
-                            _caseManagerClient.UpdateDocumentStatus(new PdfDocument()
-                            {
-                                PdfDocumentId = doc.PdfDocumentId,
-                                StatusCode = PdfDocument.Types.StatusCodeOptions.FailedToSend
-                            });
+                                    _caseManagerClient.UpdateDocumentStatus(new PdfDocument()
+                                    {
+                                        PdfDocumentId = doc.PdfDocumentId,
+                                        StatusCode = PdfDocument.Types.StatusCodeOptions.FailedToSend
+                                    });
 
+                                }
+                            }
                         }
                     }
 
+                else
+                {
+                    Log.Information($"Unable to fetch {doc.ServerUrl}");
                 }
-
-
             }
             return result;
         }
