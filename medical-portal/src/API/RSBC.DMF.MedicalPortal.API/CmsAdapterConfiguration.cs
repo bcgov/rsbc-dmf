@@ -32,14 +32,14 @@ namespace RSBC.DMF.MedicalPortal.API
                 if (string.IsNullOrEmpty(clientSecret))
                 {
                     // add the service without authentication.
-                    var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                     services.AddTransient(_ => new UserManager.UserManagerClient(channel));
                 }
                 else
                 {
-                    var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -52,7 +52,7 @@ namespace RSBC.DMF.MedicalPortal.API
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
-                        var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+                        var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                         services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                         services.AddTransient(_ => new UserManager.UserManagerClient(channel));

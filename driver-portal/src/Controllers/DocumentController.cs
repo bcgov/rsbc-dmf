@@ -11,24 +11,30 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
+    // DOMAIN documents, document storage
+
     [Route("api/[controller]")]
     [ApiController]
     public class DocumentController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly IUserService _userService;
         private readonly DocumentFactory _documentFactory;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private readonly ILogger<DocumentController> _logger;
 
-        public DocumentController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, DocumentFactory documentFactory, IMapper mapper, ILoggerFactory loggerFactory)
+        public DocumentController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, DocumentFactory documentFactory, IMapper mapper, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _documentManagerClient = documentManagerClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _userService = userService;
             _documentFactory = documentFactory;
             _mapper = mapper;
+            _configuration = configuration;
             _logger = loggerFactory.CreateLogger<DocumentController>();
         }
 
@@ -56,7 +62,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 {
                     return StatusCode((int)HttpStatusCode.Unauthorized, $"Not authorized - you are not authorized to view document {documentId}");
                 }
-
                 
                 if (!string.IsNullOrEmpty(reply.Document?.DocumentUrl))
                 {
@@ -111,12 +116,22 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         // to save time, we opted to just write this api call manually on the frontend
         [ApiExplorerSettings(IgnoreApi = true)]
 
-        public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file, [FromForm] string documentTypeCode)
+        public async Task<IActionResult> UploadDriverDocument([FromForm] IFormFile file, [FromForm] int documentSubTypeId)
         {
             // sanity check paramters
             if (string.IsNullOrEmpty(file?.FileName) || file.Length == 0)
             {
                 return BadRequest();
+            }
+
+            // validate document sub type
+            var documentIdRequest = new DocumentIdRequest();
+            documentIdRequest.Id = documentSubTypeId;
+            var documentSubTypeGuidReply = _documentManagerClient.GetDocumentSubTypeGuid(documentIdRequest);
+            if (documentSubTypeGuidReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            {
+                _logger.LogError("ERROR getting document sub type id.\n {0}", documentSubTypeGuidReply.ErrorDetail);
+                return StatusCode(500, documentSubTypeGuidReply.ErrorDetail);
             }
 
             var profile = await _userService.GetCurrentUserContext();
@@ -154,12 +169,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var driver = new Driver();
             driver.Id = profile.DriverId;
 
-            // TODO temporary code
-            var documentType = "Diabetic Doctor Report";
-            if (documentTypeCode == "001") documentType = "DMER";
-            if (documentTypeCode == "030") documentType = "EVF";
-
-            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, documentType, documentTypeCode);
+            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
+            document.DocumentSubTypeId = documentSubTypeGuidReply.Id.ToString();
             var result = _cmsAdapterClient.CreateDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {

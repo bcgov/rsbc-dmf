@@ -69,7 +69,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -87,7 +87,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Tests
                     }
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 CaseManagerClient = new CaseManager.CaseManagerClient(channel);
             }
              
