@@ -99,7 +99,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
             services.AddGrpcReflection();
             services.AddDistributedMemoryCache();
-            services.AddCaseManagement(Configuration);
+            services.RegisterServices(Configuration);
             /*
             services.AddHttpClient("adfs_token").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
@@ -143,6 +143,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 endpoints.MapGrpcService<CaseService>();
                 endpoints.MapGrpcService<CssService>();
                 endpoints.MapGrpcService<UserService>();
+                endpoints.MapGrpcService<DocumentService>();
 
                 endpoints.MapControllers();
                 

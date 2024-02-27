@@ -26,6 +26,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => src.CaseType == "DMER" ? "Solicited" : "Unsolicited"))
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate) 
                 .AddTransform(NullStringConverter);
+            CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

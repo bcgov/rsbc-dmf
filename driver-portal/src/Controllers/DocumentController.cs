@@ -20,7 +20,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly IUserService _userService;
         private readonly DocumentFactory _documentFactory;
         private readonly IMapper _mapper;
-        private readonly ILogger<DriverController> _logger;
+        private readonly ILogger<DocumentController> _logger;
 
         public DocumentController(CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, IUserService userService, DocumentFactory documentFactory, IMapper mapper, ILoggerFactory loggerFactory)
         {
@@ -29,7 +29,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             _userService = userService;
             _documentFactory = documentFactory;
             _mapper = mapper;
-            _logger = loggerFactory.CreateLogger<DriverController>();
+            _logger = loggerFactory.CreateLogger<DocumentController>();
         }
 
         /// <summary>

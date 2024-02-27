@@ -60,9 +60,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     // Save data in cache.
                     _cache.Set(driversLicence, data, cacheEntryOptions);
                 }
-                
+
             }
-            
+
 
             if (data != null)
             {
@@ -78,75 +78,101 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     City = data.ADDR?.CITY,
                     PostalCode = data.ADDR?.POST,
                     Province = data.ADDR?.PROV,
-                    Country = data.ADDR?.CNTY
+                    Country = data.ADDR?.CNTY,
+                    UnitNumber = data.ADDR?.BUNO
                 };
 
                 // handle address
                 if (data.ADDR != null)
                 {
-                    List<string> addressComponents = new List<string>();
+                    var addressComponents = "";
 
-                    if (!string.IsNullOrEmpty(data.ADDR.APR1))
+                    // Unit Number
+                    if (!string.IsNullOrEmpty(data.ADDR.BUNO))
                     {
-                        addressComponents.Add($"{data.ADDR.APR1}");
+                        addressComponents += $"{data.ADDR.BUNO}-";
                     }
 
-                    if (!string.IsNullOrEmpty(data.ADDR.APR2))
-                    {
-                        addressComponents.Add($"{data.ADDR.APR2}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.APR3))
-                    {
-                        addressComponents.Add($"{data.ADDR.APR3}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.PSTN))
-                    {
-                        addressComponents.Add($"STN {data.ADDR.PSTN}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.SITE))
-                    {
-                        addressComponents.Add($"SITE {data.ADDR.SITE}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.COMP))
-                    {
-                        addressComponents.Add($"COMP {data.ADDR.COMP}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.RURR))
-                    {
-                        addressComponents.Add($"RR# {data.ADDR.RURR}");
-                    }
-
-                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
-                    {
-                        addressComponents.Add($"PO BOX {data.ADDR.POBX}");
-                    }
+                    // Street Number
 
                     if (!string.IsNullOrEmpty(data.ADDR.STNO))
                     {
-                        addressComponents.Add($"{data.ADDR.STNO}");
+                        addressComponents += $"{data.ADDR.STNO}";
                     }
 
+                    // AddressPrefix1
+                    if (!string.IsNullOrEmpty(data.ADDR.APR1))
+                    {
+                        addressComponents += $" {data.ADDR.APR1}";
+                    }
+
+                    //AddressPrefix2
+                    if (!string.IsNullOrEmpty(data.ADDR.APR2))
+                    {
+                        addressComponents += $" {data.ADDR.APR2}";
+                    }
+
+                    //AddressPrefix3 // Not in ICBC Client
+                    if (!string.IsNullOrEmpty(data.ADDR.APR3))
+                    {
+                        addressComponents += $" {data.ADDR.APR3}";
+                    }
+
+                    // ???
+
+                    if (!string.IsNullOrEmpty(data.ADDR.PSTN))
+                    {
+                        addressComponents += $"STN {data.ADDR.PSTN}";
+                    }
+
+                    // Site
+                    if (!string.IsNullOrEmpty(data.ADDR.SITE))
+                    {
+                        addressComponents += $"SITE {data.ADDR.SITE}";
+                    }
+
+                    // Compound
+
+                    if (!string.IsNullOrEmpty(data.ADDR.COMP))
+                    {
+                        addressComponents += $"COMP {data.ADDR.COMP}";
+                    }
+
+                    // RuralRoute
+                    if (!string.IsNullOrEmpty(data.ADDR.RURR))
+                    {
+                        addressComponents += $"RR# {data.ADDR.RURR}";
+                    }
+
+                    // PostOfficeBox
+
+                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
+                    {
+                        addressComponents += $"PO BOX {data.ADDR.POBX}";
+                    }
+
+                    //Street Name
                     if (!string.IsNullOrEmpty(data.ADDR.STNM))
                     {
-                        addressComponents.Add($"{data.ADDR.STNM}");
+                        addressComponents += $" {data.ADDR.STNM}";
                     }
 
+                    // Street Type
                     if (!string.IsNullOrEmpty(data.ADDR.STTY))
                     {
-                        addressComponents.Add($"{data.ADDR.STTY}");
+                        addressComponents += $" {data.ADDR.STTY}";
                     }
 
+                    // Street Direction
                     if (!string.IsNullOrEmpty(data.ADDR.STDI))
                     {
-                        addressComponents.Add($"{data.ADDR.STDI}");
+                        addressComponents += $" {data.ADDR.STDI}";
                     }
 
-                    result.AddressLine1 = string.Join(" ", addressComponents.ToArray());
+                    result.AddressLine1 = addressComponents;
+
+
+
                 }
 
                 // handle two middle names, or just one.
@@ -173,7 +199,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 return Json(null);
 
                 //
-                
+
                 //StatusCode(StatusCodes.Status500InternalServerError, "No response received from ICBC - Network Error");
             }
 

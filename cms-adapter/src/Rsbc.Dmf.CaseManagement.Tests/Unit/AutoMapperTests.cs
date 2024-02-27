@@ -3,6 +3,7 @@ using Google.Protobuf.Collections;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Unit
@@ -114,5 +115,20 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
 
             Assert.NotNull(mappedCaseDetail);
         }
+
+        [Fact]
+        public void Map_CaseManagement_DocumentSubType_To_Service_DocumentSubType()
+        {
+            var documentSubType = new DocumentSubType();
+            documentSubType.Id = 1;
+            documentSubType.Name = "Joe";
+
+            var mappedDocumentSubType = _mapper.Map<Service.DocumentSubType>(documentSubType);
+
+            Assert.NotNull(mappedDocumentSubType);
+            Assert.Equal(documentSubType.Id, mappedDocumentSubType.Id);
+            Assert.Equal(documentSubType.Name, mappedDocumentSubType.Name);
+        }
+
     }
 }
