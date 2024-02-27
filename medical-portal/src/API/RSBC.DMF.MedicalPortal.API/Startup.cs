@@ -143,7 +143,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 var configvalue = configuration.GetValue("app:knownNetwork", string.Empty)?.Split('/');
                 if (configvalue.Length == 2)
                 {
-                    var knownNetwork = new IPNetwork(IPAddress.Parse(configvalue[0]), int.Parse(configvalue[1]));
+                    var knownNetwork = new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(configvalue[0]), int.Parse(configvalue[1]));
                     options.KnownNetworks.Add(knownNetwork);
                 }
             });
