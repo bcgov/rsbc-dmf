@@ -103,7 +103,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     // AddressPrefix1
                     if (!string.IsNullOrEmpty(data.ADDR.APR1))
                     {
-                        addressComponents += $" {data.ADDR.APR1}";
+                        addressComponents += $"{(addressComponents.Length > 0 ? ' ' : String.Empty)}{data.ADDR.APR1}";
                     }
 
                     //AddressPrefix2
