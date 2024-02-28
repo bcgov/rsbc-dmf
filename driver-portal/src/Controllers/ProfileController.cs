@@ -27,7 +27,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         [HttpGet("current")]
-        [AllowAnonymous]
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
