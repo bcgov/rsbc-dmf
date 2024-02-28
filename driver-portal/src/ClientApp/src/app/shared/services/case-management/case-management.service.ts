@@ -47,10 +47,10 @@ export class CaseManagementService {
     return this.documentService.apiDocumentDocumentIdGet$Json(params);
   }
 
-  public updateEmailAddress(
-    params: Parameters<ProfileService['apiProfileEmailPut']>[0]
+  public userRegistration(
+    params: Parameters<ProfileService['apiProfileRegisterPut$Json']>[0]
   ) {
-    return this.profileService.apiProfileEmailPut(params);
+    return this.profileService.apiProfileRegisterPut$Json(params);
   }
 
   public updateDriverProfile(

@@ -76,7 +76,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             var loginResponse = await userManager.LoginAsync(loginRequest);
             if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-            var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
+            var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId, UserType = UserType.DriverUserType });
             if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
             var userProfile = searchResults.User.SingleOrDefault();

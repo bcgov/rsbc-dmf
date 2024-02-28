@@ -54,8 +54,9 @@ export class AccountComponent implements OnInit {
 
   onSubmit() {
     this.caseManagementService
-      .updateEmailAddress({
+      .userRegistration({
         body: {
+          driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
           email: this.accountForm.value.emailAddress,
         },
       })

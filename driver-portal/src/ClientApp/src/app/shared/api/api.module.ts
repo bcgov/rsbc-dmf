@@ -10,7 +10,6 @@ import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
 import { DriverService } from './services/driver.service';
 import { ProfileService } from './services/profile.service';
-import { UserService } from './services/user.service';
 
 /**
  * Module that provides all services and configuration.
@@ -26,7 +25,6 @@ import { UserService } from './services/user.service';
     DocumentService,
     DriverService,
     ProfileService,
-    UserService,
     ApiConfiguration
   ],
 })
