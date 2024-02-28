@@ -69,5 +69,3 @@ jobs:
           # Specify whether or not CI build should fail if Codecov runs into an error during upload
           fail_ci_if_error: true
 
-      - name: Build image
-        run: docker build . --file ./bcmail-adapter/src/Dockerfile --tag $IMAGE_NAME

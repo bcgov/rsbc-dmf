@@ -229,7 +229,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -247,7 +247,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     }
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
             }
 

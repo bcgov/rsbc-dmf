@@ -82,6 +82,7 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset CreateDate { get; set; }
         public DateTimeOffset? DueDate { get; set; }
         public string Description { get; set; }
+        public string DocumentSubTypeId { get; set; }
     }
 
     public class CreateStatusReply
@@ -1389,9 +1390,11 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    var record = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
-                    result = record;
-
+                    result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+                    if (result == null)
+                    {
+                        result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault();
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -1697,6 +1700,15 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), searchdriver);
+                        if (request.DocumentSubTypeId != null)
+                        {
+                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
+                                .FirstOrDefault();
+                            if (documentSubType != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType), documentSubType);
+                            }
+                        }
 
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
@@ -1708,7 +1720,7 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Success = false;
                     }
                 }
-                else
+                else // insert
                 {
                     try
                     {
@@ -1732,8 +1744,16 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
+                        if (request.DocumentSubTypeId != null)
+                        {
+                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
+                                .FirstOrDefault();
+                            if (documentSubType != null)
+                            {
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType), documentSubType);
+                            }
+                        }
 
-                        
 
                         if (!string.IsNullOrEmpty(request.CaseId))
                         {

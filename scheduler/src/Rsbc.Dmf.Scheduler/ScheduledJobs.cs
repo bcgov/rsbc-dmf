@@ -59,7 +59,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     if (!string.IsNullOrEmpty(_configuration["ICBC_ADAPTER_JWT_SECRET"]))
                     {
-                        var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                        var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                         var initialClient = new IcbcAdapterClient(initialChannel);
                         // call the token service to get a token.
@@ -79,7 +79,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     }
 
-                    var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                     _icbcAdapterClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(channel);
 
                 }
@@ -101,11 +101,12 @@ namespace Rsbc.Dmf.Scheduler
 
                     var httpClient = new HttpClient(httpClientHandler);
                     // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                    httpClient.Timeout = TimeSpan.FromHours(1);
                     httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
                     if (!string.IsNullOrEmpty(_configuration["BCMAIL_ADAPTER_JWT_SECRET"]))
                     {
-                        var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                        var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                         var initialClient = new BcMailAdapterClient(initialChannel);
                         // call the token service to get a token.
@@ -125,7 +126,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     }
 
-                    var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                     _bcMailAdapterClient = new BcMailAdapterClient(channel);
                     
 
@@ -147,11 +148,12 @@ namespace Rsbc.Dmf.Scheduler
 
                     var httpClient = new HttpClient(httpClientHandler);
                     // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                    httpClient.Timeout = TimeSpan.FromHours(1);
                     httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
                     if (!string.IsNullOrEmpty(_configuration["CMS_ADAPTER_JWT_SECRET"]))
                     {
-                        var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                        var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                         var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                         // call the token service to get a token.
@@ -171,7 +173,7 @@ namespace Rsbc.Dmf.Scheduler
 
                     }
 
-                    var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                     _caseManagerClient = new CaseManager.CaseManagerClient(channel);
 
                 }

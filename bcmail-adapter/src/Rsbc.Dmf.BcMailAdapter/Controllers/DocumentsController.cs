@@ -1,35 +1,24 @@
 ﻿
 using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Rewrite;
-using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Cms;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Interfaces;
-
-using Serilog.Core;
-using SixLabors.ImageSharp;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Serilog;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
-using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
-using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
 
@@ -468,7 +457,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            Serilog.Log.Information(JsonSerializer.Serialize(bcmail, options));
             /*
             try
             {
@@ -583,7 +571,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedStyle = ParseByteArrayToString(attachment.Css);
                             System.IO.File.WriteAllText(stylesheetFileName, decodedStyle, Encoding.UTF8);
                             var stylesettings = new WebSettings() { UserStyleSheet = $"file:///{stylesheetFileName}" };
-                            Serilog.Log.Logger.Information(stylesettings.UserStyleSheet);
+                            
                             doc.Objects[0].WebSettings.UserStyleSheet = stylesettings.UserStyleSheet;
                         }
 
@@ -595,7 +583,6 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             System.IO.File.WriteAllText(headerFilename, decodedHeader, Encoding.UTF8);
                             var headerSettings = new HeaderSettings() { HtmlUrl = $"file:///{headerFilename}" };
-                            Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
 
                             //string decodedHeader = ParseByteArrayToString(attachment.Header);

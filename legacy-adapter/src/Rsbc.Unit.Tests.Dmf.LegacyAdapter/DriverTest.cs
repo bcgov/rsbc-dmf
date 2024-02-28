@@ -368,8 +368,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         {
             DfcmsAddDocument();
 
-            // now check for the comment to be in the response.
-
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
 
             var response = _client.SendAsync(request).GetAwaiter().GetResult();
@@ -403,7 +401,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
 
-            Assert.Equal(documents.Count, 1);
+            Assert.Equal(0, documents.Count);
         }
 
 

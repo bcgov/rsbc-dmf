@@ -87,6 +87,8 @@ namespace Pssg.Interfaces.Icbc.ViewModels
 
         public string Country { get; set; }
 
+        public string UnitNumber { get; set; }
+
 
         /// <summary>
         /// </summary>        

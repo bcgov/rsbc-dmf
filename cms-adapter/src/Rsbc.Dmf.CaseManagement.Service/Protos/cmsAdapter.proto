@@ -211,38 +211,6 @@ message LegacyComment {
 	string SignatureName = 10;
 }
 
-message LegacyDocument {
-	int64 SequenceNumber = 1;
-	string DocumentTypeCode = 2;
-	string DocumentType = 3;
-	string BusinessArea = 4;
-	string DocumentUrl = 5;
-	string UserId = 6;
-	string CaseId = 7;
-	string DocumentId = 8;	
-	google.protobuf.Timestamp FaxReceivedDate = 9;
-	google.protobuf.Timestamp ImportDate = 10;
-	string ImportId = 11;
-	Driver Driver = 12;
-	string BatchId = 13;
-	string OriginatingNumber = 14;
-	int64 DocumentPages = 15;
-	string ValidationMethod = 16;
-	string ValidationPrevious = 17;
-	string Priority = 18;
-	string Owner = 19;
-	string SubmittalStatus = 20;
-	string Queue = 21;
-	int64 DpsDocumentId = 22;
-	string FilenameOverride = 23;
-	string Origin = 24;
-	google.protobuf.Timestamp CreateDate = 25;
-	google.protobuf.Timestamp DueDate = 26;
-	string Description = 27;
-	string IdCode = 28;
-	string CaseType = 29;
-}
-
 message GetDocumentRequest {	
 	string documentId = 1;
 }
@@ -490,9 +458,49 @@ message DecisionItem {
 	DecisionOutcomeOptions outcome = 3;
 }
 
+////////////////////////
 // START DocumentManager
+
 service DocumentManager {
 	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
+	rpc GetDocumentSubTypeGuid(DocumentIdRequest) returns (GetDocumentSubTypeIdReply);
+}
+
+message LegacyDocument {
+	int64 SequenceNumber = 1;
+	string DocumentTypeCode = 2;
+	string DocumentType = 3;
+	string BusinessArea = 4;
+	string DocumentUrl = 5;
+	string UserId = 6;
+	string CaseId = 7;
+	string DocumentId = 8;	
+	google.protobuf.Timestamp FaxReceivedDate = 9;
+	google.protobuf.Timestamp ImportDate = 10;
+	string ImportId = 11;
+	Driver Driver = 12;
+	string BatchId = 13;
+	string OriginatingNumber = 14;
+	int64 DocumentPages = 15;
+	string ValidationMethod = 16;
+	string ValidationPrevious = 17;
+	string Priority = 18;
+	string Owner = 19;
+	string SubmittalStatus = 20;
+	string Queue = 21;
+	int64 DpsDocumentId = 22;
+	string FilenameOverride = 23;
+	string Origin = 24;
+	google.protobuf.Timestamp CreateDate = 25;
+	google.protobuf.Timestamp DueDate = 26;
+	string Description = 27;
+	string IdCode = 28;
+	string CaseType = 29;
+	string DocumentSubTypeId = 30;
+}
+
+message DocumentIdRequest {
+	int32 id = 1;
 }
 
 message DocumentTypeRequest {
@@ -510,7 +518,15 @@ message GetDocumentSubTypesReply {
 	string errorDetail = 3;
 }
 
+message GetDocumentSubTypeIdReply {
+	string id = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
 // END DocumentManager
+////////////////////////
+// START CssManager
 
 service CssManager {
 	rpc GetCss(CssRequest) returns (CssReply);
@@ -525,6 +541,9 @@ message CssReply {
 	string errorDetail = 2;
 	string css = 3; 
 }
+
+// END CssManager
+////////////////////////
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
@@ -636,7 +655,7 @@ message ResultStatusReply {
 	string errorDetail = 2;
 }
 
-enum  BringForwardPriority{
+enum BringForwardPriority{
 	Low = 0;
 	Normal = 1;
 	High = 2;
