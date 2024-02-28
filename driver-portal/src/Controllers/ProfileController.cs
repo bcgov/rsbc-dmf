@@ -93,7 +93,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             CaseManagement.Service.Driver foundDriver = null;
             foreach (var driver in getDriverReply.Items)
             {
-                if (profile.FirstName == driver.GivenName && profile.LastName == driver.Surname /*&& userRegistration.BirthDate.Date == driver.BirthDate.ToDateTime().Date*/)
+                if (profile.FirstName == driver.GivenName && profile.LastName == driver.Surname /*&& profile.BirthDate.Date == driver.BirthDate.ToDateTime().Date*/)
                 {
                     foundDriver = driver;
                 }
