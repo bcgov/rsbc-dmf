@@ -690,31 +690,14 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     {
                         try
                         {
+
                             using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                             {
+
                                 for (var i = 0; i < srcPDF.PageCount; i++)
                                 {
-                                    XGraphics gfx;
-                                    XRect box;
+                                    resultPDF.AddPage(srcPDF.Pages[i]);
 
-                                    // Open the file to resize
-                                    XPdfForm form = XPdfForm.FromStream(src);
-
-                                    // Add a new page to the output document
-                                    PdfPage documentPage = srcPDF.Pages[i];
-
-                                    if (form.PixelWidth > form.PixelHeight)
-                                        documentPage.Orientation = PageOrientation.Landscape;
-                                    else
-                                        documentPage.Orientation = PageOrientation.Portrait;
-
-                                    double width = documentPage.Width;
-                                    double height = documentPage.Height;
-
-                                    gfx = XGraphics.FromPdfPage(documentPage);
-                                    box = new XRect(0, 0, width, height);
-                                    gfx.DrawImage(form, box);
-                                    resultPDF.AddPage(documentPage);
                                 }
 
                                 // If pdf document has odd pages then add an empty page
@@ -722,6 +705,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                 {
                                     resultPDF.AddPage(new PdfPage());
                                 }
+
 
                             }
                         }
