@@ -48,11 +48,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             var userRegistration = new UserRegistration();
             userRegistration.DriverLicenseNumber = "00200173";
-            userRegistration.FirstName = "";
-            userRegistration.LastName = "MASON";
             userRegistration.Email = "mason@mailinator.com";
-            userRegistration.BirthDate = new System.DateTime(1916, 7, 15);
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{DRIVER_API_BASE}/{nameof(DriverController.UserRegistration)}");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/{nameof(ProfileController.Register)}");
             SetContent(request, userRegistration);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -67,11 +64,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             var userRegistration = new UserRegistration();
             userRegistration.DriverLicenseNumber = "1234567";
-            userRegistration.FirstName = "John";
-            userRegistration.LastName = "Doe";
             userRegistration.Email = "johndoe@gmail.com";
-            userRegistration.BirthDate = new System.DateTime(1980, 1, 1);
-            var request = new HttpRequestMessage(HttpMethod.Post, $"{DRIVER_API_BASE}/{nameof(DriverController.UserRegistration)}");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/{nameof(ProfileController.Register)}");
             SetContent(request, userRegistration);
             var response = await _client.SendAsync(request);
             response.StatusCode = System.Net.HttpStatusCode.Unauthorized;

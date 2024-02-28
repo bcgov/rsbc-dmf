@@ -67,8 +67,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                     new Claim(UserClaimTypes.DriverId, driverId),
                     new Claim(ClaimTypes.Email, "Email"),
                     new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
-                    new Claim(ClaimTypes.GivenName, "FirstName"),
-                    new Claim(ClaimTypes.Surname, "LastName")
+                    new Claim(ClaimTypes.GivenName, ""),
+                    new Claim(ClaimTypes.Surname, "MASON")
                 };
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;
