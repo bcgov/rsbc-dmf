@@ -685,6 +685,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 }
 
+                driver.Id = driverId;
+
                 if (faxReceivedDate == null)
                 {
                     faxReceivedDate = DateTimeOffset.Now;
