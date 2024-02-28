@@ -21,6 +21,9 @@ using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
+using PdfSharpCore.Drawing;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using PdfSharpCore;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -675,7 +678,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// </summary>
         /// <param name="srcPDFs"></param>
         /// <returns></returns>
-        private byte[] CombinePDFs(List<byte[]> srcPDFs)
+        public byte[] CombinePDFs(List<byte[]> srcPDFs)
         {
             byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -691,8 +694,27 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             {
                                 for (var i = 0; i < srcPDF.PageCount; i++)
                                 {
-                                    resultPDF.AddPage(srcPDF.Pages[i]);
+                                    XGraphics gfx;
+                                    XRect box;
 
+                                    // Open the file to resize
+                                    XPdfForm form = XPdfForm.FromStream(src);
+
+                                    // Add a new page to the output document
+                                    PdfPage documentPage = srcPDF.Pages[i];
+
+                                    if (form.PixelWidth > form.PixelHeight)
+                                        documentPage.Orientation = PageOrientation.Landscape;
+                                    else
+                                        documentPage.Orientation = PageOrientation.Portrait;
+
+                                    double width = documentPage.Width;
+                                    double height = documentPage.Height;
+
+                                    gfx = XGraphics.FromPdfPage(documentPage);
+                                    box = new XRect(0, 0, width, height);
+                                    gfx.DrawImage(form, box);
+                                    resultPDF.AddPage(documentPage);
                                 }
 
                                 // If pdf document has odd pages then add an empty page

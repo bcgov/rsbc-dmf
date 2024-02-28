@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-submission-history',
@@ -26,16 +27,25 @@ export class SubmissionHistoryComponent implements OnInit {
     });
 
     this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
+    console.log(this.filteredDocuments);
   }
 
   get allDriverDocuments() {
     return this._allDocuments;
   }
 
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(
+    private caseManagementService: CaseManagementService,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit(): void {
-    this.getAllDocuments('e27d7c69-3913-4116-a360-f5e990200173');
+    // this.getAllDocuments('e27d7c69-3913-4116-a360-f5e990200173');
+    if (this.loginService.userProfile?.id) {
+      this.getAllDocuments(this.loginService.userProfile?.id as string);
+    } else {
+      console.log('No Letter Documents');
+    }
   }
 
   getAllDocuments(driverId: string) {
