@@ -1753,24 +1753,23 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                         }
 
+                        dynamicsContext.SaveChanges();
 
-                        if (!string.IsNullOrEmpty(request.CaseId))
+                        if (!string.IsNullOrEmpty(request.CaseId) && !(request.CaseId == Guid.Empty.ToString()))
                         {
                             try
                             {
-                                Guid caseId;
-                                if (Guid.TryParse(request.CaseId, out caseId))
+                                Guid caseId = Guid.Parse(request.CaseId);                                
+                                if (caseId != Guid.Empty)
                                 {
-                                    if (caseId != Guid.Empty)
+                                    var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
+                                    if (theCase != null)
                                     {
-                                        var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
-                                        if (theCase != null)
-                                        {
-                                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
-                                        }
-                                        dynamicsContext.Detach(theCase);
+                                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                        dynamicsContext.SaveChanges();
                                     }
-                                }
+                                    dynamicsContext.Detach(theCase);
+                                }                                
                             }
                             catch (Exception ex)
                             {
@@ -1778,8 +1777,6 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                             
                         }
-
-                        dynamicsContext.SaveChanges();
 
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
