@@ -1756,18 +1756,25 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (!string.IsNullOrEmpty(request.CaseId))
                         {
-                            Guid caseId;
-                            if (Guid.TryParse(request.CaseId, out caseId))
+                            try
                             {
-                                if (caseId != Guid.Empty)
+                                Guid caseId;
+                                if (Guid.TryParse(request.CaseId, out caseId))
                                 {
-                                    var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
-                                    if (theCase != null)
+                                    if (caseId != Guid.Empty)
                                     {
-                                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                        var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
+                                        if (theCase != null)
+                                        {
+                                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                        }
+                                        dynamicsContext.Detach(theCase);
                                     }
-                                    dynamicsContext.Detach(theCase);
                                 }
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex, $"CreateDocumentOnDriver Error linking Case {request.CaseId} to Document.");
                             }
                             
                         }
