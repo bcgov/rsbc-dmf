@@ -144,13 +144,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         addressComponents += $"RR# {data.ADDR.RURR}";
                     }
 
-                    // PostOfficeBox
-
-                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
-                    {
-                        addressComponents += $"PO BOX {data.ADDR.POBX}";
-                    }
-
                     //Street Name
                     if (!string.IsNullOrEmpty(data.ADDR.STNM))
                     {
@@ -167,6 +160,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     if (!string.IsNullOrEmpty(data.ADDR.STDI))
                     {
                         addressComponents += $" {data.ADDR.STDI}";
+                    }
+
+                    // PostOfficeBox
+
+                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
+                    {
+                        addressComponents += $"\n PO BOX {data.ADDR.POBX}";
                     }
 
                     result.AddressLine1 = addressComponents;
