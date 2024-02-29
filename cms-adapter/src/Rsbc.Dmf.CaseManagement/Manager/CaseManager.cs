@@ -3901,10 +3901,10 @@ namespace Rsbc.Dmf.CaseManagement
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
                             // Condition Check if the document is DMER 
-                            if(document.dfp_DocumentTypeID != null
+                            //Updating code on 2 / 29 / 2024 removed the check for manual pass
+                            if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
                                 )
                             {
                                 outputArray.Add(item);
@@ -3991,6 +3991,7 @@ namespace Rsbc.Dmf.CaseManagement
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                             {
