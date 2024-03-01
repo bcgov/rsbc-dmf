@@ -1,24 +1,35 @@
 ﻿
 using Google.Protobuf;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Cms;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Pdf.IO;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.BcMailAdapter.ViewModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Interfaces;
-using Serilog;
+
+using Serilog.Core;
+using SixLabors.ImageSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Serilog;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
+using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
 using PdfSharpCore.Drawing;
@@ -112,7 +123,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
             return result;
         }
-        
+
         [HttpPost("{documentId}/Split")]
         public ActionResult SplitDocument([FromBody] SplitDetails splitDetails, [FromRoute] Guid documentId)
         {
@@ -126,11 +137,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                 string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
 
-               
+
 
                 string filename = serverRelativeUrl.Substring(serverRelativeUrl.LastIndexOf('/') + 1);
 
-                string originalId = serverRelativeUrl.Substring(originalEntity.Length + 1 , serverRelativeUrl.Length - originalEntity.Length - filename.Length -2);
+                string originalId = serverRelativeUrl.Substring(originalEntity.Length + 1, serverRelativeUrl.Length - originalEntity.Length - filename.Length - 2);
 
                 string newExtension = Path.GetExtension(filename);
 
@@ -145,7 +156,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     newFilename = filename;
                 }
 
-                newFilename += "-" + DateTime.Now.ToString("yyyyMMddHHmmss"); 
+                newFilename += "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
 
                 if (newExtension != null)
                 {
@@ -286,24 +297,24 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             {
                                 keepPdf.Save(keepStream, false);
 
-                            // update the page data
-                            var keepFileRequest = new UploadFileRequest
-                            {
-                                ContentType = "application/pdf",
-                                Data = ByteString.CopyFrom(keepStream.ToArray()),
-                                EntityName = originalEntity,
-                                FileName = filename,
-                                FolderName = originalId
-                            };
+                                // update the page data
+                                var keepFileRequest = new UploadFileRequest
+                                {
+                                    ContentType = "application/pdf",
+                                    Data = ByteString.CopyFrom(keepStream.ToArray()),
+                                    EntityName = originalEntity,
+                                    FileName = filename,
+                                    FolderName = originalId
+                                };
 
-                            var keepSaveResult = _documentStorageAdapterClient.UploadFile(keepFileRequest);
+                                var keepSaveResult = _documentStorageAdapterClient.UploadFile(keepFileRequest);
 
                             }
                         }
 
-                        
 
-                        
+
+
                     }
                 }
             }
@@ -339,7 +350,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 var mergeDocumentResponse = _caseManagerClient.GetLegacyDocument(new LegacyDocumentRequest { DocumentId = id.ToString() });
 
                 if (mergeDocumentResponse.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                {                    
+                {
                     // fetch it
                     var fileResult = _documentStorageAdapterClient.DownloadFile(new DownloadFileRequest()
                     {
@@ -409,7 +420,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
                 }
             }
-            
+
             return Ok(newPdf);
         }
 
@@ -418,7 +429,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)  
+        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)
         {
             // this could put the HTML file and attachments in a particular location.
 
@@ -460,6 +471,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
+            Serilog.Log.Information(JsonSerializer.Serialize(bcmail, options));
             /*
             try
             {
@@ -574,7 +586,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             string decodedStyle = ParseByteArrayToString(attachment.Css);
                             System.IO.File.WriteAllText(stylesheetFileName, decodedStyle, Encoding.UTF8);
                             var stylesettings = new WebSettings() { UserStyleSheet = $"file:///{stylesheetFileName}" };
-                            
+                            Serilog.Log.Logger.Information(stylesettings.UserStyleSheet);
                             doc.Objects[0].WebSettings.UserStyleSheet = stylesettings.UserStyleSheet;
                         }
 
@@ -586,6 +598,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                             System.IO.File.WriteAllText(headerFilename, decodedHeader, Encoding.UTF8);
                             var headerSettings = new HeaderSettings() { HtmlUrl = $"file:///{headerFilename}" };
+                            Serilog.Log.Logger.Information(headerSettings.HtmlUrl);
                             doc.Objects[0].HeaderSettings = headerSettings;
 
                             //string decodedHeader = ParseByteArrayToString(attachment.Header);
@@ -695,8 +708,43 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             {
 
                                 for (var i = 0; i < srcPDF.PageCount; i++)
+
                                 {
-                                    resultPDF.AddPage(srcPDF.Pages[i]);
+                                    // Check to see if width of the new page 
+                                    // REplace with a check on the destination document
+                                    XSize size = PageSizeConverter.ToSize(PdfSharpCore.PageSize.A4);
+
+                                    if (srcPDF.Pages[i].Height > size.Height || srcPDF.Pages[i].Width > size.Width)
+                                    {
+                                        XGraphics gfx;
+                                        XRect box;
+
+                                        var outputDocument = new PdfSharpCore.Pdf.PdfDocument();
+
+                                        MemoryStream stream = new MemoryStream();
+                                        // Open a new document
+
+                                        PdfPage outputDocumentPage = outputDocument.AddPage(srcPDF.Pages[i]);
+
+
+                                        // Convert output document to memory stream
+                                        outputDocument.Save(stream, false);
+
+                                        // Open the file to resize
+                                        XPdfForm form = XPdfForm.FromStream(stream);
+                                        var newPage = resultPDF.AddPage();
+                                        double width = newPage.Width;
+                                        double height = newPage.Height;
+
+                                        gfx = XGraphics.FromPdfPage(newPage);
+                                        box = new XRect(0, 0, width, height);
+                                        gfx.DrawImage(form, box);
+
+                                    }
+                                    else
+                                    {
+                                        resultPDF.AddPage(srcPDF.Pages[i]);
+                                    }
 
                                 }
 
@@ -711,10 +759,12 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                         }
                         catch (Exception e)
                         {
+
                             _logger.LogError(e, "Error reading from PDF stream");
                         }
                     }
                 }
+
                 using (var resposeStream = new MemoryStream())
                 {
                     resultPDF.Save(resposeStream, false);
