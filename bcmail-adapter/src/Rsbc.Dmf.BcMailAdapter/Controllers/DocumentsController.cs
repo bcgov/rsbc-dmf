@@ -703,8 +703,10 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     {
                         try
                         {
+
                             using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                             {
+
                                 for (var i = 0; i < srcPDF.PageCount; i++)
 
                                 {
@@ -751,6 +753,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                 {
                                     resultPDF.AddPage(new PdfPage());
                                 }
+
 
                             }
                         }
