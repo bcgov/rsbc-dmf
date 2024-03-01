@@ -780,26 +780,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     CreateStatusReply result;
 
-                    string[] documentTypes = {
-                        "Ignition Interlock Incident",
-                        "Ignition Interlock MIA",
-                        "RDP Registration",
-                        "Remedial Reconsideration",
-                        "Ignition Interlock Extension",
-                        "Ignition Interlock Reconsideration",
-                        "RDP and IIP Reconsideration",
-                        "Ignition Interlock Medical Exemption",
-                        "RDP Application For Extension",
-                        "High Risk Driving Incident Report",
-                        "Indefinite IIP",
-                        "OOP Certificate",
-                        "Client Letter Out DIP",
-                        "IIP Waiver",
-                        "OOP Document",
-                        "OOP Registration"
-                        };
                     string[] documentTypeCodes = {
-
                             "080",
                             "081",
                             "110",
@@ -815,8 +796,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             "320",
                             "211",
                             "213",
-                            "214"
-
+                            "214",
+                            "180" // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
                             };
 
                     var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);
