@@ -1085,8 +1085,14 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseComment-1");                
+                var driverResult = await CreateDriver(new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    BirthDate = request.Driver.BirthDate,
+                    SequenceNumber = request.SequenceNumber,
+                    Surname = request.Driver.Surname
+                });
+
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
 
