@@ -300,52 +300,55 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
-            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
-            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (!string.IsNullOrEmpty(caseId) && caseId != Guid.Empty.ToString())
             {
-                string caseType = "Unsolicited";
-
-                if (c.Item.CaseType == "DMER")
+                var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+                if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
-                    caseType = "Solicited";
+                    string caseType = "Unsolicited";
+
+                    if (c.Item.CaseType == "DMER")
+                    {
+                        caseType = "Solicited";
+                    }
+
+                    result.CaseId = c.Item.CaseId;
+
+                    string title = "";
+                    int dashPos = c.Item.Title.LastIndexOf("-");
+                    if (dashPos != -1)
+                    {
+                        title = c.Item.Title.Substring(dashPos + 1).Trim();
+                    }
+                    else
+                    {
+                        title = Math.Abs(c.Item.CaseSequence).ToString();
+                    }
+
+
+                    result.Title = title;
+                    result.IdCode = c.Item.IdCode;
+                    result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
+                    result.CaseType = caseType;
+                    result.DmerType = c.Item.DmerType;
+                    result.Status = c.Item.Status;
+                    result.AssigneeTitle = c.Item.AssigneeTitle;
+                    result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
+                    result.LatestDecision = c.Item.LatestDecision;
+                    result.DecisionForClass = c.Item.DecisionForClass;
+                    result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                    result.CaseSequence = (int)Math.Abs(c.Item.CaseSequence);
+
+                    result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+                    result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly, true).OrderByDescending(x => x.CommentDate).ToList();
                 }
 
-                result.CaseId = c.Item.CaseId;
-
-                string title = "";
-                int dashPos = c.Item.Title.LastIndexOf("-");
-                if (dashPos != -1)
+                // set to null if no decision has been made.
+                if (result.DecisionDate == DateTimeOffset.MinValue)
                 {
-                    title = c.Item.Title.Substring(dashPos + 1).Trim();
+                    result.DecisionDate = null;
                 }
-                else
-                {
-                    title = Math.Abs(c.Item.CaseSequence).ToString();
-                }
-
-
-                result.Title = title;
-                result.IdCode = c.Item.IdCode;
-                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
-                result.CaseType = caseType;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.AssigneeTitle = c.Item.AssigneeTitle;
-                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
-                result.LatestDecision = c.Item.LatestDecision;
-                result.DecisionForClass = c.Item.DecisionForClass;
-                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                result.CaseSequence = (int)Math.Abs(c.Item.CaseSequence);
-                
-                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-
-                result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly, true).OrderByDescending(x => x.CommentDate).ToList();
-            }
-
-            // set to null if no decision has been made.
-            if (result.DecisionDate == DateTimeOffset.MinValue)
-            {
-                result.DecisionDate = null;
             }
             return Json(result);
         }
