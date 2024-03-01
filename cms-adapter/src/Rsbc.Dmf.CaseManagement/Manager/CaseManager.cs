@@ -1743,7 +1743,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
-                        if (request.DocumentSubTypeId != null)
+                        if (!string.IsNullOrEmpty(request.DocumentSubTypeId))
                         {
                             var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
                                 .FirstOrDefault();
