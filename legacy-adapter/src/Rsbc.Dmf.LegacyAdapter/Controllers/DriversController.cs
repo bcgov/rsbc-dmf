@@ -694,8 +694,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     SubmittalStatus = "Sent",
                 };
 
-                // Convert the 
-
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename($"D{importDateString}-{filename}");
 
