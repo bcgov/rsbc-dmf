@@ -74,10 +74,7 @@ namespace Pssg.Interfaces
                 var config = new AmazonS3Config
                 {
                     ServiceURL = Configuration["SERVICE_URL"],
-                    ForcePathStyle = true,
-                    SignatureVersion = "2",
-                    SignatureMethod = SigningAlgorithm.HmacSHA1,
-                    UseHttp = false,
+                    ForcePathStyle = true
                 };
 
                 S3Client = new AmazonS3Client(credentials, config);
@@ -481,8 +478,14 @@ namespace Pssg.Interfaces
                 fileName = GetTruncatedFileName(fileName, listTitle, folderName);
                 
                 var key = GetServerRelativeUrl (listTitle, folderName, fileName);
-
-                result = await UploadFile(key, data, contentType, metadata);
+                try
+                {
+                    result = await UploadFile(key, data, contentType, metadata);
+                }
+                catch (Exception ex)
+                {
+                    Serilog.Log.Error(ex, $"Error uploading file - key:{key}");
+                }
             }
 
             return result;

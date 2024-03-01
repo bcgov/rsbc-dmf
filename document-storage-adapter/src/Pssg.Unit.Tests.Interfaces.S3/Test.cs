@@ -98,7 +98,7 @@ namespace Pssg.DocumentStorageAdapter.Tests
             string documentType = "Document Type";
             string fileName = documentType + "__" + "test-file-name" + rnd.Next() + ".txt";
             string folderName = "test-folder-name" + rnd.Next();
-            string path = "/";
+            string path = "";
     
             path += S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string contentType = "text/plain";
@@ -159,7 +159,7 @@ namespace Pssg.DocumentStorageAdapter.Tests
             fileName += ".txt";
 
             string folderName = "test-folder-name" + rnd.Next();
-            string path = "/";
+            string path = "";
             if (!string.IsNullOrEmpty(s3.WebName))
             {
                 path += $"{s3.WebName}/";
@@ -213,7 +213,7 @@ namespace Pssg.DocumentStorageAdapter.Tests
             string documentType = "Document Type";
             string fileName = documentType + "__" + "test-'-name" + rnd.Next() + ".txt";
             string folderName = "test-folder-name" + rnd.Next();
-            string path =  "/" + S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
+            string path =  S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string url = serverAppIdUri + s3.WebName + "/" + S3.DefaultDocumentListTitle + "/" + folderName + "/" + fileName;
             string contentType = "text/plain";
             string testData = "This is just a test.";
