@@ -1,0 +1,51 @@
+.submissions {
+  display: flex;
+  flex-direction: row;
+  padding-top: 24px;
+  gap: 100px;
+}
+.submissionRequirement {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.closedCaseContent {
+  display: flex;
+  flex-direction: row;
+  gap:60px;
+}
+
+.caseDetailRow {
+  display: flex;
+  justify-content: start;
+  gap: 180px;
+  line-height: 32px;
+  padding-bottom: 24px;
+}
+
+.mat-mdc-card {
+  border: 1px solid gray;
+   box-shadow: none !important;
+   margin: 30px 0 30px 0;
+   padding: 24px;
+   .mat-mdc-card-header {
+     padding-top: 12px;
+ 
+     .mat-mdc-card-header-text {
+       width: 100%;
+       vertical-align: middle;
+     }
+   }
+}
+
+.expandedIcon{
+  transform: scale(1.5);
+  color: #003366;
+}
+
+.open {
+  background-color: #f1f1f3;
+  border: 1px solid #003366;
+  cursor: pointer;
+}

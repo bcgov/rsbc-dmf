@@ -19,6 +19,21 @@ import { CaseComponent } from './case/case.component';
 import { CaseTypeComponent } from './case-definations/case-type/case-type.component';
 import { CaseStatusComponent } from './case-definations/case-status/case-status.component';
 import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.component';
+import { DecisionOutcomeComponent } from './case-definations/decision-outcome/decision-outcome.component';
+import { EligibleLicenseClassComponent } from './case-definations/eligible-license-class/eligible-license-class.component';
+import { SubmissionTypeComponent } from './case-definations/submission-type/submission-type.component';
+import { SubmissionStatusComponent } from './case-definations/submission-status/submission-status.component';
+import { RsbcCaseAssignmentComponent } from './case-definations/rsbc-case-assignment/rsbc-case-assignment.component';
+import { LetterTopicComponent } from './case-definations/letter-topic/letter-topic.component';
+import { CaseDetailsComponent } from './case-details/case-details.component';
+import { SubmissionRequirementsComponent } from './submission-requirements/submission-requirements.component';
+import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
+import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
+import { QuickLinksComponent } from './quick-links/quick-links.component';
+import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
+import { LetterDetailsComponent } from './letter-details/letter-details.component';
+import { UserRegistrationComponent } from './user-registration/user-registration.component';
+import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +45,21 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
     CaseTypeComponent,
     CaseStatusComponent,
     DmerTypeComponent,
+    DecisionOutcomeComponent,
+    EligibleLicenseClassComponent,
+    SubmissionTypeComponent,
+    SubmissionStatusComponent,
+    RsbcCaseAssignmentComponent,
+    LetterTopicComponent,
+    CaseDetailsComponent,
+    SubmissionRequirementsComponent,
+    CaseSubmissionsComponent,
+    LettersToDriverComponent,
+    QuickLinksComponent,
+    SubmissionHistoryComponent,
+    LetterDetailsComponent,
+    UserRegistrationComponent,
+    GetAssistanceComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -44,14 +74,17 @@ import { DmerTypeComponent } from './case-definations/dmer-type/dmer-type.compon
     SharedModule,
     OAuthModule.forRoot({
       resourceServer: {
-        sendAccessToken: false,
-        //customUrlValidation: url => url.toLowerCase().includes('/api/') && !url.toLowerCase().endsWith('/config'),
+        sendAccessToken: true,
+        customUrlValidation: (url) =>
+          url.toLowerCase().includes('/api/') &&
+          !url.toLowerCase().endsWith('/config'),
       },
     }),
     CoreUiModule,
     RouterModule.forRoot([]),
     AppRoutingModule,
     MaterialModule,
+    ApiModule.forRoot({ rootUrl: '/driver-portal' }),
   ],
   providers: [
     {

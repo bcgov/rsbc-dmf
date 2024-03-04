@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CaseManagementService } from '../shared/services/case-management/case-management.service';
+import { LoginService } from '../shared/services/login.service';
 
 @Component({
   selector: 'app-account',
@@ -8,22 +11,56 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class AccountComponent implements OnInit {
   isEditView = false;
-  setEmailAddress = true;
-  
-  accountForm = this.fb.group({
-    mail: [false]
-  })
 
-  constructor(private fb: FormBuilder) {}
+  accountForm = this.fb.group({
+    mail: [false],
+    firstName: [''],
+    lastName: [''],
+    emailAddress: [''],
+    driverLicenceNumber: [''],
+  });
+
+  isCreateProfile = this.route.snapshot.routeConfig?.path === 'create-profile';
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private caseManagementService: CaseManagementService,
+    private loginService: LoginService
+  ) {}
 
   ngOnInit() {
-    this.accountForm.valueChanges.subscribe((val) => {
-      console.log(val);
-    })
+    if (this.loginService.userProfile?.id) {
+      this.getuserDetails(this.loginService.userProfile?.id as string);
+    }
+    this.accountForm.disable();
+
+    if (this.isCreateProfile) {
+      this.accountForm.controls.emailAddress.enable();
+      this.accountForm.controls.driverLicenceNumber.enable();
+    }
+  }
+
+  getuserDetails(driverId: string) {
+    this.loginService.getUserProfile().subscribe((user) => {
+      this.accountForm.patchValue(user);
+    });
   }
 
   onEdit() {
-    this.setEmailAddress = false;
+    this.accountForm.controls.emailAddress.enable();
     this.isEditView = true;
+  }
+
+  onSubmit() {
+    this.caseManagementService
+      .updateEmailAddress({
+        body: {
+          email: this.accountForm.value.emailAddress,
+        },
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

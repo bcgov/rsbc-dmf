@@ -37,9 +37,11 @@ service CaseManager {
 
   rpc GetComments (CommentsRequest) returns (GetCommentsReply);
 
+  rpc GetCases (CaseStatusRequest) returns (GetCasesReply);
+
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
-  rpc GetMostRecentCaseDetail (DriverLicenseRequest) returns (GetCaseDetailReply);
+  rpc GetMostRecentCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
@@ -54,6 +56,8 @@ service CaseManager {
   rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
 
   rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
+
+  rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
 
@@ -82,6 +86,8 @@ service CaseManager {
 
   // Update a Case
   rpc UpdateCase(UpdateCaseRequest) returns (UpdateCaseReply);
+
+  rpc CreateDecision (LegacyDecision) returns (ResultStatusReply);
 
   // Create a Driver
   rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
@@ -127,6 +133,11 @@ message CaseIdRequest {
     string caseId= 1;
 }
 
+message CaseStatusRequest {
+	string driverId = 1;
+	EntityState status = 2;
+}
+
 enum OriginRestrictions {
     None = 0;
     UserOnly = 1;
@@ -134,10 +145,9 @@ enum OriginRestrictions {
 }
 
 message CommentsRequest {
-    string caseId= 1;
-    string driverId= 2;
-    OriginRestrictions originRestrictions =3;
-
+	string caseId= 1;
+	string driverId= 2;
+	OriginRestrictions originRestrictions =3;
 }
 
 message CommentIdRequest {
@@ -151,6 +161,12 @@ message LegacyDocumentRequest {
 message LegacyDocumentStatusRequest{
     string documentId=1;
     int64 status = 2;
+}
+
+message GetCasesReply {
+	repeated CaseDetail items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
 }
 
 message GetCaseDetailReply {
@@ -178,45 +194,16 @@ message GetCommentReply {
 }
 
 message LegacyComment {
-    int64 SequenceNumber = 1;
-    string CommentTypeCode = 2;
-    string CommentText = 3;
-    string UserId = 4;
-    string CaseId = 5;
-    string CommentId = 6;
-    google.protobuf.Timestamp CommentDate = 7;
-    Driver Driver = 8;
-    string Assignee = 9;
-}
-
-message LegacyDocument {
-    int64 SequenceNumber = 1;
-    string DocumentTypeCode = 2;
-    string DocumentType = 3;
-    string BusinessArea = 4;
-    string DocumentUrl = 5;
-    string UserId = 6;
-    string CaseId = 7;
-    string DocumentId = 8;	
-    google.protobuf.Timestamp FaxReceivedDate = 9;
-    google.protobuf.Timestamp ImportDate = 10;
-    string ImportId = 11;
-    Driver Driver = 12;
-    string BatchId = 13;
-    string OriginatingNumber = 14;
-    int64 DocumentPages = 15;
-    string ValidationMethod = 16;
-    string ValidationPrevious = 17;
-    string Priority = 18;
-    string Owner = 19;
-    string SubmittalStatus = 20;
-    string Queue = 21;
-    int64 DpsDocumentId = 22;
-    string FilenameOverride = 23;
-    string Origin = 24;
-    google.protobuf.Timestamp CreateDate = 25;
-    google.protobuf.Timestamp DueDate = 26;
-    string Description = 27;
+	int64 SequenceNumber = 1;
+	string CommentTypeCode = 2;
+	string CommentText = 3;
+	string UserId = 4;
+	string CaseId = 5;
+	string CommentId = 6;
+	google.protobuf.Timestamp CommentDate = 7;
+	Driver Driver = 8;
+	string Assignee = 9;
+	string SignatureName = 10;
 }
 
 message GetDocumentRequest {	
@@ -303,22 +290,30 @@ message GetAllFlagsReply {
     repeated FlagItem Flags = 1;
 }
 
+message LegacyDecision {
+	string caseId = 1;
+	string driverId = 2;
+	string outcomeText = 3;
+	string subOutcomeText = 4;
+	google.protobuf.Timestamp statusDate = 5;
+}
+
 message DmerCase {
-    string caseId = 1;
-    string createdBy = 2;
-    google.protobuf.Timestamp createdOn = 3;
-    string modifiedBy = 4;
-    google.protobuf.Timestamp modifiedOn = 5;
-    bool isCommercial = 6;
-    string title = 7;
-    Driver driver = 10;
-    Provider provider = 11;	
-    string status = 12;
-    string dmerType = 13;
-    string clinicName = 14;
-    repeated FlagItem Flags = 30;
-    repeated DecisionItem Decisions = 35;
-    int64 caseSequence = 40;
+	string caseId = 1;
+	string createdBy = 2;
+	google.protobuf.Timestamp createdOn = 3;
+	string modifiedBy = 4;
+	google.protobuf.Timestamp modifiedOn = 5;
+	bool isCommercial = 6;
+	string title = 7;
+	Driver driver = 10;
+	Provider provider = 11;	
+	string status = 12;
+	string dmerType = 13;
+	string clinicName = 14;
+	repeated FlagItem Flags = 30;
+	repeated DecisionItem Decisions = 35;
+	int64 caseSequence = 40;
 }
 
 message Driver {
@@ -391,7 +386,6 @@ message CreateCaseRequest {
     string SubmittalStatus = 6;
 }
 
-
 message UpdateCaseRequest{
     string caseId = 1;
     bool isCleanPass = 2;
@@ -421,9 +415,10 @@ message SetCasePractitionerClinicReply{
 message LegacyCandidateRequest{
     string licenseNumber = 1;
     string clientNumber = 2;
-    string surname = 3;
-    google.protobuf.Timestamp birthDate = 4;
-    google.protobuf.Timestamp effectiveDate = 5;
+	string surname = 3;
+	google.protobuf.Timestamp birthDate = 4;
+	google.protobuf.Timestamp effectiveDate = 5;
+	string medicalType = 10;
 }
 
 message LegacyCandidateReply{
@@ -458,6 +453,76 @@ message DecisionItem {
     DecisionOutcomeOptions outcome = 3;
 }
 
+////////////////////////
+// START DocumentManager
+
+service DocumentManager {
+	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
+	rpc GetDocumentSubTypeGuid(DocumentIdRequest) returns (GetDocumentSubTypeIdReply);
+}
+
+message LegacyDocument {
+	int64 SequenceNumber = 1;
+	string DocumentTypeCode = 2;
+	string DocumentType = 3;
+	string BusinessArea = 4;
+	string DocumentUrl = 5;
+	string UserId = 6;
+	string CaseId = 7;
+	string DocumentId = 8;	
+	google.protobuf.Timestamp FaxReceivedDate = 9;
+	google.protobuf.Timestamp ImportDate = 10;
+	string ImportId = 11;
+	Driver Driver = 12;
+	string BatchId = 13;
+	string OriginatingNumber = 14;
+	int64 DocumentPages = 15;
+	string ValidationMethod = 16;
+	string ValidationPrevious = 17;
+	string Priority = 18;
+	string Owner = 19;
+	string SubmittalStatus = 20;
+	string Queue = 21;
+	int64 DpsDocumentId = 22;
+	string FilenameOverride = 23;
+	string Origin = 24;
+	google.protobuf.Timestamp CreateDate = 25;
+	google.protobuf.Timestamp DueDate = 26;
+	string Description = 27;
+	string IdCode = 28;
+	string CaseType = 29;
+	string DocumentSubTypeId = 30;
+}
+
+message DocumentIdRequest {
+	int32 id = 1;
+}
+
+message DocumentTypeRequest {
+	string documentTypeCode = 1;
+}
+
+message DocumentSubType {
+	int32 id = 1;
+	string name = 2;
+}
+
+message GetDocumentSubTypesReply {
+	repeated DocumentSubType items = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+message GetDocumentSubTypeIdReply {
+	string id = 1;
+	ResultStatus resultStatus = 2;
+	string errorDetail = 3;
+}
+
+// END DocumentManager
+////////////////////////
+// START CssManager
+
 service CssManager {
     rpc GetCss(CssRequest) returns (CssReply);
 }
@@ -472,11 +537,23 @@ message CssReply {
     string css = 3; 
 }
 
+// END CssManager
+////////////////////////
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
+}
+
+message ResultBoolReply {
+	bool result = 1;
+}
+
+message UserDriverAuthorizedRequest {
+	string userId = 1;
+	string driverId = 2;
 }
 
 message UserSetEmailRequest {
@@ -513,10 +590,11 @@ message UserLoginRequest {
 }
 
 message UserLoginReply {
-    ResultStatus resultStatus = 1;
-    string errorDetail = 2;
-    string userId = 10;
-    string userEmail = 11;
+	ResultStatus resultStatus = 1;
+	string errorDetail = 2;
+	string userId = 10;
+	string userEmail = 11;
+	string driverId = 12;
 }
 
 message User {
@@ -572,9 +650,9 @@ message ResultStatusReply {
 }
 
 enum BringForwardPriority{
-    Low = 0;
-    Normal = 1;
-    High = 2;
+	Low = 0;
+	Normal = 1;
+	High = 2;
 }
 
 // NOTE Callback is synonymous with BringForward and Dynamics Task. Use Callback moving forward and rename BringForward to Callback

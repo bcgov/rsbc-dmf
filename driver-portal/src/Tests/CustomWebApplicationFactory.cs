@@ -1,127 +1,135 @@
-﻿using Grpc.Net.Client;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization.Policy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Rsbc.Dmf.CaseManagement.Service;
-using System.Net;
-using System.Net.Http;
-using Rsbc.Dmf.CaseManagement.Helpers;
-using Pssg.DocumentStorageAdapter;
-using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Pssg.DocumentStorageAdapter.Helpers;
+using Rsbc.Dmf.CaseManagement.Helpers;
 using Rsbc.Dmf.DriverPortal.Api;
+using Rsbc.Dmf.DriverPortal.Api.Services;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
+    /// <summary>
+    /// web application factory used for testing HttpClient
+    /// </summary>
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
-        public IConfiguration Configuration;
+        private readonly IConfiguration _configuration;
+
+        public CustomWebApplicationFactory(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            Configuration = new ConfigurationBuilder()
-                    .AddUserSecrets<Program>()
-                    .AddEnvironmentVariables()
-                    .Build();
-
-            DocumentStorageAdapterClient documentStorageAdapterClient = null;
-            string documentStorageAdapterURI = Configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
-
-            if (string.IsNullOrEmpty(documentStorageAdapterURI))
+            builder.ConfigureTestServices(services =>
             {
-                // add the mock
-                documentStorageAdapterClient = DocumentStorageHelper.CreateMock(Configuration);
-            }
-            else
-            {
-                var httpClientHandler = new HttpClientHandler();
-                httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                services.AddTransient<DocumentFactory>();
 
-
-                var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
-                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
-                // call the token service to get a token.
-                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                // add policy but then fake success always, the RequireClaim is bypassed
+                services.AddAuthorization(options =>
                 {
-                    Secret = Configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                    // policy needed to bypass services with attribute [Authorize(Policy = Policy.Driver)]
+                    options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
+                });
+                services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+
+                services.AddControllersWithViews().AddJsonOptions(x =>
+                {
+                    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                });
+
+                services.AddAutoMapperSingleton(LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole()));
+
+                // setup http context with mocked user claims
+                var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+                var context = new DefaultHttpContext();
+                var user = new ClaimsPrincipal();
+                var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
+                var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Sid, userId),
+                    new Claim(UserClaimTypes.DriverId, driverId),
+                    new Claim(ClaimTypes.Email, "Email"),
+                    new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
+                    new Claim(ClaimTypes.GivenName, "FirstName"),
+                    new Claim(ClaimTypes.Surname, "LastName")
                 };
+                user.AddIdentity(new ClaimsIdentity(claims));
+                context.User = user;
+                mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
+                services.AddTransient(x => mockHttpContextAccessor.Object);
 
-                var tokenReply = initialClient.GetToken(tokenRequest);
-
-                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                services.AddTransient<IUserService, UserService>();
+                
+                // document storage client
+                string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+                if (string.IsNullOrEmpty(documentStorageAdapterURI))
                 {
-                    // Add the bearer token to the client.
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-
-                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                    documentStorageAdapterClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(channel);
+                    // add the mock
+                    var documentStorageAdapterClient = DocumentStorageHelper.CreateMock(_configuration);
+                    services.AddTransient(_ => documentStorageAdapterClient);
                 }
-            }
-
-            string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
-
-            CaseManager.CaseManagerClient caseManagerClient;
-            if (string.IsNullOrEmpty(cmsAdapterURI))
-            {
-                // setup from Mock
-                caseManagerClient = CmsHelper.CreateMock(Configuration);
-            }
-            else
-            {
-                var httpClientHandler = new HttpClientHandler();
-                // Return `true` to allow certificates that are untrusted/invalid                    
-                httpClientHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-
-                var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
-                if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
+                else
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-
-                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
-                    // call the token service to get a token.
-                    var tokenRequest = new CaseManagement.Service.TokenRequest
-                    {
-                        Secret = Configuration["CMS_ADAPTER_JWT_SECRET"]
-                    };
-
-                    var tokenReply = initialClient.GetToken(tokenRequest);
-                    if (tokenReply != null && tokenReply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                    {
-                        // Add the bearer token to the client.
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-                    }
+                    services.AddDocumentStorageClient(_configuration);
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
-                caseManagerClient = new CaseManager.CaseManagerClient(channel);
-            }
+                // case management client
+                string cmsAdapterURI = _configuration["CMS_ADAPTER_URI"];
+                if (string.IsNullOrEmpty(cmsAdapterURI))
+                {
+                    // setup from Mock
+                    var caseManagerClient = CmsHelper.CreateMock(_configuration);
+                    services.AddTransient(_ => caseManagerClient);
+                }
+                else
+                {
+                    services.AddCaseManagementAdapterClient(_configuration);
+                }
+            });
 
             builder
                 .UseSolutionRelativeContentRoot("")
                 .UseEnvironment("Staging")
-                .UseConfiguration(Configuration)
-                .ConfigureTestServices(
-                    services => {
-                        services.AddTransient(_ => caseManagerClient);
-                        if (documentStorageAdapterClient != null)
-                        {
-                            services.AddTransient(_ => documentStorageAdapterClient);
-                        }
-                        services.AddAutoMapperSingleton();
-                    });
+                .UseConfiguration(_configuration);
+        }
+
+        public class FakePolicyEvaluator : IPolicyEvaluator
+        {
+            public virtual async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+            {
+                var principal = new ClaimsPrincipal();
+                principal.AddIdentity(
+                    new ClaimsIdentity(new[] {
+                        new Claim(UserClaimTypes.DriverId, "DriverId")
+                    }
+                ));
+
+                return await Task.FromResult(
+                    AuthenticateResult.Success(new AuthenticationTicket(principal, new AuthenticationProperties(), null)));
+            }
+
+            public virtual async Task<PolicyAuthorizationResult> AuthorizeAsync(AuthorizationPolicy policy,
+                AuthenticateResult authenticationResult, HttpContext context, object resource)
+            {
+                return await Task.FromResult(PolicyAuthorizationResult.Success());
+            }
         }
     }
 }

@@ -40,6 +40,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System.IO.Pipelines;
 using System.Buffers;
 using System.Collections;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.LegacyAdapter
 {
@@ -92,13 +93,19 @@ namespace Rsbc.Dmf.LegacyAdapter
                 {
                     o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
+
+
+                    byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    Array.Resize(ref secretBytes, 32);
+                    
+                    var symmetricSecurityKey = new SymmetricSecurityKey(secretBytes);
+
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         RequireExpirationTime = false,
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                        IssuerSigningKey = symmetricSecurityKey
                     };
                 })
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
@@ -222,7 +229,7 @@ namespace Rsbc.Dmf.LegacyAdapter
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -240,7 +247,7 @@ namespace Rsbc.Dmf.LegacyAdapter
                     }
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
             }
 

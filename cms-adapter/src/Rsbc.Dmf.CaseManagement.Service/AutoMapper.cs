@@ -3,10 +3,11 @@ using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq.Expressions;
+using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
+using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
-
     public class MappingProfile : Profile 
     {
         public MappingProfile()
@@ -18,16 +19,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
             CreateMap<CaseManagement.Address, Address>()
-                .AddTransform(NullConverter);
+                .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.Driver, Driver>()
-                .AddTransform(NullConverter);
+                .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.LegacyDocument, LegacyDocument>()
-                .AddTransform(NullConverter);
-            CreateMap<CaseManagement.Callback, Callback>()
-                .AddTransform(NullConverter);
-    }
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.CaseDetail, CaseDetail>()
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
+        }
 
-        private Expression<Func<string, string>> NullConverter = x => x ?? string.Empty;
+        private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
     }
 
     public static class AutoMapperEx
@@ -37,6 +39,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new DocumentAutoMapperProfile());
+                mc.AddProfile(new DocumentTypeAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

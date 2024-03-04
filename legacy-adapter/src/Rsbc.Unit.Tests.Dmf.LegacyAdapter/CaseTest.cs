@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using System;
@@ -10,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
@@ -904,11 +903,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var caseId = GetCaseId();
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Documents");
-
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
+            var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();
         }
 
@@ -920,27 +915,18 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             var caseId = GetCaseId();
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}/Documents");
-
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
+            var response = await _client.SendAsync(request);
+            var responseContent = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
 
             var documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
-
             foreach (var document in documents)
             {
-
                 request = new HttpRequestMessage(HttpMethod.Get, $"/Documents/{document.DocumentId}");
-
-                response = _client.SendAsync(request).GetAwaiter().GetResult();
-
-                responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
+                response = await _client.SendAsync(request);
+                responseContent = await response.Content.ReadAsStringAsync();
                 response.EnsureSuccessStatusCode();
             }
         }
-
     }
 }

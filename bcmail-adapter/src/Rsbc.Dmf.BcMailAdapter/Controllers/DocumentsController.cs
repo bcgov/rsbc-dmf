@@ -25,12 +25,16 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Serilog;
 using WkHtmlToPdfDotNet;
 using WkHtmlToPdfDotNet.Contracts;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using PaperKind = WkHtmlToPdfDotNet.PaperKind;
+using PdfSharpCore.Drawing;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using PdfSharpCore;
 
 namespace Rsbc.Dmf.BcMailAdapter.Controllers
 {
@@ -119,7 +123,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
             return result;
         }
-        
+
         [HttpPost("{documentId}/Split")]
         public ActionResult SplitDocument([FromBody] SplitDetails splitDetails, [FromRoute] Guid documentId)
         {
@@ -133,17 +137,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                 string originalEntity = serverRelativeUrl.Substring(0, serverRelativeUrl.IndexOf("/"));
 
-               
+
 
                 string filename = serverRelativeUrl.Substring(serverRelativeUrl.LastIndexOf('/') + 1);
 
-                string originalId = serverRelativeUrl.Substring(originalEntity.Length + 1 , serverRelativeUrl.Length - originalEntity.Length - filename.Length -2);
+                string originalId = serverRelativeUrl.Substring(originalEntity.Length + 1, serverRelativeUrl.Length - originalEntity.Length - filename.Length - 2);
 
                 string newExtension = Path.GetExtension(filename);
 
                 string newFilename;
 
-                if (newExtension != null)
+                if (string.IsNullOrEmpty(newExtension))
                 {
                     newFilename = filename.Substring(0, filename.Length - newExtension.Length);
                 }
@@ -152,7 +156,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     newFilename = filename;
                 }
 
-                newFilename += "-2";
+                newFilename += "-" + DateTime.Now.ToString("yyyyMMddHHmmss");
 
                 if (newExtension != null)
                 {
@@ -221,27 +225,36 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                                 // now create a document for this.
 
+
                                 if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                                 {
                                     var newLegacyDocument = new LegacyDocument
                                     {
                                         BatchId = documentResponse.Document.BatchId,
+                                        BusinessArea = documentResponse.Document.BusinessArea,
+                                        CaseId = documentResponse.Document.CaseId,
+                                        CreateDate = documentResponse.Document.CreateDate,
+                                        DocumentType = "Unclassified",
                                         DocumentUrl = newFileResult.FileName,
                                         Driver = documentResponse.Document.Driver,
-                                        DocumentType = "Unclassified",
-                                        FaxReceivedDate = documentResponse.Document.FaxReceivedDate,
-                                        ImportDate = documentResponse.Document.ImportDate,
+                                        Origin = documentResponse.Document.Origin,
+                                        Owner = "Team - Intake",
+                                        Priority = documentResponse.Document.Priority,
+                                        Queue = documentResponse.Document.Queue,
+                                        SubmittalStatus = "Uploaded",
+                                        UserId = documentResponse.Document.UserId,
                                         ValidationMethod = documentResponse.Document.ValidationMethod,
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
-                                        BusinessArea = documentResponse.Document.BusinessArea,
-                                        SubmittalStatus = "Uploaded",
-                                        Queue = documentResponse.Document.Queue,
-                                        Priority = documentResponse.Document.Priority, 
-                                        Owner = "Team - Intake"
                                     };
 
-                                    DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
-                                    DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
+                                    // DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();
+                                    // DateTimeOffset faxReceivedDate = documentResponse.Document.FaxReceivedDate.ToDateTimeOffset();
+
+                                    newLegacyDocument.ImportDate = documentResponse.Document.ImportDate;
+                                    newLegacyDocument.FaxReceivedDate = documentResponse.Document.FaxReceivedDate;
+
+
+                                    /*
                                     TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
                                     if (importDate.DateTime != DateTimeOffset.MinValue)
@@ -271,6 +284,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         newLegacyDocument.FaxReceivedDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
                                     }
 
+                                    */
+
                                     _caseManagerClient.CreateDocumentOnDriver(newLegacyDocument);
                                 }
 
@@ -282,24 +297,24 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                             {
                                 keepPdf.Save(keepStream, false);
 
-                            // update the page data
-                            var keepFileRequest = new UploadFileRequest
-                            {
-                                ContentType = "application/pdf",
-                                Data = ByteString.CopyFrom(keepStream.ToArray()),
-                                EntityName = originalEntity,
-                                FileName = filename,
-                                FolderName = originalId
-                            };
+                                // update the page data
+                                var keepFileRequest = new UploadFileRequest
+                                {
+                                    ContentType = "application/pdf",
+                                    Data = ByteString.CopyFrom(keepStream.ToArray()),
+                                    EntityName = originalEntity,
+                                    FileName = filename,
+                                    FolderName = originalId
+                                };
 
-                            var keepSaveResult = _documentStorageAdapterClient.UploadFile(keepFileRequest);
+                                var keepSaveResult = _documentStorageAdapterClient.UploadFile(keepFileRequest);
 
                             }
                         }
 
-                        
 
-                        
+
+
                     }
                 }
             }
@@ -335,7 +350,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                 var mergeDocumentResponse = _caseManagerClient.GetLegacyDocument(new LegacyDocumentRequest { DocumentId = id.ToString() });
 
                 if (mergeDocumentResponse.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-                {                    
+                {
                     // fetch it
                     var fileResult = _documentStorageAdapterClient.DownloadFile(new DownloadFileRequest()
                     {
@@ -372,7 +387,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
             string folderName = serverRelativeUrl.Substring(firstSlashPos, lastSlashPos - firstSlashPos - 1);
             string filename = serverRelativeUrl.Substring(lastSlashPos);
-
+            bool updated = false;
             using (var newStream = new MemoryStream())
             {
                 newPdf.Save(newStream, false);
@@ -384,15 +399,26 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     Data = ByteString.CopyFrom(newStream.ToArray()),
                     EntityName = originalEntity,
                     FileName = filename,
-                    FolderName = documentResponse.Document.Driver.Id
+                    FolderName = folderName
                 };
                 var newFileResult = _documentStorageAdapterClient.UploadFile(newFileRequest);
+                if (newFileResult.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    updated = true;
+                }
+                else
+                {
+                    Log.Error($"Error uploading file - detail is {newFileResult.ErrorDetail}");
+                }
             }
 
-            // now remove the other documents.
-            foreach (var deleteId in documentsToMerge)
+            if (updated)
             {
-                _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
+                // now remove the other documents.
+                foreach (var deleteId in documentsToMerge)
+                {
+                    _caseManagerClient.DeleteLegacyCaseDocument(new LegacyDocumentRequest { DocumentId = deleteId.ToString() });
+                }
             }
 
             return Ok(newPdf);
@@ -403,7 +429,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         [ProducesResponseType(200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)  
+        public ActionResult BcMailDocument([FromBody] ViewModels.BcMail bcmail)
         {
             // this could put the HTML file and attachments in a particular location.
 
@@ -665,7 +691,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
         /// </summary>
         /// <param name="srcPDFs"></param>
         /// <returns></returns>
-        private byte[] CombinePDFs(List<byte[]> srcPDFs)
+        public byte[] CombinePDFs(List<byte[]> srcPDFs)
         {
             byte[] result;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -677,11 +703,48 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                     {
                         try
                         {
+
                             using (var srcPDF = PdfReader.Open(src, PdfDocumentOpenMode.Import))
                             {
+
                                 for (var i = 0; i < srcPDF.PageCount; i++)
+
                                 {
-                                    resultPDF.AddPage(srcPDF.Pages[i]);
+                                    // Check to see if width of the new page 
+                                    // REplace with a check on the destination document
+                                    XSize size = PageSizeConverter.ToSize(PdfSharpCore.PageSize.A4);
+
+                                    if (srcPDF.Pages[i].Height > size.Height || srcPDF.Pages[i].Width > size.Width)
+                                    {
+                                        XGraphics gfx;
+                                        XRect box;
+
+                                        var outputDocument = new PdfSharpCore.Pdf.PdfDocument();
+
+                                        MemoryStream stream = new MemoryStream();
+                                        // Open a new document
+
+                                        PdfPage outputDocumentPage = outputDocument.AddPage(srcPDF.Pages[i]);
+
+
+                                        // Convert output document to memory stream
+                                        outputDocument.Save(stream, false);
+
+                                        // Open the file to resize
+                                        XPdfForm form = XPdfForm.FromStream(stream);
+                                        var newPage = resultPDF.AddPage();
+                                        double width = newPage.Width;
+                                        double height = newPage.Height;
+
+                                        gfx = XGraphics.FromPdfPage(newPage);
+                                        box = new XRect(0, 0, width, height);
+                                        gfx.DrawImage(form, box);
+
+                                    }
+                                    else
+                                    {
+                                        resultPDF.AddPage(srcPDF.Pages[i]);
+                                    }
 
                                 }
 
@@ -691,14 +754,17 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     resultPDF.AddPage(new PdfPage());
                                 }
 
+
                             }
                         }
                         catch (Exception e)
                         {
+
                             _logger.LogError(e, "Error reading from PDF stream");
                         }
                     }
                 }
+
                 using (var resposeStream = new MemoryStream())
                 {
                     resultPDF.Save(resposeStream, false);

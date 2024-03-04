@@ -43,7 +43,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly IIcbcClient _icbcClient;
         private readonly IMemoryCache _cache;
 
-        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,IIcbcClient icbcClient,
+        public DriversController(ILogger<DriversController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient,
             IMemoryCache memoryCache)
         {
             _cache = memoryCache;
@@ -130,8 +130,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentText = item.CommentText,
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
-                            SequenceNumber = item.SequenceNumber,
-                            UserId = item.UserId
+                            SequenceNumber = Math.Abs(item.SequenceNumber),
+                            UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName // 24-01-12 default to signature name, fallback to UserID if not present.
                         });
                     }
                 }
@@ -140,7 +140,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 {
                     switch (sort)
                     {
-                        
+
                         case 'T': // - commentTypeCode
                             result = result.OrderBy(x => x.CommentTypeCode).ToList();
                             break;
@@ -234,8 +234,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             CommentText = item.CommentText,
                             CommentTypeCode = item.CommentTypeCode,
                             Driver = driver,
-                            SequenceNumber = item.SequenceNumber,
-                            UserId = item.UserId
+                            SequenceNumber = Math.Abs(item.SequenceNumber),
+                            UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName
                         });
                     }
                 }
@@ -318,10 +318,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         [ProducesResponseType(500)]
         public ActionResult CreateCommentForDriver([FromRoute] string licenseNumber, [FromBody] ViewModels.Comment comment)
         {
-            if (!string.IsNullOrEmpty(_configuration["DEBUG_ERROR"]))
-            {
-                return StatusCode(500, "TEST - SAMPLE ERROR");
-            };
+            
 
             licenseNumber = _icbcClient.NormalizeDl(licenseNumber, _configuration);
 
@@ -346,7 +343,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             }
 
-            if (icbcDriver != null && !string.IsNullOrEmpty(icbcDriver.INAM?.SURN)  && comment.Driver.LastName != icbcDriver.INAM?.SURN)
+            if (icbcDriver != null && !string.IsNullOrEmpty(icbcDriver.INAM?.SURN) && comment.Driver.LastName != icbcDriver.INAM?.SURN)
             {
                 comment.Driver.LastName = icbcDriver.INAM?.SURN;
                 // ensure Dynamics has the most recent data.
@@ -359,12 +356,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 });
             }
 
-                //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
-                // add the comment
+            //Serilog.Log.Logger.Information (JsonConvert.SerializeObject(comment));
+            // add the comment
 
-                if (comment.CommentText.Length > 1900 )
+            if (comment.CommentText.Length > 1900)
             {
-                comment.CommentText = comment.CommentText.Substring(0,1900);
+                comment.CommentText = comment.CommentText.Substring(0, 1900);
                 Serilog.Log.Error("Encountered comment longer than 1900 chars");
                 DebugUtils.SaveDebug("DriversCreateCommentForDriver", licenseNumber + " " + JsonConvert.SerializeObject(comment));
             }
@@ -390,7 +387,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 driver.Surname = comment.Driver.LastName ?? string.Empty;
             }
 
-            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now.AddMinutes(-1); 
+            DateTimeOffset commentDate = comment.CommentDate ?? DateTimeOffset.Now.AddMinutes(-1);
             // Dynamics has a minimum value for a date.
             if (commentDate.Year < 1753)
             {
@@ -403,7 +400,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 if (comment.CaseId != null && comment.CaseId != "none" && comment.CaseId != "null")
                 {
                     caseId = comment.CaseId;
-                }
+                }                
                 else // handle situations where the CaseID is not supplied.
                 {
                     if (comment.SequenceNumber != null)
@@ -411,20 +408,17 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         // fetch it from the sequence number.
                         caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
                     }
-                    
-                    if (caseId == null) // try just the DL and Surname.
-                    {
-                        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName);
-                    }
-                    
+
+                    // 2024-03-01 - do not try further, the comment will just be attached to the driver.
                 }
+                
 
                 var payload = new LegacyComment()
                 {
                     CaseId = caseId ?? string.Empty,
                     CommentText = comment.CommentText ?? string.Empty,
                     CommentTypeCode = comment.CommentTypeCode ?? string.Empty,
-                    SequenceNumber = comment.SequenceNumber ?? 1,
+                    SequenceNumber = Math.Abs(comment.SequenceNumber ?? 1),
                     UserId = comment.UserId ?? string.Empty,
                     CommentDate = Timestamp.FromDateTimeOffset(commentDate),
                     Driver = driver,
@@ -461,7 +455,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 return StatusCode(500, "Error in create comment");
             }
-            
+
         }
 
         /// <summary>
@@ -479,7 +473,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             if (string.IsNullOrEmpty(licenseNumber))
             {
-                Serilog.Log.Error ("Request to Driver Get Documents with no DL");
+                Serilog.Log.Error("Request to Driver Get Documents with no DL");
                 return StatusCode(400, "Bad Request");
             }
             else
@@ -494,7 +488,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     foreach (var item in reply.Items)
                     {
 
-                        if (item.SubmittalStatus != "Uploaded")
+                        if (item.SubmittalStatus != "Uploaded" && !string.IsNullOrEmpty(item.DocumentUrl))
                         {
 
                             // todo - get the driver details from ICBC, get the MedicalIssueDate from Dynamics
@@ -522,42 +516,42 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                             TimeZoneInfo pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
-                            DateTimeOffset importDate = DateTimeOffset.Now;
+                            DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
 
                             try
                             {
                                 if (item.ImportDate != null)
                                 {
-                                    importDate = item.ImportDate.ToDateTimeOffset();
+                                    faxReceivedDate = item.ImportDate.ToDateTimeOffset();
 
-                                    if (importDate.Offset == TimeSpan.Zero)
+                                    if (faxReceivedDate.Offset == TimeSpan.Zero)
                                     {
-                                        importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
+                                        faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
                                     }
                                 }
                             }
                             catch (Exception ex)
                             {
                                 Serilog.Log.Information(ex, "Error parsing import date");
-                                importDate = DateTimeOffset.Now;
+                                faxReceivedDate = DateTimeOffset.Now;
                             }
 
-                            DateTimeOffset faxReceivedDate = DateTimeOffset.Now;
+                            DateTimeOffset importDate = DateTimeOffset.Now;
 
                             try
                             {
                                 if (item.FaxReceivedDate != null)
                                 {
-                                    faxReceivedDate = item.FaxReceivedDate.ToDateTimeOffset();
+                                    importDate = item.FaxReceivedDate.ToDateTimeOffset();
 
-                                    if (faxReceivedDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
+                                    if (importDate < new DateTimeOffset(1970, 2, 1, 0, 0, 0, TimeSpan.Zero))
                                     {
-                                        faxReceivedDate = DateTimeOffset.Now;
+                                        importDate = DateTimeOffset.Now;
                                     }
 
-                                    if (faxReceivedDate.Offset == TimeSpan.Zero)
+                                    if (importDate.Offset == TimeSpan.Zero)
                                     {
-                                        faxReceivedDate = TimeZoneInfo.ConvertTimeFromUtc(faxReceivedDate.DateTime, pacificZone);
+                                        importDate = TimeZoneInfo.ConvertTimeFromUtc(importDate.DateTime, pacificZone);
                                     }
                                 }
 
@@ -600,7 +594,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     return StatusCode(500, reply.ErrorDetail);
                 }
             }
-            
+
         }
 
 
@@ -696,8 +690,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     OriginatingNumber = string.Empty,
                     SubmittalStatus = "Sent",
                 };
-
-                // Convert the 
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename($"D{importDateString}-{filename}");

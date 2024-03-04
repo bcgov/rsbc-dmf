@@ -40,6 +40,7 @@ using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using static Rsbc.Dmf.BcMailAdapter.BcMailAdapter;
 using static Rsbc.Dmf.Scheduler.ScheduledJobs;
+using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Rsbc.Dmf.Scheduler
 {
@@ -167,8 +168,8 @@ namespace Rsbc.Dmf.Scheduler
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
-                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxReceiveMessageSize = null; 
+                options.MaxSendMessageSize = null; 
             });
 
             if (!string.IsNullOrEmpty(Configuration["ENABLE_HANGFIRE_JOBS"]))
@@ -211,7 +212,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -231,7 +232,7 @@ namespace Rsbc.Dmf.Scheduler
                    
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
 
             }
@@ -259,7 +260,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 if (!string.IsNullOrEmpty(Configuration["ICBC_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
                     // call the token service to get a token.
@@ -279,7 +280,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 }
 
-                var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(channel));
 
             }
@@ -304,7 +305,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 if (!string.IsNullOrEmpty(Configuration["BCMAIL_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new BcMailAdapterClient(initialChannel);
                     // call the token service to get a token.
@@ -324,7 +325,7 @@ namespace Rsbc.Dmf.Scheduler
 
                 }
 
-                var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(bcmailAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new BcMailAdapterClient(channel));
 
             }
@@ -502,19 +503,16 @@ namespace Rsbc.Dmf.Scheduler
                     var icbcClient = serviceScope.ServiceProvider.GetService<IcbcAdapterClient>();
                     var cmsClient = serviceScope.ServiceProvider.GetService<CaseManagerClient>();
                     var bcmailClient = serviceScope.ServiceProvider.GetService<BcMailAdapterClient>();
+                                        
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Daily(3));
 
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily(3));
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendMedicalUpdates(null), Cron.Never);
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateNonComplyDocuments(null), Cron.Daily(3));
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).ResolveCaseStatus(null), Cron.Daily);
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
 
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateNonComplyDocuments(null), Cron.Daily);
-
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).UpdateBirthdate(null), Cron.Never);
-
-                                  RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily);
-
-
+                    RecurringJob.AddOrUpdate(() => new ScheduledJobs(Configuration, schedulerJobClient, icbcClient, cmsClient, bcmailClient).SendToBcMail(null), Cron.Daily(3));
 
                     Log.Logger.Information("Hangfire jobs setup.");
                 }

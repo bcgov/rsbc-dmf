@@ -2,16 +2,13 @@ using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
@@ -24,14 +21,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
     {
         private readonly ILogger<CaseService> _logger;
         private readonly ICaseManager _caseManager;
+        private readonly IDocumentManager _documentManager;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IConfiguration configuration, IMapper mapper)
+        public CaseService(ILogger<CaseService> logger, ICaseManager caseManager, IDocumentManager documentManager, IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _logger = logger;
             _caseManager = caseManager;
+            _documentManager = documentManager;
             _mapper = mapper;
         }
 
@@ -155,8 +154,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
             }
 
-
-
             return reply;
         }
 
@@ -175,6 +172,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber ?? string.Empty;
                 driver.Surname = request.Driver.Surname ?? string.Empty;
+                driver.Id = request.Driver.Id ?? string.Empty;
             }
 
             var newDocument = new CaseManagement.LegacyDocument()
@@ -200,7 +198,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 SubmittalStatus = request.SubmittalStatus ?? string.Empty,
                 Queue = request.Queue ?? string.Empty,
                 DpsDocumentId = request.DpsDocumentId,
-                Origin = request.Origin ?? string.Empty
+                Origin = request.Origin,
+                DocumentSubTypeId = request.DocumentSubTypeId ?? string.Empty
             };
 
             if (request.FaxReceivedDate != null)
@@ -229,6 +228,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        [Obsolete("CreateLegacyCaseDocument is deprecated, please use CreateDocumentOnDriver instead.", false)]
 
         /// <summary>
         /// Create Legacy Case Document
@@ -546,7 +546,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             // fetch the document.
             try
             {
-                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                var d = await _documentManager.GetLegacyDocument(request.DocumentId);
                 if (d != null)
                 {
                     if (await _caseManager.DeactivateLegacyDocument(request.DocumentId))
@@ -569,6 +569,34 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public async override Task<GetCasesReply> GetCases(CaseStatusRequest caseStatusRequest, ServerCallContext context)
+        {
+            var reply = new GetCasesReply();
+
+            try
+            {
+                var driverId = Guid.Parse(caseStatusRequest.DriverId);
+                var activeStatus = caseStatusRequest.Status.Convert<EntityState, Dynamics.EntityState>();
+                var cases = await _caseManager.GetCases(driverId, activeStatus);
+                if (cases == null)
+                {
+                    reply.ErrorDetail = "No cases match driver ID";
+                    return reply;
+                }
+
+                var mappedCases = _mapper.Map<IEnumerable<CaseDetail>>(cases);
+                reply.Items.AddRange(mappedCases);
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
         public async override Task<GetCaseDetailReply> GetCaseDetail(CaseIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
@@ -578,6 +606,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var c = await _caseManager.GetCaseDetail(request.CaseId);
                 if (c != null)
                 {
+                    // TODO use automapper
+                    // add null DateTimeOffset converter in AutoMapper (null to DateTimeOffset.MinValue)
                     reply.Item = new CaseDetail();
                     reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;
@@ -623,40 +653,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetCaseDetailReply> GetMostRecentCaseDetail(DriverLicenseRequest request, ServerCallContext context)
+        public async override Task<GetCaseDetailReply> GetMostRecentCaseDetail(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
 
             try
             {
-
-
-                var c = await _caseManager.GetMostRecentCaseDetail(request.DriverLicenseNumber);
+                var driverId = Guid.Parse(request.Id);
+                var c = await _caseManager.GetMostRecentCaseDetail(driverId);
+                
                 if (c != null)
                 {
-                    reply.Item = new CaseDetail();
-                    reply.Item.CaseSequence = c.CaseSequence;
-                    reply.Item.CaseId = c.CaseId;
-                    reply.Item.DriverId = c.DriverId;
-                    reply.Item.Title = c.Title ?? string.Empty;
-                    reply.Item.IdCode = c.IdCode ?? string.Empty;
-                    reply.Item.OpenedDate = Timestamp.FromDateTimeOffset(c.OpenedDate);
-                    reply.Item.CaseType = c.CaseType ?? string.Empty;
-                    reply.Item.DmerType = c.DmerType ?? string.Empty;
-                    reply.Item.Status = c.Status ?? string.Empty;
-                    reply.Item.AssigneeTitle = c.AssigneeTitle ?? string.Empty;
-                    reply.Item.LastActivityDate = Timestamp.FromDateTimeOffset(c.LastActivityDate);
-                    if (c.DecisionDate == null)
-                    {
-                        reply.Item.DecisionDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue);
-                    }
-                    else
-                    {
-                        reply.Item.DecisionDate = Timestamp.FromDateTimeOffset(c.DecisionDate.Value);
-                    }
-                    reply.Item.LatestDecision = c.LatestDecision ?? string.Empty;
-                    reply.Item.DecisionForClass = c.DecisionForClass ?? string.Empty;
-                    reply.Item.DpsProcessingDate = Timestamp.FromDateTimeOffset(c.DpsProcessingDate);
+                    reply.Item = _mapper.Map<CaseDetail>(c);
                     reply.ResultStatus = ResultStatus.Success;
                 }
                 else
@@ -728,7 +736,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)(item.SequenceNumber ?? -1),
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
+
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -755,7 +765,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _caseManager.GetCaseLegacyDocuments(request.CaseId);
+                var result = await _documentManager.GetCaseLegacyDocuments(request.CaseId);
 
                 foreach (var item in result)
                 {
@@ -835,7 +845,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)(item.SequenceNumber ?? 0),
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     };
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -882,7 +893,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)item.SequenceNumber,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -926,7 +938,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         SequenceNumber = (long)item.SequenceNumber,
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
-                        CommentText = item.CommentText ?? string.Empty
+                        CommentText = item.CommentText ?? string.Empty,
+                        SignatureName = item.SignatureName ?? string.Empty
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
@@ -976,6 +989,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
         public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
+
             try
             {
                 var result = await _caseManager.GetDriverLegacyDocuments(Guid.Parse(request.Id));
@@ -988,6 +1002,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ErrorDetail = ex.Message;
                 reply.ResultStatus = ResultStatus.Fail;
             }
+
             return reply;
         }
 
@@ -1002,7 +1017,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _caseManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
 
                 foreach (var item in result)
                 {
@@ -1111,6 +1126,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     {
                         driver.DriverLicenseNumber = item.DriverLicenseNumber;
                         driver.Surname = item.Surname ?? string.Empty;
+                        driver.GivenName = item.GivenName ?? string.Empty;
                         driver.Id = item.Id;
                     }
                     reply.Items.Add(driver);
@@ -1125,7 +1141,43 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        
+
+        /// <summary>
+        /// Get Driver
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetDriversReply> GetDriverById(DriverIdRequest request, ServerCallContext context)
+        {
+            var reply = new GetDriversReply();
+            try
+            {
+                var result = await _caseManager.GetDriverById(request.Id);
+
+                foreach (var item in result)
+                {
+                    var driver = new Driver();
+                    if (item != null && item.DriverLicenseNumber != null)
+                    {
+                        driver.DriverLicenseNumber = item.DriverLicenseNumber;
+                        driver.Surname = item.Surname ?? string.Empty;
+                        driver.GivenName = item.GivenName ?? string.Empty;
+                        driver.Id = item.Id;
+                    }
+                    reply.Items.Add(driver);
+                }
+                reply.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+            return reply;
+        }
+
+
 
 
         /// <summary>
@@ -1191,7 +1243,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     }
 
                     // create the case.
-                    await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto, "ProcessLegacyCandidate");
+                    await _caseManager.LegacyCandidateCreate(searchRequest, birthdate, dto, "ProcessLegacyCandidate", request.MedicalType );
 
                     reply.ResultStatus = ResultStatus.Success;
                     reply.IsNewCase = true;
@@ -1600,6 +1652,44 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 reply.ResultStatus = ResultStatus.Fail;
             }
             
+            return reply;
+        }
+
+        /// <summary>
+        /// Create Decision
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<ResultStatusReply> CreateDecision(LegacyDecision request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+            try {
+
+                var createDecisionRequest = new CaseManagement.CreateDecisionRequest
+                {
+                    CaseId = request.CaseId,
+                    DriverId = request.DriverId,
+                    OutcomeText = request.OutcomeText,
+                    StatusDate = request.StatusDate.ToDateTimeOffset(),
+                    SubOutcomeText = request.SubOutcomeText
+                };
+
+                var createDecisionResult = await _caseManager.CreateDecision(createDecisionRequest);
+                if (createDecisionResult.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = createDecisionResult.ErrorDetail ?? "unknown error";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ErrorDetail = e.Message;
+            }
+
             return reply;
         }
 
@@ -2099,10 +2189,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
             result.ResultStatus = ResultStatus.Fail;
 
             var configuredSecret = _configuration["JWT_TOKEN_KEY"];
+
+
             if (configuredSecret != null && !string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                byte[] key = Encoding.UTF8.GetBytes(_configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+
+                var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
+                var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     _configuration["JWT_VALID_ISSUER"],
@@ -2134,32 +2230,37 @@ namespace Rsbc.Dmf.CaseManagement.Service
             // fetch the document.
             try
             {
-                var d = await _caseManager.GetLegacyDocument(request.DocumentId);
+                var d = await _documentManager.GetLegacyDocument(request.DocumentId);
                 reply.Document = new LegacyDocument
                 {
                     BatchId = d.BatchId ?? string.Empty,
+                    BusinessArea = d.BusinessArea ?? string.Empty,
                     CaseId = d.CaseId ?? string.Empty,
+                    CreateDate = Timestamp.FromDateTimeOffset(d.CreateDate),
                     DocumentId = d.DocumentId ?? string.Empty,
                     DocumentPages = (int)d.DocumentPages,
                     DocumentTypeCode = d.DocumentTypeCode ?? string.Empty,
-                    DocumentUrl = d.DocumentUrl ?? string.Empty,                    
+                    DocumentUrl = d.DocumentUrl ?? string.Empty,
+                    DpsDocumentId = d.DpsDocumentId,
                     ImportId = d.ImportId ?? string.Empty,
+                    Origin = d.Origin ?? string.Empty,
                     OriginatingNumber = d.OriginatingNumber ?? string.Empty,
-                    ValidationMethod = d.ValidationMethod ?? string.Empty,
-                    ValidationPrevious = d.ValidationPrevious ?? string.Empty,
-                    SequenceNumber = (int)(d.SequenceNumber ?? -1),
-                    UserId = d.UserId ?? string.Empty,  
                     Priority = d.Priority ?? string.Empty,
                     Queue = d.Queue ?? string.Empty,
-                    DpsDocumentId = d.DpsDocumentId 
+                    SequenceNumber = (int)(d.SequenceNumber ?? -1),
+                    SubmittalStatus = d.SubmittalStatus ?? string.Empty,
+                    UserId = d.UserId ?? string.Empty,
+                    ValidationMethod = d.ValidationMethod ?? string.Empty,
+                    ValidationPrevious = d.ValidationPrevious ?? string.Empty,
+                    
                 };
 
-                if (d.Driver != null)
+                    if (d.Driver != null)
                 {
                     reply.Document.Driver = new Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
                 }
 
-                if(d.FaxReceivedDate != null)
+                if (d.FaxReceivedDate != null)
                 {
                     reply.Document.FaxReceivedDate = Timestamp.FromDateTimeOffset(d.FaxReceivedDate.Value);
                 }

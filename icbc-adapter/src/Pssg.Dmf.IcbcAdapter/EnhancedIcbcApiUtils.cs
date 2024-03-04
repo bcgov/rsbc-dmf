@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using Renci.SshNet;
 using System.IO;
 using Pssg.SharedUtils;
@@ -69,7 +68,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             foreach (var unsentItem in unsentItems.Items)
             {
-                
+                Log.Logger.Information($"SENDING {unsentItem.Driver.DriverLicenseNumber}");
                 var item = GetMedicalUpdateDataforPass(unsentItem);
 
                 if (item != null)
@@ -131,11 +130,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
 
                     string responseContent = _icbcClient.SendMedicalUpdate(item);
+                    Log.Logger.Information(responseContent);
 
                     if (responseContent.Contains("SUCCESS"))
                     {
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
+                        
                     }
 
                     else
@@ -192,39 +193,45 @@ namespace Rsbc.Dmf.IcbcAdapter
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
                     var medicalDispositionValue = GetMedicalDisposition(driver);
 
-
-                    if (driver != null && driver.INAM?.SURN != null && medicalDispositionValue != "P"
-                        // Add check driver already has a P in the driver history
-                       
-                        )
+                    if (driver == null || driver.INAM?.SURN == null)
                     {
-                        var newUpdate = new IcbcMedicalUpdate()
-                        {
-                            DlNumber = licenseNumber,
-                            LastName = driver.INAM.SURN,
-                        };
-
-                        var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
-
-                        if (firstDecision != null)
-                        {
-                            if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
-                            {
-                                newUpdate.MedicalDisposition = "P";
-                            }                          
-                        }
-
-                        // get most recent Medical Issue Date from the driver.
-
-                        DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
-
-                        newUpdate.MedicalIssueDate = adjustedDate;
-
-                        return newUpdate;
+                        Log.Logger.Error($"Null received for driver history for {licenseNumber}");
                     }
                     else
                     {
-                        Log.Logger.Error("Error getting driver from ICBC.");
+
+                        if ( medicalDispositionValue != "P"
+                           // Add check driver already has a P in the driver history
+                           )
+                        {
+                            var newUpdate = new IcbcMedicalUpdate()
+                            {
+                                DlNumber = licenseNumber,
+                                LastName = driver.INAM.SURN,
+                            };
+
+                            var firstDecision = item.Decisions.OrderByDescending(x => x.CreatedOn).FirstOrDefault();
+
+                            if (firstDecision != null)
+                            {
+                                if (firstDecision.Outcome == DecisionItem.Types.DecisionOutcomeOptions.FitToDrive)
+                                {
+                                    newUpdate.MedicalDisposition = "P";
+                                }
+                            }
+
+                            // get most recent Medical Issue Date from the driver.
+
+                            DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
+
+                            newUpdate.MedicalIssueDate = adjustedDate;
+
+                            return newUpdate;
+                        }
+                        else
+                        {
+                            Log.Logger.Error("medicalDispositionValue already P");
+                        }
                     }
                 }
                 catch (Exception e)

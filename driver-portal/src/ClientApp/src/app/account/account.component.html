@@ -1,14 +1,13 @@
-<div class="page-desc">
-  <div class="container">
+<div class="container">
+  <div *ngIf="!isCreateProfile">
     <div class="list">
       <h2>My Account</h2>
-      <div style="display: flex">
+      <div class="myAccount">
         <div>
           <p>
             You can access and modify your account details on this page.
-            However, please note that some fields cannot be edited as they
-            <br />
-            are linked to your BC Services Card.
+            However, please note that some fields cannot be edited as they are
+            linked to your BC Services Card.
           </p>
           <p>
             If the address on your ICBC record is incorrect, you will need to
@@ -24,7 +23,7 @@
         <button
           mat-flat-button
           color="primary"
-          class="edit-profile"
+          class="primaryButton"
           (click)="onEdit()"
         >
           Edit Profile
@@ -32,214 +31,220 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="container">
-  <h2 class="title">Personal Information</h2>
-  <form>
-    <div class="flex-row">
-      <div>
-        <label class="form-label">First Name</label>
-        <mat-form-field
-          appearance="outline"
-          fxFlex="50px"
-          class="disabledInput"
-        >
-          <input
-            matInput
-            name="firstName"
-            placeholder="First Name"
-            [disabled]="true"
-          />
-        </mat-form-field>
-      </div>
-      <div>
-        <label class="form-label">Middle Name</label>
-        <mat-form-field appearance="outline" class="disabledInput">
-          <input
-            matInput
-            name="middleName"
-            placeholder="Middle Name"
-            [disabled]="true"
-          />
-        </mat-form-field>
-      </div>
-      <div>
-        <label class="form-label">Last Name</label>
-        <mat-form-field appearance="outline" class="disabledInput">
-          <input
-            matInput
-            name="lastName"
-            placeholder="Last Name"
-            [disabled]="true"
-          />
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div fxLayout="row">
-      <div style="padding-top: 16px">
-        <label class="form-label">Email Address</label>
-        <mat-form-field
-          appearance="outline"
-          style="width: 40%"
-          class="disabledInput"
-        >
-          <input
-            matInput
-            name="email"
-            placeholder="Email Address"
-            [disabled]="setEmailAddress"
-          />
-        </mat-form-field>
-      </div>
-    </div>
-  </form>
-  <div class="disclaimer">
-    <b>Disclaimer:</b> <br />
-
-    Email address is required to create an account profile. After submitting
-    this form you are consenting to receiving an email which will ask you <br />
-    to verify your account creation
-  </div>
-</div>
-
-<div class="container">
-  <h2 class="title">ICBC Identification</h2>
-  <p>
-    Providing the following Insurance Corporation of British Columbia (ICBC)
-    information allows the Driver's portal to display your active and <br />
-    historical cases.
-  </p>
-  <p>
-    Your ICBC secret keyword is typically your mother's maiden name. However if
-    you do not know your ICBC secret keyword you will need to<br />
-    visit an
-    <a
-      href="https://www.icbc.com/driver-licensing/visit-dl-office"
-      target="_blank"
-      >ICBC office</a
-    >
-    to obtain it.
-  </p>
-  <div>
-    <div>
-      <label class="form-label">Driver's License Number (required)</label>
-      <mat-form-field appearance="outline" class="disabledInput">
-        <input
-          matInput
-          name="driverLicenseNumber"
-          placeholder="Driver License Number"
-          [disabled]="true"
-        />
-      </mat-form-field>
-    </div>
-    <div style="padding-top: 16px">
-      <label class="form-label">ICBC Secret Keyword (required)</label>
-      <mat-form-field appearance="outline" class="disabledInput">
-        <input
-          matInput
-          name="icbcKeyword"
-          placeholder="ICBC Secret Keyword"
-          [disabled]="true"
-        />
-      </mat-form-field>
+  <div class="myAccount" *ngIf="isCreateProfile">
+    <div class="list">
+      <h2>Create your Profile</h2>
+      <p>
+        Please review and complete the form below. As this account is linked to
+        your BC Services Card, certain fields are not editable.
+      </p>
     </div>
   </div>
-</div>
-
-<div class="container" style="padding-bottom: 50px">
-  <h2 class="title">Notification Preferences</h2>
-  <b>Select one or more ways to receive RSBC notifications (required)</b>
 
   <div>
-    <label class="notification">
-      <input type="checkbox" />
-      Email (as seen above)
-    </label>
-
-    <label class="notification">
-      <input type="checkbox" />
-      Text/ SMS
-    </label>
-
-    <div *ngIf="isEditView">
-      <label class="form-label">Phone Number</label>
-      <mat-form-field appearance="outline" class="inputWidth">
-        <input matInput name="phoneNumber" placeholder="Phone Number" />
-      </mat-form-field>
-    </div>
-
-    <label class="notification">
-      <input type="checkbox" [formControl]="accountForm.controls.mail" />
-      Mail <br />
-      <p>
-        Be environmentally friendly. Leaving the Mail option unchecked means you
-        are opting out of receiving notification by mail. <br />
-        Certain decision documents will still be mailed to you for your records.
-      </p>
-    </label>
-
-    <div *ngIf="accountForm.controls.mail.value === true">
-      <p>
-        <b>Where do you want RSBC to send you mail regarding your cases?</b>
-        <br />
-        The address below is from your BC Services Card record.
-      </p>
-      <label class="notification">
-        <input type="checkbox" />
-        Use a different address <br />
-        <p>
-          Note:This will not update the address on your BC Services Card or your
-          driver's <br />
-          license with ICBC.
-        </p>
-      </label>
-      <form>
+    <h2 class="title">Personal Information</h2>
+    <form>
+      <div class="flex-row">
         <div>
-          <label class="form-label">Street Address</label>
-          <mat-form-field appearance="outline" class="inputWidth">
-            <input matInput name="phoneNumber" placeholder="Phone Number" />
+          <label class="form-label">First Name</label>
+          <mat-form-field
+            appearance="outline"
+            fxFlex="50px"
+            class="disabledInput"
+          >
+            <input
+              matInput
+              name="firstName"
+              placeholder="First Name"
+              [formControl]="accountForm.controls.firstName"
+            />
           </mat-form-field>
         </div>
-        <div style="display: flex; gap: 48px">
-          <div>
-            <label class="form-label">City or Locality</label>
-            <mat-form-field appearance="outline">
-              <input matInput name="city" placeholder="City or Locality" />
-            </mat-form-field>
-          </div>
-          <div>
-            <label class="form-label">State or Province</label>
-            <mat-form-field appearance="outline">
-              <input matInput name="state" placeholder="State or Province" />
-            </mat-form-field>
-          </div>
+        <div>
+          <label class="form-label">Middle Name</label>
+          <mat-form-field appearance="outline" class="disabledInput">
+            <input
+              matInput
+              name="middleName"
+              placeholder="Middle Name"
+              [formControl]="accountForm.controls.firstName"
+            />
+          </mat-form-field>
         </div>
-        <div style="display: flex; gap: 48px">
-          <div>
-            <label class="form-label">Postal Code</label>
-            <mat-form-field appearance="outline">
-              <input matInput name="postalCode" placeholder="Postal Code" />
-            </mat-form-field>
-          </div>
-          <div>
-            <label class="form-label">Country</label>
-            <mat-form-field appearance="outline">
-              <input matInput name="country" placeholder="Country" />
-            </mat-form-field>
-          </div>
+        <div>
+          <label class="form-label">Last Name</label>
+          <mat-form-field appearance="outline" class="disabledInput">
+            <input
+              matInput
+              name="lastName"
+              placeholder="Last Name"
+              [formControl]="accountForm.controls.lastName"
+            />
+          </mat-form-field>
         </div>
-      </form>
+      </div>
+
+      <div>
+        <div style="padding-top: 16px">
+          <label class="form-label">Email Address</label>
+          <mat-form-field
+            appearance="outline"
+            class="inputWidth"
+            [ngClass]="{
+              disabledInput: accountForm.controls.emailAddress.disabled
+            }"
+          >
+            <input
+              matInput
+              type="text"
+              name="email"
+              placeholder="Email Address"
+              [formControl]="accountForm.controls.emailAddress"
+            />
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <div class="disclaimer">
+      <b>Disclaimer:</b> <br />
+
+      Email address is required to create an account profile. After submitting
+      this form you are consenting to receiving an email which will ask you
+      <br />
+      to verify your account creation
     </div>
+  </div>
 
-    <label>
-      <input type="checkbox" />
-      I acknowledge my selected notification preferences. I give consent to
-      receive communications from RSBC in this manner. <br />
+  <div>
+    <h2 class="title">ICBC Identification</h2>
+    <p>
+      Providing the following Insurance Corporation of British Columbia (ICBC)
+      information allows the Driver's portal to display your active and <br />
+      historical cases.
+    </p>
 
-      Note: You can update your notification settings at any time in the Driver
-      Portal under Account Management.
-    </label>
+    <div>
+      <div>
+        <label class="form-label">Driver's License Number (required)</label>
+        <mat-form-field
+          appearance="outline"
+          class="inputWidth"
+          [ngClass]="{
+            disabledInput: accountForm.controls.driverLicenceNumber.disabled
+          }"
+        >
+          <input
+            matInput
+            type="text"
+            name="driverLicenseNumber"
+            placeholder="Driver License Number"
+            [formControl]="accountForm.controls.driverLicenceNumber"
+          />
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding-bottom: 50px">
+    <h2 class="title">Notification Preferences</h2>
+    <b>Select one or more ways to receive RSBC notifications (required)</b>
+
+    <div>
+      <label class="notification">
+        <input type="checkbox" />
+        Email (as seen above)
+      </label>
+
+      <!-- <label class="notification">
+        <input type="checkbox" />
+        Text/ SMS
+      </label>
+
+      <div *ngIf="isEditView">
+        <label class="form-label">Phone Number</label>
+        <mat-form-field appearance="outline" class="inputWidth">
+          <input matInput name="phoneNumber" placeholder="Phone Number" />
+        </mat-form-field>
+      </div> -->
+
+      <label class="notification">
+        <input type="checkbox" />
+        Mail <br />
+        <p>
+          Be environmentally friendly. Leaving the Mail option unchecked means
+          you are opting out of receiving notification by mail. <br />
+          Certain decision documents will still be mailed to you for your
+          records.
+        </p>
+      </label>
+
+      <div *ngIf="isEditView">
+        <p>
+          <b>Where do you want RSBC to send you mail regarding your cases?</b>
+          <br />
+          The address below is from your BC Services Card record.
+        </p>
+        <!-- <label class="notification">
+          <input type="checkbox" [formControl]="accountForm.controls.mail" />
+          Use a different address <br />
+          <p>
+            Note:This will not update the address on your BC Services Card or
+            your driver's <br />
+            license with ICBC.
+          </p>
+        </label> -->
+        <form>
+          <div>
+            <label class="form-label">Street Address</label>
+            <mat-form-field appearance="outline" class="inputWidth">
+              <input matInput name="phoneNumber" placeholder="Phone Number" />
+            </mat-form-field>
+          </div>
+          <div style="display: flex; gap: 48px">
+            <div>
+              <label class="form-label">City or Locality</label>
+              <mat-form-field appearance="outline">
+                <input matInput name="city" placeholder="City or Locality" />
+              </mat-form-field>
+            </div>
+            <div>
+              <label class="form-label">State or Province</label>
+              <mat-form-field appearance="outline">
+                <input matInput name="state" placeholder="State or Province" />
+              </mat-form-field>
+            </div>
+          </div>
+          <div style="display: flex; gap: 48px">
+            <div>
+              <label class="form-label">Postal Code</label>
+              <mat-form-field appearance="outline">
+                <input matInput name="postalCode" placeholder="Postal Code" />
+              </mat-form-field>
+            </div>
+            <div>
+              <label class="form-label">Country</label>
+              <mat-form-field appearance="outline">
+                <input matInput name="country" placeholder="Country" />
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <label>
+        <input type="checkbox" />
+        I acknowledge my selected notification preferences. I give consent to
+        receive communications from RSBC in this manner. <br />
+
+        Note: You can update your notification settings at any time in the
+        Driver Portal under Account Management.
+      </label>
+      <div class="submitButtonContainer">
+        <button mat-flat-button class="primaryButton" (click)="onSubmit()">
+          Submit
+        </button>
+        <button class="cancelButton">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>

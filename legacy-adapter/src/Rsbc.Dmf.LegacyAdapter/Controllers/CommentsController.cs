@@ -83,7 +83,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         /// </summary>
         /// <param name="caseId"></param>
         /// <returns></returns>
-        // GET: /Comments/Exist
+        // GET: /Comments/{ID}
         [HttpGet("{commentId}")]
         [ProducesResponseType(typeof(List<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]

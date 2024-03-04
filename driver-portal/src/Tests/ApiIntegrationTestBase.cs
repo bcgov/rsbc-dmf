@@ -2,31 +2,33 @@
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
-using AutoMapper;
+using System;
 
 namespace Rsbc.Dmf.DriverPortal.Tests
 {
-    public abstract class ApiIntegrationTestBase
+    public abstract class ApiIntegrationTestBase : IDisposable
     {
-        protected HttpClient _client { get; }
+        protected readonly HttpClient _client;
         protected readonly IConfiguration _configuration;
         protected const string CASE_API_BASE = "/api/Cases";
-        protected const string DRIVER_API_BASE = "/api/Drivers";
-        protected const string CALLBACK_API_BASE = "/api/Callback";
-        protected IMapper _mapper { get; }
+        protected const string DRIVER_API_BASE = "/api/Driver";
+        protected const string DOCUMENT_API_BASE = "/api/Document";
+        protected const string DOCUMENT_TYPE_API_BASE = "/api/DocumentType";
 
-        public ApiIntegrationTestBase(HttpClientFixture fixture)
+        public ApiIntegrationTestBase(IConfiguration configuration)
         {
-            _client = fixture.Client;
-            _configuration = fixture.Configuration;
-            _mapper = fixture.Mapper;
+            _configuration = configuration;
+            _client = new CustomWebApplicationFactory(configuration)
+                .CreateClient();
         }
+
+        public void Dispose() => _client.Dispose();
 
         protected async Task<T> HttpClientSendRequest<T>(HttpRequestMessage request)
         {
             var response = await _client.SendAsync(request);
-            var jsonString = await response.Content.ReadAsStringAsync();
             response.EnsureSuccessStatusCode();
+            var jsonString = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(jsonString);
         }
     }

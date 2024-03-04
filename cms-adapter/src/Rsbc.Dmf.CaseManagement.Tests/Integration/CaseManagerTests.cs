@@ -16,12 +16,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
     public class CaseManagerTests : TestBase
     {
         private readonly ICaseManager _caseManager;
+        private readonly IDocumentManager _documentManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger _logger = new NullLogger<CaseManagerTests>();
 
-        public CaseManagerTests(ICaseManager caseManager, IConfiguration configuration)
+        public CaseManagerTests(ICaseManager caseManager, IDocumentManager documentManager, IConfiguration configuration)
         {
             _caseManager = caseManager;
+            _documentManager = documentManager;
             _configuration = configuration;
         }
 
@@ -218,8 +220,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             };
             DateTime testDate = DateTime.Now;
 
-            await _caseManager.LegacyCandidateCreate(newDriver, testDate, testDate);
-            await _caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now);
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, testDate, null) ;
+            await _caseManager.LegacyCandidateCreate(newDriver, testDate, DateTime.Now, null );
 
             var newCaseId = await _caseManager.GetNewestCaseIdForDriver(newDriver);
 
@@ -416,7 +418,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // confirm it is present
 
-            var docs = await _caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            var docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             bool found = false;
 
@@ -434,7 +436,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             Assert.True(found);
 
-            var getDocument = await _caseManager.GetLegacyDocument(documentId);
+            var getDocument = await _documentManager.GetLegacyDocument(documentId);
 
             Assert.NotNull(getDocument.Driver.Id);
 
@@ -448,7 +450,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             found = false;
 
-            docs = await _caseManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber);
 
             foreach (var doc in docs)
             {
@@ -696,14 +698,15 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 OriginatingNumber = "1",
                 SequenceNumber = 1,
                 DocumentUrl = documentUrl,
-                SubmittalStatus = "Open-Required"
+                SubmittalStatus = "Open-Required",
+                Owner = "Team - Intake"
             };
 
             await _caseManager.CreateICBCDocumentEnvelope(legacyDocumentRequest);
 
             // confirm it is present
 
-            var docs = await _caseManager.GetCaseLegacyDocuments(caseId);
+            var docs = await _documentManager.GetCaseLegacyDocuments(caseId);
 
             bool found = false;
 
@@ -745,7 +748,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                     OriginatingNumber = "1",
                     SequenceNumber = 1,
                     DocumentUrl = documentUrl,
-                    SubmittalStatus = "Uploaded"
+                    SubmittalStatus = "Uploaded",
+                    
                 };
 
                 await _caseManager.CreateDocumentOnDriver(legacyDocumentRequest);

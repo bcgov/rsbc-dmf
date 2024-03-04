@@ -34,8 +34,8 @@ jobs:
         run: docker pull caddy:latest
 
       - name: Build image
-        working-directory: ./driver-portal/src/ClientApp
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME 
+        working-directory: ./
+        run: docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag $IMAGE_NAME 
         # --cache-from=$IMAGE_ID
 
       - name: Push image

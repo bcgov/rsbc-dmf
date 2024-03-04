@@ -300,50 +300,62 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
-
-
-            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
-            if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            if (!string.IsNullOrEmpty(caseId) && caseId != Guid.Empty.ToString())
             {
-                string caseType = "Unsolicited";
-
-                if (c.Item.CaseType == "DMER")
+                var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+                if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
-                    caseType = "Solicited";
+                    string caseType = "Unsolicited";
+
+                    if (c.Item.CaseType == "DMER")
+                    {
+                        caseType = "Solicited";
+                    }
+
+                    result.CaseId = c.Item.CaseId;
+
+                    string title = "";
+                    int dashPos = c.Item.Title.LastIndexOf("-");
+                    if (dashPos != -1)
+                    {
+                        title = c.Item.Title.Substring(dashPos + 1).Trim();
+                    }
+                    else
+                    {
+                        title = Math.Abs(c.Item.CaseSequence).ToString();
+                    }
+
+
+                    result.Title = title;
+                    result.IdCode = c.Item.IdCode;
+                    result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
+                    result.CaseType = caseType;
+                    result.DmerType = c.Item.DmerType;
+                    result.Status = c.Item.Status;
+                    result.AssigneeTitle = c.Item.AssigneeTitle;
+                    result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
+                    result.LatestDecision = c.Item.LatestDecision;
+                    result.DecisionForClass = c.Item.DecisionForClass;
+                    result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
+                    result.CaseSequence = (int)Math.Abs(c.Item.CaseSequence);
+
+                    result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
+
+                    result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly, true).OrderByDescending(x => x.CommentDate).ToList();
                 }
 
-                result.CaseId = c.Item.CaseId;
-                result.Title = c.Item.CaseSequence.ToString();
-                result.IdCode = c.Item.IdCode;
-                result.OpenedDate = c.Item.OpenedDate.ToDateTimeOffset();
-                result.CaseType = caseType;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.AssigneeTitle = c.Item.AssigneeTitle;
-                result.LastActivityDate = c.Item.LastActivityDate.ToDateTimeOffset();
-                result.LatestDecision = c.Item.LatestDecision;
-                result.DecisionForClass = c.Item.DecisionForClass;
-                result.DecisionDate = c.Item.DecisionDate.ToDateTimeOffset();
-                if (c.Item.CaseSequence > -1)
+                // set to null if no decision has been made.
+                if (result.DecisionDate == DateTimeOffset.MinValue)
                 {
-                    result.CaseSequence = (int)c.Item.CaseSequence;
+                    result.DecisionDate = null;
                 }
-                result.DpsProcessingDate = c.Item.DpsProcessingDate.ToDateTimeOffset();
-
-                result.Comments = GetCommentsForCase(caseId, c.Item.DriverId, OriginRestrictions.SystemOnly).OrderByDescending(x => x.CommentDate).ToList();
-            }
-
-            // set to null if no decision has been made.
-            if (result.DecisionDate == DateTimeOffset.MinValue)
-            {
-                result.DecisionDate = null;
             }
             return Json(result);
         }
 
 
 
-        private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions)
+        private List<Comment> GetCommentsForCase(string caseId, string driverId, OriginRestrictions originRestrictions, bool maskAuthor)
         {
             List<ViewModels.Comment> result = new List<ViewModels.Comment>();
             var reply = _cmsAdapterClient.GetComments(new CommentsRequest() { CaseId = caseId, DriverId = driverId, OriginRestrictions = originRestrictions });
@@ -365,7 +377,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         MedicalIssueDate = DateTimeOffset.Now
                     };
 
-                    result.Add(new ViewModels.Comment
+                    var comment = new ViewModels.Comment
                     {
                         CaseId = item.CaseId,
                         CommentDate = item.CommentDate.ToDateTimeOffset(),
@@ -373,9 +385,11 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
                         Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
-                    });
+                        SequenceNumber = Math.Abs(item.SequenceNumber),
+                        UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName  // 24-01-12 default to signature name, fallback to UserID if not present.
+                    };
+
+                    result.Add(comment);
                 }
 
             }
@@ -424,8 +438,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         CommentText = item.CommentText,
                         CommentTypeCode = item.CommentTypeCode,
                         Driver = driver,
-                        SequenceNumber = item.SequenceNumber,
-                        UserId = item.UserId
+                        SequenceNumber = Math.Abs(item.SequenceNumber),
+                        UserId = string.IsNullOrEmpty(item.SignatureName) ? item.UserId : item.SignatureName
                     });
                 }
                 return Json(result);
@@ -674,6 +688,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                 }
 
+                driver.Id = driverId;
+
                 if (faxReceivedDate == null)
                 {
                     faxReceivedDate = DateTimeOffset.Now;
@@ -767,26 +783,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
                     CreateStatusReply result;
 
-                    string[] documentTypes = {
-                        "Ignition Interlock Incident",
-                        "Ignition Interlock MIA",
-                        "RDP Registration",
-                        "Remedial Reconsideration",
-                        "Ignition Interlock Extension",
-                        "Ignition Interlock Reconsideration",
-                        "RDP and IIP Reconsideration",
-                        "Ignition Interlock Medical Exemption",
-                        "RDP Application For Extension",
-                        "High Risk Driving Incident Report",
-                        "Indefinite IIP",
-                        "OOP Certificate",
-                        "Client Letter Out DIP",
-                        "IIP Waiver",
-                        "OOP Document",
-                        "OOP Registration"
-                        };
                     string[] documentTypeCodes = {
-
                             "080",
                             "081",
                             "110",
@@ -802,8 +799,8 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                             "320",
                             "211",
                             "213",
-                            "214"
-
+                            "214",
+                            "180" // 2024-03-01 Added letter out, as all letter outs received from DPS are remedial.
                             };
 
                     var documentTypeindex = Array.IndexOf(documentTypeCodes, documentTypeCode);

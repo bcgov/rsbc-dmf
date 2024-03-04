@@ -1,0 +1,38 @@
+<div class="container">
+  <div class="list">
+    <h2>Most Recent Case</h2>
+  </div>
+  <app-recent-case></app-recent-case>
+
+  <div class="list">
+    <h2>Submission Requirements</h2>
+    <app-submission-requirements
+      [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
+     
+    ></app-submission-requirements>
+  </div>
+
+  <!-- <div class="documentation"></div>
+  <mat-tab-group
+    [selectedIndex]="selectedIndex"
+    (selectedIndexChange)="selectedIndex = $event"
+  >
+    <mat-tab label="Submission Requirements">
+      <app-submission-requirements
+        [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
+        (viewLetter)="onViewLetter()"
+      ></app-submission-requirements
+    ></mat-tab>
+    <mat-tab label="Case Submissions">
+      <app-case-submissions
+        [caseSubmissionDocuments]="caseDocuments?.caseSubmissions"
+      ></app-case-submissions>
+    </mat-tab>
+    <mat-tab label="Letters to Driver">
+      <app-letters-to-driver
+        [letterDocuments]="caseDocuments?.lettersToDriver"
+      ></app-letters-to-driver
+    ></mat-tab>
+  </mat-tab-group>
+</div> -->
+</div>

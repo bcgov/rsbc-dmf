@@ -51,14 +51,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
         }
 
-
-
-
-
-
-
-
-
         [Fact]
         public async void DfwebSubmitComment()
         {
@@ -364,9 +356,9 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             request.Content = new StringContent(stringContent, Encoding.UTF8, "application/json");
 
-            var response = _client.SendAsync(request).GetAwaiter().GetResult();
+            var response = await _client.SendAsync(request);
 
-            var responseContent = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             response.EnsureSuccessStatusCode();
         }
@@ -375,8 +367,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         public async void DfcmsAddRemoveDocument()
         {
             DfcmsAddDocument();
-
-            // now check for the comment to be in the response.
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"/Drivers/{testDl}/Documents");
 
@@ -411,8 +401,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 
             documents = JsonConvert.DeserializeObject<List<Rsbc.Dmf.LegacyAdapter.ViewModels.Document>>(responseContent);
 
-            Assert.Equal(documents.Count, 0);
-
+            Assert.Equal(0, documents.Count);
         }
 
 

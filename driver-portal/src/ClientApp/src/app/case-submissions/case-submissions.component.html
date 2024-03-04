@@ -1,0 +1,208 @@
+<div class="container">
+  <div class="submissions">
+    <div>
+      <p>
+        The Document History tab displays the documents and reports that RSBC
+        has received regarding your case. Unfortunately, you cannot download a
+        copy of these submissions. tab.
+      </p>
+      <br />
+      <p>
+        Please note that if your medical practitioner or you have sent a
+        document through fax, it might take a while for it to appear in the
+        Document History tab from the Submission Requirements tab.
+      </p>
+    </div>
+    <div>
+      <app-quick-links></app-quick-links>
+    </div>
+  </div>
+
+  <div class="list">
+    <div>
+      <mat-card
+        *ngFor="let caseDocument of caseSubmissionDocuments"
+        [ngClass]="{
+          open: caseDocument.documentId && isExpanded[caseDocument.documentId]
+        }"
+      >
+        <mat-card-content class="closedCaseContent">
+          <div>
+            <mat-icon
+              (click)="toggleIsExpandable(caseDocument.documentId)"
+              class="expandedIcon"
+            >
+              expand_circle_down
+            </mat-icon>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div style="border-left: 2px solid #808080; height: 45%">
+              &nbsp;
+            </div>
+            <div>&nbsp;</div>
+          </div>
+          <div>
+            <div class="caseDetailRow">
+              <div>
+                <label>Submission type </label>
+                <div>
+                  <b>{{ caseDocument.documentType }}</b>
+                </div>
+              </div>
+
+              <div>
+                <label>Submission status</label>
+                <div>
+                  <b>{{ caseDocument.submittalStatus }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Submission date</label>
+                <div>
+                  <b>{{ caseDocument.importDate | date : "longDate" }}</b>
+                </div>
+              </div>
+            </div>
+
+            <div
+              class="caseDetailRow"
+              *ngIf="caseDocument.documentId && isExpanded?.[caseDocument.documentId]"
+              style="
+                border-top: 2px solid gray;
+                padding-top: 20px;
+                padding-bottom: 20px;
+              "
+            >
+              <div>
+                <label>Created Date</label>
+                <div>
+                  <b>{{ caseDocument?.createDate | date : "longDate" }}</b>
+                </div>
+              </div>
+
+              <div>
+                <label>Description</label>
+                <div>
+                  <b>{{ caseDocument.description }}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div
+    class="numberOfItems"
+    *ngIf="caseSubmissionDocuments && caseSubmissionDocuments.length > 0"
+  >
+    Showing {{ caseSubmissionDocuments.length }} of
+    {{ caseSubmissionDocuments.length }} records
+  </div>
+
+  <div class="list" id="definitions">
+    <h2>Definitions</h2>
+    <div class="accordion-btn-container">
+      <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+        >Expand All</a
+      >
+      <span class="accordion-bar">&nbsp;|&nbsp;</span>
+      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+        >Collapse All</a
+      >
+    </div>
+    <div style="padding-bottom: 30px">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-type></app-case-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Case Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-case-status></app-case-status>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              DMER Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-dmer-type></app-dmer-type>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Decision outcome
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <app-decision-outcome></app-decision-outcome>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Eligible License Class
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-eligible-license-class></app-eligible-license-class>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              RSBC Case Assignment
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-rsbc-case-assignment></app-rsbc-case-assignment>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Type</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-type></app-submission-type>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Document SubType
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>Upwards of 90 subtypes</div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Status</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-submission-status></app-submission-status>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Letter Topic</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <app-letter-topic></app-letter-topic>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+</div>

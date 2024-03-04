@@ -32,7 +32,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     logging.AddEventSourceLogger();
                 })
                 .UseSerilog()
-                .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/var/run/secrets/service-cert")
+                .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/ssl")
                 .UseStartup<Startup>()
                 .UseKestrel(options =>
                 {

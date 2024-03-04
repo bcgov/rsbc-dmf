@@ -20,6 +20,7 @@ using Serilog.Filters;
 using Serilog.Sinks.Splunk;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Rsbc.Dmf.CaseManagement.Dynamics;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -41,6 +42,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
+                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+
                 // Configure JWT authentication
                 services.AddAuthentication(o =>
                 {
@@ -56,7 +60,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                            new SymmetricSecurityKey(key)
                     };
                 });
             }
@@ -95,7 +99,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             });
             services.AddGrpcReflection();
             services.AddDistributedMemoryCache();
-            services.AddCaseManagement(Configuration);
+            services.RegisterServices(Configuration);
             /*
             services.AddHttpClient("adfs_token").ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
             {
@@ -109,6 +113,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             */
             services.AddAutoMapperSingleton();
+            services.AddDynamicsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -138,6 +143,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 endpoints.MapGrpcService<CaseService>();
                 endpoints.MapGrpcService<CssService>();
                 endpoints.MapGrpcService<UserService>();
+                endpoints.MapGrpcService<DocumentService>();
 
                 endpoints.MapControllers();
                 

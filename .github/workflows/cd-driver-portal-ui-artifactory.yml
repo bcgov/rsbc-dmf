@@ -1,0 +1,62 @@
+name: cd-driver-portal-ui-artifactory
+
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - main
+
+    # Publish `v1.2.3` tags as releases. 
+    tags:
+      - v*
+    paths:
+      - "driver-portal/src/ClientApp/**"
+      - ".github/workflows/cd-driver-portal-ui.yml"
+env:
+  IMAGE_NAME: driver-portal-ui
+  IMAGE_ID: ${{ secrets.ARTIFACTORY_URI }}/driver-portal-ui
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log into registry
+        run: echo "${{ secrets.ARTIFACTORY_PASSWORD }}" | docker login ${{ secrets.ARTIFACTORY_URI }} -u ${{ secrets.ARTIFACTORY_USERNAME }} --password-stdin
+
+      - name: Pull image
+        run: docker pull $IMAGE_ID || true
+      
+      - name: Pull Caddy from OpenShift
+        run: docker pull caddy:latest
+
+      - name: Build image
+        working-directory: ./
+        run: docker build . --file ./driver-portal/src/ClientApp/Dockerfile --tag $IMAGE_NAME 
+        # --cache-from=$IMAGE_ID
+
+      - name: Push image
+        run: |
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION

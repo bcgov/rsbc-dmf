@@ -87,6 +87,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
+                byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref secretBytes, 32);
 
                 services.AddIdentity<IdentityUser, IdentityRole>()
                     .AddDefaultTokenProviders();
@@ -109,7 +111,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
                         IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                            new SymmetricSecurityKey(secretBytes)
                     };
                 });
 
@@ -159,8 +161,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
-                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxReceiveMessageSize = null; 
+                options.MaxSendMessageSize = null; 
             });
 
             
@@ -203,7 +205,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             // health checks. 
             services.AddHealthChecks()
-                .AddCheck("document-storage-adapter", () => HealthCheckResult.Healthy("OK"));
+                .AddCheck("icbc-adapter", () => HealthCheckResult.Healthy("OK"));
             // add ICBC client
             if (Configuration["ICBC_SERVICE_URI"] != null)
             {
@@ -235,7 +237,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -253,18 +255,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                     }
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
-            }
-
-            if (Configuration["ICBC_SERVICE_URI"] != null)
-            {
-                services.AddTransient(_ => new EnhancedIcbcClient(Configuration));
             }
 
         }
 
-        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        private void ConfigureProblemDetails(Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options)
         {
             // Only include exception details in a development environment. There's really no nee
             // to set this as it's the default behavior. It's just included here for completeness :)

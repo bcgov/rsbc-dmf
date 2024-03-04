@@ -13,6 +13,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { ProgressChartComponent } from './progress-chart/progress-chart.component';
 import { ProgressTableComponent } from './progress-table/progress-table.component';
 import { ProgressCaseTableComponent } from './progress-case-table/progress-case-table.component';
+import { ProgressCaseDecisionTableComponent } from './progress-case-decision-table/progress-case-decision-table.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ProgressCaseTableComponent } from './progress-case-table/progress-case-
     ProgressComponent,
     ProgressChartComponent,
     ProgressTableComponent,
-    ProgressCaseTableComponent
+    ProgressCaseTableComponent,
+    ProgressCaseDecisionTableComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

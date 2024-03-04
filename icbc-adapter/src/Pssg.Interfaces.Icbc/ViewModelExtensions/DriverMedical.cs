@@ -26,7 +26,11 @@ namespace Pssg.Interfaces.ViewModelExtensions
                     MedicalDisposition = item.MDSP,
                     MedicalDispositionDescription = item.MDSPDESC,
                     PGN1 = item.PGN1,
-                    PGN2 = item.PGN2
+                    PGN2 = item.PGN2,
+                    DocumentNumber = item.DocumentNumber,
+                    MedicalLevel = item.MedicalLevel,
+                    MedicalType = item.MedicalType,
+                     
                 };
             }
             return result;

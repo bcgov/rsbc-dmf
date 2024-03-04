@@ -145,9 +145,6 @@ namespace Rsbc.Dmf.BcMailAdapter
                     ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-            
-
-            
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
             {
                 services.AddIdentity<IdentityUser, IdentityRole>()
@@ -162,13 +159,19 @@ namespace Rsbc.Dmf.BcMailAdapter
                 {
                     o.SaveToken = true;
                     o.RequireHttpsMetadata = false;
+
+
+                    byte[] secretBytes = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                    Array.Resize(ref secretBytes, 32);
+
+                    var symmetricSecurityKey = new SymmetricSecurityKey(secretBytes);
+
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         RequireExpirationTime = false,
                         ValidIssuer = Configuration["JWT_VALID_ISSUER"],
                         ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
-                        IssuerSigningKey =
-                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]))
+                        IssuerSigningKey = symmetricSecurityKey
                     };
                 })
                 .AddJwtBearerQueryStringAuthentication((JwtBearerQueryStringOptions options) =>
@@ -218,8 +221,8 @@ namespace Rsbc.Dmf.BcMailAdapter
             services.AddGrpc(options =>
             {
                 options.EnableDetailedErrors = true;
-                options.MaxReceiveMessageSize = 256 * 1024 * 1024; // 256 MB
-                options.MaxSendMessageSize = 256 * 1024 * 1024; // 256 MB
+                options.MaxReceiveMessageSize = null; 
+                options.MaxSendMessageSize = null; 
             });
 
 
@@ -253,7 +256,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
 
-                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                 var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
                 // call the token service to get a token.
@@ -269,7 +272,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                     // Add the bearer token to the client.
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
-                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
                 }
@@ -296,7 +299,7 @@ namespace Rsbc.Dmf.BcMailAdapter
 
                 if (!string.IsNullOrEmpty(Configuration["CMS_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
@@ -314,7 +317,7 @@ namespace Rsbc.Dmf.BcMailAdapter
                     }
                 }
 
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient });
+                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                 services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                 services.AddTransient(_ => new CssManager.CssManagerClient(channel));
             }
@@ -426,7 +429,7 @@ namespace Rsbc.Dmf.BcMailAdapter
         }
 
 
-        private void ConfigureProblemDetails(ProblemDetailsOptions options)
+        private void ConfigureProblemDetails(Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options)
         {
             // Only include exception details in a development environment. There's really no need
             // to set this as it's the default behavior. It's just included here for completeness :)

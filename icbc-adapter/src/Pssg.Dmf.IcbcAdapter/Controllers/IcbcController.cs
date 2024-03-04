@@ -17,6 +17,8 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Org.BouncyCastle.Asn1.Ocsp;
 using Google.Protobuf.WellKnownTypes;
 using Org.BouncyCastle.Bcpg;
+using Microsoft.Extensions.Caching.Memory;
+using Pssg.Interfaces.IcbcModels;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -61,16 +63,19 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
-        private readonly IcbcClient icbcClient;
+        private readonly IIcbcClient _icbcClient;
+
+        private readonly IMemoryCache _cache;
 
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
 
-        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient)
+        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IMemoryCache cache, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _logger = logger;
-            icbcClient = new IcbcClient(configuration);
+            _icbcClient = icbcClient;
             _caseManagerClient = caseManagerClient;
+            _cache = cache; 
         }
 
         /// <summary>
@@ -84,16 +89,50 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
         public ActionResult CreateCandidates([FromBody] List<NewCandidate> newCandidates)
         {
-
-
-            //return Ok();
-
-
+            if (!string.IsNullOrEmpty(_configuration["DISABLE_CREATE_CANDIDATE"]))
+            {
+                return Ok();
+            }
 
             //check for duplicates; if there is an existing case then do not create a new one
 
             foreach (var item in newCandidates)
             {
+                string medicalType = "";
+                // first check that the item is not in the cache.
+                CLNT data = null;
+                if (!_cache.TryGetValue(item.DlNumber, out data))
+                {
+                    // get the history from ICBC
+                    data = _icbcClient.GetDriverHistory(item.DlNumber);
+
+                    // ensure the presentation of the DL matches the calling system.
+                    data.DR1MST.LNUM = item.DlNumber;
+                    // Key not in cache, so get data.
+                    //cacheEntry = DateTime.Now;
+                    if (data != null)
+                    {
+                        // Set cache options.
+                        var cacheEntryOptions = new MemoryCacheEntryOptions()
+                            // Keep in cache for this time, reset time if accessed.
+                            .SetSlidingExpiration(TimeSpan.FromMinutes(10));
+
+                        // Save data in cache.
+                        _cache.Set(item.DlNumber, data, cacheEntryOptions);
+                    }
+                }
+                if (data != null && data.DR1MST != null && data.DR1MST.DR1MEDN != null)
+                {
+                    try
+                    {
+                        medicalType = data.DR1MST.DR1MEDN.OrderByDescending(x => x.MIDT).FirstOrDefault().MedicalType;
+                    }
+                    catch (Exception e)
+                    {
+                        Serilog.Log.Error(e, "ICBC Create Candidate Lookup Error");
+                    }                    
+                }
+                
                 LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                 {                    
                     LicenseNumber = item.DlNumber,
@@ -101,6 +140,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     ClientNumber = string.Empty,
                     BirthDate = Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
                     EffectiveDate = Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
+                    MedicalType = medicalType
                 };
 
 
@@ -122,7 +162,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                     _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                     {
-                        CaseId = caseId,
+                        CaseId = caseId ?? string.Empty,
                         Driver = new CaseManagement.Service.Driver()
                         {
                             DriverLicenseNumber = lcr.LicenseNumber,
@@ -134,7 +174,9 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
                         DocumentId = Guid.NewGuid().ToString(),
                         SequenceNumber = 1,
-
+                        Owner = "Team - Intake"
+                         
+                  
                     });
 
                     // If a new case is created on the driver

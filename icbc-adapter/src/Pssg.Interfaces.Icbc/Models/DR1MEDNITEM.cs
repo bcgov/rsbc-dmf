@@ -84,5 +84,9 @@ namespace Pssg.Interfaces.Icbc.Models
         [JsonProperty(PropertyName = "PGN1")]
         public string PGN1 { get; set; }
 
+        public string DocumentNumber { get; set; }
+        public string MedicalType { get; set; }
+        public int? MedicalLevel { get; set; }
+
     }
 }

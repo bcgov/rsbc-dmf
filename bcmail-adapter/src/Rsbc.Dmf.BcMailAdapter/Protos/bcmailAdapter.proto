@@ -11,9 +11,11 @@ service BcMailAdapter {
   // Get a token given a secret.
   rpc GetToken (TokenRequest) returns (TokenReply);
 
-
   // Send documents to BCMAil
   rpc SendDocumentsToBcMail(EmptyRequest) returns (ResultStatusReply);
+
+  // Send documents to BCMAil
+  rpc TestBcMail(EmptyRequest) returns (ResultStatusReply);
    
 }
 

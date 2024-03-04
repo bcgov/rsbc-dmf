@@ -38,8 +38,11 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             string configuredSecret = Configuration["JWT_TOKEN_KEY"];
             if (configuredSecret.Equals(secret))
             {
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+                var symmetricSecurityKey = new SymmetricSecurityKey(key);
+                
+                var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     Configuration["JWT_VALID_ISSUER"],

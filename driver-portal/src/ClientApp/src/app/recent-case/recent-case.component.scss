@@ -8,7 +8,7 @@
 
 .recentCaseContent {
   display: flex;
-  gap: 50px;
+  gap: 35px;
 }
 
 .recentCaseContent > div {
@@ -55,4 +55,54 @@ mat-stepper {
   background-color: rgba(236, 245, 255, 1);
   border-radius: 5px;
   padding: 8px;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  pointer-events: none !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-done {
+  background-color: rgba(0, 0, 0, 0.54);
+}
+
+::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+  color: #003366;
+}
+::ng-deep
+  .mat-step-label.mat-step-label-active.mat-step-label-selected
+  > .mat-step-text-label {
+  color: #003366;
+  font-weight: 700;
+
+  border: 2px solid #f1f1f3;
+  border-radius: 2px;
+  background-color: #f1f1f3;
+  // padding-top: 20px;
+}
+
+mat-card:hover {
+  background-color: white;
+  border: 2px solid #003366;
+  cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .recentCaseContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "A A"
+      "B C"
+      "D E";
+  }
+
+  .recentCaseContent > div:first-child {
+    border-right: none;
+    border-bottom: 2px solid grey;
+  }
+
+  mat-stepper {
+    orientation: "vertical";
+  }
 }
