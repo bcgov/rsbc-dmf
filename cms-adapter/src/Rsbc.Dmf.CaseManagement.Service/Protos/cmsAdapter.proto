@@ -45,8 +45,6 @@ service CaseManager {
 
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
-  rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
-
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
@@ -544,6 +542,7 @@ message CssReply {
 
 // END CssManager
 ////////////////////////
+// START UserManager
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
@@ -654,6 +653,14 @@ message ResultStatusReply {
     string errorDetail = 2;
 }
 
+// END UserManager
+////////////////////////
+// START CallbackManager
+
+service CallbackManager {
+  rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
+}
+
 enum BringForwardPriority{
 	Low = 0;
 	Normal = 1;
@@ -693,3 +700,6 @@ message GetDriverCallbacksReply {
     string driverId = 3;
     repeated Callback items = 4;
 }
+
+// END CallbackManager
+////////////////////////

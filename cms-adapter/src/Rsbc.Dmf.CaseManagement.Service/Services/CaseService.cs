@@ -959,33 +959,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public async override Task<GetDriverCallbacksReply> GetDriverCallbacks(DriverIdRequest request, ServerCallContext context)
-        {
-            var reply = new GetDriverCallbacksReply();
-
-            try
-            {
-                var result = await _caseManager.GetDriverCallbacks(Guid.Parse(request.Id));
-                var callbacks = _mapper.Map<IEnumerable<Callback>>(result);
-                reply.Items.AddRange(callbacks);
-                reply.DriverId = request.Id;
-                reply.ResultStatus = ResultStatus.Success;
-            }
-            catch (Exception ex)
-            {
-                reply.ErrorDetail = ex.Message;
-                reply.ResultStatus = ResultStatus.Fail;
-            }
-
-            return reply;
-        }
-
-        /// <summary>
-        /// Get Driver Documents
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
         public async override Task<GetDocumentsReply> GetDriverDocumentsById(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetDocumentsReply();
