@@ -3,7 +3,6 @@ using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,11 +11,9 @@ namespace Rsbc.Dmf.CaseManagement
     public interface IUserManager
     {
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
-
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
-
         Task<bool> SetUserEmail(string userId, string email);
-
+        bool SetDriverEmail(string driverId, string email);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
@@ -209,6 +206,26 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Items = mappedUsers.ToArray()
             };
+        }
+
+        public bool SetDriverEmail(string driverId, string email)
+        {
+            var login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Expand(d => d.dfp_DriverId.dfp_PersonId)
+                .Where(l => l._dfp_driverid_value == Guid.Parse(driverId))
+                .FirstOrDefault();
+
+            if (login != null)
+            {
+                login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
+
+                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+                dynamicsContext.SaveChanges();
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<bool> SetUserEmail(string userId, string email)

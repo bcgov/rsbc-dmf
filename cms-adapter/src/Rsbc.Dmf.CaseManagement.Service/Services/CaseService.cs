@@ -1078,7 +1078,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
         /// <summary>
         /// Get Driver
         /// </summary>
@@ -1086,6 +1085,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="context"></param>
         /// <returns></returns>
         public async override Task<GetDriversReply> GetDriver(DriverLicenseRequest request, ServerCallContext context)
+        {
+            return await GetDriver(request, false);
+        }
+
+        /// <summary>
+        /// Get Driver With BirthDate
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<GetDriversReply> GetDriverPerson(DriverLicenseRequest request, ServerCallContext context)
+        {
+            return await GetDriver(request, true);
+        }
+
+        private async Task<GetDriversReply> GetDriver(DriverLicenseRequest request, bool includeBirthdate)
         {
             var reply = new GetDriversReply();
             try
@@ -1101,6 +1116,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         driver.Surname = item.Surname ?? string.Empty;
                         driver.GivenName = item.GivenName ?? string.Empty;
                         driver.Id = item.Id;
+                        if (includeBirthdate)
+                        {
+                            driver.BirthDate = Timestamp.FromDateTime(item.BirthDate.ToUniversalTime());
+                        }
                     }
                     reply.Items.Add(driver);
                 }
@@ -1113,7 +1132,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             return reply;
         }
-
 
         /// <summary>
         /// Get Driver

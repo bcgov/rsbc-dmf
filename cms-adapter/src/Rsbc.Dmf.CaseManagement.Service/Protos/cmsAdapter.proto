@@ -55,6 +55,8 @@ service CaseManager {
 
   rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
 
+  rpc GetDriverPerson (DriverLicenseRequest) returns (GetDriversReply);
+
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
   rpc GetLegacyDocument (LegacyDocumentRequest) returns (GetLegacyDocumentReply);
@@ -129,7 +131,7 @@ message DriverIdRequest {
 }
 
 message DriverLicenseRequest {
-    string driverLicenseNumber= 1;
+	string driverLicenseNumber = 1;
 }
 
 message CaseIdRequest {
@@ -548,6 +550,7 @@ service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc SetDriverEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
 }
 

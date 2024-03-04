@@ -1,70 +1,45 @@
-﻿using Hangfire;
+﻿using Google.Protobuf.WellKnownTypes;
 using Hangfire.Console;
 using Hangfire.Server;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Rest;
+using Pssg.Interfaces;
+using Pssg.Interfaces.Icbc.Models;
+using Pssg.Interfaces.IcbcModels;
+using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System;
-using System.Collections.Generic;
-using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using Renci.SshNet;
-using System.IO;
-using Pssg.SharedUtils;
-using FileHelpers;
-using Rsbc.Dmf.CaseManagement.Service;
 using System.Linq;
-using Rsbc.Dmf.IcbcAdapter.ViewModels;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Net.Http;
-using Newtonsoft.Json;
-using Google.Protobuf.WellKnownTypes;
-using Pssg.Interfaces;
-using Newtonsoft.Json.Serialization;
-using Pssg.Interfaces.Icbc.Models;
-using System.Net.Http.Json;
-using Newtonsoft.Json.Linq;
-using Grpc.Core;
-using Pssg.Interfaces.IcbcModels;
-using Org.BouncyCastle.Asn1.X509;
+using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
     public class EnhancedIcbcApiUtils
     {
-        
+
         private IConfiguration _configuration { get; }
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
         private readonly IIcbcClient _icbcClient;
-       
-       
 
-        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient )
+        public EnhancedIcbcApiUtils(IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IIcbcClient icbcClient)
         {
             _configuration = configuration;
             _caseManagerClient = caseManagerClient;
             _icbcClient = icbcClient;
-            
- 
         }
-
-
 
         /// <summary>
         /// Hangfire job to check for and send recent items in the queue
         /// </summary>
-       
+
         public async Task SendMedicalUpdates()
         {
             Log.Logger.Error("Starting SendMedicalUpdates");
 
             // Get Unsent Medical for manual and clean pass
-            
+
             var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
 
-            
+
 
             foreach (var unsentItem in unsentItems.Items)
             {
@@ -79,7 +54,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     if (responseContent.Contains("SUCCESS"))
                     {
                         // mark it as sent
-                        MarkMedicalUpdateSent(unsentItem.CaseId);                             
+                        MarkMedicalUpdateSent(unsentItem.CaseId);
                     }
                     else
                     {
@@ -90,12 +65,12 @@ namespace Rsbc.Dmf.IcbcAdapter
                             Description = responseContent,
                             Assignee = string.Empty,
                             Priority = BringForwardPriority.Normal
-                            
+
                         };
-                            
+
                         _caseManagerClient.CreateBringForward(bringForwardRequest);
 
-                         // Mark ICBC error 
+                        // Mark ICBC error 
 
                         var icbcError = new IcbcErrorRequest
                         {
@@ -105,19 +80,19 @@ namespace Rsbc.Dmf.IcbcAdapter
                         _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
                         Log.Logger.Error($"ICBC Error {responseContent}");
-                    }                                            
+                    }
                 }
 
 
                 else
                 {
-                    Log.Logger.Error( $"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
+                    Log.Logger.Error($"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
                 }
 
 
             }
 
-            Log.Logger.Error( "End of SendMedicalUpdates.");
+            Log.Logger.Error("End of SendMedicalUpdates.");
 
             // create for one more call for GetmedicalAdjudication
 
@@ -136,7 +111,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     {
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
-                        
+
                     }
 
                     else
@@ -166,13 +141,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                     }
                 }
 
-                }
+            }
 
 
-           }
+        }
 
-            private void MarkMedicalUpdateSent ( string caseId)
-        {            
+        private void MarkMedicalUpdateSent(string caseId)
+        {
             var idListRequest = new IdListRequest();
             idListRequest.IdList.Add(caseId);
             var result = _caseManagerClient.MarkMedicalUpdatesSent(idListRequest);
@@ -180,11 +155,11 @@ namespace Rsbc.Dmf.IcbcAdapter
             Log.Logger.Error($"Mark Medical Update Sent {caseId} status is  {result.ResultStatus} {result.ErrorDetail}");
         }
 
-        public IcbcMedicalUpdate GetMedicalUpdateDataforPass (DmerCase item)
+        public IcbcMedicalUpdate GetMedicalUpdateDataforPass(DmerCase item)
         {
 
             // Start by getting the current status for the given driver.  If the medical disposition matches, do not proceed.
-                
+
             if (item.Driver != null)
             {
                 string licenseNumber = item.Driver.DriverLicenseNumber;
@@ -200,7 +175,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     else
                     {
 
-                        if ( medicalDispositionValue != "P"
+                        if (medicalDispositionValue != "P"
                            // Add check driver already has a P in the driver history
                            )
                         {
@@ -230,7 +205,10 @@ namespace Rsbc.Dmf.IcbcAdapter
                         }
                         else
                         {
-                            Log.Logger.Error("medicalDispositionValue already P");
+                            Log.Logger.Information("GetMedicalUpdateDataforPass medicalDispositionValue already P");
+
+                            // tag as sent.
+                            MarkMedicalUpdateSent(item.CaseId);
                         }
                     }
                 }
@@ -239,13 +217,13 @@ namespace Rsbc.Dmf.IcbcAdapter
                     Log.Logger.Error(e, "Error getting driver from ICBC.");
                 }
 
-                
+
             }
             else
             {
                 Log.Logger.Information($"Case {item.CaseId} {item.Title} has no Driver..");
             }
-             
+
             return null;
         }
 
@@ -265,32 +243,47 @@ namespace Rsbc.Dmf.IcbcAdapter
                 try
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
-                    if (driver != null && driver.INAM?.SURN != null)
-                    {
-                        var newUpdate = new IcbcMedicalUpdate()
-                        {
-                            DlNumber = licenseNumber,
-                            LastName = driver.INAM.SURN,
-                        };
+                    var medicalDispositionValue = GetMedicalDisposition(driver);
 
-                        if(newUpdate != null)
-                        {
-                            newUpdate.MedicalDisposition = "J";
-                        }
-
-
-                        // get most recent Medical Issue Date from the driver.
-
-                        DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
-
-                        newUpdate.MedicalIssueDate = adjustedDate;
-
-                        return newUpdate;
-                    }
-                    else
+                    if (driver == null && driver.INAM?.SURN == null)
                     {
                         Log.Logger.Error("Error getting driver from ICBC.");
                     }
+                    else
+                    {
+                        // check driver already has a J in the driver history
+                        if (medicalDispositionValue != "J")
+                        {
+                            var newUpdate = new IcbcMedicalUpdate()
+                            {
+                                DlNumber = licenseNumber,
+                                LastName = driver.INAM.SURN,
+                            };
+
+                            if (newUpdate != null)
+                            {
+                                newUpdate.MedicalDisposition = "J";
+                            }
+
+
+                            // get most recent Medical Issue Date from the driver.
+
+                            DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
+
+                            newUpdate.MedicalIssueDate = adjustedDate;
+
+                            return newUpdate;
+                        }
+                        else
+                        {
+                            Log.Logger.Information("GetMedicalUpdateDataforAdjudication medicalDispositionValue already J");
+
+                            // tag as sent.
+                            MarkMedicalUpdateSent(item.CaseId);
+                        }
+
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -318,8 +311,8 @@ namespace Rsbc.Dmf.IcbcAdapter
             // Get List of  drivers from dynamics
 
             var driversReply = _caseManagerClient.GetDrivers(new CaseManagement.Service.EmptyRequest());
-                
-            foreach(var driver in driversReply.Items)
+
+            foreach (var driver in driversReply.Items)
             {
                 var dlNumber = driver.DriverLicenseNumber;
 
@@ -338,9 +331,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                             Surname = response.INAM?.SURN ?? string.Empty
                         });
                     }
-                  
+
                 }
-            }        
+            }
         }
 
         /// <summary>
@@ -355,13 +348,13 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 foreach (var item in driver.DR1MST.DR1MEDN)
                 {
-                    if (item.MIDT != null && item.MIDT > result)
+                    if (item.MDSP != null && item.MDSP != "I" && item.MIDT != null && item.MIDT > result)
                     {
                         result = item.MIDT.Value;
                     }
                 }
             }
-            
+
 
             return result;
         }
@@ -379,14 +372,14 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 foreach (var item in driver.DR1MST.DR1MEDN)
                 {
-                    if (item.MDSP != null)
+                    if (item.MDSP != null && item.MDSP != "I")
                     {
-                        result= item.MDSP;
+                        result = item.MDSP;
                     }
                 }
             }
 
-           return result;
+            return result;
         }
 
         public class ClientResult
