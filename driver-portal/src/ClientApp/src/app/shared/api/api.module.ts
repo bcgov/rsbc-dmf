@@ -11,7 +11,6 @@ import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
 import { ProfileService } from './services/profile.service';
-import { UserService } from './services/user.service';
 
 /**
  * Module that provides all services and configuration.
@@ -28,7 +27,6 @@ import { UserService } from './services/user.service';
     DocumentTypeService,
     DriverService,
     ProfileService,
-    UserService,
     ApiConfiguration
   ],
 })

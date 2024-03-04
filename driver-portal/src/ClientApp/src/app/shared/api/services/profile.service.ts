@@ -15,8 +15,11 @@ import { apiProfileCurrentGet$Plain } from '../fn/profile/api-profile-current-ge
 import { ApiProfileCurrentGet$Plain$Params } from '../fn/profile/api-profile-current-get-plain';
 import { apiProfileDriverPut } from '../fn/profile/api-profile-driver-put';
 import { ApiProfileDriverPut$Params } from '../fn/profile/api-profile-driver-put';
-import { apiProfileEmailPut } from '../fn/profile/api-profile-email-put';
-import { ApiProfileEmailPut$Params } from '../fn/profile/api-profile-email-put';
+import { apiProfileRegisterPut$Json } from '../fn/profile/api-profile-register-put-json';
+import { ApiProfileRegisterPut$Json$Params } from '../fn/profile/api-profile-register-put-json';
+import { apiProfileRegisterPut$Plain } from '../fn/profile/api-profile-register-put-plain';
+import { ApiProfileRegisterPut$Plain$Params } from '../fn/profile/api-profile-register-put-plain';
+import { OkResult } from '../models/ok-result';
 import { UserProfile } from '../models/user-profile';
 
 @Injectable({ providedIn: 'root' })
@@ -72,28 +75,50 @@ export class ProfileService extends BaseService {
     );
   }
 
-  /** Path part for operation `apiProfileEmailPut()` */
-  static readonly ApiProfileEmailPutPath = '/api/Profile/email';
+  /** Path part for operation `apiProfileRegisterPut()` */
+  static readonly ApiProfileRegisterPutPath = '/api/Profile/Register';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiProfileEmailPut()` instead.
+   * To access only the response body, use `apiProfileRegisterPut$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfileEmailPut$Response(params?: ApiProfileEmailPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiProfileEmailPut(this.http, this.rootUrl, params, context);
+  apiProfileRegisterPut$Plain$Response(params?: ApiProfileRegisterPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiProfileRegisterPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiProfileEmailPut$Response()` instead.
+   * To access the full response (for headers, for example), `apiProfileRegisterPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfileEmailPut(params?: ApiProfileEmailPut$Params, context?: HttpContext): Observable<void> {
-    return this.apiProfileEmailPut$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiProfileRegisterPut$Plain(params?: ApiProfileRegisterPut$Plain$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiProfileRegisterPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiProfileRegisterPut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileRegisterPut$Json$Response(params?: ApiProfileRegisterPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiProfileRegisterPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiProfileRegisterPut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileRegisterPut$Json(params?: ApiProfileRegisterPut$Json$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiProfileRegisterPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
     );
   }
 
