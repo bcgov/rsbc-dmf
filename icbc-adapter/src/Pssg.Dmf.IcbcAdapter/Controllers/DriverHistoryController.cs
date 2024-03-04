@@ -166,7 +166,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                     if (!string.IsNullOrEmpty(data.ADDR.POBX))
                     {
-                        addressComponents += $"\n PO BOX {data.ADDR.POBX}";
+                        addressComponents += $"\n</br> PO BOX {data.ADDR.POBX}";
                     }
 
                     result.AddressLine1 = addressComponents;
