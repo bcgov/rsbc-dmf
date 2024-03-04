@@ -400,7 +400,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                 if (comment.CaseId != null && comment.CaseId != "none" && comment.CaseId != "null")
                 {
                     caseId = comment.CaseId;
-                }
+                }                
                 else // handle situations where the CaseID is not supplied.
                 {
                     if (comment.SequenceNumber != null)
@@ -409,12 +409,9 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                         caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName, (int)comment.SequenceNumber.Value);
                     }
 
-                    if (caseId == null) // try just the DL and Surname.
-                    {
-                        caseId = _cmsAdapterClient.GetCaseId(comment.Driver.LicenseNumber, comment.Driver.LastName);
-                    }
-
+                    // 2024-03-01 - do not try further, the comment will just be attached to the driver.
                 }
+                
 
                 var payload = new LegacyComment()
                 {
@@ -693,8 +690,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                     OriginatingNumber = string.Empty,
                     SubmittalStatus = "Sent",
                 };
-
-                // Convert the 
 
                 string importDateString = importDate.ToString("yyyyMMddHHmmss");
                 string fileKey = DocumentUtils.SanitizeKeyFilename($"D{importDateString}-{filename}");

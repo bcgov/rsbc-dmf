@@ -1086,8 +1086,14 @@ namespace Rsbc.Dmf.CaseManagement
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
-                var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
-                await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseComment-1");                
+                var driverResult = await CreateDriver(new CreateDriverRequest()
+                {
+                    DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                    BirthDate = request.Driver.BirthDate,
+                    SequenceNumber = request.SequenceNumber,
+                    Surname = request.Driver.Surname
+                });
+
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
 
@@ -1744,7 +1750,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
-                        if (request.DocumentSubTypeId != null)
+                        if (!string.IsNullOrEmpty(request.DocumentSubTypeId))
                         {
                             var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
                                 .FirstOrDefault();
@@ -1754,26 +1760,30 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                         }
 
+                        dynamicsContext.SaveChanges();
 
-                        if (!string.IsNullOrEmpty(request.CaseId))
+                        if (!string.IsNullOrEmpty(request.CaseId) && !(request.CaseId == Guid.Empty.ToString()))
                         {
-                            Guid caseId;
-                            if (Guid.TryParse(request.CaseId, out caseId))
+                            try
                             {
+                                Guid caseId = Guid.Parse(request.CaseId);                                
                                 if (caseId != Guid.Empty)
                                 {
                                     var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
                                     if (theCase != null)
                                     {
                                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                        dynamicsContext.SaveChanges();
                                     }
                                     dynamicsContext.Detach(theCase);
-                                }
+                                }                                
+                            }
+                            catch (Exception ex)
+                            {
+                                Log.Error(ex, $"CreateDocumentOnDriver Error linking Case {request.CaseId} to Document.");
                             }
                             
                         }
-
-                        dynamicsContext.SaveChanges();
 
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
@@ -3898,10 +3908,10 @@ namespace Rsbc.Dmf.CaseManagement
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
                             // Condition Check if the document is DMER 
-                            if(document.dfp_DocumentTypeID != null
+                            //Updating code on 2 / 29 / 2024 removed the check for manual pass
+                            if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
                                 )
                             {
                                 outputArray.Add(item);
@@ -3988,6 +3998,7 @@ namespace Rsbc.Dmf.CaseManagement
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
                                 || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                             {

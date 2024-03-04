@@ -47,7 +47,11 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 data = _icbcClient.GetDriverHistory(driversLicence);
 
                 // ensure the presentation of the DL matches the calling system.
-                data.DR1MST.LNUM = driversLicence;
+                if (data != null && data.DR1MST != null)
+                {
+                    data.DR1MST.LNUM = driversLicence;
+                }
+                
                 // Key not in cache, so get data.
                 //cacheEntry = DateTime.Now;
                 if (data != null)
@@ -103,7 +107,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     // AddressPrefix1
                     if (!string.IsNullOrEmpty(data.ADDR.APR1))
                     {
-                        addressComponents += $" {data.ADDR.APR1}";
+                        addressComponents += $"{(addressComponents.Length > 0 ? ' ' : String.Empty)}{data.ADDR.APR1}";
                     }
 
                     //AddressPrefix2
@@ -144,13 +148,6 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         addressComponents += $"RR# {data.ADDR.RURR}";
                     }
 
-                    // PostOfficeBox
-
-                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
-                    {
-                        addressComponents += $"PO BOX {data.ADDR.POBX}";
-                    }
-
                     //Street Name
                     if (!string.IsNullOrEmpty(data.ADDR.STNM))
                     {
@@ -167,6 +164,13 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     if (!string.IsNullOrEmpty(data.ADDR.STDI))
                     {
                         addressComponents += $" {data.ADDR.STDI}";
+                    }
+
+                    // PostOfficeBox
+
+                    if (!string.IsNullOrEmpty(data.ADDR.POBX))
+                    {
+                        addressComponents += $"\n PO BOX {data.ADDR.POBX}";
                     }
 
                     result.AddressLine1 = addressComponents;
