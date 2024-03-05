@@ -21,7 +21,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         /// <summary>
-        /// Get Case
+        /// Get Callbacks for the driver
         /// </summary>        
         [HttpGet("{driverId}")]
         [Authorize(Policy = Policy.Driver)]
