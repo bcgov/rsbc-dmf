@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
-using Microsoft.Extensions.Configuration;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api;
 using System;
@@ -14,13 +13,11 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     public class AutoMapperTests
     {
         private readonly IMapper _mapper;
-        private readonly IConfiguration _configuration;
         private LegacyDocument _document;
 
-        public AutoMapperTests(IMapper mapper, IConfiguration configuration)
+        public AutoMapperTests(IMapper mapper)
         {
             _mapper = mapper;
-            _configuration = configuration;
             _document = new LegacyDocument
             {
                 ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
