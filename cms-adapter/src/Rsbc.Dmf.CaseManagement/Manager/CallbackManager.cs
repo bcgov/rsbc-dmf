@@ -49,8 +49,11 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         Id = callback.activityid ?? Guid.NewGuid(),
                         RequestCallback = callback.scheduledend.GetValueOrDefault(),
+                        // TODO find the correct field for Topic, no Dynamics values seem to match this
                         Topic = CallbackTopic.Upload,//Enum.Parse<CallbackTopic>(callback.activitytypecode), e.g. "task"
-                        CallStatus = (CallbackCallStatus)callback.statecode,
+                        // TODO find the correct field for CallStatus
+                        // Dynamics statuscode values are blank, "Pending", and "Completed"
+                        CallStatus = (CallbackCallStatus)callback.statuscode,
                         Closed = callback.actualend.GetValueOrDefault()
                     });
                 }
