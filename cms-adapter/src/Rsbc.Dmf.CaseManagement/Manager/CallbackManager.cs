@@ -23,11 +23,6 @@ namespace Rsbc.Dmf.CaseManagement
             _logger = logger;
         }
 
-        ///<summary>
-        ///Get Driver Callbacks
-        /// </summary>
-        /// <param name="driverId"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<Callback>> GetDriverCallbacks(Guid driverId)
         {
             // get cases and include callbacks
