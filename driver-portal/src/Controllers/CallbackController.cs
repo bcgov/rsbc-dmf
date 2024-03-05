@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
-using System.ComponentModel.DataAnnotations;
+using Rsbc.Dmf.DriverPortal.Api.Services;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -11,28 +11,32 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class CallbackController : Controller
     {
         private readonly CallbackManager.CallbackManagerClient _callbackManagerClient;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public CallbackController(CallbackManager.CallbackManagerClient callbackManagerClient, IMapper mapper)
+        public CallbackController(CallbackManager.CallbackManagerClient callbackManagerClient, IUserService userService, IMapper mapper)
         {
             _callbackManagerClient = callbackManagerClient;
+            _userService = userService;
             _mapper = mapper;
         }
 
         /// <summary>
         /// Get Callbacks for the driver
         /// </summary>        
-        [HttpGet("{driverId}")]
+        [HttpGet("driver")]
         [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDriverCallbacks))]
-        public ActionResult GetDriverCallbacks([Required][FromRoute] string driverId)
+        public async Task<ActionResult> GetDriverCallbacks()
         {
             var result = new List<ViewModels.Callback>();
 
-            var driverIdRequest = new DriverIdRequest { Id = driverId };
+            var profile = await _userService.GetCurrentUserContext();
+
+            var driverIdRequest = new DriverIdRequest { Id = profile.DriverId };
             var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
@@ -40,7 +44,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             else
             {
-                return StatusCode(500, driverCallbacks?.ErrorDetail ?? "GetDriverCallbacks failed.");
+                return StatusCode(500, driverCallbacks?.ErrorDetail ?? $"{nameof(GetDriverCallbacks)} failed.");
             }
 
             return Json(result);

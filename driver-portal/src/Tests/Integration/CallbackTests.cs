@@ -18,7 +18,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             if (string.IsNullOrEmpty(driverId))
                 return;
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/{driverId}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/driver");
             var response = await HttpClientSendRequest<IEnumerable<Callback>>(request);
 
             Assert.NotNull(response);
