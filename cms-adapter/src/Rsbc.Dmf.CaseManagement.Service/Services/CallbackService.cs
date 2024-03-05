@@ -20,12 +20,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Get Driver Callbacks
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
         public async override Task<GetDriverCallbacksReply> GetDriverCallbacks(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetDriverCallbacksReply();
