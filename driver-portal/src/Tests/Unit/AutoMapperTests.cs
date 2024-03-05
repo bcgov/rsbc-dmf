@@ -100,7 +100,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
         public void Map_Callback_To_ViewModel()
         {
             var callback = new Callback();
-            callback.Id = _configuration["DRIVER_WITH_CALLBACKS"];
+            callback.Id = Guid.NewGuid().ToString();
             callback.RequestCallback = new Timestamp();
             callback.Topic = Callback.Types.CallbackTopic.Upload;
             callback.CallStatus = Callback.Types.CallbackCallStatus.Open;
