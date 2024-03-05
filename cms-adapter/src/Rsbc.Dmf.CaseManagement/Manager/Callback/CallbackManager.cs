@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-    public interface ICallbackManager
-    {
-        Task<IEnumerable<Callback>> GetDriverCallbacks(Guid driverId);
-    }
-
     internal partial class CallbackManager : ICallbackManager
     {
         internal readonly DynamicsContext _dynamicsContext;
