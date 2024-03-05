@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.ComponentModel.DataAnnotations;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
@@ -25,20 +24,19 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// </summary>        
         [HttpGet("{driverId}")]
         [Authorize(Policy = Policy.Driver)]
-        [ProducesResponseType(typeof(DriverCallbacks), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDriverCallbacks))]
         public ActionResult GetDriverCallbacks([Required][FromRoute] string driverId)
         {
-            var result = new DriverCallbacks();
+            var result = new List<ViewModels.Callback>();
 
             var driverIdRequest = new DriverIdRequest { Id = driverId };
             var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
-                result.DriverId = driverCallbacks.DriverId;
-                result.Callbacks = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
+                result = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
             }
             else
             {

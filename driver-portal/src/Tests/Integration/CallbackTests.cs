@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Microsoft.Extensions.Configuration;
 using Rsbc.Dmf.DriverPortal.ViewModels;
+using System.Collections.Generic;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -18,10 +19,9 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
                 return;
 
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/{driverId}");
-            var response = await HttpClientSendRequest<DriverCallbacks>(request);
+            var response = await HttpClientSendRequest<IEnumerable<Callback>>(request);
 
             Assert.NotNull(response);
-            Assert.Equal(response.DriverId, driverId);
         }
     }
 }
