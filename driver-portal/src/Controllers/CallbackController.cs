@@ -11,12 +11,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     [ApiController]
     public class CallbackController : Controller
     {
-        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly CallbackManager.CallbackManagerClient _callbackManagerClient;
         private readonly IMapper _mapper;
 
-        public CallbackController(CaseManager.CaseManagerClient cmsAdapterClient, IMapper mapper)
+        public CallbackController(CallbackManager.CallbackManagerClient callbackManagerClient, IMapper mapper)
         {
-            _cmsAdapterClient = cmsAdapterClient;
+            _callbackManagerClient = callbackManagerClient;
             _mapper = mapper;
         }
 
@@ -24,29 +24,21 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// Get Case
         /// </summary>        
         [HttpGet("{driverId}")]
+        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(DriverCallbacks), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetDriverCallbacks")]
-
-        // TODO REMOVE THIS
-        [AllowAnonymous]
-
+        [ActionName(nameof(GetDriverCallbacks))]
         public ActionResult GetDriverCallbacks([Required][FromRoute] string driverId)
         {
             var result = new DriverCallbacks();
 
             var driverIdRequest = new DriverIdRequest { Id = driverId };
-            var driverCallbacks = _cmsAdapterClient.GetDriverCallbacks(driverIdRequest);
+            var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
                 result.DriverId = driverCallbacks.DriverId;
-                result.Callbacks = new List<ViewModels.Callback>();
-                foreach (var callback in driverCallbacks.Items)
-                {
-                    var callbackViewModel = _mapper.Map<ViewModels.Callback>(callback);
-                    result.Callbacks.Add(callbackViewModel);
-                }
+                result.Callbacks = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
             }
             else
             {

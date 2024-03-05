@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
+using Microsoft.Extensions.Configuration;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api;
 using System;
@@ -13,11 +14,13 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     public class AutoMapperTests
     {
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private LegacyDocument _document;
 
-        public AutoMapperTests(IMapper mapper)
+        public AutoMapperTests(IMapper mapper, IConfiguration configuration)
         {
             _mapper = mapper;
+            _configuration = configuration;
             _document = new LegacyDocument
             {
                 ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
@@ -91,6 +94,21 @@ namespace Rsbc.Dmf.DriverPortal.Tests
 
             Assert.NotNull(mappedDocument);
             Assert.Equal("Uploaded", mappedDocument.SubmittalStatus);
+        }
+
+        [Fact]
+        public void Map_Callback_To_ViewModel()
+        {
+            var callback = new Callback();
+            callback.Id = _configuration["DRIVER_WITH_CALLBACKS"];
+            callback.RequestCallback = new Timestamp();
+            callback.Topic = Callback.Types.CallbackTopic.Upload;
+            callback.CallStatus = Callback.Types.CallbackCallStatus.Open;
+            callback.ClosedDate = new Timestamp();
+
+            var callbackViewModel = _mapper.Map<ViewModels.Callback>(callback);
+
+            Assert.NotNull(callbackViewModel);
         }
     }
 }
