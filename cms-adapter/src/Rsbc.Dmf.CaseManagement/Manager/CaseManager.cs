@@ -4125,8 +4125,10 @@ namespace Rsbc.Dmf.CaseManagement
                         in dynamicsContext.incidents
                         where( incident.dfp_caseresolvedate != null
                         && incident.dfp_caseresolvedate <= currentDate 
-                        && incident.statecode == 0)
+                        && incident.statecode == 0
+                        && incident.dfp_bpfstage == 100000003) // Check if the case status is in File End Tasks
                         || incident.dfp_immediateclosure == true
+
                         select incident;
 
             DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
