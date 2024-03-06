@@ -27,6 +27,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate) 
                 .AddTransform(NullStringConverter);
             CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
+            CreateMap<Callback, ViewModels.Callback>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

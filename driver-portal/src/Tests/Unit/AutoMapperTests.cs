@@ -92,5 +92,20 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             Assert.NotNull(mappedDocument);
             Assert.Equal("Uploaded", mappedDocument.SubmittalStatus);
         }
+
+        [Fact]
+        public void Map_Callback_To_ViewModel()
+        {
+            var callback = new Callback();
+            callback.Id = Guid.NewGuid().ToString();
+            callback.RequestCallback = new Timestamp();
+            callback.Topic = Callback.Types.CallbackTopic.Upload;
+            callback.CallStatus = Callback.Types.CallbackCallStatus.Open;
+            callback.ClosedDate = new Timestamp();
+
+            var callbackViewModel = _mapper.Map<ViewModels.Callback>(callback);
+
+            Assert.NotNull(callbackViewModel);
+        }
     }
 }

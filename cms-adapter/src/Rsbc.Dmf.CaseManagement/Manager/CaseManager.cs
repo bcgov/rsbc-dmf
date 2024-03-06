@@ -321,7 +321,6 @@ namespace Rsbc.Dmf.CaseManagement
             _caseMapper = caseMapper;
             OutcomeStatusTypes = GetOutcomeStatusTypes();
             OutcomeSubStatusTypes = GetOutcomeSubStatusTypes();
-
         }
 
         private Dictionary<string, Guid> GetOutcomeStatusTypes()
@@ -976,44 +975,35 @@ namespace Rsbc.Dmf.CaseManagement
 
                 // Get the case
                 var @case = GetIncidentById(caseId);
-                // load owner
 
-                
-               
+                // load owner
                 if (string.IsNullOrEmpty(request.Assignee))
-                 {
-                    
-                   if(@case._owningteam_value != null)
-                    {
+                {
+                   if (@case._owningteam_value != null)
+                   {
                         // create a reference to team
                         var caseTeam = dynamicsContext.teams.ByKey(@case._owningteam_value.Value).GetValue();
-
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
                     }
-                    else {
-                        //create a reference to system user
-
+                    else 
+                    {
+                        // create a reference to system user
                         var caseUser = dynamicsContext.systemusers.ByKey(@case._owninguser_value).GetValue();
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseUser);
                     }
-
-                   
                 }
                 else
                 {
                     // set the BF owner to request assignee
                     if (@case._ownerid_value != null)
-
                     {
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
-
                     };
                 }
-
-               
+         
                 // Create a bring Forward
                 try
                 {

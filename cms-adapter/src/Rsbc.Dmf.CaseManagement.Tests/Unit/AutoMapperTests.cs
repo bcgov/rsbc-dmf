@@ -130,5 +130,21 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(documentSubType.Name, mappedDocumentSubType.Name);
         }
 
+
+        [Fact]
+        public void Map_Service_Callback()
+        {
+            var callback = new Callback();
+            callback.Id = Guid.NewGuid();
+            callback.RequestCallback = new DateTimeOffset();
+            callback.Topic = CallbackTopic.Upload;
+            callback.CallStatus = CallbackCallStatus.Open;
+            callback.Closed = new DateTimeOffset();
+
+            var mappedCallback = _mapper.Map<Service.Callback>(callback);
+
+            Assert.NotNull(mappedCallback);
+        }
+
     }
 }

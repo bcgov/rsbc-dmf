@@ -9,6 +9,7 @@ namespace Rsbc.Dmf.CaseManagement
         public static IServiceCollection RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDynamics(configuration);
+            services.AddTransient<ICallbackManager, CallbackManager>();
             services.AddTransient<ICaseManager, CaseManager>();
             services.AddTransient<ICssManager, CssManager>();
             services.AddTransient<IUserManager, UserManager>();            

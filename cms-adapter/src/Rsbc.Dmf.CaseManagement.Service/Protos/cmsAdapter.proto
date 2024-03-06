@@ -121,13 +121,13 @@ enum EntityState {
     Inactive = 1;
 }
 
-message UpdateDriverRequest {
-	string driverLicenseNumber = 1;
-	google.protobuf.Timestamp birthDate = 2;
+message UpdateDriverRequest{
+    string driverLicenseNumber=1;
+    google.protobuf.Timestamp birthDate = 2;
 }
 
 message DriverIdRequest {
-	string id = 1;
+    string id = 1;
 }
 
 message DriverLicenseRequest {
@@ -135,7 +135,7 @@ message DriverLicenseRequest {
 }
 
 message CaseIdRequest {
-	string caseId= 1;
+    string caseId= 1;
 }
 
 message CaseStatusRequest {
@@ -144,9 +144,9 @@ message CaseStatusRequest {
 }
 
 enum OriginRestrictions {
-	None = 0;
-	UserOnly = 1;
-	SystemOnly = 2;
+    None = 0;
+    UserOnly = 1;
+    SystemOnly = 2;
 }
 
 message CommentsRequest {
@@ -156,16 +156,16 @@ message CommentsRequest {
 }
 
 message CommentIdRequest {
-	string commentId= 1;
+    string commentId= 1;
 }
 
 message LegacyDocumentRequest {
-	string documentId=1;
+    string documentId=1;
 }
 
 message LegacyDocumentStatusRequest{
-	string documentId=1;
-	int64 status = 2;
+    string documentId=1;
+    int64 status = 2;
 }
 
 message GetCasesReply {
@@ -175,27 +175,27 @@ message GetCasesReply {
 }
 
 message GetCaseDetailReply {
-	CaseDetail item = 1;
-	ResultStatus resultStatus = 2;
-	string errorDetail = 3;
+    CaseDetail item = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
 }
 
 message GetCommentsReply {
-	repeated LegacyComment items = 1;
-	ResultStatus resultStatus = 2;
-	string errorDetail = 3;
+    repeated LegacyComment items = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
 }
 
 message GetDocumentsReply {
-	repeated LegacyDocument items = 1;
-	ResultStatus resultStatus = 2;
-	string errorDetail = 3;
+    repeated LegacyDocument items = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
 }
 
 message GetCommentReply {
-	LegacyComment item = 1;
-	ResultStatus resultStatus = 2;
-	string errorDetail = 3;
+    LegacyComment item = 1;
+    ResultStatus resultStatus = 2;
+    string errorDetail = 3;
 }
 
 message LegacyComment {
@@ -212,27 +212,27 @@ message LegacyComment {
 }
 
 message GetDocumentRequest {	
-	string documentId = 1;
+    string documentId = 1;
 }
 
 message GetLegacyDocumentReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	LegacyDocument document = 3;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    LegacyDocument document = 3;
 }
 
 message PdfDocumentReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	repeated PdfDocument pdfDocuments = 3;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated PdfDocument pdfDocuments = 3;
 }
 
 message PdfDocument{
   string pdfDocumentId = 1;
   enum StatusCodeOptions{
-	  SendToBCMail = 0;
-	  Sent = 1;
-	  FailedToSend = 2;
+      SendToBCMail = 0;
+      Sent = 1;
+      FailedToSend = 2;
    }
   StatusCodeOptions statusCode = 2;
   string filename = 3;
@@ -240,29 +240,29 @@ message PdfDocument{
 }
 
 message CaseDetail {
-	string caseId = 1;
+    string caseId = 1;
     string title = 2;
-	string idCode = 3;
-	google.protobuf.Timestamp openedDate = 4;
-	string caseType = 5;
-	string dmerType = 6;
-	string status = 7;
-	string assigneeTitle = 8;
-	google.protobuf.Timestamp lastActivityDate = 9;
-	string latestDecision = 10;
-	string decisionForClass = 11;
-	google.protobuf.Timestamp decisionDate = 12;
-	google.protobuf.Timestamp dpsProcessingDate = 13;
-	int64 caseSequence = 14;
-	string driverId = 15;
-	int64 outstandingDocuments = 16;
-	string eligibleLicenseClass = 17;
+    string idCode = 3;
+    google.protobuf.Timestamp openedDate = 4;
+    string caseType = 5;
+    string dmerType = 6;
+    string status = 7;
+    string assigneeTitle = 8;
+    google.protobuf.Timestamp lastActivityDate = 9;
+    string latestDecision = 10;
+    string decisionForClass = 11;
+    google.protobuf.Timestamp decisionDate = 12;
+    google.protobuf.Timestamp dpsProcessingDate = 13;
+    int64 caseSequence = 14;
+    string driverId = 15;
+    int64 outstandingDocuments = 16;
+    string eligibleLicenseClass = 17;
 }
 
 message CreateStatusReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	string id = 3;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string id = 3;
 }
 
 message SearchRequest {
@@ -284,15 +284,15 @@ message EmptyRequest {
 }
 
 message CleanPassRequest{
-	string caseId = 1;
+    string caseId = 1;
 }
 
 message ManualPassRequest{
-	string caseId = 1;
+    string caseId = 1;
 }
 
 message GetAllFlagsReply {
-	repeated FlagItem Flags = 1;
+    repeated FlagItem Flags = 1;
 }
 
 message LegacyDecision {
@@ -322,103 +322,103 @@ message DmerCase {
 }
 
 message Driver {
-	string id = 1;
+    string id = 1;
     string name = 2;
-	string givenName = 3;
-	string surname = 4;
-	string middlename = 5;
-	double weight = 6;
-	string sex = 7;
-	google.protobuf.Timestamp birthDate = 8;
-	double height = 9;
-	string seck = 10;
+    string givenName = 3;
+    string surname = 4;
+    string middlename = 5;
+    double weight = 6;
+    string sex = 7;
+    google.protobuf.Timestamp birthDate = 8;
+    double height = 9;
+    string seck = 10;
     Address address = 11;
-	string driverLicenseNumber = 12;
+    string driverLicenseNumber = 12;
 }
 
 message Provider {
-	string id = 1;	
-	string name = 2;
-	string givenName = 3;
-	string surname = 4;
-	string providerDisplayId = 5;
-	string providerDisplayIdType = 6;
-	string providerRole = 7;
-	string providerSpecialty = 8;
-	string phoneUseType = 9;
-	string phoneNumber = 10;
-	string phoneExtension = 11;
-	string faxUseType = 12;
-	string faxNumber = 13;
-	Address address = 14;	
+    string id = 1;	
+    string name = 2;
+    string givenName = 3;
+    string surname = 4;
+    string providerDisplayId = 5;
+    string providerDisplayIdType = 6;
+    string providerRole = 7;
+    string providerSpecialty = 8;
+    string phoneUseType = 9;
+    string phoneNumber = 10;
+    string phoneExtension = 11;
+    string faxUseType = 12;
+    string faxNumber = 13;
+    Address address = 14;	
 }
 
 message Address {
-	string line1 = 1;
-	string line2 = 2;
-	string city = 3;
-	string postal = 4;
+    string line1 = 1;
+    string line2 = 2;
+    string city = 3;
+    string postal = 4;
 }
 
 enum ResultStatus {
-	Fail = 0;
-	Success = 1;
+    Fail = 0;
+    Success = 1;
 }
 
 message TokenRequest {
-	string secret = 1;
+    string secret = 1;
 }
 
 message TokenReply {
-	ResultStatus resultStatus = 1;
-	string token = 2;
-	string errorDetail = 3;
+    ResultStatus resultStatus = 1;
+    string token = 2;
+    string errorDetail = 3;
 }
 
 message CreateDriverRequest {
-	string driverLicenseNumber = 1;
-	google.protobuf.Timestamp birthDate = 2;
-	string surname = 3;
-	string givenName = 4;
+    string driverLicenseNumber = 1;
+    google.protobuf.Timestamp birthDate = 2;
+    string surname = 3;
+    string givenName = 4;
 }
 
 message CreateCaseRequest {
-	string caseId = 1;
-	int64 SequenceNumber = 2;
-	string driverLicenseNumber = 3;
-	string Priority = 4;
-	string Owner = 5;
-	string SubmittalStatus = 6;
+    string caseId = 1;
+    int64 SequenceNumber = 2;
+    string driverLicenseNumber = 3;
+    string Priority = 4;
+    string Owner = 5;
+    string SubmittalStatus = 6;
 }
 
 message UpdateCaseRequest{
-	string caseId = 1;
-	bool isCleanPass = 2;
-	repeated FlagItem flags = 3;
-	string pdfFileKey = 4;
-	int64 pdfFileSize = 5;
-	string dataFileKey = 6;
-	int64 dataFileSize = 7;
+    string caseId = 1;
+    bool isCleanPass = 2;
+    repeated FlagItem flags = 3;
+    string pdfFileKey = 4;
+    int64 pdfFileSize = 5;
+    string dataFileKey = 6;
+    int64 dataFileSize = 7;
 }
 
 message UpdateCaseReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
 }
 
 message SetCasePractitionerClinicRequest{
-	string caseId = 1;
-	string PractitionerId = 2;
-	string ClinicId = 3;
+    string caseId = 1;
+    string PractitionerId = 2;
+    string ClinicId = 3;
 }
 
 message SetCasePractitionerClinicReply{
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
 }
 
 message LegacyCandidateRequest{
-	string licenseNumber = 1;
+    string licenseNumber = 1;
     string clientNumber = 2;
 	string surname = 3;
 	google.protobuf.Timestamp birthDate = 4;
@@ -427,35 +427,35 @@ message LegacyCandidateRequest{
 }
 
 message LegacyCandidateReply{
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	bool isNewCase = 3;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    bool isNewCase = 3;
 }
 
 message FlagItem {
-	string identifier = 1;
-	string question = 2;
-	bool result = 3;
-	enum FlagTypeOptions {
-		Unknown = 0;
-		Submittal = 1;
-		Review = 2;
-		FollowUp = 3;
-		Message = 4;
-	}
-	FlagTypeOptions flagType = 4;
+    string identifier = 1;
+    string question = 2;
+    bool result = 3;
+    enum FlagTypeOptions {
+        Unknown = 0;
+        Submittal = 1;
+        Review = 2;
+        FollowUp = 3;
+        Message = 4;
+    }
+    FlagTypeOptions flagType = 4;
 }
 
 message DecisionItem {
-	string identifier = 1;
-	google.protobuf.Timestamp createdOn = 2;
-	enum DecisionOutcomeOptions {
-		Unknown = 0;
-		FitToDrive = 1;
+    string identifier = 1;
+    google.protobuf.Timestamp createdOn = 2;
+    enum DecisionOutcomeOptions {
+        Unknown = 0;
+        FitToDrive = 1;
         NonComply = 2;
         UnfitToDrive = 3;
-	}
-	DecisionOutcomeOptions outcome = 3;
+    }
+    DecisionOutcomeOptions outcome = 3;
 }
 
 ////////////////////////
@@ -529,21 +529,22 @@ message GetDocumentSubTypeIdReply {
 // START CssManager
 
 service CssManager {
-	rpc GetCss(CssRequest) returns (CssReply);
+    rpc GetCss(CssRequest) returns (CssReply);
 }
 
 message CssRequest {	
-	string id = 1;
+    string id = 1;
 }
 
 message CssReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	string css = 3; 
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string css = 3; 
 }
 
 // END CssManager
 ////////////////////////
+// START UserManager
 
 service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
@@ -563,36 +564,36 @@ message UserDriverAuthorizedRequest {
 }
 
 message UserSetEmailRequest {
-	string userId = 1;
-	string email = 2;
+    string userId = 1;
+    string email = 2;
 }
 
 message UsersSearchRequest {
-	string userId = 1;
-	string externalSystem = 2;
-	string externalSystemUserId = 3;
-	UserType userType = 4;
+    string userId = 1;
+    string externalSystem = 2;
+    string externalSystemUserId = 3;
+    UserType userType = 4;
 }
 
 message UsersSearchReply {
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	repeated User user = 10;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated User user = 10;
 }
 
 message GetDriversReply {
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
-	repeated Driver items = 10;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated Driver items = 10;
 }
 
 message UserLoginRequest {
-	string externalSystemUserId = 1;
-	string externalSystem = 2;
-	UserType userType = 3; 
-	string firstName = 10;
-	string lastName = 11;
-	repeated UserProfile userProfiles = 20;
+    string externalSystemUserId = 1;
+    string externalSystem = 2;
+    UserType userType = 3; 
+    string firstName = 10;
+    string lastName = 11;
+    repeated UserProfile userProfiles = 20;
 }
 
 message UserLoginReply {
@@ -604,55 +605,63 @@ message UserLoginReply {
 }
 
 message User {
-	string id = 1;
-	string externalSystemUserId = 2;
-	string externalSystem = 3;
-	string firstName = 10;
-	string lastName = 11;
-	repeated string roles = 12;
-	repeated UserProfile linkedProfiles = 20;
+    string id = 1;
+    string externalSystemUserId = 2;
+    string externalSystem = 3;
+    string firstName = 10;
+    string lastName = 11;
+    repeated string roles = 12;
+    repeated UserProfile linkedProfiles = 20;
 }
 
 message UserProfile {
-	oneof profile {
-		MedicalPractitionerProfile medicalPractitioner = 1;
-		DriverProfile driver = 2;
-	}
+    oneof profile {
+        MedicalPractitionerProfile medicalPractitioner = 1;
+        DriverProfile driver = 2;
+    }
 }
 
 message MedicalPractitionerProfile {
-	string id = 1;
-	string role = 2;
-	Clinic clinic = 3;
+    string id = 1;
+    string role = 2;
+    Clinic clinic = 3;
 }
 
 message Clinic {
-	string id = 1;
-	string name = 2;
+    string id = 1;
+    string name = 2;
 }
 
 message DriverProfile {
-	string id = 1;
+    string id = 1;
 }
 
 enum UserType {
-	MedicalPractitionerUserType = 0;
-	DriverUserType = 1;
+    MedicalPractitionerUserType = 0;
+    DriverUserType = 1;
 }
 
 message IdListRequest {
-	repeated string idList = 1;
+    repeated string idList = 1;
 }
 
 message IcbcErrorRequest{
-	// string caseId = 1
-	string caseId = 1;
-	string errorMessage = 2;
+    // string caseId = 1
+    string caseId = 1;
+    string errorMessage = 2;
 }
 
 message ResultStatusReply {	
-	ResultStatus resultStatus = 1;
-	string errorDetail = 2;
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+}
+
+// END UserManager
+////////////////////////
+// START CallbackManager
+
+service CallbackManager {
+  rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
 }
 
 enum BringForwardPriority{
@@ -661,11 +670,39 @@ enum BringForwardPriority{
 	High = 2;
 }
 
-message BringForwardRequest {
-	string caseId = 1;
-	// if assignee is blank, assign to the Owner of the Case.
-	string assignee = 2; 
-	string subject = 3;
-	string description = 4;	
-	BringForwardPriority priority = 5;
+// NOTE Callback is synonymous with BringForward and Dynamics Task. Use Callback moving forward and rename BringForward to Callback
+// with any code changes that affect code that uses the term BringForward
+message Callback {
+    string id = 1;
+    google.protobuf.Timestamp requestCallback = 2;
+    enum CallbackTopic {
+        view = 0;
+        upload = 1;
+    }
+    CallbackTopic topic = 3;
+    enum CallbackCallStatus {
+        open = 0;
+        closed = 1;
+    }
+    CallbackCallStatus callStatus = 4;
+    google.protobuf.Timestamp closedDate = 5;
 }
+
+message BringForwardRequest {
+    string caseId = 1;
+    // if assignee is blank, assign to the Owner of the Case.
+    string assignee = 2; 
+    string subject = 3;
+    string description = 4;	
+    BringForwardPriority priority = 5;
+}
+
+message GetDriverCallbacksReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string driverId = 3;
+    repeated Callback items = 4;
+}
+
+// END CallbackManager
+////////////////////////

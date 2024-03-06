@@ -11,6 +11,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
     {
         protected readonly HttpClient _client;
         protected readonly IConfiguration _configuration;
+        protected const string CALLBACK_API_BASE = "/api/Callback";
         protected const string CASE_API_BASE = "/api/Cases";
         protected const string DRIVER_API_BASE = "/api/Driver";
         protected const string PROFILE_API_BASE = "/api/Profile";
