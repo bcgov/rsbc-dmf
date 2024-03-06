@@ -1696,7 +1696,8 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), searchdriver);
-                        if (request.DocumentSubTypeId != null)
+                        dynamicsContext.SaveChanges();
+                        if (!string.IsNullOrEmpty(request.DocumentSubTypeId) && request.DocumentSubTypeId != Guid.Empty.ToString())
                         {
                             var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
                                 .FirstOrDefault();
@@ -1706,7 +1707,7 @@ namespace Rsbc.Dmf.CaseManagement
                             }
                         }
 
-                        await dynamicsContext.SaveChangesAsync();
+                        dynamicsContext.SaveChanges();
                         result.Success = true;
                         result.Id = bcgovDocumentUrl.bcgov_documenturlid.ToString();
                     }
