@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Runtime.Caching;
 using System;
 using System.Net.Http;
 
@@ -25,7 +26,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 return true;
             }
             });
-            services.AddTransient<ISecurityTokenProvider, CachedADFSSecurityTokenProvider>();
+            services.AddMemoryCache();
+            services.AddTransient<ISecurityTokenProvider, AdfsSecurityTokenProvider>();
             services.AddScoped(sp =>
             {
                 var options = sp.GetRequiredService<IOptions<DynamicsOptions>>().Value;

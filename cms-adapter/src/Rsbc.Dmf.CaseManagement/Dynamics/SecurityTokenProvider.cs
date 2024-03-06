@@ -1,5 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -13,45 +16,61 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         Task<string> AcquireToken();
     }
 
-    public class CachedADFSSecurityTokenProvider : ISecurityTokenProvider
+
+    public class AdfsSecurityTokenProvider : ISecurityTokenProvider
     {
-        private readonly string cacheKey = $"{nameof(CachedADFSSecurityTokenProvider)}_token";
-        private readonly ADFSSecurityTokenProvider internalSecurityProvider;
-        private readonly IDistributedCache cache;
-
-        public CachedADFSSecurityTokenProvider(IHttpClientFactory httpClientFactory, IOptions<DynamicsOptions> options, IDistributedCache cache)
-        {
-            internalSecurityProvider = new ADFSSecurityTokenProvider(httpClientFactory, options);
-            this.cache = cache;
-        }
-
-        public async Task<string> AcquireToken() => await cache.GetOrAdd(cacheKey, () => internalSecurityProvider.AcquireToken(), DateTimeOffset.Now.AddMinutes(1));
-    }
-
-    public class ADFSSecurityTokenProvider : ISecurityTokenProvider
-    {
+        private readonly IConfiguration Configuration;
+        private readonly IMemoryCache cache;
+        private const string cacheKey = "adfs_token";
         private readonly DynamicsOptions options;
         private readonly IHttpClientFactory httpClientFactory;
 
-        public ADFSSecurityTokenProvider(IHttpClientFactory httpClientFactory, IOptions<DynamicsOptions> options)
+        public AdfsSecurityTokenProvider(IConfiguration config, IMemoryCache cache, IHttpClientFactory httpClientFactory, IOptions<DynamicsOptions> options)
         {
-            this.options = options.Value;
+            this.Configuration = config;
+            this.cache = cache;
             this.httpClientFactory = httpClientFactory;
+            this.options = options.Value;
         }
+
+        
+
 
         public async Task<string> AcquireToken()
         {
-            using var httpClient = httpClientFactory.CreateClient("adfs_token");           
+
+            string result;
+
+            if (!cache.TryGetValue(cacheKey, out result))
+            {
+                result = await AcquireTokenInternal();
+                cache.Set(cacheKey, result, TimeSpan.FromMinutes(5));
+            }
+
+            return result;
+
+
+        }
+
+
+
+            
+
+
+            public async Task<string> AcquireTokenInternal()
+        {
+            using var httpClient = httpClientFactory.CreateClient("adfs_token");
             httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
             // Construct the body of the request
             var pairs = new List<KeyValuePair<string, string>>
-                {
+            {
                     new KeyValuePair<string, string>("resource", options.Adfs.ResourceName),
                     new KeyValuePair<string, string>("client_id", options.Adfs.ClientId),
                     new KeyValuePair<string, string>("client_secret", options.Adfs.ClientSecret),
                     new KeyValuePair<string, string>("username", $"{options.Adfs.ServiceAccountDomain}\\{options.Adfs.ServiceAccountName}"),
                     new KeyValuePair<string, string>("password", options.Adfs.ServiceAccountPassword),
+
                     new KeyValuePair<string, string>("scope", "openid"),
                     new KeyValuePair<string, string>("response_mode", "form_post"),
                     new KeyValuePair<string, string>("grant_type", "password")
@@ -82,7 +101,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             }
             catch (Exception e)
             {
-                throw new Exception($"Failed to obtain access token from {options.Adfs.OAuth2TokenEndpoint}: {e.Message}", e);
+                throw new Exception($"Failed to obtain access token from OAuth2TokenEndpoint: {e.Message}", e);
             }
         }
     }

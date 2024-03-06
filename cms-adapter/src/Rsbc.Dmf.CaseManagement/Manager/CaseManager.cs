@@ -1762,7 +1762,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         dynamicsContext.SaveChanges();
 
-                        if (!string.IsNullOrEmpty(request.CaseId) && !(request.CaseId == Guid.Empty.ToString()))
+                        if (!string.IsNullOrEmpty(request.CaseId) && request.CaseId != Guid.Empty.ToString() && request.CaseId != "null" )
                         {
                             try
                             {
