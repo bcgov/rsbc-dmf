@@ -64,6 +64,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                             break;
                         case "Issued":
                             // exclude documents with no key
+                            // Issued is the new status for Letter outs and these are displayed in Letter To Driver Tab
                             if (!string.IsNullOrEmpty(document.DocumentUrl))
                             {
                                 result.LettersToDriver.Add(document);
@@ -114,9 +115,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == ResultStatus.Success)
             {
+                // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
                 var replyItemsWithDocuments = reply.Items
                     .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
-                    .Where(i => i.SubmittalStatus != "Open-Required" && (i.SubmittalStatus != "Issued" || i.SubmittalStatus != "Sent" ));
+                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent" );
                 var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
 
                 // sort the documents
