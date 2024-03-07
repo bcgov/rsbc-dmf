@@ -3,6 +3,8 @@ import { CaseManagementService } from '../shared/services/case-management/case-m
 import { ViewportScroller } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
 import { Callback } from '../shared/api/models';
+import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface CallBackTopic {
   value: string;
@@ -17,7 +19,8 @@ export class GetAssistanceComponent implements OnInit {
   constructor(
     private caseManagementService: CaseManagementService,
     private viewportScroller: ViewportScroller,
-    private loginService: LoginService
+    private loginService: LoginService,
+    public dialog: MatDialog
   ) {}
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
@@ -72,8 +75,14 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
-  cancelCallback() {
-    console.log('cancelCallback');
+  openCancelCallbackDialog() {
+    const dialogRef = this.dialog.open(CancelCallbackDialogComponent, {
+      height: '650px',
+      width: '820px',
+      data: {
+        callbackId: null,
+      },
+    });
   }
 
   helpcard() {
