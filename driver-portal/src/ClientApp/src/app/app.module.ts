@@ -34,6 +34,7 @@ import { SubmissionHistoryComponent } from './submission-history/submission-hist
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
+import { CancelCallbackDialogComponent } from './get-assistance/cancel-callback-dialog/cancel-callback-dialog.component';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ import { GetAssistanceComponent } from './get-assistance/get-assistance.componen
     LetterDetailsComponent,
     UserRegistrationComponent,
     GetAssistanceComponent,
+    CancelCallbackDialogComponent,
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

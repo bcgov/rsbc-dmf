@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {
+  CallbackService,
   CasesService,
   DocumentService,
   DocumentTypeService,
@@ -16,7 +17,8 @@ export class CaseManagementService {
     private driversService: DriverService,
     private documentService: DocumentService,
     private profileService: ProfileService,
-    private documentTypeService: DocumentTypeService
+    private documentTypeService: DocumentTypeService,
+    private callbacService: CallbackService
   ) {}
 
   public getMostRecentCase(
@@ -65,5 +67,11 @@ export class CaseManagementService {
     params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
   ) {
     return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
+  }
+
+  public getCallBackRequest(
+    params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
+  ) {
+    return this.callbacService.apiCallbackDriverGet$Json(params);
   }
 }
