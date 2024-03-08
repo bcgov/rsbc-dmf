@@ -40,5 +40,32 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
+
+        public async override Task<ResultStatusReply> Cancel(CallbackIdRequest request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                var callbackId = Guid.Parse(request.Id);
+                var result = await _callbackManager.Cancel(callbackId);
+                if (result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                    reply.ErrorDetail = result.ErrorDetail;
+                }
+            }
+            catch (Exception ex)
+            {
+                reply.ErrorDetail = ex.Message;
+                reply.ResultStatus = ResultStatus.Fail;
+            }
+
+            return reply;
+        }
     }
 }

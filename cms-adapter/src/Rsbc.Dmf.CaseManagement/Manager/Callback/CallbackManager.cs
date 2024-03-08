@@ -51,5 +51,26 @@ namespace Rsbc.Dmf.CaseManagement
 
             return results;
         }
+
+        public async Task<ResultStatusReply> Cancel(Guid callbackId)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                var task = _dynamicsContext.tasks.Single(t => t.activityid == callbackId);
+                task.statecode = (int)EntityState.Inactive;
+                await _dynamicsContext.SaveChangesAsync();
+                reply.Success = true;
+            } 
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, $"{nameof(Cancel)} failed.");
+                reply.Success = false;
+                reply.ErrorDetail = ex.Message;
+            }
+
+            return reply;
+        }
     }
 }

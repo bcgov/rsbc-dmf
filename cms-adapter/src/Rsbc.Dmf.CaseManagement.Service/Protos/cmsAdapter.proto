@@ -661,7 +661,12 @@ message ResultStatusReply {
 // START CallbackManager
 
 service CallbackManager {
-  rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
+    rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
+    rpc Cancel (CallbackIdRequest) returns (ResultStatusReply);
+}
+
+message CallbackIdRequest {
+    string id = 1;
 }
 
 enum BringForwardPriority{
