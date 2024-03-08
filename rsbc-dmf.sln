@@ -33,6 +33,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IcbcClient", "icbc-adapter\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "shared-utils\SharedUtils.csproj", "{416A9869-BBA5-4DEC-866E-3206B702CE47}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.LegacyAdapter", "legacy-adapter\src\Rsbc.Dmf.LegacyAdapter\Rsbc.Dmf.LegacyAdapter.csproj", "{BCF94157-465B-40D5-B3EB-7E7B7F481B3B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.DMF.MedicalPortal.API", "medical-portal\src\API\RSBC.DMF.MedicalPortal.API\RSBC.DMF.MedicalPortal.API.csproj", "{D25BE017-1765-4B57-94BE-E236A6C3D95F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "migration-metrics", "migration-metrics\src\migration-metrics.csproj", "{B17FBB67-39CC-4B7A-B1AF-4798633A72F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OAuthServer", "oauth-server\src\OAuthServer\OAuthServer.csproj", "{54F9E25D-B0AA-4CB9-B08F-3A78EFDC1FA4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -95,6 +103,22 @@ Global
 		{416A9869-BBA5-4DEC-866E-3206B702CE47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{416A9869-BBA5-4DEC-866E-3206B702CE47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{416A9869-BBA5-4DEC-866E-3206B702CE47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCF94157-465B-40D5-B3EB-7E7B7F481B3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCF94157-465B-40D5-B3EB-7E7B7F481B3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCF94157-465B-40D5-B3EB-7E7B7F481B3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCF94157-465B-40D5-B3EB-7E7B7F481B3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D25BE017-1765-4B57-94BE-E236A6C3D95F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D25BE017-1765-4B57-94BE-E236A6C3D95F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D25BE017-1765-4B57-94BE-E236A6C3D95F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D25BE017-1765-4B57-94BE-E236A6C3D95F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B17FBB67-39CC-4B7A-B1AF-4798633A72F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B17FBB67-39CC-4B7A-B1AF-4798633A72F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B17FBB67-39CC-4B7A-B1AF-4798633A72F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B17FBB67-39CC-4B7A-B1AF-4798633A72F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F9E25D-B0AA-4CB9-B08F-3A78EFDC1FA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F9E25D-B0AA-4CB9-B08F-3A78EFDC1FA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F9E25D-B0AA-4CB9-B08F-3A78EFDC1FA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F9E25D-B0AA-4CB9-B08F-3A78EFDC1FA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
