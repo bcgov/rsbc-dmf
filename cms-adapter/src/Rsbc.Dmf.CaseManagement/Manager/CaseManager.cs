@@ -947,11 +947,7 @@ namespace Rsbc.Dmf.CaseManagement
             return legacyComment;
         }
 
-        /// <summary>
-        /// Add BringForward to Task Entity
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        // TODO rename Create and move to CallbackManager
         public async Task<ResultStatusReply> CreateBringForward(BringForwardRequest request)
         {
             ResultStatusReply result = new ResultStatusReply()

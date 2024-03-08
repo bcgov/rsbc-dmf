@@ -2273,12 +2273,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// Create Bring Forwards
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        // TODO move to CallbackService and rename to Create
         public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();
