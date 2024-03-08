@@ -3,29 +3,55 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Policy = Policy.Driver)]
     [ApiController]
     public class CallbackController : Controller
     {
         private readonly CallbackManager.CallbackManagerClient _callbackManagerClient;
+        // TODO move CreateBringForward to CallbackService and then remove CaseManagerClient from this controller
+        private readonly CaseManagerClient _caseManagerClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public CallbackController(CallbackManager.CallbackManagerClient callbackManagerClient, IUserService userService, IMapper mapper)
+        public CallbackController(CallbackManager.CallbackManagerClient callbackManagerClient, CaseManager.CaseManagerClient caseManagerClient, IUserService userService, IMapper mapper)
         {
             _callbackManagerClient = callbackManagerClient;
+            _caseManagerClient = caseManagerClient;
             _userService = userService;
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Get Callbacks for the driver
-        /// </summary>        
+        [HttpGet("create")]
+        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(Create))]
+        public async Task<IActionResult> Create([FromBody] BringForwardRequest callback)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+
+            // security check
+            var @case = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            callback.CaseId = @case.Item.CaseId;
+
+            // create callback
+            var reply = _caseManagerClient.CreateBringForward(callback);
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode(500, reply.ErrorDetail ?? $"{nameof(Create)} failed.");
+            }
+            else
+            {
+                return Ok();
+            }
+        }
+     
         [HttpGet("driver")]
-        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
