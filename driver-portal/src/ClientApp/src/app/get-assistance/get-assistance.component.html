@@ -205,10 +205,20 @@
         whenever you want.
       </p>
       <div style="padding-bottom: 32px">
-        <mat-card>
+        <mat-card
+          *ngFor="let callback of allCallBacks"
+          [ngClass]="{
+            open: callback.id && isExpanded[callback.id]
+          }"
+        >
           <mat-card-content class="closedCaseContent">
             <div style="text-align: center">
-              <mat-icon class="expandedIcon"> expand_circle_down </mat-icon>
+              <mat-icon
+                (click)="toggleIsExpandable(callback.id)"
+                class="expandedIcon"
+              >
+                expand_circle_down
+              </mat-icon>
             </div>
             <div style="display: flex; flex-direction: column">
               <div class="case-details-border">&nbsp;</div>
@@ -219,37 +229,33 @@
                 <div>
                   <label>Request call back date </label>
                   <div>
-                    <!-- <b>{{ letter.createDate | date : "longDate" }}</b> -->
-                    <b>April 28, 2023</b>
+                    <b>{{ callback.requestCallback | date : "longDate" }}</b>
                   </div>
                 </div>
 
                 <div>
                   <label>Topic</label>
                   <div>
-                    <!-- <b>{{ letter.documentType }}</b> -->
-                    <b>Upload an extra document</b>
+                    <b>{{ callback.topic }}</b>
                   </div>
                 </div>
                 <div>
                   <label>Call Status</label>
                   <div>
-                    <!-- <b>{{ letter.documentType }}</b> -->
-                    <b>Open</b>
+                    <b>{{ callback.callStatus }}</b>
                   </div>
                 </div>
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button (click)="cancelCallback()">
-                      Cancel Callback
-                    </button>
+                    <button mat-flat-button (click)="openCancelCallbackDialog()">Cancel Callback</button>
                   </div>
                 </div>
               </div>
 
               <div
                 class="caseDetailRow"
+                *ngIf="callback.id && isExpanded?.[callback.id]"
                 style="
                   border-top: 2px solid gray;
                   padding-top: 20px;
@@ -275,6 +281,27 @@
           </mat-card-content>
         </mat-card>
       </div>
+    </div>
+
+    <div
+      class="numberOfItems"
+      *ngIf="
+        allCallBacks &&
+        allCallBacks.length > 0 &&
+        filteredCallbacks &&
+        filteredCallbacks.length > 0
+      "
+    >
+      Showing {{ filteredCallbacks.length }} of
+      {{ allCallBacks.length }} records
+      <br />
+      <a
+        *ngIf="filteredCallbacks.length < allCallBacks.length"
+        (click)="viewMore()"
+        class="viewMore"
+        ><b style="color: #003366">View more records</b>
+        <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+      >
     </div>
   </div>
 </div>
