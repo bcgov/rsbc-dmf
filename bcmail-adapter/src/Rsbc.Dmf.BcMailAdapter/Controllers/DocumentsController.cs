@@ -712,7 +712,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                 {
                                     // Check to see if width of the new page 
                                     // REplace with a check on the destination document
-                                    XSize size = PageSizeConverter.ToSize(PdfSharpCore.PageSize.A4);
+                                    XSize size = PageSizeConverter.ToSize(PdfSharpCore.PageSize.Letter);
 
                                     if (srcPDF.Pages[i].Height > size.Height || srcPDF.Pages[i].Width > size.Width)
                                     {
