@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
@@ -74,6 +75,41 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpGet("cancel")]
+        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(Cancel))]
+        public async Task<IActionResult> Cancel([FromBody] CallbackIdRequest callback)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+
+            // get the driver's callbacks
+            var driverIdRequest = new DriverIdRequest { Id = profile.DriverId };
+            var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
+            if (driverCallbacks.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, driverCallbacks?.ErrorDetail ?? $"{nameof(GetDriverCallbacks)} failed.");
+            }
+
+            // security check
+            if (!driverCallbacks.Items.Any(c => c.Id == callback.Id))
+            {
+                return StatusCode((int)HttpStatusCode.Forbidden, "Callback not found.");
+            }
+
+            // cancel callback
+            var reply = _callbackManagerClient.Cancel(callback);
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Cancel)} failed.");
+            }
+            else
+            {
+                return Ok();
+            }
         }
     }
 }

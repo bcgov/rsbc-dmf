@@ -116,9 +116,11 @@ service CaseManager {
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 }
 
+// sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
 enum EntityState {
     Active = 0;
     Inactive = 1;
+    Cancelled = 2;
 }
 
 message UpdateDriverRequest{

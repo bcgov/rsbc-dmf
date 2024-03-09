@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,17 +24,17 @@ namespace Rsbc.Dmf.CaseManagement
             // get cases and include callbacks
             var cases = _dynamicsContext.incidents
                 .Expand(c => c.Incident_Tasks)
-                .Where(c => c._dfp_driverid_value == driverId && c.statecode == 0);
+                .Where(c => c._dfp_driverid_value == driverId && c.statecode == (int)EntityState.Active);
 
             // compile a list of callbacks from each case
             var results = new List<Callback>();
             foreach (var @case in cases)
             {
                 // skip if tasks is null or has no active task
-                if (!@case.Incident_Tasks?.Any(task => task.statecode == 0) ?? false)
+                if (!@case.Incident_Tasks?.Any(task => task.statecode == (int)EntityState.Active) ?? false)
                     break;
 
-                foreach (var callback in @case.Incident_Tasks.Where(task => task.statecode == 0))
+                foreach (var callback in @case.Incident_Tasks.Where(task => task.statecode == (int)EntityState.Active))
                 {
                     results.Add(new Callback
                     {
@@ -58,9 +59,29 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                var task = _dynamicsContext.tasks.Single(t => t.activityid == callbackId);
-                task.statecode = (int)EntityState.Inactive;
-                await _dynamicsContext.SaveChangesAsync();
+                // TODO optimize
+                var cases = _dynamicsContext.incidents
+                    .Expand(c => c.Incident_Tasks)
+                    .Where(c => c.statecode == (int)EntityState.Active)
+                    .ToList();
+
+                // TODO should just be 1 case from most recent case
+                task task2 = null;
+                foreach (var @case in cases) {
+                    if (@case.Incident_Tasks.Any(task => task.activityid == callbackId))
+                        task2 = @case.Incident_Tasks.First(task => task.activityid == callbackId);
+                }
+                if (task2 == null)
+                {
+                    reply.Success = false;
+                    reply.ErrorDetail = "Callback not found.";
+                    return reply;
+                }
+
+                task2.statecode = (int)EntityState.Cancelled;
+                _dynamicsContext.UpdateObject(task2);
+
+                var response = await _dynamicsContext.SaveChangesAsync();
                 reply.Success = true;
             } 
             catch (Exception ex) 
