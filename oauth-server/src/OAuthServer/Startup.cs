@@ -98,6 +98,7 @@ namespace OAuthServer
                     }
                     
                 })
+                .AddAspNetIdentity<AppUser>()
 
                 .AddOperationalStore(options =>
                 {
