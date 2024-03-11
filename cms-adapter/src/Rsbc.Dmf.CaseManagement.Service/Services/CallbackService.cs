@@ -41,14 +41,15 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        public async override Task<ResultStatusReply> Cancel(CallbackIdRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> Cancel(CallbackCancelRequest request, ServerCallContext context)
         {
             var reply = new ResultStatusReply();
 
             try
             {
-                var callbackId = Guid.Parse(request.Id);
-                var result = await _callbackManager.Cancel(callbackId);
+                var callbackId = Guid.Parse(request.CallbackId);
+                var caseId = Guid.Parse(request.CaseId);
+                var result = await _callbackManager.Cancel(caseId, callbackId);
                 if (result.Success)
                 {
                     reply.ResultStatus = ResultStatus.Success;

@@ -53,35 +53,33 @@ namespace Rsbc.Dmf.CaseManagement
             return results;
         }
 
-        public async Task<ResultStatusReply> Cancel(Guid callbackId)
+        public async Task<ResultStatusReply> Cancel(Guid caseId, Guid callbackId)
         {
             var reply = new ResultStatusReply();
 
             try
             {
-                // TODO optimize
-                var cases = _dynamicsContext.incidents
+                var callback = _dynamicsContext.incidents
                     .Expand(c => c.Incident_Tasks)
-                    .Where(c => c.statecode == (int)EntityState.Active)
-                    .ToList();
+                    .Where(c => c.incidentid == caseId && c.statecode == (int)EntityState.Active)
+                    .ToList()
+                    .First()
+                    .Incident_Tasks
+                    .Where(cb => cb.activityid == callbackId)
+                    .ToList()
+                    .First();
 
-                // TODO should just be 1 case from most recent case
-                task task2 = null;
-                foreach (var @case in cases) {
-                    if (@case.Incident_Tasks.Any(task => task.activityid == callbackId))
-                        task2 = @case.Incident_Tasks.First(task => task.activityid == callbackId);
-                }
-                if (task2 == null)
+                if (callback == null)
                 {
                     reply.Success = false;
                     reply.ErrorDetail = "Callback not found.";
                     return reply;
                 }
 
-                task2.statecode = (int)EntityState.Cancelled;
-                _dynamicsContext.UpdateObject(task2);
+                callback.statecode = (int)EntityState.Cancelled;
+                _dynamicsContext.UpdateObject(callback);
 
-                var response = await _dynamicsContext.SaveChangesAsync();
+                await _dynamicsContext.SaveChangesAsync();
                 reply.Success = true;
             } 
             catch (Exception ex) 

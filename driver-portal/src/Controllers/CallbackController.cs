@@ -37,8 +37,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var profile = await _userService.GetCurrentUserContext();
 
             // security check
-            var @case = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
-            callback.CaseId = @case.Item.CaseId;
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            callback.CaseId = mostRecentCaseReply.Item.CaseId;
 
             // create callback
             var reply = _caseManagerClient.CreateBringForward(callback);
@@ -86,22 +86,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         {
             var profile = await _userService.GetCurrentUserContext();
 
-            // get the driver's callbacks
-            var driverIdRequest = new DriverIdRequest { Id = profile.DriverId };
-            var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
-            if (driverCallbacks.ResultStatus != ResultStatus.Success)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, driverCallbacks?.ErrorDetail ?? $"{nameof(GetDriverCallbacks)} failed.");
-            }
-
-            // security check
-            if (!driverCallbacks.Items.Any(c => c.Id == callback.Id))
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden, "Callback not found.");
-            }
+            // security check by using user owned case
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
 
             // cancel callback
-            var reply = _callbackManagerClient.Cancel(callback);
+            var callbackCancelRequest = new CallbackCancelRequest
+            {
+                CaseId = mostRecentCaseReply.Item.CaseId,
+                CallbackId = callback.Id
+            };
+            var reply = _callbackManagerClient.Cancel(callbackCancelRequest);
             if (reply.ResultStatus != ResultStatus.Success)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Cancel)} failed.");

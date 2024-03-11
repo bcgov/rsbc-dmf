@@ -664,11 +664,16 @@ message ResultStatusReply {
 
 service CallbackManager {
     rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
-    rpc Cancel (CallbackIdRequest) returns (ResultStatusReply);
+    rpc Cancel (CallbackCancelRequest) returns (ResultStatusReply);
 }
 
 message CallbackIdRequest {
     string id = 1;
+}
+
+message CallbackCancelRequest {
+    string caseId = 1;
+    string callbackId = 2;
 }
 
 enum BringForwardPriority{
