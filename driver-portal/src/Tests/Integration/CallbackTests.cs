@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
+using System;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -56,12 +57,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             if (string.IsNullOrEmpty(callbackId))
                 return;
 
-            var callbackIdRequest = new CallbackIdRequest()
-            {
-                Id = callbackId,
-            };
             var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/cancel");
-            SetContent(request, callbackIdRequest);
+            SetContent(request, Guid.Parse(callbackId));
 
             var response = await _client.SendAsync(request);
 

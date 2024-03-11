@@ -38,6 +38,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             // security check
             var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
+            }
+
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
 
             // create callback
@@ -82,23 +87,27 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(Cancel))]
-        public async Task<IActionResult> Cancel([FromBody] CallbackIdRequest callback)
+        public async Task<IActionResult> Cancel([FromBody] Guid callbackId)
         {
             var profile = await _userService.GetCurrentUserContext();
 
             // security check by using user owned case
             var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
+            }
 
             // cancel callback
             var callbackCancelRequest = new CallbackCancelRequest
             {
                 CaseId = mostRecentCaseReply.Item.CaseId,
-                CallbackId = callback.Id
+                CallbackId = callbackId.ToString()
             };
             var reply = _callbackManagerClient.Cancel(callbackCancelRequest);
             if (reply.ResultStatus != ResultStatus.Success)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Cancel)} failed.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Cancel)} cancel failed.");
             }
             else
             {

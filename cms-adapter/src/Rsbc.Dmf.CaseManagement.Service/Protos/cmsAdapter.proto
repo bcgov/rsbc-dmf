@@ -667,10 +667,6 @@ service CallbackManager {
     rpc Cancel (CallbackCancelRequest) returns (ResultStatusReply);
 }
 
-message CallbackIdRequest {
-    string id = 1;
-}
-
 message CallbackCancelRequest {
     string caseId = 1;
     string callbackId = 2;
