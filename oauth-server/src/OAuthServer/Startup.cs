@@ -25,6 +25,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace OAuthServer
 {
@@ -72,6 +73,11 @@ namespace OAuthServer
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"), new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
+
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = false;
+            });
 
             var builder = services
                 .AddIdentityServer(options =>
@@ -198,7 +204,11 @@ namespace OAuthServer
                                    
 
                                    claims.Add(new Claim("userInfo", jwe.Payload.SerializeToJson()));
-                                   ctx.Principal.AddIdentity(new ClaimsIdentity( claims  ) );
+                                   if (ctx.Principal != null)
+                                   {
+                                       ctx.Principal.AddIdentity(new ClaimsIdentity(claims));
+                                   }
+                                   
                                    //ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
 
                                }
