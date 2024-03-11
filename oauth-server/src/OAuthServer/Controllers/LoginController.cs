@@ -1,10 +1,14 @@
 ﻿using IdentityModel;
 using IdentityServer4;
+using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,19 +26,22 @@ namespace OAuthServer.Controllers
         private readonly IProfileService profileService;
         private readonly IClientStore clientStore;
         private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
+        private readonly UserManager<AppUser> _userManager;
 
         public LoginController(
             IIdentityServerInteractionService interaction,
             IEventService events,
             IProfileService profileService,
             IClientStore clientStore,
-            IAuthenticationSchemeProvider authenticationSchemeProvider)
+            IAuthenticationSchemeProvider authenticationSchemeProvider,
+            UserManager<AppUser> userManager)
         {
             this.interaction = interaction;
             this.events = events;
             this.profileService = profileService;
             this.clientStore = clientStore;
             this.authenticationSchemeProvider = authenticationSchemeProvider;
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -107,9 +114,12 @@ namespace OAuthServer.Controllers
             if (sessionId != null) additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sessionId));
             additionalClaims.AddRange(externalUser.Claims);
 
+            AppUser user2 = await _userManager.GetUserAsync(HttpContext.User);
+
             foreach (var claim in additionalClaims)
             {
                 Serilog.Log.Logger.Information($"{claim.Type}:{claim.Value}");
+                await _userManager.AddClaimAsync(user2, claim);
             }
 
             // issue authentication cookie for user
@@ -130,9 +140,6 @@ namespace OAuthServer.Controllers
 
             // return back to protocol processing
             return Redirect(returnUrl);
-
-
-
         }
 
         /// <summary>
