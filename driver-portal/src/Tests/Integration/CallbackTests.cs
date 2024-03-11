@@ -46,5 +46,26 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             Assert.NotNull(response);
         }
+
+        // NOTE you can use create callback integration test to get a new callback id,
+        // if the callback no longer exists in dynamics 
+        [Fact]
+        public async Task Cancel_Callback()
+        {
+            var callbackId = _configuration["CALLBACK_ID"];
+            if (string.IsNullOrEmpty(callbackId))
+                return;
+
+            var callbackIdRequest = new CallbackIdRequest()
+            {
+                Id = callbackId,
+            };
+            var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/cancel");
+            SetContent(request, callbackIdRequest);
+
+            var response = await _client.SendAsync(request);
+
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        }
     }
 }
