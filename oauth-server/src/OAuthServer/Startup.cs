@@ -74,10 +74,12 @@ namespace OAuthServer
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             var config = JsonSerializer.Deserialize<Config>(File.ReadAllText("./Data/config.json"), new JsonSerializerOptions { Converters = { new JsonStringEnumConverter() } });
 
+            /*
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
                 options.User.RequireUniqueEmail = false;
             });
+            */
 
             var builder = services
                 .AddIdentityServer(options =>
@@ -93,13 +95,16 @@ namespace OAuthServer
                     if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
                     {
                         options.IssuerUri = configuration["ISSUER_URI"];
-                        
-                        
+
                     }
                     
                 })
                 .AddAspNetIdentity<AppUser>()
-
+                .AddConfigurationStore(options =>
+                {
+                    options.ConfigureDbContext = builder =>
+                        builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
+                })
                 .AddOperationalStore(options =>
                 {
                     options.ConfigureDbContext = builder => builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
