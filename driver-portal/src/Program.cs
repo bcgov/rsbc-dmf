@@ -29,6 +29,9 @@ services.AddAuthentication("introspection")
     //JWT tokens handling
     .AddJwtBearer("jwt", options =>
     {
+        options.SaveToken = true;
+        options.MapInboundClaims = true;
+        
         options.BackchannelHttpHandler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator

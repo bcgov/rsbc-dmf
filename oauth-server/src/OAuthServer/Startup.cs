@@ -95,7 +95,7 @@ namespace OAuthServer
 
                                 if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
                             })
-
+                            .AddProfileService<ProfileService>()
                             .AddOperationalStore(options =>
                             {
                                 options.ConfigureDbContext = builder => builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
@@ -189,11 +189,13 @@ namespace OAuthServer
                            else
                            {
                                //...or fail
+                               Log.Error($"ERROR fetching jwt - {response.Error}");
                                ctx.Fail(response.Error);
                            }
                        }
                        else if (response.IsError)
                        {
+                           Log.Error($"ERROR - {response.Error}");
                            //handle for all other failures
                            ctx.Fail(response.Error);
                        }
