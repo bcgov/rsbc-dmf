@@ -96,7 +96,7 @@ services.AddAuthorization(options =>
             .RequireClaim("scope", "driver-portal-api");
     });
 
-    options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
+    //options.DefaultPolicy = options.GetPolicy(JwtBearerDefaults.AuthenticationScheme) ?? null!;
     options.AddPolicy(Policy.Driver, new DriverPolicyFactory().Create());
 
     var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
