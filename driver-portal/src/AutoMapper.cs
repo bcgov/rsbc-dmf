@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
+using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Linq.Expressions;
 

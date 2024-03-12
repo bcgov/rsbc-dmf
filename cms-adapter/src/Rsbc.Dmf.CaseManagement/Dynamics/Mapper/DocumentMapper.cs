@@ -75,8 +75,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         {
             var statusMap = new Dictionary<int, string>()
             {
+                // TODO update to use shared-utils SubmittalStatus.cs
                 { 100000000, "Open-Required"  },
-                { 100000001, "Received" }, 
+                { 100000001, "Received" }, // Accept
                 { 100000003, "Reviewed" },
                 { 100000004, "Reject" },
                 { 100000008, "Sent" },

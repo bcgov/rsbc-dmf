@@ -206,6 +206,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string ErrorMessage { get; set; }
     }
 
+    [Obsolete("use shared-utils SubmittalStatus.cs")]
+
     public enum submittalStatusOptionSet
     {
         Accept = 100000001,
