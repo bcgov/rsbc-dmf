@@ -31,13 +31,8 @@ export class SubmissionRequirementsComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
+  selectedValue: string = '';
   acceptControl = new FormControl(false);
-
-  // documentTypes: DocumentType[] = [
-  //   { value: '310', viewValue: 'Diabetic Doctor Report' },
-  //   { value: '001', viewValue: 'DMER' },
-  //   { value: '030', viewValue: 'EVF' },
-  // ];
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -48,7 +43,6 @@ export class SubmissionRequirementsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //console.log('submission requirements component');
     this.getDocumentSubtypes();
   }
 
@@ -108,7 +102,7 @@ export class SubmissionRequirementsComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    
+    formData.append('documentSubTypeId', this.selectedValue);
 
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
