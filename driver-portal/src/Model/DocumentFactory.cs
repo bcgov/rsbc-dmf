@@ -1,4 +1,6 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using EnumsNET;
+using Google.Protobuf.WellKnownTypes;
+using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.DriverPortal.Api
@@ -39,7 +41,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 ValidationPrevious = string.Empty,
                 ImportId = string.Empty,
                 OriginatingNumber = string.Empty,
-                SubmittalStatus = "Sent",
+                SubmittalStatus = SubmittalStatus.Uploaded.AsString(),
             };
         }
     }

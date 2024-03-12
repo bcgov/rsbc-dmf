@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Rsbc.Dmf.DriverPortal.Api
+namespace Pssg.SharedUtils
 {
     // NOTE this should be in a shared library with cms-adapter, so they can both use this enum
     // after moved, remove Enums.NET package from driver-portal project
@@ -27,7 +27,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
         [Description("Carry Forward")]
         CarryForward = 100000006,
 
-        [Description("Received")]
+        [Description("Received")]   // Accept
         Received = 100000001,
 
         [Description("Reject")]

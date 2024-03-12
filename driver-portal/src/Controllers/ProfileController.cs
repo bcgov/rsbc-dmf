@@ -17,11 +17,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         private readonly UserManager.UserManagerClient _userManagerClient;
         private readonly IUserService userService;
         private readonly ILogger<ProfileController> _logger;
+        private readonly IConfiguration _configuration;
 
-        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, IUserService userService, ILoggerFactory loggerFactory)
+        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, IUserService userService, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             this.userService = userService;
             _cmsAdapterClient = cmsAdapterClient;
+            _configuration = configuration;
             _userManagerClient = userManagerClient;
             _logger = loggerFactory.CreateLogger<ProfileController>();
         }
@@ -30,23 +32,27 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
-            if (userContext == null || userContext.DriverId == null) return NotFound();
-
-            var driverIdRequest = new DriverIdRequest() { Id = userContext.DriverId };
-            var reply = _cmsAdapterClient.GetDriverById(driverIdRequest);
+            if (userContext == null) return NotFound("");
 
             string emailAddress = userContext.Email;
             string firstName = userContext.FirstName;
             string lastName = userContext.LastName;
 
-            if (reply.ResultStatus == ResultStatus.Success && reply.Items != null && reply.Items.Count > 0)
+            if (userContext.DriverId != null)
             {
-                var driverRecord = reply.Items.FirstOrDefault();
-                if (driverRecord != null)
+                var driverIdRequest = new DriverIdRequest() { Id = userContext.DriverId };
+                var reply = _cmsAdapterClient.GetDriverById(driverIdRequest);
+
+                if (reply.ResultStatus == ResultStatus.Success && reply.Items != null && reply.Items.Count > 0)
                 {
-                    firstName = driverRecord.GivenName;
-                    lastName = driverRecord.Surname;
+                    var driverRecord = reply.Items.FirstOrDefault();
+                    if (driverRecord != null)
+                    {
+                        firstName = driverRecord.GivenName;
+                        lastName = driverRecord.Surname;
+                    }
                 }
+
             }
 
             return new UserProfile
@@ -65,7 +71,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="newEmail"></param>
         /// <returns></returns>
         [HttpPut(nameof(Register))]
-        [Authorize(Policy = Policy.Driver)]
+        [Authorize] // May need a new policy for new user
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -91,12 +97,23 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode(401, "No driver found.");
             }
             CaseManagement.Service.Driver foundDriver = null;
+
+            DateTime claimBirthDate = DateTime.Parse(profile.BirthDate);
+
             foreach (var driver in getDriverReply.Items)
             {
-                if (profile.FirstName == driver.GivenName && profile.LastName == driver.Surname /*&& profile.BirthDate.Date == driver.BirthDate.ToDateTime().Date*/)
+                if (string.IsNullOrEmpty(_configuration["ENABLE_ICBC"]))
                 {
                     foundDriver = driver;
                 }
+                else
+                {
+                    if (profile.FirstName == driver.GivenName && profile.LastName == driver.Surname && claimBirthDate.Date == driver.BirthDate.ToDateTime().Date)
+                    {
+                        foundDriver = driver;
+                    }
+                }
+                    
             }
             if (foundDriver == null)
             {
