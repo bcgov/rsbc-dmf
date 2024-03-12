@@ -3898,7 +3898,7 @@ namespace Rsbc.Dmf.CaseManagement
                             //Updating code on 2 / 29 / 2024 removed the check for manual pass
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
+                                && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 )
                             {
                                 outputArray.Add(item);
@@ -3985,12 +3985,10 @@ namespace Rsbc.Dmf.CaseManagement
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
-                                || document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
+                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
+                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
+                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                             {
-
-
                                 outputArray.Add(item);
                             }
 
