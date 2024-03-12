@@ -82,12 +82,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             return Json(result);
         }
 
-        [HttpGet("cancel")]
+        [HttpPut("cancel")]
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(Cancel))]
-        public async Task<IActionResult> Cancel([FromBody] Guid callbackId)
+        public async Task<IActionResult> Cancel([FromBody] string callbackId)
         {
             var profile = await _userService.GetCurrentUserContext();
 

@@ -80,4 +80,10 @@ export class CaseManagementService {
   ) {
     return this.callbacService.apiCallbackCreatePost$Json(params);
   }
+
+  public cancelCallBackRequest(
+    params: Parameters<CallbackService['apiCallbackCancelPut$Json']>[0]
+  ) {
+    return this.callbacService.apiCallbackCancelPut$Json(params);
+  }
 }

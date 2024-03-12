@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiCallbackCancelPut$Json } from '../fn/callback/api-callback-cancel-put-json';
+import { ApiCallbackCancelPut$Json$Params } from '../fn/callback/api-callback-cancel-put-json';
+import { apiCallbackCancelPut$Plain } from '../fn/callback/api-callback-cancel-put-plain';
+import { ApiCallbackCancelPut$Plain$Params } from '../fn/callback/api-callback-cancel-put-plain';
 import { apiCallbackCreatePost$Json } from '../fn/callback/api-callback-create-post-json';
 import { ApiCallbackCreatePost$Json$Params } from '../fn/callback/api-callback-create-post-json';
 import { apiCallbackCreatePost$Plain } from '../fn/callback/api-callback-create-post-plain';
@@ -117,6 +121,53 @@ export class CallbackService extends BaseService {
   apiCallbackDriverGet$Json(params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<Array<Callback>> {
     return this.apiCallbackDriverGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
+    );
+  }
+
+  /** Path part for operation `apiCallbackCancelPut()` */
+  static readonly ApiCallbackCancelPutPath = '/api/Callback/cancel';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiCallbackCancelPut$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCancelPut$Plain$Response(params?: ApiCallbackCancelPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiCallbackCancelPut$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiCallbackCancelPut$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCancelPut$Plain(params?: ApiCallbackCancelPut$Plain$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiCallbackCancelPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiCallbackCancelPut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCancelPut$Json$Response(params?: ApiCallbackCancelPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiCallbackCancelPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiCallbackCancelPut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCancelPut$Json(params?: ApiCallbackCancelPut$Json$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiCallbackCancelPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
     );
   }
 
