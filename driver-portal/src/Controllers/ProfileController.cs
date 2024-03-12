@@ -71,7 +71,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="newEmail"></param>
         /// <returns></returns>
         [HttpPut(nameof(Register))]
-        [Authorize] // May need a new policy for new user
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -83,7 +82,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (profile == null) return NotFound();
 
             // verify user registration name and birth date
-            // TODO check DOB after Keycloak is implemented
             var driverLicenseRequest = new DriverLicenseRequest();
             driverLicenseRequest.DriverLicenseNumber = userRegistration.DriverLicenseNumber;
             var getDriverReply = _cmsAdapterClient.GetDriverPerson(driverLicenseRequest);
