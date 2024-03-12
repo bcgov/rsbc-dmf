@@ -183,7 +183,26 @@ namespace OAuthServer
 
                                    Log.Information($"RAW IDENTITY JWE {jwe.Payload.SerializeToJson()}");
 
-                                   ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
+                                   string birthdate = jwe.Payload["birthdate"].ToString();
+
+                                   string name = jwe.Payload["display_name"].ToString();
+
+                                   string givenName = jwe.Payload["given_name"].ToString();
+
+                                   string givenNames = jwe.Payload["given_names"].ToString();
+
+                                   string familyName = jwe.Payload["family_name"].ToString();
+
+
+                                   ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
+                                   {
+                                       new Claim("userInfo", jwe.Payload.SerializeToJson()),
+                                       new Claim ("birthdate", birthdate),
+                                       new Claim ("name",name),
+                                       new Claim ("given_name",givenName),
+                                       new Claim ("given_names", givenNames),
+                                       new Claim ("family_name",familyName)
+                                   }));
                                }
                            }
                            else
