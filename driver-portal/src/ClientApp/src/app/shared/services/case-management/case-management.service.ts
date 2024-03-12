@@ -74,4 +74,10 @@ export class CaseManagementService {
   ) {
     return this.callbacService.apiCallbackDriverGet$Json(params);
   }
+
+  public createCallBackRequest(
+    params: Parameters<CallbackService['apiCallbackCreatePost$Json']>[0]
+  ) {
+    return this.callbacService.apiCallbackCreatePost$Json(params);
+  }
 }

@@ -9,16 +9,68 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiCallbackCreatePost$Json } from '../fn/callback/api-callback-create-post-json';
+import { ApiCallbackCreatePost$Json$Params } from '../fn/callback/api-callback-create-post-json';
+import { apiCallbackCreatePost$Plain } from '../fn/callback/api-callback-create-post-plain';
+import { ApiCallbackCreatePost$Plain$Params } from '../fn/callback/api-callback-create-post-plain';
 import { apiCallbackDriverGet$Json } from '../fn/callback/api-callback-driver-get-json';
 import { ApiCallbackDriverGet$Json$Params } from '../fn/callback/api-callback-driver-get-json';
 import { apiCallbackDriverGet$Plain } from '../fn/callback/api-callback-driver-get-plain';
 import { ApiCallbackDriverGet$Plain$Params } from '../fn/callback/api-callback-driver-get-plain';
 import { Callback } from '../models/callback';
+import { OkResult } from '../models/ok-result';
 
 @Injectable({ providedIn: 'root' })
 export class CallbackService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `apiCallbackCreatePost()` */
+  static readonly ApiCallbackCreatePostPath = '/api/Callback/create';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiCallbackCreatePost$Plain()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCreatePost$Plain$Response(params?: ApiCallbackCreatePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiCallbackCreatePost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiCallbackCreatePost$Plain$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCreatePost$Plain(params?: ApiCallbackCreatePost$Plain$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiCallbackCreatePost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiCallbackCreatePost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCreatePost$Json$Response(params?: ApiCallbackCreatePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiCallbackCreatePost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiCallbackCreatePost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiCallbackCreatePost$Json(params?: ApiCallbackCreatePost$Json$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiCallbackCreatePost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
+    );
   }
 
   /** Path part for operation `apiCallbackDriverGet()` */

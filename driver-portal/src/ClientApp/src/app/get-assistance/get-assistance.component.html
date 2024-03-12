@@ -174,7 +174,13 @@
                 </div>
               </div>
               <div class="submitButtonContainer">
-                <button mat-flat-button class="primaryButton">Submit</button>
+                <button
+                  mat-flat-button
+                  class="primaryButton"
+                  (click)="createCallBack()"
+                >
+                  Submit
+                </button>
                 <button class="cancelButton" (click)="back()">Back</button>
               </div>
             </form>
@@ -248,7 +254,12 @@
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button (click)="openCancelCallbackDialog()">Cancel Callback</button>
+                    <button
+                      mat-flat-button
+                      (click)="openCancelCallbackDialog()"
+                    >
+                      > Cancel Callback
+                    </button>
                   </div>
                 </div>
               </div>

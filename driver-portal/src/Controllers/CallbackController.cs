@@ -26,7 +26,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("create")]
+        [HttpPost("create")]
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

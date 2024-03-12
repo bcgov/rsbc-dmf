@@ -1,6 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApplicationVersionInfo } from './models/application-version-info';
+export { BringForwardPriority } from './models/bring-forward-priority';
+export { BringForwardRequest } from './models/bring-forward-request';
 export { Callback } from './models/callback';
 export { CallbackCallStatus } from './models/callback-call-status';
 export { CallbackTopic } from './models/callback-topic';
