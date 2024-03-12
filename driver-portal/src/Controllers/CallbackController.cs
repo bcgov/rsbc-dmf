@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
@@ -36,8 +37,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var profile = await _userService.GetCurrentUserContext();
 
             // security check
-            var @case = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
-            callback.CaseId = @case.Item.CaseId;
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
+            }
+
+            callback.CaseId = mostRecentCaseReply.Item.CaseId;
 
             // create callback
             var reply = _caseManagerClient.CreateBringForward(callback);
@@ -74,6 +80,39 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpGet("cancel")]
+        [ProducesResponseType(typeof(OkResult), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(Cancel))]
+        public async Task<IActionResult> Cancel([FromBody] Guid callbackId)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+
+            // security check by using user owned case
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
+            }
+
+            // cancel callback
+            var callbackCancelRequest = new CallbackCancelRequest
+            {
+                CaseId = mostRecentCaseReply.Item.CaseId,
+                CallbackId = callbackId.ToString()
+            };
+            var reply = _callbackManagerClient.Cancel(callbackCancelRequest);
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Cancel)} cancel failed.");
+            }
+            else
+            {
+                return Ok();
+            }
         }
     }
 }

@@ -76,9 +76,12 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         }
     }
 
+    // sync with EntityState enum in Rsbc.Dmf.CaseManagement.Service\Protos\cmsAdapter.proto
     public enum EntityState
     {
         Active = 0,
-        Inactive = 1
+        Inactive = 1,
+        Cancelled = 2,
+        //Pending = 3?
     }
 }
