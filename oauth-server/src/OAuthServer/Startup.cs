@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using IdentityModel.Client;
+﻿using IdentityModel.Client;
 using IdentityServer4;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
@@ -8,6 +7,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,9 +15,9 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -25,7 +25,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace OAuthServer
 {
@@ -81,41 +81,32 @@ namespace OAuthServer
             });
             */
 
+            //services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AdditionalUserClaimsPrincipalFactory>();
             var builder = services
-                .AddIdentityServer(options =>
-                {
-                    options.Events.RaiseErrorEvents = true;
-                    options.Events.RaiseInformationEvents = true;
-                    options.Events.RaiseFailureEvents = true;
-                    options.Events.RaiseSuccessEvents = true;
+                            .AddIdentityServer(options =>
+                            {
+                                options.Events.RaiseErrorEvents = true;
+                                options.Events.RaiseInformationEvents = true;
+                                options.Events.RaiseFailureEvents = true;
+                                options.Events.RaiseSuccessEvents = true;
 
-                    options.UserInteraction.LoginUrl = "~/login";
-                    options.UserInteraction.LogoutUrl = "~/logout";
+                                options.UserInteraction.LoginUrl = "~/login";
+                                options.UserInteraction.LogoutUrl = "~/logout";
 
-                    if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
-                    {
-                        options.IssuerUri = configuration["ISSUER_URI"];
-
-                    }
-                    
-                })
-                .AddAspNetIdentity<AppUser>()
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = builder =>
-                        builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = builder => builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
-                    options.EnableTokenCleanup = true;
-                })
-                .AddInMemoryApiScopes(config.ApiScopes)
-                .AddInMemoryClients(config.Clients)
-                .AddInMemoryIdentityResources(config.IdentityResources)
-                .AddInMemoryApiResources(config.ApiResources)
-                .AddInMemoryCaching()
-                ;
+                                if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
+                            })
+                            .AddProfileService<ProfileService>()
+                            .AddOperationalStore(options =>
+                            {
+                                options.ConfigureDbContext = builder => builder.UseSqlite(connectionString, sql => sql.MigrationsAssembly(typeof(Startup).Assembly.FullName));
+                                options.EnableTokenCleanup = true;
+                            })
+                            .AddInMemoryApiScopes(config.ApiScopes)
+                            .AddInMemoryClients(config.Clients)
+                            .AddInMemoryIdentityResources(config.IdentityResources)
+                            .AddInMemoryApiResources(config.ApiResources)
+                            .AddInMemoryCaching()
+                            ;
 
             //store the oidc key in the key ring persistent volume
             var keyPath = Path.Combine(new DirectoryInfo(keyRingPath ?? "./Data").FullName, "oidc_key.jwk");
@@ -140,7 +131,7 @@ namespace OAuthServer
                // See https://github.com/dotnet/aspnetcore/issues/4650 for more information
                // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
                // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
-               //options.GetClaimsFromUserInfoEndpoint = true;
+               options.GetClaimsFromUserInfoEndpoint = false;
 
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
@@ -161,7 +152,6 @@ namespace OAuthServer
                {
                    OnTokenValidated = async ctx =>
                    {
-                       Serilog.Log.Information($"**** TOKEN VALIDATED ******");
                        var oidcConfig = await ctx.Options.ConfigurationManager.GetConfigurationAsync(CancellationToken.None);
 
                        //set token validation parameters
@@ -180,9 +170,6 @@ namespace OAuthServer
 
                        //request userinfo claims through the backchannel
                        var response = await ctx.Options.Backchannel.GetUserInfoAsync(userInfoRequest, CancellationToken.None);
-
-                       Serilog.Log.Information($"Read token {response.Raw}");
-
                        if (response.IsError && response.HttpStatusCode == HttpStatusCode.OK)
                        {
                            //handle encrypted userinfo response...
@@ -194,60 +181,55 @@ namespace OAuthServer
                                    handler.ValidateToken(response.Raw, validationParameters, out var token);
                                    var jwe = token as JwtSecurityToken;
 
-                                   Serilog.Log.Information($"Add identity {jwe.Payload.SerializeToJson()}");
+                                   Log.Information($"RAW IDENTITY JWE {jwe.Payload.SerializeToJson()}");
 
-                                   List<Claim> claims = new List<Claim>();
+                                   string birthdate = jwe.Payload["birthdate"].ToString();
 
-                                   foreach (var i in jwe.Payload.Claims)
+                                   string name = jwe.Payload["display_name"].ToString();
+
+                                   string givenName = jwe.Payload["given_name"].ToString();
+
+                                   string givenNames = jwe.Payload["given_names"].ToString();
+
+                                   string familyName = jwe.Payload["family_name"].ToString();
+
+
+                                   ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
                                    {
-                                       if (i.Type == "display_name")
-                                       {
-                                           claims.Add(new Claim("name", i.Value));
-                                       }
-                                       claims.Add(i);
-                                   }
-
-                                   
-
-                                   claims.Add(new Claim("userInfo", jwe.Payload.SerializeToJson()));
-                                   if (ctx.Principal != null)
-                                   {
-                                       ctx.Principal.AddIdentity(new ClaimsIdentity(claims));
-                                   }
-                                   
-                                   //ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
-
-                               }
-                               else
-                               {
-                                   Serilog.Log.Error($"Unable to read token {response.Raw}");
+                                       new Claim("userInfo", jwe.Payload.SerializeToJson()),
+                                       new Claim ("birthdate", birthdate),
+                                       new Claim ("name",name),
+                                       new Claim ("given_name",givenName),
+                                       new Claim ("given_names", givenNames),
+                                       new Claim ("family_name",familyName)
+                                   }));
                                }
                            }
                            else
                            {
-                               Serilog.Log.Error(response.Error);
                                //...or fail
+                               Log.Error($"ERROR fetching jwt - {response.Error}");
                                ctx.Fail(response.Error);
                            }
                        }
                        else if (response.IsError)
                        {
-                           Serilog.Log.Error(response.Error);
+                           Log.Error($"ERROR - {response.Error}");
                            //handle for all other failures
                            ctx.Fail(response.Error);
                        }
                        else
                        {
-                           Serilog.Log.Information($"Valid raw token {response.Json.GetRawText()}");
+                           Log.Information($"RAW IDENTITY JSON {response.Json.GetRawText()}");
                            //handle non encrypted userinfo response
                            ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
                        }
                    },
                    OnUserInformationReceived = async ctx =>
                    {
-                       Serilog.Log.Information($"**** OnUserInformationReceived ******");
                        //handle userinfo claim mapping when options.GetClaimsFromUserInfoEndpoint = true
                        await Task.CompletedTask;
+                       Log.Information($"RAW IDENTITY RootElement {ctx.User.RootElement.GetRawText()}");
                        ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
                        {
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
