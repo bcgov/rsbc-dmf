@@ -300,12 +300,8 @@ namespace Rsbc.Dmf.CaseManagement
                     };
                     dynamicsContext.AddTocontacts(person);
 
-                    //new driver
-                    var driverEntity = AddDriver(driver);
-                    dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driverEntity);
-                    dynamicsContext.SetLink(driverEntity, nameof(dfp_driver.dfp_PersonId), person);
+                    // Do not add driver record at this time; it will happen during user registration
                 }
-                //TODO: update driver
             }
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
             {

@@ -17,3 +17,5 @@
 /migration-metrics/src/ClientApp/.angular/cache/16.2.0
 /migration-metrics/src/ClientApp/.angular/cache/17.0.8
 /system-status/src/ClientApp/.angular/cache/17.0.8
+/oauth-server/src/OAuthServer/Data/IdentityServer.db-shm
+/oauth-server/src/OAuthServer/Data/IdentityServer.db-wal

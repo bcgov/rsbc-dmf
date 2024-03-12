@@ -21,11 +21,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
 
     public record UserContext
     {
-        public string Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }        
-        public string Email { get; set; }
+        public string BirthDate { get; set; }
         public string DriverId { get; set; }
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string Id { get; set; }
+        public string LastName { get; set; }
     }
 
     public class UserService : IUserService
@@ -48,14 +49,17 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public async Task<UserContext> GetUserContext(ClaimsPrincipal user)
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
-
+            
             return await Task.FromResult(new UserContext
             {
                 Id = user.FindFirstValue(ClaimTypes.Sid),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName),
-                LastName = user.FindFirstValue(ClaimTypes.Surname),
-                Email = user.FindFirstValue(ClaimTypes.Email),
-                DriverId = user.FindFirstValue(UserClaimTypes.DriverId)
+                BirthDate = user.FindFirstValue(UserClaimTypes.BirthDate),
+                DriverId = user.FindFirstValue(UserClaimTypes.DriverId),
+                FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
+                LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
+
+                // TODO - Add email if the claim can be added.
+                
             });
         }
 
