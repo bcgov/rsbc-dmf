@@ -25,6 +25,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace OAuthServer
 {
@@ -142,6 +143,7 @@ namespace OAuthServer
                options.Scope.Add("profile");
                options.Scope.Add("address");
                options.Scope.Add("email");
+               options.Scope.Add("userInfo");
 
                //set the tokens decrypting key
                options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
@@ -178,6 +180,9 @@ namespace OAuthServer
                                {
                                    handler.ValidateToken(response.Raw, validationParameters, out var token);
                                    var jwe = token as JwtSecurityToken;
+
+                                   Log.Information($"RAW IDENTITY JWE {jwe.Payload.SerializeToJson()}");
+
                                    ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", jwe.Payload.SerializeToJson()) }));
                                }
                            }
@@ -194,6 +199,7 @@ namespace OAuthServer
                        }
                        else
                        {
+                           Log.Information($"RAW IDENTITY JSON {response.Json.GetRawText()}");
                            //handle non encrypted userinfo response
                            ctx.Principal.AddIdentity(new ClaimsIdentity(new[] { new Claim("userInfo", response.Json.GetRawText()) }));
                        }
@@ -202,6 +208,7 @@ namespace OAuthServer
                    {
                        //handle userinfo claim mapping when options.GetClaimsFromUserInfoEndpoint = true
                        await Task.CompletedTask;
+                       Log.Information($"RAW IDENTITY RootElement {ctx.User.RootElement.GetRawText()}");
                        ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
                        {
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
