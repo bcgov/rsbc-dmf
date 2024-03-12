@@ -31,7 +31,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
-  selectedValue: string = '';
+  selectedValue = "";
   acceptControl = new FormControl(false);
 
   constructor(
