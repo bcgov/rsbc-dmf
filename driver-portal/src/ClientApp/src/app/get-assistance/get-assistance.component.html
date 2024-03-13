@@ -174,7 +174,13 @@
                 </div>
               </div>
               <div class="submitButtonContainer">
-                <button mat-flat-button class="primaryButton">Submit</button>
+                <button
+                  mat-flat-button
+                  class="primaryButton"
+                  (click)="createCallBack()"
+                >
+                  Submit
+                </button>
                 <button class="cancelButton" (click)="back()">Back</button>
               </div>
             </form>
@@ -204,8 +210,8 @@
         longer need assistance, you have the option to cancel your open request
         whenever you want.
       </p>
-      <div style="padding-bottom: 32px">
-        <mat-card
+      <div style="padding-bottom: 32px" class="list">
+        <mat-card class="callBackCard"
           *ngFor="let callback of allCallBacks"
           [ngClass]="{
             open: callback.id && isExpanded[callback.id]
@@ -248,7 +254,12 @@
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button (click)="openCancelCallbackDialog()">Cancel Callback</button>
+                    <button
+                      mat-flat-button
+                      (click)="openCancelCallbackDialog(callback)"
+                    >
+                      Cancel Callback
+                    </button>
                   </div>
                 </div>
               </div>

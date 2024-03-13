@@ -107,7 +107,7 @@
         <div style="grid-area: A">
           <label>Due Date</label>
           <div>
-            <b>{{ document.dueDate }}</b>
+            <b>{{ document.dueDate | date : "longDate" }}</b>
           </div>
         </div>
 
@@ -127,7 +127,11 @@
         <div style="grid-area: D">
           <label></label>
           <div>
-            <button mat-flat-button routerLink="/lettersToDriver">
+            <button
+              mat-flat-button
+              class="primaryButton"
+              routerLink="/lettersToDriver"
+            >
               View Letter
             </button>
           </div>

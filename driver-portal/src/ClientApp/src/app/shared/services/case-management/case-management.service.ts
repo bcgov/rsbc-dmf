@@ -52,9 +52,9 @@ export class CaseManagementService {
   }
 
   public userRegistration(
-    params: Parameters<ProfileService['apiProfileRegisterPut$Json']>[0]
+    params: Parameters<ProfileService['apiProfileRegisterPut$Json$Response']>[0]
   ) {
-    return this.profileService.apiProfileRegisterPut$Json(params);
+    return this.profileService.apiProfileRegisterPut$Json$Response(params);
   }
 
   public updateDriverProfile(
@@ -73,5 +73,17 @@ export class CaseManagementService {
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
   ) {
     return this.callbacService.apiCallbackDriverGet$Json(params);
+  }
+
+  public createCallBackRequest(
+    params: Parameters<CallbackService['apiCallbackCreatePost$Json']>[0]
+  ) {
+    return this.callbacService.apiCallbackCreatePost$Json(params);
+  }
+
+  public cancelCallBackRequest(
+    params: Parameters<CallbackService['apiCallbackCancelPut$Json']>[0]
+  ) {
+    return this.callbacService.apiCallbackCancelPut$Json(params);
   }
 }

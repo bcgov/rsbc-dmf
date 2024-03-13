@@ -240,7 +240,20 @@
         Driver Portal under Account Management.
       </label>
       <div class="submitButtonContainer">
-        <button mat-flat-button class="primaryButton" (click)="onSubmit()">
+        <button
+          *ngIf="!isCreateProfile"
+          mat-flat-button
+          class="primaryButton"
+          (click)="onUpdate()"
+        >
+          Update
+        </button>
+        <button
+          *ngIf="isCreateProfile"
+          mat-flat-button
+          class="primaryButton"
+          (click)="onRegister()"
+        >
           Submit
         </button>
         <button class="cancelButton">Cancel</button>
