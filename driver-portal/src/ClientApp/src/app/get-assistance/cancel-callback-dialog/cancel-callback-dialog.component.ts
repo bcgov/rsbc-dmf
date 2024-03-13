@@ -19,10 +19,8 @@ export class CancelCallbackDialogComponent {
   cancelRequestCallback() {
     this.caseManagementService
       .cancelCallBackRequest({ body: this.data })
-
       .subscribe((res) => {
-        console.log(res);
-        console.log(this.data);
+        this.dialogRef.close();
       });
   }
 

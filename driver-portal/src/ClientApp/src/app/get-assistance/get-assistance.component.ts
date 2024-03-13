@@ -83,18 +83,25 @@ export class GetAssistanceComponent implements OnInit {
     return this.caseManagementService
       .createCallBackRequest({ body: callback })
       .subscribe((response) => {
-        console.log(response);
+        this.getCallbackRequests(this.loginService.userProfile?.id as string);
       });
   }
 
   openCancelCallbackDialog(callback: Callback) {
-    const dialogRef = this.dialog.open(CancelCallbackDialogComponent, {
-      height: '650px',
-      width: '820px',
-      data: {
-        callbackId: callback.id,
-      },
-    });
+    const dialogRef = this.dialog
+      .open(CancelCallbackDialogComponent, {
+        height: '650px',
+        width: '820px',
+        data: {
+          callbackId: callback.id,
+        },
+      })
+      .afterClosed()
+      .subscribe({
+        next: () => {
+          this.getCallbackRequests(this.loginService.userProfile?.id as string);
+        },
+      });
   }
 
   helpcard() {
