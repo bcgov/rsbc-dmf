@@ -5,6 +5,7 @@ export { BringForwardPriority } from './models/bring-forward-priority';
 export { BringForwardRequest } from './models/bring-forward-request';
 export { Callback } from './models/callback';
 export { CallbackCallStatus } from './models/callback-call-status';
+export { CallbackCancelRequest } from './models/callback-cancel-request';
 export { CallbackTopic } from './models/callback-topic';
 export { CaseDetail } from './models/case-detail';
 export { CaseDocuments } from './models/case-documents';

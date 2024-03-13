@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-account',
@@ -26,7 +28,9 @@ export class AccountComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private caseManagementService: CaseManagementService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private _http: HttpClient,
+    public _snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -52,7 +56,21 @@ export class AccountComponent implements OnInit {
     this.isEditView = true;
   }
 
-  onSubmit() {
+  onUpdate() {
+    this.caseManagementService
+      .userRegistration({
+        body: {
+          //driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
+          email: this.accountForm.value.emailAddress,
+        },
+      })
+      .subscribe((res) => {
+        console.log(res);
+      });
+  }
+
+  onRegister() {
+    console.log('Registering...');
     this.caseManagementService
       .userRegistration({
         body: {
@@ -60,8 +78,21 @@ export class AccountComponent implements OnInit {
           email: this.accountForm.value.emailAddress,
         },
       })
-      .subscribe((res) => {
-        console.log(res);
+      .subscribe({
+        error: (err) => {
+          console.log(typeof err.status);
+          if (err.status === 401) {
+            this._snackBar.open(
+              'Unable To Register. Please Check that you have entered your Driver License Number correctly. The name and birthdate on your Driver Licence must match the details on your BC Services Card',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['warning']
+              }
+            );
+          }
+        },
       });
   }
 }

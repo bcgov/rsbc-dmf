@@ -52,9 +52,9 @@ export class CaseManagementService {
   }
 
   public userRegistration(
-    params: Parameters<ProfileService['apiProfileRegisterPut$Json']>[0]
+    params: Parameters<ProfileService['apiProfileRegisterPut$Json$Response']>[0]
   ) {
-    return this.profileService.apiProfileRegisterPut$Json(params);
+    return this.profileService.apiProfileRegisterPut$Json$Response(params);
   }
 
   public updateDriverProfile(

@@ -91,7 +91,9 @@ export class GetAssistanceComponent implements OnInit {
     const dialogRef = this.dialog.open(CancelCallbackDialogComponent, {
       height: '650px',
       width: '820px',
-      data: callback.id,
+      data: {
+        callbackId: callback.id,
+      },
     });
   }
 

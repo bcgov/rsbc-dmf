@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CallbackCancelRequest } from 'src/app/shared/api/models';
 import { CaseManagementService } from 'src/app/shared/services/case-management/case-management.service';
 
 @Component({
@@ -12,7 +13,7 @@ export class CancelCallbackDialogComponent {
     private dialogRef: MatDialogRef<CancelCallbackDialogComponent>,
     private caseManagementService: CaseManagementService,
     @Inject(MAT_DIALOG_DATA)
-    private data: string
+    private data: CallbackCancelRequest
   ) {}
 
   cancelRequestCallback() {

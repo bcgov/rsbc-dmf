@@ -183,6 +183,10 @@ input[type="text"]:enabled {
   padding-top: 24px;
 }
 
+::ng-deep .warning {
+  background: "yellow";
+}
+
 @media only screen and (max-width: 896px) {
   /* For mobile phones: */
 

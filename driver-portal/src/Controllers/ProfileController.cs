@@ -119,11 +119,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             // driver found and matched user registration
+            // Set the login driver association
             // update email in dynamics 
             var userSetEmailRequest = new UserSetEmailRequest();
-            userSetEmailRequest.UserId = profile.DriverId;
+            userSetEmailRequest.UserId = foundDriver.Id;
             userSetEmailRequest.Email = userRegistration.Email;
             var reply = _userManagerClient.SetDriverEmail(userSetEmailRequest);
+            
             if (reply.ResultStatus == ResultStatus.Success)
             {
                 return Ok();

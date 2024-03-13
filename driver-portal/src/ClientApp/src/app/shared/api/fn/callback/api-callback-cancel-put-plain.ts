@@ -6,10 +6,11 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
+import { CallbackCancelRequest } from '../../models/callback-cancel-request';
 import { OkResult } from '../../models/ok-result';
 
 export interface ApiCallbackCancelPut$Plain$Params {
-      body?: string
+      body?: CallbackCancelRequest
 }
 
 export function apiCallbackCancelPut$Plain(http: HttpClient, rootUrl: string, params?: ApiCallbackCancelPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {

@@ -87,7 +87,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(Cancel))]
-        public async Task<IActionResult> Cancel([FromBody] string callbackId)
+        public async Task<IActionResult> Cancel([FromBody] CallbackCancelRequest callback)
         {
             var profile = await _userService.GetCurrentUserContext();
 
@@ -102,7 +102,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var callbackCancelRequest = new CallbackCancelRequest
             {
                 CaseId = mostRecentCaseReply.Item.CaseId,
-                CallbackId = callbackId.ToString()
+                CallbackId = callback.CallbackId,
             };
             var reply = _callbackManagerClient.Cancel(callbackCancelRequest);
             if (reply.ResultStatus != ResultStatus.Success)

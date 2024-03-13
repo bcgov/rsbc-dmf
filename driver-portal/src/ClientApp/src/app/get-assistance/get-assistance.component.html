@@ -210,8 +210,8 @@
         longer need assistance, you have the option to cancel your open request
         whenever you want.
       </p>
-      <div style="padding-bottom: 32px">
-        <mat-card
+      <div style="padding-bottom: 32px" class="list">
+        <mat-card class="callBackCard"
           *ngFor="let callback of allCallBacks"
           [ngClass]="{
             open: callback.id && isExpanded[callback.id]
