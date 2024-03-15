@@ -228,8 +228,9 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
                 dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
-                dynamicsContext.SaveChanges();
             }
+
+            dynamicsContext.SaveChanges();
         }
 
         public async Task<bool> SetUserEmail(string userId, string email)
@@ -364,10 +365,7 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_userid = userId,
                 dfp_type = (int?)loginType
             };
-
             dynamicsContext.AddTodfp_logins(login);
-            dynamicsContext.SaveChanges();
-
             return login;
         }
 
