@@ -31,7 +31,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
-  selectedValue = "";
+  selectedValue = '';
   acceptControl = new FormControl(false);
 
   constructor(
@@ -112,7 +112,11 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe((res) => {
         console.log(res);
-        this._snackBar.open('Successfully uploaded!', 'Close', {});
+        this._snackBar.open('Successfully uploaded!', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 2000,
+        });
       });
   }
 }

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
-import { Callback } from '../shared/api/models';
+import { BringForwardRequest, Callback } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -60,7 +60,6 @@ export class GetAssistanceComponent implements OnInit {
     if (this.loginService.userProfile) {
       this.getCallbackRequests(this.loginService.userProfile.id as string);
     }
-    console.log('GetAssistanceComponent initialized');
   }
 
   getCallbackRequests(driverId: string) {
@@ -75,14 +74,34 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
-  openCancelCallbackDialog() {
-    const dialogRef = this.dialog.open(CancelCallbackDialogComponent, {
-      height: '650px',
-      width: '820px',
-      data: {
-        callbackId: null,
-      },
-    });
+  createCallBack() {
+    const callback: BringForwardRequest = {
+      caseId: '',
+      description: 'Test',
+      subject: 'Testing callback',
+    };
+    return this.caseManagementService
+      .createCallBackRequest({ body: callback })
+      .subscribe((response) => {
+        this.getCallbackRequests(this.loginService.userProfile?.id as string);
+      });
+  }
+
+  openCancelCallbackDialog(callback: Callback) {
+    const dialogRef = this.dialog
+      .open(CancelCallbackDialogComponent, {
+        height: '650px',
+        width: '820px',
+        data: {
+          callbackId: callback.id,
+        },
+      })
+      .afterClosed()
+      .subscribe({
+        next: () => {
+          this.getCallbackRequests(this.loginService.userProfile?.id as string);
+        },
+      });
   }
 
   helpcard() {

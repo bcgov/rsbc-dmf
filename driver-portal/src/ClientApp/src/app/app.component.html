@@ -3,7 +3,9 @@
     <app-header></app-header>
   </header>
   <nav style="position: fixed; width: 100%; z-index: 1; top: 146px">
-    <app-nav-menu *ngIf="loginService.isLoggedIn()"></app-nav-menu>
+    <app-nav-menu
+      *ngIf="loginService.isLoggedIn() && loginService.userProfile?.driverId"
+    ></app-nav-menu>
   </nav>
   <main style="position: relative; top: 200px">
     <router-outlet></router-outlet>
