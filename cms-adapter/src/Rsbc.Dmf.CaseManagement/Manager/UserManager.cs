@@ -278,7 +278,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (login == null)
             {
-                CreateLogin(loginId, loginType);
+                login = CreateLogin(loginId, loginType);
             }
             else
             {
