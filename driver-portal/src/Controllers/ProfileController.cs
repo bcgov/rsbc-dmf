@@ -131,6 +131,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             userSetEmailRequest.UserId = profile.Id;
             userSetEmailRequest.DriverId = profile.DriverId;
             userSetEmailRequest.Email = userRegistration.Email;
+            userSetEmailRequest.NotifyByMail = userRegistration.NotifyByMail;
+            userSetEmailRequest.NotifyByEmail = userRegistration.NotifyByEmail;
             var setDriverReply = _userManagerClient.SetDriverLoginAndEmail(userSetEmailRequest);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {

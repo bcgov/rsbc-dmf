@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string userId, string email);
-        void SetDriverLoginAndEmail(string userId, Guid driverId, string email);
+        void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
@@ -208,7 +208,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public void SetDriverLoginAndEmail(string userId, Guid driverId, string email)
+        public void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
@@ -222,6 +222,11 @@ namespace Rsbc.Dmf.CaseManagement
                 login = CreateLogin(userId, null);
                 dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driverId);
             }
+
+            // update notification preferences
+            login.dfp_mail = notifyByMail;
+            login.dfp_email = notifyByEmail;
+            dynamicsContext.UpdateObject(login);
 
             // update email
             if (login.dfp_DriverId.dfp_PersonId != null)

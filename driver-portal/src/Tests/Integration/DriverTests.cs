@@ -70,6 +70,8 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             var userRegistration = new UserRegistration();
             userRegistration.DriverLicenseNumber = "01000032";
             userRegistration.Email = "buttar@mailinator.com";
+            userRegistration.NotifyByMail = true;
+            userRegistration.NotifyByEmail = true;
             var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/register");
             SetContent(request, userRegistration);
             var response = await _client.SendAsync(request);

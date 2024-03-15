@@ -129,7 +129,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                userManager.SetDriverLoginAndEmail(request.UserId, Guid.Parse(request.DriverId), request.Email);
+                userManager.SetDriverLoginAndEmail(request.UserId, Guid.Parse(request.DriverId), request.Email, request.NotifyByMail, request.NotifyByEmail);
                 result.ResultStatus = ResultStatus.Success;
             } 
             catch (Exception ex)

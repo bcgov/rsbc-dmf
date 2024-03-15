@@ -569,6 +569,8 @@ message UserSetEmailRequest {
     string userId = 1;
     string email = 2;
     string driverId = 3;
+    bool notifyByMail = 4;
+    bool notifyByEmail = 5;
 }
 
 message UsersSearchRequest {
