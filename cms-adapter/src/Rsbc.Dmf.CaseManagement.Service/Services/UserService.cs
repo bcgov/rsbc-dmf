@@ -123,14 +123,19 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<ResultStatusReply> SetDriverEmail(UserSetEmailRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> SetDriverLoginAndEmail(UserSetEmailRequest request, ServerCallContext context)
         {
-            ResultStatusReply result = new ResultStatusReply();
-            result.ResultStatus = ResultStatus.Fail;
+            var result = new ResultStatusReply();
 
-            if (userManager.SetDriverEmail(request.UserId, request.Email))
+            try
             {
+                userManager.SetDriverLoginAndEmail(request.UserId, Guid.Parse(request.DriverId), request.Email, request.NotifyByMail, request.NotifyByEmail);
                 result.ResultStatus = ResultStatus.Success;
+            } 
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
             }
 
             return result;

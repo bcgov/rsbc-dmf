@@ -49,7 +49,30 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             var userRegistration = new UserRegistration();
             userRegistration.DriverLicenseNumber = "00200173";
             userRegistration.Email = "mason@mailinator.com";
-            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/{nameof(ProfileController.Register)}");
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/register");
+            SetContent(request, userRegistration);
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+        }
+
+        // NOTE this will pass but will have a login unless you delete the login first
+        // you also need to replace the following lines in CustomWebApplicationFactory.cs
+        // var driverId = "6709a2ab-9ea1-ed11-b83d-00505683fbf4";
+        // new Claim(UserClaimTypes.FamilyName, "BUTTAR"),
+
+        [Fact]
+        public async Task User_Registration_No_Login()
+        {
+            var driverId = _configuration["DRIVER_WITH_NO_LOGIN"];
+            if (string.IsNullOrEmpty(driverId))
+                return;
+
+            var userRegistration = new UserRegistration();
+            userRegistration.DriverLicenseNumber = "01000032";
+            userRegistration.Email = "buttar@mailinator.com";
+            userRegistration.NotifyByMail = true;
+            userRegistration.NotifyByEmail = true;
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/register");
             SetContent(request, userRegistration);
             var response = await _client.SendAsync(request);
             response.EnsureSuccessStatusCode();

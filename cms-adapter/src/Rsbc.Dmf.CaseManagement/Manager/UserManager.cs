@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string userId, string email);
-        bool SetDriverEmail(string driverId, string email);
+        void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
@@ -208,24 +208,34 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public bool SetDriverEmail(string driverId, string email)
+        public void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
-                .Expand(d => d.dfp_DriverId.dfp_PersonId)
-                .Where(l => l._dfp_driverid_value == Guid.Parse(driverId))
-                .FirstOrDefault();
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
+                .Where(l => l.dfp_userid == userId)
+                .SingleOrDefault();
 
-            if (login != null)
+            // for first time login, create login and link to driver
+            if (login == null)
             {
-                login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
-
-                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
-                dynamicsContext.SaveChanges();
-                return true;
+                login = CreateLogin(userId, null);
+                dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driverId);
             }
 
-            return false;
+            // update notification preferences
+            login.dfp_mail = notifyByMail;
+            login.dfp_email = notifyByEmail;
+            dynamicsContext.UpdateObject(login);
+
+            // update email
+            if (login.dfp_DriverId.dfp_PersonId != null)
+            {
+                login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
+                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+            }
+
+            dynamicsContext.SaveChanges();
         }
 
         public async Task<bool> SetUserEmail(string userId, string email)
@@ -273,14 +283,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (login == null)
             {
-                //first time login
-                login = new dfp_login
-                {
-                    dfp_loginid = Guid.NewGuid(),
-                    dfp_userid = loginId,
-                    dfp_type = (int)loginType
-                };
-                dynamicsContext.AddTodfp_logins(login);
+                login = CreateLogin(loginId, loginType);
             }
             else
             {
@@ -357,6 +360,19 @@ namespace Rsbc.Dmf.CaseManagement
             "idir" => LoginType.Idir,
             _ => throw new NotImplementedException(externalSystem)
         };
+
+        // first time login
+        private dfp_login CreateLogin(string userId, LoginType? loginType)
+        {
+            var login = new dfp_login
+            {
+                dfp_loginid = Guid.NewGuid(),
+                dfp_userid = userId,
+                dfp_type = (int?)loginType
+            };
+            dynamicsContext.AddTodfp_logins(login);
+            return login;
+        }
 
         private dfp_driver AddDriver(DriverUser user)
         {

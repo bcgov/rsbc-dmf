@@ -6,15 +6,15 @@ This adapter connects the case management system.  The current implementation is
 
 You will need to update the OData client whenever the schema for MS Dynamics changes.
 
-First, ensure that you have the "OData Connected Service" extension installed in Visual Studio.
+First, ensure that you have the "OData Connected Service 2022+ extension installed in Visual Studio.
 
-In a browser, login to MS Dynamics and open developer tools in the browser.  Get the "cookie" header value and set that aside.
+In a browser, login to MS Dynamics and open developer tools in the browser.  Copy the "cookie" header value from the request headers.
 
 Before updating, delete the "Reference.cs" file that contains the current client.  Otherwise you may see an error during the following steps because the file exists.
 
-Within Visual Studio, right click the "Dynamics" connected service and select "Update".
+Within Visual Studio, right click the "Dynamics" connected service folder and select "Update OData Connected Service".
 
-In the special headers field, enter "cookie: " followed by the contents of the cookie you captured earlier.
+In the custom headers field, enter "Cookie: " followed by the contents of the cookie you captured earlier.
 
 Click next and verify that you can see schema elements.
 

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
+using System.Net;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -70,7 +71,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// </summary>
         /// <param name="newEmail"></param>
         /// <returns></returns>
-        [HttpPut(nameof(Register))]
+        [HttpPut("register")]
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -78,8 +79,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult> Register([FromBody] UserRegistration userRegistration)
         {
             var profile = await userService.GetCurrentUserContext();
-
-            if (profile == null) return NotFound();
+            if (profile == null) 
+            { 
+                return NotFound(); 
+            }
 
             // verify user registration name and birth date
             var driverLicenseRequest = new DriverLicenseRequest();
@@ -92,11 +95,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             if (getDriverReply.Items?.Count == 0)
             {
-                return StatusCode(401, "No driver found.");
+                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
             }
             CaseManagement.Service.Driver foundDriver = null;
 
-            DateTime claimBirthDate = DateTime.Parse(profile.BirthDate);
+            // parse birthdate
+            if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
+            {
+                _logger.LogError($"{nameof(Register)} could not parse DL {userRegistration.DriverLicenseNumber} birthDate {profile.BirthDate}.");
+                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+            }
 
             foreach (var driver in getDriverReply.Items)
             {
@@ -118,23 +126,21 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode(401, "Driver details do not match.");
             }
 
-            // driver found and matched user registration
-            // Set the login driver association
-            // update email in dynamics 
+            // update driver email, create new login if no login exists
             var userSetEmailRequest = new UserSetEmailRequest();
-            userSetEmailRequest.UserId = foundDriver.Id;
+            userSetEmailRequest.UserId = profile.Id;
+            userSetEmailRequest.DriverId = profile.DriverId;
             userSetEmailRequest.Email = userRegistration.Email;
-            var reply = _userManagerClient.SetDriverEmail(userSetEmailRequest);
-            
-            if (reply.ResultStatus == ResultStatus.Success)
+            userSetEmailRequest.NotifyByMail = userRegistration.NotifyByMail;
+            userSetEmailRequest.NotifyByEmail = userRegistration.NotifyByEmail;
+            var setDriverReply = _userManagerClient.SetDriverLoginAndEmail(userSetEmailRequest);
+            if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {
-                return Ok();
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.SetDriverLoginAndEmail)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
-            else
-            {
-                _logger.LogError($"{nameof(UserRegistration)} updating email failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
-            }
+
+            return Ok();
         }
 
         /// <summary>
