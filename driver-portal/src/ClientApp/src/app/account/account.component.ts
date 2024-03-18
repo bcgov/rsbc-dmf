@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
 import { HttpClient } from '@angular/common/http';
@@ -31,7 +31,8 @@ export class AccountComponent implements OnInit {
     private caseManagementService: CaseManagementService,
     private loginService: LoginService,
     private _http: HttpClient,
-    public _snackBar: MatSnackBar
+    public _snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -83,6 +84,14 @@ export class AccountComponent implements OnInit {
         },
       })
       .subscribe({
+        next: (res) => {
+          this._snackBar.open('Registration successful', 'Close', {
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            duration: 5000,
+          });
+          this.router.navigate(['/dashboard']);
+        },
         error: (err) => {
           console.log(typeof err.status);
           if (err.status === 401) {
@@ -92,6 +101,7 @@ export class AccountComponent implements OnInit {
               {
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
+                duration: 5000,
               }
             );
           }
