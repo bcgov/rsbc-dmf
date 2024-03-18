@@ -15,7 +15,8 @@ export class AccountComponent implements OnInit {
   isEditView = false;
 
   accountForm = this.fb.group({
-    mail: [false],
+    notifyByMail: [false],
+    notifyByEmail: [false],
     firstName: [''],
     lastName: [''],
     emailAddress: [''],
@@ -58,10 +59,11 @@ export class AccountComponent implements OnInit {
 
   onUpdate() {
     this.caseManagementService
-      .userRegistration({
+      .updateDriverProfile({
         body: {
           //driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
-          email: this.accountForm.value.emailAddress,
+          //email: this.accountForm.value.emailAddress,
+          driverLicense: this.accountForm.value.driverLicenceNumber,
         },
       })
       .subscribe((res) => {
@@ -76,6 +78,8 @@ export class AccountComponent implements OnInit {
         body: {
           driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
           email: this.accountForm.value.emailAddress,
+          notifyByEmail: this.accountForm.value.notifyByEmail as boolean,
+          notifyByMail: this.accountForm.value.notifyByMail as boolean,
         },
       })
       .subscribe({
@@ -88,7 +92,6 @@ export class AccountComponent implements OnInit {
               {
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
-                panelClass: ['warning']
               }
             );
           }

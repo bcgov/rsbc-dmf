@@ -27,6 +27,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public string FirstName { get; set; }
         public string Id { get; set; }
         public string LastName { get; set; }
+
+        public string ExternalUserName { get; set; }
+
+        public string DisplayName { get; set; }
     }
 
     public class UserService : IUserService
@@ -57,9 +61,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 DriverId = user.FindFirstValue(UserClaimTypes.DriverId),
                 FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
                 LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
-
-                // TODO - Add email if the claim can be added.
-                
+                Email = user.FindFirstValue(ClaimTypes.Email),
+                ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
+                DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName)
             });
         }
 
@@ -75,6 +79,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
+
                 UserProfiles = { new UserProfile() }
             };
             var loginResponse = await userManager.LoginAsync(loginRequest);
@@ -92,6 +97,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
             claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+            claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
+
             if (!string.IsNullOrEmpty(loginResponse.DriverId))
             claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
             user.AddIdentity(new ClaimsIdentity(claims));

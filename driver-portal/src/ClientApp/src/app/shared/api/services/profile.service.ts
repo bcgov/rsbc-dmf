@@ -76,7 +76,7 @@ export class ProfileService extends BaseService {
   }
 
   /** Path part for operation `apiProfileRegisterPut()` */
-  static readonly ApiProfileRegisterPutPath = '/api/Profile/Register';
+  static readonly ApiProfileRegisterPutPath = '/api/Profile/register';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
