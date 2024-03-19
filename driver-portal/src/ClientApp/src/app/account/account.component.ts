@@ -15,8 +15,8 @@ export class AccountComponent implements OnInit {
   isEditView = false;
 
   accountForm = this.fb.group({
-    notifyByMail: [false],
     notifyByEmail: [false],
+    notifyByMail: [false],
     firstName: [''],
     lastName: [''],
     emailAddress: [''],
@@ -44,6 +44,8 @@ export class AccountComponent implements OnInit {
     if (this.isCreateProfile) {
       this.accountForm.controls.emailAddress.enable();
       this.accountForm.controls.driverLicenceNumber.enable();
+      this.accountForm.controls.notifyByEmail.enable();
+      this.accountForm.controls.notifyByMail.enable();
     }
   }
 
@@ -73,7 +75,6 @@ export class AccountComponent implements OnInit {
   }
 
   onRegister() {
-    console.log('Registering...');
     this.caseManagementService
       .userRegistration({
         body: {
@@ -91,6 +92,7 @@ export class AccountComponent implements OnInit {
             duration: 5000,
           });
           this.router.navigate(['/dashboard']);
+          location.reload();
         },
         error: (err) => {
           console.log(typeof err.status);

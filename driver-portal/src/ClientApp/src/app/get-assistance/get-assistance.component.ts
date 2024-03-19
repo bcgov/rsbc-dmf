@@ -5,6 +5,7 @@ import { LoginService } from '../shared/services/login.service';
 import { BringForwardRequest, Callback } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 interface CallBackTopic {
   value: string;
@@ -20,7 +21,8 @@ export class GetAssistanceComponent implements OnInit {
     private caseManagementService: CaseManagementService,
     private viewportScroller: ViewportScroller,
     private loginService: LoginService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {}
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
@@ -84,6 +86,12 @@ export class GetAssistanceComponent implements OnInit {
       .createCallBackRequest({ body: callback })
       .subscribe((response) => {
         this.getCallbackRequests(this.loginService.userProfile?.id as string);
+        this.showCallBack = false;
+        this._snackBar.open('Successfully created call back request', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 2000,
+        });
       });
   }
 
