@@ -44,7 +44,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
-
+            callback.Origin = 100000005;
             // create callback
             var reply = _caseManagerClient.CreateBringForward(callback);
             if (reply.ResultStatus != ResultStatus.Success)

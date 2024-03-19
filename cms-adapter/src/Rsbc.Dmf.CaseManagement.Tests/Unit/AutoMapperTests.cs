@@ -137,7 +137,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             var callback = new Callback();
             callback.Id = Guid.NewGuid();
             callback.RequestCallback = new DateTimeOffset();
-            callback.Topic = CallbackTopic.Upload;
+            //callback.Subject = CallbackTopic.Upload;
             callback.CallStatus = CallbackCallStatus.Open;
             callback.Closed = new DateTimeOffset();
 

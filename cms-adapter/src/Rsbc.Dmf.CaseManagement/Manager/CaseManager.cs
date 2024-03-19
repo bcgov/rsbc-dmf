@@ -219,12 +219,12 @@ namespace Rsbc.Dmf.CaseManagement
         Uploaded = 100000010
     }
 
-    public enum BringForwardPriority
+    // TODO move to CallbackModel.cs
+    public enum CallbackPriority
     {
         Low = 0,
         Normal = 1,
         High = 2
-
     }
 
     public class ResultStatusReply
@@ -949,7 +949,7 @@ namespace Rsbc.Dmf.CaseManagement
             return legacyComment;
         }
 
-        // TODO rename Create and move to CallbackManager
+        [Obsolete("Use CallbackManager.Create instead.")]
         public async Task<ResultStatusReply> CreateBringForward(BringForwardRequest request)
         {
             ResultStatusReply result = new ResultStatusReply()

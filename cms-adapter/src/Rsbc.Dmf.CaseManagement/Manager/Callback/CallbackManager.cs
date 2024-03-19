@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
@@ -11,12 +12,89 @@ namespace Rsbc.Dmf.CaseManagement
     internal partial class CallbackManager : ICallbackManager
     {
         internal readonly DynamicsContext _dynamicsContext;
+        private readonly IMapper _mapper;
         private readonly ILogger<CallbackManager> _logger;
 
-        public CallbackManager(DynamicsContext dynamicsContext, ILogger<CallbackManager> logger)
+        public CallbackManager(DynamicsContext dynamicsContext, IMapper mapper, ILogger<CallbackManager> logger)
         {
             _dynamicsContext = dynamicsContext;
+            _mapper = mapper;
             _logger = logger;
+        }
+
+        public async Task<ResultStatusReply> Create(Callback request)
+        {
+            var result = new ResultStatusReply();
+
+            string caseId = request.CaseId;
+            if (!string.IsNullOrEmpty(caseId))
+            {
+                // TODO automapper
+                var newTask = new task()
+                {
+                    description = request.Description,
+                    subject = request.Subject,
+                    scheduledend = DateTimeOffset.UtcNow,
+                    prioritycode = (int?)request.Priority,
+                    dfp_origin = request.Origin,
+                    statecode = (int)request.CallStatus
+                };
+
+                // Get the case
+                var @case = _dynamicsContext.incidents
+                    .Where(d => d.incidentid == Guid.Parse(caseId))
+                    .FirstOrDefault();
+
+                _dynamicsContext.AddTotasks(newTask);
+
+                // load owner
+                if (string.IsNullOrEmpty(request.Assignee))
+                {
+                    if (@case._owningteam_value != null)
+                    {
+                        // create a reference to team
+                        var caseTeam = _dynamicsContext.teams
+                            .ByKey(@case._owningteam_value.Value)
+                            .GetValue();
+                        _dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
+                    }
+                    else
+                    {
+                        // create a reference to system user
+                        var caseUser = _dynamicsContext.systemusers
+                            .ByKey(@case._owninguser_value)
+                            .GetValue();
+                        _dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseUser);
+                    }
+                }
+                else
+                {
+                    // set the callback owner to case owner
+                    if (@case._ownerid_value != null)
+                    {
+                        _dynamicsContext.AddTotasks(newTask);
+                        _dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
+                    };
+                }
+
+                // Create a bring Forward
+                try
+                {
+                    // set Case Id
+                    _dynamicsContext.SetLink(newTask, nameof(task.regardingobjectid_incident), @case);
+
+                    await _dynamicsContext.SaveChangesAsync();
+                    result.Success = true;
+                    _dynamicsContext.DetachAll();
+                }
+                catch (Exception ex)
+                {
+                    result.Success = false;
+                    _logger.LogError(ex.Message);
+                    result.ErrorDetail = ex.Message;
+                }
+            }
+            return result;
         }
 
         public async Task<IEnumerable<Callback>> GetDriverCallbacks(Guid driverId)
@@ -31,23 +109,11 @@ namespace Rsbc.Dmf.CaseManagement
             foreach (var @case in cases)
             {
                 // skip if tasks is null or has no active task
-                if (!@case.Incident_Tasks?.Any(task => task.statecode == (int)EntityState.Active) ?? false)
+                if (!(@case.Incident_Tasks?.Any() ?? false))
                     break;
 
-                foreach (var callback in @case.Incident_Tasks.Where(task => task.statecode == (int)EntityState.Active))
-                {
-                    results.Add(new Callback
-                    {
-                        Id = callback.activityid ?? Guid.NewGuid(),
-                        RequestCallback = callback.scheduledend.GetValueOrDefault(),
-                        // TODO find the correct field for Topic, no Dynamics values seem to match this
-                        Topic = CallbackTopic.Upload,//Enum.Parse<CallbackTopic>(callback.activitytypecode), e.g. "task"
-                        // TODO find the correct field for CallStatus
-                        // Dynamics statuscode values are blank, "Pending", and "Completed"
-                        CallStatus = (CallbackCallStatus)callback.statuscode,
-                        Closed = callback.actualend.GetValueOrDefault()
-                    });
-                }
+                var callbacks = _mapper.Map<IEnumerable<Callback>>(@case.Incident_Tasks);
+                results.AddRange(callbacks);
             }
 
             return results;

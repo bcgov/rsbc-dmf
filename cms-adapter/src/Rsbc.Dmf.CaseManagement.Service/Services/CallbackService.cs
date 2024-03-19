@@ -20,6 +20,47 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _mapper = mapper;
         }
 
+        public async override Task<ResultStatusReply> Create(Callback request, ServerCallContext context)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                // TODO automapper
+                var callbackRequest = new CaseManagement.Callback()
+                {
+                    CaseId = request.CaseId ?? string.Empty,
+                    Assignee = request.Assignee ?? string.Empty,
+                    Description = request.Description ?? string.Empty,
+                    Subject = request.Subject ?? string.Empty,
+                    Priority = (CaseManagement.CallbackPriority)request.Priority,
+                    CallStatus = (CallbackCallStatus)request.CallStatus,
+                    Phone = request.Phone ?? string.Empty,
+                    PreferredTime = (PreferredTime)request.PreferredTime,
+                    NotifyByMail = request.NotifyByMail,
+                    NotifyByEmail = request.NotifyByEmail,
+                };
+
+                var result = await _callbackManager.Create(callbackRequest);
+                if (result != null && result.Success)
+                {
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{nameof(CallbackService)}.{nameof(Create)} failed: {ex}");
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = ex.Message;
+            }
+
+            return reply;
+        }
+
         public async override Task<GetDriverCallbacksReply> GetDriverCallbacks(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetDriverCallbacksReply();
