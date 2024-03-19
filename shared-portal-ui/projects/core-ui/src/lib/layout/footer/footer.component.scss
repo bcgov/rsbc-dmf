@@ -10,6 +10,37 @@
   line-height: normal;
 }
 
+.get-help {
+  border-width: 0px;
+  left: 0px;
+  top: 0px;
+  background: inherit;
+  background-color: rgba(242, 242, 242, 1);
+  border: none;
+  border-radius: 0px;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.get-help-content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 100px;
+  justify-content: center;
+  padding: 32px;
+}
+
+.help-button {
+  width: 130px;
+  height: 30px;
+  font-family: "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  border-radius: 5px;
+}
+
 footer {
   background-color: #003366;
   width: 100%;
@@ -78,5 +109,10 @@ footer {
 @media only screen and (max-width: 896px) {
   footer .site-footer-links {
     flex-direction: column;
+  }
+
+  .get-help-content {
+    flex-direction: column;
+    gap: 50px;
   }
 }
