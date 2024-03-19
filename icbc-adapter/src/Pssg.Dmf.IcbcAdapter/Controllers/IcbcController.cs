@@ -204,7 +204,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                     else
                     {
                         
-                        if (caseId != null)
+                        if (caseId != null )
                         {
                            
                             // Create a bring forward

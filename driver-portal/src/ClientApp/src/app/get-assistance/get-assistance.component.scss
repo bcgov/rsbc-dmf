@@ -22,6 +22,7 @@
   max-width: 280px;
   background-color: rgb(255, 255, 255);
   padding: 6px 0;
+  align-items: flex-start;
 }
 
 .help-topics-item {
@@ -32,12 +33,8 @@
   user-select: none;
   min-width: 64px;
   line-height: 36px;
-  padding: 0 16px;
-
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  flex: 1;
+  padding: 10px 20px;
+  border-radius: 4px;
 }
 
 .help-topics-item:hover {
@@ -52,6 +49,11 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+
+  > .mat-mdc-card {
+    border: 2px solid #606060;
+    cursor: pointer;
+  }
 }
 
 .help {
@@ -79,6 +81,19 @@ button {
 button:hover {
   color: #fff;
   background-color: #003366;
+}
+
+.callBackButton {
+  width: 253px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #fff;
+  background-color: #003366;
+  border-radius: 5px;
 }
 
 .closedCaseContent {
@@ -158,7 +173,7 @@ input[type="checkbox"] {
 
 .primaryButton {
   border-width: 0px;
-  width: 170px;
+  width: 253px;
   height: 49px;
   font-family: "BC Sans Bold", "BC Sans", sans-serif;
   font-weight: 700;
