@@ -20,15 +20,20 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             if (string.IsNullOrEmpty(driverId))
                 return;
 
-            var bringForwardRequest = new BringForwardRequest()
+            var callback = new Callback();
             {
-                Assignee = string.Empty,
-                Description = "Test Description1",
+            callback.RequestCallback = new Google.Protobuf.WellKnownTypes.Timestamp();
+            callback.Subject = "Driver Portal Integration Test";
                 Subject = "Driver Portal Error Test",
-                Priority = BringForwardPriority.High
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/create");
-            SetContent(request, bringForwardRequest);
+            callback.CallStatus = CallbackCallStatus.Open;
+            callback.NotifyByMail = true;
+            callback.NotifyByEmail = false;
+            callback.Origin = 100000005;
+            callback.Phone = "1112223333";
+            callback.Priority = CallbackPriority.Low;
+            callback.PreferredTime = PreferredTime.Morning;
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{CALLBACK_API_BASE}/create");
+            SetContent(request, callback);
 
             var response = await _client.SendAsync(request);
 

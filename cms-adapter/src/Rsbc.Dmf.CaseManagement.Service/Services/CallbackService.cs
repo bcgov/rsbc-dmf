@@ -31,7 +31,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 {
                     CaseId = request.CaseId ?? string.Empty,
                     Assignee = request.Assignee ?? string.Empty,
-                    Description = request.Description ?? string.Empty,
                     Subject = request.Subject ?? string.Empty,
                     Priority = (CaseManagement.CallbackPriority)request.Priority,
                     CallStatus = (CallbackCallStatus)request.CallStatus,

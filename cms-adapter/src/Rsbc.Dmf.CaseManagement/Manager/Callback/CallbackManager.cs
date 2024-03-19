@@ -30,15 +30,12 @@ namespace Rsbc.Dmf.CaseManagement
             if (!string.IsNullOrEmpty(caseId))
             {
                 // TODO automapper
-                var newTask = new task()
-                {
-                    description = request.Description,
-                    subject = request.Subject,
-                    scheduledend = DateTimeOffset.UtcNow,
-                    prioritycode = (int?)request.Priority,
-                    dfp_origin = request.Origin,
-                    statecode = (int)request.CallStatus
-                };
+                var newTask = _mapper.Map<task>(request);
+                // let Dynamics create the Id Guid
+                newTask.activityid = null;
+                // TODO transform DateTime.Min to null
+                newTask.actualend = null;
+                newTask.scheduledend = null;
 
                 // Get the case
                 var @case = _dynamicsContext.incidents
@@ -72,7 +69,6 @@ namespace Rsbc.Dmf.CaseManagement
                     // set the callback owner to case owner
                     if (@case._ownerid_value != null)
                     {
-                        _dynamicsContext.AddTotasks(newTask);
                         _dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
                     };
                 }

@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.CaseManagement
         [Description("Topic")]
         public string Subject { get; set; }
 
-        public string Description { get; set; }
+        public string Description { get; }
         public CallbackPriority? Priority { get; set; }
         public int? Origin { get; set; }
     }
