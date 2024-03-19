@@ -196,7 +196,7 @@
         If the topics above don't give you the answer you're looking for, you
         can call a client service representative at RSBC. <br />
         <br />
-        <b>Hours of operation</b>: Monday to Friday from 8am to 5pm <br />
+        <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
 
         <b>Phone</b>: 1-855-387-7747
       </p>
@@ -211,7 +211,8 @@
         whenever you want.
       </p>
       <div style="padding-bottom: 32px" class="list">
-        <mat-card class="callBackCard"
+        <mat-card
+          class="callBackCard"
           *ngFor="let callback of allCallBacks"
           [ngClass]="{
             open: callback.id && isExpanded[callback.id]

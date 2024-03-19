@@ -1193,10 +1193,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
 
                 bool found = false;
-                if (searchResult != null && searchResult.Items.Count() > 0)
+                if (searchResult != null && searchResult.Items.Count() > 0 )
                 {
                     var closedStatus = new HashSet<string>
                 {
+                        // check for state code wether it is resolved or cancelled
                 "Decision Rendered",
                 "Canceled"
                 };
