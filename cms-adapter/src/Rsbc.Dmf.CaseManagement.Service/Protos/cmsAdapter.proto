@@ -705,6 +705,7 @@ message Callback {
     bool notifyByMail = 11;
     bool notifyByEmail = 12;
     google.protobuf.Timestamp closedDate = 13;
+    int32 origin = 14;
 }
 
 // Obsolete - use CallbackRequest

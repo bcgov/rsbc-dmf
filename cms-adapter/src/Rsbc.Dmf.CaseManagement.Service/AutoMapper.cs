@@ -5,6 +5,7 @@ using System;
 using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
+using static Rsbc.Dmf.CaseManagement.Dynamics.Mapper.CallbackMapper;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -42,6 +43,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new MappingProfile());
                 mc.AddProfile(new DocumentAutoMapperProfile());
                 mc.AddProfile(new DocumentTypeAutoMapperProfile());
+                mc.AddProfile(new CallbackMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

@@ -28,11 +28,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         [HttpPost("create")]
-        [ProducesResponseType(typeof(OkResult), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Create))]
-        public async Task<IActionResult> Create([FromBody] BringForwardRequest callback)
+        public async Task<IActionResult> Create([FromBody] Callback callback)
         {
             var profile = await _userService.GetCurrentUserContext();
 
@@ -45,11 +45,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = 100000005;
+            callback.Priority = CallbackPriority.Normal;
+
             // create callback
-            var reply = _caseManagerClient.CreateBringForward(callback);
+            var reply = _callbackManagerClient.Create(callback);
             if (reply.ResultStatus != ResultStatus.Success)
             {
-                return StatusCode(500, reply.ErrorDetail ?? $"{nameof(Create)} failed.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Create)} failed.");
             }
             else
             {

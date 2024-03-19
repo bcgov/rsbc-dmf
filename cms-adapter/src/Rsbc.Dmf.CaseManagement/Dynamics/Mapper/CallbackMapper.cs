@@ -31,7 +31,19 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_origin))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
                     .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.prioritycode));
+
+                CreateMap<Callback, task>()
+                    .ForMember(dest => dest.activityid, opt => opt.MapFrom(src => src.Id))
+                    .ForMember(dest => dest.scheduledend, opt => opt.MapFrom(src => src.RequestCallback))
+                    .ForMember(dest => dest.statecode, opt => opt.MapFrom(src => src.CallStatus))
+                    .ForMember(dest => dest.actualend, opt => opt.MapFrom(src => src.Closed))
+                    .ForMember(dest => dest.subject, opt => opt.MapFrom(src => src.Subject))
+                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => SerializeValues(src.Phone, src.PreferredTime, src.NotifyByMail, src.NotifyByEmail)))
+                    .ForMember(dest => dest.dfp_origin, opt => opt.MapFrom(src => src.Origin))
+                    .ForMember(dest => dest.prioritycode, opt => opt.MapFrom(src => src.Priority));
             }
+
+            private const char _delimiter = ',';
 
             // TODO can optimize by caching the split values
             // or only using automapper to parse the description once per row instead of everytime you need any value
@@ -42,7 +54,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     return string.Empty;
                 }
 
-                var values = value.Split(',');
+                var values = value.Split(_delimiter);
                 var index = (int)indexEnum;
                 if (values.Length > index)
                 {
@@ -50,6 +62,11 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 }
 
                 return string.Empty;
+            }
+
+            private string SerializeValues(params object[] values)
+            {
+                return string.Join(_delimiter, values);
             }
         }
     }
