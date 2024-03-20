@@ -129,10 +129,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // update driver email, create new login if no login exists
             var userSetEmailRequest = new UserSetEmailRequest();
             userSetEmailRequest.UserId = profile.Id;
-            userSetEmailRequest.DriverId = profile.DriverId;
+            userSetEmailRequest.DriverId = foundDriver.Id;
             userSetEmailRequest.Email = userRegistration.Email;
             userSetEmailRequest.NotifyByMail = userRegistration.NotifyByMail;
             userSetEmailRequest.NotifyByEmail = userRegistration.NotifyByEmail;
+            userSetEmailRequest.ExternalUserName = profile.DisplayName; 
+
             var setDriverReply = _userManagerClient.SetDriverLoginAndEmail(userSetEmailRequest);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {

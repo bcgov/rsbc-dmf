@@ -571,6 +571,7 @@ message UserSetEmailRequest {
     string driverId = 3;
     bool notifyByMail = 4;
     bool notifyByEmail = 5;
+    string externalUserName = 6;
 }
 
 message UsersSearchRequest {
