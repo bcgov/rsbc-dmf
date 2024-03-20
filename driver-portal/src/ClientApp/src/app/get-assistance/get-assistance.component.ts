@@ -6,6 +6,7 @@ import { BringForwardRequest, Callback } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder } from '@angular/forms';
 
 interface CallBackTopic {
   value: string;
@@ -22,8 +23,16 @@ export class GetAssistanceComponent implements OnInit {
     private viewportScroller: ViewportScroller,
     private loginService: LoginService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private fb: FormBuilder
   ) {}
+
+  callbackRequest = this.fb.group({
+    caseId: [''],
+    description: [''],
+    subject: [''],
+  });
+
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
   display = 0;
@@ -78,9 +87,9 @@ export class GetAssistanceComponent implements OnInit {
 
   createCallBack() {
     const callback: BringForwardRequest = {
-      caseId: '',
-      description: 'Test',
-      subject: 'Testing callback',
+      description: this.callbackRequest.value.description,
+      subject: this.callBackTopics.find((x) => x.value == this.selectedValue)
+        ?.viewValue,
     };
     return this.caseManagementService
       .createCallBackRequest({ body: callback })
