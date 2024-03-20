@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using SharedUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Unit
@@ -135,9 +135,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_Service_Callback()
         {
             var callback = new Callback();
+            callback.CaseId = Guid.NewGuid().ToString();
             callback.Id = Guid.NewGuid();
             callback.RequestCallback = new DateTimeOffset();
-            //callback.Subject = CallbackTopic.Upload;
+            callback.Subject = "Subject";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.Closed = new DateTimeOffset();
 
@@ -159,7 +160,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             callback.CaseId = Guid.NewGuid().ToString();
             callback.NotifyByMail = true;
             callback.NotifyByEmail = false;
-            callback.Origin = 100000005;
+            callback.Origin = (int)UserCode.Portal;
             callback.Phone = "Phone";
             callback.Priority = CallbackPriority.Low;
             callback.PreferredTime = PreferredTime.Morning;

@@ -28,7 +28,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.DocumentSubType, Service.DocumentSubType>();
-            CreateMap<CaseManagement.Callback, Service.Callback>();
+            CreateMap<CaseManagement.Callback, Service.Callback>()
+                .AddTransform(NullStringConverter);
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

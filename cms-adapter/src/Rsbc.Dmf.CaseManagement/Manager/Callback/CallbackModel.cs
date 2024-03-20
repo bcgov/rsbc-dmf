@@ -3,12 +3,6 @@ using System.ComponentModel;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-    public enum CallbackTopic
-    {
-        View = 0,
-        Upload = 1
-    }
-
     public enum CallbackCallStatus
     {
         Open = 0,   // Mapped to EntityState.Active
@@ -25,6 +19,7 @@ namespace Rsbc.Dmf.CaseManagement
         public PreferredTime PreferredTime { get; set; }
         public bool NotifyByMail { get; set; }
         public bool NotifyByEmail { get; set; }
+        // TODO change type to Guid
         public string CaseId { get; set; }
         public string Assignee { get; set; }
 
