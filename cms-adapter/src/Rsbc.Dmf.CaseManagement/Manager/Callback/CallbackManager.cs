@@ -100,11 +100,13 @@ namespace Rsbc.Dmf.CaseManagement
             var results = new List<Callback>();
             foreach (var @case in cases)
             {
-                // skip if tasks is null or has no active task
-                if (!(@case.Incident_Tasks?.Any() ?? false))
+                // skip if tasks is null or has no active/inactive tasks 
+                // 2 = cancelled
+                var tasks = @case.Incident_Tasks?.Where(t => t.statecode < 2);
+                if (!(tasks?.Any() ?? false))
                     break;
 
-                var callbacks = _mapper.Map<IEnumerable<Callback>>(@case.Incident_Tasks);
+                var callbacks = _mapper.Map<IEnumerable<Callback>>(tasks);
                 results.AddRange(callbacks);
             }
 

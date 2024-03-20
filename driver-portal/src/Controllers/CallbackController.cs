@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -47,6 +48,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;
+            callback.RequestCallback = DateTime.UtcNow.ToTimestamp();
 
             // create callback
             var reply = _callbackManagerClient.Create(callback);
