@@ -67,20 +67,20 @@ export class SubmissionRequirementsComponent implements OnInit {
       return w.name != f.name;
     });
     this._snackBar.open('Successfully delete!', 'Close', {
-      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 5000,
     });
   }
 
-  show = false;
+  showUpload = false;
 
   openUploadFile() {
-    console.log('openUploadFile');
-    this.show = true;
+    this.showUpload = true;
   }
 
   closeUploadFile() {
-    console.log('closeUploadFile');
-    this.show = false;
+    this.showUpload = false;
   }
 
   handleFileInput(event: any) {
@@ -115,8 +115,9 @@ export class SubmissionRequirementsComponent implements OnInit {
         this._snackBar.open('Successfully uploaded!', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
-          duration: 2000,
+          duration: 5000,
         });
+        this.showUpload = false;
       });
   }
 }
