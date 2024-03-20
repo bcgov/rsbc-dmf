@@ -64,7 +64,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             Subject = "ICBC Error",
                             Description = responseContent,
                             Assignee = string.Empty,
-                            Priority = BringForwardPriority.Normal
+                            Priority = CallbackPriority.Normal
 
                         };
 
@@ -122,7 +122,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                             Subject = "ICBC Error",
                             Description = responseContent,
                             Assignee = string.Empty,
-                            Priority = BringForwardPriority.Normal
+                            Priority = CallbackPriority.Normal
 
                         };
 

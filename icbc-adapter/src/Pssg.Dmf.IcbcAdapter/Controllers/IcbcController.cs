@@ -213,7 +213,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                                 CaseId = caseId,
                                 Description = "ICBC",
                                 Assignee = string.Empty,
-                                Priority = BringForwardPriority.High,
+                                Priority = CallbackPriority.High,
                                 Subject = "A DMER Candidate was introduced to a Case In Progress",     
 
                             });
