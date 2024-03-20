@@ -2248,7 +2248,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                     if (d.Driver != null)
                 {
-                    reply.Document.Driver = new Driver { Id = d.Driver?.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
+                    reply.Document.Driver = new Driver { Id = d.Driver.Id, DriverLicenseNumber = d.Driver?.DriverLicenseNumber };                    
                 }
 
                 if (d.FaxReceivedDate != null)
