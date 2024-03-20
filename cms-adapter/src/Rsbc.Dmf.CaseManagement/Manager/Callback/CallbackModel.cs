@@ -17,8 +17,6 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset? Closed { get; set; }
         public string Phone { get; set; }
         public PreferredTime PreferredTime { get; set; }
-        public bool NotifyByMail { get; set; }
-        public bool NotifyByEmail { get; set; }
         // TODO change type to Guid
         public string CaseId { get; set; }
         public string Assignee { get; set; }

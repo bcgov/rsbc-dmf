@@ -158,8 +158,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             callback.Assignee = "Assignee";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.CaseId = Guid.NewGuid().ToString();
-            callback.NotifyByMail = true;
-            callback.NotifyByEmail = false;
             callback.Origin = (int)UserCode.Portal;
             callback.Phone = "Phone";
             callback.Priority = CallbackPriority.Low;
@@ -171,8 +169,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             var deserializedCallback = _mapper.Map<Callback>(entity);
             Assert.NotNull(deserializedCallback);
             Assert.Equal("Phone", deserializedCallback.Phone);
-            Assert.True(deserializedCallback.NotifyByMail);
-            Assert.False(deserializedCallback.NotifyByEmail);
             Assert.Equal(PreferredTime.Morning, deserializedCallback.PreferredTime);
         }
     }

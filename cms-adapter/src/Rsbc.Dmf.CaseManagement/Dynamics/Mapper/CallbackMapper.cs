@@ -11,9 +11,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
             private enum SeparatedValueIndex
             {
                 Phone,
-                PreferredTime,
-                NotifyByMail,
-                NotifyByEmail
+                PreferredTime
             }
 
             public CallbackMapperProfile()
@@ -26,8 +24,6 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.Subject, opt => opt.MapFrom(src => src.subject))
                     .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.Phone, src.description, string.Empty)))
                     .ForMember(dest => dest.PreferredTime, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.PreferredTime, src.description, string.Empty)))
-                    .ForMember(dest => dest.NotifyByMail, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.NotifyByMail, src.description, "False")))
-                    .ForMember(dest => dest.NotifyByEmail, opt => opt.MapFrom(src => ParseSeparatedValue(SeparatedValueIndex.NotifyByEmail, src.description, "False")))
                     .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_origin))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.description))
                     .ForMember(dest => dest.Priority, opt => opt.MapFrom(src => src.prioritycode));
@@ -38,7 +34,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                     .ForMember(dest => dest.statecode, opt => opt.MapFrom(src => src.CallStatus))
                     .ForMember(dest => dest.actualend, opt => opt.MapFrom(src => src.Closed))
                     .ForMember(dest => dest.subject, opt => opt.MapFrom(src => src.Subject))
-                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => SerializeValues(src.Phone, src.PreferredTime, src.NotifyByMail, src.NotifyByEmail)))
+                    .ForMember(dest => dest.description, opt => opt.MapFrom(src => SerializeValues(src.Phone, src.PreferredTime)))
                     .ForMember(dest => dest.dfp_origin, opt => opt.MapFrom(src => src.Origin))
                     .ForMember(dest => dest.prioritycode, opt => opt.MapFrom(src => src.Priority));
             }

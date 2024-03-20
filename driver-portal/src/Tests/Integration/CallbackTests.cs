@@ -27,8 +27,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime().ToTimestamp();
             callback.Subject = "Driver Portal Integration Test";
             callback.CallStatus = CallbackCallStatus.Open;
-            callback.NotifyByMail = true;
-            callback.NotifyByEmail = false;
             callback.Origin = (int)UserCode.Portal;
             callback.Phone = "1112223333";
             callback.Priority = CallbackPriority.Low;

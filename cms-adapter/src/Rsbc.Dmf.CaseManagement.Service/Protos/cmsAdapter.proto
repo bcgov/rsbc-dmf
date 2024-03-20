@@ -703,10 +703,8 @@ message Callback {
         Evening = 2;
     }
     PreferredTime preferredTime = 10;
-    bool notifyByMail = 11;
-    bool notifyByEmail = 12;
-    google.protobuf.Timestamp closedDate = 13;
-    int32 origin = 14;
+    google.protobuf.Timestamp closedDate = 11;
+    int32 origin = 12;
 }
 
 // Obsolete - use CallbackRequest
