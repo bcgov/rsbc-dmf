@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using System;
+using static Rsbc.Dmf.CaseManagement.Service.Callback.Types;
+using SharedUtils;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -21,14 +23,12 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
                 return;
 
             var callback = new Callback();
-            {
             callback.RequestCallback = new Google.Protobuf.WellKnownTypes.Timestamp();
             callback.Subject = "Driver Portal Integration Test";
-                Subject = "Driver Portal Error Test",
             callback.CallStatus = CallbackCallStatus.Open;
             callback.NotifyByMail = true;
             callback.NotifyByEmail = false;
-            callback.Origin = 100000005;
+            callback.Origin = (int)UserCode.Portal;
             callback.Phone = "1112223333";
             callback.Priority = CallbackPriority.Low;
             callback.PreferredTime = PreferredTime.Morning;

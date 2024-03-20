@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using SharedUtils;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
@@ -44,7 +45,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
-            callback.Origin = 100000005;
+            callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;
 
             // create callback
