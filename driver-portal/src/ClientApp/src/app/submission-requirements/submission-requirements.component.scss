@@ -48,6 +48,19 @@ button:hover {
   color: #003366;
 }
 
+.secondaryButton {
+  border-width: 0px;
+  width: 170px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  border: 2px solid #003366;
+  background-color: #003366;
+  color: #fff;
+}
+
 .fileUpload {
   border-width: 0px;
   left: 0px;
