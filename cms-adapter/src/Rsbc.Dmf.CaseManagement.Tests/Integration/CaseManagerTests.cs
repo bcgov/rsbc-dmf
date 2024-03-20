@@ -483,7 +483,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
                 Assignee = string.Empty,
                 Description = "Test Description1",
                 Subject = "ICBC Error Test",
-                Priority = (CaseManagement.BringForwardPriority?)BringForwardPriority.High
+                Priority = (CaseManagement.CallbackPriority?)CallbackPriority.High
             };
             var result = await _caseManager.CreateBringForward(bringForwardRequest);
             result.ShouldNotBeNull();

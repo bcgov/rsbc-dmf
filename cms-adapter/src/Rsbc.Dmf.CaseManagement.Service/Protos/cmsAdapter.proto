@@ -667,6 +667,7 @@ message ResultStatusReply {
 // START CallbackManager
 
 service CallbackManager {
+    rpc Create (Callback) returns (ResultStatusReply);
     rpc GetDriverCallbacks (DriverIdRequest) returns (GetDriverCallbacksReply);
     rpc Cancel (CallbackCancelRequest) returns (ResultStatusReply);
 }
@@ -676,37 +677,44 @@ message CallbackCancelRequest {
     string callbackId = 2;
 }
 
-enum BringForwardPriority{
+enum CallbackPriority {
 	Low = 0;
 	Normal = 1;
 	High = 2;
 }
 
-// NOTE Callback is synonymous with BringForward and Dynamics Task. Use Callback moving forward and rename BringForward to Callback
-// with any code changes that affect code that uses the term BringForward
 message Callback {
     string id = 1;
-    google.protobuf.Timestamp requestCallback = 2;
-    enum CallbackTopic {
-        view = 0;
-        upload = 1;
-    }
-    CallbackTopic topic = 3;
+    string caseId = 2;
+    string assignee = 3; 
+    string subject = 4;
+    string description = 5;	
+    CallbackPriority priority = 6;
+    google.protobuf.Timestamp requestCallback = 7;
     enum CallbackCallStatus {
         open = 0;
         closed = 1;
     }
-    CallbackCallStatus callStatus = 4;
-    google.protobuf.Timestamp closedDate = 5;
+    CallbackCallStatus callStatus = 8;
+    string phone = 9;
+    enum PreferredTime {
+        Anytime = 0;
+        Morning = 1;
+        Evening = 2;
+    }
+    PreferredTime preferredTime = 10;
+    google.protobuf.Timestamp closedDate = 11;
+    int32 origin = 12;
 }
 
+// Obsolete - use CallbackRequest
 message BringForwardRequest {
     string caseId = 1;
     // if assignee is blank, assign to the Owner of the Case.
     string assignee = 2; 
     string subject = 3;
     string description = 4;	
-    BringForwardPriority priority = 5;
+    CallbackPriority priority = 5;
 }
 
 message GetDriverCallbacksReply {

@@ -6,7 +6,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
     {
         public Guid Id { get; set; }
         public DateTimeOffset RequestCallback { get; set; }
-        public CallbackTopic Topic { get; set; }
+        public string Topic { get; set; }
         public CallbackCallStatus CallStatus { get; set; }
         public DateTimeOffset Closed { get; set; }
     }
