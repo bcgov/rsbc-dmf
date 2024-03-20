@@ -8,6 +8,7 @@ using System.Net;
 using System;
 using static Rsbc.Dmf.CaseManagement.Service.Callback.Types;
 using SharedUtils;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -23,7 +24,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
                 return;
 
             var callback = new Callback();
-            callback.RequestCallback = new Google.Protobuf.WellKnownTypes.Timestamp();
+            callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime().ToTimestamp();
             callback.Subject = "Driver Portal Integration Test";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.NotifyByMail = true;

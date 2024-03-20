@@ -29,13 +29,9 @@ namespace Rsbc.Dmf.CaseManagement
             string caseId = request.CaseId;
             if (!string.IsNullOrEmpty(caseId))
             {
-                // TODO automapper
                 var newTask = _mapper.Map<task>(request);
                 // let Dynamics create the Id Guid
                 newTask.activityid = null;
-                // TODO transform DateTime.Min to null
-                newTask.actualend = null;
-                newTask.scheduledend = null;
 
                 // Get the case
                 var @case = _dynamicsContext.incidents

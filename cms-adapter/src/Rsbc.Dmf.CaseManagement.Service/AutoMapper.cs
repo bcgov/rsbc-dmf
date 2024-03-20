@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
@@ -19,6 +20,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ConvertUsing(x => x == null ? null : Timestamp.FromDateTimeOffset(x.Value));
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
+            CreateMap<Timestamp, DateTimeOffset>()
+                .ConvertUsing(x => x.ToDateTimeOffset());
+            CreateMap<Timestamp, DateTimeOffset?>()
+                .ConvertUsing(x => x == null ? null : x.ToDateTimeOffset());
+
             CreateMap<CaseManagement.Address, Address>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.Driver, Driver>()
@@ -27,8 +33,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
-            CreateMap<CaseManagement.DocumentSubType, Service.DocumentSubType>();
-            CreateMap<CaseManagement.Callback, Service.Callback>()
+            CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
+            CreateMap<CaseManagement.Callback, Callback>()
+                .AddTransform(NullStringConverter);
+            CreateMap<Callback, CaseManagement.Callback>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
                 .AddTransform(NullStringConverter);
         }
 

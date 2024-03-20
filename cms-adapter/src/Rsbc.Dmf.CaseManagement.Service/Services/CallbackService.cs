@@ -26,20 +26,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                // TODO automapper
-                var callbackRequest = new CaseManagement.Callback()
-                {
-                    CaseId = request.CaseId ?? string.Empty,
-                    Assignee = request.Assignee ?? string.Empty,
-                    Subject = request.Subject ?? string.Empty,
-                    Priority = (CaseManagement.CallbackPriority)request.Priority,
-                    CallStatus = (CallbackCallStatus)request.CallStatus,
-                    Phone = request.Phone ?? string.Empty,
-                    PreferredTime = (PreferredTime)request.PreferredTime,
-                    NotifyByMail = request.NotifyByMail,
-                    NotifyByEmail = request.NotifyByEmail,
-                };
-
+                var callbackRequest = _mapper.Map<CaseManagement.Callback>(request);
                 var result = await _callbackManager.Create(callbackRequest);
                 if (result != null && result.Success)
                 {
