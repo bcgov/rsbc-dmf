@@ -27,9 +27,15 @@
         </ul>
       </div>
       <div style="padding-bottom: 24px">
-        <button mat-flat-button (click)="openUploadFile()">Upload File</button>
+        <button
+          class="secondaryButton"
+          mat-flat-button
+          (click)="openUploadFile()"
+        >
+          Upload File
+        </button>
       </div>
-      <div class="fileUpload" *ngIf="show">
+      <div class="fileUpload" *ngIf="showUpload">
         <b> Upload Your File</b>
         <br />
         1. Select the appropriate document type based on the submission
@@ -88,13 +94,19 @@
         <div class="uploadbutton">
           <button
             mat-flat-button
-            class="primaryButton"
+            class="secondaryButton"
             (click)="fileUpload()"
             [disabled]="!confirmed.checked"
           >
             Upload File
           </button>
-          <button mat-flat-button (click)="closeUploadFile()">Cancel</button>
+          <button
+            mat-flat-button
+            class="primaryButton"
+            (click)="closeUploadFile()"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>
