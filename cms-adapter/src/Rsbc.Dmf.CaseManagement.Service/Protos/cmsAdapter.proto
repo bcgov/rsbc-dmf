@@ -355,11 +355,21 @@ message Provider {
     Address address = 14;	
 }
 
+// Obsolete use FullAddress instead
 message Address {
     string line1 = 1;
     string line2 = 2;
     string city = 3;
     string postal = 4;
+}
+
+message FullAddress {
+    string line1 = 1;
+    string line2 = 2;
+    string city = 3;
+    string postal = 4;
+    string province = 5;
+    string country = 6;
 }
 
 enum ResultStatus {
@@ -552,7 +562,8 @@ service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
-  rpc SetDriverLoginAndEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc SetDriverLogin(SetDriverLoginRequest) returns (ResultStatusReply);
+  rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
 }
 
@@ -566,12 +577,22 @@ message UserDriverAuthorizedRequest {
 }
 
 message UserSetEmailRequest {
-    string userId = 1;
+    string loginId = 1;
     string email = 2;
+}
+
+message SetDriverLoginRequest {
+    string loginId = 1;
     string driverId = 3;
-    bool notifyByMail = 4;
-    bool notifyByEmail = 5;
-    string externalUserName = 6;
+}
+
+message UpdateLoginRequest {
+    string loginId = 1;
+    string email = 2;
+    bool notifyByMail = 3;
+    bool notifyByEmail = 4;
+    string externalUserName = 5;
+    FullAddress address = 6;
 }
 
 message UsersSearchRequest {

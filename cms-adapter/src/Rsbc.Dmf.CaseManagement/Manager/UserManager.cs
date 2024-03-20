@@ -12,9 +12,30 @@ namespace Rsbc.Dmf.CaseManagement
     {
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
-        Task<bool> SetUserEmail(string userId, string email);
-        void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail, string externalUserName);
+        Task<bool> SetUserEmail(string loginId, string email);
+        Task<bool> SetDriverLogin(string loginId, Guid driverId);
+        Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
+    }
+
+    public class UpdateLoginRequest
+    {
+        public string LoginId { get; set; }
+        public string Email { get; set; }
+        public bool NotifyByMail { get; set; }
+        public bool NotifyByEmail { get; set; }
+        public string ExternalSystemUserId { get; set; }
+        public FullAddress Address { get; set; }
+    }
+
+    public class FullAddress
+    {
+        public string Line1 { get; set; }
+        public string Line2 { get; set; }
+        public string City { get; set; }
+        public string Postal { get; set; }
+        public string Country { get; set; }
+        public string Province { get; set; }
     }
 
     public class SearchUsersRequest
@@ -208,7 +229,7 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public void SetDriverLoginAndEmail(string loginId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail, string externalUserName)
+        public async Task<bool> SetDriverLogin(string loginId, Guid driverId)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
@@ -216,58 +237,77 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(l => l.dfp_loginid == Guid.Parse(loginId))
                 .SingleOrDefault();
 
+            // if we change userRegistration page to not need authentication (which creates the login in method 'LoginUser')
+            // we will need the following line:
+            // if (login == null) { login = CreateLogin(loginId, LoginType.Bcsc); }
+
             // for first time login, create login and link to driver
             if (login.dfp_DriverId == null)
             {
-               /*login = CreateLogin(loginId, LoginType.Bcsc);*/
                 // Query to get the driver
                 var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == driverId).FirstOrDefault();
-                if(driver != null)
+                if (driver != null)
                 {
                     dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driver);
-                    
-                    dynamicsContext.SaveChanges();
+                    await dynamicsContext.SaveChangesAsync();
                     dynamicsContext.Detach(driver);
-                }
-
-                //fetch the login and driver again
-                login = dynamicsContext.dfp_logins
-                .Expand(l => l.dfp_DriverId)
-                .Expand(l => l.dfp_DriverId.dfp_PersonId)
-                .Where(l => l.dfp_loginid == Guid.Parse(loginId))
-                .SingleOrDefault();
-
-                // update notification preferences
-                login.dfp_mail = notifyByMail;
-                login.dfp_email = notifyByEmail;
-                login.dfp_name = externalUserName;
-                
-                dynamicsContext.UpdateObject(login);
-
-
-                // update email
-                if (login.dfp_DriverId.dfp_PersonId != null)
+                } 
+                else
                 {
-
-                    login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
-                    dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+                    return false;
                 }
-
-               
-                dynamicsContext.SaveChanges();
             }
 
-            
+            return true;
         }
 
-        public async Task<bool> SetUserEmail(string userId, string email)
+        public async Task<bool> UpdateLogin(UpdateLoginRequest request)
+        {
+            //fetch the login and driver again
+            var login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
+                .Where(l => l.dfp_loginid == Guid.Parse(request.LoginId))
+                .SingleOrDefault();
+
+            // update notification preferences
+            login.dfp_mail = request.NotifyByMail;
+            login.dfp_email = request.NotifyByEmail;
+            login.dfp_name = request.ExternalSystemUserId;
+                
+            dynamicsContext.UpdateObject(login);
+
+            // update email
+            if (login.dfp_DriverId.dfp_PersonId != null)
+            {
+                login.dfp_DriverId.dfp_PersonId.emailaddress1 = request.Email;
+                if (request.Address != null)
+                {
+                    login.dfp_DriverId.dfp_PersonId.address1_city = request.Address.City;
+                    login.dfp_DriverId.dfp_PersonId.address1_country = request.Address.Country;
+                    login.dfp_DriverId.dfp_PersonId.address1_line1 = request.Address.Line1;
+                    login.dfp_DriverId.dfp_PersonId.address1_postalcode = request.Address.Postal;
+                    login.dfp_DriverId.dfp_PersonId.address1_stateorprovince = request.Address.Province;
+                }
+                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+            }
+            else
+            {
+                return false;
+            }
+
+            await dynamicsContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SetUserEmail(string loginId, string email)
         {
             bool result = false;
 
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
                 .Expand(l => l.dfp_login_dfp_medicalpractitioner)                
-                .Where(l => l.dfp_loginid == Guid.Parse(userId))
+                .Where(l => l.dfp_loginid == Guid.Parse(loginId))
                 .FirstOrDefault();
 
             if (login != null)

@@ -72,9 +72,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <param name="newEmail"></param>
         /// <returns></returns>
         [HttpPut("register")]
-        [ProducesResponseType(typeof(OkResult), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Register))]
         public async Task<ActionResult> Register([FromBody] UserRegistration userRegistration)
         {
@@ -91,7 +91,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (getDriverReply.ResultStatus != ResultStatus.Success)
             {
                 _logger.LogError($"{nameof(UserRegistration)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", getDriverReply.ErrorDetail);
-                return StatusCode(500, getDriverReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail);
             }
             if (getDriverReply.Items?.Count == 0)
             {
@@ -123,22 +123,34 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
             if (foundDriver == null)
             {
-                return StatusCode(401, "Driver details do not match.");
+                return StatusCode((int)HttpStatusCode.Unauthorized, "Driver details do not match.");
             }
 
             // update driver email, create new login if no login exists
-            var userSetEmailRequest = new UserSetEmailRequest();
-            userSetEmailRequest.UserId = profile.Id;
-            userSetEmailRequest.DriverId = foundDriver.Id;
-            userSetEmailRequest.Email = userRegistration.Email;
-            userSetEmailRequest.NotifyByMail = userRegistration.NotifyByMail;
-            userSetEmailRequest.NotifyByEmail = userRegistration.NotifyByEmail;
-            userSetEmailRequest.ExternalUserName = profile.DisplayName; 
+            var request = new SetDriverLoginRequest();
+            request.LoginId = profile.Id;
+            request.DriverId = foundDriver.Id;
 
-            var setDriverReply = _userManagerClient.SetDriverLoginAndEmail(userSetEmailRequest);
+            var setDriverReply = _userManagerClient.SetDriverLogin(request);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {
-                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.SetDriverLoginAndEmail)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
+            }
+
+            // update driver email, create new login if no login exists
+            var updateLoginRequest = new UpdateLoginRequest();
+            updateLoginRequest.LoginId = profile.Id;
+            updateLoginRequest.Email = userRegistration.Email;
+            updateLoginRequest.NotifyByMail = userRegistration.NotifyByMail;
+            updateLoginRequest.NotifyByEmail = userRegistration.NotifyByEmail;
+            updateLoginRequest.ExternalUserName = profile.DisplayName;
+            updateLoginRequest.Address = userRegistration.Address;
+
+            setDriverReply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            if (setDriverReply.ResultStatus != ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
