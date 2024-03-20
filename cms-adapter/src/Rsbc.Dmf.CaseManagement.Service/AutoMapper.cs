@@ -5,6 +5,7 @@ using System;
 using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
+using static Rsbc.Dmf.CaseManagement.Dynamics.Mapper.CallbackMapper;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -18,6 +19,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ConvertUsing(x => x == null ? null : Timestamp.FromDateTimeOffset(x.Value));
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
+            CreateMap<Timestamp, DateTimeOffset>()
+                .ConvertUsing(x => x.ToDateTimeOffset());
+            CreateMap<Timestamp, DateTimeOffset?>()
+                .ConvertUsing(x => x == null ? null : x.ToDateTimeOffset());
+
             CreateMap<CaseManagement.Address, Address>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.Driver, Driver>()
@@ -26,8 +32,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.CaseDetail, CaseDetail>()
                 .AddTransform(NullStringConverter);
-            CreateMap<CaseManagement.DocumentSubType, Service.DocumentSubType>();
-            CreateMap<CaseManagement.Callback, Service.Callback>();
+            CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
+            CreateMap<CaseManagement.Callback, Callback>()
+                .AddTransform(NullStringConverter);
+            CreateMap<Callback, CaseManagement.Callback>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
+                .AddTransform(NullStringConverter);
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
@@ -42,6 +52,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new MappingProfile());
                 mc.AddProfile(new DocumentAutoMapperProfile());
                 mc.AddProfile(new DocumentTypeAutoMapperProfile());
+                mc.AddProfile(new CallbackMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

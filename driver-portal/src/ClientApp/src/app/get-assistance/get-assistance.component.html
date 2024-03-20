@@ -59,7 +59,6 @@
               ><b> Upload a Document </b>
               <div>
                 You have an extra document that you want to submit to RSBC.
-                <br />
                 Learn more about this process.
               </div>
             </mat-card-content>
@@ -130,8 +129,13 @@
           <div class="callback">
             <div style="display: flex; gap: 42px; padding: 24px">
               <b>Still require assistance?</b>
-              <button (click)="onRequestCallBack()">Request Call Back</button>
-              <button (click)="viewRequest($event, 'callBack')">
+              <button class="callBackButton" (click)="onRequestCallBack()">
+                Request Call Back
+              </button>
+              <button
+                class="callBackButton"
+                (click)="viewRequest($event, 'callBack')"
+              >
                 Contact RSBC
               </button>
             </div>
@@ -168,13 +172,19 @@
                 </div>
                 <div>
                   <label class="form-label">Best time to receive a call</label>
-                  <label> <input type="checkbox" />9:00am - 5:00pm </label>
+                  <label> <input type="checkbox" />9:00am - 4:00pm </label>
                   <label> <input type="checkbox" />9:00am and 12:00pm </label>
-                  <label> <input type="checkbox" />12:01am - 5:00pm </label>
+                  <label> <input type="checkbox" />12:01pm - 4:00pm </label>
                 </div>
               </div>
               <div class="submitButtonContainer">
-                <button mat-flat-button class="primaryButton">Submit</button>
+                <button
+                  class="primaryButton"
+                  mat-flat-button
+                  (click)="createCallBack()"
+                >
+                  Submit
+                </button>
                 <button class="cancelButton" (click)="back()">Back</button>
               </div>
             </form>
@@ -190,9 +200,10 @@
         If the topics above don't give you the answer you're looking for, you
         can call a client service representative at RSBC. <br />
         <br />
-        <b>Hours of operation</b>: Monday to Friday from 8am to 5pm <br />
+        <b>Hours of operation</b>: Monday to Friday from 9am to 4pm <br />
 
-        <b>Phone</b>: 1-855-387-7747
+        <b>Phone</b>: 1-855-387-7747 <br />
+        <b>Greater Victoria</b> : 250-387-7747
       </p>
     </div>
     <div style="padding-top: 32px" id="callBack">
@@ -204,8 +215,9 @@
         longer need assistance, you have the option to cancel your open request
         whenever you want.
       </p>
-      <div style="padding-bottom: 32px">
+      <div style="padding-bottom: 32px" class="list">
         <mat-card
+          class="callBackCard"
           *ngFor="let callback of allCallBacks"
           [ngClass]="{
             open: callback.id && isExpanded[callback.id]
@@ -248,13 +260,18 @@
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button (click)="openCancelCallbackDialog()">Cancel Callback</button>
+                    <button
+                      mat-flat-button
+                      (click)="openCancelCallbackDialog(callback)"
+                    >
+                      Cancel Callback
+                    </button>
                   </div>
                 </div>
               </div>
 
               <div
-                class="caseDetailRow"
+                class="caseDetailRow expandedDetails"
                 *ngIf="callback.id && isExpanded?.[callback.id]"
                 style="
                   border-top: 2px solid gray;
@@ -276,6 +293,8 @@
                     <b>April 29 - Call attempt unsuccessful</b>
                   </div>
                 </div>
+                <div></div>
+                <div></div>
               </div>
             </div>
           </mat-card-content>
@@ -285,6 +304,7 @@
 
     <div
       class="numberOfItems"
+      style="margin-bottom: 32px"
       *ngIf="
         allCallBacks &&
         allCallBacks.length > 0 &&

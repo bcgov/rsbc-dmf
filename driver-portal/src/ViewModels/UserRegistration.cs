@@ -4,5 +4,8 @@
     {
         public string DriverLicenseNumber { get; set; }
         public string Email { get; set; }
+        public bool NotifyByMail { get; set; }
+        public bool NotifyByEmail { get; set; }
+
     }
 }

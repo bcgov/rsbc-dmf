@@ -6,5 +6,6 @@
         public const string BirthDate = "birthdate";
         public const string GivenName = "given_name";
         public const string FamilyName = "family_name";
+        public const string DisplayName = "name";
     }
 }

@@ -23,7 +23,6 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             _callbackService = new CallbackService(callbackManager, logger, mapper);
         }
 
-
         [Fact(Skip = RequiresDynamics)]
         public async Task GetDriverCallbacks()
         {

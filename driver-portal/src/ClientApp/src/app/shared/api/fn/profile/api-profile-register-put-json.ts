@@ -29,4 +29,4 @@ export function apiProfileRegisterPut$Json(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiProfileRegisterPut$Json.PATH = '/api/Profile/Register';
+apiProfileRegisterPut$Json.PATH = '/api/Profile/register';

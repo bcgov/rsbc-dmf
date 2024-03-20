@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using Rsbc.Dmf.CaseManagement.Service;
 using System.Net;
 using System;
+using static Rsbc.Dmf.CaseManagement.Service.Callback.Types;
+using SharedUtils;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -20,15 +23,16 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             if (string.IsNullOrEmpty(driverId))
                 return;
 
-            var bringForwardRequest = new BringForwardRequest()
-            {
-                Assignee = string.Empty,
-                Description = "Test Description1",
-                Subject = "Driver Portal Error Test",
-                Priority = BringForwardPriority.High
-            };
-            var request = new HttpRequestMessage(HttpMethod.Get, $"{CALLBACK_API_BASE}/create");
-            SetContent(request, bringForwardRequest);
+            var callback = new Callback();
+            callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime().ToTimestamp();
+            callback.Subject = "Driver Portal Integration Test";
+            callback.CallStatus = CallbackCallStatus.Open;
+            callback.Origin = (int)UserCode.Portal;
+            callback.Phone = "1112223333";
+            callback.Priority = CallbackPriority.Low;
+            callback.PreferredTime = PreferredTime.Morning;
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{CALLBACK_API_BASE}/create");
+            SetContent(request, callback);
 
             var response = await _client.SendAsync(request);
 

@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CallbackCancelRequest } from 'src/app/shared/api/models';
+import { CaseManagementService } from 'src/app/shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-cancel-callback-dialog',
@@ -7,10 +9,19 @@ import { MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./cancel-callback-dialog.component.scss'],
 })
 export class CancelCallbackDialogComponent {
-  constructor(private dialogRef: MatDialogRef<CancelCallbackDialogComponent>) {}
+  constructor(
+    private dialogRef: MatDialogRef<CancelCallbackDialogComponent>,
+    private caseManagementService: CaseManagementService,
+    @Inject(MAT_DIALOG_DATA)
+    private data: CallbackCancelRequest
+  ) {}
 
   cancelRequestCallback() {
-    console.log('Cancel Request');
+    this.caseManagementService
+      .cancelCallBackRequest({ body: this.data })
+      .subscribe((res) => {
+        this.dialogRef.close();
+      });
   }
 
   onCancel() {

@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string userId, string email);
-        bool SetDriverEmail(string driverId, string email);
+        void SetDriverLoginAndEmail(string userId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail, string externalUserName);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
@@ -208,24 +208,56 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public bool SetDriverEmail(string driverId, string email)
+        public void SetDriverLoginAndEmail(string loginId, Guid driverId, string email, bool notifyByMail, bool notifyByEmail, string externalUserName)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
-                .Expand(d => d.dfp_DriverId.dfp_PersonId)
-                .Where(l => l._dfp_driverid_value == Guid.Parse(driverId))
-                .FirstOrDefault();
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
+                .Where(l => l.dfp_loginid == Guid.Parse(loginId))
+                .SingleOrDefault();
 
-            if (login != null)
+            // for first time login, create login and link to driver
+            if (login.dfp_DriverId == null)
             {
-                login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
+               /*login = CreateLogin(loginId, LoginType.Bcsc);*/
+                // Query to get the driver
+                var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == driverId).FirstOrDefault();
+                if(driver != null)
+                {
+                    dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driver);
+                    
+                    dynamicsContext.SaveChanges();
+                    dynamicsContext.Detach(driver);
+                }
 
-                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+                //fetch the login and driver again
+                login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
+                .Where(l => l.dfp_loginid == Guid.Parse(loginId))
+                .SingleOrDefault();
+
+                // update notification preferences
+                login.dfp_mail = notifyByMail;
+                login.dfp_email = notifyByEmail;
+                login.dfp_name = externalUserName;
+                
+                dynamicsContext.UpdateObject(login);
+
+
+                // update email
+                if (login.dfp_DriverId.dfp_PersonId != null)
+                {
+
+                    login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
+                    dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+                }
+
+               
                 dynamicsContext.SaveChanges();
-                return true;
             }
 
-            return false;
+            
         }
 
         public async Task<bool> SetUserEmail(string userId, string email)
@@ -273,14 +305,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (login == null)
             {
-                //first time login
-                login = new dfp_login
-                {
-                    dfp_loginid = Guid.NewGuid(),
-                    dfp_userid = loginId,
-                    dfp_type = (int)loginType
-                };
-                dynamicsContext.AddTodfp_logins(login);
+                login = CreateLogin(loginId, loginType);
             }
             else
             {
@@ -357,6 +382,21 @@ namespace Rsbc.Dmf.CaseManagement
             "idir" => LoginType.Idir,
             _ => throw new NotImplementedException(externalSystem)
         };
+
+        // first time login
+        private dfp_login CreateLogin(string userId, LoginType? loginType)
+        {
+            var login = new dfp_login
+            {
+                dfp_loginid = Guid.NewGuid(),
+                dfp_userid = userId,
+                dfp_type = (int?)loginType
+            };
+            dynamicsContext.AddTodfp_logins(login);
+
+            dynamicsContext.SaveChanges();
+            return login;
+        }
 
         private dfp_driver AddDriver(DriverUser user)
         {

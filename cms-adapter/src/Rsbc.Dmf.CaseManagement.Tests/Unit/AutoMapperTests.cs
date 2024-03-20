@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using SharedUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Xunit;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Unit
@@ -135,9 +135,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_Service_Callback()
         {
             var callback = new Callback();
+            callback.CaseId = Guid.NewGuid().ToString();
             callback.Id = Guid.NewGuid();
             callback.RequestCallback = new DateTimeOffset();
-            callback.Topic = CallbackTopic.Upload;
+            callback.Subject = "Subject";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.Closed = new DateTimeOffset();
 
@@ -146,5 +147,29 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.NotNull(mappedCallback);
         }
 
+        [Fact]
+        public void Map_Callback_task_Serialize_Description()
+        {
+            var callback = new Callback();
+            callback.Id = Guid.NewGuid();
+            callback.RequestCallback = new DateTimeOffset();
+            callback.Subject = "Subject";
+            callback.Closed = new DateTimeOffset();
+            callback.Assignee = "Assignee";
+            callback.CallStatus = CallbackCallStatus.Open;
+            callback.CaseId = Guid.NewGuid().ToString();
+            callback.Origin = (int)UserCode.Portal;
+            callback.Phone = "Phone";
+            callback.Priority = CallbackPriority.Low;
+            callback.PreferredTime = PreferredTime.Morning;
+
+            var entity = _mapper.Map<task>(callback);
+            Assert.NotNull(entity);
+
+            var deserializedCallback = _mapper.Map<Callback>(entity);
+            Assert.NotNull(deserializedCallback);
+            Assert.Equal("Phone", deserializedCallback.Phone);
+            Assert.Equal(PreferredTime.Morning, deserializedCallback.PreferredTime);
+        }
     }
 }

@@ -235,6 +235,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         CaseId = documentResponse.Document.CaseId,
                                         CreateDate = documentResponse.Document.CreateDate,
                                         DocumentType = "Unclassified",
+                                        DocumentTypeCode = "999",
                                         DocumentUrl = newFileResult.FileName,
                                         Driver = documentResponse.Document.Driver,
                                         Origin = documentResponse.Document.Origin,
@@ -245,6 +246,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         UserId = documentResponse.Document.UserId,
                                         ValidationMethod = documentResponse.Document.ValidationMethod,
                                         ValidationPrevious = documentResponse.Document.ValidationPrevious,
+                                        
                                     };
 
                                     // DateTimeOffset importDate = documentResponse.Document.ImportDate.ToDateTimeOffset();

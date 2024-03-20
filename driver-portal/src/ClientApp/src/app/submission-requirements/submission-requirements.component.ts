@@ -31,13 +31,8 @@ export class SubmissionRequirementsComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
+  selectedValue = '';
   acceptControl = new FormControl(false);
-
-  // documentTypes: DocumentType[] = [
-  //   { value: '310', viewValue: 'Diabetic Doctor Report' },
-  //   { value: '001', viewValue: 'DMER' },
-  //   { value: '030', viewValue: 'EVF' },
-  // ];
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -48,7 +43,6 @@ export class SubmissionRequirementsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    //console.log('submission requirements component');
     this.getDocumentSubtypes();
   }
 
@@ -73,20 +67,20 @@ export class SubmissionRequirementsComponent implements OnInit {
       return w.name != f.name;
     });
     this._snackBar.open('Successfully delete!', 'Close', {
-      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      duration: 5000,
     });
   }
 
-  show = false;
+  showUpload = false;
 
   openUploadFile() {
-    console.log('openUploadFile');
-    this.show = true;
+    this.showUpload = true;
   }
 
   closeUploadFile() {
-    console.log('closeUploadFile');
-    this.show = false;
+    this.showUpload = false;
   }
 
   handleFileInput(event: any) {
@@ -108,7 +102,7 @@ export class SubmissionRequirementsComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    
+    formData.append('documentSubTypeId', this.selectedValue);
 
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
@@ -118,7 +112,12 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe((res) => {
         console.log(res);
-        this._snackBar.open('Successfully uploaded!', 'Close', {});
+        this._snackBar.open('Successfully uploaded!', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000,
+        });
+        this.showUpload = false;
       });
   }
 }

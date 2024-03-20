@@ -29,8 +29,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.ValidationMethod, opt => opt.MapFrom(src => src.dfp_validationmethod))
                     .ForMember(dest => dest.ValidationPrevious, opt => opt.MapFrom(src => src.dfp_validationprevious))
                     .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
-                    .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.dfp_duedate))
-                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_description))
+                    .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
                     .AddTransform(NullStringConverter);
             }
@@ -75,8 +75,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
         {
             var statusMap = new Dictionary<int, string>()
             {
+                // TODO update to use shared-utils SubmittalStatus.cs
                 { 100000000, "Open-Required"  },
-                { 100000001, "Received" }, 
+                { 100000001, "Received" }, // Accept
                 { 100000003, "Reviewed" },
                 { 100000004, "Reject" },
                 { 100000008, "Sent" },

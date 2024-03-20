@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DMFT</title>
+    <style>
+      * {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "BC Sans", Arial, sans-serif;
+        font-size: 16px;
+      }
+
+      img {
+        width: 100%;
+      }
+
+      .center {
+        text-align: center;
+      }
+
+      .center-item {
+        margin: 0 auto;
+        display: block;
+      }
+
+      .spacer {
+        margin: 0 16px;
+      }
+
+      /*--Typography----------------*/
+      p {
+        margin-bottom: 24px;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 38px;
+        margin-bottom: 16px;
+      }
+
+      h2.large {
+        font-size: 30px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 16px;
+      }
+
+      /*--Links----------------*/
+
+      .--link-white {
+        color: #fff;
+        font-weight: 700;
+      }
+
+      .--link-dark {
+        color: #000000;
+        font-weight: 700;
+      }
+
+      .--link-white-normal {
+        color: #fff;
+      }
+
+      /*--Buttons----------------*/
+
+      .BC-Gov-PrimaryButton {
+        background-color: #003366;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        padding: 12px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+      }
+
+      .BC-Gov-PrimaryButton:hover {
+        text-decoration: underline;
+        opacity: 0.8;
+      }
+
+      :focus {
+        outline: 4px solid #3b99fc;
+        outline-offset: 1px;
+      }
+
+      .BC-Gov-PrimaryButton:active {
+        opacity: 1;
+      }
+
+      .BC-Gov-PrimaryButton-Dark {
+        background-color: #fff;
+        border: none;
+        border-radius: 4px;
+        color: #313132;
+        padding: 12px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+      }
+
+      .BC-Gov-PrimaryButton-Dark:hover {
+        text-decoration: underline;
+        background-color: #f2f2f2;
+      }
+
+      :focus {
+        outline: 4px solid #3b99fc;
+        outline-offset: 1px;
+      }
+
+      .BC-Gov-PrimaryButton-Dark:active {
+        background-color: #fff;
+      }
+
+      .background-colour {
+        background-color: #003366;
+        height: 100px;
+        width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .BC-Gov-SecondaryButton-Dark {
+        background: none;
+        border-radius: 4px;
+        border: 2px solid #fff;
+        padding: 10px 30px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        color: #fff;
+      }
+
+      .BC-Gov-SecondaryButton-Dark:hover {
+        text-decoration: underline;
+        background-color: #fff;
+        color: #313132;
+      }
+
+      :focus {
+        outline-offset: 1px;
+        outline: 4px solid #3b99fc;
+      }
+
+      .BC-Gov-SecondaryButton-Dark:active {
+        background-color: #f2f2f2;
+        color: #313132;
+      }
+
+      .background-colour {
+        background-color: #003366;
+        height: 100px;
+        width: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /*--Images----------------*/
+      .site-logo {
+        max-width: 193px;
+      }
+
+      .medical-professional-icon {
+        width: 38px;
+        margin-bottom: 8px;
+      }
+
+      .about-icon,
+      .concern-icon,
+      .ccmta-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 8px;
+      }
+
+      .contact-icon {
+        width: 95px;
+        height: 80px;
+        margin-right: 20px;
+      }
+
+      .phone-icon,
+      .email-icon {
+        width: 25px;
+        height: 25px;
+        margin-right: 6px;
+        vertical-align: bottom;
+      }
+
+      /*--Containers----------------*/
+      .container {
+        width: 1200px;
+        margin: 0 auto;
+        /*z-index: -10; hiding and replacing with z index on container-background to get yellow border on bg to show*/
+      }
+
+      .container-alt {
+        width: 1180px;
+        margin: 0 auto;
+      }
+
+      .container-background {
+        position: relative;
+        width: 1180px;
+        margin: 0 auto;
+        border-radius: 4px;
+        background-color: #ecf5ff;
+        margin-top: -20px;
+        z-index: 1;
+        border-top: 5px solid #fcba19;
+        padding: 50px 30px;
+        height: 1730px;
+      }
+
+      /*--Header----------------*/
+      .site-header {
+        width: 100%;
+        height: 100px;
+        background-color: #003366;
+        border-bottom: 4px solid #fcba19;
+      }
+
+      .site-header__inner {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .site-header__buttons {
+        margin-top: 24px;
+      }
+
+      .site-logo {
+        margin-top: 10px;
+      }
+
+      /*--Hero----------------*/
+      .hero {
+        height: 580px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero__img {
+        margin-top: -220px;
+      }
+
+      .hero__content {
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        color: #fff;
+        max-width: 600px;
+        background-color: rgba(0, 51, 102, 0.7);
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .hero__content p {
+        font-size: 18px;
+        margin-bottom: 20px;
+      }
+
+      .hero h1 span {
+        font-size: 30px;
+      }
+
+      .hero__content ul {
+        font-size: 18px;
+        margin-left: 40px;
+      }
+
+      .hero__content ul li {
+        margin-bottom: 16px;
+      }
+
+      .hero__overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      /*--Card Container----------------*/
+      .card-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      /*--CCMTA----------------*/
+      .ccmta {
+        background: #f2f2f2;
+        padding: 40px;
+        width: 49%;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: 0px 5px 20px 0px rgba(0, 51, 102, 0.25);
+      }
+
+      .ccmta p {
+        font-size: 18px;
+      }
+
+      .ccmta hr {
+        width: 400px;
+        margin-bottom: 30px;
+        border: 1px solid;
+      }
+
+      .ccmta__buttons {
+        display: flex;
+		gap:12px;
+        margin: 32px;
+      }
+
+      /*--Assistance----------------*/
+      .assistance {
+        background: #fff;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        border: 2px solid #fcba19;
+        padding: 35px;
+        border-radius: 4px;
+        box-shadow: 0px 5px 5px 0px rgba(0, 51, 102, 0.35);
+      }
+
+      .assistance h2 {
+        color: #003366;
+        margin-bottom: 16px;
+      }
+
+      .assistance__contacts {
+        display: flex;
+        width: 400px;
+        justify-content: space-between;
+      }
+
+      /*--Footer----------------*/
+
+      .site-footer {
+        width: 100%;
+        height: 80px;
+        background-color: #003366;
+        border-top: 3px solid #fcba19;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 120px;
+      }
+
+      .site-footer-links {
+        display: flex;
+        list-style: none;
+        justify-content: center;
+      }
+
+      .site-footer-links a {
+        color: #fff;
+        margin-left: 10px;
+        margin-right: 10px;
+        text-decoration: none;
+      }
+
+      .site-footer-links a:hover {
+        text-decoration: underline;
+      }
+
+      .site-footer-links span {
+        color: #fff;
+      }
+
+      .site-copyright {
+        text-align: center;
+        padding: 12px 0;
+      }
+
+      /* Useful Links */
+
+      h2 {
+        font-weight: bold;
+        color: #003366;
+        font-size: 31px;
+        border-left: 3px solid #fcba19;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+	  .usefulLinks > p{
+	border-top: 1px solid;
+    padding-top: 9px;
+
+	  }
+
+      .row {
+        display: flex;
+        padding-top: 24px;
+      }
+
+      .column {
+        flex: 50%;
+        padding: 10px;
+      }
+
+      /* Resources Accordion */
+
+      .accordion {
+        background-color: #eee;
+        color: #003366;
+		font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+      }
+
+      .active,
+      .accordion:hover {
+        background-color: #ccc;
+      }
+
+      .panel {
+        padding: 24px;
+        display: none;
+        background-color: white;
+        overflow: hidden;
+      }
+
+	  .accordion:after {
+  content: '\002B';
+  color: #777;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+
+    </style>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner container">
+		<div>
+			<a href="/"
+			><img
+			  class="site-logo"
+			  src="img/british-columbia-logo.svg"
+			  alt="British Columbia Logo"
+		  /></a>
+		</div>
+        
+		<div class="ccmta__buttons">
+			<a class="BC-Gov-SecondaryButton-Dark" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card" target="_blank">Register</a>
+			<a class="BC-Gov-PrimaryButton-Dark" href="https://test.roadsafetybc.gov.bc.ca/driver-portal" target="_blank">Login</a>
+			
+		</div>
+      </div>
+	  
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="hero container">
+          <img class="hero__img" src="img/hero.jpg" alt="" />
+
+          <div class="hero__content">
+            <h1><span>RoadSafetyBC's Driver Portal</span></h1>
+            <p>
+              RoadSafetyBC is part of the Ministry of Public Safety and
+              Solicitor General and is dedicated to maintaining road safety. Assessing the medical fitness of drivers is just one of the ways we fulfill this commitment.
+			  This portal will:
+            </p>
+            <ul>
+              <li>Allow you to see the status of your file.</li>
+			  <li>Give you access to timely information.</li>
+              <li>Allow you to upload documents online.</li>
+              <li>Allow you to request a telephone call regarding your file.</li>
+              <li>
+                Improve public safety and contribute to
+                <a
+                  class="--link-white-normal"
+                  href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/strategy"
+                  target="_blank"
+                  >RoadSafetyBC's Vision Zero goal</a
+                >
+              </li>
+            </ul>
+			
+			<div class="ccmta__buttons">
+				<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card" target="_blank">Register</a>
+				<a class="BC-Gov-SecondaryButton-Dark"  href="https://test.roadsafetybc.gov.bc.ca/driver-portal" target="_blank">Login</a>
+			</div>
+          </div>
+        </section>
+
+        <div class="row">
+          <div class="column">
+            <h2>UsefulLinks</h2>
+			<div class="usefulLinks">
+
+            <p>
+              Do you have a concern about a driver?
+              <a
+                href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/report "
+                target="_blank"
+                >Find out how</a
+              >
+            </p>
+            <p>
+              Is there a decision you'd like to appeal?
+              <a
+                href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/medical-fitness/review-decision "
+                target="_blank"
+                >Learn about the process.</a
+              >
+            </p>
+            <p>
+              Want to change your address with ICBC?
+              <a
+                href="https://www.icbc.com/driver-licensing/getting-licensed/Change-your-name-or-address "
+                target="_blank"
+                >Find out how you can do.</a
+              >
+            </p>
+            </div>
+
+          </div>
+
+          <div class="column">
+            <h2>Resources</h2>
+            <div>
+              <button class="accordion">RoadSafetyBC</button>
+              <div class="panel">
+                <p>
+                  RoadSafetyBC is part of the
+                  <a
+                    href="https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/public-safety-solicitor-general"
+                    target="_blank"
+                    >Ministry of Public Safety and Solicitor General</a
+                  >
+                  and is responsible for road safety in the province.
+                  RoadSafetyBC govern drivers, implement road safety policies,
+                  and work with their partners to help reach their goal of zero
+                  traffic fatalities.
+
+				  <div >
+					<a class="BC-Gov-PrimaryButton" href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc" target="_blank">Learn More</a>
+				</div>	
+                </p>
+               
+              </div>
+
+              <button class="accordion">
+                Insurance Corporation of British Columbia (ICBC)
+              </button>
+              <div class="panel">
+                <p>
+                  ICBC provides universal auto insurance to BC motorists and are
+                  also responsible for driver licensing and vehicle registration
+                  and licensing.
+				  <div >
+					<a class="BC-Gov-PrimaryButton" href=" https://www.icbc.com/" target="_blank">Learn More</a>
+				</div>	
+                </p>
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="assistance">
+            <img class="contact-icon" src="img/contact-icon.svg" alt="" />
+            <div>
+              <h2 class="large">Need assistance?</h2>
+              <p>
+                <strong>Contact <a href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/contact" target="_blank">RoadSafetyBC</a></strong>
+				<br />Hours of operation:
+                Monday to Friday from 8am to 4pm
+              </p>
+
+              <div class="assistance__contacts">
+              
+                <div>
+                  <img
+                    class="email-icon"
+                    src="img/email-icon.svg"
+                    alt="Support email address"
+                  /><a href="mailto:RSBCDMFSupport@gov.bc.ca"
+                    >RSBCDMFSupport@gov.bc.ca</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <ul class="site-footer-links">
+          <li><a href="/">Home</a></li>
+          <span class="divider">|</span>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/about-gov-bc-ca"
+              >About gov.bc.ca</a
+            >
+          </li>
+          <span class="divider">|</span>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
+              >Disclaimer</a
+            >
+          </li>
+          <span class="divider">|</span>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/privacy"
+              >Privacy</a
+            >
+          </li>
+          <span class="divider">|</span>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
+              >Accessibility</a
+            >
+          </li>
+          <span class="divider">|</span>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
+              >Copyright</a
+            >
+          </li>
+          <span class="divider">|</span>
+          <li>
+            <a
+              href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services"
+              >Contact Us</a
+            >
+          </li>
+        </ul>
+      </div>
+    </footer>
+    <section class="site-copyright">
+      Copyright © 2023 Province of British Columbia. All rights reserved.
+    </section>
+
+    <script>
+      // Resource Accordian Open and Close
+      var acc = document.getElementsByClassName("accordion");
+      var i;
+
+      for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+          this.classList.toggle("active");
+          var panel = this.nextElementSibling;
+          if (panel.style.display === "block") {
+            panel.style.display = "none";
+          } else {
+            panel.style.display = "block";
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
+using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api;
 using System;
@@ -99,7 +100,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             var callback = new Callback();
             callback.Id = Guid.NewGuid().ToString();
             callback.RequestCallback = new Timestamp();
-            callback.Topic = Callback.Types.CallbackTopic.Upload;
+            callback.Subject = "Subject";
             callback.CallStatus = Callback.Types.CallbackCallStatus.Open;
             callback.ClosedDate = new Timestamp();
 

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
+using SharedUtils;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
@@ -27,12 +29,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("create")]
-        [ProducesResponseType(typeof(OkResult), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [HttpPost("create")]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Create))]
-        public async Task<IActionResult> Create([FromBody] BringForwardRequest callback)
+        public async Task<IActionResult> Create([FromBody] Callback callback)
         {
             var profile = await _userService.GetCurrentUserContext();
 
@@ -44,12 +46,15 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             }
 
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
+            callback.Origin = (int)UserCode.Portal;
+            callback.Priority = CallbackPriority.Normal;
+            callback.RequestCallback = DateTime.UtcNow.ToTimestamp();
 
             // create callback
-            var reply = _caseManagerClient.CreateBringForward(callback);
+            var reply = _callbackManagerClient.Create(callback);
             if (reply.ResultStatus != ResultStatus.Success)
             {
-                return StatusCode(500, reply.ErrorDetail ?? $"{nameof(Create)} failed.");
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(Create)} failed.");
             }
             else
             {
@@ -82,12 +87,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             return Json(result);
         }
 
-        [HttpGet("cancel")]
+        [HttpPut("cancel")]
         [ProducesResponseType(typeof(OkResult), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(Cancel))]
-        public async Task<IActionResult> Cancel([FromBody] Guid callbackId)
+        public async Task<IActionResult> Cancel([FromBody] CallbackCancelRequest callback)
         {
             var profile = await _userService.GetCurrentUserContext();
 
@@ -102,7 +107,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var callbackCancelRequest = new CallbackCancelRequest
             {
                 CaseId = mostRecentCaseReply.Item.CaseId,
-                CallbackId = callbackId.ToString()
+                CallbackId = callback.CallbackId,
             };
             var reply = _callbackManagerClient.Cancel(callbackCancelRequest);
             if (reply.ResultStatus != ResultStatus.Success)

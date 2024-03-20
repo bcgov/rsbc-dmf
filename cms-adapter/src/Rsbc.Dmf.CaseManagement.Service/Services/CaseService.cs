@@ -1193,10 +1193,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var searchResult = await _caseManager.LegacyCandidateSearch(searchRequest);
 
                 bool found = false;
-                if (searchResult != null && searchResult.Items.Count() > 0)
+                if (searchResult != null && searchResult.Items.Count() > 0 )
                 {
                     var closedStatus = new HashSet<string>
                 {
+                        // check for state code wether it is resolved or cancelled
                 "Decision Rendered",
                 "Canceled"
                 };
@@ -2273,7 +2274,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        // TODO move to CallbackService and rename to Create
+        [Obsolete("Use CallbackService.Create instead.")]
         public async override Task<ResultStatusReply> CreateBringForward(BringForwardRequest request, ServerCallContext context)
         {
             ResultStatusReply reply = new ResultStatusReply();
@@ -2286,12 +2287,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Assignee = request.Assignee ?? string.Empty,
                     Description = request.Description?? string.Empty,                
                     Subject = request.Subject ?? string.Empty,
-                    Priority = (CaseManagement.BringForwardPriority?)request.Priority
+                    Priority = (CaseManagement.CallbackPriority?)request.Priority
                 };
                 
-                // call _caseManager...
-               var result =  await _caseManager.CreateBringForward(bringForwardRequest);
-
+                var result =  await _caseManager.CreateBringForward(bringForwardRequest);
                 if(result != null && result.Success)
                 {
                     reply.ResultStatus = ResultStatus.Success;
