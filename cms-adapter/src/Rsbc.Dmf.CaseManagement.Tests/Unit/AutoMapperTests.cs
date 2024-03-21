@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
-using SharedUtils;
+//using SharedUtils;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -158,7 +158,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             callback.Assignee = "Assignee";
             callback.CallStatus = CallbackCallStatus.Open;
             callback.CaseId = Guid.NewGuid().ToString();
-            callback.Origin = (int)UserCode.Portal;
+            //callback.Origin = (int)UserCode.Portal;
+            callback.Origin = 100000005;
             callback.Phone = "Phone";
             callback.Priority = CallbackPriority.Low;
             callback.PreferredTime = PreferredTime.Morning;

@@ -39,6 +39,8 @@ service CaseManager {
 
   rpc GetCases (CaseStatusRequest) returns (GetCasesReply);
 
+  rpc GetActiveCases (DriverLicenseRequest) returns (GetCasesReply);
+
   rpc GetCaseDetail (CaseIdRequest) returns (GetCaseDetailReply);
 
   rpc GetMostRecentCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
@@ -48,6 +50,8 @@ service CaseManager {
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
 
   rpc GetDriverDocumentsById (DriverIdRequest) returns (GetDocumentsReply);
+
+  rpc GetIcbcDmerEnvelopes (DriverLicenseRequest) returns (GetDocumentsReply);
 
   rpc GetDriverDocuments (DriverLicenseRequest) returns (GetDocumentsReply);
 
