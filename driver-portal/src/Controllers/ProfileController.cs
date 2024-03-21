@@ -126,7 +126,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.Unauthorized, "Driver details do not match.");
             }
 
-            // update driver email, create new login if no login exists
+            // update driver email
             var request = new SetDriverLoginRequest();
             request.LoginId = profile.Id;
             request.DriverId = foundDriver.Id;
@@ -134,7 +134,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var setDriverReply = _userManagerClient.SetDriverLogin(request);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {
-                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
@@ -157,20 +157,35 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// set the user's profile email
-        /// </summary>
-        /// <param name="newEmail"></param>
-        /// <returns></returns>
+        // set the user's profile email, notification preferences, and address
         [HttpPut("driver")]
-        public async Task<ActionResult> UpdateDriver([FromBody] DriverUpdate newEmail)
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(UpdateDriver))]
+        public async Task<ActionResult> UpdateDriver([FromBody] DriverUpdate request)
         {
             var profile = await userService.GetCurrentUserContext();
+            if (profile == null) 
+            { 
+                return NotFound(); 
+            }
 
-            if (profile == null) return NotFound();
+            var updateLoginRequest = new UpdateLoginRequest();
+            updateLoginRequest.LoginId = profile.Id;
+            updateLoginRequest.Email = request.Email;
+            updateLoginRequest.NotifyByMail = request.NotifyByMail;
+            updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
+            updateLoginRequest.ExternalUserName = profile.DisplayName;
+            updateLoginRequest.Address = request.Address;
 
-            // update the driver information.
-            
+            var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {request.DriverLicenseNumber}.\n {0}", reply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
+            }
+
             return Ok();
         }
 
@@ -181,9 +196,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
         public record DriverUpdate
         {
-            public string DriverLicense { get; set; }
-            bool NotifyMail {  get; set; }
-            bool NotifyEmail { get; set; }
+            public string DriverLicenseNumber { get; set; }
+            public string Email { get; set; }
+            public bool NotifyByMail { get; set; }
+            public bool NotifyByEmail { get; set; }
+            public FullAddress Address { get; set; }
         }
 
         public record UserProfile

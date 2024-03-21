@@ -4,6 +4,7 @@ using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
+using static Rsbc.Dmf.DriverPortal.Api.Controllers.ProfileController;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -71,6 +72,30 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             SetContent(request, userRegistration);
             var response = await _client.SendAsync(request);
             response.StatusCode = System.Net.HttpStatusCode.Unauthorized;
+        }
+
+        [Fact]
+        public async Task Update_Driver()
+        {
+            var driverId = _configuration["DOCS_DRIVER_ID"];
+            if (string.IsNullOrEmpty(driverId))
+                return;
+
+            var driverUpdate = new DriverUpdate();
+            driverUpdate.DriverLicenseNumber = "00200173";
+            driverUpdate.Email = "mason2@mailinator.com";
+            driverUpdate.NotifyByEmail = true;
+            driverUpdate.NotifyByMail = true;
+            driverUpdate.Address = new CaseManagement.Service.FullAddress();
+            driverUpdate.Address.City = "Vancouver";
+            driverUpdate.Address.Country = "Canada";
+            driverUpdate.Address.Line1 = "100 Water Street";
+            driverUpdate.Address.Postal = "V3S 3P8";
+            driverUpdate.Address.Province = "BC";
+            var request = new HttpRequestMessage(HttpMethod.Put, $"{PROFILE_API_BASE}/driver");
+            SetContent(request, driverUpdate);
+            var response = await _client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
         }
     }
 }

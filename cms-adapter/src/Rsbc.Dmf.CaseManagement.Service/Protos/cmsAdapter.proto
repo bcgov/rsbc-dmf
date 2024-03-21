@@ -587,12 +587,13 @@ message SetDriverLoginRequest {
 }
 
 message UpdateLoginRequest {
-    string loginId = 1;
-    string email = 2;
-    bool notifyByMail = 3;
-    bool notifyByEmail = 4;
-    string externalUserName = 5;
-    FullAddress address = 6;
+    string driverLicenseNumber = 1;
+    string loginId = 2;
+    string email = 3;
+    bool notifyByMail = 4;
+    bool notifyByEmail = 5;
+    string externalUserName = 6;
+    FullAddress address = 7;
 }
 
 message UsersSearchRequest {
