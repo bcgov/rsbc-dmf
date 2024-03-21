@@ -1,0 +1,105 @@
+<mxfile host="Electron" modified="2024-03-19T17:24:28.453Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.0.4 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="6z6CTabGWTlJqectgh1G" version="24.0.4" type="device">
+  <diagram name="Page-1" id="0AR3rsJodO729Y-SIUCw">
+    <mxGraphModel dx="2074" dy="1245" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-1" value="Medical Practitioner" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="50" y="120" width="30" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-4" value="RoadSafetyBC&lt;br&gt;Medical Portal" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="70" width="180" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-8" value="" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="DjyJCRKdRv2M477Nrg_C-4">
+          <mxGeometry x="50" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-10" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="DjyJCRKdRv2M477Nrg_C-4">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="80" y="300" as="sourcePoint" />
+            <mxPoint x="80" y="110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-6" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;endWidth=33;endSize=7.44;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="120" y="150" as="sourcePoint" />
+            <mxPoint x="240" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-7" value="ONE HEALTH" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="DjyJCRKdRv2M477Nrg_C-6">
+          <mxGeometry x="0.0167" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-14" value="CHEFS" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;" vertex="1" parent="1">
+          <mxGeometry x="200" y="450" width="80" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-15" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="480" y="150" as="sourcePoint" />
+            <mxPoint x="620" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-16" value="Dynamics" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" vertex="1" parent="1">
+          <mxGeometry x="890" y="70" width="150" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-19" value="CMS Adapter" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;" vertex="1" parent="1">
+          <mxGeometry x="630" y="120" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-20" value="" style="shape=flexArrow;endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="770" y="160" as="sourcePoint" />
+            <mxPoint x="870" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-21" value="" style="endArrow=none;dashed=1;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="40" y="400" as="sourcePoint" />
+            <mxPoint x="1040" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-22" value="GET FORM" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="40" y="440" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-23" value="Transform / Add Driver, Medical Practitioner Data" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="410" y="440" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-24" value="Render Form" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="700" y="440" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-26" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="510" as="sourcePoint" />
+            <mxPoint x="390" y="510" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-27" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="550" y="500" as="sourcePoint" />
+            <mxPoint x="680" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-28" value="Get form values" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="40" y="640" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-29" value="Submit to CHEFS" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="250" y="640" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-30" value="Communicate Result" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="500" y="640" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-32" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="700" as="sourcePoint" />
+            <mxPoint x="230" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DjyJCRKdRv2M477Nrg_C-33" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="390" y="700" as="sourcePoint" />
+            <mxPoint x="470" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
