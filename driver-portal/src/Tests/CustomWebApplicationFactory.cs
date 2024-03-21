@@ -60,6 +60,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 var context = new DefaultHttpContext();
                 var user = new ClaimsPrincipal();
                 var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
+                //var userId = "6c24e1c4-0bd1-4812-ad6a-b012e0c3ed8c";
                 var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
                 var claims = new List<Claim>
                 {
