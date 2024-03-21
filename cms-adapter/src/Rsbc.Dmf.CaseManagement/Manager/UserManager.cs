@@ -13,14 +13,14 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string loginId, string email);
-        Task<bool> SetDriverLogin(string loginId, Guid driverId);
+        Task<bool> SetDriverLogin(Guid loginId, Guid driverId);
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
 
     public class UpdateLoginRequest
     {
-        public string LoginId { get; set; }
+        public Guid LoginId { get; set; }
         public string Email { get; set; }
         public bool NotifyByMail { get; set; }
         public bool NotifyByEmail { get; set; }
@@ -229,12 +229,12 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public async Task<bool> SetDriverLogin(string loginId, Guid driverId)
+        public async Task<bool> SetDriverLogin(Guid loginId, Guid driverId)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
                 .Expand(l => l.dfp_DriverId.dfp_PersonId)
-                .Where(l => l.dfp_loginid == Guid.Parse(loginId))
+                .Where(l => l.dfp_loginid == loginId)
                 .SingleOrDefault();
 
             // if we change userRegistration page to not need authentication (which creates the login in method 'LoginUser')
@@ -267,7 +267,7 @@ namespace Rsbc.Dmf.CaseManagement
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
                 .Expand(l => l.dfp_DriverId.dfp_PersonId)
-                .Where(l => l.dfp_loginid == Guid.Parse(request.LoginId))
+                .Where(l => l.dfp_loginid == request.LoginId)
                 .SingleOrDefault();
 
             // update notification preferences
