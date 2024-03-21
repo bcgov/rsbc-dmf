@@ -19,6 +19,7 @@ using Google.Protobuf.WellKnownTypes;
 using Org.BouncyCastle.Bcpg;
 using Microsoft.Extensions.Caching.Memory;
 using Pssg.Interfaces.IcbcModels;
+using Serilog;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -132,59 +133,60 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                         Serilog.Log.Error(e, "ICBC Create Candidate Lookup Error");
                     }                    
                 }
+
+                // determine if there is active cases for driver.
+                var driverLicenseRequest = new DriverLicenseRequest()
+                    { DriverLicenseNumber = item.DlNumber };
+                var activeCaseReply = _caseManagerClient.GetActiveCases(driverLicenseRequest);
                 
-                LegacyCandidateRequest lcr = new LegacyCandidateRequest()
-                {                    
-                    LicenseNumber = item.DlNumber,
-                    Surname = item.LastName ?? string.Empty,
-                    ClientNumber = string.Empty,
-                    BirthDate = Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
-                    EffectiveDate = Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
-                    MedicalType = medicalType
-                };
+                var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
+                var commentTypeCode = "C";
+                var userId = "System";
+                var assignee = string.Empty;
+                var dmerIssuranceDate = DateTime.UtcNow.ToString("MM/dd/yyyy hh:mm tt");
 
-
-                var candidateCreation = _caseManagerClient.ProcessLegacyCandidate(lcr);
-                if (candidateCreation != null) 
+                if (activeCaseReply.ResultStatus != CaseManagement.Service.ResultStatus.Success ||
+                    activeCaseReply.Items.Count == 0)
                 {
-                    var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
-                    var commentDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow);
-
-                    var dmerIssuranceDate = DateTime.UtcNow.ToString("MM/dd/yyyy hh:mm tt");
-
-                    var assignee = string.Empty;
-
-                    var commentTypeCode = "C" ?? string.Empty;
-
-                    var userId = "System" ?? string.Empty;
-
-                    // Create DMER envelope for the case
-
-                    _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
+                    // no cases, create new one with document.
+                    LegacyCandidateRequest lcr = new LegacyCandidateRequest()
                     {
-                        CaseId = caseId ?? string.Empty,
-                        Driver = new CaseManagement.Service.Driver()
+                        LicenseNumber = item.DlNumber,
+                        Surname = item.LastName ?? string.Empty,
+                        ClientNumber = string.Empty,
+                        BirthDate = Timestamp.FromDateTimeOffset(item.BirthDate ?? DateTimeOffset.MinValue),
+                        EffectiveDate = Timestamp.FromDateTimeOffset(item.EffectiveDate ?? DateTimeOffset.MinValue),
+                        MedicalType = medicalType
+                    };
+
+                    var candidateCreation = _caseManagerClient.ProcessLegacyCandidate(lcr);
+                    
+                    if (candidateCreation != null)
+                    {
+                        var caseId = _caseManagerClient.GetCaseId(lcr.LicenseNumber, lcr.Surname);
+
+                        // Create DMER envelope for the case
+
+                        _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
                         {
-                            DriverLicenseNumber = lcr.LicenseNumber,
-                        },
-                        SubmittalStatus = "Open-Required",
-                        DocumentType = "DMER",
-                        DocumentTypeCode = "001",
-                        FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
-                        ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
-                        DocumentId = Guid.NewGuid().ToString(),
-                        SequenceNumber = 1,
-                        Owner = "Team - Intake"
-                         
-                  
-                    });
+                            CaseId = caseId ?? string.Empty,
+                            Driver = new CaseManagement.Service.Driver()
+                            {
+                                DriverLicenseNumber = lcr.LicenseNumber,
+                            },
+                            SubmittalStatus = "Open-Required",
+                            DocumentType = "DMER",
+                            DocumentTypeCode = "001",
+                            FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                            ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
+                            DocumentId = Guid.NewGuid().ToString(),
+                            SequenceNumber = 1,
+                            Owner = "Team - Intake"
+                        });
 
-                    // If a new case is created on the driver
-                    if (candidateCreation.IsNewCase == true && caseId != null)
-                    {
                         // Create Comment
                         _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
-                        {  
+                        {
                             CaseId = caseId,
                             Driver = new CaseManagement.Service.Driver()
                             {
@@ -192,7 +194,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                             },
                             SequenceNumber = 1,
                             CommentDate = commentDate,
-                            CommentText =  $"This case was opened because a DMER was issued to this driver by ICBC on {dmerIssuranceDate}",
+                            CommentText =
+                                $"This case was opened because a DMER was issued to this driver by ICBC on {dmerIssuranceDate}",
                             CommentTypeCode = commentTypeCode,
                             UserId = userId,
                             Assignee = assignee
@@ -200,42 +203,70 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
 
                     }
 
-                    // If there is exsisting case on a driver
+                }
+                else // existing active case
+                {
+                    // add a bring forward and comment.
+                    var firstCase = activeCaseReply.Items.OrderByDescending(x => x.OpenedDate).First();
+                    var caseId = firstCase.CaseId;
+                    if (caseId != null)
+                    {
+
+                        // Create a bring forward
+                        _caseManagerClient.CreateBringForward(new BringForwardRequest()
+                        {
+                            CaseId = caseId,
+                            Description = "ICBC",
+                            Assignee = string.Empty,
+                            Priority = CallbackPriority.High,
+                            Subject = "A DMER Candidate was introduced to a Case In Progress",
+
+                        });
+
+                        // Create Comment
+                        _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
+                        {
+                            CaseId = caseId,
+                            Driver = new CaseManagement.Service.Driver()
+                            {
+                                DriverLicenseNumber = item.DlNumber,
+                            },
+                            SequenceNumber = 1,
+                            CommentDate = commentDate,
+                            CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress.",
+                            CommentTypeCode = commentTypeCode,
+                            UserId = userId,
+                            Assignee = assignee
+                        });
+                    }
                     else
                     {
-                        
-                        if (caseId != null )
-                        {
-                           
-                            // Create a bring forward
-                            _caseManagerClient.CreateBringForward(new BringForwardRequest()
-                            {
-                                CaseId = caseId,
-                                Description = "ICBC",
-                                Assignee = string.Empty,
-                                Priority = CallbackPriority.High,
-                                Subject = "A DMER Candidate was introduced to a Case In Progress",     
-
-                            });
-
-                            // Create Comment
-                            _caseManagerClient.CreateICBCMedicalCandidateComment(new LegacyComment()
-                            {
-                                CaseId = caseId,
-                                Driver = new CaseManagement.Service.Driver()
-                                {
-                                    DriverLicenseNumber = lcr.LicenseNumber,
-                                },
-                                SequenceNumber = 1,
-                                CommentDate = commentDate,
-                                CommentText = $"A DMER was issued to this driver by ICBC on {dmerIssuranceDate} while this case was already in progress and assigned to {{assignee}}",
-                                CommentTypeCode = commentTypeCode,
-                                UserId = userId,
-                                Assignee = assignee
-                            });
-                        }
+                        Log.Error("Unexpected error during ICBC Create Candidate - CaseId is null.");
                     }
-                    
+
+                    // Check for an open/required document on the driver.
+                    var documents = _caseManagerClient.GetIcbcDmerEnvelopes(driverLicenseRequest);
+                    if (documents.ResultStatus != CaseManagement.Service.ResultStatus.Success ||
+                        documents.Items.Count == 0)
+                    {
+                        // add a document requirement.
+                        _caseManagerClient.CreateICBCDocumentEnvelope(new LegacyDocument()
+                        {
+                            CaseId = caseId ?? string.Empty,
+                            Driver = new CaseManagement.Service.Driver()
+                            {
+                                DriverLicenseNumber = item.DlNumber,
+                            },
+                            SubmittalStatus = "Open-Required",
+                            DocumentType = "DMER",
+                            DocumentTypeCode = "001",
+                            FaxReceivedDate = Timestamp.FromDateTimeOffset(DateTimeOffset.MinValue),
+                            ImportDate = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
+                            DocumentId = Guid.NewGuid().ToString(),
+                            SequenceNumber = 1,
+                            Owner = "Team - Intake"
+                        });
+                    }
                 }
 
                 _logger.LogInformation($"Received Candidate {item.DlNumber}");

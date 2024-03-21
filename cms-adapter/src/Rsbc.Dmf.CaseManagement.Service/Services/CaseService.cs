@@ -908,6 +908,45 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
+        public async override Task<GetCasesReply> GetActiveCases(DriverLicenseRequest request,
+            ServerCallContext context)
+        {
+            var reply = new GetCasesReply();
+            try
+            {
+                var driver =
+                    (await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber)).FirstOrDefault();
+                if (driver == null)
+                {
+                    reply.ErrorDetail = "Driver not found.";
+                    reply.ResultStatus = ResultStatus.Fail;
+                }
+                else
+                {
+                    var activeStatus = Dynamics.EntityState.Active;
+                    var cases = await _caseManager.GetCases(Guid.Parse(driver.Id), activeStatus);
+                    if (cases == null)
+                    {
+                        reply.ResultStatus = ResultStatus.Fail;
+                        reply.ErrorDetail = "No cases";
+                        return reply;
+                    }
+
+                    var mappedCases = _mapper.Map<IEnumerable<CaseDetail>>(cases);
+                    reply.Items.AddRange(mappedCases);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
         /// <summary>
         /// Get All Driver Comments
         /// </summary>
@@ -977,6 +1016,73 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
 
             return reply;
+        }
+
+
+
+
+        public async override Task<GetDocumentsReply> GetIcbcDmerEnvelopes(DriverLicenseRequest request,
+            ServerCallContext context)
+        {
+            var reply = new GetDocumentsReply();
+            try
+            {
+                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+                foreach (var item in result)
+            {
+                if (string.IsNullOrEmpty(item.DocumentUrl) && item.DocumentType == "DMER" &&
+                    item.SubmittalStatus == "Open-Required")
+                {
+                    var driver = new Driver();
+                    if (item.Driver != null)
+                    {
+                        driver.DriverLicenseNumber = item.Driver.DriverLicenseNumber;
+                        driver.Surname = item.Driver.Surname ?? string.Empty;
+                    }
+
+                    // TODO use automapper, see CaseService.GetDriverDocumentsById
+                    var newDocument = new LegacyDocument
+                    {
+                        BatchId = item.BatchId,
+                        BusinessArea = item.BusinessArea,
+                        CaseId = item.CaseId ?? string.Empty,
+                        DocumentPages = item.DocumentPages,
+                        DocumentId = item.DocumentId,
+                        DocumentType = item.DocumentType ?? string.Empty,
+                        DocumentTypeCode = item.DocumentTypeCode ?? string.Empty,
+                        DocumentUrl = item.DocumentUrl ?? string.Empty,
+                        ImportId = item.ImportId ?? string.Empty,
+                        OriginatingNumber = item.OriginatingNumber ?? string.Empty,
+                        ValidationMethod = item.ValidationMethod ?? string.Empty,
+                        ValidationPrevious = item.ValidationPrevious ?? string.Empty,
+                        SequenceNumber = item.SequenceNumber ?? -1,
+                        Driver = driver,
+                        SubmittalStatus = item.SubmittalStatus ?? string.Empty,
+                    };
+
+                    if (item.FaxReceivedDate != null)
+                    {
+                        newDocument.FaxReceivedDate = Timestamp.FromDateTimeOffset(item.FaxReceivedDate.Value);
+                    }
+
+                    if (item.ImportDate != null)
+                    {
+                        newDocument.ImportDate = Timestamp.FromDateTimeOffset(item.ImportDate.Value);
+                    }
+                    reply.Items.Add(newDocument);
+                    }
+                
+
+
+            }
+            reply.ResultStatus = ResultStatus.Success;
+        }
+        catch (Exception ex)
+        {
+            reply.ErrorDetail = ex.Message;
+            reply.ResultStatus = ResultStatus.Fail;
+        }
+        return reply;
         }
 
         /// <summary>
