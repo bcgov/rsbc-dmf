@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
+    <!--<ProjectReference Include="..\..\shared-utils\SharedUtils.csproj" />-->
     <ProjectReference Include="..\Rsbc.Dmf.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj" />
     <ProjectReference Include="..\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj" />
   </ItemGroup>
