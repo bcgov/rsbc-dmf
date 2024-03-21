@@ -167,15 +167,17 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
                     var medicalDispositionValue = GetMedicalDisposition(driver);
+                    var driverStatus = GetDriverMasterStatus(driver);
 
                     if (driver == null || driver.INAM?.SURN == null)
                     {
                         Log.Logger.Error($"Null received for driver history for {licenseNumber}");
                     }
+
                     else
                     {
 
-                        if (medicalDispositionValue != "P"
+                        if (medicalDispositionValue != "P" || driverStatus != "DECEASED"
                            // Add check driver already has a P in the driver history
                            )
                         {
@@ -244,6 +246,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
                     var driver = _icbcClient.GetDriverHistory(licenseNumber);
                     var medicalDispositionValue = GetMedicalDisposition(driver);
+                    var driverStatus = GetDriverMasterStatus(driver);
 
                     if (driver == null && driver.INAM?.SURN == null)
                     {
@@ -252,7 +255,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                     else
                     {
                         // check driver already has a J in the driver history
-                        if (medicalDispositionValue != "J")
+                        if (medicalDispositionValue != "J" || driverStatus != "DECEASED")
                         {
                             var newUpdate = new IcbcMedicalUpdate()
                             {
@@ -377,6 +380,26 @@ namespace Rsbc.Dmf.IcbcAdapter
                         result = item.MDSP;
                     }
                 }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Get GetDriverMasterStatus
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <returns></returns>
+        public string GetDriverMasterStatus(CLNT driver)
+        {
+            string result = string.Empty;
+
+            if (driver.DR1MST != null)
+            {
+                
+
+                result = driver.DR1MST.MSCD;
+              
             }
 
             return result;
