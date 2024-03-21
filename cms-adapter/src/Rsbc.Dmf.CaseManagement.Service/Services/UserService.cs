@@ -132,7 +132,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                await _userManager.SetDriverLogin(request.LoginId, Guid.Parse(request.DriverId));
+                await _userManager.SetDriverLogin(Guid.Parse(request.LoginId), Guid.Parse(request.DriverId));
                 result.ResultStatus = ResultStatus.Success;
             } 
             catch (Exception ex)

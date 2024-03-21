@@ -21,7 +21,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 
             var userRegistration = new UserRegistration();
             userRegistration.DriverLicenseNumber = "00200173";
-            userRegistration.Email = "mason1@mailinator.com";
+            userRegistration.Email = "mason@mailinator.com";
             userRegistration.NotifyByEmail = true;
             userRegistration.NotifyByMail = true;
             userRegistration.Address = new CaseManagement.Service.FullAddress();

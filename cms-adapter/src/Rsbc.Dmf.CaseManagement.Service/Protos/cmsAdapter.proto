@@ -583,7 +583,7 @@ message UserSetEmailRequest {
 
 message SetDriverLoginRequest {
     string loginId = 1;
-    string driverId = 3;
+    string driverId = 2;
 }
 
 message UpdateLoginRequest {
