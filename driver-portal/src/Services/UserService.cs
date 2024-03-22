@@ -1,13 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Rsbc.Dmf.CaseManagement.Service;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Rsbc.Dmf.CaseManagement.Service;
+using System.ComponentModel;
 using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Services
 {
@@ -25,7 +18,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public string DriverId { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
+
+        [Description("UserId")]
         public string Id { get; set; }
+
         public string LastName { get; set; }
 
         public string ExternalUserName { get; set; }
@@ -116,9 +112,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         /// <returns></returns>
         public async Task SetEmail (string userId, string email)
         {
-            UserSetEmailRequest request = new UserSetEmailRequest()
+            var request = new UserSetEmailRequest()
             {
-                UserId = userId, Email = email
+                LoginId = userId, Email = email
             };
             var result = await userManager.SetEmailAsync(request);
         }

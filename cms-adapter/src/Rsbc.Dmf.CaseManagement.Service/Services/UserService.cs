@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using AutoMapper;
+using Grpc.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,20 @@ namespace Rsbc.Dmf.CaseManagement.Service
 {
     public class UserService : UserManager.UserManagerBase
     {
-        private readonly IUserManager userManager;      
+        private readonly IUserManager _userManager;
+        private readonly IMapper _mapper;
 
-        public UserService(IUserManager userManager)
+        public UserService(IUserManager userManager, IMapper mapper)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
+            _mapper = mapper;
         }
 
         public async override Task<UsersSearchReply> Search(UsersSearchRequest request, ServerCallContext context)
         {
             try
             {
-                var users = (await userManager.SearchUsers(new SearchUsersRequest
+                var users = (await _userManager.SearchUsers(new SearchUsersRequest
                 {
                     ByExternalUserId = string.IsNullOrEmpty(request.ExternalSystemUserId) ? null : (request.ExternalSystemUserId, request.ExternalSystem),
                     ByType = request.UserType == UserType.DriverUserType ? CaseManagement.UserType.Driver : CaseManagement.UserType.MedicalPractitioner,
@@ -96,7 +99,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     throw new Exception($"invalid login request for user {request.ExternalSystemUserId}@{request.ExternalSystem}");
                 }
 
-                var loginResult = await userManager.LoginUser(loginRequest);
+                var loginResult = await _userManager.LoginUser(loginRequest);
 
                 var userId = loginResult.Userid;
                 var userEmail = loginResult.Email;
@@ -115,7 +118,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             ResultStatusReply result = new ResultStatusReply();
             result.ResultStatus = ResultStatus.Fail;
 
-            if (await userManager.SetUserEmail(request.UserId, request.Email))
+            if (await _userManager.SetUserEmail(request.LoginId, request.Email))
             {
                 result.ResultStatus = ResultStatus.Success;
             }
@@ -123,15 +126,34 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<ResultStatusReply> SetDriverLoginAndEmail(UserSetEmailRequest request, ServerCallContext context)
+        public async override Task<ResultStatusReply> SetDriverLogin(SetDriverLoginRequest request, ServerCallContext context)
         {
             var result = new ResultStatusReply();
 
             try
             {
-                userManager.SetDriverLoginAndEmail(request.UserId, Guid.Parse(request.DriverId), request.Email, request.NotifyByMail, request.NotifyByEmail, request.ExternalUserName);
+                await _userManager.SetDriverLogin(Guid.Parse(request.LoginId), Guid.Parse(request.DriverId));
                 result.ResultStatus = ResultStatus.Success;
             } 
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
+        public async override Task<ResultStatusReply> UpdateLogin(UpdateLoginRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            try
+            {
+                var userUpdateRequest = _mapper.Map<CaseManagement.UpdateLoginRequest>(request);
+                await _userManager.UpdateLogin(userUpdateRequest);
+                result.ResultStatus = ResultStatus.Success;
+            }
             catch (Exception ex)
             {
                 result.ResultStatus = ResultStatus.Fail;

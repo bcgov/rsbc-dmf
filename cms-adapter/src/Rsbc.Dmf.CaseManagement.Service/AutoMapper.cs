@@ -38,6 +38,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Callback, CaseManagement.Callback>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
                 .AddTransform(NullStringConverter);
+            CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
+            CreateMap<FullAddress, CaseManagement.FullAddress>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

@@ -60,6 +60,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 var context = new DefaultHttpContext();
                 var user = new ClaimsPrincipal();
                 var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
+                //var userId = "6c24e1c4-0bd1-4812-ad6a-b012e0c3ed8c";
                 var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
                 var claims = new List<Claim>
                 {
@@ -68,7 +69,9 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                     new Claim(ClaimTypes.Email, "Email"),
                     new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
                     new Claim(ClaimTypes.GivenName, ""),
-                    new Claim(ClaimTypes.Surname, "MASON")
+                    new Claim(ClaimTypes.Surname, "MASON"),
+                    new Claim(UserClaimTypes.BirthDate, "01/01/2000"),
+                    new Claim(UserClaimTypes.DisplayName, "John Smith")
                 };
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;

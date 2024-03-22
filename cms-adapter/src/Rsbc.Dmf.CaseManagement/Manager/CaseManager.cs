@@ -102,6 +102,7 @@ namespace Rsbc.Dmf.CaseManagement
         public bool Success { get; set; }
     }
 
+    [Obsolete("Use UserManager.cs FullAddress instead")]
     public class Address
     {
         public string Line1 { get; set; }
