@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { LoginService } from '../shared/services/login.service';
 import { DmerSubmissionConfirmationDialogComponent } from './dmer-submission-confirmation-dialog/dmer-submission-confirmation-dialog.component';

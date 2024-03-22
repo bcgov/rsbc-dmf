@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "medical-portal:build:production"
+              "buildTarget": "medical-portal:build:production"
             },
             "development": {
-              "browserTarget": "medical-portal:build:development"
+              "buildTarget": "medical-portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -84,7 +84,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "medical-portal:build"
+            "buildTarget": "medical-portal:build"
           }
         },
         "test": {
@@ -118,8 +118,18 @@
       }
     }
   },
-  "defaultProject": "medical-portal",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ],
+    "analytics": false
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }
