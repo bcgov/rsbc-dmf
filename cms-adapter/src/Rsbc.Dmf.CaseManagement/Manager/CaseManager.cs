@@ -3870,8 +3870,8 @@ namespace Rsbc.Dmf.CaseManagement
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
                         && i.dfp_bpfstage == 100000003); // Case should be in File End Tasks (FET)
-           
-    
+
+
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
 
             do
@@ -3892,11 +3892,25 @@ namespace Rsbc.Dmf.CaseManagement
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
+
                         // Load documents
                         await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                        // Check for manual pass document if exists break
+
+                        var hasManualPassDocument = false;
+
+
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
-                            // Condition Check if the document is DMER 
+                            if (document.dfp_DocumentTypeID != null
+                                && document.dfp_DocumentTypeID.dfp_name == "DMER" && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                            {
+                                hasManualPassDocument = true;
+                                break;
+                            }
+
+                            // Condition Check if the document is DMER and not manual pass
                             //Updating code on 2 / 29 / 2024 removed the check for manual pass
                             if (document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
@@ -3908,19 +3922,24 @@ namespace Rsbc.Dmf.CaseManagement
 
                         }
 
-
+                        if (hasManualPassDocument == false)
+                        {
                             //load decisions
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
-                        if (item.dfp_incident_dfp_decision.Count > 0)
-                        {
-                            foreach (var decision in item.dfp_incident_dfp_decision)
+                            if (item.dfp_incident_dfp_decision.Count > 0)
                             {
-                                //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
-                                if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
-                            }
-                            outputArray.Add(item);
+                                foreach (var decision in item.dfp_incident_dfp_decision)
+                                {
+                                    //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
+                                    if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+                                }
+                                outputArray.Add(item);
 
+                            }
+                            
                         }
+
+                        
                     }
                 }
             }
@@ -3929,7 +3948,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
-            return MapCases(outputArray);            
+            return MapCases(outputArray);
         }
 
         /// <summary>
