@@ -1,6 +1,6 @@
 import { Component, HostBinding, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { RouterLinkWithHref } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-remove-medical-staff-association-dialog',
