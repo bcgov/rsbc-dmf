@@ -20,7 +20,6 @@
     "@angular/compiler": "^17.3.1",
     "@angular/compiler-cli": "^17.3.1",
     "@angular/core": "^17.3.1",
-
     "@angular/forms": "^17.3.1",
     "@angular/material": "^16.2.14",
     "@angular/platform-browser": "^17.3.1",
@@ -55,7 +54,7 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage": "^2.1.0",
     "karma-jasmine": "~4.0.0",
-    "karma-typescript": "^5.5.2",
+    "karma-typescript": "^5.5.4",
     "karma-typescript-angular2-transform": "^5.5.2",
     "karma-verbose-reporter": "0.0.6",
     "ng-openapi-gen": "^0.21.2",
