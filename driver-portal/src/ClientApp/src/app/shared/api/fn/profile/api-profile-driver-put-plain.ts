@@ -7,25 +7,26 @@ import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
 import { DriverUpdate } from '../../models/driver-update';
+import { OkResult } from '../../models/ok-result';
 
-export interface ApiProfileDriverPut$Params {
+export interface ApiProfileDriverPut$Plain$Params {
       body?: DriverUpdate
 }
 
-export function apiProfileDriverPut(http: HttpClient, rootUrl: string, params?: ApiProfileDriverPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiProfileDriverPut.PATH, 'put');
+export function apiProfileDriverPut$Plain(http: HttpClient, rootUrl: string, params?: ApiProfileDriverPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+  const rb = new RequestBuilder(rootUrl, apiProfileDriverPut$Plain.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<OkResult>;
     })
   );
 }
 
-apiProfileDriverPut.PATH = '/api/Profile/driver';
+apiProfileDriverPut$Plain.PATH = '/api/Profile/driver';

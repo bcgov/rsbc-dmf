@@ -6,11 +6,11 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { BringForwardRequest } from '../../models/bring-forward-request';
+import { Callback } from '../../models/callback';
 import { OkResult } from '../../models/ok-result';
 
 export interface ApiCallbackCreatePost$Plain$Params {
-      body?: BringForwardRequest
+      body?: Callback
 }
 
 export function apiCallbackCreatePost$Plain(http: HttpClient, rootUrl: string, params?: ApiCallbackCreatePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {

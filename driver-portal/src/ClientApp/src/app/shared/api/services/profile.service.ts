@@ -13,8 +13,10 @@ import { apiProfileCurrentGet$Json } from '../fn/profile/api-profile-current-get
 import { ApiProfileCurrentGet$Json$Params } from '../fn/profile/api-profile-current-get-json';
 import { apiProfileCurrentGet$Plain } from '../fn/profile/api-profile-current-get-plain';
 import { ApiProfileCurrentGet$Plain$Params } from '../fn/profile/api-profile-current-get-plain';
-import { apiProfileDriverPut } from '../fn/profile/api-profile-driver-put';
-import { ApiProfileDriverPut$Params } from '../fn/profile/api-profile-driver-put';
+import { apiProfileDriverPut$Json } from '../fn/profile/api-profile-driver-put-json';
+import { ApiProfileDriverPut$Json$Params } from '../fn/profile/api-profile-driver-put-json';
+import { apiProfileDriverPut$Plain } from '../fn/profile/api-profile-driver-put-plain';
+import { ApiProfileDriverPut$Plain$Params } from '../fn/profile/api-profile-driver-put-plain';
 import { apiProfileRegisterPut$Json } from '../fn/profile/api-profile-register-put-json';
 import { ApiProfileRegisterPut$Json$Params } from '../fn/profile/api-profile-register-put-json';
 import { apiProfileRegisterPut$Plain } from '../fn/profile/api-profile-register-put-plain';
@@ -127,23 +129,45 @@ export class ProfileService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiProfileDriverPut()` instead.
+   * To access only the response body, use `apiProfileDriverPut$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfileDriverPut$Response(params?: ApiProfileDriverPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiProfileDriverPut(this.http, this.rootUrl, params, context);
+  apiProfileDriverPut$Plain$Response(params?: ApiProfileDriverPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiProfileDriverPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiProfileDriverPut$Response()` instead.
+   * To access the full response (for headers, for example), `apiProfileDriverPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiProfileDriverPut(params?: ApiProfileDriverPut$Params, context?: HttpContext): Observable<void> {
-    return this.apiProfileDriverPut$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiProfileDriverPut$Plain(params?: ApiProfileDriverPut$Plain$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiProfileDriverPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiProfileDriverPut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileDriverPut$Json$Response(params?: ApiProfileDriverPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+    return apiProfileDriverPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiProfileDriverPut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiProfileDriverPut$Json(params?: ApiProfileDriverPut$Json$Params, context?: HttpContext): Observable<OkResult> {
+    return this.apiProfileDriverPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<OkResult>): OkResult => r.body)
     );
   }
 
