@@ -63,12 +63,7 @@
         <div>
           <label class="form-label">Middle Name</label>
           <mat-form-field appearance="outline" class="disabledInput">
-            <input
-              matInput
-              name="middleName"
-              placeholder="Middle Name"
-              [formControl]="accountForm.controls.firstName"
-            />
+            <input matInput name="middleName" placeholder="Middle Name" />
           </mat-form-field>
         </div>
         <div>
@@ -203,7 +198,11 @@
           <div>
             <label class="form-label">Street Address</label>
             <mat-form-field appearance="outline" class="inputWidth">
-              <input matInput name="phoneNumber" placeholder="Phone Number" />
+              <input
+                matInput
+                name="streetAddress"
+                placeholder="Street Address"
+              />
             </mat-form-field>
           </div>
           <div style="display: flex; gap: 48px">

@@ -13,7 +13,7 @@
       </div>
       <div>
         <div class="callBackContent">
-          <div class="text">
+          <div class="text" *ngIf="_allCallBackRequests?.length != 0">
             You have 1 open Request Call Back *
             <ul>
               <li>
@@ -23,6 +23,9 @@
               </li>
             </ul>
             <span>* Maximum of 1 open call back request</span>
+          </div>
+          <div class="text" *ngIf="_allCallBackRequests?.length == 0">
+            You have no call back requests
           </div>
         </div>
       </div>
@@ -129,7 +132,12 @@
           <div class="callback">
             <div style="display: flex; gap: 42px; padding: 24px">
               <b>Still require assistance?</b>
-              <button class="callBackButton" (click)="onRequestCallBack()">
+              <button
+                [class.disabledButton]="disableCallBack"
+                [disabled]="disableCallBack"
+                [class.callBackButton]="!disableCallBack"
+                (click)="onRequestCallBack()"
+              >
                 Request Call Back
               </button>
               <button
@@ -258,7 +266,7 @@
                     <b>{{ callback.callStatus }}</b>
                   </div>
                 </div>
-                <div>
+                <div *ngIf="callback.callStatus == 'Open'">
                   <label></label>
                   <div>
                     <button
