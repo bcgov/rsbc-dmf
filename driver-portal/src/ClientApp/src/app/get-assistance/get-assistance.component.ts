@@ -41,6 +41,8 @@ export class GetAssistanceComponent implements OnInit {
 
   _allCallBackRequests?: Callback[] | null = [];
 
+  disableCallBack = true;
+
   @Input() set allCallBacks(callbacks: Callback[] | null | undefined) {
     this._allCallBackRequests = callbacks;
 
@@ -81,6 +83,9 @@ export class GetAssistanceComponent implements OnInit {
         this.filteredCallbacks = this._allCallBackRequests?.slice(
           0,
           this.pageSize
+        );
+        this.disableCallBack = !!callBacks.find(
+          (y: any) => y.callStatus == 'Open'
         );
       });
   }

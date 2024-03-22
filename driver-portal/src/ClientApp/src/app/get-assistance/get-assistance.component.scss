@@ -179,6 +179,7 @@ input[type="checkbox"] {
   font-weight: 700;
   font-style: normal;
   font-size: 16px;
+  letter-spacing: 1px;
   color: #f2f2f2;
   background-color: #003366;
 }
@@ -192,6 +193,20 @@ input[type="checkbox"] {
   font-style: normal;
   font-size: 18px;
   letter-spacing: 1px;
+}
+
+button.disabledButton {
+  width: 253px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #fff;
+  background-color: rgba(199, 199, 199, 1);
+  border-radius: 5px;
+  border: none;
 }
 
 .callBackContent {
