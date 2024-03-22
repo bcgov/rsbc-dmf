@@ -2,6 +2,7 @@
 /* eslint-disable */
 export { ApplicationVersionInfo } from './models/application-version-info';
 export { Callback } from './models/callback';
+export { Callback2 } from './models/callback-2';
 export { CallbackCallStatus } from './models/callback-call-status';
 export { CallbackCancelRequest } from './models/callback-cancel-request';
 export { CallbackPriority } from './models/callback-priority';
