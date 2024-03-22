@@ -147,6 +147,7 @@ services.AddSwaggerGen(options =>
             Url = new Uri("https://example.com/license")
         }
     });
+    options.CustomSchemaIds(s => s.FullName.Replace("+", "."));
 });
 
 // Add Document Storage Adapter
