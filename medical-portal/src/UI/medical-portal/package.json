@@ -59,5 +59,8 @@
     "karma-verbose-reporter": "0.0.6",
     "ng-openapi-gen": "^0.21.2",
     "typescript": "~5.4.3"
-  }
+  },
+"overrides": { 
+  "webpack-dev-middleware": "7.1.1"
+}
 }
