@@ -20,3 +20,4 @@
 /oauth-server/src/OAuthServer/Data/IdentityServer.db-shm
 /oauth-server/src/OAuthServer/Data/IdentityServer.db-wal
 /medical-portal/docs/.$CHEFS-Integration.drawio.dtmp
+*.bkp
