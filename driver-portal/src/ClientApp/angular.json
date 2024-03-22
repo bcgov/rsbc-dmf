@@ -74,11 +74,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "Driver-Portal:build:production"
+              "buildTarget": "Driver-Portal:build:production"
             },
             "development": {
-              "browserTarget": "Driver-Portal:build:development",
-              "proxyConfig": "proxy.conf.js"
+              "proxyConfig": "proxy.conf.js",
+              "buildTarget": "Driver-Portal:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -86,7 +86,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Driver-Portal:build"
+            "buildTarget": "Driver-Portal:build"
           }
         },
         "test": {
