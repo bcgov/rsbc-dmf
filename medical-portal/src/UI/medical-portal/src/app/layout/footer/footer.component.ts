@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, Optional } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import {ChangeDetectorRef} from '@angular/core';
 import { ApplicationVersionInfoService } from 'src/app/shared/api/services/application-version-info.service';
 import { VersionInfoComponent } from 'src/app/shared/components/version-info/version-info.component';

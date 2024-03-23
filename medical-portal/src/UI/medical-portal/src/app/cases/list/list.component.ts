@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CaseManagementService, DMERCase } from 'src/app/shared/services/case-management/case-management.service';
 import {Sort} from "@angular/material/sort";
@@ -18,8 +18,8 @@ export class ListComponent implements OnInit {
   public sortedData: DMERCase[] = [];
   public searchBox: string = '';
 
-  statusFilter = new FormControl('');
-  lastModifiedByFilter = new FormControl('');
+  statusFilter = new UntypedFormControl('');
+  lastModifiedByFilter = new UntypedFormControl('');
 
   constructor(
     private caseManagementService: CaseManagementService,

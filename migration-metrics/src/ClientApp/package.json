@@ -32,10 +32,10 @@
     "run-script-os": "^1.1.6",
     "rxjs": "~7.8.0",
     "tslib": "^2.5.0",
-    "zone.js": "~0.14.2"
+    "zone.js": "~0.14.2"    
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^17.0.8",
+    "@angular-devkit/build-angular": "^17.3.1",
     "@angular-eslint/builder": "17.1.1",
     "@angular-eslint/eslint-plugin": "17.1.1",
     "@angular-eslint/eslint-plugin-template": "17.1.1",
@@ -57,9 +57,10 @@
     "karma-jasmine-html-reporter": "^2.0.0",
     "karma-typescript": "^5.5.4",
     "karma-typescript-angular2-transform": "^5.5.4",
-    "typescript": "~5.2.2"
+    "typescript": "~5.2.2"    
   },
   "overrides": {
-    "autoprefixer": "10.4.5"
+    "autoprefixer": "10.4.5",
+    "webpack-dev-middleware": "7.1.1"
   }
 }
