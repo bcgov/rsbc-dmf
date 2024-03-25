@@ -6,15 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Callback } from '../../models/callback';
+import { DriverUpdate } from '../../models/driver-update';
 import { OkResult } from '../../models/ok-result';
 
-export interface ApiCallbackCreatePost$Json$Params {
-      body?: Callback
+export interface ApiProfileDriverPut$Json$Params {
+      body?: DriverUpdate
 }
 
-export function apiCallbackCreatePost$Json(http: HttpClient, rootUrl: string, params?: ApiCallbackCreatePost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
-  const rb = new RequestBuilder(rootUrl, apiCallbackCreatePost$Json.PATH, 'post');
+export function apiProfileDriverPut$Json(http: HttpClient, rootUrl: string, params?: ApiProfileDriverPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
+  const rb = new RequestBuilder(rootUrl, apiProfileDriverPut$Json.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -29,4 +29,4 @@ export function apiCallbackCreatePost$Json(http: HttpClient, rootUrl: string, pa
   );
 }
 
-apiCallbackCreatePost$Json.PATH = '/api/Callback/create';
+apiProfileDriverPut$Json.PATH = '/api/Profile/driver';

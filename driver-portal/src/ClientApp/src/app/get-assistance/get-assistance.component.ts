@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
-import { BringForwardRequest, Callback } from '../shared/api/models';
+import { Callback } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -91,7 +91,7 @@ export class GetAssistanceComponent implements OnInit {
   }
 
   createCallBack() {
-    const callback: BringForwardRequest = {
+    const callback: Callback = {
       description: this.callbackRequest.value.description,
       subject: this.callBackTopics.find((x) => x.value == this.selectedValue)
         ?.viewValue,

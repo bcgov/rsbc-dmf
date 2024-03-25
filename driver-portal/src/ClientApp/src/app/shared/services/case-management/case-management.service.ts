@@ -58,9 +58,9 @@ export class CaseManagementService {
   }
 
   public updateDriverProfile(
-    params: Parameters<ProfileService['apiProfileDriverPut$Response']>[0]
+    params: Parameters<ProfileService['apiProfileDriverPut$Json$Response']>[0]
   ) {
-    return this.profileService.apiProfileDriverPut$Response(params);
+    return this.profileService.apiProfileDriverPut$Json$Response(params);
   }
 
   public getDocumentSubTypes(

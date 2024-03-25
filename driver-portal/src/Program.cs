@@ -134,19 +134,9 @@ services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Driver Portal API",
-        Description = "An ASP.NET Core Web API for managing Driver Portal items",
-        TermsOfService = new Uri("https://example.com/terms"),
-        Contact = new OpenApiContact
-        {
-            Name = "Example Contact",
-            Url = new Uri("https://example.com/contact")
-        },
-        License = new OpenApiLicense
-        {
-            Name = "Example License",
-            Url = new Uri("https://example.com/license")
-        }
+        Description = "An ASP.NET Core Web API for managing Driver Portal items"
     });
+    options.CustomSchemaIds(type => SwashbuckleHelper.GetSchemaId(type));
 });
 
 // Add Document Storage Adapter
