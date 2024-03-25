@@ -57,7 +57,7 @@
         @if (display === 0) {
 
         <div class="help-cards">
-          <mat-card (click)="helpcard()">
+          <mat-card (click)="helpcard(HelpTopics.UPLOAD_EXTRA_DOCUMENT)">
             <mat-card-content
               ><b> Upload a Document </b>
               <div>
@@ -66,7 +66,7 @@
               </div>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card (click)="helpcard(HelpTopics.VIEW_DMER_SUBMISSION)">
             <mat-card-content
               ><b> View DMER submission </b>
               <div>
@@ -75,7 +75,7 @@
               </div>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card (click)="helpcard(HelpTopics.RECEIVED_AN_INCORRECT_LETTER)">
             <mat-card-content
               ><b> Received an incorrect letter </b>
               <div>
@@ -86,7 +86,7 @@
           </mat-card>
         </div>
         <div class="help-cards">
-          <mat-card>
+          <mat-card (click)="helpcard(HelpTopics.DOCUMENT_HISTORY)">
             <mat-card-content
               ><b> Cannot see document in Document History </b>
               <div>
@@ -95,7 +95,7 @@
               </div>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card (click)="helpcard(HelpTopics.REPLACEMENT_DOCUMENT)">
             <mat-card-content
               ><b>Submit a replacement document </b>
               <div>
@@ -104,7 +104,7 @@
               </div>
             </mat-card-content>
           </mat-card>
-          <mat-card>
+          <mat-card (click)="helpcard(HelpTopics.REQUEST_EXTENSION)">
             <mat-card-content
               ><b> Request extension </b>
               <div>
@@ -115,8 +115,8 @@
           </mat-card>
         </div>
 
-        } @else if (display === 5) {
-        <div>
+        } @else if (display === HelpTopics.UPLOAD_EXTRA_DOCUMENT) {
+        <div class="helpDetails">
           <b style="padding: 12px">Upload an Extra Document</b>
           <p>
             Under the Submission Requirements tab on a case page, RSBC lists all
@@ -129,79 +129,142 @@
             agent by requesting a call back. They will be able to provide you
             with the assistance you need.
           </p>
-          <div class="callback">
-            <div style="display: flex; gap: 42px; padding: 24px">
-              <b>Still require assistance?</b>
-              <button
-                [class.disabledButton]="disableCallBack"
-                [disabled]="disableCallBack"
-                [class.callBackButton]="!disableCallBack"
-                (click)="onRequestCallBack()"
-              >
-                Request Call Back
-              </button>
-              <button
-                class="callBackButton"
-                (click)="viewRequest($event, 'callBack')"
-              >
-                Contact RSBC
-              </button>
-            </div>
-          </div>
-          <div style="padding: 24px" *ngIf="showCallBack">
-            <h3>Request Call Back</h3>
-            <form>
-              <div style="display: flex; flex-direction: column">
-                <div>
-                  <mat-form-field style="width: 300px">
-                    <mat-label>Select Topic</mat-label>
-                    <mat-select
-                      [(ngModel)]="selectedValue"
-                      name="callBackTopic"
-                    >
-                      @for (callBackTopic of callBackTopics; track
-                      callBackTopic) {
-                      <mat-option [value]="callBackTopic.value">{{
-                        callBackTopic.viewValue
-                      }}</mat-option>
-                      }
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-                <div>
-                  <label class="form-label">Phone Number</label>
-                  <mat-form-field appearance="outline" class="inputWidth">
-                    <input
-                      matInput
-                      name="phoneNumber"
-                      placeholder="Phone Number"
-                      [formControl]="callbackRequest.controls.description"
-                    />
-                  </mat-form-field>
-                </div>
-                <div>
-                  <label class="form-label">Best time to receive a call</label>
-                  <label> <input type="checkbox" />9:00am - 4:00pm </label>
-                  <label> <input type="checkbox" />9:00am and 12:00pm </label>
-                  <label> <input type="checkbox" />12:01pm - 4:00pm </label>
-                </div>
-              </div>
-              <div class="submitButtonContainer">
-                <button
-                  class="primaryButton"
-                  mat-flat-button
-                  (click)="createCallBack()"
-                >
-                  Submit
-                </button>
-                <button class="cancelButton" (click)="back()">Back</button>
-              </div>
-            </form>
-          </div>
         </div>
 
+        } @else if(display === HelpTopics.VIEW_DMER_SUBMISSION){
+        <div class="helpDetails">
+          <b style="padding: 12px">View DMER Submission</b>
+          <p>
+            In the Submission History tab, it displays the documents and reports
+            that RSBC has received to date on all of your cases. You are not
+            able to download a copy of these documents. To view any personal
+            information collected about you, you will be required to submit a
+            Freedom of Information request. Please enquire by calling
+            250-387-1321, or faxing 250-387-9843, or email
+            <a href="mailto:FOI.Requests@gov.bc.ca">FOI Request Support</a>
+          </p>
+          <p>
+            Find more information on Freedom of Information Requests
+            <a
+              href="https://www2.gov.bc.ca/gov/content/governments/about-the-bc-government/open-government/open-information/freedom-of-information"
+              target="_blank"
+              >here</a
+            >
+          </p>
+        </div>
+        } @else if(display === HelpTopics.RECEIVED_AN_INCORRECT_LETTER){
+        <div class="helpDetails">
+          <b style="padding: 12px">Received an incorrect letter</b>
+          <p>
+            The Letters to Driver tab displays all the letters that RSBC has
+            sent you about our case. If you received a RSBC letter in error,
+            please call RSBC at 250-387-7747 or toll free at 1-855-387-7747.
+          </p>
+        </div>
+        } @else if(display === HelpTopics.DOCUMENT_HISTORY){
+        <div class="helpDetails">
+          <b style="padding: 12px">Cannot see document in Document History</b>
+          <p>
+            The Submission History tab displays the documents and reports that
+            RSBC has received to date on all of your cases. Please note that if
+            your medical practitioner or you have sent a document through fax,
+            it might take a while for it to appear as received.
+          </p>
+        </div>
+        } @else if(display === HelpTopics.REPLACEMENT_DOCUMENT){
+        <div class="helpDetails">
+          <b style="padding: 12px">Submit a replacement document</b>
+          <p>
+            The Submission History tab displays the documents and reports that
+            RSBC has received to date on all of your cases. ** If you have
+            uploaded an incorrect file, please call RSBC at 250-387-7747 or toll
+            free at 1-855-387-7747.
+          </p>
+        </div>
+        } @else if(display === HelpTopics.REQUEST_EXTENSION){
+        <div class="helpDetails">
+          <b style="padding: 12px">Request extension</b>
+          <p>
+            the Dashboard tab displays Outstanding Documents. RSBC sent you a
+            letter advising that further medical information is required within
+            a timeframe. If you require an extension for this submittal, please
+            call RSBC at 250-387-7747 or toll free at 1-855-387-7747.
+          </p>
+        </div>
         }
       </div>
+
+      @if (showCallBackCreate){
+
+      <div class="createCallBack">
+        <div class="callback" >
+          <div style="display: flex; gap: 42px; padding: 24px">
+            <b>Still require assistance?</b>
+            <button
+              [class.disabledButton]="disableCallBack"
+              [disabled]="disableCallBack"
+              [class.callBackButton]="!disableCallBack"
+              (click)="onRequestCallBack()"
+            >
+              Request Call Back
+            </button>
+            <button
+              class="callBackButton"
+              (click)="viewRequest($event, 'callBack')"
+            >
+              Contact RSBC
+            </button>
+          </div>
+        </div>
+        <div style="padding: 24px" *ngIf="showCallBack">
+          <h3>Request Call Back</h3>
+          <form>
+            <div style="display: flex; flex-direction: column">
+              <div>
+                <mat-form-field style="width: 300px">
+                  <mat-label>Select Topic</mat-label>
+                  <mat-select [(ngModel)]="selectedValue" name="callBackTopic">
+                    @for (callBackTopic of callBackTopics; track callBackTopic)
+                    {
+                    <mat-option [value]="callBackTopic.value">{{
+                      callBackTopic.viewValue
+                    }}</mat-option>
+                    }
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div>
+                <label class="form-label">Phone Number</label>
+                <mat-form-field appearance="outline" class="inputWidth">
+                  <input
+                    matInput
+                    name="phoneNumber"
+                    placeholder="Phone Number"
+                    [formControl]="callbackRequest.controls.description"
+                  />
+                </mat-form-field>
+              </div>
+              <div>
+                <label class="form-label">Best time to receive a call</label>
+                <label> <input type="checkbox" />9:00am - 4:00pm </label>
+                <label> <input type="checkbox" />9:00am and 12:00pm </label>
+                <label> <input type="checkbox" />12:01pm - 4:00pm </label>
+              </div>
+            </div>
+            <div class="submitButtonContainer">
+              <button
+                class="primaryButton"
+                mat-flat-button
+                (click)="createCallBack()"
+              >
+                Submit
+              </button>
+              <button class="cancelButton" (click)="back()">Back</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      }
     </div>
     <div style="padding-top: 32px">
       <h2>Contact RoadSafetyBC</h2>
@@ -266,7 +329,7 @@
                     <b>{{ callback.callStatus }}</b>
                   </div>
                 </div>
-                <div *ngIf="callback.callStatus == 'Open'">
+                <div *ngIf="callback.callStatus === 'Open'">
                   <label></label>
                   <div>
                     <button
@@ -291,14 +354,13 @@
                 <div>
                   <label>Preferred callback times</label>
                   <div>
-                    <!-- <b>{{ letter.caseId }}</b> -->
-                    <b>9:00am and 12:00pm</b>
+                    <b>9.00 AM - 12.01 PM</b>
                   </div>
                 </div>
                 <div>
                   <label>RSBC Call details</label>
                   <div>
-                    <!-- <b>{{ letter.caseId }}</b> -->
+                    <!-- <b></b> -->
                     <b>April 29 - Call attempt unsuccessful</b>
                   </div>
                 </div>
