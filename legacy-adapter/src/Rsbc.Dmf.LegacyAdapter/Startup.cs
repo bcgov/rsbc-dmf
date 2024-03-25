@@ -129,8 +129,6 @@ namespace Rsbc.Dmf.LegacyAdapter
                     opts.IncludeExceptionDetails =  (ctx, env) => true;
                     opts.OnBeforeWriteDetails = (ctx, pr) =>
                     {
-                        // Log the problem
-                        Log.Logger.Error($"Unexpected Exception {ctx.Request.Path}  {ctx.Request.Method}   {pr.Title} {pr.Detail} {pr.Instance}");
                         // attempt to read to string.
                         ctx.Request.EnableBuffering();
                         var pipeReadResult = ctx.Request.BodyReader.ReadAsync().GetAwaiter().GetResult();   

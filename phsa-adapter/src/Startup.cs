@@ -145,8 +145,7 @@ namespace Rsbc.Dmf.PhsaAdapter
                         if (string.IsNullOrEmpty(phsaReferenceToken)) return null;
 
                         var logger = req.HttpContext.RequestServices.GetRequiredService<ILogger<OAuth2IntrospectionDefaults>>();
-                        logger.LogInformation("PHSA reference token: {0}", phsaReferenceToken);
-
+                        
                         var userReferenceToken = ExtractUserReferenceTokenFromPhsaToken(phsaReferenceToken).GetAwaiter().GetResult();
 
                         logger.LogInformation("user reference token: {0}", userReferenceToken);

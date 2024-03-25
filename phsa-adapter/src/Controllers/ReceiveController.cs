@@ -28,7 +28,6 @@ namespace Rsbc.Dmf.PhsaAdapter.Controllers
 
                 // TODO - centralize the receive bundle code.
 
-                _logger.LogInformation(body);
             }
 
             return Ok();

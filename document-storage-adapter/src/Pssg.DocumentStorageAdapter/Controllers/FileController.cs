@@ -78,7 +78,6 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 var fileContents = _S3.DownloadFile(fileName, ref metaData);
                 if (fileContents == null)
                 {
-                    _logger.LogError($"Error during file download for file {download.FileUrl} - no file data.");
                     return new BadRequestResult();
                 }
                 //return new FileContentResult(fileContents, "application/octet-stream");
@@ -148,7 +147,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error during file download for file {download.FileUrl}.");
+                _logger.LogError(e, $"Error during file download for file.");
                 throw e;
             }
             
