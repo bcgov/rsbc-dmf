@@ -24,8 +24,10 @@ Click Finish and it should update the client.
 
 TODO make a table with columns e.g. ViewModel, Service, Dynamics
 Document bcgov_documenturl (LegacyDocument)
-DocumentType ? (dfp_documentsubtype.dfp_DocumentTypeID)
-DocumentSubType dfp_documentsubtype
+DocumentType dfp_DocumentTypeID
+  bcgov_documenturls.dfp_DocumentTypeID
+DocumentSubType dfp_DocumentSubType
+  bcgov_documenturls.dfp_DocumentSubType
 Submittal Type dfp_submittaltype
 
 Callback/BringForward -> task

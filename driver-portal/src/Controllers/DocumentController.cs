@@ -147,7 +147,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (!DocumentUtils.IsAllowedMimeType(mimeType.Name))
             {
                 _logger.LogError($"ERROR in uploading file due to invalid mime type {mimeType?.Name}");
-                return BadRequest();
+                return BadRequest("Invalid file type.");
             }
 
             // add the document
@@ -171,7 +171,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
             document.DocumentSubTypeId = documentSubTypeGuidReply.Id.ToString();
-            var result = _cmsAdapterClient.CreateDocumentOnDriver(document);
+            var result = _cmsAdapterClient.CreateUnsolicitedDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
                 return StatusCode(500, result.ErrorDetail);

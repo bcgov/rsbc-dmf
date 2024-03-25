@@ -20,6 +20,8 @@ service CaseManager {
 
   rpc CreateCaseDocument(LegacyDocument) returns (CreateStatusReply);
 
+  rpc CreateUnsolicitedDocumentOnDriver(LegacyDocument) returns (CreateStatusReply);
+
   rpc CreateDocumentOnDriver(LegacyDocument) returns (CreateStatusReply);
 
   rpc CreateICBCDocumentEnvelope(LegacyDocument) returns (CreateStatusReply);
@@ -513,6 +515,7 @@ message LegacyDocument {
 	string IdCode = 28;
 	string CaseType = 29;
 	string DocumentSubTypeId = 30;
+    string DocumentSubType = 31;
 }
 
 message DocumentIdRequest {

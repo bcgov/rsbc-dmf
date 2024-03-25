@@ -101,8 +101,9 @@ namespace Rsbc.Dmf.CaseManagement
             foreach (var @case in cases)
             {
                 // skip if tasks is null or has no active/inactive tasks 
-                // 2 = cancelled
-                var tasks = @case.Incident_Tasks?.Where(t => t.statecode < 2);
+                // 2 = cancelled, 1 = inactive (which in this case represents closed), 0 = active
+                // TODO 100000005 is 'Portal' origin, replace with shared-utils UserCode.Portal after fixing relative paths
+                var tasks = @case.Incident_Tasks?.Where(t => t.statecode < 2 && t.dfp_origin == 100000005);
                 if (!(tasks?.Any() ?? false))
                     break;
 

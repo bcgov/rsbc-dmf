@@ -157,13 +157,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// Create Document on Driver
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        public async override Task<CreateStatusReply> CreateUnsolicitedDocumentOnDriver(LegacyDocument request, ServerCallContext context)
+        {
+            return await CreateDocument(request, false, context);
+        }
+
         public async override Task<CreateStatusReply> CreateDocumentOnDriver(LegacyDocument request, ServerCallContext context)
+        {
+            return await CreateDocument(request, true, context);
+        }
+
+        private async Task<CreateStatusReply> CreateDocument(LegacyDocument request, bool solicited, ServerCallContext context)
         {
             var reply = new CreateStatusReply();
 
@@ -199,7 +203,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 Queue = request.Queue ?? string.Empty,
                 DpsDocumentId = request.DpsDocumentId,
                 Origin = request.Origin,
-                DocumentSubTypeId = request.DocumentSubTypeId ?? string.Empty
+                DocumentSubTypeId = request.DocumentSubTypeId ?? string.Empty,
+                Solicited = solicited
             };
 
             if (request.FaxReceivedDate != null)
@@ -229,7 +234,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         [Obsolete("CreateLegacyCaseDocument is deprecated, please use CreateDocumentOnDriver instead.", false)]
-
         /// <summary>
         /// Create Legacy Case Document
         /// </summary>
@@ -1017,9 +1021,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
-
-
-
 
         public async override Task<GetDocumentsReply> GetIcbcDmerEnvelopes(DriverLicenseRequest request,
             ServerCallContext context)
