@@ -1676,7 +1676,9 @@ namespace Rsbc.Dmf.CaseManagement
                         bcgovDocumentUrl.bcgov_filename = Path.GetFileName(request.DocumentUrl);
                     }
                 }
-                
+
+                bcgovDocumentUrl.dfp_solicited = request.Solicited;
+
                 if (!string.IsNullOrEmpty(request.Origin) && request.Origin == "DPS/KOFAX")
                 {
 
@@ -1685,7 +1687,6 @@ namespace Rsbc.Dmf.CaseManagement
                         bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
                     }
                 }
-
 
                 if (found) // update
                 {    
@@ -1791,12 +1792,9 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
             }
-            return result;
 
-           
+            return result;       
         }
-
-
 
         protected int TranslateDocumentOrigin(string documentOrigin)
         {
@@ -1804,6 +1802,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 { "Mercury Uploaded RSBC", 100000014 },
                 { "Migration",  100000015 },
+                { "Driver Portal", 100000016 },
                 { "DPS/KOFAX", 100000017 },
             };
 
