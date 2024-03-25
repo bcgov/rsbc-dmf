@@ -102,7 +102,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 // skip if tasks is null or has no active/inactive tasks 
                 // 2 = cancelled
-                var tasks = @case.Incident_Tasks?.Where(t => t.statecode < 2);
+                var tasks = @case.Incident_Tasks?.Where(t => t.statecode < 2 && t.dfp_origin == 100000005);
                 if (!(tasks?.Any() ?? false))
                     break;
 

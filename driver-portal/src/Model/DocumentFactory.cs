@@ -36,6 +36,7 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 Priority = string.Empty,
                 // maps to "Intake Team"
                 Owner = "Client Services",
+                Origin = "Driver Portal",
                 BatchId = string.Empty,
                 ValidationMethod = string.Empty,
                 ValidationPrevious = string.Empty,

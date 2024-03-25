@@ -20,6 +20,8 @@ service CaseManager {
 
   rpc CreateCaseDocument(LegacyDocument) returns (CreateStatusReply);
 
+  rpc CreateUnsolicitedDocumentOnDriver(LegacyDocument) returns (CreateStatusReply);
+
   rpc CreateDocumentOnDriver(LegacyDocument) returns (CreateStatusReply);
 
   rpc CreateICBCDocumentEnvelope(LegacyDocument) returns (CreateStatusReply);
