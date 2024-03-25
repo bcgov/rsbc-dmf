@@ -1022,9 +1022,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-
-
-
         public async override Task<GetDocumentsReply> GetIcbcDmerEnvelopes(DriverLicenseRequest request,
             ServerCallContext context)
         {
