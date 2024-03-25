@@ -43,6 +43,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         /// </summary>
         public string DocumentTypeCode { get; set; }
         public string DocumentType { get; set; }
+        public string DocumentSubType { get; set; }
         public string CaseType { get; set; }
         public string BusinessArea { get; set; }
 

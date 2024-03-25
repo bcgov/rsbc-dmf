@@ -76,17 +76,17 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 // sort the documents
                 if (result.CaseSubmissions.Count > 0)
                 {
-                    result.CaseSubmissions = result.CaseSubmissions.OrderByDescending(cs => cs.ImportDate).ToList();
+                    result.CaseSubmissions = result.CaseSubmissions.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 
                 if (result.SubmissionRequirements.Count > 0)
                 {
-                    result.SubmissionRequirements = result.SubmissionRequirements.OrderByDescending(cs => cs.ImportDate).ToList();
+                    result.SubmissionRequirements = result.SubmissionRequirements.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 
                 if (result.LettersToDriver.Count > 0)
                 {
-                    result.LettersToDriver = result.LettersToDriver.OrderByDescending(cs => cs.ImportDate).ToList();
+                    result.LettersToDriver = result.LettersToDriver.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 
                 return Json(result);
@@ -124,7 +124,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 // sort the documents
                 if (result.Count > 0)
                 {
-                    result = result.OrderByDescending(cs => cs.ImportDate).ToList();
+                    result = result.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 
                 return Json(result);

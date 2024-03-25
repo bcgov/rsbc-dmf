@@ -19,6 +19,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .ForMember(dest => dest.DocumentTypeCode, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_apidocumenttype))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_name))
+                    .ForMember(dest => dest.DocumentSubType, opt => opt.MapFrom(src => src.dfp_DocumentSubType.dfp_name))
                     .AfterMap((src, dest) => dest.CaseType = dest.DocumentType == "DMER" ? "Solicited" : "Unsolicited")
                     .ForMember(dest => dest.BusinessArea, opt => opt.MapFrom(src => ConvertBusinessAreaToString(src.dfp_DocumentTypeID.dfp_businessarea)))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
@@ -79,12 +80,14 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 { 100000000, "Open-Required"  },
                 { 100000001, "Received" }, // Accept
                 { 100000003, "Reviewed" },
-                { 100000004, "Reject" },
+                { 100000004, "Reject" }, // 'Rejected' in Dynamics
+                { 100000005, "Non-Comply" },
                 { 100000008, "Sent" },
                 { 100000009, "Clean Pass"  },
                 { 100000010, "Uploaded" },
+                { 100000011, "Issued" },
                 { 100000012, "Manual Pass"  },
-                { 100000011, "Issued" }
+                // Empty 13, Actioned Non-comply 7, Under Review 2, Carry Forward 7
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode.Value))
