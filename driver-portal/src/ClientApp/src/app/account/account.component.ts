@@ -66,7 +66,9 @@ export class AccountComponent implements OnInit {
         body: {
           //driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
           //email: this.accountForm.value.emailAddress,
-          driverLicense: this.accountForm.value.driverLicenceNumber,
+          email: this.accountForm.value.emailAddress,
+          notifyByEmail: this.accountForm.value.notifyByEmail as boolean,
+          notifyByMail: this.accountForm.value.notifyByMail as boolean,
         },
       })
       .subscribe((res) => {

@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
-import { Callback } from '../shared/api/models';
+import { Callback, Callback2 } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,12 +12,26 @@ interface CallBackTopic {
   value: string;
   viewValue: string;
 }
+
+enum HelpTopics {
+  ALL_TOPICS = 0,
+  UPLOAD_EXTRA_DOCUMENT = 1,
+  VIEW_DMER_SUBMISSION = 2,
+  RECEIVED_AN_INCORRECT_LETTER = 3,
+  DOCUMENT_HISTORY = 4,
+  REPLACEMENT_DOCUMENT = 5,
+  REQUEST_EXTENSION = 6,
+}
+
 @Component({
   selector: 'app-get-assistance',
   templateUrl: './get-assistance.component.html',
   styleUrls: ['./get-assistance.component.scss'],
 })
 export class GetAssistanceComponent implements OnInit {
+  HelpTopics = HelpTopics;
+  showCallBackCreate = false;
+
   constructor(
     private caseManagementService: CaseManagementService,
     private viewportScroller: ViewportScroller,
@@ -35,15 +49,15 @@ export class GetAssistanceComponent implements OnInit {
 
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
-  display = 0;
+  display: HelpTopics = HelpTopics.ALL_TOPICS;
 
-  filteredCallbacks?: Callback[] | null = [];
+  filteredCallbacks?: Callback2[] | null = [];
 
-  _allCallBackRequests?: Callback[] | null = [];
+  _allCallBackRequests?: Callback2[] | null = [];
 
   disableCallBack = true;
 
-  @Input() set allCallBacks(callbacks: Callback[] | null | undefined) {
+  @Input() set allCallBacks(callbacks: Callback2[] | null | undefined) {
     this._allCallBackRequests = callbacks;
 
     this._allCallBackRequests?.forEach((req) => {
@@ -109,7 +123,7 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
-  openCancelCallbackDialog(callback: Callback) {
+  openCancelCallbackDialog(callback: Callback2) {
     const dialogRef = this.dialog
       .open(CancelCallbackDialogComponent, {
         height: '650px',
@@ -126,12 +140,14 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
-  helpcard() {
-    this.display = 5;
+  helpcard(helpTopic: HelpTopics) {
+    this.display = helpTopic;
+    this.showCallBackCreate = true;
   }
 
   recommendedTopics() {
-    this.display = 0;
+    this.display = HelpTopics.ALL_TOPICS;
+    this.showCallBackCreate = false;
   }
   onRequestCallBack() {
     console.log('onRequestCallBack');
