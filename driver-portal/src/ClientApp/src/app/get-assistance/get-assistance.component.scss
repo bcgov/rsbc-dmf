@@ -61,6 +61,10 @@
   gap: 32px;
 }
 
+.helpDetails {
+  line-height: 4;
+}
+
 .assistance-page {
   display: flex;
   // flex-direction: row;
@@ -114,6 +118,12 @@ button:hover {
   padding-bottom: 24px;
   align-content: flex-start;
   padding-bottom: 24px;
+}
+
+.createCallBack {
+  display: flex;
+  justify-content: space-around;
+  padding-left: 140px;
 }
 
 .callback {
