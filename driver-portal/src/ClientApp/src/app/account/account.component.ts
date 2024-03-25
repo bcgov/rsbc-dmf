@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AccountComponent implements OnInit {
   isEditView = false;
+  onEditProfile = false;
 
   accountForm = this.fb.group({
     notifyByEmail: [false],
@@ -58,6 +59,7 @@ export class AccountComponent implements OnInit {
   onEdit() {
     this.accountForm.controls.emailAddress.enable();
     this.isEditView = true;
+    this.onEditProfile = true;
   }
 
   onUpdate() {

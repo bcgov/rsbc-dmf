@@ -244,7 +244,8 @@
         Note: You can update your notification settings at any time in the
         Driver Portal under Account Management.
       </label>
-      <div class="submitButtonContainer">
+
+      <div class="submitButtonContainer" *ngIf="onEditProfile">
         <button
           *ngIf="!isCreateProfile"
           mat-flat-button
