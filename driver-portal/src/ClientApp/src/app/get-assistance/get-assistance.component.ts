@@ -6,7 +6,7 @@ import { Callback, Callback2 } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 interface CallBackTopic {
   value: string;
@@ -41,10 +41,11 @@ export class GetAssistanceComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  callbackRequest = this.fb.group({
+  callbackRequestForm = this.fb.group({
     caseId: [''],
     description: [''],
-    subject: [''],
+    subject: ['', Validators.required],
+    phone: [''],
   });
 
   isExpanded: Record<string, boolean> = {};
@@ -107,13 +108,20 @@ export class GetAssistanceComponent implements OnInit {
   isCreatingCallBack = false;
 
   createCallBack() {
+    if (this.callbackRequestForm.invalid) {
+      this.callbackRequestForm.markAllAsTouched();
+      return;
+    }
     if (this.isCreatingCallBack) {
       return;
     }
+
     const callback: Callback = {
-      description: this.callbackRequest.value.description,
-      subject: this.callBackTopics.find((x) => x.value == this.selectedValue)
-        ?.viewValue,
+      description: this.callbackRequestForm.value.description,
+      phone: String(this.callbackRequestForm.value.phone),
+      subject: this.callBackTopics.find(
+        (x) => x.value == this.callbackRequestForm.value.subject
+      )?.viewValue,
     };
     this.isCreatingCallBack = true;
     this.caseManagementService
@@ -129,6 +137,8 @@ export class GetAssistanceComponent implements OnInit {
         this.isCreatingCallBack = false;
       });
   }
+
+  
 
   openCancelCallbackDialog(callback: Callback2) {
     this.dialog

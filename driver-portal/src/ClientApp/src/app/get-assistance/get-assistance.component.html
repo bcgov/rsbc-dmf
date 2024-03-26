@@ -223,7 +223,10 @@
               <div>
                 <mat-form-field style="width: 300px">
                   <mat-label>Select Topic</mat-label>
-                  <mat-select [(ngModel)]="selectedValue" name="callBackTopic">
+                  <mat-select
+                    [formControl]="callbackRequestForm.controls.subject"
+                    name="callBackTopic"
+                  >
                     @for (callBackTopic of callBackTopics; track callBackTopic)
                     {
                     <mat-option [value]="callBackTopic.value">{{
@@ -231,6 +234,10 @@
                     }}</mat-option>
                     }
                   </mat-select>
+                  @if
+                  (callbackRequestForm.controls.subject.getError('required')) {
+                  <mat-error>This Field is required</mat-error>
+                  }
                 </mat-form-field>
               </div>
               <div>
@@ -240,7 +247,8 @@
                     matInput
                     name="phoneNumber"
                     placeholder="Phone Number"
-                    [formControl]="callbackRequest.controls.description"
+                    type="number"
+                    [formControl]="callbackRequestForm.controls.phone"
                   />
                 </mat-form-field>
               </div>
