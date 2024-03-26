@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
@@ -85,7 +86,7 @@ export class AccountComponent implements OnInit {
         },
       })
       .subscribe({
-        next: (res) => {
+        next: () => {
           this._snackBar.open('Registration successful', 'Close', {
             horizontalPosition: 'center',
             verticalPosition: 'top',

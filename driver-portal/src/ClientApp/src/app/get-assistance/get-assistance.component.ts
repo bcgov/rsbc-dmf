@@ -138,8 +138,6 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
-  
-
   openCancelCallbackDialog(callback: Callback2) {
     this.dialog
       .open(CancelCallbackDialogComponent, {

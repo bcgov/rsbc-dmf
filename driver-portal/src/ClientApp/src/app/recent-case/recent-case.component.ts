@@ -32,6 +32,7 @@ export class RecentCaseComponent implements OnInit {
     private router: Router
   ) {}
 
+  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit(): void {
     this.breakpointObserver
       .observe(['(max-width: 768px)'])
