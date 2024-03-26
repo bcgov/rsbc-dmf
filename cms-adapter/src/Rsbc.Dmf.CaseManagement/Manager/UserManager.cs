@@ -13,6 +13,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string loginId, string email);
+        Task<bool> UpdateEmail(Guid loginId, string email);
         Task<bool> SetDriverLogin(Guid loginId, Guid driverId);
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
@@ -66,6 +67,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Userid { get; set; }
         public string Email { get; set; }
         public string DriverId { get; set; }
+        public string DriverLicenseNumber { get; set; }
     }
 
     public abstract class User
@@ -300,6 +302,30 @@ namespace Rsbc.Dmf.CaseManagement
             return true;
         }
 
+        public async Task<bool> UpdateEmail(Guid loginId, string email)
+        {
+            var login = dynamicsContext.dfp_logins
+                .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
+                .Where(l => l.dfp_loginid == loginId)
+                .SingleOrDefault();
+
+            // update email
+            if (login.dfp_DriverId.dfp_PersonId != null)
+            {
+                login.dfp_DriverId.dfp_PersonId.emailaddress1 = email;
+
+                dynamicsContext.UpdateObject(login.dfp_DriverId.dfp_PersonId);
+            }
+            else
+            {
+                return false;
+            }
+
+            await dynamicsContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> SetUserEmail(string loginId, string email)
         {
             bool result = false;
@@ -412,7 +438,9 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.DetachAll();
 
-            return new LoginUserResponse { Userid = login.dfp_loginid.ToString() , Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
+            var loginUserResponse = new LoginUserResponse { Userid = login.dfp_loginid.ToString(), Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
+            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId.dfp_licensenumber;
+            return loginUserResponse;
         }
 
         private LoginType ParseExternalSystem(string externalSystem) => externalSystem.ToLowerInvariant() switch
