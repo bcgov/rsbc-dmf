@@ -6,7 +6,7 @@ import { Callback, Callback2 } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 interface CallBackTopic {
   value: string;
@@ -41,10 +41,11 @@ export class GetAssistanceComponent implements OnInit {
     private fb: FormBuilder
   ) {}
 
-  callbackRequest = this.fb.group({
+  callbackRequestForm = this.fb.group({
     caseId: [''],
     description: [''],
-    subject: [''],
+    subject: ['', Validators.required],
+    phone: [''],
   });
 
   isExpanded: Record<string, boolean> = {};
@@ -104,27 +105,43 @@ export class GetAssistanceComponent implements OnInit {
       });
   }
 
+  isCreatingCallBack = false;
+
   createCallBack() {
+    if (this.callbackRequestForm.invalid) {
+      this.callbackRequestForm.markAllAsTouched();
+      return;
+    }
+    if (this.isCreatingCallBack) {
+      return;
+    }
+
     const callback: Callback = {
-      description: this.callbackRequest.value.description,
-      subject: this.callBackTopics.find((x) => x.value == this.selectedValue)
-        ?.viewValue,
+      description: this.callbackRequestForm.value.description,
+      phone: String(this.callbackRequestForm.value.phone),
+      subject: this.callBackTopics.find(
+        (x) => x.value == this.callbackRequestForm.value.subject
+      )?.viewValue,
     };
-    return this.caseManagementService
+    this.isCreatingCallBack = true;
+    this.caseManagementService
       .createCallBackRequest({ body: callback })
-      .subscribe((response) => {
+      .subscribe(() => {
         this.getCallbackRequests(this.loginService.userProfile?.id as string);
         this.showCallBack = false;
         this._snackBar.open('Successfully created call back request', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
-          duration: 2000,
+          duration: 5000,
         });
+        this.isCreatingCallBack = false;
       });
   }
 
+  
+
   openCancelCallbackDialog(callback: Callback2) {
-    const dialogRef = this.dialog
+    this.dialog
       .open(CancelCallbackDialogComponent, {
         height: '650px',
         width: '820px',
@@ -136,6 +153,15 @@ export class GetAssistanceComponent implements OnInit {
       .subscribe({
         next: () => {
           this.getCallbackRequests(this.loginService.userProfile?.id as string);
+          this._snackBar.open(
+            'Successfully cancelled call back request',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000,
+            }
+          );
         },
       });
   }

@@ -13,7 +13,7 @@
       </div>
       <div>
         <div class="callBackContent">
-          <div class="text" *ngIf="_allCallBackRequests?.length != 0">
+          <div class="text" *ngIf="_allCallBackRequests?.length !== 0">
             You have 1 open Request Call Back *
             <ul>
               <li>
@@ -24,7 +24,7 @@
             </ul>
             <span>* Maximum of 1 open call back request</span>
           </div>
-          <div class="text" *ngIf="_allCallBackRequests?.length == 0">
+          <div class="text" *ngIf="_allCallBackRequests?.length === 0">
             You have no call back requests
           </div>
         </div>
@@ -197,7 +197,7 @@
       @if (showCallBackCreate){
 
       <div class="createCallBack">
-        <div class="callback" >
+        <div class="callback">
           <div style="display: flex; gap: 42px; padding: 24px">
             <b>Still require assistance?</b>
             <button
@@ -223,7 +223,10 @@
               <div>
                 <mat-form-field style="width: 300px">
                   <mat-label>Select Topic</mat-label>
-                  <mat-select [(ngModel)]="selectedValue" name="callBackTopic">
+                  <mat-select
+                    [formControl]="callbackRequestForm.controls.subject"
+                    name="callBackTopic"
+                  >
                     @for (callBackTopic of callBackTopics; track callBackTopic)
                     {
                     <mat-option [value]="callBackTopic.value">{{
@@ -231,6 +234,10 @@
                     }}</mat-option>
                     }
                   </mat-select>
+                  @if
+                  (callbackRequestForm.controls.subject.getError('required')) {
+                  <mat-error>This Field is required</mat-error>
+                  }
                 </mat-form-field>
               </div>
               <div>
@@ -240,7 +247,8 @@
                     matInput
                     name="phoneNumber"
                     placeholder="Phone Number"
-                    [formControl]="callbackRequest.controls.description"
+                    type="number"
+                    [formControl]="callbackRequestForm.controls.phone"
                   />
                 </mat-form-field>
               </div>

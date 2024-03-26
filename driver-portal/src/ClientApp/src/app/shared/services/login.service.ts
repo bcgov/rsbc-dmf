@@ -26,7 +26,7 @@ export class LoginService {
       tap(config => {
         console.log(config);
         this.oauthService.configure(config);
-        //this.oauthService.setupAutomaticSilentRefresh();
+        this.oauthService.setupAutomaticSilentRefresh();
         console.debug('oauth service configured');
       }), concatMap(() => {
         console.debug('try login');
@@ -51,7 +51,7 @@ export class LoginService {
     return this.profileService.apiProfileCurrentGet$Json().pipe(tap(profile => {
       this.userProfile = profile;
     }));
-  }
+  } 
 }
 
 export type Profile = UserProfile

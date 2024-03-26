@@ -66,11 +66,7 @@ export class AccountComponent implements OnInit {
     this.caseManagementService
       .updateDriverProfile({
         body: {
-          //driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
-          //email: this.accountForm.value.emailAddress,
           email: this.accountForm.value.emailAddress,
-          notifyByEmail: this.accountForm.value.notifyByEmail as boolean,
-          notifyByMail: this.accountForm.value.notifyByMail as boolean,
         },
       })
       .subscribe((res) => {

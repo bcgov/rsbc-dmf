@@ -9,6 +9,7 @@ export interface Document {
   createDate?: string;
   description?: string | null;
   documentId?: string | null;
+  documentSubType?: string | null;
   documentType?: string | null;
   documentTypeCode?: string | null;
   documentUrl?: string | null;

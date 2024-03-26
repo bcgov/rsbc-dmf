@@ -87,14 +87,11 @@ export class SubmissionRequirementsComponent implements OnInit {
     console.log('handleFileInput', event);
     this.fileToUpload = event.target.files[0];
   }
-
+  isFileUploading = false;
   fileUpload() {
-    console.log('fileUpload');
-    // this.caseManagementService
-    //   .({ body: { file: this.fileToUpload } as any })
-    //   .subscribe((res) => {
-    //     console.log(res);
-    //   });
+    if (this.isFileUploading) {
+      return;
+    }
     if (!this.fileToUpload) {
       console.log('No file selected');
       return;
@@ -118,6 +115,7 @@ export class SubmissionRequirementsComponent implements OnInit {
           duration: 5000,
         });
         this.showUpload = false;
+        this.isFileUploading = false;
       });
   }
 }
