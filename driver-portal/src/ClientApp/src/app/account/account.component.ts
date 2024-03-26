@@ -49,6 +49,7 @@ export class AccountComponent implements OnInit {
     this.accountForm.disable();
 
     if (this.isCreateProfile) {
+      this.onEditProfile = true;
       this.accountForm.controls.emailAddress.enable();
       this.accountForm.controls.driverLicenseNumber.enable();
       this.accountForm.controls.notifyByEmail.enable();
