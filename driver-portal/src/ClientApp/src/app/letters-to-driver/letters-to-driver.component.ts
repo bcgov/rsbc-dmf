@@ -58,7 +58,7 @@ export class LettersToDriverComponent implements OnInit {
       });
   }
 
-  downloadFile(data: any) {
+  downloadFile(data : any) {
     const blob = new Blob([data], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
     //window.open('https://path/to/file.extenstion', '_blank');

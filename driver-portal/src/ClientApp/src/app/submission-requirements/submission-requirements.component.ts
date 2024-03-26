@@ -15,10 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ApiConfiguration } from '../shared/api/api-configuration';
 
-interface DocumentType {
-  value: string;
-  viewValue: string;
-}
 @Component({
   selector: 'app-submission-requirements',
   templateUrl: './submission-requirements.component.html',
@@ -100,7 +96,7 @@ export class SubmissionRequirementsComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
     formData.append('documentSubTypeId', this.selectedValue);
-
+    this.isFileUploading = true;
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
         headers: {
