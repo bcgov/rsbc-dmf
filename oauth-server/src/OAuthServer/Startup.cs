@@ -184,24 +184,22 @@ namespace OAuthServer
                                    Log.Information($"RAW IDENTITY JWE {jwe.Payload.SerializeToJson()}");
 
                                    string birthdate = jwe.Payload["birthdate"].ToString();
-
                                    string name = jwe.Payload["display_name"].ToString();
-
                                    string givenName = jwe.Payload["given_name"].ToString();
-
                                    string givenNames = jwe.Payload["given_names"].ToString();
-
                                    string familyName = jwe.Payload["family_name"].ToString();
-
+                                   string driverLicenseNumber = jwe.Payload["driver_license_number"].ToString();
 
                                    ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
                                    {
+                                       // TODO Move driver-portal UserClaimTypes to shared-utils and use those constants instead of the magic words below
                                        new Claim("userInfo", jwe.Payload.SerializeToJson()),
-                                       new Claim ("birthdate", birthdate),
-                                       new Claim ("name",name),
-                                       new Claim ("given_name",givenName),
-                                       new Claim ("given_names", givenNames),
-                                       new Claim ("family_name",familyName)
+                                       new Claim("birthdate", birthdate),
+                                       new Claim("name",name),
+                                       new Claim("given_name",givenName),
+                                       new Claim("given_names", givenNames),
+                                       new Claim("family_name",familyName),
+                                       new Claim("driver_license_number", driverLicenseNumber)
                                    }));
                                }
                            }
