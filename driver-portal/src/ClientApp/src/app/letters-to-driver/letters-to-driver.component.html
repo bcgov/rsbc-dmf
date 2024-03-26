@@ -48,7 +48,12 @@
               <div>
                 <label>Letter Topic</label>
                 <div>
-                  <b>{{ letter.documentType }}</b>
+                  <b>
+                    {{ letter.documentType }}
+                    @if(letter?.documentSubType) { -
+                    {{ letter?.documentSubType }}
+                    }
+                  </b>
                 </div>
               </div>
               <div>
