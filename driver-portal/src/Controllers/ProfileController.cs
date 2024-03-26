@@ -153,14 +153,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             setDriverReply = _userManagerClient.UpdateLogin(updateLoginRequest);
             if (setDriverReply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
             return Ok();
         }
 
-        // set the user's profile email, notification preferences, and address
+        // set the user's profile email
         [HttpPut("driver")]
         [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -174,18 +174,30 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return NotFound(); 
             }
 
-            var updateLoginRequest = new UpdateLoginRequest();
-            updateLoginRequest.LoginId = profile.Id;
-            updateLoginRequest.Email = request.Email;
-            updateLoginRequest.NotifyByMail = request.NotifyByMail;
-            updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
-            updateLoginRequest.ExternalUserName = profile.DisplayName;
-            updateLoginRequest.Address = request.Address;
+            // I'm leaving this here for now, it feels like the profile page requirements are not completed yet
+            // TODO remove comments
+            //var updateLoginRequest = new UpdateLoginRequest();
+            //updateLoginRequest.LoginId = profile.Id;
+            //updateLoginRequest.Email = request.Email;
+            //updateLoginRequest.NotifyByMail = request.NotifyByMail;
+            //updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
+            //updateLoginRequest.ExternalUserName = profile.DisplayName;
+            //updateLoginRequest.Address = request.Address;
 
-            var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            //var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            //if (reply.ResultStatus != ResultStatus.Success)
+            //{
+            //    _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)}.\n {0}", reply.ErrorDetail);
+            //    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
+            //}
+
+            var updateEmailRequest = new UserSetEmailRequest();
+            updateEmailRequest.Email = request.Email;
+            updateEmailRequest.LoginId = profile.Id;
+            var reply = _userManagerClient.UpdateEmail(updateEmailRequest);
             if (reply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {request.DriverLicenseNumber}.\n {0}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateEmail)} failed.\n {0}", reply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
 
@@ -199,11 +211,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
         public record DriverUpdate
         {
-            public string DriverLicenseNumber { get; set; }
+            public string? DriverLicenseNumber { get; set; }
             public string Email { get; set; }
             public bool NotifyByMail { get; set; }
             public bool NotifyByEmail { get; set; }
-            public FullAddress Address { get; set; }
+            public FullAddress? Address { get; set; }
         }
 
         public record UserProfile

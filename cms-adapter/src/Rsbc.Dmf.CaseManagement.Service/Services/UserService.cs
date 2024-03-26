@@ -114,6 +114,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
         }
 
+        // same as UpdateEmail but for medical practitioners
         public async override Task<ResultStatusReply> SetEmail(UserSetEmailRequest request, ServerCallContext context)
         {
             ResultStatusReply result = new ResultStatusReply();
@@ -153,6 +154,25 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var userUpdateRequest = _mapper.Map<CaseManagement.UpdateLoginRequest>(request);
                 await _userManager.UpdateLogin(userUpdateRequest);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
+        // same as SetEmail but for driver portal
+        public async override Task<ResultStatusReply> UpdateEmail(UserSetEmailRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            try
+            {
+                await _userManager.UpdateEmail(Guid.Parse(request.LoginId), request.Email);
                 result.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)
