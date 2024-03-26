@@ -14,7 +14,7 @@ export class ConfigurationStubService extends ConfigurationService {
       formServerUrl: 'formurl',
     };
   }
-  public getEFormsFormId(name: string): string {
+  public getEFormsFormId(): string {
     return '1';
   }
 

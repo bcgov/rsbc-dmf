@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ProfileService } from '../api/services';
 

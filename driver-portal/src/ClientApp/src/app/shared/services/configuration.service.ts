@@ -3,10 +3,8 @@ import { Inject, Injectable } from '@angular/core';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { Configuration } from '../api/models';
 import { ConfigService } from '../api/services';
-import { EFormsServerOptions } from '../components/phsa-form-viewer/phsa-form-viewer.component';
 
 @Injectable({
   providedIn: 'root'
