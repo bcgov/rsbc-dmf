@@ -569,6 +569,7 @@ service UserManager {
   rpc Search (UsersSearchRequest) returns (UsersSearchReply);
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
+  rpc UpdateEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc SetDriverLogin(SetDriverLoginRequest) returns (ResultStatusReply);
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
@@ -637,6 +638,7 @@ message UserLoginReply {
 	string userId = 10;
 	string userEmail = 11;
 	string driverId = 12;
+    string driverLicenseNumber = 13;
 }
 
 message User {

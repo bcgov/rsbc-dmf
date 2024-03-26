@@ -33,7 +33,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
-            if (userContext == null) return NotFound("");
+            if (userContext == null) 
+            { 
+                return NotFound(""); 
+            }
 
             string emailAddress = userContext.Email;
             string firstName = userContext.FirstName;
@@ -53,7 +56,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         lastName = driverRecord.Surname;
                     }
                 }
-
             }
 
             return new UserProfile
@@ -62,7 +64,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 EmailAddress = emailAddress,
                 FirstName = firstName,
                 LastName = lastName,                
-                DriverId = userContext.DriverId
+                DriverId = userContext.DriverId,
+                DriverLicenseNumber = userContext.DriverLicenseNumber
             };
         }
 
@@ -90,7 +93,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var getDriverReply = _cmsAdapterClient.GetDriverPerson(driverLicenseRequest);
             if (getDriverReply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UserRegistration)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", getDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)} failed.\n {0}", getDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail);
             }
             if (getDriverReply.Items?.Count == 0)
@@ -102,7 +105,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // parse birthdate
             if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
             {
-                _logger.LogError($"{nameof(Register)} could not parse DL {userRegistration.DriverLicenseNumber} birthDate {profile.BirthDate}.");
+                _logger.LogError($"{nameof(Register)} could not parse DL.");
                 return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
             }
 
@@ -134,7 +137,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var setDriverReply = _userManagerClient.SetDriverLogin(request);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {
-                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
@@ -150,14 +153,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             setDriverReply = _userManagerClient.UpdateLogin(updateLoginRequest);
             if (setDriverReply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
             return Ok();
         }
 
-        // set the user's profile email, notification preferences, and address
+        // set the user's profile email
         [HttpPut("driver")]
         [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -171,18 +174,30 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return NotFound(); 
             }
 
-            var updateLoginRequest = new UpdateLoginRequest();
-            updateLoginRequest.LoginId = profile.Id;
-            updateLoginRequest.Email = request.Email;
-            updateLoginRequest.NotifyByMail = request.NotifyByMail;
-            updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
-            updateLoginRequest.ExternalUserName = profile.DisplayName;
-            updateLoginRequest.Address = request.Address;
+            // I'm leaving this here for now, it feels like the profile page requirements are not completed yet
+            // TODO remove comments
+            //var updateLoginRequest = new UpdateLoginRequest();
+            //updateLoginRequest.LoginId = profile.Id;
+            //updateLoginRequest.Email = request.Email;
+            //updateLoginRequest.NotifyByMail = request.NotifyByMail;
+            //updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
+            //updateLoginRequest.ExternalUserName = profile.DisplayName;
+            //updateLoginRequest.Address = request.Address;
 
-            var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            //var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            //if (reply.ResultStatus != ResultStatus.Success)
+            //{
+            //    _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)}.\n {0}", reply.ErrorDetail);
+            //    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
+            //}
+
+            var updateEmailRequest = new UserSetEmailRequest();
+            updateEmailRequest.Email = request.Email;
+            updateEmailRequest.LoginId = profile.Id;
+            var reply = _userManagerClient.UpdateEmail(updateEmailRequest);
             if (reply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed for driverLicenseNumber: {request.DriverLicenseNumber}.\n {0}", reply.ErrorDetail);
+                _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateEmail)} failed.\n {0}", reply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
 
@@ -196,11 +211,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
         public record DriverUpdate
         {
-            public string DriverLicenseNumber { get; set; }
+            public string? DriverLicenseNumber { get; set; }
             public string Email { get; set; }
             public bool NotifyByMail { get; set; }
             public bool NotifyByEmail { get; set; }
-            public FullAddress Address { get; set; }
+            public FullAddress? Address { get; set; }
         }
 
         public record UserProfile
@@ -210,6 +225,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string DriverId { get; set; }
+            public string DriverLicenseNumber { get; set; }
         }
     }
 }
