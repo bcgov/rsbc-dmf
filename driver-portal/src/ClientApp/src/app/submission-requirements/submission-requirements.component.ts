@@ -84,6 +84,7 @@ export class SubmissionRequirementsComponent implements OnInit {
     this.fileToUpload = event.target.files[0];
   }
   isFileUploading = false;
+
   fileUpload() {
     if (this.isFileUploading) {
       return;
@@ -92,7 +93,6 @@ export class SubmissionRequirementsComponent implements OnInit {
       console.log('No file selected');
       return;
     }
-
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
     formData.append('documentSubTypeId', this.selectedValue);
@@ -105,6 +105,9 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe((res) => {
         console.log(res);
+        this.fileToUpload = null;
+        this.selectedValue = '';
+        this.acceptControl.reset();
         this._snackBar.open('Successfully uploaded!', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
