@@ -302,10 +302,8 @@ namespace Rsbc.Dmf.CaseManagement
             return true;
         }
 
-
         public async Task<bool> UpdateEmail(Guid loginId, string email)
         {
-            //fetch the login and driver again
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
                 .Expand(l => l.dfp_DriverId.dfp_PersonId)
