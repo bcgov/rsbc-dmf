@@ -188,7 +188,7 @@ namespace OAuthServer
                                    string givenName = jwe.Payload["given_name"].ToString();
                                    string givenNames = jwe.Payload["given_names"].ToString();
                                    string familyName = jwe.Payload["family_name"].ToString();
-                                   string driverLicenseNumber = jwe.Payload["driver_license_number"].ToString();
+                                   
 
                                    ctx.Principal.AddIdentity(new ClaimsIdentity(new[]
                                    {
@@ -198,8 +198,7 @@ namespace OAuthServer
                                        new Claim("name",name),
                                        new Claim("given_name",givenName),
                                        new Claim("given_names", givenNames),
-                                       new Claim("family_name",familyName),
-                                       new Claim("driver_license_number", driverLicenseNumber)
+                                       new Claim("family_name",familyName)
                                    }));
                                }
                            }
