@@ -134,13 +134,23 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         /// <param name="userId"></param>
         /// <param name="email"></param>
         /// <returns></returns>
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task SetEmail (string userId, string email)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
+            if (userId == null)
+            {
+#pragma warning disable CS0219 // Variable is assigned but its value is never used
+                var x = 1;
+#pragma warning restore CS0219 // Variable is assigned but its value is never used
+            }
+            /*
             UserSetEmailRequest request = new UserSetEmailRequest()
             {
                 UserId = userId, Email = email
             };
             var result = await userManager.SetEmailAsync(request);
+            */
         }
     }
 }
