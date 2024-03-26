@@ -127,6 +127,7 @@ export class GetAssistanceComponent implements OnInit {
     this.caseManagementService
       .createCallBackRequest({ body: callback })
       .subscribe(() => {
+        this.callbackRequestForm.reset();
         this.getCallbackRequests(this.loginService.userProfile?.id as string);
         this.showCallBack = false;
         this._snackBar.open('Successfully created call back request', 'Close', {
