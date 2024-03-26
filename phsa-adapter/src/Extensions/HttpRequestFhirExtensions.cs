@@ -190,6 +190,8 @@ namespace Rsbc.Dmf.PhsaAdapter.Extensions
         
         private static HttpResponseMessage CreateBareFhirResponse(this HttpRequestMessage request, FhirResponse fhir)
         {
+            return request.CreateResponse(fhir.StatusCode);
+                /*
             bool includebody = request.PreferRepresentation();
 
             if (fhir.Resource != null)
@@ -214,6 +216,7 @@ namespace Rsbc.Dmf.PhsaAdapter.Extensions
             {
                 return request.CreateResponse(fhir.StatusCode);
             }
+                */
         }
      
 
