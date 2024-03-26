@@ -439,7 +439,7 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             var loginUserResponse = new LoginUserResponse { Userid = login.dfp_loginid.ToString(), Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
-            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId.dfp_licensenumber;
+            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? ""; ;
             return loginUserResponse;
         }
 
