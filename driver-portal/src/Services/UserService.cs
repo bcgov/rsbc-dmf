@@ -27,6 +27,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         public string ExternalUserName { get; set; }
 
         public string DisplayName { get; set; }
+        public string DriverLicenseNumber { get; set; }
     }
 
     public class UserService : IUserService
@@ -59,7 +60,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
                 Email = user.FindFirstValue(ClaimTypes.Email),
                 ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
-                DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName)
+                DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
+                DriverLicenseNumber = user.FindFirstValue(UserClaimTypes.DriverLicenseNumber)
             });
         }
 
@@ -96,7 +98,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
 
             if (!string.IsNullOrEmpty(loginResponse.DriverId))
-            claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
+            {
+                claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
+                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, loginResponse.DriverLicenseNumber));
+            }
             user.AddIdentity(new ClaimsIdentity(claims));
 
             logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);

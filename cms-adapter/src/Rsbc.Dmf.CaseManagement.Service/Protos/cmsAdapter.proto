@@ -637,6 +637,7 @@ message UserLoginReply {
 	string userId = 10;
 	string userEmail = 11;
 	string driverId = 12;
+    string driverLicenseNumber = 13;
 }
 
 message User {

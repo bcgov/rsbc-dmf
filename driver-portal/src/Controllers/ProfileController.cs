@@ -33,7 +33,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
-            if (userContext == null) return NotFound("");
+            if (userContext == null) 
+            { 
+                return NotFound(""); 
+            }
 
             string emailAddress = userContext.Email;
             string firstName = userContext.FirstName;
@@ -53,7 +56,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         lastName = driverRecord.Surname;
                     }
                 }
-
             }
 
             return new UserProfile
@@ -62,7 +64,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 EmailAddress = emailAddress,
                 FirstName = firstName,
                 LastName = lastName,                
-                DriverId = userContext.DriverId
+                DriverId = userContext.DriverId,
+                DriverLicenseNumber = userContext.DriverLicenseNumber
             };
         }
 
@@ -90,7 +93,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var getDriverReply = _cmsAdapterClient.GetDriverPerson(driverLicenseRequest);
             if (getDriverReply.ResultStatus != ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UserRegistration)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", getDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)} failed.\n {0}", getDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail);
             }
             if (getDriverReply.Items?.Count == 0)
@@ -102,7 +105,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // parse birthdate
             if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
             {
-                _logger.LogError($"{nameof(Register)} could not parse DL {userRegistration.DriverLicenseNumber} birthDate {profile.BirthDate}.");
+                _logger.LogError($"{nameof(Register)} could not parse DL.");
                 return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
             }
 
@@ -134,7 +137,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var setDriverReply = _userManagerClient.SetDriverLogin(request);
             if (setDriverReply.ResultStatus != ResultStatus.Success) 
             {
-                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed for driverLicenseNumber: {userRegistration.DriverLicenseNumber}.\n {0}", setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
@@ -210,6 +213,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string DriverId { get; set; }
+            public string DriverLicenseNumber { get; set; }
         }
     }
 }
