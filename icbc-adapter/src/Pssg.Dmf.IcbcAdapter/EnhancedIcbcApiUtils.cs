@@ -79,11 +79,9 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                        Log.Logger.Error($"ICBC Error {responseContent}");
+                        Log.Logger.Error($"ICBC Error");
                     }
                 }
-
-
                 else
                 {
                     Log.Logger.Error($"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
@@ -105,13 +103,11 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
 
                     string responseContent = _icbcClient.SendMedicalUpdate(item);
-                    Log.Logger.Information(responseContent);
 
                     if (responseContent.Contains("SUCCESS"))
                     {
                         // mark it as sent
                         MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
-
                     }
 
                     else
@@ -137,7 +133,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                        Log.Logger.Error($"ICBC Error {responseContent}");
+                        Log.Logger.Error($"ICBC Error");
                     }
                 }
 
