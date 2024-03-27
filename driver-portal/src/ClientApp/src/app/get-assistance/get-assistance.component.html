@@ -200,21 +200,20 @@
       <div class="createCallBack">
         <div class="callback">
           <b>Still require assistance?</b>
-            <button
-              [class.disabledButton]="disableCallBack"
-              [disabled]="disableCallBack"
-              [class.callBackButton]="!disableCallBack"
-              (click)="onRequestCallBack()"
-            >
-              Request Call Back
-            </button>
-            <button
-              class="callBackButton"
-              (click)="viewRequest($event, 'callBack')"
-            >
-              Contact RSBC
-            </button>
-          
+          <button
+            [class.disabledButton]="disableCallBack"
+            [disabled]="disableCallBack"
+            [class.callBackButton]="!disableCallBack"
+            (click)="onRequestCallBack()"
+          >
+            Request Call Back
+          </button>
+          <button
+            class="callBackButton"
+            (click)="viewRequest($event, 'callBack')"
+          >
+            Contact RSBC
+          </button>
         </div>
         <div style="padding: 24px" *ngIf="showCallBack">
           <h3>Request Call Back</h3>
@@ -256,20 +255,26 @@
                 <label class="form-label">Best time to receive a call</label>
                 <label>
                   <input
-                    type="checkbox"
-                    [formControl]="callbackRequestForm.controls.description"
+                    name="callback_request"
+                    type="radio"
+                    value="0"
+                    [formControl]="callbackRequestForm.controls.preferredTime"
                   />9:00am - 4:00pm
                 </label>
                 <label>
                   <input
-                    type="checkbox"
-                    [formControl]="callbackRequestForm.controls.description"
+                    name="callback_request"
+                    type="radio"
+                    value="1"
+                    [formControl]="callbackRequestForm.controls.preferredTime"
                   />9:00am and 12:00pm
                 </label>
                 <label>
                   <input
-                    type="checkbox"
-                    [formControl]="callbackRequestForm.controls.description"
+                    name="callback_request"
+                    type="radio"
+                    value="2"
+                    [formControl]="callbackRequestForm.controls.preferredTime"
                   />12:01pm - 4:00pm
                 </label>
               </div>
