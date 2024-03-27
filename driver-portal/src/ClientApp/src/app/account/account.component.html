@@ -81,7 +81,7 @@
 
       <div>
         <div style="padding-top: 16px">
-          <label class="form-label">Email Address</label>
+          <label class="form-label">Email Address *</label>
           <mat-form-field
             appearance="outline"
             class="inputWidth"
@@ -96,8 +96,7 @@
               placeholder="Email Address"
               [formControl]="accountForm.controls.emailAddress"
             />
-            @if
-            (accountForm.controls.emailAddress.getError('required')) {
+            @if (accountForm.controls.emailAddress.getError('required')) {
             <mat-error>This Field is required</mat-error>
             }
           </mat-form-field>
@@ -190,6 +189,7 @@
                 matInput
                 name="streetAddress"
                 placeholder="Street Address"
+                [formControl]="accountForm.controls.addressLine1"
               />
             </mat-form-field>
           </div>
@@ -197,13 +197,23 @@
             <div>
               <label class="form-label">City or Locality</label>
               <mat-form-field appearance="outline" class="disabledInput">
-                <input matInput name="city" placeholder="City or Locality" />
+                <input
+                  matInput
+                  name="city"
+                  placeholder="City or Locality"
+                  [formControl]="accountForm.controls.city"
+                />
               </mat-form-field>
             </div>
             <div>
               <label class="form-label">State or Province</label>
               <mat-form-field appearance="outline" class="disabledInput">
-                <input matInput name="state" placeholder="State or Province" />
+                <input
+                  matInput
+                  name="state"
+                  placeholder="State or Province"
+                  [formControl]="accountForm.controls.province"
+                />
               </mat-form-field>
             </div>
           </div>
@@ -211,27 +221,39 @@
             <div>
               <label class="form-label">Postal Code</label>
               <mat-form-field appearance="outline" class="disabledInput">
-                <input matInput name="postalCode" placeholder="Postal Code" />
+                <input
+                  matInput
+                  name="postalCode"
+                  placeholder="Postal Code"
+                  [formControl]="accountForm.controls.postal"
+                />
               </mat-form-field>
             </div>
             <div>
               <label class="form-label">Country</label>
               <mat-form-field appearance="outline" class="disabledInput">
-                <input matInput name="country" placeholder="Country" />
+                <input
+                  matInput
+                  name="country"
+                  placeholder="Country"
+                  [formControl]="accountForm.controls.country"
+                />
               </mat-form-field>
             </div>
           </div>
         </form>
       </div>
 
-      <label>
-        <input type="checkbox" />
-        I acknowledge my selected notification preferences. I give consent to
-        receive communications from RSBC in this manner. <br />
+      <div style="padding-top: 12px">
+        <label>
+          <input type="checkbox" />
+          I acknowledge my selected notification preferences. I give consent to
+          receive communications from RSBC in this manner. <br />
 
-        Note: You can update your notification settings at any time in the
-        Driver Portal under Account Management.
-      </label>
+          Note: You can update your notification settings at any time in the
+          Driver Portal under Account Management.
+        </label>
+      </div>
 
       <div class="submitButtonContainer" *ngIf="onEditProfile">
         <button

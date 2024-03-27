@@ -86,4 +86,10 @@ export class CaseManagementService {
   ) {
     return this.callbacService.apiCallbackCancelPut$Json(params);
   }
+
+  public getDriverAddress(
+    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
+  ) {
+    return this.driversService.apiDriverInfoGet$Json(params);
+  }
 }

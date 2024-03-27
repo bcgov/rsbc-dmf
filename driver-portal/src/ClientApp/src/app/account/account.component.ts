@@ -23,10 +23,10 @@ export class AccountComponent implements OnInit {
     lastName: [''],
     emailAddress: ['', Validators.required],
     driverLicenseNumber: [''],
-    streetAddress: [''],
+    addressLine1: [''],
     city: [''],
-    state: [''],
-    postalCode: [''],
+    province: [''],
+    postal: [''],
     country: [''],
   });
 
@@ -45,6 +45,7 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
     if (this.loginService.userProfile?.id) {
       this.getuserDetails(this.loginService.userProfile?.id as string);
+      this.getDriverAddress();
     }
     this.accountForm.disable();
 
@@ -63,6 +64,11 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  getDriverAddress() {
+    this.caseManagementService.getDriverAddress({}).subscribe((userAddress) => {
+      this.accountForm.patchValue(userAddress as any);
+    });
+  }
   onEdit() {
     this.accountForm.controls.emailAddress.enable();
     this.isEditView = true;
