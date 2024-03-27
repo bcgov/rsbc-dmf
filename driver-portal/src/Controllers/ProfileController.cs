@@ -5,6 +5,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net;
+using System.Security.Claims;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
