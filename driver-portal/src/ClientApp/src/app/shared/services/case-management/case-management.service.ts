@@ -7,7 +7,6 @@ import {
   DriverService,
   ProfileService,
 } from '../../api/services';
-import { Driver } from '../../api/models';
 
 @Injectable({
   providedIn: 'root',
