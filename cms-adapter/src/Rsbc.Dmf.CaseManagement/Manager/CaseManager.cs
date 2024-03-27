@@ -1755,7 +1755,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         dynamicsContext.SaveChanges();
 
-                        if (!string.IsNullOrEmpty(request.CaseId) && request.CaseId != Guid.Empty.ToString() && request.CaseId != "null" )
+                        if (!string.IsNullOrEmpty(request.CaseId) && request.CaseId != Guid.Empty.ToString() && request.CaseId.ToLower() != "null" && request.CaseId.ToLower() != "error")
                         {
                             try
                             {

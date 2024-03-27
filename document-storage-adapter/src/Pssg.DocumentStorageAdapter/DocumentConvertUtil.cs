@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Diagnostics.Eventing.Reader;
+using System.IO;
 using PdfSharpCore.Pdf;
 using PdfSharpCore.Drawing;
 
@@ -12,6 +14,7 @@ using TiffLibrary.PixelFormats;
 using TiffLibrary.Compression;
 using Org.BouncyCastle.Utilities.IO;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Serilog;
 
 namespace Pssg.DocumentStorageAdapter
 {
@@ -51,52 +54,66 @@ namespace Pssg.DocumentStorageAdapter
             {
                 TiffImageFileDirectory ifd = tiff.ReadImageFileDirectory(ifdOffset);
 
-                TiffImageDecoder decoder = tiff.CreateImageDecoder(ifd);
+                TiffImageDecoderOptions decoderOptions = new TiffImageDecoderOptions();
+                decoderOptions.UndoColorPreMultiplying = false;
+                
 
+                TiffImageDecoder decoder = tiff.CreateImageDecoder(ifd, decoderOptions);
+                
 
                 TiffRgb24[] pixels = new TiffRgb24[decoder.Width * decoder.Height];
 
-                decoder.Decode(TiffPixelBuffer.Wrap(pixels, decoder.Width, decoder.Height));
-
-                // write it to a memory stream.
-                var sourceBuffer = TiffPixelBuffer.WrapReadOnly(pixels, decoder.Width, decoder.Height);
-
-                byte[] encodedFile;
+                try
                 {
-                    var builder = new TiffImageEncoderBuilder();
-                    builder.PhotometricInterpretation = TiffPhotometricInterpretation.RGB;
-                    builder.Compression = TiffCompression.Jpeg;
-                    builder.DeflateCompressionLevel = TiffDeflateCompressionLevel.Optimal;
-                    builder.RowsPerStrip = decoder.Height;
-                    //builder.JpegOptions = new TiffJpegEncodingOptions { Quality = JpegQuality, UseSharedQuantizationTables = UseSharedQuantizationTables, OptimizeCoding = true };
 
-                    TiffImageEncoder<TiffRgb24> encoder = builder.Build<TiffRgb24>();
 
-                    using var ms = new MemoryStream();
-                    using TiffFileWriter writer = TiffFileWriter.OpenAsync(ms, true).GetAwaiter().GetResult();
-                    TiffImageFileDirectoryWriter ifdWriter = writer.CreateImageFileDirectory();
-                    encoder.EncodeAsync(ifdWriter, sourceBuffer).GetAwaiter().GetResult();
-                    writer.SetFirstImageFileDirectoryOffset(ifdWriter.FlushAsync().GetAwaiter().GetResult());
-                    writer.FlushAsync().GetAwaiter().GetResult();
+                    decoder.Decode(TiffPixelBuffer.Wrap(pixels, decoder.Width, decoder.Height));
 
-                    encodedFile = ms.ToArray();
+                    // write it to a memory stream.
+                    var sourceBuffer = TiffPixelBuffer.WrapReadOnly(pixels, decoder.Width, decoder.Height);
 
-                    using (var stream2 = new MemoryStream(encodedFile))
+                    byte[] encodedFile;
                     {
-                        var newPage = pdfDocument.Pages.Add(new PdfPage());
+                        var builder = new TiffImageEncoderBuilder();
+                        builder.PhotometricInterpretation = TiffPhotometricInterpretation.RGB;
+                        builder.Compression = TiffCompression.Jpeg;
+                        builder.DeflateCompressionLevel = TiffDeflateCompressionLevel.Optimal;
+                        builder.RowsPerStrip = decoder.Height;
+                        //builder.JpegOptions = new TiffJpegEncodingOptions { Quality = JpegQuality, UseSharedQuantizationTables = UseSharedQuantizationTables, OptimizeCoding = true };
 
-                        XGraphics xgr = XGraphics.FromPdfPage(newPage);
+                        TiffImageEncoder<TiffRgb24> encoder = builder.Build<TiffRgb24>();
 
-                        XImage imgFrame = XImage.FromStream(() => stream2);
+                        using var ms = new MemoryStream();
+                        using TiffFileWriter writer = TiffFileWriter.OpenAsync(ms, true).GetAwaiter().GetResult();
+                        TiffImageFileDirectoryWriter ifdWriter = writer.CreateImageFileDirectory();
+                        encoder.EncodeAsync(ifdWriter, sourceBuffer).GetAwaiter().GetResult();
+                        writer.SetFirstImageFileDirectoryOffset(ifdWriter.FlushAsync().GetAwaiter().GetResult());
+                        writer.FlushAsync().GetAwaiter().GetResult();
 
-                        newPage.Width = imgFrame.PointWidth;
-                        newPage.Height = imgFrame.PointHeight;
+                        encodedFile = ms.ToArray();
 
-                        xgr.DrawImage(imgFrame, 0, 0);
-                        xgr.Save();
-                        xgr.Dispose();
+                        using (var stream2 = new MemoryStream(encodedFile))
+                        {
+                            var newPage = pdfDocument.Pages.Add(new PdfPage());
+
+                            XGraphics xgr = XGraphics.FromPdfPage(newPage);
+
+                            XImage imgFrame = XImage.FromStream(() => stream2);
+
+                            newPage.Width = imgFrame.PointWidth;
+                            newPage.Height = imgFrame.PointHeight;
+
+                            xgr.DrawImage(imgFrame, 0, 0);
+                            xgr.Save();
+                            xgr.Dispose();
+                        }
                     }
                 }
+                catch (Exception e)
+                {
+                    Log.Error(e,"Error occurred decoding page");
+                }
+
 
                 ifdOffset = ifd.NextOffset; // get the next page
             }
