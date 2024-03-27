@@ -7,6 +7,7 @@ import {
   DriverService,
   ProfileService,
 } from '../../api/services';
+import { Driver } from '../../api/models';
 
 @Injectable({
   providedIn: 'root',
@@ -85,5 +86,11 @@ export class CaseManagementService {
     params: Parameters<CallbackService['apiCallbackCancelPut$Json']>[0]
   ) {
     return this.callbacService.apiCallbackCancelPut$Json(params);
+  }
+
+  public getDriverAddress(
+    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
+  ) {
+    return this.driversService.apiDriverInfoGet$Json(params);
   }
 }
