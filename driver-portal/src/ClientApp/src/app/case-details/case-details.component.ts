@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDocuments } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
@@ -10,9 +10,6 @@ import { LoginService } from '../shared/services/login.service';
 })
 export class CaseDetailsComponent implements OnInit {
   caseDocuments?: CaseDocuments;
-
-  // public caseDocuments: Document[] = [];
-
   selectedIndex = 0;
 
   constructor(
@@ -31,7 +28,7 @@ export class CaseDetailsComponent implements OnInit {
   getCaseSubmissionDocuments(driverId: string) {
     this.caseManagementService
       .getDriverDocuments({ driverId })
-      .subscribe((caseDocuments: any) => {
+      .subscribe((caseDocuments) => {
         this.caseDocuments = caseDocuments;
         console.log(caseDocuments);
       });

@@ -32,20 +32,9 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="gRPC Prototypes\" />
-	</ItemGroup>
-	<ItemGroup>
-		<Protobuf Include="../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
-			<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
-		</Protobuf>
-
-		
-    </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
     <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
     <ProjectReference Include="..\Pssg.Interfaces.Icbc\IcbcClient.csproj" />
   </ItemGroup>
-
 
 </Project>

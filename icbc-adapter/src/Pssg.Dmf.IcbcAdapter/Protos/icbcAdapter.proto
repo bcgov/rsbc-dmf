@@ -44,6 +44,8 @@ message DriverInfoReply {
     string addressLine1 = 7;
     string birthDate = 8;
     string sex = 9;
+    string province = 10;
+    string country = 11;
 }
 
 enum ResultStatus {

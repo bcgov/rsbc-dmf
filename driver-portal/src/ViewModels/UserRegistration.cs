@@ -8,7 +8,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         public string Email { get; set; }
         public bool NotifyByMail { get; set; }
         public bool NotifyByEmail { get; set; }
-        public FullAddress Address { get; set; }
+        public FullAddress? Address { get; set; }
 
     }
 }

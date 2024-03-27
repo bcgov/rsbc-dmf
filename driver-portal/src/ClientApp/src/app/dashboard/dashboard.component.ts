@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Router } from '@angular/router';
 import { MatAccordion } from '@angular/material/expansion';

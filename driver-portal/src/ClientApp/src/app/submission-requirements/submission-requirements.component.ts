@@ -15,10 +15,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ApiConfiguration } from '../shared/api/api-configuration';
 
-interface DocumentType {
-  value: string;
-  viewValue: string;
-}
 @Component({
   selector: 'app-submission-requirements',
   templateUrl: './submission-requirements.component.html',
@@ -87,23 +83,20 @@ export class SubmissionRequirementsComponent implements OnInit {
     console.log('handleFileInput', event);
     this.fileToUpload = event.target.files[0];
   }
+  isFileUploading = false;
 
   fileUpload() {
-    console.log('fileUpload');
-    // this.caseManagementService
-    //   .({ body: { file: this.fileToUpload } as any })
-    //   .subscribe((res) => {
-    //     console.log(res);
-    //   });
+    if (this.isFileUploading) {
+      return;
+    }
     if (!this.fileToUpload) {
       console.log('No file selected');
       return;
     }
-
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
     formData.append('documentSubTypeId', this.selectedValue);
-
+    this.isFileUploading = true;
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
         headers: {
@@ -112,12 +105,16 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe((res) => {
         console.log(res);
+        this.fileToUpload = null;
+        this.selectedValue = '';
+        this.acceptControl.reset();
         this._snackBar.open('Successfully uploaded!', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 5000,
         });
         this.showUpload = false;
+        this.isFileUploading = false;
       });
   }
 }

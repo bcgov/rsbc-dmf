@@ -16,11 +16,18 @@ export class CancelCallbackDialogComponent {
     private data: CallbackCancelRequest
   ) {}
 
+  iscancelCallback = false;
+
   cancelRequestCallback() {
+    if (this.iscancelCallback) {
+      return;
+    }
+    this.iscancelCallback = true;
     this.caseManagementService
       .cancelCallBackRequest({ body: this.data })
-      .subscribe((res) => {
+      .subscribe(() => {
         this.dialogRef.close();
+        this.iscancelCallback = false;
       });
   }
 

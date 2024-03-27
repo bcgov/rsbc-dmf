@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
@@ -20,8 +21,13 @@ export class AccountComponent implements OnInit {
     notifyByMail: [false],
     firstName: [''],
     lastName: [''],
-    emailAddress: [''],
-    driverLicenceNumber: [''],
+    emailAddress: ['', Validators.required],
+    driverLicenseNumber: [''],
+    addressLine1: [''],
+    city: [''],
+    province: [''],
+    postal: [''],
+    country: [''],
   });
 
   isCreateProfile = this.route.snapshot.routeConfig?.path === 'create-profile';
@@ -39,12 +45,14 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
     if (this.loginService.userProfile?.id) {
       this.getuserDetails(this.loginService.userProfile?.id as string);
+      this.getDriverAddress();
     }
     this.accountForm.disable();
 
     if (this.isCreateProfile) {
+      this.onEditProfile = true;
       this.accountForm.controls.emailAddress.enable();
-      this.accountForm.controls.driverLicenceNumber.enable();
+      this.accountForm.controls.driverLicenseNumber.enable();
       this.accountForm.controls.notifyByEmail.enable();
       this.accountForm.controls.notifyByMail.enable();
     }
@@ -56,40 +64,62 @@ export class AccountComponent implements OnInit {
     });
   }
 
+  getDriverAddress() {
+    this.caseManagementService.getDriverAddress({}).subscribe((userAddress) => {
+      this.accountForm.patchValue(userAddress as any);
+    });
+  }
   onEdit() {
     this.accountForm.controls.emailAddress.enable();
     this.isEditView = true;
     this.onEditProfile = true;
   }
 
+  isUpdatingProfile = false;
   onUpdate() {
+    if (this.accountForm.invalid) {
+      this.accountForm.markAllAsTouched();
+      return;
+    }
+    if (this.isUpdatingProfile) {
+      return;
+    }
+
+    this.isUpdatingProfile = true;
     this.caseManagementService
       .updateDriverProfile({
         body: {
-          //driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
-          //email: this.accountForm.value.emailAddress,
           email: this.accountForm.value.emailAddress,
-          notifyByEmail: this.accountForm.value.notifyByEmail as boolean,
-          notifyByMail: this.accountForm.value.notifyByMail as boolean,
         },
       })
       .subscribe((res) => {
-        console.log(res);
+        this._snackBar.open('Successfully Updated Email Address', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000,
+        });
+        this.isUpdatingProfile = false;
       });
+  }
+
+  onCancel() {
+    this.accountForm.controls.emailAddress.disable();
+    this.isEditView = false;
+    this.onEditProfile = false;
   }
 
   onRegister() {
     this.caseManagementService
       .userRegistration({
         body: {
-          driverLicenseNumber: this.accountForm.value.driverLicenceNumber,
+          driverLicenseNumber: this.accountForm.value.driverLicenseNumber,
           email: this.accountForm.value.emailAddress,
           notifyByEmail: this.accountForm.value.notifyByEmail as boolean,
           notifyByMail: this.accountForm.value.notifyByMail as boolean,
         },
       })
       .subscribe({
-        next: (res) => {
+        next: () => {
           this._snackBar.open('Registration successful', 'Close', {
             horizontalPosition: 'center',
             verticalPosition: 'top',

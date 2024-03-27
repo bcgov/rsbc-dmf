@@ -57,7 +57,12 @@
               <div>
                 <label>Submission Type</label>
                 <div>
-                  <b>{{ document.documentType }}</b>
+                  <b
+                    >{{ document.documentType }} 
+                    @if(document?.documentSubType){
+                    - {{ document?.documentSubType }}
+                    }
+                  </b>
                 </div>
               </div>
               <div>

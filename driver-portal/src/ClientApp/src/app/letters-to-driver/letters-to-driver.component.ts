@@ -8,7 +8,7 @@ import { Document } from '../shared/api/models';
   templateUrl: './letters-to-driver.component.html',
   styleUrls: ['./letters-to-driver.component.scss'],
 })
-export class LettersToDriverComponent {
+export class LettersToDriverComponent implements OnInit {
   constructor(private caseManagementService: CaseManagementService) {}
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
@@ -32,6 +32,9 @@ export class LettersToDriverComponent {
     this.filteredDocuments = this._letterDocuments?.slice(0, this.pageSize);
   }
 
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+  }
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
@@ -55,7 +58,7 @@ export class LettersToDriverComponent {
       });
   }
 
-  downloadFile(data: any) {
+  downloadFile(data : any) {
     const blob = new Blob([data], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
     //window.open('https://path/to/file.extenstion', '_blank');
