@@ -75,6 +75,8 @@ export class GetAssistanceComponent implements OnInit {
 
   showCallBack = false;
 
+  showOpenCallbackMessagePredicate = (r: Callback2) => r.callStatus === 'Open';
+
   selectedValue?: string | undefined | null;
 
   callBackTopics: CallBackTopic[] = [
@@ -117,7 +119,7 @@ export class GetAssistanceComponent implements OnInit {
     }
 
     const callback: Callback = {
-      description: this.callbackRequestForm.value.description,
+      description: String(this.callbackRequestForm.value.description),
       phone: String(this.callbackRequestForm.value.phone),
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject

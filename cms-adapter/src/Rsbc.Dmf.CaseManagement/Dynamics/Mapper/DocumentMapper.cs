@@ -81,7 +81,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                 { 100000001, "Received" }, // Accept
                 { 100000002, "Received" }, // 'Under Review' in Dynamics
                 { 100000003, "Reviewed" },
-                { 100000004, "Reject" }, // 'Rejected' in Dynamics
+                { 100000004, "Rejected" }, // 'Rejected' in Dynamics
                 { 100000005, "Non-Comply" },
                 { 100000007, "Non-Comply" }, // 'Actioned Non-comply' in Dynamics
                 { 100000008, "Sent" },

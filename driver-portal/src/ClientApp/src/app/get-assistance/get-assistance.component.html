@@ -13,7 +13,8 @@
       </div>
       <div>
         <div class="callBackContent">
-          <div class="text" *ngIf="_allCallBackRequests?.length !== 0">
+          @if (_allCallBackRequests?.some(showOpenCallbackMessagePredicate)) {
+          <div class="text">
             You have 1 open Request Call Back *
             <ul>
               <li>
@@ -24,9 +25,9 @@
             </ul>
             <span>* Maximum of 1 open call back request</span>
           </div>
-          <div class="text" *ngIf="_allCallBackRequests?.length === 0">
-            You have no call back requests
-          </div>
+          } @else {
+          <div class="text">You have no call back requests</div>
+          }
         </div>
       </div>
     </div>
@@ -198,8 +199,7 @@
 
       <div class="createCallBack">
         <div class="callback">
-          <div style="display: flex; gap: 42px; padding: 24px">
-            <b>Still require assistance?</b>
+          <b>Still require assistance?</b>
             <button
               [class.disabledButton]="disableCallBack"
               [disabled]="disableCallBack"
@@ -214,7 +214,7 @@
             >
               Contact RSBC
             </button>
-          </div>
+          
         </div>
         <div style="padding: 24px" *ngIf="showCallBack">
           <h3>Request Call Back</h3>
@@ -254,9 +254,24 @@
               </div>
               <div>
                 <label class="form-label">Best time to receive a call</label>
-                <label> <input type="checkbox" />9:00am - 4:00pm </label>
-                <label> <input type="checkbox" />9:00am and 12:00pm </label>
-                <label> <input type="checkbox" />12:01pm - 4:00pm </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    [formControl]="callbackRequestForm.controls.description"
+                  />9:00am - 4:00pm
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    [formControl]="callbackRequestForm.controls.description"
+                  />9:00am and 12:00pm
+                </label>
+                <label>
+                  <input
+                    type="checkbox"
+                    [formControl]="callbackRequestForm.controls.description"
+                  />12:01pm - 4:00pm
+                </label>
               </div>
             </div>
             <div class="submitButtonContainer">
@@ -360,18 +375,12 @@
                 "
               >
                 <div>
-                  <label>Preferred callback times</label>
+                  <label>Discription</label>
                   <div>
-                    <b>9.00 AM - 12.01 PM</b>
+                    <b></b>
                   </div>
                 </div>
-                <div>
-                  <label>RSBC Call details</label>
-                  <div>
-                    <!-- <b></b> -->
-                    <b>April 29 - Call attempt unsuccessful</b>
-                  </div>
-                </div>
+
                 <div></div>
                 <div></div>
               </div>
