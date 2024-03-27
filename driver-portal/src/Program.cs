@@ -139,11 +139,10 @@ services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => SwashbuckleHelper.GetSchemaId(type));
 });
 
-// Add Document Storage Adapter
+// grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
-
-// Add Case Management System (CMS) Adapter 
 services.AddCaseManagementAdapterClient(builder.Configuration);
+services.AddIcbcAdapterClient(builder.Configuration);
 
 // Health Checks
 services.AddHealthChecks()
