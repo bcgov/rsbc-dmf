@@ -145,7 +145,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetHistory))]
-        [AllowAnonymous]
         public async Task<ActionResult<DriverInfoReply>> GetHistory()
         {
             var profile = await _userService.GetCurrentUserContext();
