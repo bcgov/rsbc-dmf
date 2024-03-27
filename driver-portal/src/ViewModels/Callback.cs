@@ -9,5 +9,7 @@ namespace Rsbc.Dmf.DriverPortal.ViewModels
         public string Topic { get; set; }
         public CallbackCallStatus CallStatus { get; set; }
         public DateTimeOffset Closed { get; set; }
+        public string Phone { get; set; }
+        public PreferredTime PreferredTime { get; set; }
     }
 }
