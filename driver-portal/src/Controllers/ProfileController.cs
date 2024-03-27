@@ -114,6 +114,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 }
                 else
                 {
+                    DateTime driverBirthDate = new DateTime(driver.BirthDate.ToDateTimeOffset().Year,
+                        driver.BirthDate.ToDateTimeOffset().Month, driver.BirthDate.ToDateTimeOffset().Day);
+
                     if (profile.FirstName == driver.GivenName && profile.LastName == driver.Surname && claimBirthDate.Date == driver.BirthDate.ToDateTime().Date)
                     {
                         foundDriver = driver;
