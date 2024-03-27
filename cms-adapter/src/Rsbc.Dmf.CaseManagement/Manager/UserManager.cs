@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Email { get; set; }
         public bool NotifyByMail { get; set; }
         public bool NotifyByEmail { get; set; }
-        public string ExternalSystemUserId { get; set; }
+        public string ExternalUserName { get; set; }
         public FullAddress Address { get; set; }
     }
 
