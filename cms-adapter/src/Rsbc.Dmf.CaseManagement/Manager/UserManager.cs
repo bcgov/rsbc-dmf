@@ -275,7 +275,7 @@ namespace Rsbc.Dmf.CaseManagement
             // update notification preferences
             login.dfp_mail = request.NotifyByMail;
             login.dfp_email = request.NotifyByEmail;
-            login.dfp_name = request.ExternalSystemUserId;
+            login.dfp_name = request.ExternalUserName;
                 
             dynamicsContext.UpdateObject(login);
 
@@ -397,7 +397,7 @@ namespace Rsbc.Dmf.CaseManagement
                 else
                 {
                     userEmail = login.dfp_DriverId.dfp_PersonId?.emailaddress1;
-            }
+                }
             }
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
             {

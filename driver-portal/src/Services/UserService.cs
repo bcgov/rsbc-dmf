@@ -10,6 +10,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
         Task SetEmail(string userId, string email);
+        void UpdateClaim(string key, string value);
     }
 
     public record UserContext
@@ -109,13 +110,20 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
             return user;
         }
 
+        public void UpdateClaim(string key, string value)
+        {
+            var identity = new ClaimsIdentity(httpContext.HttpContext.User.Identity);
+            identity.TryRemoveClaim(identity.FindFirst(key));
+            identity.AddClaim(new Claim(key, value));
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-        public async Task SetEmail (string userId, string email)
+        public async Task SetEmail(string userId, string email)
         {
             var request = new UserSetEmailRequest()
             {

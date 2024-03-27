@@ -157,6 +157,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
+            userService.UpdateClaim(ClaimTypes.Email, userRegistration.Email);
+
             return Ok();
         }
 
@@ -200,6 +202,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateEmail)} failed.\n {0}", reply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
+
+            userService.UpdateClaim(ClaimTypes.Email, request.Email);
 
             return Ok();
         }
