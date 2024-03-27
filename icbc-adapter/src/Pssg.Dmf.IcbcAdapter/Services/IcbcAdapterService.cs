@@ -48,7 +48,20 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
         {
             var result = new DriverInfoReply();
             
-            // call the client
+            var reply = _icbcClient.GetDriverHistory(request.DriverLicence);
+            if (reply != null)
+            {
+                result.AddressLine1 = reply.ToAddressLine1();
+                result.BirthDate = reply.BIDT?.ToString();
+                result.City = reply.ADDR?.CITY;
+                result.GivenName = reply.INAM?.GIV1;
+                result.Postal = reply.ADDR?.POST;
+                result.Province = reply.ADDR?.PROV;
+                result.Country = reply.ADDR?.CNTY;
+                result.Sex = reply.SEX;
+                result.Surname = reply.INAM?.SURN;
+                result.ResultStatus = ResultStatus.Success;
+            }
 
             return Task.FromResult(result);
         }

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
+using Rsbc.Dmf.IcbcAdapter;
+using System.Net;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -13,13 +15,15 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly IcbcAdapter.IcbcAdapter.IcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IcbcAdapter.IcbcAdapter.IcbcAdapterClient icbcAdapterClient, IUserService userService/*, IMemoryCache memoryCache*/, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _icbcAdapterClient = icbcAdapterClient;
             _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
@@ -41,7 +45,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
-            if (reply.ResultStatus == ResultStatus.Success)
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 var result = new CaseDocuments();
                 var replyItemsExcludingUploaded = reply.Items.Where(i => i.SubmittalStatus != "Uploaded");
@@ -101,7 +105,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
-        /// <returns>CaseDocuments</returns>
+        /// <returns>IEnumerable&lt;Document&gt;</returns>
         [HttpGet("AllDocuments")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
@@ -113,7 +117,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
-            if (reply.ResultStatus == ResultStatus.Success)
+            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
                 var replyItemsWithDocuments = reply.Items
@@ -134,6 +138,26 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
                 return StatusCode(500, reply.ErrorDetail);
             }
+        }
+
+        [HttpGet("info")]
+        [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(GetHistory))]
+        [AllowAnonymous]
+        public async Task<ActionResult<DriverInfoReply>> GetHistory()
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            if (profile?.DriverLicenseNumber == null)
+            {
+                return NotFound();
+            }
+
+            var request = new DriverInfoRequest();
+            request.DriverLicence = profile.DriverLicenseNumber;
+            var data = _icbcAdapterClient.GetDriverInfo(request);
+            return Json(data);
         }
     }
 }
