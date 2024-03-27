@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
-import { Callback, Callback2 } from '../shared/api/models';
+import { Callback, Callback2, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -46,6 +46,7 @@ export class GetAssistanceComponent implements OnInit {
     description: [''],
     subject: ['', Validators.required],
     phone: [''],
+    preferredTime: ['0'],
   });
 
   isExpanded: Record<string, boolean> = {};
@@ -74,6 +75,8 @@ export class GetAssistanceComponent implements OnInit {
   }
 
   showCallBack = false;
+
+  showOpenCallbackMessagePredicate = (r: Callback2) => r.callStatus === 'Open';
 
   selectedValue?: string | undefined | null;
 
@@ -117,8 +120,9 @@ export class GetAssistanceComponent implements OnInit {
     }
 
     const callback: Callback = {
-      description: this.callbackRequestForm.value.description,
       phone: String(this.callbackRequestForm.value.phone),
+      preferredTime: this.callbackRequestForm.value
+        .preferredTime as PreferredTime,
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject
       )?.viewValue,
