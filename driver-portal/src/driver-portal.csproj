@@ -82,7 +82,6 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
 	  <ProjectReference Include="..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
-	  <ProjectReference Include="..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj" />
 	  <ProjectReference Include="..\..\shared-utils\SharedUtils.csproj" />
 	</ItemGroup>
 
