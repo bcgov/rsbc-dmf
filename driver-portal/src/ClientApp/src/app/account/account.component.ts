@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
@@ -15,6 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AccountComponent implements OnInit {
   isEditView = false;
   onEditProfile = false;
+  acceptControl = new FormControl(false);
 
   accountForm = this.fb.group({
     notifyByEmail: [false],
@@ -22,7 +23,7 @@ export class AccountComponent implements OnInit {
     firstName: [''],
     lastName: [''],
     emailAddress: ['', Validators.required],
-    driverLicenseNumber: [''],
+    driverLicenseNumber: ['', Validators.maxLength(8)],
     addressLine1: [''],
     city: [''],
     province: [''],
@@ -45,8 +46,8 @@ export class AccountComponent implements OnInit {
   ngOnInit() {
     if (this.loginService.userProfile?.id) {
       this.getuserDetails(this.loginService.userProfile?.id as string);
-      this.getDriverAddress();
     }
+    this.getDriverAddress();
     this.accountForm.disable();
 
     if (this.isCreateProfile) {
@@ -109,6 +110,11 @@ export class AccountComponent implements OnInit {
   }
 
   onRegister() {
+    if (this.accountForm.invalid) {
+      this.accountForm.markAllAsTouched();
+      return;
+    }
+
     this.caseManagementService
       .userRegistration({
         body: {

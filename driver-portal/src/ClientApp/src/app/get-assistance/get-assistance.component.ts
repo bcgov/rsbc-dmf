@@ -83,7 +83,7 @@ export class GetAssistanceComponent implements OnInit {
   callBackTopics: CallBackTopic[] = [
     { value: '1', viewValue: 'Upload an extra document' },
     { value: '2', viewValue: 'View DMER Submission' },
-    { value: '3', viewValue: 'Received an Inccorect Letter' },
+    { value: '3', viewValue: 'Received an Incorrect Letter' },
     { value: '4', viewValue: 'Request extension' },
   ];
 
