@@ -25,7 +25,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Email { get; set; }
         public bool NotifyByMail { get; set; }
         public bool NotifyByEmail { get; set; }
-        public string ExternalSystemUserId { get; set; }
+        public string ExternalUserName { get; set; }
         public FullAddress Address { get; set; }
     }
 
@@ -275,7 +275,7 @@ namespace Rsbc.Dmf.CaseManagement
             // update notification preferences
             login.dfp_mail = request.NotifyByMail;
             login.dfp_email = request.NotifyByEmail;
-            login.dfp_name = request.ExternalSystemUserId;
+            login.dfp_name = request.ExternalUserName;
                 
             dynamicsContext.UpdateObject(login);
 
@@ -366,6 +366,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
+                .Expand(l => l.dfp_DriverId.dfp_PersonId)
                 .Where(l => l.dfp_userid == loginId && l.dfp_type == (int)loginType)
                 .SingleOrDefault();
 
@@ -392,6 +393,10 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.AddTocontacts(person);
 
                     // Do not add driver record at this time; it will happen during user registration
+                }
+                else
+                {
+                    userEmail = login.dfp_DriverId.dfp_PersonId?.emailaddress1;
                 }
             }
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
@@ -439,7 +444,7 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.DetachAll();
 
             var loginUserResponse = new LoginUserResponse { Userid = login.dfp_loginid.ToString(), Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
-            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? ""; ;
+            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? string.Empty; ;
             return loginUserResponse;
         }
 
