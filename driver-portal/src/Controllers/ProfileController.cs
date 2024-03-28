@@ -108,6 +108,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             // TODO add extension method string.ToDateTime()
             // security validation
+            if (string.IsNullOrEmpty(_configuration["DISABLE_ICBC"])) 
+            {
             if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
             {
                 _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
@@ -121,6 +123,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             if (profile.FirstName != reply.GivenName || profile.LastName != reply.Surname || claimBirthDate.Date != replyBirthDate.Date)
             {
                 return StatusCode((int)HttpStatusCode.Unauthorized);
+            }
             }
 
             // NOTE this will create the driver, if it does not exist
