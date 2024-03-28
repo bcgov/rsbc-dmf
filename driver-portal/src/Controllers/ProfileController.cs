@@ -103,27 +103,27 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // TODO add caching
             //if (!_cacheService.TryGetValue(nameof(IcbcAdapterClient.GetDriverInfo), driverInfoRequest.DriverLicence, out reply))
             //{
-                        reply = _icbcAdapterClient.GetDriverInfo(driverInfoRequest);
+                reply = _icbcAdapterClient.GetDriverInfo(driverInfoRequest);
             //}
 
             // TODO add extension method string.ToDateTime()
             // security validation
             if (string.IsNullOrEmpty(_configuration["DISABLE_ICBC"])) 
             {
-            if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
-            {
-                _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
-                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-            }
-            if (!DateTime.TryParse(reply.BirthDate, out DateTime replyBirthDate))
-            {
-                _logger.LogError($"{nameof(Register)} could not parse ICBC birthdate.");
-                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-            }
-            if (profile.FirstName != reply.GivenName || profile.LastName != reply.Surname || claimBirthDate.Date != replyBirthDate.Date)
-            {
-                return StatusCode((int)HttpStatusCode.Unauthorized);
-            }
+                if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
+                {
+                    _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                if (!DateTime.TryParse(reply.BirthDate, out DateTime replyBirthDate))
+                {
+                    _logger.LogError($"{nameof(Register)} could not parse ICBC birthdate.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                if (profile.FirstName != reply.GivenName || profile.LastName != reply.Surname || claimBirthDate.Date != replyBirthDate.Date)
+                {
+                    return StatusCode((int)HttpStatusCode.Unauthorized);
+                }
             }
 
             // NOTE this will create the driver, if it does not exist
