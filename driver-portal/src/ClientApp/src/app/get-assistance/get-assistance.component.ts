@@ -156,15 +156,6 @@ export class GetAssistanceComponent implements OnInit {
       .subscribe({
         next: () => {
           this.getCallbackRequests(this.loginService.userProfile?.id as string);
-          this._snackBar.open(
-            'Successfully cancelled call back request',
-            'Close',
-            {
-              horizontalPosition: 'center',
-              verticalPosition: 'top',
-              duration: 5000,
-            }
-          );
         },
       });
   }
