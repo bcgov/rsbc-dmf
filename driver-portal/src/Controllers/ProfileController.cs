@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using System.Net;
+using System.Security.Claims;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -30,6 +30,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         }
 
         [HttpGet("current")]
+        [ProducesResponseType(typeof(UserProfile), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(GetCurrentProfile))]
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var userContext = await userService.GetCurrentUserContext();
@@ -77,6 +81,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [HttpPut("register")]
         [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Register))]
         public async Task<ActionResult> Register([FromBody] UserRegistration userRegistration)
@@ -160,11 +165,14 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
             }
 
+            userService.UpdateClaim(ClaimTypes.Email, userRegistration.Email);
+
             return Ok();
         }
 
         // set the user's profile email
         [HttpPut("driver")]
+        [Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
@@ -177,23 +185,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return NotFound(); 
             }
 
-            // I'm leaving this here for now, it feels like the profile page requirements are not completed yet
-            // TODO remove comments
-            //var updateLoginRequest = new UpdateLoginRequest();
-            //updateLoginRequest.LoginId = profile.Id;
-            //updateLoginRequest.Email = request.Email;
-            //updateLoginRequest.NotifyByMail = request.NotifyByMail;
-            //updateLoginRequest.NotifyByEmail = request.NotifyByEmail;
-            //updateLoginRequest.ExternalUserName = profile.DisplayName;
-            //updateLoginRequest.Address = request.Address;
-
-            //var reply = _userManagerClient.UpdateLogin(updateLoginRequest);
-            //if (reply.ResultStatus != ResultStatus.Success)
-            //{
-            //    _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateLogin)}.\n {0}", reply.ErrorDetail);
-            //    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
-            //}
-
             var updateEmailRequest = new UserSetEmailRequest();
             updateEmailRequest.Email = request.Email;
             updateEmailRequest.LoginId = profile.Id;
@@ -203,6 +194,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 _logger.LogError($"{nameof(UpdateDriver)}.{nameof(UserManager.UserManagerClient.UpdateEmail)} failed.\n {0}", reply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
+
+            userService.UpdateClaim(ClaimTypes.Email, request.Email);
 
             return Ok();
         }
