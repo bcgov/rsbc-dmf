@@ -51,12 +51,10 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                     string responseContent = _icbcClient.SendMedicalUpdate(item);
 
-                    if (responseContent.Contains("SUCCESS"))
-                    {
-                        // mark it as sent
-                        MarkMedicalUpdateSent(unsentItem.CaseId);
-                    }
-                    else
+                    // 24-03-27 only try once to send an update.
+                    MarkMedicalUpdateSent(unsentItem.CaseId);
+
+                    if (!responseContent.Contains("SUCCESS"))
                     {
                         var bringForwardRequest = new BringForwardRequest
                         {
@@ -68,7 +66,8 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         };
 
-                        _caseManagerClient.CreateBringForward(bringForwardRequest);
+                        // 24-03-27 disable bring forwards
+                        //_caseManagerClient.CreateBringForward(bringForwardRequest);
 
                         // Mark ICBC error 
 
@@ -103,14 +102,9 @@ namespace Rsbc.Dmf.IcbcAdapter
                 {
 
                     string responseContent = _icbcClient.SendMedicalUpdate(item);
+                    MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
 
-                    if (responseContent.Contains("SUCCESS"))
-                    {
-                        // mark it as sent
-                        MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
-                    }
-
-                    else
+                    if (!responseContent.Contains("SUCCESS"))
                     {
                         var bringForwardRequest = new BringForwardRequest
                         {
@@ -122,7 +116,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                         };
 
-                        _caseManagerClient.CreateBringForward(bringForwardRequest);
+                        //_caseManagerClient.CreateBringForward(bringForwardRequest);
 
                         // Mark ICBC error 
 
