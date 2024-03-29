@@ -11,9 +11,6 @@
         }
 	respond @blocked "Driver Portal is not available." 403
 
-	log {
-		format formatted "{request}"
-	}
 	root * /site 
 
 	header / {
