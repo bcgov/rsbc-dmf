@@ -8,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
 {
+    #region Model
+
     public interface IUserManager
     {
         Task<SearchUsersResponse> SearchUsers(SearchUsersRequest request);
         Task<LoginUserResponse> LoginUser(LoginUserRequest request);
         Task<bool> SetUserEmail(string loginId, string email);
         Task<bool> UpdateEmail(Guid loginId, string email);
-        Task<bool> SetDriverLogin(Guid loginId, Guid driverId);
+        Task<bool> SetDriverLogin(Guid loginId, Guid? driverId);
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
     }
@@ -101,6 +103,8 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public string Name { get; set; }
     }
+
+    #endregion Model
 
     internal class UserManager : IUserManager
     {
@@ -231,7 +235,8 @@ namespace Rsbc.Dmf.CaseManagement
             };
         }
 
-        public async Task<bool> SetDriverLogin(Guid loginId, Guid driverId)
+        // returns false if driver does not exist
+        public async Task<bool> SetDriverLogin(Guid loginId, Guid? driverId)
         {
             var login = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
@@ -247,7 +252,15 @@ namespace Rsbc.Dmf.CaseManagement
             if (login.dfp_DriverId == null)
             {
                 // Query to get the driver
-                var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == driverId).FirstOrDefault();
+                dfp_driver driver = null;
+                if (driverId != null)
+                {
+                    driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == driverId).FirstOrDefault();
+                    if (driver == null)
+                    {
+                        return false;
+                    }
+                }
                 if (driver != null)
                 {
                     dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driver);
@@ -256,7 +269,7 @@ namespace Rsbc.Dmf.CaseManagement
                 } 
                 else
                 {
-                    return false;
+                    return false;             
                 }
             }
 
@@ -469,17 +482,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             dynamicsContext.SaveChanges();
             return login;
-        }
-
-        private dfp_driver AddDriver(DriverUser user)
-        {
-            var driver = new dfp_driver
-            {
-                dfp_driverid = Guid.NewGuid()
-            };
-            dynamicsContext.AddTodfp_drivers(driver);
-
-            return driver;
         }
 
         private dfp_medicalpractitioner AddMedicalPractitioner(ClinicAssignment clinicAssignment)

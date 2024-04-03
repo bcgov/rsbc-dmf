@@ -723,11 +723,6 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
-        /// <summary>
-        /// Get Driver
-        /// </summary>
-        /// <param name="licensenumber"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
@@ -749,11 +744,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        /// <summary>
-        /// Get Driver
-        /// </summary>
-        /// <param name="licensenumber"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDriverById(string id)
         {
             List<Driver> result = new List<Driver>();

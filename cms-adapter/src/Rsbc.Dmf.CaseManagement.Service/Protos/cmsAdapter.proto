@@ -59,9 +59,9 @@ service CaseManager {
 
   rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
 
-  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
-
   rpc GetDriverPerson (DriverLicenseRequest) returns (GetDriversReply);
+  // Obsolete - user GetDriverPerson instead
+  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
 
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
@@ -96,6 +96,8 @@ service CaseManager {
   rpc CreateDecision (LegacyDecision) returns (ResultStatusReply);
 
   // Create a Driver
+  rpc CreateDriverPerson (CreateDriverRequest) returns (CreateDriverReply);
+  // Obsolete - user CreateDriverPerson instead
   rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
 
   // Update a Driver
@@ -400,6 +402,12 @@ message CreateDriverRequest {
     string givenName = 4;
 }
 
+message CreateDriverReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string driverId = 3;
+}
+
 message CreateCaseRequest {
     string caseId = 1;
     int64 SequenceNumber = 2;
@@ -570,7 +578,7 @@ service UserManager {
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc UpdateEmail(UserSetEmailRequest) returns (ResultStatusReply);
-  rpc SetDriverLogin(SetDriverLoginRequest) returns (ResultStatusReply);
+  rpc SetDriverLogin(SetDriverLoginRequest) returns (SetDriverLoginReply);
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
 }
@@ -592,6 +600,12 @@ message UserSetEmailRequest {
 message SetDriverLoginRequest {
     string loginId = 1;
     string driverId = 2;
+}
+
+message SetDriverLoginReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    bool hasDriver = 3;
 }
 
 message UpdateLoginRequest {

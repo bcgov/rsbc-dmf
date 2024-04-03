@@ -76,8 +76,10 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;
                 mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
+                // TODO move to .AddMemoryCacheService() extension
+                services.AddMemoryCache();
+                services.AddSingleton<ICacheService, MemoryCacheService>();
                 services.AddTransient(x => mockHttpContextAccessor.Object);
-
                 services.AddTransient<IUserService, UserService>();
                 
                 // document storage client
