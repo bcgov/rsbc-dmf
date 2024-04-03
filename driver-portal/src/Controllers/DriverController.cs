@@ -6,6 +6,7 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using Rsbc.Dmf.IcbcAdapter;
 using System.Net;
+using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -14,17 +15,19 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     [Authorize(Policy = Policy.Driver)]
     public class DriverController : Controller
     {
+        private readonly ICacheService _cacheService;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
-        private readonly IcbcAdapter.IcbcAdapter.IcbcAdapterClient _icbcAdapterClient;
+        private readonly IcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IcbcAdapter.IcbcAdapter.IcbcAdapterClient icbcAdapterClient, IUserService userService/*, IMemoryCache memoryCache*/, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IcbcAdapterClient icbcAdapterClient, IUserService userService, ICacheService cacheService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
             _icbcAdapterClient = icbcAdapterClient;
             _userService = userService;
+            _cacheService = cacheService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<DriverController>();
         }
@@ -155,8 +158,16 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var request = new DriverInfoRequest();
             request.DriverLicence = profile.DriverLicenseNumber;
-            var data = _icbcAdapterClient.GetDriverInfo(request);
-            return Json(data);
+
+            DriverInfoReply reply = null;
+            var serviceName = nameof(IcbcAdapterClient.GetDriverInfo);
+            if (!_cacheService.TryGetValue(serviceName, request.DriverLicence, out reply))
+            {
+                reply = _icbcAdapterClient.GetDriverInfo(request);
+                _cacheService.Set(serviceName, request.DriverLicence, reply);
+            }
+
+            return Json(reply);
         }
     }
 }
