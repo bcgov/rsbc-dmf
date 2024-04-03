@@ -2,8 +2,15 @@
 	admin off
 }
 
+
+
+
 :2015 {
-	log
+@blocked {
+                client_ip not 142.32.0.0/16
+        }
+	respond @blocked "Driver Portal is not available." 403
+
 	root * /site 
 
 	header / {

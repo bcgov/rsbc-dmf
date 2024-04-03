@@ -77,7 +77,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                         string fileName = Path.GetFileName(reply.Document.DocumentUrl);
                         string mimetype = DocumentUtils.GetMimeType(fileName);
                         Response.Headers.ContentDisposition = new Microsoft.Extensions.Primitives.StringValues($"inline; filename={fileName}");
-                        _logger.LogInformation($"Sending DocumentID {documentId} file {reply.Document.DocumentUrl} data size {fileContents?.Length}");
                         return new FileContentResult(fileContents, mimetype)
                         {
                             FileDownloadName = $"{fileName}"
@@ -85,7 +84,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     }
                     else
                     {
-                        _logger.LogError($"Unexpected error - unable to fetch file from storage  id - {documentId} - {reply.ErrorDetail}");
+                        _logger.LogError($"Unexpected error - unable to fetch file");
                         return StatusCode((int)HttpStatusCode.InternalServerError, "Unexpected error - unable to fetch file from storage");
                     }
                 }

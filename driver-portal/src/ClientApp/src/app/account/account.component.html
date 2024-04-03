@@ -138,6 +138,11 @@
             placeholder="Driver License Number"
             [formControl]="accountForm.controls.driverLicenseNumber"
           />
+          @if (accountForm.controls.driverLicenseNumber.getError('maxlength')) {
+          <mat-error
+            >Max 8 digits are allowed for Driver License Number</mat-error
+          >
+          }
         </mat-form-field>
       </div>
     </div>
@@ -246,7 +251,7 @@
 
       <div style="padding-top: 12px">
         <label>
-          <input type="checkbox" />
+          <input type="checkbox" #confirmed [formControl]="acceptControl" />
           I acknowledge my selected notification preferences. I give consent to
           receive communications from RSBC in this manner. <br />
 
@@ -269,6 +274,7 @@
           mat-flat-button
           class="primaryButton"
           (click)="onRegister()"
+          [disabled]="!confirmed.checked"
         >
           Submit
         </button>
