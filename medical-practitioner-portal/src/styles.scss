@@ -220,7 +220,7 @@ body {
 }
 
 .list {
-  padding-top: 50px;
+  //padding-top: 32px;
   h2 {
     font-weight: bold;
     color: #003366;
@@ -342,5 +342,11 @@ button:disabled:hover {
   background-color: #fff;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

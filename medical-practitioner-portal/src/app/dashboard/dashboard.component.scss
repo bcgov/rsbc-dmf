@@ -1,0 +1,89 @@
+.search-card {
+  margin-top: 32px;
+}
+
+.form-label {
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+}
+
+form {
+  width: 100%;
+  padding: 30px;
+  display: flex;
+  flex-flow: row;
+  justify-content: stretch;
+  align-items: center;
+  padding-bottom: 1px;
+}
+.search-input {
+  width: 845px;
+
+  ::ng-deep .mat-form-field-flex {
+    background-color: #ffffff;
+    //border: solid 2px  #003366;
+  }
+}
+
+.search-button {
+  width: 270px;
+  height: 49px;
+  background-color: #003366 !important;
+  border: none;
+  border-radius: 5px;
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.search-button:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.search-container {
+  display: flex;
+  gap: 32px;
+  padding-top: 12px;
+}
+
+.card-title {
+  padding-left: 24px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 24px;
+}
+
+.filter-dmer {
+  display: flex;
+  gap: 50px;
+}
+
+.dmer-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+mat-card {
+  margin-bottom: 24px;
+}
+
+.mat-mdc-card {
+  border: 1px solid gray;
+  box-shadow: none !important;
+  margin: 30px 0 30px 0;
+  padding: 12px;
+
+  .mat-mdc-card-header {
+    padding-top: 12px;
+
+    .mat-mdc-card-header-text {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
+}
