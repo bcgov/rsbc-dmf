@@ -33,6 +33,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             _configuration = configuration;
         }
 
+        // NOTE configuration needed for within HttpClient services
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureTestServices(services =>
@@ -77,7 +78,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 context.User = user;
                 mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
                 services.AddTransient(x => mockHttpContextAccessor.Object);
-
                 services.AddTransient<IUserService, UserService>();
                 
                 // document storage client

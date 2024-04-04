@@ -76,9 +76,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
                 UserType = UserType.DriverUserType,
                 ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
                 ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
-                LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
-
+                FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
+                LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
                 UserProfiles = { new UserProfile() }
             };
             var loginResponse = await userManager.LoginAsync(loginRequest);

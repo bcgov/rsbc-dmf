@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Google.Protobuf.WellKnownTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.DriverPortal.Api.Services;
@@ -18,12 +19,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly UserManager.UserManagerClient _userManagerClient;
-        private readonly IcbcAdapterClient _icbcAdapterClient;
+        private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
         private readonly ILogger<ProfileController> _logger;
         private readonly IConfiguration _configuration;
 
-        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, IcbcAdapterClient icbcAdapterClient, IUserService userService, ILoggerFactory loggerFactory, IConfiguration configuration)
+        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             _userService = userService;
             _cmsAdapterClient = cmsAdapterClient;
@@ -96,61 +97,74 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return NotFound(); 
             }
 
+            // get driver info
             var driverInfoRequest = new DriverInfoRequest();
             driverInfoRequest.DriverLicence = userRegistration.DriverLicenseNumber;
-
-            DriverInfoReply reply = null;
-            // TODO add caching
-            //if (!_cacheService.TryGetValue(nameof(IcbcAdapterClient.GetDriverInfo), driverInfoRequest.DriverLicence, out reply))
-            //{
-                        reply = _icbcAdapterClient.GetDriverInfo(driverInfoRequest);
-            //}
+            var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(driverInfoRequest);
 
             // TODO add extension method string.ToDateTime()
             // security validation
             if (string.IsNullOrEmpty(_configuration["DISABLE_ICBC"])) 
             {
-            if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
-            {
-                _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
-                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-            }
-            if (!DateTime.TryParse(reply.BirthDate, out DateTime replyBirthDate))
-            {
-                _logger.LogError($"{nameof(Register)} could not parse ICBC birthdate.");
-                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-            }
-            if (profile.FirstName != reply.GivenName || profile.LastName != reply.Surname || claimBirthDate.Date != replyBirthDate.Date)
-            {
-                return StatusCode((int)HttpStatusCode.Unauthorized);
-            }
+                if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
+                {
+                    _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                if (!DateTime.TryParse(driverInfoReply.BirthDate, out DateTime replyBirthDate))
+                {
+                    _logger.LogError($"{nameof(Register)} could not parse ICBC birthdate.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                if (profile.FirstName != driverInfoReply.GivenName || profile.LastName != driverInfoReply.Surname || claimBirthDate.Date != replyBirthDate.Date)
+                {
+                    return StatusCode((int)HttpStatusCode.Unauthorized);
+                }
             }
 
-            // NOTE this will create the driver, if it does not exist
             var driverLicenseRequest = new DriverLicenseRequest();
             driverLicenseRequest.DriverLicenseNumber = userRegistration.DriverLicenseNumber;
-            var getDriverReply = _cmsAdapterClient.GetDriverPerson(driverLicenseRequest);
+            var getDriverReply = await _cmsAdapterClient.GetDriverPersonAsync(driverLicenseRequest);
             if (getDriverReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
                 _logger.LogError($"{nameof(Register)} failed.\n {0}", getDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, getDriverReply.ErrorDetail);
             }
-            if (getDriverReply.Items?.Count == 0)
-            {
-                return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-            }
-            CaseManagement.Service.Driver foundDriver = null;
 
             // update driver email
             var request = new SetDriverLoginRequest();
             request.LoginId = profile.Id;
-            request.DriverId = getDriverReply.Items.First().Id;
-
-            var setDriverReply = _userManagerClient.SetDriverLogin(request);
+            request.DriverId = getDriverReply.Items.FirstOrDefault()?.Id ?? string.Empty;
+            var setDriverReply = await _userManagerClient.SetDriverLoginAsync(request);
             if (setDriverReply.ResultStatus != CaseManagement.Service.ResultStatus.Success) 
             {
                 _logger.LogError($"{nameof(Register)}.{nameof(UserManager.UserManagerClient.SetDriverLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
                 return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
+            }
+
+            // if no driver exists, we need to create driver with contact person
+            if (!setDriverReply.HasDriver)
+            {
+                var createDriverRequest = new CreateDriverPersonRequest();
+                createDriverRequest.LoginId = profile.Id;
+                createDriverRequest.GivenName = profile.FirstName;
+                createDriverRequest.Surname = profile.LastName;
+                createDriverRequest.DriverLicenseNumber = userRegistration.DriverLicenseNumber;
+                if (!DateTime.TryParse(profile.BirthDate, out DateTime claimBirthDate))
+                {
+                    // in theory, this should never happen and only possible if ICBC validation is disabled
+                    _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                createDriverRequest.BirthDate = claimBirthDate.ToUniversalTime().ToTimestamp();
+                var createDriverReply = await _cmsAdapterClient.CreateDriverPersonAsync(createDriverRequest);
+                if (createDriverReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                {
+                    _logger.LogError($"{nameof(Register)} could not create driver.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
+                _userService.UpdateClaim(UserClaimTypes.DriverId, createDriverReply.DriverId);
+                _userService.UpdateClaim(UserClaimTypes.DriverLicenseNumber, createDriverRequest.DriverLicenseNumber);
             }
 
             // update driver email, create new login if no login exists
@@ -161,11 +175,11 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             updateLoginRequest.NotifyByEmail = userRegistration.NotifyByEmail;
             updateLoginRequest.ExternalUserName = profile.DisplayName;
             updateLoginRequest.Address = userRegistration.Address;
-            setDriverReply = _userManagerClient.UpdateLogin(updateLoginRequest);
-            if (setDriverReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+            var updateLoginReply = _userManagerClient.UpdateLogin(updateLoginRequest);
+            if (updateLoginReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
             {
-                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed.\n {0}", setDriverReply.ErrorDetail);
-                return StatusCode((int)HttpStatusCode.InternalServerError, setDriverReply.ErrorDetail);
+                _logger.LogError($"{nameof(UserRegistration)}.{nameof(UserManager.UserManagerClient.UpdateLogin)} failed.\n {0}", updateLoginReply.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, updateLoginReply.ErrorDetail);
             }
 
             // TODO we probably need to update driver id and driver license number if a new driver was added above
