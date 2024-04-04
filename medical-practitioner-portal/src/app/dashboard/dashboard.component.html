@@ -29,7 +29,12 @@
                 placeholder="Enter the DMER Case ID to start or access a DMER "
               />
             </mat-form-field>
-            <button mat-flat-button color="primary" class="search-button">
+            <button
+              mat-flat-button
+              color="primary"
+              class="search-button"
+              (click)="searchDmerCase()"
+            >
               Search DMER Case
             </button>
           </div>
@@ -45,6 +50,76 @@
       </form>
     </mat-card-content>
   </mat-card>
+
+  <div *ngIf="showSearchResults">
+    <div class="result-card">
+      <div>
+        Showing Search Results for DMER Case Id
+        <button mat-button color="primary" (click)="clearResults()">
+          Clear
+        </button>
+      </div>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="serachResultRow1">
+            <div style="padding: 30px; border-right: 2px solid grey">
+              <div>
+                <label>Case Id</label>
+                <div>
+                  <b><a style="cursor: pointer;">DMR1234</a></b>
+                </div>
+              </div>
+            </div>
+            <div class="serachResultRow2">
+              <div>
+                <div>
+                  <label>Patient's Name</label>
+                  <div><b>Minto, Rahul Anu</b></div>
+                </div>
+                <div>
+                  <label>DMER Type</label>
+                  <div>
+                    <b>Scheduled Age</b>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  <label>Driver License Number</label>
+                  <div>
+                    <b>6034197</b>
+                  </div>
+                </div>
+                <div>
+                  <label>DMER Status</label>
+                  <div>
+                    <b>Required - Unclaimed</b>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <label>Date Of Birth</label>
+                  <div>
+                    <b>May 12, 1989</b>
+                  </div>
+                </div>
+
+                <div>
+                  <label></label>
+                  <div>
+                    <button mat-flat-button>Start DMER</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
   <div class="list">
     <h2>DMER Definitions</h2>
     <div class="accordion-btn-container">
@@ -63,6 +138,7 @@
             <mat-panel-title class="accordian-Title">DMER Type</mat-panel-title>
           </mat-expansion-panel-header>
           <h1>Test1</h1>
+          <!-- <app-dmer-type></app-dmer-type> -->
           <!-- <app-case-type></app-case-type> -->
         </mat-expansion-panel>
         <mat-expansion-panel>

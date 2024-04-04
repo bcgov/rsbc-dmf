@@ -87,3 +87,16 @@ mat-card {
     }
   }
 }
+
+.serachResultRow1 {
+  display: flex;
+  flex-direction: row;
+}
+
+.serachResultRow2 {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: space-around;
+  line-height: 24px;
+}

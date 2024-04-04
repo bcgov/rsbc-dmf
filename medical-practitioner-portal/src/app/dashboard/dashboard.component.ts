@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild } from '@angular/core';
 
-import { ViewportScroller } from '@angular/common';
-import { Router } from '@angular/router';
+import { CommonModule, ViewportScroller } from '@angular/common';
+
 import {
   MatExpansionModule,
   MatAccordion,
@@ -14,8 +14,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-// import { CoreUiModule } from '../../../../shared-portal-ui/projects/core-ui/src/public-api';
-// import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definations/dmer-type/dmer-type.component';
+// import { DmerTypeComponent } from '@shared/case-definitions';
+// import { CoreUiModule } from '@shared/core-ui';
+// import { DmerTypeComponent } from '@shared/core-ui';
 interface Status {
   value: string;
   viewValue: string;
@@ -32,10 +33,13 @@ interface Status {
     MatButtonModule,
     MatSelectModule,
     FormsModule,
+    CommonModule,
+    // DmerTypeComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent {
   status: Status[] = [
@@ -49,9 +53,10 @@ export class DashboardComponent {
   ];
 
   selectedStatus: string = 'allStatus';
+  showSearchResults = false;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
-    private router: Router,
+    //private router: Router,
     private viewportScroller: ViewportScroller
   ) {}
 
@@ -65,5 +70,14 @@ export class DashboardComponent {
 
   clear() {
     console.log('clear');
+  }
+
+  searchDmerCase() {
+    console.log('search DMER Case');
+    this.showSearchResults = true;
+  }
+
+  clearResults() {
+    this.showSearchResults = false;
   }
 }
