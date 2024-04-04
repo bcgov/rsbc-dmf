@@ -723,11 +723,6 @@ namespace Rsbc.Dmf.CaseManagement
             return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
-        /// <summary>
-        /// Get Driver
-        /// </summary>
-        /// <param name="licensenumber"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
         {
             List<Driver> result = new List<Driver>();
@@ -749,11 +744,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        /// <summary>
-        /// Get Driver
-        /// </summary>
-        /// <param name="licensenumber"></param>
-        /// <returns></returns>
         public async Task<IEnumerable<Driver>> GetDriverById(string id)
         {
             List<Driver> result = new List<Driver>();
@@ -1937,8 +1927,6 @@ namespace Rsbc.Dmf.CaseManagement
             // get the driver
             bool secondCandidateCreate = true;
 
-
-
             var driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             if (driver == null)
             {
@@ -1954,26 +1942,15 @@ namespace Rsbc.Dmf.CaseManagement
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
 
-
             if (driver != null && driver.dfp_licensenumber == "00000000") // bypass normal logic
-
             {
-
                 // document type ID
                 var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
-
-
-
-
 
                 // find the owner.
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
 
-
-
                 var bcgovDocumentUrl = new bcgov_documenturl();
-
-
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
                 bcgovDocumentUrl.bcgov_url = request.DocumentUrl;
@@ -3176,102 +3153,127 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        /// <summary>
-        /// Create Driver
-        /// </summary>
-        /// <param name="request"></param>
-        /// <returns></returns>
         public async Task<ResultStatusReply> CreateDriver(CreateDriverRequest request)
         {
-
-            ResultStatusReply result = new ResultStatusReply();
+            var result = new ResultStatusReply();
             result.Success = false;
 
             contact driverContact;
 
-            // step 1 : Create driver contact 
-            string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
-            string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
-
-            var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
-
             try
             {
-                driverContact = dynamicsContext.contacts.Where(x => x.contactid == contactId).FirstOrDefault();
-            }
-            catch (Exception)
-            {
-                driverContact = null;
-            }
+                // step 1 : Create driver contact 
+                string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
+                string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+                var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
 
-            if (driverContact == null)
-            {
-                driverContact = new contact()
+                try
                 {
-                    contactid = contactId,
-                    lastname = request.Surname,
-                    firstname = request.GivenName,
+                    driverContact = dynamicsContext.contacts.Where(x => x.contactid == contactId).FirstOrDefault();
+                }
+                catch (Exception)
+                {
+                    driverContact = null;
+                }
+
+                if (driverContact == null)
+                {
+                    driverContact = new contact()
+                    {
+                        contactid = contactId,
+                        lastname = request.Surname,
+                        firstname = request.GivenName,
+                    };
+
+                    if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                    {
+                        driverContact.birthdate = new Microsoft.OData.Edm.Date(request.BirthDate.Value.Year,
+                        request.BirthDate.Value.Month, request.BirthDate.Value.Day);
+                    }
+
+                    dynamicsContext.AddTocontacts(driverContact);
+                    var saveResult2 = await dynamicsContext.SaveChangesAsync();
+                    var tempId2 = GetCreatedId(saveResult2);
+                    if (tempId2 != null)
+                    {
+                        contactId = tempId2.Value;
+                        driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
+                    }
+                }
+
+                // Step 2 : Create Driver
+                string newDriverId = string.Format("e27d7c69-3913-4116-a360-f5e99972b7e8");
+                string driverSubId = newDriverId.Substring(0, newDriverId.Length - request.DriverLicenseNumber.Length);
+                Guid driverId = Guid.Parse(driverSubId + request.DriverLicenseNumber);
+
+                dfp_driver driver = new dfp_driver()
+                {
+                    dfp_driverid = driverId,
+                    dfp_licensenumber = request.DriverLicenseNumber,
+                    statuscode = 1,
                 };
 
                 if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 {
-                    driverContact.birthdate = new Microsoft.OData.Edm.Date(request.BirthDate.Value.Year,
-                    request.BirthDate.Value.Month, request.BirthDate.Value.Day);
+                    driver.dfp_dob = request.BirthDate.Value;
                 }
 
-                
-                dynamicsContext.AddTocontacts(driverContact);
-                var saveResult2 = await dynamicsContext.SaveChangesAsync();
-                var tempId2 = GetCreatedId(saveResult2);
-                if (tempId2 != null)
+                await dynamicsContext.SaveChangesAsync();
+                dynamicsContext.AddTodfp_drivers(driver);
+                dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+
+                var saveResult = await dynamicsContext.SaveChangesAsync();
+                var tempId = GetCreatedId(saveResult);
+                if (tempId != null)
                 {
-                    contactId = tempId2.Value;
-                    driverContact = dynamicsContext.contacts.ByKey(tempId2).GetValue();
+                    driverId = tempId.Value;
+                    driver = dynamicsContext.dfp_drivers.ByKey(tempId).GetValue();
                 }
-                              
+                //dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
+
+                // this save is necessary so that the create incident will work.
+                await dynamicsContext.SaveChangesAsync();
+                result.Success = true;
+                result.Id = driverId.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to create driver.");
+                result.Success = false;
+                result.ErrorDetail = "Failed to create driver.";
             }
 
-            // Step 2 : Create Driver
-
-            string newDriverId = string.Format("e27d7c69-3913-4116-a360-f5e99972b7e8");
-            string driverSubId = newDriverId.Substring(0, newDriverId.Length - request.DriverLicenseNumber.Length);
-            Guid driverId = Guid.Parse(driverSubId + request.DriverLicenseNumber);
-
-
-            dfp_driver driver = new dfp_driver()
-            {
-                dfp_driverid = driverId,
-                dfp_licensenumber = request.DriverLicenseNumber,                
-                statuscode = 1,
-            };
-
-            
-
-            if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
-            {
-                driver.dfp_dob = request.BirthDate.Value;
-            }
-
-            
-            await dynamicsContext.SaveChangesAsync();
-            dynamicsContext.AddTodfp_drivers(driver);
-            dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
-
-            var saveResult = await dynamicsContext.SaveChangesAsync();
-            var tempId = GetCreatedId(saveResult);
-            if (tempId != null)
-            {
-                driverId = tempId.Value;
-                driver = dynamicsContext.dfp_drivers.ByKey(tempId).GetValue();
-            }
-            //dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
-
-            // this save is necessary so that the create incident will work.
-            await dynamicsContext.SaveChangesAsync();
-            result.Success = true;
             return result;
         }
-    
+
+        public async Task<ResultStatusReply> LinkLoginToDriver(Guid loginId, Guid driverId)
+        {
+            var reply = new ResultStatusReply();
+
+            try
+            {
+                var driver = dynamicsContext.dfp_drivers
+                    .Where(d => d.dfp_driverid == driverId)
+                    .First();
+
+                var login = dynamicsContext.dfp_logins
+                    .Where(l => l.dfp_loginid == loginId)
+                    .Single();
+
+                dynamicsContext.SetLink(login, nameof(dfp_login.dfp_DriverId), driver);
+                await dynamicsContext.SaveChangesAsync();
+
+                reply.Success = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Failed to link login to driver.");
+                reply.Success = false;
+                reply.ErrorDetail = "Failed to link login to driver.";
+            }
+
+            return reply;
+        }
 
         private bool IncidentExists(Guid id)
         {

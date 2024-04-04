@@ -59,9 +59,9 @@ service CaseManager {
 
   rpc GetDrivers (EmptyRequest) returns (GetDriversReply);
 
-  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
-
   rpc GetDriverPerson (DriverLicenseRequest) returns (GetDriversReply);
+  // Obsolete - user GetDriverPerson instead
+  rpc GetDriver (DriverLicenseRequest) returns (GetDriversReply);
 
   rpc GetDriverById (DriverIdRequest) returns (GetDriversReply);
 
@@ -96,6 +96,8 @@ service CaseManager {
   rpc CreateDecision (LegacyDecision) returns (ResultStatusReply);
 
   // Create a Driver
+  rpc CreateDriverPerson (CreateDriverPersonRequest) returns (CreateDriverReply);
+  // Obsolete - user CreateDriverPerson instead
   rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
 
   // Update a Driver
@@ -393,11 +395,25 @@ message TokenReply {
     string errorDetail = 3;
 }
 
+message CreateDriverPersonRequest {
+    string driverLicenseNumber = 1;
+    google.protobuf.Timestamp birthDate = 2;
+    string surname = 3;
+    string givenName = 4;
+    string loginId = 5;
+}
+
 message CreateDriverRequest {
     string driverLicenseNumber = 1;
     google.protobuf.Timestamp birthDate = 2;
     string surname = 3;
     string givenName = 4;
+}
+
+message CreateDriverReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    string driverId = 3;
 }
 
 message CreateCaseRequest {
@@ -570,7 +586,7 @@ service UserManager {
   rpc Login (UserLoginRequest) returns (UserLoginReply);
   rpc SetEmail(UserSetEmailRequest) returns (ResultStatusReply);
   rpc UpdateEmail(UserSetEmailRequest) returns (ResultStatusReply);
-  rpc SetDriverLogin(SetDriverLoginRequest) returns (ResultStatusReply);
+  rpc SetDriverLogin(SetDriverLoginRequest) returns (SetDriverLoginReply);
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
 }
@@ -592,6 +608,12 @@ message UserSetEmailRequest {
 message SetDriverLoginRequest {
     string loginId = 1;
     string driverId = 2;
+}
+
+message SetDriverLoginReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    bool hasDriver = 3;
 }
 
 message UpdateLoginRequest {

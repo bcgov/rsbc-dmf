@@ -128,13 +128,18 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<ResultStatusReply> SetDriverLogin(SetDriverLoginRequest request, ServerCallContext context)
+        public async override Task<SetDriverLoginReply> SetDriverLogin(SetDriverLoginRequest request, ServerCallContext context)
         {
-            var result = new ResultStatusReply();
+            var result = new SetDriverLoginReply();
 
             try
             {
-                await _userManager.SetDriverLogin(Guid.Parse(request.LoginId), Guid.Parse(request.DriverId));
+                Guid? driverId = null;
+                if (request.DriverId != string.Empty)
+                {
+                    driverId = Guid.Parse(request.DriverId);
+                }
+                result.HasDriver = await _userManager.SetDriverLogin(Guid.Parse(request.LoginId), driverId);
                 result.ResultStatus = ResultStatus.Success;
             } 
             catch (Exception ex)

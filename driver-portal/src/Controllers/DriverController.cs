@@ -15,12 +15,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     public class DriverController : Controller
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
-        private readonly IcbcAdapter.IcbcAdapter.IcbcAdapterClient _icbcAdapterClient;
+        private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<DriverController> _logger;
 
-        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, IcbcAdapter.IcbcAdapter.IcbcAdapterClient icbcAdapterClient, IUserService userService/*, IMemoryCache memoryCache*/, IMapper mapper, ILoggerFactory loggerFactory)
+        public DriverController(CaseManager.CaseManagerClient cmsAdapterClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, IMapper mapper, ILoggerFactory loggerFactory)
         {
             _cmsAdapterClient = cmsAdapterClient;
             _icbcAdapterClient = icbcAdapterClient;
@@ -156,8 +156,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             var request = new DriverInfoRequest();
             request.DriverLicence = profile.DriverLicenseNumber;
-            var data = _icbcAdapterClient.GetDriverInfo(request);
-            return Json(data);
+            var reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+
+            return Json(reply);
         }
     }
 }

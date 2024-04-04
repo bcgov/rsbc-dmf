@@ -1185,26 +1185,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// Get Driver
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public async override Task<GetDriversReply> GetDriver(DriverLicenseRequest request, ServerCallContext context)
-        {
-            return await GetDriver(request, false);
-        }
-
-        /// <summary>
-        /// Get Driver With BirthDate
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        // Get Driver With BirthDate by linking driver to person
         public async override Task<GetDriversReply> GetDriverPerson(DriverLicenseRequest request, ServerCallContext context)
         {
             return await GetDriver(request, true);
+        }
+
+        [Obsolete("Use GetDriverPerson method instead.")]
+        public async override Task<GetDriversReply> GetDriver(DriverLicenseRequest request, ServerCallContext context)
+        {
+            return await GetDriver(request, false);
         }
 
         private async Task<GetDriversReply> GetDriver(DriverLicenseRequest request, bool includeBirthdate)
@@ -1792,31 +1782,55 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// Create Driver
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        public async override Task<CreateDriverReply> CreateDriverPerson(CreateDriverPersonRequest request, ServerCallContext context)
+        {
+            var createDriverRequest = new CreateDriverRequest();
+            createDriverRequest.BirthDate = request.BirthDate;
+            createDriverRequest.DriverLicenseNumber = request.DriverLicenseNumber;
+            createDriverRequest.Surname = request.Surname;
+            createDriverRequest.GivenName = request.GivenName;
+
+            var reply = await CreateDriver(createDriverRequest, false);
+            if (reply.ResultStatus == ResultStatus.Success && !string.IsNullOrEmpty(request.LoginId))
+            {
+                var loginId = Guid.Parse(request.LoginId);
+                var driverId = Guid.Parse(reply.DriverId);
+                var linkReply = await _caseManager.LinkLoginToDriver(loginId, driverId);
+                reply.ResultStatus = linkReply.Success ? ResultStatus.Success : ResultStatus.Fail;
+            }
+
+            return reply;
+        }
+
+        [Obsolete("Use CreateDriverPerson method instead.")]
         public async override Task<ResultStatusReply> CreateDriver(CreateDriverRequest request, ServerCallContext context)
         {
-            var reply = new ResultStatusReply() { ResultStatus = ResultStatus.Fail };
+            var reply = await CreateDriver(request, true);
+            var resultStatusReply = new ResultStatusReply();
+            resultStatusReply.ResultStatus = reply.ResultStatus;
+            resultStatusReply.ErrorDetail = reply.ErrorDetail;
+            return resultStatusReply;
+        }
+
+        private async Task<CreateDriverReply> CreateDriver(CreateDriverRequest request, bool tryGetDriver)
+        {
+            var reply = new CreateDriverReply() { ResultStatus = ResultStatus.Fail };
 
             try
             {
                 // start by getting the driver.
-
-                var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
-
-                // check the drivers.
-
                 bool isChange = false;
-
-                foreach (var driver in drivers)
+                if (tryGetDriver)
                 {
-                    if (driver.Surname != request.Surname || driver.BirthDate != request.BirthDate.ToDateTime())
+                    var drivers = await _caseManager.GetDriverByLicenseNumber(request.DriverLicenseNumber);
+
+                    // check the drivers.
+                    foreach (var driver in drivers)
                     {
-                        isChange = true;
+                        if (driver.Surname != request.Surname || driver.BirthDate != request.BirthDate.ToDateTime())
+                        {
+                            isChange = true;
+                        }
                     }
                 }
 
@@ -1838,13 +1852,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         {
                             createDriverRequest.BirthDate = null;
                         }
-                        
                     }
                     var createDriverResult = await _caseManager.CreateDriver(createDriverRequest);
-
-
                     if (createDriverResult.Success)
                     {
+                        reply.DriverId = createDriverResult.Id;
                         reply.ResultStatus = ResultStatus.Success;
                     }
                     else
@@ -1854,9 +1866,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 }
                 else // update
                 {
-                    
-                }
 
+                }
             }
             catch (Exception e)
             {
@@ -1865,7 +1876,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return reply;
         }
-
 
         /// <summary>
         /// Update Driver
