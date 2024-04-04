@@ -150,9 +150,7 @@ services.AddHealthChecks()
 
 services.AddHttpClient();
 services.AddHttpContextAccessor();
-// TODO move to extension .AddMemoryCacheService()
-services.AddMemoryCache();
-services.AddSingleton<ICacheService, MemoryCacheService>();
+services.AddMemoryCacheService();
 services.AddTransient<IUserService, UserService>();
 services.AddTransient<DocumentFactory>();
 // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
