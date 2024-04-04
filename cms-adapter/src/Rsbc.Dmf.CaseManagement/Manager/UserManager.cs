@@ -479,8 +479,8 @@ namespace Rsbc.Dmf.CaseManagement
                 dfp_type = (int?)loginType
             };
             dynamicsContext.AddTodfp_logins(login);
-
             dynamicsContext.SaveChanges();
+
             return login;
         }
 

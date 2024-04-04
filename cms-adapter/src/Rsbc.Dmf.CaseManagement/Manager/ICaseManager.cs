@@ -57,6 +57,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType);
 
+        Task<ResultStatusReply> LinkLoginToDriver(Guid loginId, Guid driverId);
+
         Task MarkMedicalUpdatesSent(List<string> ids);
 
         Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request);

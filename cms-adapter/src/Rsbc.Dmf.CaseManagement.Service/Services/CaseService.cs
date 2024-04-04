@@ -1782,9 +1782,24 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        public async override Task<CreateDriverReply> CreateDriverPerson(CreateDriverRequest request, ServerCallContext context)
+        public async override Task<CreateDriverReply> CreateDriverPerson(CreateDriverPersonRequest request, ServerCallContext context)
         {
-            return await CreateDriver(request, false);
+            var createDriverRequest = new CreateDriverRequest();
+            createDriverRequest.BirthDate = request.BirthDate;
+            createDriverRequest.DriverLicenseNumber = request.DriverLicenseNumber;
+            createDriverRequest.Surname = request.Surname;
+            createDriverRequest.GivenName = request.GivenName;
+
+            var reply = await CreateDriver(createDriverRequest, false);
+            if (reply.ResultStatus == ResultStatus.Success && !string.IsNullOrEmpty(request.LoginId))
+            {
+                var loginId = Guid.Parse(request.LoginId);
+                var driverId = Guid.Parse(reply.DriverId);
+                var linkReply = await _caseManager.LinkLoginToDriver(loginId, driverId);
+                reply.ResultStatus = linkReply.Success ? ResultStatus.Success : ResultStatus.Fail;
+            }
+
+            return reply;
         }
 
         [Obsolete("Use CreateDriverPerson method instead.")]

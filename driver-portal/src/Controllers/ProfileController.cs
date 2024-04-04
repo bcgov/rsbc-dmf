@@ -157,7 +157,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // if no driver exists, we need to create driver with contact person
             if (!setDriverReply.HasDriver)
             {
-                var createDriverRequest = new CreateDriverRequest();
+                var createDriverRequest = new CreateDriverPersonRequest();
+                createDriverRequest.LoginId = profile.Id;
                 createDriverRequest.GivenName = profile.FirstName;
                 createDriverRequest.Surname = profile.LastName;
                 createDriverRequest.DriverLicenseNumber = userRegistration.DriverLicenseNumber;
@@ -167,8 +168,13 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     _logger.LogError($"{nameof(Register)} could not parse profile birthdate.");
                     return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
                 }
-                createDriverRequest.BirthDate = claimBirthDate.ToTimestamp();
+                createDriverRequest.BirthDate = claimBirthDate.ToUniversalTime().ToTimestamp();
                 var createDriverReply = await _cmsAdapterClient.CreateDriverPersonAsync(createDriverRequest);
+                if (createDriverReply.ResultStatus != CaseManagement.Service.ResultStatus.Success)
+                {
+                    _logger.LogError($"{nameof(Register)} could not create driver.");
+                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
+                }
                 _userService.UpdateClaim(UserClaimTypes.DriverId, createDriverReply.DriverId);
                 _userService.UpdateClaim(UserClaimTypes.DriverLicenseNumber, createDriverRequest.DriverLicenseNumber);
             }

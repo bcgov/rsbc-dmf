@@ -96,7 +96,7 @@ service CaseManager {
   rpc CreateDecision (LegacyDecision) returns (ResultStatusReply);
 
   // Create a Driver
-  rpc CreateDriverPerson (CreateDriverRequest) returns (CreateDriverReply);
+  rpc CreateDriverPerson (CreateDriverPersonRequest) returns (CreateDriverReply);
   // Obsolete - user CreateDriverPerson instead
   rpc CreateDriver (CreateDriverRequest) returns (ResultStatusReply);
 
@@ -393,6 +393,14 @@ message TokenReply {
     ResultStatus resultStatus = 1;
     string token = 2;
     string errorDetail = 3;
+}
+
+message CreateDriverPersonRequest {
+    string driverLicenseNumber = 1;
+    google.protobuf.Timestamp birthDate = 2;
+    string surname = 3;
+    string givenName = 4;
+    string loginId = 5;
 }
 
 message CreateDriverRequest {
