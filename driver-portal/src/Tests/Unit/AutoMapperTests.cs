@@ -3,7 +3,6 @@ using EnumsNET;
 using Google.Protobuf.WellKnownTypes;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
-using Rsbc.Dmf.DriverPortal.Api;
 using System;
 using Xunit;
 using CaseDetail = Rsbc.Dmf.CaseManagement.Service.CaseDetail;

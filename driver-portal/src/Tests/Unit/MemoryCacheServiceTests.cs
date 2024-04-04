@@ -1,6 +1,5 @@
-﻿using Rsbc.Dmf.DriverPortal.Api.Services;
+﻿using Rsbc.Dmf.DriverPortal.Api;
 using Xunit;
-using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Unit
 {
@@ -11,19 +10,19 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Unit
         public MemoryCacheServiceTests(ICacheService cacheService) 
         {
             _memoryCacheService = (MemoryCacheService)cacheService;
-            _memoryCacheService.Dispose();
         }
 
         [Fact]
         public void TryGetValue() 
         {
+            _memoryCacheService.Set("test1", "key", "value");
+            _memoryCacheService.Set("test2", "key", 267);
 
-        }
+            _memoryCacheService.TryGetValue("test1", "key", out string value1);
+            _memoryCacheService.TryGetValue("test2", "key", out int value2);
 
-        [Fact]
-        public void Set()
-        {
-            //_memoryCacheService.
+            Assert.Equal("value", value1);
+            Assert.Equal(267, value2);
         }
     }
 }

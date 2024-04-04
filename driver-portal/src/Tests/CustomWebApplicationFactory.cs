@@ -33,6 +33,7 @@ namespace Rsbc.Dmf.DriverPortal.Tests
             _configuration = configuration;
         }
 
+        // NOTE configuration needed for within HttpClient services
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureTestServices(services =>
@@ -76,9 +77,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;
                 mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
-                // TODO move to .AddMemoryCacheService() extension
-                services.AddMemoryCache();
-                services.AddSingleton<ICacheService, MemoryCacheService>();
                 services.AddTransient(x => mockHttpContextAccessor.Object);
                 services.AddTransient<IUserService, UserService>();
                 
