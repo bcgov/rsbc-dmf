@@ -19,20 +19,18 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
     {
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly UserManager.UserManagerClient _userManagerClient;
-        private readonly IcbcAdapterClient _icbcAdapterClient;
+        private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
         private readonly IUserService _userService;
-        private readonly ICacheService _cacheService;
         private readonly ILogger<ProfileController> _logger;
         private readonly IConfiguration _configuration;
 
-        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, IcbcAdapterClient icbcAdapterClient, IUserService userService, ICacheService cacheService, ILoggerFactory loggerFactory, IConfiguration configuration)
+        public ProfileController(CaseManager.CaseManagerClient cmsAdapterClient, UserManager.UserManagerClient userManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IUserService userService, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             _userService = userService;
             _cmsAdapterClient = cmsAdapterClient;
             _icbcAdapterClient = icbcAdapterClient;
             _configuration = configuration;
             _userManagerClient = userManagerClient;
-            _cacheService = cacheService;
             _logger = loggerFactory.CreateLogger<ProfileController>();
         }
 
@@ -102,17 +100,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             // get driver info
             var driverInfoRequest = new DriverInfoRequest();
             driverInfoRequest.DriverLicence = userRegistration.DriverLicenseNumber;
-            DriverInfoReply driverInfoReply = null;
-            var serviceName = nameof(IcbcAdapterClient.GetDriverInfo);
-            if (!_cacheService.TryGetValue(serviceName, driverInfoRequest.DriverLicence, out driverInfoReply))
-            {
-                driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(driverInfoRequest);
-                if (driverInfoReply.ResultStatus != IcbcAdapter.ResultStatus.Success)
-                {
-                    return StatusCode((int)HttpStatusCode.Unauthorized, "No driver found.");
-                }
-                _cacheService.Set(serviceName, driverInfoRequest.DriverLicence, driverInfoReply);
-            }
+            var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(driverInfoRequest);
 
             // TODO add extension method string.ToDateTime()
             // security validation

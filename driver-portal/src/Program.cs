@@ -151,6 +151,7 @@ services.AddHealthChecks()
 services.AddHttpClient();
 services.AddHttpContextAccessor();
 services.AddMemoryCacheService();
+services.AddTransient<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 services.AddTransient<IUserService, UserService>();
 services.AddTransient<DocumentFactory>();
 // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
