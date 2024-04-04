@@ -80,4 +80,6 @@ export class DashboardComponent {
   clearResults() {
     this.showSearchResults = false;
   }
+  
+  
 }

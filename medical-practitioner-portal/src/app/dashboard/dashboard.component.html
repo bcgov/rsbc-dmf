@@ -54,7 +54,7 @@
   <div *ngIf="showSearchResults">
     <div class="result-card">
       <div>
-        Showing Search Results for DMER Case Id
+        Showing Search Results for <b>DMER Case Id</b>
         <button mat-button color="primary" (click)="clearResults()">
           Clear
         </button>
@@ -67,7 +67,8 @@
               <div>
                 <label>Case Id</label>
                 <div>
-                  <b><a style="cursor: pointer;">DMR1234</a></b>
+                  <b><a>DMR1234</a> <br /></b>
+                  View case details
                 </div>
               </div>
             </div>
@@ -110,7 +111,9 @@
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button>Start DMER</button>
+                    <button mat-flat-button color="primary" class="dmer-button">
+                      Start DMER
+                    </button>
                   </div>
                 </div>
               </div>

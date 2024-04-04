@@ -39,6 +39,16 @@ form {
   font-weight: 700;
 }
 
+.dmer-button {
+  background-color: #003366 !important;
+  border: none;
+  border-radius: 5px;
+  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+}
+
 .search-button:hover {
   text-decoration: underline;
   opacity: 0.8;
@@ -99,4 +109,10 @@ mat-card {
   flex-direction: row;
   justify-content: space-around;
   line-height: 24px;
+}
+
+a {
+  cursor: pointer;
+  color: #003366;
+  text-decoration: underline;
 }
