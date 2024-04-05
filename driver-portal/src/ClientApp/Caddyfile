@@ -6,10 +6,7 @@
 
 
 :2015 {
-@blocked {
-                client_ip not 142.32.0.0/16
-        }
-	respond @blocked "Driver Portal is not available." 403
+
 
 	root * /site 
 
