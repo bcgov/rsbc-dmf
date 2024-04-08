@@ -2,16 +2,11 @@
 	admin off
 }
 
-
-
-
 :2015 {
 
-
+  log stdout
+  
 	root * /site 
-
-  @html path *.js
-  header @html Content-Type text/javascript
 
 	header / {
 		# Enable HTTP Strict Transport Security (HSTS) to force clients to always connect via HTTPS (do not use if only testing)
@@ -31,6 +26,9 @@
 	encode zstd gzip
 
 	route {
+
+    @jstype path *.js
+    header @jstype Content-Type text/javascript
 
 		uri strip_prefix {$BASE_URL}
 		reverse_proxy /api* {$API_URL}
