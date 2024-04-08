@@ -2,11 +2,10 @@
 	admin off
 }
 
-log stdout
-
 :2015 {
 
-
+  log stdout
+  
 	root * /site 
 
 	header / {
