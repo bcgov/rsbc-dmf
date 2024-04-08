@@ -1,4 +1,4 @@
-name: cd-driver-portal-ui
+name: cd-driver-portal-ui-prodtest
 
 on:
   push:
