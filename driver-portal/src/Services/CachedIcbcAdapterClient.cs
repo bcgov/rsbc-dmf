@@ -1,4 +1,5 @@
-﻿using Rsbc.Dmf.IcbcAdapter;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Rsbc.Dmf.IcbcAdapter;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Services
@@ -8,28 +9,51 @@ namespace Rsbc.Dmf.DriverPortal.Api.Services
         Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request);
     }
 
-    public class CachedIcbcAdapterClient : ICachedIcbcAdapterClient
+    public class CachedIcbcAdapterClient : BaseCacheService, ICachedIcbcAdapterClient, IDisposable
     {
-        private readonly ICacheService _cacheService;
+        private readonly IMemoryCache _cacheService;
         private readonly IcbcAdapterClient _icbcAdapterClient;
+        private readonly ILogger _logger;
 
-        public CachedIcbcAdapterClient(ICacheService cacheService, IcbcAdapterClient icbcAdapterClient)
+        public CachedIcbcAdapterClient(IMemoryCache cacheService, IcbcAdapterClient icbcAdapterClient, ILoggerFactory loggerFactory)
         {
             _cacheService = cacheService;
             _icbcAdapterClient = icbcAdapterClient;
+            _logger = loggerFactory.CreateLogger<CachedIcbcAdapterClient>();
         }
 
         public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request)
         {
             DriverInfoReply reply = null;
-            var serviceName = nameof(IcbcAdapterClient.GetDriverInfo);
-            if (!_cacheService.TryGetValue(serviceName, request.DriverLicence, out reply))
+            try
             {
+                var key = GetHashKey(nameof(IcbcAdapterClient.GetDriverInfo), request.DriverLicence);
+                if (!_cacheService.TryGetValue(key, out reply))
+                {
+                    reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+                    _cacheService.Set(key, reply);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"{nameof(IcbcAdapterClient.GetDriverInfoAsync)} {nameof(IMemoryCache)} failed.");
                 reply = await _icbcAdapterClient.GetDriverInfoAsync(request);
-                _cacheService.Set(serviceName, request.DriverLicence, reply);
             }
 
             return reply;
+        }
+
+        public void Dispose()
+        {
+            _cacheService.Dispose();
+        }
+    }
+
+    public class BaseCacheService
+    {
+        protected string GetHashKey(string name, string key)
+        {
+            return $"{name.GetHashCode()}/{key}";
         }
     }
 }

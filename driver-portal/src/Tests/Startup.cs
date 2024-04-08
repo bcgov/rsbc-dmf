@@ -20,7 +20,6 @@ namespace Rsbc.Dmf.DriverPortal.Tests
                 .AddEnvironmentVariables()
                 .Build();
             services.AddSingleton<IConfiguration>(_configuration);
-            services.AddMemoryCacheService();
 
             using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
                 .SetMinimumLevel(LogLevel.Trace)

@@ -7,7 +7,6 @@ using Rsbc.Dmf.DriverPortal.ViewModels;
 using Rsbc.Dmf.IcbcAdapter;
 using System.Net;
 using System.Security.Claims;
-using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
