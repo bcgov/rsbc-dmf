@@ -3904,6 +3904,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         var hasManualPassDocument = false;
 
+                        bool addItem = false;
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
@@ -3921,13 +3922,15 @@ namespace Rsbc.Dmf.CaseManagement
                                 && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 )
                             {
-                                outputArray.Add(item);
+                                addItem = true;
+                               
                             }
 
                         }
 
-                        if (hasManualPassDocument == false)
+                        if (hasManualPassDocument == false )
                         {
+                            
                             //load decisions
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
                             if (item.dfp_incident_dfp_decision.Count > 0)
@@ -3937,13 +3940,20 @@ namespace Rsbc.Dmf.CaseManagement
                                     //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                                     if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
                                 }
-                                outputArray.Add(item);
+
+                                addItem = true;
+                                
 
                             }
                             
+                            if (addItem)
+                            {
+                                outputArray.Add(item);
+                            }
                         }
-
                         
+
+
                     }
                 }
             }
