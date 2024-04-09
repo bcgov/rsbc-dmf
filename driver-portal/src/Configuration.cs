@@ -89,17 +89,18 @@ namespace Rsbc.Dmf.DriverPortal.Api
             }
         }
 
-        public static void AddIcbcAdapterClient(this IServiceCollection services, IConfiguration configuration)
+        public static void AddIcbcAdapterClient(this IServiceCollection services, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
+            var logger = loggerFactory.CreateLogger<IServiceCollection>();
+
             // Add ICBC Adapter
             string icbcAdapterURI = configuration["ICBC_ADAPTER_URI"];
-
             if (!string.IsNullOrEmpty(icbcAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
                 // Return `true` to allow certificates that are untrusted/invalid                    
                 httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
                 var httpClient = new HttpClient(httpClientHandler)
                 {
@@ -110,7 +111,6 @@ namespace Rsbc.Dmf.DriverPortal.Api
                 if (!string.IsNullOrEmpty(configuration["ICBC_ADAPTER_JWT_SECRET"]))
                 {
                     var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
-
                     var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
 
                     // call the token service to get a token.
@@ -118,13 +118,16 @@ namespace Rsbc.Dmf.DriverPortal.Api
                     {
                         Secret = configuration["ICBC_ADAPTER_JWT_SECRET"]
                     };
-
                     var tokenReply = initialClient.GetToken(tokenRequest);
-
                     if (tokenReply != null && tokenReply.ResultStatus == IcbcAdapter.ResultStatus.Success)
                     {
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                        logger.LogInformation("GetToken successfuly.");
+                    }
+                    else
+                    {
+                        logger.LogError("GetToken failed {0}.", tokenReply?.ErrorDetail);
                     }
                 }
 

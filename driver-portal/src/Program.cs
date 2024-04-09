@@ -139,10 +139,15 @@ services.AddSwaggerGen(options =>
     options.CustomSchemaIds(type => SwashbuckleHelper.GetSchemaId(type));
 });
 
+// NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+    .AddConsole());
+
 // grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration);
-services.AddIcbcAdapterClient(builder.Configuration);
+services.AddIcbcAdapterClient(builder.Configuration, loggerFactory);
 
 // Health Checks
 services.AddHealthChecks()
@@ -154,10 +159,6 @@ services.AddMemoryCache();
 services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 services.AddTransient<IUserService, UserService>();
 services.AddTransient<DocumentFactory>();
-// NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
-using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
-    .SetMinimumLevel(LogLevel.Trace)
-    .AddConsole());
 services.AddAutoMapperSingleton(loggerFactory);
 
 var app = builder.Build();
