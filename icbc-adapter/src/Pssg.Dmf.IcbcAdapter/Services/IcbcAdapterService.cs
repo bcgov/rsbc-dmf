@@ -124,7 +124,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                 var jwtSecurityToken = new JwtSecurityToken(
                     _configuration["JWT_VALID_ISSUER"],
                     _configuration["JWT_VALID_AUDIENCE"],
-                    expires: DateTime.UtcNow.AddMinutes(15),
+                    expires: DateTime.UtcNow.AddYears(5),
                     signingCredentials: creds
                 );
                 result.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
