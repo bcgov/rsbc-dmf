@@ -1,0 +1,230 @@
+<div class="page-desc">
+  <div class="container">
+    <h1>Portal Dashboard</h1>
+    <p>In this portal you can:</p>
+    <div>
+      <ul>
+        <li>Start, access and submit a Driver’s Medical Exam Report (DMER)</li>
+        <li>See DMER Status</li>
+        <li>Options for the driver to obtain a missing DMER CaseId</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <mat-card class="search-card">
+    <mat-card-header>
+      <mat-card-title class="card-title"> Search DMER Case </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form>
+        <div>
+          <label class="form-label">DMER Case ID</label>
+
+          <div class="search-container">
+            <mat-form-field class="search-input" appearance="outline">
+              <input
+                matInput
+                placeholder="Enter the DMER Case ID to start or access a DMER "
+              />
+            </mat-form-field>
+            <button
+              mat-flat-button
+              color="primary"
+              class="search-button"
+              (click)="searchDmerCase()"
+            >
+              Search DMER Case
+            </button>
+          </div>
+
+          <p>
+            Missing DMER Case ID?
+            <a
+              >Find out the options for the driver to obtain their DMER Case
+              ID</a
+            >
+          </p>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <div *ngIf="showSearchResults">
+    <div class="result-card">
+      <div>
+        Showing Search Results for <b>DMER Case Id</b>
+        <button mat-button color="primary" (click)="clearResults()">
+          Clear
+        </button>
+      </div>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="serachResultRow1">
+            <div style="padding: 30px; border-right: 2px solid grey">
+              <div>
+                <label>Case Id</label>
+                <div>
+                  <b><a>DMR1234</a> <br /></b>
+                  View case details
+                </div>
+              </div>
+            </div>
+            <div class="serachResultRow2">
+              <div>
+                <div>
+                  <label>Patient's Name</label>
+                  <div><b>Minto, Rahul Anu</b></div>
+                </div>
+                <div>
+                  <label>DMER Type</label>
+                  <div>
+                    <b>Scheduled Age</b>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div>
+                  <label>Driver License Number</label>
+                  <div>
+                    <b>6034197</b>
+                  </div>
+                </div>
+                <div>
+                  <label>DMER Status</label>
+                  <div>
+                    <b>Required - Unclaimed</b>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <label>Date Of Birth</label>
+                  <div>
+                    <b>May 12, 1989</b>
+                  </div>
+                </div>
+
+                <div>
+                  <label></label>
+                  <div>
+                    <button mat-flat-button color="primary" class="dmer-button">
+                      Start DMER
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  <div class="list">
+    <h2>DMER Definitions</h2>
+    <div class="accordion-btn-container">
+      <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+        >Expand All</a
+      >
+      <span class="accordion-bar">&nbsp;|&nbsp;</span>
+      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+        >Collapse All</a
+      >
+    </div>
+    <div style="padding-bottom: 30px">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">DMER Type</mat-panel-title>
+          </mat-expansion-panel-header>
+          <h1>Test1</h1>
+          <!-- <app-dmer-type></app-dmer-type> -->
+          <!-- <app-case-type></app-case-type> -->
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title"
+              >DMER Status</mat-panel-title
+            >
+          </mat-expansion-panel-header>
+          <h1>Test1</h1>
+          <!-- <app-case-type></app-case-type> -->
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </div>
+  <div class="list">
+    <h2>DMERs</h2>
+    <p>
+      Browse the list or search for DMERs you have been working on using the
+      search field and filters below. See above for DMER Type and Case Status
+      definitions.
+    </p>
+    <div class="filter-dmer">
+      <div>
+        <mat-form-field class="cases-input" appearance="outline">
+          <input matInput type="text" placeholder="Search by Name or Case ID" />
+          <button
+            matSuffix
+            mat-icon-button
+            aria-label="search"
+            (click)="searchCases()"
+          >
+            <mat-icon>search</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-icon class="filter-icon">filter_alt</mat-icon>
+        <mat-label style="color: #003366">Filter By: </mat-label>
+        <mat-form-field>
+          <mat-select [(ngModel)]="selectedStatus" name="status">
+            @for (status of status; track status) {
+            <mat-option [value]="status.value">{{
+              status.viewValue
+            }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div><button mat-button (click)="clear()">Clear</button></div>
+    </div>
+    <div>
+      <mat-card style="margin-bottom: 24px">
+        <mat-card-content class="dmer-details">
+          <div>
+            <label>DMER Case Id</label>
+            <div><b>A71267137</b></div>
+          </div>
+          <div>
+            <label>Patient's Name</label>
+            <div>
+              <b>Rahul Minto</b>
+            </div>
+          </div>
+          <div>
+            <label>Date of Birth</label>
+            <div>
+              <b>May 13, 1952</b>
+            </div>
+          </div>
+          <div>
+            <label>DMER Type</label>
+            <div>
+              <b>Suspected Medical Condition</b>
+            </div>
+          </div>
+          <div>
+            <label>DMER Status</label>
+            <div>
+              <b>Required - Unclaimed</b>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
