@@ -2,15 +2,10 @@
 	admin off
 }
 
-
-
-
 :2015 {
-@blocked {
-                client_ip not 142.32.0.0/16
-        }
-	respond @blocked "Driver Portal is not available." 403
 
+  log stdout
+  
 	root * /site 
 
 	header / {
@@ -31,7 +26,11 @@
 	encode zstd gzip
 
 	route {
-		uri strip_prefix /driver-portal
+
+    @jstype path *.js
+    header @jstype Content-Type text/javascript
+
+		uri strip_prefix {$BASE_URL}
 		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 	}
