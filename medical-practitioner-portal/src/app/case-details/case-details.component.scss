@@ -1,0 +1,70 @@
+.dmer-details {
+    display: flex;
+    justify-content: space-between;
+    line-height: 24px;
+  }
+  
+  mat-card {
+    margin-bottom: 24px;
+  }
+  
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 12px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .mat-mdc-card.caseStatus {
+    background-color: white;
+    border: 1px solid #c3cddc;
+  }
+  
+  mat-stepper {
+    background-color: rgba(236, 245, 255, 1);
+    border-radius: 5px;
+    padding: 8px;
+  }
+  
+  ::ng-deep .mat-horizontal-stepper-header {
+    pointer-events: none !important;
+  }
+  
+  ::ng-deep .mat-step-header .mat-step-icon-state-done {
+    background-color: rgba(0, 0, 0, 0.54);
+  }
+  
+  ::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+    color: #003366;
+  }
+  ::ng-deep
+    .mat-step-label.mat-step-label-active.mat-step-label-selected
+    > .mat-step-text-label {
+    color: #003366;
+    font-weight: 700;
+  
+    border: 2px solid #f1f1f3;
+    border-radius: 2px;
+    background-color: #f1f1f3;
+    // padding-top: 20px;
+  }
+  
+  .primaryButton{
+  width: 172px;
+  height: 48px;
+  background: inherit;
+  background-color: rgba(0, 51, 102, 1);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  }

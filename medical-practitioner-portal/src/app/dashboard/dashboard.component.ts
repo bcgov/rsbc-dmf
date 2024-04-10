@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
 // import { DmerTypeComponent } from '@shared/case-definitions';
 // import { CoreUiModule } from '@shared/core-ui';
 // import { DmerTypeComponent } from '@shared/core-ui';
@@ -34,12 +36,14 @@ interface Status {
     MatSelectModule,
     FormsModule,
     CommonModule,
-    // DmerTypeComponent,
+    RouterLink,
+    RouterLinkActive
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  
 })
 export class DashboardComponent {
   status: Status[] = [
@@ -56,7 +60,7 @@ export class DashboardComponent {
   showSearchResults = false;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
-    //private router: Router,
+   
     private viewportScroller: ViewportScroller
   ) {}
 
