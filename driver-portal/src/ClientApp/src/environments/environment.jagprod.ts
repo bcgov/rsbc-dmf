@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiRootUrl: '/driver-portal'
+  apiRootUrl: '/roadsafetybc/driver-portal'
 };
