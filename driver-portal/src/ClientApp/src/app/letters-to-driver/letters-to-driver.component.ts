@@ -43,18 +43,14 @@ export class LettersToDriverComponent implements OnInit {
     const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
 
     this.filteredDocuments = this._letterDocuments?.slice(0, pageSize);
-    console.log(pageSize);
   }
 
   downloadLetters(documentId: string | null | undefined) {
-    console.log('downloadLetters');
     if (!documentId) return;
     this.caseManagementService
       .getDownloadDocument({ documentId })
       .subscribe((res) => {
         this.downloadFile(res);
-
-        console.log(res);
       });
   }
 

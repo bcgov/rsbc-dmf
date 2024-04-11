@@ -23,7 +23,6 @@ export class LoginService {
 
     return this.configService.getOAuthConfig().pipe(
       tap((config) => {
-        console.log(config);
         this.oauthService.configure(config);
         this.oauthService.setupAutomaticSilentRefresh();
         console.debug('oauth service configured');

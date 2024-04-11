@@ -26,7 +26,6 @@ export class DmerSubmissionConfirmationComponent {
     );
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("Dialog result:", result);
       if (result) {
         if (action === 'dashboard') {
           this.router.navigate(['/dashboard'])

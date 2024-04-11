@@ -30,12 +30,10 @@ export class CaseDetailsComponent implements OnInit {
       .getDriverDocuments({ driverId })
       .subscribe((caseDocuments) => {
         this.caseDocuments = caseDocuments;
-        console.log(caseDocuments);
       });
   }
 
   onViewLetter() {
-    console.log('OnViewLetter');
     this.selectedIndex = 2;
   }
 }

@@ -23,3 +23,10 @@ input[type="checkbox"] {
   color: #f2f2f2;
   background-color: #003366;
 }
+
+
+.acceptButton :disabled, button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}

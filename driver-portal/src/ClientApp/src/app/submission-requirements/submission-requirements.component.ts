@@ -12,7 +12,7 @@ import { Document, DocumentSubType } from '../shared/api/models';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { ApiConfiguration } from '../shared/api/api-configuration';
 
 @Component({
@@ -35,9 +35,13 @@ export class SubmissionRequirementsComponent implements OnInit {
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private apiConfig: ApiConfiguration
+    private apiConfig: ApiConfiguration,
+    private fb: FormBuilder
   ) {}
 
+  uploadForm = this.fb.group({
+    documentSubType : ['', Validators.required]
+  })
   ngOnInit() {
     this.getDocumentSubtypes();
   }
@@ -50,7 +54,6 @@ export class SubmissionRequirementsComponent implements OnInit {
   public files: any[] = [];
 
   onSelect(event: any) {
-    console.log(event);
     this.fileToUpload = event.addedFiles[0];
   }
 
@@ -80,7 +83,6 @@ export class SubmissionRequirementsComponent implements OnInit {
   }
 
   handleFileInput(event: any) {
-    console.log('handleFileInput', event);
     this.fileToUpload = event.target.files[0];
   }
   isFileUploading = false;
@@ -90,7 +92,11 @@ export class SubmissionRequirementsComponent implements OnInit {
       return;
     }
     if (!this.fileToUpload) {
-      console.log('No file selected');
+      this._snackBar.open('Please select the file to Upload', 'Close', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 5000,
+      });
       return;
     }
     const formData = new FormData();
@@ -103,8 +109,7 @@ export class SubmissionRequirementsComponent implements OnInit {
           enctype: 'multipart/form-data',
         },
       })
-      .subscribe((res) => {
-        console.log(res);
+      .subscribe(() => {
         this.fileToUpload = null;
         this.selectedValue = '';
         this.acceptControl.reset();

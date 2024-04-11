@@ -3939,6 +3939,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 {
                                     //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                                     if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+
                                 }
 
                                 addItem = true;

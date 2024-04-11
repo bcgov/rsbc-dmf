@@ -34,8 +34,7 @@ export class AppComponent implements OnInit {
       //get the user's profile
 
       const driver = await firstValueFrom(this.loginService.getUserProfile());
-      console.log(driver);
-
+     
       if (!this.loginService.isLoggedIn()) {
         return;
       }
