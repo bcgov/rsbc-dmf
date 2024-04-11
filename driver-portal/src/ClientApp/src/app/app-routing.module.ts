@@ -9,6 +9,7 @@ import { SubmissionHistoryComponent } from './submission-history/submission-hist
 import { LetterDetailsComponent } from './letter-details/letter-details.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
+import { enableDebugTools } from '@angular/platform-browser';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -34,7 +35,10 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, RouterModule.forRoot(routes)],
+  imports: [CommonModule, RouterModule.forRoot(routes, {
+    scrollOffset : [0,0],
+    scrollPositionRestoration : 'top'})
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
