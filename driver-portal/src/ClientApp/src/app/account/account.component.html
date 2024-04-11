@@ -63,7 +63,7 @@
         <div>
           <label class="form-label">Middle Name</label>
           <mat-form-field appearance="outline" class="disabledInput">
-            <input matInput name="middleName" placeholder="Middle Name" />
+            <input matInput name="middleName" placeholder="Middle Name" [formControl]="accountForm.controls.middleName"/>
           </mat-form-field>
         </div>
         <div>
@@ -81,7 +81,7 @@
 
       <div>
         <div style="padding-top: 16px">
-          <label class="form-label">Email Address *</label>
+          <label class="form-label">Email Address <span style="color: red;">*</span></label>
           <mat-form-field
             appearance="outline"
             class="inputWidth"
@@ -266,6 +266,7 @@
           mat-flat-button
           class="primaryButton"
           (click)="onUpdate()"
+          [disabled]="!confirmed.checked"
         >
           Update
         </button>

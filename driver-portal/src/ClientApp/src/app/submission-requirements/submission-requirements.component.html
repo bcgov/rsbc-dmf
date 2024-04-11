@@ -44,16 +44,21 @@
         3. Click Upload <br />
         File button Certain documents cannot be uploaded (e.g., example here).
         Learn how to submit additional documentation.
+        <form>
         <div style="padding-top: 24px">
           <mat-form-field appearance="outline" style="width: 350px">
             <mat-label>Select Document Type</mat-label>
-            <mat-select [(ngModel)]="selectedValue" name="documentType">
+            <mat-select [(ngModel)]="selectedValue" name="documentType" [formControl]="uploadForm.controls.documentSubType">
               @for (documentType of documentSubTypes; track documentType) {
               <mat-option [value]="documentType.id">{{
                 documentType.name
               }}</mat-option>
               }
             </mat-select>
+            @if
+            (uploadForm.controls.documentSubType.getError('required')) {
+            <mat-error>This Field is required</mat-error>
+            }
           </mat-form-field>
         </div>
 
@@ -108,6 +113,7 @@
             Cancel
           </button>
         </div>
+      </form>
       </div>
     </div>
     <div>

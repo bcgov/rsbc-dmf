@@ -22,6 +22,7 @@ export class AccountComponent implements OnInit {
     notifyByMail: [false],
     firstName: [''],
     lastName: [''],
+    middleName : [''],
     emailAddress: ['', Validators.required],
     driverLicenseNumber: ['', Validators.maxLength(8)],
     addressLine1: [''],

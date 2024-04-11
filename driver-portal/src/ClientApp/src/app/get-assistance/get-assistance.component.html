@@ -221,7 +221,7 @@
             <div style="display: flex; flex-direction: column">
               <div>
                 <mat-form-field style="width: 300px">
-                  <mat-label>Select Topic</mat-label>
+                  <mat-label>Select Topic </mat-label>
                   <mat-select
                     [formControl]="callbackRequestForm.controls.subject"
                     name="callBackTopic"
@@ -240,7 +240,7 @@
                 </mat-form-field>
               </div>
               <div>
-                <label class="form-label">Phone Number</label>
+                <label class="form-label">Phone Number <span style="color: red;">*</span></label>
                 <mat-form-field appearance="outline" class="inputWidth">
                   <input
                     matInput
@@ -249,6 +249,9 @@
                     type="number"
                     [formControl]="callbackRequestForm.controls.phone"
                   />
+                  @if (callbackRequestForm.controls.phone.getError('required')) {
+                    <mat-error>This Field is required</mat-error>
+                    }
                 </mat-form-field>
               </div>
               <div>

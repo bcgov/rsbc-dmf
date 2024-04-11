@@ -45,7 +45,7 @@ export class GetAssistanceComponent implements OnInit {
     caseId: [''],
     description: [''],
     subject: ['', Validators.required],
-    phone: [''],
+    phone: ['', Validators.required],
     preferredTime: ['0'],
   });
 
