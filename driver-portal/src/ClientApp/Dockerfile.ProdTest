@@ -12,7 +12,7 @@ RUN npm install
 #RUN npm run lint
 #RUN npm run test -- --no-watch --no-progress
 
-RUN npm run build -- --base-href /roadsafetybc/driver-portal/ --deploy-url /roadsafetybc/driver-portal/ --configuration production
+RUN npm run build -- --base-href /roadsafetybc/driver-portal/ --deploy-url /roadsafetybc/driver-portal/ --configuration jagprod
 
 FROM caddy:latest as final
 COPY ./driver-portal/src/ClientApp/Caddyfile /etc/caddy/Caddyfile

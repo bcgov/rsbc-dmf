@@ -35,6 +35,7 @@ import { LetterDetailsComponent } from './letter-details/letter-details.componen
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 import { CancelCallbackDialogComponent } from './get-assistance/cancel-callback-dialog/cancel-callback-dialog.component';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -86,7 +87,7 @@ import { CancelCallbackDialogComponent } from './get-assistance/cancel-callback-
     RouterModule.forRoot([]),
     AppRoutingModule,
     MaterialModule,
-    ApiModule.forRoot({ rootUrl: '/driver-portal' }),
+    ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
   ],
   providers: [
     {
