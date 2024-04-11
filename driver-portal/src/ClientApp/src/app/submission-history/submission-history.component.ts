@@ -27,7 +27,6 @@ export class SubmissionHistoryComponent implements OnInit {
     });
 
     this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
-    console.log(this.filteredDocuments);
   }
 
   get allDriverDocuments() {
@@ -65,6 +64,5 @@ export class SubmissionHistoryComponent implements OnInit {
     const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
 
     this.filteredDocuments = this._allDocuments?.slice(0, pageSize);
-    console.log(pageSize);
   }
 }

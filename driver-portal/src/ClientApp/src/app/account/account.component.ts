@@ -136,7 +136,6 @@ export class AccountComponent implements OnInit {
           location.reload();
         },
         error: (err) => {
-          console.log(typeof err.status);
           if (err.status === 401) {
             this._snackBar.open(
               'Unable To Register. Please Check that you have entered your Driver License Number correctly. The name and birthdate on your Driver Licence must match the details on your BC Services Card',

@@ -63,7 +63,6 @@ export class DashboardComponent implements OnInit {
     this.caseManagementService.getCases(searchParams).subscribe((cases) => {
       if (cases && Array.isArray(cases) && cases?.[0]) {
         this.searchedCase = cases[0];
-        // console.log(this.searchedCase)
       } else {
         this.searchedCase = null;
       }

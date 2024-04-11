@@ -27,7 +27,6 @@ export class LetterDetailsComponent implements OnInit {
       .getDriverDocuments({ driverId })
       .subscribe((caseDocuments) => {
         this.caseDocuments = caseDocuments;
-        console.log(caseDocuments);
       });
   }
 }

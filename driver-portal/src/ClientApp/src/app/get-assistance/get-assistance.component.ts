@@ -67,7 +67,6 @@ export class GetAssistanceComponent implements OnInit {
     });
 
     this.filteredCallbacks = this._allCallBackRequests?.slice(0, this.pageSize);
-    console.log(this.filteredCallbacks);
   }
 
   get allCallBacks() {
@@ -170,12 +169,10 @@ export class GetAssistanceComponent implements OnInit {
     this.showCallBackCreate = false;
   }
   onRequestCallBack() {
-    console.log('onRequestCallBack');
     this.showCallBack = true;
   }
 
   back() {
-    console.log('back');
     this.showCallBack = false;
   }
 
@@ -192,6 +189,6 @@ export class GetAssistanceComponent implements OnInit {
     const pageSize = (this.filteredCallbacks?.length ?? 0) + this.pageSize;
 
     this.filteredCallbacks = this._allCallBackRequests?.slice(0, pageSize);
-    console.log(pageSize);
+    
   }
 }
