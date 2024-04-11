@@ -109,7 +109,7 @@ export class SubmissionRequirementsComponent implements OnInit {
           enctype: 'multipart/form-data',
         },
       })
-      .subscribe((res) => {
+      .subscribe(() => {
         this.fileToUpload = null;
         this.selectedValue = '';
         this.acceptControl.reset();
