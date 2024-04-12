@@ -14,7 +14,6 @@ Gatling tests for RSBC DMF
 
 # Setup
 This will setup using Maven and Scala but there are other combinations e.g. sbt, Kotlin, Java
-- Clone the repository https://github.com/jburditt/rsbc-dmf-gatling
 - Install Java, you can verify with command `java -v`
 - Install Scala, you can verify with command `scala -version`
 - Install Maven, you can verify with command `mvn -v`. On Windows 11, add the "bin" folder to the environment variable "PATH"
