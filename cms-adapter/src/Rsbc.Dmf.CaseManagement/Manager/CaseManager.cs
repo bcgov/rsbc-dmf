@@ -3896,11 +3896,10 @@ namespace Rsbc.Dmf.CaseManagement
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
-
                         // Load documents
                         await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
 
-                        // Check for manual pass document if exists break
+                        // Check for manual pass document if it exists break
 
                         var hasManualPassDocument = false;
 
@@ -3908,8 +3907,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
-                            if (document.dfp_DocumentTypeID != null
-                                && document.dfp_DocumentTypeID.dfp_name == "DMER" && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                            if (document.dfp_DocumentTypeID != null && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
                                 hasManualPassDocument = true;
                                 break;
@@ -3923,14 +3921,12 @@ namespace Rsbc.Dmf.CaseManagement
                                 )
                             {
                                 addItem = true;
-                               
                             }
-
                         }
 
-                        if (hasManualPassDocument == false )
+                        if (hasManualPassDocument == false)
                         {
-                            
+
                             //load decisions
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
                             if (item.dfp_incident_dfp_decision.Count > 0)
@@ -3943,16 +3939,15 @@ namespace Rsbc.Dmf.CaseManagement
                                 }
 
                                 addItem = true;
-                                
 
                             }
-                            
+
                             if (addItem)
                             {
                                 outputArray.Add(item);
                             }
                         }
-                        
+
 
 
                     }
