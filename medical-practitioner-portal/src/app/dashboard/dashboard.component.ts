@@ -37,13 +37,12 @@ interface Status {
     FormsModule,
     CommonModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  
 })
 export class DashboardComponent {
   status: Status[] = [
@@ -59,10 +58,7 @@ export class DashboardComponent {
   selectedStatus: string = 'allStatus';
   showSearchResults = false;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
-  constructor(
-   
-    private viewportScroller: ViewportScroller
-  ) {}
+  constructor(private viewportScroller: ViewportScroller) {}
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
@@ -84,6 +80,4 @@ export class DashboardComponent {
   clearResults() {
     this.showSearchResults = false;
   }
-  
-  
 }
