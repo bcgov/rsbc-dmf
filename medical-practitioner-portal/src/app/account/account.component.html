@@ -1,116 +1,105 @@
 <div class="page-desc">
-    <div class="container">
-<h1>My Profile</h1>
-    </div>
-
+  <div class="container">
+    <h1>My Profile</h1>
+  </div>
 </div>
 <div class="container">
-<div class="list">
-<h2>My Account</h2>
-<mat-card style="margin-bottom: 24px">
-    <mat-card-content class="account-details">
-      <div>
-        <label>Full Name</label>
+  <div class="list">
+    <h2>My Account</h2>
+    <mat-card style="margin-bottom: 24px">
+      <mat-card-content class="account-details">
         <div>
-          <b>Jane Doe</b>
+          <label>Full Name</label>
+          <div>
+            <b>Jane Doe</b>
+          </div>
         </div>
-      </div>
-      <div>
-        <label>Email</label>
         <div>
-          <b>Jane Doegmail.com</b>
+          <label>Email</label>
+          <div>
+            <b>Jane Doegmail.com</b>
+          </div>
         </div>
-      </div>
-      <div>
-        <label>Role</label>
         <div>
-          <b>Practitioner</b>
+          <label>Role</label>
+          <div>
+            <b>Practitioner</b>
+          </div>
         </div>
-      </div>
-      <div>
-        <label></label>
         <div>
+          <label></label>
+          <div>
             <div>
-                <button class="manage-button">
-                  Manage
-                </button>
-              </div>
+              <button class="manage-button">Manage</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
-</div>
-<div class="list">
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="list">
     <h2>PIdP Endorsements</h2>
     <div>
-        <mat-card
-         
-        >
-          <mat-card-content class="endorsementeContent">
-            <div style="text-align: center">
-              <mat-icon
-                (click)="toggleIsExpandable()"
-                class="expandedIcon"
-              >
-                expand_circle_down
-              </mat-icon>
-            </div>
-            <div style="display: flex; flex-direction: column">
-                <div class="endorsement-border">&nbsp;</div>
-                <div>&nbsp;</div>
-              </div>
-            
-            <div style="flex: 1">
-              <div class="endorsementRow">
+      <mat-card>
+        <mat-card-content class="endorsementeContent">
+          <div style="text-align: center">
+            <mat-icon (click)="toggleIsExpandable()" class="expandedIcon">
+              expand_circle_down
+            </mat-icon>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div class="endorsement-border">&nbsp;</div>
+            <div>&nbsp;</div>
+          </div>
+
+          <div style="flex: 1">
+            <div class="endorsementRow">
+              <div>
+                <label>Full Name</label>
                 <div>
-                    <label>Full Name</label>
-                    <div>
-                      <b>Shelby Drew</b>
-                    </div>
-                  </div>
-                  <div>
-                    <label>Email</label>
-                    <div>
-                      <b>shelby.drewhealth.ca</b>
-                    </div>
-                  </div>
-                  <div>
-                    <label>Role</label>
-                    <div>
-                      <b>Practitioner</b>
-                    </div>
-                  </div>
-                  <div>
-                    <label></label>
-                    <div>
-                        <div>
-                            <button class="manage-button">
-                              Manage
-                            </button>
-                          </div>
-                    </div>
-                  </div>
+                  <b>Shelby Drew</b>
                 </div>
-  
-              <div
-                class="endorsementRow"
-                
-                style="
-                  border-top: 2px solid gray;
-                  padding-top: 20px;
-                  padding-bottom: 20px;
-                "
-              >
+              </div>
+              <div>
+                <label>Email</label>
                 <div>
-                  <label>Licenses</label>
+                  <b>shelby.drewhealth.ca</b>
+                </div>
+              </div>
+              <div>
+                <label>Role</label>
+                <div>
+                  <b>Practitioner</b>
+                </div>
+              </div>
+              <div>
+                <label></label>
+                <div>
                   <div>
-                    <b></b>
+                    <button class="manage-button">Manage</button>
                   </div>
                 </div>
               </div>
             </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-</div>
+
+            <div
+              class="endorsementRow"
+              style="
+                border-top: 2px solid gray;
+                padding-top: 20px;
+                padding-bottom: 20px;
+              "
+            >
+              <div>
+                <label>Licenses</label>
+                <div>
+                  <b></b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 </div>

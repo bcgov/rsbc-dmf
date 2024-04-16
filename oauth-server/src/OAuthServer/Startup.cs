@@ -26,6 +26,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
+using Microsoft.AspNetCore.Http;
 
 namespace OAuthServer
 {
@@ -62,6 +63,7 @@ namespace OAuthServer
                             "https://dev.roadsafetybc.gov.bc.ca",
                             "https://test.roadsafetybc.gov.bc.ca",
                             "https://roadsafetybc.gov.bc.ca",
+                            "https://jag.gov.bc.ca",
                             "https://www.roadsafetybc.gov.bc.ca",
                             "https://localhost:3020",
                             "http://localhost:3020")
@@ -69,6 +71,7 @@ namespace OAuthServer
                     });
             });
 
+            
             services.AddControllersWithViews();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -92,8 +95,11 @@ namespace OAuthServer
 
                                 options.UserInteraction.LoginUrl = "~/login";
                                 options.UserInteraction.LogoutUrl = "~/logout";
-
-                                if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
+                                if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+                                {
+                                    options.IssuerUri = configuration["ISSUER_URI"];
+                                    
+                                }
                             })
                             .AddProfileService<ProfileService>()
                             .AddOperationalStore(options =>
@@ -125,6 +131,21 @@ namespace OAuthServer
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAuthentication()
+                .AddCookie("IdCookie", options =>
+                {
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
+                    {
+                        options.Cookie.Domain = configuration["COOKIE_DOMAIN"];
+                    }
+
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
+                    {
+                        options.Cookie.Path = configuration["COOKIE_PATH"];
+                    }
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.HttpOnly = false;
+                })
            .AddOpenIdConnect("bcsc", options =>
            {
                // Note: Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler  doesn't handle JWE correctly
@@ -132,12 +153,27 @@ namespace OAuthServer
                // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
                // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
                options.GetClaimsFromUserInfoEndpoint = false;
-
+               
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
+               
                options.ResponseType = OpenIdConnectResponseType.Code;
-               options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-               options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+               //options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+               //options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+
+               options.SignInScheme = "IdCookie";
+               options.SignOutScheme = "IdCookie";
+
+               if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
+               {
+                   options.CorrelationCookie.Path = configuration["COOKIE_PATH"];
+                   options.NonceCookie.Path = configuration["COOKIE_PATH"];
+                   
+               }
+               options.NonceCookie.HttpOnly = false;
+               options.CorrelationCookie.HttpOnly = false;
+               
 
                //add required scopes
                options.Scope.Add("profile");
@@ -147,6 +183,8 @@ namespace OAuthServer
 
                //set the tokens decrypting key
                options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
+
+               
 
                options.Events = new OpenIdConnectEvents
                {
@@ -231,10 +269,34 @@ namespace OAuthServer
                        {
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
                        }));
+                   },
+                   OnTicketReceived = async context =>
+                   {
+                       string redirectUri = configuration["BASE_PATH"] + "/callback";
+                       if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+                       {
+                           redirectUri = configuration["ISSUER_URI"] + "/callback";
+                       }
+                       context.ReturnUri = redirectUri;
+                       await Task.CompletedTask;
                    }
-               };
-           });
 
+               };
+           }); ;
+
+            /*
+            services.AddAuthentication("IdCookie")
+                .AddCookie("IdCookie", options =>
+                {
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
+                    {
+                        options.Cookie.Domain = configuration["COOKIE_DOMAIN"];
+                    }
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.HttpOnly = false;
+                });
+            */
             services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
             {
@@ -280,12 +342,17 @@ namespace OAuthServer
                 .BlockAllMixedContent());
 
             app.UseResponseCompression();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.None,
+                Secure = CookieSecurePolicy.Always
+            });
 
             app.UsePathBase(configuration["BASE_PATH"] ?? "");
             app.UseRouting();
 
             app.UseCors(MyPolicy);
+
 
             app.UseIdentityServer();
 

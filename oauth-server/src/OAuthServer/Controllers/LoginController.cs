@@ -7,9 +7,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using System.Web;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http;
 
 namespace OAuthServer.Controllers
 {
@@ -22,20 +27,24 @@ namespace OAuthServer.Controllers
         private readonly IProfileService profileService;
         private readonly IClientStore clientStore;
         private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
+        private readonly IConfiguration _configuration;
 
         public LoginController(
             IIdentityServerInteractionService interaction,
             IEventService events,
             IProfileService profileService,
             IClientStore clientStore,
-            IAuthenticationSchemeProvider authenticationSchemeProvider)
+            IAuthenticationSchemeProvider authenticationSchemeProvider, IConfiguration configuration)
         {
             this.interaction = interaction;
             this.events = events;
             this.profileService = profileService;
             this.clientStore = clientStore;
             this.authenticationSchemeProvider = authenticationSchemeProvider;
+            _configuration = configuration;
         }
+
+
 
         /// <summary>
         /// Entry point into the login workflow
@@ -45,9 +54,17 @@ namespace OAuthServer.Controllers
         {
             var scheme = await GetAuthenticationSchemeForClient(returnUrl);
             if (string.IsNullOrEmpty(scheme)) return BadRequest($"No client defined for {returnUrl}");
-
-            return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
+            if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
+            {
+                return Redirect(_configuration["ISSUER_URI"] + $"/challenge?scheme={scheme}&returnUrl={HttpUtility.UrlEncode(returnUrl)}");
+            }
+            else
+            {
+                return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
+            }
         }
+
+        
 
         /// <summary>
         /// initiate roundtrip to external authentication provider
@@ -79,10 +96,25 @@ namespace OAuthServer.Controllers
             Serilog.Log.Logger.Information("**** REACHED CALLBACK ****");
 
             // read external identity from the temporary cookie
-            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+            // adjust the cookie path.
+
+            foreach (var item in HttpContext.Request.Headers)
+            {
+                Serilog.Log.Information($"{item.Key} = {item.Value}");
+            }
+
+            foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                Serilog.Log.Information($"{cookie.Key} = {cookie.Value}");
+            }
+            
+
+            var result = await HttpContext.AuthenticateAsync("IdCookie");
             if (result?.Succeeded != true)
             {
-                throw new Exception("External authentication error");
+                Serilog.Log.Error(result.Failure,"External authentication error");
+                //throw new Exception("External authentication error ");
             }
 
             // retrieve claims of the external user
@@ -98,7 +130,14 @@ namespace OAuthServer.Controllers
             var scheme = result.Properties.Items["scheme"];
 
             // retrieve returnUrl
-            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+
+            string returnUrlPrefix = "";
+            if (!string.IsNullOrEmpty(_configuration["RETURN_PREFIX"]))
+            {
+                returnUrlPrefix = _configuration["RETURN_PREFIX"];
+            }
+
+            var returnUrl = returnUrlPrefix + result.Properties.Items["returnUrl"] ?? "~/";
 
             // use the user information to find your user in your database, or provision a new user
             //var user = FindUserFromExternalProvider(scheme, userId);
