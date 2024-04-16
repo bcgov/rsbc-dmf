@@ -257,7 +257,6 @@ namespace OAuthServer
                        {
                            redirectUri = configuration["ISSUER_URI"] + "/callback";
                        }
-                       
                        context.ReturnUri = redirectUri;
                        await Task.CompletedTask;
                    }
@@ -265,7 +264,7 @@ namespace OAuthServer
                };
            }); ;
 
-
+            /*
             services.AddAuthentication("IdCookie")
                 .AddCookie("IdCookie", options =>
                 {
@@ -277,7 +276,7 @@ namespace OAuthServer
                     options.Cookie.SameSite = SameSiteMode.None;
                     options.Cookie.HttpOnly = false;
                 });
-
+            */
             services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
             {

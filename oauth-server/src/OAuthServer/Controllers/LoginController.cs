@@ -110,7 +110,7 @@ namespace OAuthServer.Controllers
             }
             
 
-            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.DefaultCookieAuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true)
             {
                 Serilog.Log.Error(result.Failure,"External authentication error");
