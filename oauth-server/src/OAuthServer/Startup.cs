@@ -143,9 +143,9 @@ namespace OAuthServer
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
 
-               if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+               if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
                {
-                   options.CallbackPath = configuration["ISSUER_URI"] + "/callback";
+                   options.CallbackPath = configuration["COOKIE_PATH"] + "/callback";
                }
 
                options.ResponseType = OpenIdConnectResponseType.Code;
