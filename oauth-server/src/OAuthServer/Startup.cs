@@ -250,15 +250,14 @@ namespace OAuthServer
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
                        }));
                    },
-                   OnAuthorizationCodeReceived = async context =>
+                   OnTicketReceived = async context =>
                    {
                        string redirectUri = configuration["BASE_PATH"] + "/callback";
                        if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
                        {
                            redirectUri = configuration["ISSUER_URI"] + "/callback";
                        }
-
-                       context.ProtocolMessage.RedirectUri = redirectUri;
+                       context.ReturnUri = redirectUri;
                        await Task.CompletedTask;
                    }
 
