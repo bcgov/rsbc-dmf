@@ -137,8 +137,8 @@ namespace OAuthServer.Controllers
             if (!string.IsNullOrEmpty(_configuration["RETURN_PREFIX"]))
             {
                 int questionPos = result.Properties.Items["returnUrl"].IndexOf("?");
-                returnUrl = _configuration["RETURN_PREFIX"] + _configuration["BASE_URL"] +
-                            "connect/authorize" + result.Properties.Items["returnUrl"].Substring(questionPos);
+                returnUrl = _configuration["RETURN_PREFIX"] + _configuration["BASE_PATH"] +
+                            "/connect/authorize" + result.Properties.Items["returnUrl"].Substring(questionPos);
             }
             
 
