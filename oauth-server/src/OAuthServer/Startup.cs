@@ -143,11 +143,6 @@ namespace OAuthServer
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
 
-               if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
-               {
-                   options.CallbackPath = configuration["COOKIE_PATH"] + "/callback";
-               }
-
                options.ResponseType = OpenIdConnectResponseType.Code;
                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -254,7 +249,19 @@ namespace OAuthServer
                        {
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
                        }));
+                   },
+                   OnRedirectToIdentityProvider = async context =>
+                   {
+                       string redirectUri = configuration["BASE_PATH"] + "/callback";
+                       if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+                       {
+                           redirectUri = configuration["ISSUER_URI"] + "/callback";
+                       }
+
+                       context.ProtocolMessage.RedirectUri = redirectUri;
+                       await Task.CompletedTask;
                    }
+
                };
            }); ;
 
