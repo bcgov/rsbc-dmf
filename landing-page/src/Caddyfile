@@ -20,6 +20,14 @@
         Referrer-Policy "same-origin"
     }
 
+	route {
+
+    @jstype path *.js
+    header @jstype Content-Type text/javascript
+		
+		reverse_proxy /rsbc-dfp-oidc {OIDC_URL}		
+	}
+
     encode zstd gzip
 
     file_server
