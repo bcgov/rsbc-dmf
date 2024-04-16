@@ -159,6 +159,8 @@ namespace OAuthServer
                {
                    options.NonceCookie.Domain = configuration["COOKIE_DOMAIN"];
                }
+               options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
+               options.NonceCookie.SameSite = SameSiteMode.None;
 
                options.Events = new OpenIdConnectEvents
                {
@@ -294,6 +296,7 @@ namespace OAuthServer
             app.UseResponseCompression();
             app.UseCookiePolicy(new CookiePolicyOptions
             {
+                MinimumSameSitePolicy = SameSiteMode.None,
                 Secure = CookieSecurePolicy.Always
             });
 
