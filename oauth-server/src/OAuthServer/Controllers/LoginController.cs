@@ -63,23 +63,7 @@ namespace OAuthServer.Controllers
             }
         }
 
-        /// <summary>
-        /// Entry point into the login workflow
-        /// </summary>
-        [HttpGet("signin-oidc")]
-        public async Task<IActionResult> Login(string code, string state, string oidcAuthenticationResponseURI)
-        {
-            
-            if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
-            {
-                return Redirect(_configuration["ISSUER_URI"] + $"/callback");
-            }
-            else
-            {
-                return RedirectToAction(nameof(Callback));
-            }
-
-        }
+        
 
         /// <summary>
         /// initiate roundtrip to external authentication provider
