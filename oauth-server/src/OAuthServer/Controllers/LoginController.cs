@@ -13,6 +13,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Web;
+using System.Security.Cryptography;
 
 namespace OAuthServer.Controllers
 {
@@ -42,6 +43,8 @@ namespace OAuthServer.Controllers
             _configuration = configuration;
         }
 
+
+
         /// <summary>
         /// Entry point into the login workflow
         /// </summary>
@@ -58,7 +61,24 @@ namespace OAuthServer.Controllers
             {
                 return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
             }
+        }
+
+        /// <summary>
+        /// Entry point into the login workflow
+        /// </summary>
+        [HttpGet("signin-oidc")]
+        public async Task<IActionResult> Login(string code, string state, string oidcAuthenticationResponseURI)
+        {
             
+            if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
+            {
+                return Redirect(_configuration["ISSUER_URI"] + $"/callback");
+            }
+            else
+            {
+                return RedirectToAction(nameof(Callback), new { scheme, returnUrl });
+            }
+
         }
 
         /// <summary>
