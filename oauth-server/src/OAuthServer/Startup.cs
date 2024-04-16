@@ -26,6 +26,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
+using Microsoft.AspNetCore.Http;
 
 namespace OAuthServer
 {
@@ -62,6 +63,7 @@ namespace OAuthServer
                             "https://dev.roadsafetybc.gov.bc.ca",
                             "https://test.roadsafetybc.gov.bc.ca",
                             "https://roadsafetybc.gov.bc.ca",
+                            "https://jag.gov.bc.ca",
                             "https://www.roadsafetybc.gov.bc.ca",
                             "https://localhost:3020",
                             "http://localhost:3020")
@@ -93,7 +95,11 @@ namespace OAuthServer
                                 options.UserInteraction.LoginUrl = "~/login";
                                 options.UserInteraction.LogoutUrl = "~/logout";
 
-                                if (!string.IsNullOrEmpty(configuration["ISSUER_URI"])) options.IssuerUri = configuration["ISSUER_URI"];
+                                if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+                                {
+                                    options.IssuerUri = configuration["ISSUER_URI"];
+                                    
+                                }
                             })
                             .AddProfileService<ProfileService>()
                             .AddOperationalStore(options =>
@@ -286,6 +292,7 @@ namespace OAuthServer
             app.UseRouting();
 
             app.UseCors(MyPolicy);
+
 
             app.UseIdentityServer();
 
