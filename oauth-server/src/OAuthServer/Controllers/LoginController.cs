@@ -76,7 +76,7 @@ namespace OAuthServer.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(Callback), new { scheme, returnUrl });
+                return RedirectToAction(nameof(Callback));
             }
 
         }
