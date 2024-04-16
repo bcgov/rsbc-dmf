@@ -139,14 +139,20 @@ namespace OAuthServer
                // When BCSC user info payload is encrypted, we need to load the user info manually in OnTokenValidated event below
                // IdentityModel.Client also doesn't support JWT userinfo responses, so the following code takes care of this manually
                options.GetClaimsFromUserInfoEndpoint = false;
-
+               
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
                options.ResponseType = OpenIdConnectResponseType.Code;
                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
+               if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
+               {
+                   options.CorrelationCookie.Path = configuration["COOKIE_PATH"];
+                   options.NonceCookie.Path = configuration["COOKIE_PATH"];
+               }
                options.NonceCookie.HttpOnly = false;
+               options.CorrelationCookie.HttpOnly = false;
 
                //add required scopes
                options.Scope.Add("profile");
