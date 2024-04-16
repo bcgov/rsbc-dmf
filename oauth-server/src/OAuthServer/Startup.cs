@@ -250,7 +250,7 @@ namespace OAuthServer
                               new Claim("userInfo", ctx.User.RootElement.GetRawText())
                        }));
                    },
-                   OnRedirectToIdentityProvider = async context =>
+                   OnAuthorizationCodeReceived = async context =>
                    {
                        string redirectUri = configuration["BASE_PATH"] + "/callback";
                        if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
