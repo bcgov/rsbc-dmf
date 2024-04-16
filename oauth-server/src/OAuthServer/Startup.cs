@@ -257,6 +257,7 @@ namespace OAuthServer
                        {
                            redirectUri = configuration["ISSUER_URI"] + "/callback";
                        }
+                       
                        context.ReturnUri = redirectUri;
                        await Task.CompletedTask;
                    }
