@@ -240,7 +240,13 @@ namespace OAuthServer
                        }));
                    }
                };
-           });
+           }).AddCookie(IdentityServerConstants.DefaultCookieAuthenticationScheme, options =>
+            {
+                if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
+                {
+                    options.Cookie.Domain = configuration["COOKIE_DOMAIN"];
+                }
+            }); ;
 
             services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
