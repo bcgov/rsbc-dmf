@@ -715,6 +715,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                     // Check to see if width of the new page 
                                     // REplace with a check on the destination document
                                     XSize size = PageSizeConverter.ToSize(PdfSharpCore.PageSize.Letter);
+                                  
 
                                     if (srcPDF.Pages[i].Height > size.Height || srcPDF.Pages[i].Width > size.Width)
                                     {
@@ -737,11 +738,18 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
                                         var newPage = resultPDF.AddPage();
                                         double width = newPage.Width;
                                         double height = newPage.Height;
-
+                                        
+                                       
+                                        
                                         gfx = XGraphics.FromPdfPage(newPage);
                                         box = new XRect(0, 0, width, height);
                                         gfx.DrawImage(form, box);
 
+                                        // add media box settings to new page to adjust the print settings
+                                        //newPage.MediaBox.X1 = box;
+                                        
+                                        box = newPage.MediaBox.ToXRect();
+                                        box.Inflate(size);
                                     }
                                     else
                                     {
