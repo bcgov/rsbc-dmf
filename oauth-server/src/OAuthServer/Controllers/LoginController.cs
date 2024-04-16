@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using System.Web;
 
 namespace OAuthServer.Controllers
 {
@@ -51,7 +52,7 @@ namespace OAuthServer.Controllers
             if (string.IsNullOrEmpty(scheme)) return BadRequest($"No client defined for {returnUrl}");
             if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
             {
-                return Redirect(_configuration["ISSUER_URI"] + $"/challenge?scheme={scheme}&returnUrl={returnUrl}");
+                return Redirect(_configuration["ISSUER_URI"] + $"/challenge?scheme={scheme}&returnUrl={HttpUtility.UrlEncode(returnUrl)}");
             }
             else
             {
