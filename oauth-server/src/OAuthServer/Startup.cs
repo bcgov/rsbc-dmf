@@ -71,6 +71,7 @@ namespace OAuthServer
                     });
             });
 
+            
             services.AddControllersWithViews();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
@@ -94,7 +95,7 @@ namespace OAuthServer
 
                                 options.UserInteraction.LoginUrl = "~/login";
                                 options.UserInteraction.LogoutUrl = "~/logout";
-
+                                
                                 if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
                                 {
                                     options.IssuerUri = configuration["ISSUER_URI"];
@@ -286,7 +287,10 @@ namespace OAuthServer
                 .BlockAllMixedContent());
 
             app.UseResponseCompression();
-            app.UseCookiePolicy();
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                Secure = CookieSecurePolicy.Always
+            });
 
             app.UsePathBase(configuration["BASE_PATH"] ?? "");
             app.UseRouting();
