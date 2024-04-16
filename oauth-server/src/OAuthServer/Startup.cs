@@ -95,7 +95,6 @@ namespace OAuthServer
 
                                 options.UserInteraction.LoginUrl = "~/login";
                                 options.UserInteraction.LogoutUrl = "~/logout";
-                                
                                 if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
                                 {
                                     options.IssuerUri = configuration["ISSUER_URI"];
@@ -132,6 +131,21 @@ namespace OAuthServer
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddAuthentication()
+                .AddCookie("IdCookie", options =>
+                {
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
+                    {
+                        options.Cookie.Domain = configuration["COOKIE_DOMAIN"];
+                    }
+
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
+                    {
+                        options.Cookie.Path = configuration["COOKIE_PATH"];
+                    }
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.HttpOnly = false;
+                })
            .AddOpenIdConnect("bcsc", options =>
            {
                // Note: Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectHandler  doesn't handle JWE correctly
@@ -142,18 +156,24 @@ namespace OAuthServer
                
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
-
+               
                options.ResponseType = OpenIdConnectResponseType.Code;
-               options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-               options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+               //options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+               //options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+
+               options.SignInScheme = "IdCookie";
+               options.SignOutScheme = "IdCookie";
 
                if (!string.IsNullOrEmpty(configuration["COOKIE_PATH"]))
                {
                    options.CorrelationCookie.Path = configuration["COOKIE_PATH"];
                    options.NonceCookie.Path = configuration["COOKIE_PATH"];
+                   
                }
                options.NonceCookie.HttpOnly = false;
                options.CorrelationCookie.HttpOnly = false;
+               
 
                //add required scopes
                options.Scope.Add("profile");
