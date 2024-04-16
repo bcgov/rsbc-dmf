@@ -142,6 +142,12 @@ namespace OAuthServer
                
                configuration.GetSection("identityproviders:bcsc").Bind(options);
 
+
+               if (!string.IsNullOrEmpty(configuration["ISSUER_URI"]))
+               {
+                   options.CallbackPath = configuration["ISSUER_URI"] + "/callback";
+               }
+
                options.ResponseType = OpenIdConnectResponseType.Code;
                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
