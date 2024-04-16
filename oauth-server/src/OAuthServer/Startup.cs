@@ -146,6 +146,8 @@ namespace OAuthServer
                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
                options.SignOutScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
+               options.NonceCookie.HttpOnly = false;
+
                //add required scopes
                options.Scope.Add("profile");
                options.Scope.Add("address");
@@ -254,6 +256,7 @@ namespace OAuthServer
                     }
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.HttpOnly = false;
                 });
 
             services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
