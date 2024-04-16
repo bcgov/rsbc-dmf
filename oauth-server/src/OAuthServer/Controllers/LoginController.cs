@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace OAuthServer.Controllers
 {
@@ -22,19 +24,21 @@ namespace OAuthServer.Controllers
         private readonly IProfileService profileService;
         private readonly IClientStore clientStore;
         private readonly IAuthenticationSchemeProvider authenticationSchemeProvider;
+        private readonly IConfiguration _configuration;
 
         public LoginController(
             IIdentityServerInteractionService interaction,
             IEventService events,
             IProfileService profileService,
             IClientStore clientStore,
-            IAuthenticationSchemeProvider authenticationSchemeProvider)
+            IAuthenticationSchemeProvider authenticationSchemeProvider, IConfiguration configuration)
         {
             this.interaction = interaction;
             this.events = events;
             this.profileService = profileService;
             this.clientStore = clientStore;
             this.authenticationSchemeProvider = authenticationSchemeProvider;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -45,8 +49,15 @@ namespace OAuthServer.Controllers
         {
             var scheme = await GetAuthenticationSchemeForClient(returnUrl);
             if (string.IsNullOrEmpty(scheme)) return BadRequest($"No client defined for {returnUrl}");
-
-            return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
+            if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
+            {
+                return Redirect(_configuration["ISSUER_URI"] + $"?scheme={scheme}&returnUrl={returnUrl}");
+            }
+            else
+            {
+                return RedirectToAction(nameof(Challenge), new { scheme, returnUrl });
+            }
+            
         }
 
         /// <summary>
