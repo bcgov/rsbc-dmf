@@ -36,6 +36,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<Configuration> Get()
         {
+            var v = configuration.GetSection("AUTH:OIDC").Value;
             var config = new Configuration
             {
                 Environment = env.EnvironmentName,
