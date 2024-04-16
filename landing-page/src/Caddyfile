@@ -3,6 +3,8 @@
 }
 
 :2015 {
+    log stdout
+
     root * /srv
 
     header / {
