@@ -78,9 +78,10 @@
         "https://localhost:3200",
         "https://localhost:3020",
         "http://localhost:3020",
-        "https://roadsafetybc.gov.bc.ca",
+        "https://roadsafetybc.gov.bc.ca/driver-portal",
         "https://dev.roadsafetybc.gov.bc.ca/driver-portal",
-        "https://test.roadsafetybc.gov.bc.ca/driver-portal"
+        "https://test.roadsafetybc.gov.bc.ca/driver-portal",
+        "https://jag.gov.bc.ca/roadsafetybc/driver-portal"
       ],
       "AllowedScopes": [
         "openid",
