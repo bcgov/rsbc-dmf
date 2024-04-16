@@ -131,13 +131,16 @@ namespace OAuthServer.Controllers
 
             // retrieve returnUrl
 
+            var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
+
             string returnUrlPrefix = "";
             if (!string.IsNullOrEmpty(_configuration["RETURN_PREFIX"]))
             {
-                returnUrlPrefix = _configuration["RETURN_PREFIX"];
+                int questionPos = result.Properties.Items["returnUrl"].IndexOf("?");
+                returnUrl = _configuration["RETURN_PREFIX"] + _configuration["BASE_URL"] +
+                            "connect/authorize" + result.Properties.Items["returnUrl"].Substring(questionPos);
             }
-
-            var returnUrl = returnUrlPrefix + result.Properties.Items["returnUrl"] ?? "~/";
+            
 
             // use the user information to find your user in your database, or provision a new user
             //var user = FindUserFromExternalProvider(scheme, userId);
