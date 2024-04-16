@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using System.Web;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http;
 
 namespace OAuthServer.Controllers
 {
@@ -95,6 +96,20 @@ namespace OAuthServer.Controllers
             Serilog.Log.Logger.Information("**** REACHED CALLBACK ****");
 
             // read external identity from the temporary cookie
+
+            // adjust the cookie path.
+
+            foreach (var item in HttpContext.Request.Headers)
+            {
+                Serilog.Log.Information($"{item.Key} = {item.Value}");
+            }
+
+            foreach (var cookie in HttpContext.Request.Cookies)
+            {
+                Serilog.Log.Information($"{cookie.Key} = {cookie.Value}");
+            }
+            
+
             var result = await HttpContext.AuthenticateAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
             if (result?.Succeeded != true)
             {
