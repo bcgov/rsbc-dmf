@@ -51,7 +51,7 @@ namespace OAuthServer.Controllers
             if (string.IsNullOrEmpty(scheme)) return BadRequest($"No client defined for {returnUrl}");
             if (!string.IsNullOrEmpty(_configuration["ISSUER_URI"]))
             {
-                return Redirect(_configuration["ISSUER_URI"] + $"?scheme={scheme}&returnUrl={returnUrl}");
+                return Redirect(_configuration["ISSUER_URI"] + $"/challenge?scheme={scheme}&returnUrl={returnUrl}");
             }
             else
             {
