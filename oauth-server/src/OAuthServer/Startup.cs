@@ -155,12 +155,7 @@ namespace OAuthServer
                //set the tokens decrypting key
                options.TokenValidationParameters.TokenDecryptionKey = encryptionKey;
 
-               if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
-               {
-                   options.NonceCookie.Domain = configuration["COOKIE_DOMAIN"];
-               }
-               options.NonceCookie.SecurePolicy = CookieSecurePolicy.Always;
-               options.NonceCookie.SameSite = SameSiteMode.None;
+               
 
                options.Events = new OpenIdConnectEvents
                {
@@ -248,6 +243,18 @@ namespace OAuthServer
                    }
                };
            }); ;
+
+
+            services.AddAuthentication("IdCookie")
+                .AddCookie("IdCookie", options =>
+                {
+                    if (!string.IsNullOrEmpty(configuration["COOKIE_DOMAIN"]))
+                    {
+                        options.Cookie.Domain = configuration["COOKIE_DOMAIN"];
+                    }
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.None;
+                });
 
             services.AddHealthChecks().AddCheck("OAuth Server", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
