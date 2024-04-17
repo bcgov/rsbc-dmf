@@ -23,7 +23,7 @@
     }
 
 	handle /rsbc-dfp-oidc* {
-		rewrite * {$PREFIX}/rsbc-dfp-oidc/{uri}
+		rewrite * {$PREFIX}/{uri}
 		reverse_proxy {$OIDC_URL}
 	}
 
