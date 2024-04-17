@@ -6,10 +6,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using pdipadapter.Infrastructure.Auth;
 //using Microsoft.OpenApi.Models;
 using System.Net;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 
@@ -20,6 +24,10 @@ builder.WebHost
     .UseUrls()
     .UseKestrel(options => { options.Listen(IPAddress.Any, 7215); });
 
-// add services to DI container
 var services = builder.Services;
 var env = builder.Environment;
+var config = new PdipadapterConfiguration();
+builder.Configuration.Bind(config);
+
+services.AddSingleton(config);
+services.AddKeycloakAuth(config);
