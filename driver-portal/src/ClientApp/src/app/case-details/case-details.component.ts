@@ -11,6 +11,7 @@ import { LoginService } from '../shared/services/login.service';
 export class CaseDetailsComponent implements OnInit {
   caseDocuments?: CaseDocuments;
   selectedIndex = 0;
+  isLoading = true;
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -30,6 +31,7 @@ export class CaseDetailsComponent implements OnInit {
       .getDriverDocuments({ driverId })
       .subscribe((caseDocuments) => {
         this.caseDocuments = caseDocuments;
+        this.isLoading = false;
       });
   }
 

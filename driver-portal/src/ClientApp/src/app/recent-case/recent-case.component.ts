@@ -22,6 +22,7 @@ export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
 
   selectedIndex = 0;
+  panelOpenState = false;
 
   @ViewChild('stepper') stepper!: MatStepper;
 
