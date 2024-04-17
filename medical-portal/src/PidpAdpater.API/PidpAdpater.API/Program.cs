@@ -31,3 +31,5 @@ builder.Configuration.Bind(config);
 
 services.AddSingleton(config);
 services.AddKeycloakAuth(config);
+
+Console.WriteLine($"Keycloak Authentication initialized.");

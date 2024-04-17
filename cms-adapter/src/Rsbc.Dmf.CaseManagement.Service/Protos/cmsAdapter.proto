@@ -589,6 +589,23 @@ service UserManager {
   rpc SetDriverLogin(SetDriverLoginRequest) returns (SetDriverLoginReply);
   rpc UpdateLogin(UpdateLoginRequest) returns (ResultStatusReply);
   rpc IsDriverAuthorized(UserDriverAuthorizedRequest) returns (ResultBoolReply);
+  rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
+}
+
+message PractitionerReply{
+	string contactId = 1;
+	string gender = 2;
+	string idpId = 3;
+	google.protobuf.Timestamp birthdate = 4;
+	string firstName = 5;
+	string lastName = 6;
+	string email = 7;
+	string clinicName = 8;
+	string role = 9;
+}
+
+message PractitionerRequest{
+	string hpdid = 1;
 }
 
 message ResultBoolReply {
