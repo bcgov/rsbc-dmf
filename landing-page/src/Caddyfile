@@ -27,7 +27,7 @@
     @jstype path *.js
     header @jstype Content-Type text/javascript
 		
-		reverse_proxy /rsbc-dfp-oidc {OIDC_URL}		
+		reverse_proxy /rsbc-dfp-oidc {$OIDC_URL}		
 	}
 
     encode zstd gzip

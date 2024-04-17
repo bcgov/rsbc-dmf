@@ -2,7 +2,7 @@
 ARG PORT 2015
 
 ### Deploy
-FROM caddy:2.4.6-alpine@sha256:15e576e7d00b1f41a648c5295a03677c24da5fede09131edcb1e6d809c7dc8aa
+FROM caddy:latest
 ARG PORT
 
 # Copy Caddyfile and static files
