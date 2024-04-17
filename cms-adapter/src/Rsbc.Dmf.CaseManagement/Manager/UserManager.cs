@@ -1,4 +1,5 @@
 ﻿using Microsoft.OData.Client;
+using Microsoft.OData.Edm;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
