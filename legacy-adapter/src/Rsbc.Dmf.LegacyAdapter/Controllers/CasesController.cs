@@ -840,6 +840,12 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
                                 Queue = assign ?? string.Empty,
                             };
 
+                            // 24/4/17 Set submittal status to "Issued" for letter out.
+                            if (documentTypeCode == "180")
+                            {
+                                remedialDocument.SubmittalStatus = "Issued";  
+                            }
+
                             var documentAttached = _cmsAdapterClient.CreateDocumentOnDriver(remedialDocument);
                             return CreatedAtAction(actionName, routeValues, remedialDocument);
                         }
