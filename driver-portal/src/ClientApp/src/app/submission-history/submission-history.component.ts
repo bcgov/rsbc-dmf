@@ -15,6 +15,8 @@ export class SubmissionHistoryComponent implements OnInit {
 
   pageSize = 10;
 
+  isLoading = true;
+
   filteredDocuments?: Document[] | null = [];
 
   _allDocuments?: Document[] | null = [];
@@ -53,6 +55,7 @@ export class SubmissionHistoryComponent implements OnInit {
       .subscribe((allDocuments: any) => {
         this._allDocuments = allDocuments;
         this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
+        this.isLoading = false;
       });
   }
 

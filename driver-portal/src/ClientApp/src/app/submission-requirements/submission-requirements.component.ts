@@ -29,6 +29,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   documentSubTypes?: DocumentSubType[];
   selectedValue = '';
   acceptControl = new FormControl(false);
+  @Input() isLoading = true;
 
   constructor(
     private caseManagementService: CaseManagementService,

@@ -11,6 +11,7 @@ import { LoginService } from '../shared/services/login.service';
 })
 export class CaseComponent implements OnInit {
   isExpanded: Record<string, boolean> = {};
+  isLoading = true;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
@@ -48,6 +49,7 @@ export class CaseComponent implements OnInit {
       .getClosedCases({ driverId })
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
+        this.isLoading = false;
       });
   }
 

@@ -14,7 +14,7 @@ export class LettersToDriverComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
   pageSize = 10;
-
+  @Input() isLoading = true;
   filteredDocuments?: Document[] | null = [];
 
   private _letterDocuments?: Document[] | null = [];
