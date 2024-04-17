@@ -22,8 +22,5 @@
 /medical-portal/docs/.$CHEFS-Integration.drawio.dtmp
 *.bkp
 
-/medical-portal/src/PidpAdpater.API/bin/
-/medical-portal/src/PidpAdpater.API/obj/
-/medical-portal/src/PidpAdpater.API/logs/
-/medical-portal/src/PidpAdpater.API/PidpAdapter.API/bin/
-/medical-portal/src/PidpAdpater.API/PidpAdapter.API/obj/
+/medical-portal/src/PidpAdpater.API/PidpAdpater.API/bin
+/medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj
