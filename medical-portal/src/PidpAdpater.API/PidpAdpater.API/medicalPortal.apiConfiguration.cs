@@ -9,6 +9,7 @@ public class PdipadapterConfiguration
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
     public KeycloakConfiguration Keycloak { get; set; } = new();
+    public CMSConfiguration CMS { get; set; } = new();
 
     public class KeycloakConfiguration
     {
@@ -19,5 +20,12 @@ public class PdipadapterConfiguration
         public string AdministrationClientId { get; set; } = string.Empty;
         public string AdministrationClientSecret { get; set; } = string.Empty;
         public string HcimClientId { get; set; } = string.Empty;
+    }
+
+    public class CMSConfiguration
+    {
+        public string SERVER_URL { get; set; } = string.Empty;
+        public string CLIENTSECRET { get; set; } = string.Empty;
+        public bool VALIDATESERVERCERTIFICATE { get; set; } = false;
     }
 }

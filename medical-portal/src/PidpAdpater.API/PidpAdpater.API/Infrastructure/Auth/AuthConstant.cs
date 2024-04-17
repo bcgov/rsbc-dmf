@@ -14,7 +14,7 @@ public static class Claims
     public const string IdentityProvider = "identity_provider";
     public const string PreferredUsername = "preferred_username";
     public const string ResourceAccess = "resource_access";
-//    public const string RealmAccess = "realm_access";
+    public const string RealmAccess = "realm_access";
     public const string Subject = "sub";
 }
 public static class Policies
