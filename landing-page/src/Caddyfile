@@ -22,11 +22,11 @@
         Referrer-Policy "same-origin"
     }
 
-	route {
-
-		
-		reverse_proxy /rsbc-dfp-oidc* {$OIDC_URL}		
+	handle /rsbc-dfp-oidc* {
+		rewrite * {$PREFIX}/rsbc-dfp-oidc/{uri}
+		reverse_proxy {$OIDC_URL}
 	}
+
 
     encode zstd gzip
 
