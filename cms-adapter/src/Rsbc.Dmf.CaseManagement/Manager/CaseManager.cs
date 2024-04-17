@@ -3584,13 +3584,17 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                { "Received", 100000001 }, // Received
-                { "Reject",  100000004 }, // Rejected
-                { "Clean Pass" ,  100000009}, // Clean Pass
-                { "Manual Pass", 100000012 }, // Manual Pass
-                { "Open-Required", 100000000 }, // Open required
-                { "Uploaded", 100000010  }, // Uploaded
-                { "Sent", 100000008}
+                { "Actioned Non-comply", 100000007},
+                { "Clean Pass" ,  100000009},
+                { "Issued", 100000011},
+                { "Manual Pass", 100000012},
+                { "Non-comply", 100000005},
+                { "Open-Required", 100000000 },
+                { "Received", 100000001 },
+                { "Rejected",  100000004 },
+                { "Reviewed", 100000003 },
+                { "Sent", 100000008},
+                { "Uploaded", 100000010  },
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
