@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using pdipadapter.Infrastructure.Auth;
+using pdipadapter.Infrastructure.Services;
 //using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Reflection;
@@ -31,5 +32,8 @@ builder.Configuration.Bind(config);
 
 services.AddSingleton(config);
 services.AddKeycloakAuth(config);
+services.AddScoped<IPidpAdapterAuthorizationService, PidpAdapterAuthorizationService>();
+
+services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 Console.WriteLine($"Keycloak Authentication initialized.");
