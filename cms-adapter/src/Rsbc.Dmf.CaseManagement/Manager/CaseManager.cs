@@ -3915,7 +3915,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            Log.Information($"{item.dfp_DriverId}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}, {submittalStatusOptionSet.ManualPass}");
+                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
 
                             if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
@@ -3965,7 +3965,7 @@ namespace Rsbc.Dmf.CaseManagement
             while ((nextLink = response.GetContinuation()) != null);
 
             dynamicsContext.DetachAll();
-            Log.Information("Start GetUnsentMedicalPass");
+            Log.Information("End GetUnsentMedicalPass");
 
             return MapCases(outputArray);
         }
@@ -3976,6 +3976,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalAdjudication()
         {
+            Log.Information("Start GetUnsentMedicalAdjudication");
             var outputArray = new List<incident>();
 
             DataServiceQueryContinuation<incident> nextLink = null;
@@ -4023,7 +4024,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            Log.Information($"{item.dfp_DriverId}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}, {submittalStatusOptionSet.ManualPass}");
+                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
 
                             if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
@@ -4039,7 +4040,7 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                                Log.Information($"{item.dfp_DriverId} {document.dfp_DocumentTypeID} ");
+                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} {document.dfp_DocumentTypeID} {item.ticketnumber} ");
                                 // condition 1: check for
                                 // 1. DMER type
                                 // 2. submital status is in review and not in  Rejected, Clean Pass
@@ -4094,6 +4095,7 @@ namespace Rsbc.Dmf.CaseManagement
             while ((nextLink = response.GetContinuation()) != null);
 
             dynamicsContext.DetachAll();
+            Log.Information("End GetUnsentMedicalAdjudication");
 
             return MapCases(outputArray);
         }
