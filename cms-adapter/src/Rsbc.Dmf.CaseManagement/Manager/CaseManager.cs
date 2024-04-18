@@ -4026,13 +4026,10 @@ namespace Rsbc.Dmf.CaseManagement
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-
-                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
-
                             if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
                                 hasManualPassDocument = true;
+                                Log.Information("MANUAL PASS TRUE");
                                 break;
                             }
                         }
@@ -4044,7 +4041,7 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} {document.dfp_DocumentTypeID} {item.ticketnumber} ");
+                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} typeID {document.dfp_DocumentTypeID} Ticket {item.ticketnumber} Submittal Status {document.dfp_submittalstatus}");
                                 // condition 1: check for
                                 // 1. DMER type
                                 // 2. submital status is in review and not in  Rejected, Clean Pass
@@ -4052,10 +4049,11 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 if (document.dfp_DocumentTypeID != null
                                     && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                    && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                    && document.dfp_submittalstatus != null
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
-                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded)
                                 {
                                     outputArray.Add(item);
                                 }
@@ -4073,6 +4071,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     outputArray.Add(item);
                                 }
 
+                                /* 24/4/18 - this code is not used at this time, left for a placeholder in the future if there is need for additional criteria.
+
                                 else
                                 {
                                     // condition 3 : Check for 
@@ -4089,6 +4089,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     }
 
                                 }
+
+                                */
 
                             }
                         }
