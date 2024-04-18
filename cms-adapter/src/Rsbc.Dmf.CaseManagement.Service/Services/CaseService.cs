@@ -2112,7 +2112,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 return newCase;
             }));
-
+            reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
 
@@ -2178,7 +2178,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                 return newCase;
             }));
-
+            reply.ResultStatus = ResultStatus.Success;
             return reply;
         }
 

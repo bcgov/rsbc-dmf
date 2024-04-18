@@ -3876,10 +3876,11 @@ namespace Rsbc.Dmf.CaseManagement
             DataServiceQueryContinuation<incident> nextLink = null;
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000003); // Case should be in File End Tasks (FET)
+                        && i.dfp_bpfstage == 100000003
+                        && i._dfp_driverid_value != null
+                        ); // Case should be in File End Tasks (FET)
 
 
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
@@ -3902,7 +3903,7 @@ namespace Rsbc.Dmf.CaseManagement
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
-                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
