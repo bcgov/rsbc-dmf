@@ -84,6 +84,20 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             return Task.FromResult(result);
         }
 
+        public override Task<ResultStatusReply> DryRunMedicalDisposition(EmptyRequest request, ServerCallContext context)
+        {
+            var result = new ResultStatusReply();
+
+            // process medical status updates - dry run
+
+            var enhancedIcbcUtils = new EnhancedIcbcApiUtils(_configuration, _caseManagerClient, _icbcClient);
+            enhancedIcbcUtils.SendMedicalUpdatesDryRun().GetAwaiter().GetResult();
+
+            return Task.FromResult(result);
+        }
+
+        
+
         /// <summary>
         /// Resolve Birth Dates
         /// </summary>

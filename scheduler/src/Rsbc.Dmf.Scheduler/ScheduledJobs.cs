@@ -199,6 +199,20 @@ namespace Rsbc.Dmf.Scheduler
         }
 
         /// <summary>
+        /// Hangfire job to check for and send recent items in the queue
+        /// </summary>
+        [AutomaticRetry(Attempts = 0)]
+        public async Task SendMedicalUpdatesDryRun(PerformContext hangfireContext)
+        {
+            LogStatement(hangfireContext, "Starting check for Candidates dry run.");
+
+            // Call ICBC Adapter to do the check for candidates
+            _icbcAdapterClient.DryRunMedicalDisposition(new IcbcAdapter.EmptyRequest());
+
+            LogStatement(hangfireContext, "End of check for Candidates dry run.");
+        }
+
+        /// <summary>
         /// Hangfire job resolve the case status
         /// </summary>
         [AutomaticRetry(Attempts = 0)]
