@@ -3986,10 +3986,11 @@ namespace Rsbc.Dmf.CaseManagement
             DataServiceQueryContinuation<incident> nextLink = null;
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000002); // case is in under review);
+                        && i.dfp_bpfstage == 100000002
+                        && i._dfp_driverid_value != null
+                        ); // case is in under review);
 
             // Get the document of type DMER from documents entity and not in Rejected, Clean Pass, or Manual Pass(Query document entity)
             // Add condition to check document is in review (Document entity)
@@ -4011,7 +4012,7 @@ namespace Rsbc.Dmf.CaseManagement
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
-                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
