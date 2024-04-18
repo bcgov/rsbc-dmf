@@ -38,95 +38,98 @@ namespace Rsbc.Dmf.IcbcAdapter
             // Get Unsent Medical for manual and clean pass
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
-
-            foreach (var unsentItem in unsentItems.Items)
+            if (unsentItems.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                Log.Logger.Information($"SENDING PASS {unsentItem.Driver.DriverLicenseNumber}");
-                var item = GetMedicalUpdateDataforPass(unsentItem);
-
-                if (item != null)
+                foreach (var unsentItem in unsentItems.Items)
                 {
+                    Log.Logger.Information($"Checking Pass Item {unsentItem.Driver.DriverLicenseNumber}");
+                    var item = GetMedicalUpdateDataforPass(unsentItem);
 
-                    string responseContent = _icbcClient.SendMedicalUpdate(item);
-
-                    // 24-03-27 only try once to send an update.
-                    MarkMedicalUpdateSent(unsentItem.CaseId);
-
-                    if (!responseContent.Contains("SUCCESS"))
+                    if (item != null)
                     {
-                        var bringForwardRequest = new BringForwardRequest
+                        string responseContent = _icbcClient.SendMedicalUpdate(item);
+
+                        // 24-03-27 only try once to send an update.
+                        MarkMedicalUpdateSent(unsentItem.CaseId);
+
+                        if (!responseContent.Contains("SUCCESS"))
                         {
-                            CaseId = unsentItem.CaseId,
-                            Subject = "ICBC Error",
-                            Description = responseContent,
-                            Assignee = string.Empty,
-                            Priority = CallbackPriority.Normal
+                            var bringForwardRequest = new BringForwardRequest
+                            {
+                                CaseId = unsentItem.CaseId,
+                                Subject = "ICBC Error",
+                                Description = responseContent,
+                                Assignee = string.Empty,
+                                Priority = CallbackPriority.Normal
 
-                        };
+                            };
 
-                        // 24-03-27 disable bring forwards
-                        //_caseManagerClient.CreateBringForward(bringForwardRequest);
+                            // 24-03-27 disable bring forwards
+                            //_caseManagerClient.CreateBringForward(bringForwardRequest);
 
-                        // Mark ICBC error 
+                            // Mark ICBC error 
 
-                        var icbcError = new IcbcErrorRequest
-                        {
-                            ErrorMessage = "ICBC Error"
-                        };
+                            var icbcError = new IcbcErrorRequest
+                            {
+                                ErrorMessage = "ICBC Error"
+                            };
 
-                        _caseManagerClient.MarkMedicalUpdateError(icbcError);
+                            _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                        Log.Logger.Error($"ICBC Error");
+                            Log.Logger.Error($"ICBC Error");
+                        }
                     }
-                }
-                else
-                {
-                    Log.Logger.Error($"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
-                }
+                    else
+                    {
+                        Log.Logger.Error($"Null received from GetMedicalUpdateData for {unsentItem.CaseId} {unsentItem.Driver?.DriverLicenseNumber}");
+                    }
 
+                }
 
             }
 
             // create for one more call for GetmedicalAdjudication
 
             var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
-            foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
+
+            if (unsentItemsAdjudication.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                Log.Logger.Information($"SENDING ADJUDICATION {unsentItemAdjudication.Driver.DriverLicenseNumber}");
-                var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
-                if (item != null)
+                foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
                 {
-
-                    string responseContent = _icbcClient.SendMedicalUpdate(item);
-                    MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
-
-                    if (!responseContent.Contains("SUCCESS"))
+                    Log.Logger.Information($"Checking Adjudication Item {unsentItemAdjudication.Driver.DriverLicenseNumber}");
+                    var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
+                    if (item != null)
                     {
-                        var bringForwardRequest = new BringForwardRequest
+                        string responseContent = _icbcClient.SendMedicalUpdate(item);
+                        MarkMedicalUpdateSent(unsentItemAdjudication.CaseId);
+
+                        if (!responseContent.Contains("SUCCESS"))
                         {
-                            CaseId = unsentItemAdjudication.CaseId,
-                            Subject = "ICBC Error",
-                            Description = responseContent,
-                            Assignee = string.Empty,
-                            Priority = CallbackPriority.Normal
+                            var bringForwardRequest = new BringForwardRequest
+                            {
+                                CaseId = unsentItemAdjudication.CaseId,
+                                Subject = "ICBC Error",
+                                Description = responseContent,
+                                Assignee = string.Empty,
+                                Priority = CallbackPriority.Normal
+                            };
 
-                        };
+                            //_caseManagerClient.CreateBringForward(bringForwardRequest);
 
-                        //_caseManagerClient.CreateBringForward(bringForwardRequest);
+                            // Mark ICBC error 
 
-                        // Mark ICBC error 
+                            var icbcError = new IcbcErrorRequest
+                            {
+                                ErrorMessage = "ICBC Error"
+                            };
 
-                        var icbcError = new IcbcErrorRequest
-                        {
-                            ErrorMessage = "ICBC Error"
-                        };
+                            _caseManagerClient.MarkMedicalUpdateError(icbcError);
 
-                        _caseManagerClient.MarkMedicalUpdateError(icbcError);
-
-                        Log.Logger.Error($"ICBC Error");
+                            Log.Logger.Error($"ICBC Error");
+                        }
                     }
-                }
 
+                }
             }
 
             Log.Logger.Information("End of SendMedicalUpdates.");
@@ -167,7 +170,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                Log.Logger.Error($"ERROR occurred when getting unset items {unsentItems.ErrorDetail}");
+                Log.Logger.Error($"ERROR occurred when getting unsent items {unsentItems.ErrorDetail}");
             }
             
             // create for one more call for GetmedicalAdjudication
@@ -196,7 +199,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             }
             else
             {
-                Log.Logger.Error($"ERROR occurred when getting unset items {unsentItemsAdjudication.ErrorDetail}");
+                Log.Logger.Error($"ERROR occurred when getting unsent items {unsentItemsAdjudication.ErrorDetail}");
             }
 
 
@@ -263,8 +266,15 @@ namespace Rsbc.Dmf.IcbcAdapter
                             DateTimeOffset adjustedDate = GetMedicalIssueDate(driver); // DateUtility.FormatDateOffsetPacific(GetMedicalIssueDate(driver)).Value;
 
                             newUpdate.MedicalIssueDate = adjustedDate;
-
-                            return newUpdate;
+                            if (newUpdate.MedicalDisposition == "P")
+                            {
+                                return newUpdate;
+                            }
+                            else
+                            {
+                                Log.Logger.Information("GetMedicalUpdateDataforPass No Fit to Drive - not sending P");
+                            }
+                            
                         }
                         else
                         {
@@ -322,12 +332,8 @@ namespace Rsbc.Dmf.IcbcAdapter
                             {
                                 DlNumber = licenseNumber,
                                 LastName = driver.INAM.SURN,
+                                MedicalDisposition = "J"
                             };
-
-                            if (newUpdate != null)
-                            {
-                                newUpdate.MedicalDisposition = "J";
-                            }
 
 
                             // get most recent Medical Issue Date from the driver.
