@@ -148,40 +148,59 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
 
-            foreach (var unsentItem in unsentItems.Items)
+            if (unsentItems.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                
-                var item = GetMedicalUpdateDataforPass(unsentItem);
+                foreach (var unsentItem in unsentItems.Items)
+                {
 
-                if (item != null)
-                {
-                    Log.Logger.Information($"SEND {unsentItem.Driver.DriverLicenseNumber} - PASS");
-                }
-                else
-                {
-                    Log.Logger.Information($"SKIP {unsentItem.Driver.DriverLicenseNumber} - no need to send");
+                    var item = GetMedicalUpdateDataforPass(unsentItem);
+
+                    if (item != null)
+                    {
+                        Log.Logger.Information($"SEND {unsentItem.Driver.DriverLicenseNumber} - PASS");
+                    }
+                    else
+                    {
+                        Log.Logger.Information($"SKIP {unsentItem.Driver.DriverLicenseNumber} - no need to send");
+                    }
                 }
             }
-
+            else
+            {
+                Log.Logger.Error($"ERROR occurred when getting unset items {unsentItems.ErrorDetail}");
+            }
+            
             // create for one more call for GetmedicalAdjudication
 
             Log.Logger.Information("*** J ***");
 
             var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
-            foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
+
+            if (unsentItemsAdjudication.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-
-                var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
-                if (item != null)
+                Log.Logger.Information($"{unsentItemsAdjudication.Items.Count} Items Received");
+                foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
                 {
-                    Log.Logger.Information($"SEND {unsentItemAdjudication.Driver.DriverLicenseNumber} - J ");
-                }
-                else
-                {
-                    Log.Logger.Information($"SKIP {unsentItemAdjudication.Driver.DriverLicenseNumber} - no need to send");
-                }
 
+                    var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
+                    if (item != null)
+                    {
+                        Log.Logger.Information($"SEND {unsentItemAdjudication.Driver.DriverLicenseNumber} - J ");
+                    }
+                    else
+                    {
+                        Log.Logger.Information($"SKIP {unsentItemAdjudication.Driver.DriverLicenseNumber} - no need to send");
+                    }
+
+                }
             }
+            else
+            {
+                Log.Logger.Error($"ERROR occurred when getting unset items {unsentItemsAdjudication.ErrorDetail}");
+            }
+
+
+            
 
             Log.Logger.Information("End of SendMedicalUpdates Dry Run.");
 
