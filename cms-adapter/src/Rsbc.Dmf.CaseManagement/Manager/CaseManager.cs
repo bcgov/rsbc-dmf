@@ -216,6 +216,7 @@ namespace Rsbc.Dmf.CaseManagement
         Reject = 100000004, 
         CleanPass=  100000009,
         ManualPass = 100000012,
+        Empty = 100000013,
         OpenRequired = 100000000,
         Reviewed = 100000003,
         Uploaded = 100000010
@@ -3951,7 +3952,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 {
                                     //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                                     if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
-
                                 }
 
                                 addItem = true;
@@ -4052,6 +4052,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 if (document.dfp_DocumentTypeID != null
                                     && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                     && document.dfp_submittalstatus != null
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Empty
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
