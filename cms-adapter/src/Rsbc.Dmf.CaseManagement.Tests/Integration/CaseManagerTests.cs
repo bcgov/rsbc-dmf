@@ -5,8 +5,10 @@ using Shouldly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Xunit;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 {
@@ -527,8 +529,19 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
         [Fact(Skip = RequiresDynamics)]
         public async Task CanGetUnsentMedicalUpdates()
         {
-            //            var queryResults = await _caseManager.GetUnsentMedicalPass();
-            //            queryResults.Items.ShouldNotBeEmpty();
+          /*  var driverLicenseNumber = _configuration["ICBC_TEST_DL"];
+            // first do a search to get this case by title.
+            var queryResults = (await _caseManager.CaseSearch(new CaseSearchRequest { DriverLicenseNumber = driverLicenseNumber })).Items.FirstOrDefault();
+
+            var dmerCase = queryResults.ShouldBeAssignableTo<DmerCase>();
+            var caseId = dmerCase.Id;*/
+
+            // Load the documents for that case
+
+            var result = await _caseManager.GetUnsentMedicalPass();
+
+            result.Items.ShouldNotBeEmpty();
+
         }
 
         [Fact(Skip = RequiresDynamics)]

@@ -3584,13 +3584,17 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                { "Received", 100000001 }, // Received
-                { "Reject",  100000004 }, // Rejected
-                { "Clean Pass" ,  100000009}, // Clean Pass
-                { "Manual Pass", 100000012 }, // Manual Pass
-                { "Open-Required", 100000000 }, // Open required
-                { "Uploaded", 100000010  }, // Uploaded
-                { "Sent", 100000008}
+                { "Actioned Non-comply", 100000007},
+                { "Clean Pass" ,  100000009},
+                { "Issued", 100000011},
+                { "Manual Pass", 100000012},
+                { "Non-comply", 100000005},
+                { "Open-Required", 100000000 },
+                { "Received", 100000001 },
+                { "Rejected",  100000004 },
+                { "Reviewed", 100000003 },
+                { "Sent", 100000008},
+                { "Uploaded", 100000010  },
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
@@ -3865,6 +3869,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalPass()
         {
+            
+            Log.Information("Start GetUnsentMedicalPass");
             var outputArray = new List<incident>();
 
             DataServiceQueryContinuation<incident> nextLink = null;
@@ -3878,6 +3884,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
 
+            Log.Information($"Response : {response != null}");
+
             do
             {
                 if (nextLink != null)
@@ -3889,6 +3897,8 @@ namespace Rsbc.Dmf.CaseManagement
                     // You must enumerate the response before calling GetContinuation below.
                     foreach (var item in response)
                     {
+                       // Log.Information(JsonConvert.SerializeObject(item));
+
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
@@ -3901,13 +3911,17 @@ namespace Rsbc.Dmf.CaseManagement
 
                         // Check for manual pass document if it exists break
 
-                        var hasManualPassDocument = false;
+                        bool hasManualPassDocument = false;
 
                         bool addItem = false;
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
-                            if (document.dfp_DocumentTypeID != null && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
+                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
+
+                            if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
                                 hasManualPassDocument = true;
                                 break;
@@ -3915,7 +3929,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                             // Condition Check if the document is DMER and not manual pass
                             //Updating code on 2 / 29 / 2024 removed the check for manual pass
-                            if (document.dfp_DocumentTypeID != null
+                            if (
+                                document.dfp_DocumentTypeID != null 
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
                                 )
@@ -3947,9 +3962,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 outputArray.Add(item);
                             }
                         }
-
-
-
                     }
                 }
             }
@@ -3957,6 +3969,7 @@ namespace Rsbc.Dmf.CaseManagement
             while ((nextLink = response.GetContinuation()) != null);
 
             dynamicsContext.DetachAll();
+            Log.Information("End GetUnsentMedicalPass");
 
             return MapCases(outputArray);
         }
@@ -3967,6 +3980,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalAdjudication()
         {
+            Log.Information("Start GetUnsentMedicalAdjudication");
             var outputArray = new List<incident>();
 
             DataServiceQueryContinuation<incident> nextLink = null;
@@ -4001,59 +4015,83 @@ namespace Rsbc.Dmf.CaseManagement
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
+
                         // Load documents
 
                         await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+
+                        bool hasManualPassDocument = false;
+
+                        
+
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            // condition 1: check for
-                            // 1. DMER type
-                            // 2. submital status is in review and not in  Rejected, Clean Pass
-                            // 3. Updating code on 2/21/2024 removed the check for manual pass
+                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
 
-                            if (document.dfp_DocumentTypeID != null
-                                && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
-                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
-                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
-                                && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
+                            if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
-                                outputArray.Add(item);
+                                hasManualPassDocument = true;
+                                break;
                             }
+                        }
 
-                            //condition 2: Check for
-                            //1. DMER type
-                            //2. Submital status is clean pass and is in review state
-                            //3. Updating code on 2/21/2024 removed the check for manual pass
+                        if (!hasManualPassDocument)
+                        {
 
-                            else if (document.dfp_DocumentTypeID != null
-                                && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                )
+                            foreach (var document in item.bcgov_incident_bcgov_documenturl)
                             {
-                                outputArray.Add(item);
-                            }
+                                await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            else
-                            {
-                                // condition 3 : Check for 
-                                // 1. Document type is DMER
-                                // 2. Submital status is Uploaded
+                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} {document.dfp_DocumentTypeID} {item.ticketnumber} ");
+                                // condition 1: check for
+                                // 1. DMER type
+                                // 2. submital status is in review and not in  Rejected, Clean Pass
+                                // 3. Updating code on 2/21/2024 removed the check for manual pass
 
                                 if (document.dfp_DocumentTypeID != null
-                                      && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                      && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
-                                      )
+                                    && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                    && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
                                 {
-                                    // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag 
-                                    //outputArray.Add(item);
+                                    outputArray.Add(item);
                                 }
 
-                            }   
+                                //condition 2: Check for
+                                //1. DMER type
+                                //2. Submital status is clean pass and is in review state
+                                //3. Updating code on 2/21/2024 removed the check for manual pass
 
-                        }               
+                                else if (document.dfp_DocumentTypeID != null
+                                    && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                    )
+                                {
+                                    outputArray.Add(item);
+                                }
+
+                                else
+                                {
+                                    // condition 3 : Check for 
+                                    // 1. Document type is DMER
+                                    // 2. Submital status is Uploaded
+
+                                    if (document.dfp_DocumentTypeID != null
+                                          && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                          && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
+                                          )
+                                    {
+                                        // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag 
+                                        //outputArray.Add(item);
+                                    }
+
+                                }
+
+                            }
+                        }
                     }
                 }
             }
@@ -4061,6 +4099,7 @@ namespace Rsbc.Dmf.CaseManagement
             while ((nextLink = response.GetContinuation()) != null);
 
             dynamicsContext.DetachAll();
+            Log.Information("End GetUnsentMedicalAdjudication");
 
             return MapCases(outputArray);
         }
@@ -4370,6 +4409,8 @@ namespace Rsbc.Dmf.CaseManagement
                             foreach (var document in currentCase.bcgov_incident_bcgov_documenturl)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
+
+                                //await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DocumentTypeID));
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0

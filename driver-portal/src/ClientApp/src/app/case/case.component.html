@@ -92,6 +92,13 @@
         </mat-card-content>
       </mat-card>
     </div>
+    <div *ngIf ="!isLoading && closedCaseDetails?.length === 0" >
+      <mat-card>
+        <mat-card-content>
+          <b>No Closed Cases found</b>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
   <div
     class="numberOfItems"

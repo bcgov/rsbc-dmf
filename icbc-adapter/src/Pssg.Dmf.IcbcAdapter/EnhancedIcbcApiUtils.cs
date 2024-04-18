@@ -39,8 +39,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
 
-
-
             foreach (var unsentItem in unsentItems.Items)
             {
                 Log.Logger.Information($"SENDING {unsentItem.Driver.DriverLicenseNumber}");
@@ -89,8 +87,6 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             }
 
-            Log.Logger.Error("End of SendMedicalUpdates.");
-
             // create for one more call for GetmedicalAdjudication
 
             var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
@@ -132,6 +128,62 @@ namespace Rsbc.Dmf.IcbcAdapter
                 }
 
             }
+
+            Log.Logger.Information("End of SendMedicalUpdates.");
+
+
+        }
+
+        /// <summary>
+        /// Hangfire job to check for and send recent items in the queue
+        /// </summary>
+
+        public async Task SendMedicalUpdatesDryRun()
+        {
+            Log.Logger.Error("Starting SendMedicalUpdates Dry Run");
+
+            // Get Unsent Medical for manual and clean pass
+
+            Log.Logger.Information("*** P ***");
+
+            var unsentItems = _caseManagerClient.GetUnsentMedicalPass(new CaseManagement.Service.EmptyRequest());
+
+            foreach (var unsentItem in unsentItems.Items)
+            {
+                
+                var item = GetMedicalUpdateDataforPass(unsentItem);
+
+                if (item != null)
+                {
+                    Log.Logger.Information($"SEND {unsentItem.Driver.DriverLicenseNumber} - PASS");
+                }
+                else
+                {
+                    Log.Logger.Information($"SKIP {unsentItem.Driver.DriverLicenseNumber} - no need to send");
+                }
+            }
+
+            // create for one more call for GetmedicalAdjudication
+
+            Log.Logger.Information("*** J ***");
+
+            var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
+            foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
+            {
+
+                var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
+                if (item != null)
+                {
+                    Log.Logger.Information($"SEND {unsentItemAdjudication.Driver.DriverLicenseNumber} - J ");
+                }
+                else
+                {
+                    Log.Logger.Information($"SKIP {unsentItemAdjudication.Driver.DriverLicenseNumber} - no need to send");
+                }
+
+            }
+
+            Log.Logger.Information("End of SendMedicalUpdates Dry Run.");
 
 
         }

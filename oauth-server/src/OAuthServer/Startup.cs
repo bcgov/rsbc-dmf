@@ -27,6 +27,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Serilog;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace OAuthServer
 {
@@ -308,7 +309,6 @@ namespace OAuthServer
 
         public void Configure(IApplicationBuilder app)
         {
-
             var forwardedHeadersOptions = new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.All

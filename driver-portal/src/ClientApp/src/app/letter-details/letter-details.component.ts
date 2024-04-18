@@ -10,6 +10,7 @@ import { LoginService } from '../shared/services/login.service';
 })
 export class LetterDetailsComponent implements OnInit {
   caseDocuments?: CaseDocuments;
+  isLoading = true;
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -27,6 +28,7 @@ export class LetterDetailsComponent implements OnInit {
       .getDriverDocuments({ driverId })
       .subscribe((caseDocuments) => {
         this.caseDocuments = caseDocuments;
+        this.isLoading = false;
       });
   }
 }

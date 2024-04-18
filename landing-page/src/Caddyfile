@@ -3,6 +3,8 @@
 }
 
 :2015 {
+  log stdout
+
     root * /srv
 
     header / {
@@ -19,6 +21,12 @@
         # Set referrer policy
         Referrer-Policy "same-origin"
     }
+
+	handle /rsbc-dfp-oidc* {
+		rewrite * {$PREFIX}{uri}
+		reverse_proxy {$OIDC_URL}
+	}
+
 
     encode zstd gzip
 

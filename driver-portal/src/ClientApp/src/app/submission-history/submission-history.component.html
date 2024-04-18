@@ -99,6 +99,13 @@
         </mat-card-content>
       </mat-card>
     </div>
+    <div *ngIf ="!isLoading && allDriverDocuments?.length === 0" >
+      <mat-card>
+        <mat-card-content>
+          <b>No Submission History records found for this case</b>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 
   <div
