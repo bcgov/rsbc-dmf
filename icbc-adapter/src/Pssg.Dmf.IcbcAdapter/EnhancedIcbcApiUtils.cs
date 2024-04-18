@@ -41,7 +41,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
             foreach (var unsentItem in unsentItems.Items)
             {
-                Log.Logger.Information($"SENDING {unsentItem.Driver.DriverLicenseNumber}");
+                Log.Logger.Information($"SENDING PASS {unsentItem.Driver.DriverLicenseNumber}");
                 var item = GetMedicalUpdateDataforPass(unsentItem);
 
                 if (item != null)
@@ -92,7 +92,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             var unsentItemsAdjudication = _caseManagerClient.GetUnsentMedicalAdjudication(new CaseManagement.Service.EmptyRequest());
             foreach (var unsentItemAdjudication in unsentItemsAdjudication.Items)
             {
-
+                Log.Logger.Information($"SENDING ADJUDICATION {unsentItemAdjudication.Driver.DriverLicenseNumber}");
                 var item = GetMedicalUpdateDataforAdjudication(unsentItemAdjudication);
                 if (item != null)
                 {
