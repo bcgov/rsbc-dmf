@@ -216,6 +216,7 @@ namespace Rsbc.Dmf.CaseManagement
         Reject = 100000004, 
         CleanPass=  100000009,
         ManualPass = 100000012,
+        Empty = 100000013,
         OpenRequired = 100000000,
         Reviewed = 100000003,
         Uploaded = 100000010
@@ -3876,10 +3877,11 @@ namespace Rsbc.Dmf.CaseManagement
             DataServiceQueryContinuation<incident> nextLink = null;
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000003); // Case should be in File End Tasks (FET)
+                        && i.dfp_bpfstage == 100000003
+                        && i._dfp_driverid_value != null
+                        ); // Case should be in File End Tasks (FET)
 
 
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
@@ -3902,7 +3904,7 @@ namespace Rsbc.Dmf.CaseManagement
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
-                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
@@ -3950,7 +3952,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 {
                                     //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
                                     if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
-
                                 }
 
                                 addItem = true;
@@ -3986,10 +3987,11 @@ namespace Rsbc.Dmf.CaseManagement
             DataServiceQueryContinuation<incident> nextLink = null;
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
-                .Expand(i => i.dfp_DriverId)
                 .Where(i => i.statecode == 0 // Active
                         && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000002); // case is in under review);
+                        && i.dfp_bpfstage == 100000002
+                        && i._dfp_driverid_value != null
+                        ); // case is in under review);
 
             // Get the document of type DMER from documents entity and not in Rejected, Clean Pass, or Manual Pass(Query document entity)
             // Add condition to check document is in review (Document entity)
@@ -4011,7 +4013,7 @@ namespace Rsbc.Dmf.CaseManagement
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
-                            //await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
+                            await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
                             if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
@@ -4026,13 +4028,10 @@ namespace Rsbc.Dmf.CaseManagement
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
-                            await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
-
-                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
-
                             if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
                                 hasManualPassDocument = true;
+                                Log.Information("MANUAL PASS TRUE");
                                 break;
                             }
                         }
@@ -4044,7 +4043,7 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} {document.dfp_DocumentTypeID} {item.ticketnumber} ");
+                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} typeID {document.dfp_DocumentTypeID} Ticket {item.ticketnumber} Submittal Status {document.dfp_submittalstatus}");
                                 // condition 1: check for
                                 // 1. DMER type
                                 // 2. submital status is in review and not in  Rejected, Clean Pass
@@ -4052,10 +4051,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 if (document.dfp_DocumentTypeID != null
                                     && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                    && (document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
+                                    && document.dfp_submittalstatus != null
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Empty
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.CleanPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.ManualPass
                                     && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Reject
-                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded))
+                                    && document.dfp_submittalstatus != (int)submittalStatusOptionSet.Uploaded)
                                 {
                                     outputArray.Add(item);
                                 }
@@ -4073,6 +4074,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     outputArray.Add(item);
                                 }
 
+                                /* 24/4/18 - this code is not used at this time, left for a placeholder in the future if there is need for additional criteria.
+
                                 else
                                 {
                                     // condition 3 : Check for 
@@ -4089,6 +4092,8 @@ namespace Rsbc.Dmf.CaseManagement
                                     }
 
                                 }
+
+                                */
 
                             }
                         }
