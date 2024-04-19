@@ -28,7 +28,7 @@ namespace Pssg.DocumentStorageAdapter
         public static byte[] convertTiff2Pdf(byte[] tiffBytes)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-
+            bool pdfError = false;
             // Create Image Stream
             MemoryStream imageStream = new MemoryStream(tiffBytes);
             imageStream.Position = 0;
@@ -111,11 +111,21 @@ namespace Pssg.DocumentStorageAdapter
                 }
                 catch (Exception e)
                 {
+                    pdfError = true;
                     Log.Error(e,"Error occurred decoding page");
                 }
 
 
                 ifdOffset = ifd.NextOffset; // get the next page
+            }
+
+            if (pdfError)
+            {
+                PdfPage page = pdfDocument.Pages[0];
+                XGraphics gfx = XGraphics.FromPdfPage(page);
+                XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+                gfx.DrawString("Document Conversion Error - Please download the document and view on your PC.", font, XBrushes.Black,
+new XRect(0, 0, page.Width, page.Height), new XStringFormat(){ Alignment = XStringAlignment.Center});
             }
 
 
