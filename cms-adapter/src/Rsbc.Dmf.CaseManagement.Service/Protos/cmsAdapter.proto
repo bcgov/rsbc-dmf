@@ -669,6 +669,7 @@ message UserLoginRequest {
     string firstName = 10;
     string lastName = 11;
     repeated UserProfile userProfiles = 20;
+    string email = 21;
 }
 
 message UserLoginReply {
