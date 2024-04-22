@@ -94,20 +94,28 @@ namespace Pssg.DocumentStorageAdapter
 
                         encodedFile = ms.ToArray();
 
-                        using (var stream2 = new MemoryStream(encodedFile))
+                        System.Drawing.ImageConverter converter = new System.Drawing.ImageConverter();
+
+                        using (System.Drawing.Image image = (System.Drawing.Image)converter.ConvertFrom(encodedFile))
                         {
-                            var newPage = pdfDocument.Pages.Add(new PdfPage());
+                            using(MemoryStream stream2 = new MemoryStream())
+                            {
+                                image.Save(stream2, System.Drawing.Imaging.ImageFormat.Png);
+                                stream2.Position = 0;
+                                var newPage = pdfDocument.Pages.Add(new PdfPage());
 
-                            XGraphics xgr = XGraphics.FromPdfPage(newPage);
+                                XGraphics xgr = XGraphics.FromPdfPage(newPage);
 
-                            XImage imgFrame = XImage.FromStream(() => stream2);
+                                XImage imgFrame = XImage.FromStream(() => stream2);
 
-                            newPage.Width = imgFrame.PointWidth;
-                            newPage.Height = imgFrame.PointHeight;
+                                newPage.Width = imgFrame.PointWidth;
+                                newPage.Height = imgFrame.PointHeight;
 
-                            xgr.DrawImage(imgFrame, 0, 0);
-                            xgr.Save();
-                            xgr.Dispose();
+                                xgr.DrawImage(imgFrame, 0, 0);
+                                xgr.Save();
+                                xgr.Dispose();
+                            }
+                            
                            
                         }
                     }
