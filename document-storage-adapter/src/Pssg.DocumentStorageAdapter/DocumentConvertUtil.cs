@@ -28,10 +28,12 @@ namespace Pssg.DocumentStorageAdapter
         public static byte[] convertTiff2Pdf(byte[] tiffBytes)
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            bool pdfError = false;
+           // bool pdfError = false;
             // Create Image Stream
             MemoryStream imageStream = new MemoryStream(tiffBytes);
+           
             imageStream.Position = 0;
+            
 
             PdfDocument pdfDocument = new PdfDocument();
 
@@ -56,7 +58,7 @@ namespace Pssg.DocumentStorageAdapter
 
                 TiffImageDecoderOptions decoderOptions = new TiffImageDecoderOptions();
                 decoderOptions.UndoColorPreMultiplying = false;
-                
+
 
                 TiffImageDecoder decoder = tiff.CreateImageDecoder(ifd, decoderOptions);
                 
@@ -106,12 +108,13 @@ namespace Pssg.DocumentStorageAdapter
                             xgr.DrawImage(imgFrame, 0, 0);
                             xgr.Save();
                             xgr.Dispose();
+                           
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    pdfError = true;
+                   // pdfError = true;
                     Log.Error(e,"Error occurred decoding page");
                 }
 
@@ -119,14 +122,14 @@ namespace Pssg.DocumentStorageAdapter
                 ifdOffset = ifd.NextOffset; // get the next page
             }
 
-            if (pdfError)
+            /*if (pdfError)
             {
                 PdfPage page = pdfDocument.Pages[0];
                 XGraphics gfx = XGraphics.FromPdfPage(page);
                 XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
                 gfx.DrawString("Document Conversion Error - Please download the document and view on your PC.", font, XBrushes.Black,
-new XRect(0, 0, page.Width, page.Height), new XStringFormat(){ Alignment = XStringAlignment.Center});
-            }
+               new XRect(0, 0, page.Width, page.Height), new XStringFormat(){ Alignment = XStringAlignment.Center});
+            }*/
 
 
             // Convert doc to stream or bytes 
