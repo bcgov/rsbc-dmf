@@ -27,10 +27,11 @@ using System.Threading.Tasks;
 using System.Reflection;
 using Grpc.Net.Client;
 using Pssg.DocumentStorageAdapter;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Runtime.Serialization;
-using Microsoft.OpenApi.Any;
-using Rsbc.Dmf.CaseManagement.Service;
+using System.Data;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
+using System.IdentityModel.Tokens.Jwt;
+using RSBC.DMF.MedicalPortal.API.Auth.Extension;
+using System.Text.Json;
 
 
 namespace RSBC.DMF.MedicalPortal.API
@@ -49,6 +50,9 @@ namespace RSBC.DMF.MedicalPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var config = this.InitializeConfiguration(services);
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             services.AddAuthentication()
                 //JWT tokens handling
                 .AddJwtBearer("token", options =>
@@ -113,6 +117,30 @@ namespace RSBC.DMF.MedicalPortal.API
                 });
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                //JWT tokens handling
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = config.Keycloak.RealmUrl;
+                    options.Audience = "LICENCE-STATUS";
+                    options.MetadataAddress = config.Keycloak.WellKnownConfig;
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async context => await OnTokenValidatedAsync(context)
+                    };
+                });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.MedicalPractitioner, policy => policy
+                .RequireAuthenticatedUser()
+                .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
+
+                options.AddPolicy(Policies.Enrolled, policy => policy
+                    .RequireAuthenticatedUser()
+                    .RequireRole(Claims.IdentityProvider, Roles.Dmft));
+
+            });
 
             services.AddControllers(options =>
             {
@@ -122,10 +150,10 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddSwaggerGen(c =>
             {
                 // add Xml comments to the swagger docs
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlPath));
-                c.SchemaFilter<EnumTypesSchemaFilter>(xmlPath);
+                //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+                //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlPath));
+                //c.SchemaFilter<EnumTypesSchemaFilter>(xmlPath);
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });            
 
@@ -147,7 +175,7 @@ namespace RSBC.DMF.MedicalPortal.API
                     options.KnownNetworks.Add(knownNetwork);
                 }
             });
-            services.AddCors(opts => opts.AddDefaultPolicy(policy =>
+            services.AddCors();/* opts => opts.AddDefaultPolicy(policy =>
             {
                 // try to get array of origins from section array
                 var corsOrigins = configuration.GetSection("app:cors:origins").GetChildren().Select(c => c.Value).ToArray();
@@ -156,9 +184,11 @@ namespace RSBC.DMF.MedicalPortal.API
                 corsOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).ToArray();
                 if (corsOrigins.Any())
                 {
-                    policy.SetIsOriginAllowedToAllowWildcardSubdomains().WithOrigins(corsOrigins);
+                    policy.SetIsOriginAllowedToAllowWildcardSubdomains().WithOrigins(corsOrigins)
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
                 }
-            }));
+            }));*/
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
             services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
@@ -175,49 +205,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management System (CMS) Adapter 
 
-            string cmsAdapterURI = configuration["CMS_ADAPTER_URI"];
-
-            if (!string.IsNullOrEmpty(cmsAdapterURI))
-            {
-                var httpClientHandler = new HttpClientHandler();
-                
-                    // Return `true` to allow certificates that are untrusted/invalid                    
-                    httpClientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                
-
-                var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
-                httpClient.DefaultRequestVersion = HttpVersion.Version20;
-
-                if (!string.IsNullOrEmpty(configuration["CMS_ADAPTER_JWT_SECRET"]))
-                {
-                    var initialChannel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
-
-                    var initialClient = new CaseManager.CaseManagerClient(initialChannel);
-                    // call the token service to get a token.
-                    var tokenRequest = new Rsbc.Dmf.CaseManagement.Service.TokenRequest
-                    {
-                        Secret = configuration["CMS_ADAPTER_JWT_SECRET"]
-                    };
-
-                    var tokenReply = initialClient.GetToken(tokenRequest);
-
-                    if (tokenReply != null && tokenReply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-                    {
-                        // Add the bearer token to the client.
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-                    }
-                }
-
-                var channel = GrpcChannel.ForAddress(cmsAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
-                services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
-                services.AddTransient(_ => new CssManager.CssManagerClient(channel));
-                services.AddTransient(_ => new UserManager.UserManagerClient(channel));
-
-            }
-
-
+            services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
 
             // Add Document Storage Adapter
 
@@ -264,21 +252,39 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddTransient<IUserService, UserService>();
         }
 
+        private Task OnTokenValidatedAsync(Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContext context)
+        {
+            if (context.Principal?.Identity is ClaimsIdentity identity
+            && identity.IsAuthenticated)
+            {
+                // Flatten the Resource Access claim
+                identity.AddClaims(identity.GetResourceAccessRoles(Clients.License)
+                    .Select(role => new Claim(ClaimTypes.Role, role)));
+            }
+
+            return Task.CompletedTask;
+        }
+        private MedicalPortalConfiguration InitializeConfiguration(IServiceCollection services)
+        {
+            var config = new MedicalPortalConfiguration();
+            this.configuration.Bind(config);
+
+            services.AddSingleton(config);
+
+            Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
+            Log.Logger.Information("### PIdP Configuration:{0} ###", JsonSerializer.Serialize(config));
+
+            return config;
+        }
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseForwardedHeaders();
             if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger(c =>
-                {
-                    c.RouteTemplate = "api/{documentName}/openapi.json";
-                });
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("v1/openapi.json", "RSBC.DMF.MedicalPortal.API v1");
-                    c.RoutePrefix = "api";
-                });
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
 
             app.UseSerilogRequestLogging(opts =>
@@ -319,10 +325,28 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization("OAuth")
-                    ;
+                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled);
+                endpoints.MapSwagger();
             });
 
+            /*
+             *             Action<SwaggerOptions> endpointSetupAction = options =>
+            {
+                var endpointOptions = new SwaggerEndpointOptions();
+
+                setupAction?.Invoke(endpointOptions);
+
+                options.RouteTemplate = pattern;
+                options.SerializeAsV2 = endpointOptions.SerializeAsV2;
+                options.PreSerializeFilters.AddRange(endpointOptions.PreSerializeFilters);
+            };
+
+            var pipeline = endpoints.CreateApplicationBuilder()
+                .UseSwagger(endpointSetupAction)
+                .Build();
+
+            return endpoints.MapGet(pattern, pipeline);
+            */
             if (!string.IsNullOrEmpty(configuration["USE_SPA"]))
             {
                 app.UseSpa(spa =>
