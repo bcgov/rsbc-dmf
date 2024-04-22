@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/medical-practitioner-portal",
-            
+
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -67,6 +67,7 @@
               "buildTarget": "medical-practitioner-portal:build:production"
             },
             "development": {
+              "proxyConfig": "proxy.conf.js",
               "buildTarget": "medical-practitioner-portal:build:development"
             }
           },
