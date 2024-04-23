@@ -67,7 +67,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
             Converter = converter;
-            //Converter.Error += Converter_Error;
+            Converter.Error += Converter_Error;
         }
 
 
