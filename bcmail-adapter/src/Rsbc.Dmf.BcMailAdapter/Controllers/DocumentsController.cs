@@ -67,7 +67,7 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _logger = logger;
             Converter = converter;
-            Converter.Error += Converter_Error;
+            //Converter.Error += Converter_Error;
         }
 
 
@@ -724,6 +724,8 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                                         var outputDocument = new PdfSharpCore.Pdf.PdfDocument();
 
+                                        
+
                                         MemoryStream stream = new MemoryStream();
                                         // Open a new document
 
@@ -747,9 +749,13 @@ namespace Rsbc.Dmf.BcMailAdapter.Controllers
 
                                         // add media box settings to new page to adjust the print settings
                                         //newPage.MediaBox.X1 = box;
-                                        
+
                                         box = newPage.MediaBox.ToXRect();
-                                        box.Inflate(size);
+                                        box.Scale(size.Height, size.Width);
+                                        //box.Inflate(size);
+
+                                        // newPage.MediaBox = new PdfRectangle(new XPoint(0, 0), new XPoint(size.Height, size.Width));
+
                                     }
                                     else
                                     {
