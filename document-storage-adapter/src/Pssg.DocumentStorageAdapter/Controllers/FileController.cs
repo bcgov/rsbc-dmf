@@ -117,10 +117,12 @@ namespace Pssg.DocumentStorageAdapter.Controllers
 
                 if (!String.IsNullOrEmpty(_configuration["CONVERT_TIFF_PDF"]))
                 {
+                    
+                    
                     // Check the file type is .tiff by filename
-
                     if (fileName.ToLower().Contains(".tif"))
                     {
+                        SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
                         try
                         {
                             var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
