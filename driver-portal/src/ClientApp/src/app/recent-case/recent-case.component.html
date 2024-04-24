@@ -1,11 +1,11 @@
 <div>
-  <mat-card routerLink="/caseDetails" class="caseDetails">
+  <mat-card routerLink="/caseDetails" class="caseDetails" fragment="submissionRequirement">
     <mat-card-content class="recentCaseContent">
       <div style="grid-area: A">
         <label>Case ID</label>
         <div>
           <b>
-            <a routerLink="/caseDetails">
+            <a routerLink="/caseDetails" fragment="submissionRequirement">
               <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>
