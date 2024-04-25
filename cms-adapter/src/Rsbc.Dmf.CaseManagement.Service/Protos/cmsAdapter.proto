@@ -267,6 +267,9 @@ message CaseDetail {
     string driverId = 15;
     int64 outstandingDocuments = 16;
     string eligibleLicenseClass = 17;
+    string name = 18;
+    string driverLicenseNumber = 19;
+    google.protobuf.Timestamp birthDate = 20;
 }
 
 message CreateStatusReply {	
