@@ -18,14 +18,11 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    // "paths": {
-    //   "@shared/case-definitions": [
-    //     "../shared-portal-ui/projects/core-ui/src/lib/case-definations",
-    //   ],
-    //   "@angular/*": [
-    //     "./node_modules/@angular/*"
-    //  ], 
-    // },
+    "paths": {
+      "@shared/standalone": [
+        "../shared-portal-ui/projects/standalone/index.ts",
+      ],
+    },
     "lib": [
       "ES2022",
       "dom"
@@ -35,6 +32,7 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "enableIvy": true
   }
 }

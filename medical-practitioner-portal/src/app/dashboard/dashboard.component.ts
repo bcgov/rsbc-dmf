@@ -17,8 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 // import { DmerTypeComponent } from '@shared/case-definitions';
-// import { CoreUiModule } from '@shared/core-ui';
-// import { DmerTypeComponent } from '@shared/core-ui';
+// import { CoreUiComponent, CoreUiModule } from '@shared/core';
+import { DmerTypeComponent } from '@shared/standalone';
 interface Status {
   value: string;
   viewValue: string;
@@ -38,7 +38,12 @@ interface Status {
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    // CoreUiModule,
+    // CoreUiComponent
+    
+    DmerTypeComponent
   ],
+  
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],
