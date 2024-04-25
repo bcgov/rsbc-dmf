@@ -9,7 +9,7 @@ on:
     tags:
       - v*
     paths:
-      - "medical-portal/src/UI/**"
+      - "medical-practitioner-portal/**"
       - ".github/workflows/cd-medical-portal-ui.yml"
 env:
   IMAGE_NAME: medical-portal-ui
@@ -30,8 +30,8 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./medical-portal/src/UI
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        working-directory: ./
+        run: docker build . --file ./medical-practitioner-portal/Dockerfile --tag $IMAGE_NAME 
 
       - name: Push image
         run: |
