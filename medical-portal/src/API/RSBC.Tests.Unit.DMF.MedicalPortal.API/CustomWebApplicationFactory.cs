@@ -54,6 +54,7 @@ using System.Threading.Tasks;
                 });
 
                 services.AddTransient<ICaseQueryService, CaseService>();
+                services.AddTransient<IUserService, UserService>();
 
                 //services.AddAutoMapperSingleton(LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole()));
 
@@ -80,6 +81,7 @@ using System.Threading.Tasks;
                 //mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
                 //services.AddTransient(x => mockHttpContextAccessor.Object);
                 //services.AddTransient<IUserService, UserService>();
+                services.AddHttpContextAccessor();
 
                 // document storage client
                 //string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];

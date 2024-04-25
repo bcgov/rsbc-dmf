@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using RSBC.DMF.MedicalPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 
 public class Startup
 {
@@ -13,8 +12,7 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var _configuration = new ConfigurationBuilder()
-            //.AddUserSecrets<ApplicationVersionInfo>()
-            //.SetBasePath(
+            .AddUserSecrets<ApplicationVersionInfo>()
             .AddJsonFile("AppSettings.json")
             .AddEnvironmentVariables()
             .Build();

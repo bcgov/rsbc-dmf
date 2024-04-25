@@ -8,13 +8,13 @@ using System.Net.Http;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
-    public static class CmsAdapterConfiguration
+    public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddCmsAdapterGrpcService(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["serverUrl"];
-            var clientSecret = config["clientSecret"];
-            var validateServerCertificate = config.GetValue("validateServerCertificate", true);
+            var serviceUrl = config["CMS_ADAPTER_URI"];
+            var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
+            var validateServerCertificate = config.GetValue("CMS_VALIDATE_SERVER_CERT", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();

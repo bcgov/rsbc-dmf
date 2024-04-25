@@ -42,6 +42,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public bool IsStarted { get; set;}
     }
 
+    // TODO remove CaseService and use CaseManagerClient directly
     public class CaseService : ICaseQueryService
     {
         private readonly CaseManager.CaseManagerClient caseManager;
