@@ -637,8 +637,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
                     // Driver
                     reply.Item.DriverId = c.DriverId;
-                    reply.Item.Name = c.Name;
-                    reply.Item.DriverLicenseNumber = c.DriverLicenseNumber;
+                    reply.Item.Name = c.Name ?? string.Empty;
+                    reply.Item.DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty;
                     reply.Item.BirthDate = c.BirthDate?.ToTimestamp() ?? DateTimeOffset.MinValue.ToTimestamp();
 
                     reply.ResultStatus = ResultStatus.Success;
