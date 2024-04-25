@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Rsbc.Dmf.CaseManagement.Helpers;
 using RSBC.DMF.MedicalPortal.API;
 using RSBC.DMF.MedicalPortal.API.Services;
 

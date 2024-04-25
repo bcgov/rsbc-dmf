@@ -20,8 +20,6 @@ public class Startup
             .Build();
         services.AddSingleton<IConfiguration>(_configuration);
 
-        services.AddTransient<ICaseQueryService, CaseService>();
-
         //using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
         //    .SetMinimumLevel(LogLevel.Trace)
         //    // TODO see XUnit DI package website for a potentially cleaner way to do XUnitLoggerProvider

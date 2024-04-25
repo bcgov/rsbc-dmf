@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.Medical
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{C3414AA1-227B-4EEB-AC70-5CDF312827CB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{65C04303-7034-4690-A845-EA75061CEA37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x64.Build.0 = Release|Any CPU
 		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x86.ActiveCfg = Release|Any CPU
 		{C3414AA1-227B-4EEB-AC70-5CDF312827CB}.Release|x86.Build.0 = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|x64.Build.0 = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Debug|x86.Build.0 = Debug|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|x64.ActiveCfg = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|x64.Build.0 = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|x86.ActiveCfg = Release|Any CPU
+		{65C04303-7034-4690-A845-EA75061CEA37}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
