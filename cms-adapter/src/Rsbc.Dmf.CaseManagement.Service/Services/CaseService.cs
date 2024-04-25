@@ -615,7 +615,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Item = new CaseDetail();
                     reply.Item.CaseSequence = c.CaseSequence;
                     reply.Item.CaseId = c.CaseId;
-                    reply.Item.DriverId = c.DriverId;
                     reply.Item.Title = c.Title ?? string.Empty;
                     reply.Item.IdCode = c.IdCode ?? string.Empty;
                     reply.Item.OpenedDate = Timestamp.FromDateTimeOffset(c.OpenedDate);
@@ -635,6 +634,13 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Item.LatestDecision = c.LatestDecision ?? string.Empty;
                     reply.Item.DecisionForClass = c.DecisionForClass ?? string.Empty;
                     reply.Item.DpsProcessingDate = Timestamp.FromDateTimeOffset(c.DpsProcessingDate);
+
+                    // Driver
+                    reply.Item.DriverId = c.DriverId;
+                    reply.Item.Name = c.Name;
+                    reply.Item.DriverLicenseNumber = c.DriverLicenseNumber;
+                    reply.Item.BirthDate = c.BirthDate?.ToTimestamp() ?? DateTimeOffset.MinValue.ToTimestamp();
+
                     reply.ResultStatus = ResultStatus.Success;
                 }
                 else

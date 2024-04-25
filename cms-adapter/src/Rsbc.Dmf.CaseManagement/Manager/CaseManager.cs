@@ -842,18 +842,15 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        /// <summary>
-        /// Get Case
-        /// </summary>
-        /// <param name="caseId"></param>
-        /// <returns>CaseDetail</returns>
         public async Task<CaseDetail> GetCaseDetail(string caseId)
         {
             CaseDetail result = null;
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents.Where(d => d.incidentid == Guid.Parse(caseId)).FirstOrDefault();
+                var fetchedCase = dynamicsContext.incidents
+                    .Where(d => d.incidentid == Guid.Parse(caseId))
+                    .FirstOrDefault();
                 if (fetchedCase != null)                
                 {
                     result = await _caseMapper.Map(fetchedCase);

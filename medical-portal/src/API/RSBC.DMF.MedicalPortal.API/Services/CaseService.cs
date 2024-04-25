@@ -35,18 +35,11 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string PatientLastname { get; set; }
 
         public string PatientMiddlename { get; set; }
-
-
         public string Status { get; set; }
         public string Title { get; set; }
-
         public string DmerType {  get; set; }
-
         public DateTimeOffset? DriverBirthDate {  get; set;}
-
         public bool IsStarted { get; set;}
-
-
     }
 
     public class CaseService : ICaseQueryService
