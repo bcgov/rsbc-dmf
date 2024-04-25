@@ -58,6 +58,11 @@ namespace Pssg.DocumentStorageAdapter.Controllers
             }
         }
 
+        [HttpPost("preview")]
+        public async Task<ActionResult> Preview([FromBody] ViewModels.Download download)
+        {
+            return await Download(download);
+        }
 
         /// <summary>
         /// POST: /file/download
@@ -112,10 +117,12 @@ namespace Pssg.DocumentStorageAdapter.Controllers
 
                 if (!String.IsNullOrEmpty(_configuration["CONVERT_TIFF_PDF"]))
                 {
+                    
+                    
                     // Check the file type is .tiff by filename
-
                     if (fileName.ToLower().Contains(".tif"))
                     {
+                        SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
                         try
                         {
                             var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
@@ -152,102 +159,6 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                 throw e;
             }
 
-
-        }
-
-        /// <summary>
-        /// POST: /file/download
-        /// To test - use curl -v -d "{""fileUrl"":""test""}" -H "Content-Type: application/json" http://localhost:5000/file/download
-        /// </summary>
-        [HttpPost("preview")]
-        public async Task<ActionResult> Preview([FromBody] ViewModels.Download download)
-        {
-            string fileName = download.FileUrl;
-            if (fileName.StartsWith("https://"))
-            {
-                fileName = fileName.Substring(8);
-            }
-
-            try
-            {
-                var _S3 = new S3(_configuration);
-                Dictionary<string, string> metaData = new Dictionary<string, string>();
-                var fileContents = _S3.DownloadFile(fileName, ref metaData);
-                if (fileContents == null)
-                {
-                    return new BadRequestResult();
-                }
-                //return new FileContentResult(fileContents, "application/octet-stream");
-
-                string contentType = "application/octet-stream";
-                string body = fileContents.Length > 0 ? Convert.ToBase64String(fileContents) : String.Empty;
-                string entityName =
-                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_ENTITY) &&
-                    metaData[S3.METADATA_KEY_ENTITY] != null
-                        ? metaData[S3.METADATA_KEY_ENTITY]
-                        : String.Empty;
-                Guid entityId = metaData != null && metaData.ContainsKey(S3.METADATA_KEY_ENTITY_ID) &&
-                                  metaData[S3.METADATA_KEY_ENTITY_ID] != null
-                    ? Guid.Parse(metaData[S3.METADATA_KEY_ENTITY_ID])
-                    : new Guid();
-                string tag1 =
-                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG1) &&
-                    metaData[S3.METADATA_KEY_TAG1] != null
-                        ? metaData[S3.METADATA_KEY_TAG1]
-                        : String.Empty;
-                string tag2 =
-                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG2) &&
-                    metaData[S3.METADATA_KEY_TAG2] != null
-                        ? metaData[S3.METADATA_KEY_TAG2]
-                        : String.Empty;
-                string tag3 =
-                    metaData != null && metaData.ContainsKey(S3.METADATA_KEY_TAG3) &&
-                    metaData[S3.METADATA_KEY_TAG3] != null
-                        ? metaData[S3.METADATA_KEY_TAG3]
-                        : String.Empty;
-
-                if (!String.IsNullOrEmpty(_configuration["CONVERT_TIFF_PDF"]))
-                {
-                    // Check the file type is .tiff by filename
-
-                    if (fileName.ToLower().Contains(".tif"))
-                    {
-                        try
-                        {
-                            var pdfBytes = DocumentConvertUtil.convertTiff2Pdf(fileContents);
-                            
-                            body = Convert.ToBase64String(pdfBytes);
-                        }
-                        catch (Exception e)
-                        {
-                            body = Convert.ToBase64String(fileContents);
-                        }
-                        fileName = fileName.Substring('.')[0] + ".pdf";
-                        contentType = "application/pdf";
-                    }
-
-                }
-
-                var result = new Upload()
-                {
-                    FileName = fileName,
-                    ContentType = contentType,
-                    Body = body,
-                    EntityName = entityName,
-                    EntityId = entityId,
-                    Tag1 = tag1,
-                    Tag2 = tag2,
-                    Tag3 = tag3,
-                };
-
-                return new JsonResult(result);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error during file download for file.");
-                throw e;
-            }
-            
 
         }
 

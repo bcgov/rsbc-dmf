@@ -23,6 +23,7 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="TiffLibrary" Version="0.6.65" />
+    <PackageReference Include="TiffLibrary.ImageSharpAdapter" Version="0.6.65" />
   </ItemGroup>
 
   <ItemGroup>
