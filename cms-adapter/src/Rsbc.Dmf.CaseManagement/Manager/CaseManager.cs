@@ -1503,6 +1503,9 @@ namespace Rsbc.Dmf.CaseManagement
                 Solicited = true,
                 Owner = request.Owner,
                 
+                
+                //DueDate = request.DueDate
+                
             };
 
             if(request.FaxReceivedDate != null)
@@ -4113,11 +4116,12 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset GetDpsProcessingDate()
         {
             var mostRecentRecord = dynamicsContext.bcgov_documenturls
+                .Where(x => x.dfp_processdate != null)
                 .OrderByDescending(i => i.dfp_processdate)
                 .Take(1)
                 .FirstOrDefault();
 
-            if (mostRecentRecord != null && mostRecentRecord.dfp_processdate != null)
+            if (mostRecentRecord != null)
             {
                 return mostRecentRecord.dfp_processdate.Value;
             } 
@@ -4185,15 +4189,15 @@ namespace Rsbc.Dmf.CaseManagement
 
         public async Task ResolveCaseStatusUpdates()
         {
-            // var dpsProcessingDate = GetDpsProcessingDate();
+            
+            // 04/25/2024 Removing the check for dfp_bpfstage is FET as this field is inconsistant and this check is being done on mercury end
             var currentDate = DateTimeOffset.UtcNow;
 
             var query = from incident
                         in dynamicsContext.incidents
                         where( incident.dfp_caseresolvedate != null
                         && incident.dfp_caseresolvedate <= currentDate 
-                        && incident.statecode == 0
-                        && incident.dfp_bpfstage == 100000003) // Check if the case status is in File End Tasks
+                        && incident.statecode == 0 )
                         || incident.dfp_immediateclosure == true
 
                         select incident;
