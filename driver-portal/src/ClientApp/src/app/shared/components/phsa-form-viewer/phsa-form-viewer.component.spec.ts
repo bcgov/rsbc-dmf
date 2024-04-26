@@ -9,9 +9,8 @@ describe('PhsaFormViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PhsaFormViewerComponent],
-      imports: [SharedModule]
-    })
+    imports: [SharedModule, PhsaFormViewerComponent]
+})
       .compileComponents();
   });
 

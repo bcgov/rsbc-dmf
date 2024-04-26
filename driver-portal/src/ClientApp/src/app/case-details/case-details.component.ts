@@ -3,11 +3,15 @@ import { CaseManagementService } from '../shared/services/case-management/case-m
 import { CaseDocuments } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
 import { ViewportScroller } from '@angular/common';
+import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
+import { RecentCaseComponent } from '../recent-case/recent-case.component';
 
 @Component({
-  selector: 'app-case-details',
-  templateUrl: './case-details.component.html',
-  styleUrls: ['./case-details.component.scss'],
+    selector: 'app-case-details',
+    templateUrl: './case-details.component.html',
+    styleUrls: ['./case-details.component.scss'],
+    standalone: true,
+    imports: [RecentCaseComponent, SubmissionRequirementsComponent],
 })
 export class CaseDetailsComponent implements OnInit, AfterViewInit {
   caseDocuments?: CaseDocuments;

@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ApplicationVersionInfo } from "../../api/models";
 @Component({
-  selector: 'app-version-info',
-  templateUrl: './version-info.component.html',
-  styleUrls: ['./version-info.component.scss']
+    selector: 'app-version-info',
+    templateUrl: './version-info.component.html',
+    styleUrls: ['./version-info.component.scss'],
+    standalone: true
 })
 export class VersionInfoComponent implements OnInit {
   versionInfo: ApplicationVersionInfo;
