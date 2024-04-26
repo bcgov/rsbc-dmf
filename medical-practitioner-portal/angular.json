@@ -71,7 +71,12 @@
               "buildTarget": "medical-practitioner-portal:build:development"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "ssl": true,
+            "sslKey": "./ssl/localhost.key",
+            "sslCert": "./ssl/localhost.crt"
+          }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
