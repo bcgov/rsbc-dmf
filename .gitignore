@@ -2,6 +2,11 @@
 **/node_modules/
 # environment variables for docker-compose
 *.env
+# Global VS files and folders
+**/.vscode/
+**/obj/
+**/bin/
+**/.angular/
 # Openshift parameter files
 **/openshift/templates/*.params
 # Angular local environment files
@@ -9,20 +14,10 @@
 /landing-page/src/html/.idea
 /.idea
 ./medical-portal\src\UI\medical-portal\proxy.conf.json
-/migration-metrics/src/ClientApp/.angular/cache/15.1.6
 /migration-metrics/src/DATA.db
 /migration-metrics/src/DATA.db-shm
 /migration-metrics/src/DATA.db-wal
-/system-status/src/ClientApp/.angular/cache/15.1.6
-/migration-metrics/src/ClientApp/.angular/cache/16.2.0
-/migration-metrics/src/ClientApp/.angular/cache/17.0.8
-/system-status/src/ClientApp/.angular/cache/17.0.8
 /oauth-server/src/OAuthServer/Data/IdentityServer.db-shm
 /oauth-server/src/OAuthServer/Data/IdentityServer.db-wal
 /medical-portal/docs/.$CHEFS-Integration.drawio.dtmp
 *.bkp
-
-/medical-portal/src/PidpAdpater.API/PidpAdpater.API/bin
-/medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj
-/partner-portal/PartnerPortal.Api/bin
-/partner-portal/PartnerPortal.Api/obj
