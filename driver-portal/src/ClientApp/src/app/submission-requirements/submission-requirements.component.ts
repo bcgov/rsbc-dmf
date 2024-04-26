@@ -113,7 +113,7 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe(() => {
         this.fileToUpload = null;
-        this.uploadForm.controls.documentSubType.setValue(''); ;
+        this.uploadForm.controls.documentSubType.setValue('');
         this.acceptControl.reset();
         this._snackBar.open('Successfully uploaded!', 'Close', {
           horizontalPosition: 'center',
