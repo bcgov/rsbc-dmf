@@ -2,14 +2,21 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { LoginService } from './shared/services/login.service';
 import { ConfigurationService } from './shared/services/configuration.service';
-import { Router } from '@angular/router';
-import { APP_BASE_HREF } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
+import { APP_BASE_HREF, NgIf } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
+import { LayoutModule } from '../../../../../shared-portal-ui/projects/core-ui/src/lib/layout/layout.module';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        LayoutModule,
+        RouterOutlet,
+    ],
 })
 export class AppComponent implements OnInit {
   public isLoading = true;
