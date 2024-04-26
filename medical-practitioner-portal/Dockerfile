@@ -15,6 +15,6 @@ RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/
 
 FROM caddy:alpine as final
 COPY ./medical-practitioner-portal/Caddyfile /etc/caddy/Caddyfile
-COPY --from=ng-builder /dist/medical-practitioner-portal/ /site
+COPY --from=ng-builder /app/medical-practitioner-portal/dist/browser/ /site
 ENV API_URL=
 EXPOSE 2015
