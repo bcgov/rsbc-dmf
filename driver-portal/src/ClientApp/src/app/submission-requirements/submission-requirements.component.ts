@@ -1,4 +1,5 @@
 import {
+  CUSTOM_ELEMENTS_SCHEMA,
   Component,
   EventEmitter,
   Input,
@@ -6,19 +7,66 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document, DocumentSubType } from '../shared/api/models';
 import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ApiConfiguration } from '../shared/api/api-configuration';
+import { SubmissionStatusComponent } from '../case-definations/submission-status/submission-status.component';
+import { SubmissionTypeComponent } from '../case-definations/submission-type/submission-type.component';
+import { DecisionOutcomeComponent } from '../case-definations/decision-outcome/decision-outcome.component';
+import { DmerTypeComponent } from '../case-definations/dmer-type/dmer-type.component';
+import { CaseStatusComponent } from '../case-definations/case-status/case-status.component';
+import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
+import { RouterLink } from '@angular/router';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { QuickLinksComponent } from '../quick-links/quick-links.component';
+import { MatIcon } from '@angular/material/icon';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { NgIf, NgFor, DatePipe } from '@angular/common';
+import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-submission-requirements',
-  templateUrl: './submission-requirements.component.html',
-  styleUrls: ['./submission-requirements.component.scss'],
+    selector: 'app-submission-requirements',
+    templateUrl: './submission-requirements.component.html',
+    styleUrls: ['./submission-requirements.component.scss'],
+    standalone: true,
+    imports: [
+        MatButton,
+        NgIf,
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatError,
+        NgxDropzoneModule,
+        MatIcon,
+        QuickLinksComponent,
+        NgFor,
+        MatCard,
+        MatCardContent,
+        RouterLink,
+        MatAccordion,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        CaseTypeComponent,
+        CaseStatusComponent,
+        DmerTypeComponent,
+        DecisionOutcomeComponent,
+        SubmissionTypeComponent,
+        SubmissionStatusComponent,
+        DatePipe,
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SubmissionRequirementsComponent implements OnInit {
   @Input() submissionRequirementDocuments?: Document[] | null = [];

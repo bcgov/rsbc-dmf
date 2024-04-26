@@ -1,10 +1,13 @@
 import { ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-quick-links',
-  templateUrl: './quick-links.component.html',
-  styleUrls: ['./quick-links.component.css'],
+    selector: 'app-quick-links',
+    templateUrl: './quick-links.component.html',
+    styleUrls: ['./quick-links.component.css'],
+    standalone: true,
+    imports: [RouterLink],
 })
 export class QuickLinksComponent {
   constructor(private viewportScroller: ViewportScroller) {}
