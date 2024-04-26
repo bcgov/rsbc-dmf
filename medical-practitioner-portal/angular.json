@@ -68,6 +68,7 @@
               "buildTarget": "medical-practitioner-portal:build:production"
             },
             "development": {
+              "proxyConfig": "proxy.conf.js",
               "buildTarget": "medical-practitioner-portal:build:development"
             }
           },
