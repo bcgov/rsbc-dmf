@@ -8,8 +8,6 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public string CaseId { get; set; }
 
-        public string DriverId { get; set; }
-
         /// <summary>
         /// Indicates system title of the case
         /// </summary>
@@ -77,6 +75,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         public int OutstandingDocuments { get; set; }
 
+        // Driver
+        public string DriverId { get; set; }
+        public string Name { get; set; }
+        public string DriverLicenseNumber { get; set; }
+        public DateTimeOffset? BirthDate { get; set; }
     }
 
 }
