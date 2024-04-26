@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDocuments } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
@@ -9,7 +9,7 @@ import { ViewportScroller } from '@angular/common';
   templateUrl: './case-details.component.html',
   styleUrls: ['./case-details.component.scss'],
 })
-export class CaseDetailsComponent implements OnInit {
+export class CaseDetailsComponent implements OnInit, AfterViewInit {
   caseDocuments?: CaseDocuments;
   selectedIndex = 0;
   isLoading = true;
@@ -21,8 +21,6 @@ export class CaseDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
-
     if (this.loginService.userProfile?.id) {
       this.getCaseSubmissionDocuments(
         this.loginService.userProfile?.id as string

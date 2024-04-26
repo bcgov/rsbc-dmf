@@ -27,7 +27,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
-  selectedValue = '';
+  //selectedValue = '';
   acceptControl = new FormControl(false);
   @Input() isLoading = true;
 
@@ -41,7 +41,8 @@ export class SubmissionRequirementsComponent implements OnInit {
   ) {}
 
   uploadForm = this.fb.group({
-    documentSubType : ['', Validators.required]
+    documentSubType : ['', Validators.required],
+
   })
   ngOnInit() {
     this.getDocumentSubtypes();
@@ -102,7 +103,7 @@ export class SubmissionRequirementsComponent implements OnInit {
     }
     const formData = new FormData();
     formData.append('file', this.fileToUpload as File);
-    formData.append('documentSubTypeId', this.selectedValue);
+    formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
     this.isFileUploading = true;
     this._http
       .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
@@ -112,7 +113,7 @@ export class SubmissionRequirementsComponent implements OnInit {
       })
       .subscribe(() => {
         this.fileToUpload = null;
-        this.selectedValue = '';
+        this.uploadForm.controls.documentSubType.setValue('');
         this.acceptControl.reset();
         this._snackBar.open('Successfully uploaded!', 'Close', {
           horizontalPosition: 'center',
