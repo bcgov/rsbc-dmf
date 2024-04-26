@@ -1,7 +1,6 @@
 # version 17.1.0 introduced breaking changes to RUN npm install, try change 17.0.10 tag to latest on subsequent versions
 FROM trion/ng-cli-karma:17.0.10 AS ng-builder
 
-COPY ./package*.json ./
 COPY ./shared-portal-ui/ ./shared-portal-ui
 COPY ./driver-portal/src/ClientApp ./driver-portal/src/ClientApp
 
