@@ -3,6 +3,10 @@ FROM trion/ng-cli-karma AS ng-builder
 COPY ./shared-portal-ui/ ./shared-portal-ui
 COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
 
+WORKDIR /app/shared-portal-ui
+
+RUN npm install 
+
 WORKDIR /app/medical-practitioner-portal
 
 RUN npm install 
