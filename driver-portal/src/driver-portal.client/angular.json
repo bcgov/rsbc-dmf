@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Driver-Portal": {
+    "driver-portal.client": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "progress": false,
-            "outputPath": "dist",
+            "outputPath": "dist/driver-portal.client",
             "preserveSymlinks": true,
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -95,11 +95,11 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Driver-Portal:build:production"
+              "buildTarget": "driver-portal.client:build:production"
             },
             "development": {
               "proxyConfig": "proxy.conf.js",
-              "buildTarget": "Driver-Portal:build:development"
+              "buildTarget": "driver-portal.client:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -107,7 +107,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "Driver-Portal:build"
+            "buildTarget": "driver-portal.client:build"
           }
         },
         "test": {

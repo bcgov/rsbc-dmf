@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Cli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj", "{77E2FD4A-7762-4A1F-B24E-B052B61350D6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal", "driver-portal.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "driver-portal.Server", "driver-portal.Server\driver-portal.Server.csproj", "{48DE0C53-610C-456D-A2C1-6F774B4A7235}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "driver-portal.Server\Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{2E6D1328-ABE5-42AE-AFE1-37D09269F831}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0A09E19-A9EB-452F-AF34-3B65784FE118}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\..\shared-utils\SharedUtils.csproj", "{EBF21CF9-7758-467A-A2BD-B044E804D106}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "driver-portal.client", "driver-portal.client\driver-portal.client.esproj", "{56C3446A-AC17-4251-958F-061AA769F327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,12 @@ Global
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBF21CF9-7758-467A-A2BD-B044E804D106}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56C3446A-AC17-4251-958F-061AA769F327}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

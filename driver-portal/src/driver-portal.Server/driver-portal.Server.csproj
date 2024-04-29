@@ -4,14 +4,13 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
-		<SpaRoot>ClientApp\</SpaRoot>
-		<SpaProxyServerUrl>https://localhost:44405</SpaProxyServerUrl>
+		<SpaRoot>..\driver-portal.client</SpaRoot>
+		<SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>83A221DE-E3D0-4A04-9E52-E4EA8E6F9EBE</UserSecretsId>
 		<RootNamespace>Rsbc.Dmf.DriverPortal.Api</RootNamespace>
 	</PropertyGroup>
-
 
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
@@ -41,7 +40,6 @@
     <PackageReference Include="Winista.MimeDetect" Version="1.1.0" />
 	</ItemGroup>
 
-
 	<ItemGroup>
 		<!-- Don't publish the SPA source files, but do show them in the project files list -->
 		<Compile Remove="Tests\**" />
@@ -53,16 +51,15 @@
 		<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="..\driver-portal.client%2a%2a" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Entities\" />
 	  <Folder Include="Services\" />
     <Folder Include="gRPC Prototypes\" />
 	</ItemGroup>
-
-
-
-
 
 	<ItemGroup>
 	  <None Include="DriverPortalApp\angular.json" />
@@ -74,15 +71,15 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="../../icbc-adapter/src/Pssg.Dmf.IcbcAdapter/Protos/icbcAdapter.proto" GrpcServices="Client">
+    <Protobuf Include="../../../icbc-adapter/src/Pssg.Dmf.IcbcAdapter/Protos/icbcAdapter.proto" GrpcServices="Client">
       <Link>gRPC Prototypes\icbcAdapter.proto</Link>
     </Protobuf>
   </ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
-	  <ProjectReference Include="..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
-	  <ProjectReference Include="..\..\shared-utils\SharedUtils.csproj" />
+	  <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+	  <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+	  <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -94,6 +91,5 @@
 		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
 		<Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
 	</Target>
-
 
 </Project>
