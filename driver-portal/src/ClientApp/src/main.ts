@@ -4,7 +4,6 @@ import { AppComponent } from './app/app.component';
 import { ApiModule } from './app/shared/api/api.module';
 import { provideRouter } from '@angular/router';
 import { OAuthModule } from 'angular-oauth2-oidc';
-import { LayoutModule, CoreUiModule } from '@shared/core-ui';
 import { FormsModule } from '@angular/forms';
 import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app/app-routing.module';
@@ -26,13 +25,13 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }), AppRoutingModule, FormsModule, LayoutModule, OAuthModule.forRoot({
+        importProvidersFrom(BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }), AppRoutingModule, FormsModule, OAuthModule.forRoot({
             resourceServer: {
                 sendAccessToken: true,
                 customUrlValidation: (url) => url.toLowerCase().includes('/api/') &&
                     !url.toLowerCase().endsWith('/config'),
             },
-        }), CoreUiModule, AppRoutingModule, ApiModule.forRoot({ rootUrl: environment.apiRootUrl })),
+        }), AppRoutingModule, ApiModule.forRoot({ rootUrl: environment.apiRootUrl })),
         {
             provide: APP_BASE_HREF,
             useFactory: (s: PlatformLocation) => {
