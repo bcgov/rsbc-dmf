@@ -18,7 +18,7 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "progress": false,
-            "outputPath": "dist/driver-portal.client",
+            "outputPath": "dist",
             "preserveSymlinks": true,
             "index": "src/index.html",
             "main": "src/main.ts",

@@ -52,10 +52,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="..\driver-portal.client%2a%2a" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <Folder Include="Entities\" />
 	  <Folder Include="Services\" />
     <Folder Include="gRPC Prototypes\" />
