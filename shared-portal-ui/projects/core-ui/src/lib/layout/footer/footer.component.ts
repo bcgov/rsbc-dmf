@@ -1,15 +1,20 @@
-import { Component, OnInit, ChangeDetectionStrategy, Optional } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Optional, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {ChangeDetectorRef} from '@angular/core';
 import { ApplicationVersionInfoService } from 'src/app/shared/api/services/application-version-info.service';
 import { VersionInfoComponent } from 'src/app/shared/components/version-info/version-info.component';
 import { ApplicationVersionInfo } from 'src/app/shared/api/models';
+import { RouterLink } from '@angular/router';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports:[RouterLink, MatToolbarModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone : true,
+  schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class FooterComponent implements OnInit {
 
