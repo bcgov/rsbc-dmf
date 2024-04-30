@@ -24,6 +24,7 @@ import { FooterComponent, HeaderComponent, NavMenuComponent } from '@shared/core
 })
 export class AppComponent implements OnInit {
   public isLoading = true;
+  public profileName : string = ''; 
 
   constructor(
     @Inject(APP_BASE_HREF) public baseHref: string,
@@ -50,6 +51,15 @@ export class AppComponent implements OnInit {
         return;
       }
 
+      // Get user profile name and initials
+      const profile = this.loginService.userProfile;
+
+      if (profile) {
+        const firstName = profile.firstName;
+        const lastName = profile.lastName;
+        this.profileName = firstName + ' ' + lastName;
+      }
+
       if (driver.driverId) {
         //if the user is logged in, redirect to the dashboard
         nextRoute = 'dashboard';
@@ -69,6 +79,8 @@ export class AppComponent implements OnInit {
       }
 
       this.router.navigate([nextRoute]).then(() => (this.isLoading = false));
+
+
     } catch (e) {
       console.error(e);
       // this.router
@@ -86,4 +98,8 @@ export class AppComponent implements OnInit {
   // public showProfile(): boolean {
   //   return this.loginService.isLoggedIn();
   // }
+
+  public onLogout():void{
+    this.loginService.logout();
+  }
 }

@@ -5,11 +5,13 @@ import {
   OnInit,
   Input,
   CUSTOM_ELEMENTS_SCHEMA,
+  Output,
+  EventEmitter,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {MatMenuModule} from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
-import { LoginService } from 'src/app/shared/services/login.service';
+
 
 @Component({
   selector: 'app-header',
@@ -22,25 +24,21 @@ import { LoginService } from 'src/app/shared/services/login.service';
 })
 export class HeaderComponent {
   @Input() showProfile = false;
-
+ 
   showMobileMenu = false;
 
-  public profileName?: string;
-  public profileRole?: string;
-  public profileInitials?: string;
+  @Input() profileName?: string;
+  @Input() profileRole?: string;
+  @Input() profileInitials?: string;
+  @Output() logout = new EventEmitter();
 
-  constructor(private loginService: LoginService) {
-    const profile = this.loginService.userProfile;
-
-    if (profile) {
-      const firstName = profile.firstName;
-      const lastName = profile.lastName;
-      this.profileName = firstName + ' ' + lastName;
-    }
+  constructor() {
+   
   }
 
   public logOut(): void {
-    this.loginService.logout();
+    //this.loginService.logout();
+    this.logout.emit();
   }
 
 }
