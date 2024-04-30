@@ -50,6 +50,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // TODO add user secrets to configuration settings
             var config = this.InitializeConfiguration(services);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -205,7 +206,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management System (CMS) Adapter 
 
-            services.AddCmsAdapterGrpcService(configuration.GetSection("cms"));
+            services.AddCaseManagementAdapterClient(configuration.GetSection("cms"));
 
             // Add Document Storage Adapter
 
