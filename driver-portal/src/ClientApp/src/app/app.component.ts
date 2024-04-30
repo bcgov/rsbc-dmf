@@ -1,11 +1,13 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-import { CUSTOM_ELEMENTS_SCHEMA, Component, Inject, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Inject, OnInit, Optional } from '@angular/core';
 import { LoginService } from './shared/services/login.service';
 import { ConfigurationService } from './shared/services/configuration.service';
 import { Router, RouterOutlet } from '@angular/router';
 import { APP_BASE_HREF, NgIf } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { FooterComponent, HeaderComponent, NavMenuComponent } from '@shared/core-ui'
+import { ApplicationVersionInfoService } from './shared/api/services';
+import { ApplicationVersionInfo } from './shared/api/models';
 
 
 @Component({
@@ -25,12 +27,14 @@ import { FooterComponent, HeaderComponent, NavMenuComponent } from '@shared/core
 export class AppComponent implements OnInit {
   public isLoading = true;
   public profileName : string = ''; 
+  public versionInfo : ApplicationVersionInfo | null = null;
 
   constructor(
     @Inject(APP_BASE_HREF) public baseHref: string,
     public loginService: LoginService,
     private configService: ConfigurationService,
-    private router: Router
+    private router: Router,
+    @Optional() private versionInfoDataService: ApplicationVersionInfoService
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -58,6 +62,16 @@ export class AppComponent implements OnInit {
         const firstName = profile.firstName;
         const lastName = profile.lastName;
         this.profileName = firstName + ' ' + lastName;
+      }
+
+      // Get Version info on footer
+      if (this.versionInfoDataService !== null)
+      {
+        this.versionInfoDataService.apiApplicationVersionInfoGet$Json()
+          .subscribe((versionInfo: ApplicationVersionInfo) => {
+            this.versionInfo = versionInfo;
+            
+          });
       }
 
       if (driver.driverId) {
