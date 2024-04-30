@@ -4,13 +4,13 @@ import {ChangeDetectorRef} from '@angular/core';
 import { VersionInfoComponent } from '../version-info/version-info.component'
 import { RouterLink } from '@angular/router';
 import {MatToolbarModule} from '@angular/material/toolbar';
-import { NgIf } from '@angular/common';
+
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  imports:[RouterLink, MatToolbarModule, NgIf, MatDialogModule, VersionInfoComponent ],
+  imports: [RouterLink, MatToolbarModule, MatDialogModule, VersionInfoComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone : true,
   schemas : [CUSTOM_ELEMENTS_SCHEMA]

@@ -15,6 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import {CaseTypeComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component'
+import {DmerTypeComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component'
 
 interface Status {
   value: string;
@@ -35,6 +37,8 @@ interface Status {
     CommonModule,
     RouterLink,
     RouterLinkActive,
+    CaseTypeComponent,
+    DmerTypeComponent
   ],
   
   templateUrl: './dashboard.component.html',
