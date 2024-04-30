@@ -8,8 +8,8 @@ describe('CoreUiComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CoreUiComponent ]
-    })
+    imports: [CoreUiComponent]
+})
     .compileComponents();
   });
 

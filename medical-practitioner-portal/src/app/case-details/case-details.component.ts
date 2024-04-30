@@ -5,13 +5,15 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatAccordion, MatExpansionModule, MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-case-details',
   standalone: true,
-  imports: [MatCardModule, MatStepperModule,  MatInputModule, MatIconModule,],
+  imports: [MatCardModule, MatStepperModule,  MatInputModule, MatIconModule, MatExpansionModule],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
+  viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [
     {
@@ -21,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
   ],
 })
 export class CaseDetailsComponent implements OnInit {
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
   @ViewChild('stepper') stepper!: MatStepper;
 

@@ -1,7 +1,6 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -29,7 +28,9 @@ namespace Rsbc.Dmf.CaseManagement
                 OpenedDate = @case.createdon.Value,
                 LastActivityDate = @case.modifiedon.Value,
                 LatestDecision = null,
-                DecisionDate = null
+                DecisionDate = null,
+                Name = @case.dfp_DriverId?.dfp_fullname,
+                BirthDate = @case.dfp_DriverId?.dfp_dob
             };
 
             if (@case.dfp_dfcmscasesequencenumber == null)

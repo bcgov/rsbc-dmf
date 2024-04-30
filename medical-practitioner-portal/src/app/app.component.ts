@@ -9,10 +9,14 @@ import { LoginService } from './shared/services/login.service';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, NavMenuComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, NavMenuComponent ],
+  //exports : [],
+  //declarations :[CoreUiModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
+
+
 export class AppComponent {
   title = 'medical-practitioner-portal';
 

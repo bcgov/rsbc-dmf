@@ -16,16 +16,29 @@ const PROXY_CONFIG = [
       Connection: 'Keep-Alive'
     }
   },
-  // {
-  //   context: [
-  //     "/swagger",
-  //   ],
-  //   target: target,
-  //   secure: false,
-  //   headers: {
-  //     Connection: 'Keep-Alive'
-  //   }
-  // }
+  {
+    context: [
+      "/medical-portal/api",
+    ],
+    target: target,
+    pathRewrite: {
+      '^/medical-portal': ''
+    },    
+    secure: false,
+    headers: {
+      Connection: 'Keep-Alive'
+    },
+  },
+  {
+    context: [
+      "/swagger",
+    ],
+    target: target,
+    secure: false,
+    headers: {
+      Connection: 'Keep-Alive'
+    }
+  }
 ]
 
 module.exports = PROXY_CONFIG;

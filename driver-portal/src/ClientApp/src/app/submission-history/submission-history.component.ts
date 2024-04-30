@@ -1,13 +1,38 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
+import { SubmissionStatusComponent } from '../case-definations/submission-status/submission-status.component';
+import { SubmissionTypeComponent } from '../case-definations/submission-type/submission-type.component';
+import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
+import { QuickLinksComponent } from '../quick-links/quick-links.component';
 
 @Component({
-  selector: 'app-submission-history',
-  templateUrl: './submission-history.component.html',
-  styleUrls: ['./submission-history.component.scss'],
+    selector: 'app-submission-history',
+    templateUrl: './submission-history.component.html',
+    styleUrls: ['./submission-history.component.scss'],
+    standalone: true,
+    imports: [
+        QuickLinksComponent,
+        NgFor,
+        MatCard,
+        NgClass,
+        MatCardContent,
+        MatIcon,
+        NgIf,
+        MatAccordion,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        CaseTypeComponent,
+        SubmissionTypeComponent,
+        SubmissionStatusComponent,
+        DatePipe,
+    ],
 })
 export class SubmissionHistoryComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;

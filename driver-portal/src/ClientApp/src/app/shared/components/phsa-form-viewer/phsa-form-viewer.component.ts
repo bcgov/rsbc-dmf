@@ -1,9 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SafePipe } from '../../pipes/safe.pipe';
 
 @Component({
-  selector: 'app-phsa-form-viewer',
-  templateUrl: './phsa-form-viewer.component.html',
-  styleUrls: ['./phsa-form-viewer.component.scss']
+    selector: 'app-phsa-form-viewer',
+    templateUrl: './phsa-form-viewer.component.html',
+    styleUrls: ['./phsa-form-viewer.component.scss'],
+    standalone: true,
+    imports: [SafePipe]
 })
 export class PhsaFormViewerComponent implements OnInit {
 

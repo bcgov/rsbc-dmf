@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'lib-core-ui',
-  template: `
+    selector: 'lib-core-ui',
+    template: `
     <p>
       core-ui works!
     </p>
   `,
-  styles: [
-  ]
+    styles: [],
+    standalone: true
 })
 export class CoreUiComponent implements OnInit {
 

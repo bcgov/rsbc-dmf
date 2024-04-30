@@ -1,15 +1,26 @@
 /* eslint-disable @angular-eslint/no-empty-lifecycle-method */
-import { Component, Inject, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Inject, OnInit } from '@angular/core';
 import { LoginService } from './shared/services/login.service';
 import { ConfigurationService } from './shared/services/configuration.service';
-import { Router } from '@angular/router';
-import { APP_BASE_HREF } from '@angular/common';
+import { Router, RouterOutlet } from '@angular/router';
+import { APP_BASE_HREF, NgIf } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
+import { FooterComponent, HeaderComponent, NavMenuComponent } from '@shared/core-ui'
+
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [
+        NgIf,
+        RouterOutlet,
+        HeaderComponent,
+        FooterComponent,
+        NavMenuComponent
+    ],
+    schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppComponent implements OnInit {
   public isLoading = true;

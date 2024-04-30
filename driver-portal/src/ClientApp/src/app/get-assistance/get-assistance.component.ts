@@ -1,12 +1,20 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { ViewportScroller } from '@angular/common';
+import { ViewportScroller, NgIf, NgFor, NgClass, DatePipe } from '@angular/common';
 import { LoginService } from '../shared/services/login.service';
 import { Callback, Callback2, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatSelect } from '@angular/material/select';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 
 interface CallBackTopic {
   value: string;
@@ -24,9 +32,30 @@ enum HelpTopics {
 }
 
 @Component({
-  selector: 'app-get-assistance',
-  templateUrl: './get-assistance.component.html',
-  styleUrls: ['./get-assistance.component.scss'],
+    selector: 'app-get-assistance',
+    templateUrl: './get-assistance.component.html',
+    styleUrls: ['./get-assistance.component.scss'],
+    standalone: true,
+    imports: [
+        CdkMenu,
+        CdkMenuItem,
+        MatCard,
+        MatCardContent,
+        NgIf,
+        ReactiveFormsModule,
+        FormsModule,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        MatError,
+        MatInput,
+        MatButton,
+        NgFor,
+        NgClass,
+        MatIcon,
+        DatePipe,
+    ],
 })
 export class GetAssistanceComponent implements OnInit {
   HelpTopics = HelpTopics;

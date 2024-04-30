@@ -16,9 +16,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
-// import { DmerTypeComponent } from '@shared/case-definitions';
-// import { CoreUiModule } from '@shared/core-ui';
-// import { DmerTypeComponent } from '@shared/core-ui';
 interface Status {
   value: string;
   viewValue: string;
@@ -39,6 +36,7 @@ interface Status {
     RouterLink,
     RouterLinkActive,
   ],
+  
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],

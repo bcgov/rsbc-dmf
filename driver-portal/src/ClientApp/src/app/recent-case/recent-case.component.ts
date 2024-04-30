@@ -1,28 +1,50 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { MatStepper } from '@angular/material/stepper';
+import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
 import { LoginService } from '../shared/services/login.service';
+import { DatePipe } from '@angular/common';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
-  selector: 'app-recent-case',
-  templateUrl: './recent-case.component.html',
-  styleUrls: ['./recent-case.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false },
-    },
-  ],
+    selector: 'app-recent-case',
+    templateUrl: './recent-case.component.html',
+    styleUrls: ['./recent-case.component.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false },
+        },
+    ],
+    standalone: true,
+    imports: [
+        MatCard,
+        RouterLink,
+        MatCardContent,
+        MatStepper,
+        MatStep,
+        MatStepLabel,
+        MatStepperIcon,
+        MatIcon,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        DatePipe,
+        MatAccordion
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
 
   selectedIndex = 0;
   panelOpenState = false;
+
 
   @ViewChild('stepper') stepper!: MatStepper;
 

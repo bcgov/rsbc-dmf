@@ -48,7 +48,7 @@
         <div style="padding-top: 24px">
           <mat-form-field appearance="outline" style="width: 350px">
             <mat-label>Select Document Type</mat-label>
-            <mat-select [(ngModel)]="selectedValue" name="documentType" [formControl]="uploadForm.controls.documentSubType">
+            <mat-select name="documentType" [formControl]="uploadForm.controls.documentSubType">
               @for (documentType of documentSubTypes; track documentType) {
               <mat-option [value]="documentType.id">{{
                 documentType.name
@@ -91,8 +91,7 @@
         </ngx-dropzone>
         <div style="padding-top: 24px">
           <label>
-            <input type="checkbox" #confirmed [formControl]="acceptControl" />I
-            verify that this document is authentic and unaltered.
+            <input type="checkbox" #confirmed [formControl]="acceptControl" />By checking this box, I confirm that I am submitting an unaltered copy of documentation provided by a medical professional.
           </label>
         </div>
 

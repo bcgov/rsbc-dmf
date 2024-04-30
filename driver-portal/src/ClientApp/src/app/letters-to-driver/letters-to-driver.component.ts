@@ -1,12 +1,37 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatAccordion } from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
+import { LetterTopicComponent } from '../case-definations/letter-topic/letter-topic.component';
+import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
+import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
+import { QuickLinksComponent } from '../quick-links/quick-links.component';
 
 @Component({
-  selector: 'app-letters-to-driver',
-  templateUrl: './letters-to-driver.component.html',
-  styleUrls: ['./letters-to-driver.component.scss'],
+    selector: 'app-letters-to-driver',
+    templateUrl: './letters-to-driver.component.html',
+    styleUrls: ['./letters-to-driver.component.scss'],
+    standalone: true,
+    imports: [
+        QuickLinksComponent,
+        NgFor,
+        MatCard,
+        NgClass,
+        MatCardContent,
+        MatIcon,
+        MatButton,
+        NgIf,
+        MatAccordion,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        CaseTypeComponent,
+        LetterTopicComponent,
+        DatePipe,
+    ],
 })
 export class LettersToDriverComponent implements OnInit {
   constructor(private caseManagementService: CaseManagementService) {}
