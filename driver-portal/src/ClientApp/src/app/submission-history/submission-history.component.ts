@@ -3,13 +3,11 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
-import { SubmissionStatusComponent } from '../case-definations/submission-status/submission-status.component';
-import { SubmissionTypeComponent } from '../case-definations/submission-type/submission-type.component';
-import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
+import { CaseTypeComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 
 @Component({
     selector: 'app-submission-history',

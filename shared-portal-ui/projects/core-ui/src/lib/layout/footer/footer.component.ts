@@ -1,24 +1,23 @@
-import { Component, OnInit, ChangeDetectionStrategy, Optional, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Component, OnInit, ChangeDetectionStrategy, Optional, CUSTOM_ELEMENTS_SCHEMA, Input } from '@angular/core';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {ChangeDetectorRef} from '@angular/core';
-import { ApplicationVersionInfoService } from 'src/app/shared/api/services/application-version-info.service';
-import { VersionInfoComponent } from 'src/app/shared/components/version-info/version-info.component';
-import { ApplicationVersionInfo } from 'src/app/shared/api/models';
+import { VersionInfoComponent } from '../version-info/version-info.component'
 import { RouterLink } from '@angular/router';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
-  imports:[RouterLink, MatToolbarModule],
+  imports:[RouterLink, MatToolbarModule, NgIf, MatDialogModule, VersionInfoComponent ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone : true,
   schemas : [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
-  versionInfo: ApplicationVersionInfo = {
+  @Input() versionInfo: any = {
     baseUri: "",
     basePath: "",
     environment: "",
@@ -31,19 +30,8 @@ export class FooterComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     @Optional() private dialog: MatDialog,
-    @Optional() private versionInfoDataService: ApplicationVersionInfoService) {
+    ) {
 
-  }
-
-  ngOnInit(): void {
-    if (this.versionInfoDataService !== null)
-    {
-      this.versionInfoDataService.apiApplicationVersionInfoGet$Json()
-        .subscribe((versionInfo: ApplicationVersionInfo) => {
-          this.versionInfo = versionInfo;
-          this.cd.detectChanges();
-        });
-    }
   }
 
   openVersionInfoDialog() {
@@ -52,7 +40,8 @@ export class FooterComponent implements OnInit {
       disableClose: true,
       autoFocus: true,
       width: "500px",
-      data: this.versionInfo
+      data: this.versionInfo,
+      height:"500px"
     };
 
     // open dialog, get reference and process returned data from dialog

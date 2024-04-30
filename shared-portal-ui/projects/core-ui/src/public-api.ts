@@ -5,10 +5,19 @@
 export * from './lib/core-ui.service';
 export * from './lib/core-ui.component';
 
+// Layout
 export *from './lib/layout/header/header.component'
 export *from './lib/layout/footer/footer.component'
 export *from './lib/layout/nav-menu/nav-menu.component'
 
-// Layout
-
+// Case Definitions
+export *from './lib/case-definitions/case-status/case-status.component'
+export *from './lib/case-definitions/case-type/case-type.component'
+export *from './lib/case-definitions/decision-outcome/decision-outcome.component'
+export *from './lib/case-definitions/dmer-type/dmer-type.component'
+export *from './lib/case-definitions/eligible-license-class/eligible-license-class.component'
+export *from './lib/case-definitions/letter-topic/letter-topic.component'
+export *from './lib/case-definitions/rsbc-case-assignment/rsbc-case-assignment.component'
+export *from './lib/case-definitions/submission-status/submission-status.component'
+export *from './lib/case-definitions/submission-type/submission-type.component'
 
