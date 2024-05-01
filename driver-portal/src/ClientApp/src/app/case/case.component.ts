@@ -3,16 +3,12 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { CaseDetail } from '../shared/api/models';
 import { LoginService } from '../shared/services/login.service';
-import { EligibleLicenseClassComponent } from '../case-definations/eligible-license-class/eligible-license-class.component';
-import { DecisionOutcomeComponent } from '../case-definations/decision-outcome/decision-outcome.component';
-import { DmerTypeComponent } from '../case-definations/dmer-type/dmer-type.component';
-import { CaseStatusComponent } from '../case-definations/case-status/case-status.component';
-import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { RecentCaseComponent } from '../recent-case/recent-case.component';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent } from '@shared/core-ui';
 
 @Component({
     selector: 'app-case',

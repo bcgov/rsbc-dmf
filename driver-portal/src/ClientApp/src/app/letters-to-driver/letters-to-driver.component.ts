@@ -2,13 +2,13 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
-import { LetterTopicComponent } from '../case-definations/letter-topic/letter-topic.component';
-import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
+import { CaseTypeComponent, LetterTopicComponent } from '@shared/core-ui';
+
 
 @Component({
     selector: 'app-letters-to-driver',

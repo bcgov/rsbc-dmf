@@ -15,12 +15,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { ApiConfiguration } from '../shared/api/api-configuration';
-import { SubmissionStatusComponent } from '../case-definations/submission-status/submission-status.component';
-import { SubmissionTypeComponent } from '../case-definations/submission-type/submission-type.component';
-import { DecisionOutcomeComponent } from '../case-definations/decision-outcome/decision-outcome.component';
-import { DmerTypeComponent } from '../case-definations/dmer-type/dmer-type.component';
-import { CaseStatusComponent } from '../case-definations/case-status/case-status.component';
-import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
 import { RouterLink } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
@@ -31,6 +25,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 
 @Component({
     selector: 'app-submission-requirements',

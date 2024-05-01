@@ -3,15 +3,8 @@ import { CaseManagementService } from '../shared/services/case-management/case-m
 import { Router } from '@angular/router';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { ViewportScroller } from '@angular/common';
-import { LetterTopicComponent } from '../case-definations/letter-topic/letter-topic.component';
-import { SubmissionStatusComponent } from '../case-definations/submission-status/submission-status.component';
-import { SubmissionTypeComponent } from '../case-definations/submission-type/submission-type.component';
-import { EligibleLicenseClassComponent } from '../case-definations/eligible-license-class/eligible-license-class.component';
-import { DecisionOutcomeComponent } from '../case-definations/decision-outcome/decision-outcome.component';
-import { DmerTypeComponent } from '../case-definations/dmer-type/dmer-type.component';
-import { CaseStatusComponent } from '../case-definations/case-status/case-status.component';
-import { CaseTypeComponent } from '../case-definations/case-type/case-type.component';
 import { RecentCaseComponent } from '../recent-case/recent-case.component';
+import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, EligibleLicenseClassComponent, LetterTopicComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
 
 @Component({
     selector: 'app-dashboard',
