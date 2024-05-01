@@ -1,10 +1,12 @@
 ﻿using Microsoft.OData.Client;
+using Microsoft.OData.Edm;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static Rsbc.Dmf.CaseManagement.UserManager;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -19,6 +21,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<bool> SetDriverLogin(Guid loginId, Guid? driverId);
         Task<bool> UpdateLogin(UpdateLoginRequest request);
         bool IsDriverAuthorized(string userId, Guid driverId);
+        Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request);
     }
 
     public class UpdateLoginRequest
@@ -104,6 +107,24 @@ namespace Rsbc.Dmf.CaseManagement
         public string Name { get; set; }
     }
 
+    public class PractitionerRequest
+    {
+        public string hpdid { get; set; } = string.Empty;
+    }
+
+    public class PractitionerReply
+    {
+        public string contactId { get; set; } = string.Empty;
+        public string Gender { get; set; } = string.Empty;
+        public string IdpId { get; set; } = string.Empty;
+        public Date? Birthdate { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string ClinicName { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+    }
+
     #endregion Model
 
     internal class UserManager : IUserManager
@@ -114,6 +135,54 @@ namespace Rsbc.Dmf.CaseManagement
         {
             this.dynamicsContext = dynamicsContext;
         }
+
+        #region Practitioner
+
+        public contact contact { get; private set; }
+
+        public async Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request)
+        {
+            if (Guid.TryParse(request.hpdid, out Guid result))
+            {
+                contact = dynamicsContext.contacts
+                .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
+                .Where(contact => contact.contactid == new Guid(request.hpdid)) //contactId is the hpdid from health bcsc idp
+                .SingleOrDefault();
+            }
+            else
+            {
+                contact = dynamicsContext.contacts
+                .Expand(med => med.dfp_contact_dfp_medicalpractitioner)
+                .Where(contact => contact.externaluseridentifier == request.hpdid) //contactId is the hpdid from health bcsc idp
+                .SingleOrDefault();
+            }
+
+
+            if (contact != null)
+            {
+
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.contactid));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.firstname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.lastname));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.emailaddress1));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.birthdate));
+                await dynamicsContext.LoadPropertyAsync(contact, nameof(contact.dfp_contact_dfp_medicalpractitioner));
+                return new PractitionerReply
+                {
+                    contactId = contact.contactid.ToString(),
+                    FirstName = contact.firstname,
+                    LastName = contact.lastname,
+                    Birthdate = contact.birthdate.Value,
+                    Email = contact.emailaddress1,
+                    IdpId = contact.externaluseridentifier,
+                    Role = Enum.GetName(typeof(ProviderRole), contact.dfp_contact_dfp_medicalpractitioner.Select(n => n.dfp_providerrole).FirstOrDefault())
+                };
+            }
+
+            return new PractitionerReply();
+        }
+
+        #endregion Practitioner
 
         public bool IsDriverAuthorized(string userId, Guid driverId)
         {

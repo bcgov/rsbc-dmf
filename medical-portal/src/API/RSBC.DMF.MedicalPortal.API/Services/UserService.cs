@@ -2,12 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
+using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Services
 {
@@ -64,9 +66,9 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             return await Task.FromResult(new UserContext
             {
-                Id = user.FindFirstValue(ClaimTypes.Sid),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName),
-                LastName = user.FindFirstValue(ClaimTypes.Surname),
+                Id = user.FindFirstValue(Claims.PreferredUsername),
+                FirstName = user.FindFirstValue(Claims.GivenName),
+                LastName = user.FindFirstValue(Claims.FamilyName),
                 Email = user.FindFirstValue(ClaimTypes.Email),
                 ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
             });
@@ -84,20 +86,23 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             var loginRequest = new UserLoginRequest
             {
                 UserType = UserType.MedicalPractitionerUserType,
-                ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
-                ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
+                Email = user.FindFirstValue(Claims.Email),
+                ExternalSystem = user.GetIdentityProvider(),
+                ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername) ?? user.FindFirstValue("sub"),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
                 LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
                 UserProfiles = { new UserProfile
                 {
                     MedicalPractitioner = new MedicalPractitionerProfile
                     {
-                        Role = "Physician",
+                        Role =  user.GetRoles().SingleOrDefault(),//"Physician", Get roles from claims
                         Clinic = new Clinic { Id = clinicId }
                     }
                 }
                 }
             };
+            if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
+            
             var loginResponse = await userManager.LoginAsync(loginRequest);
             if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
@@ -134,23 +139,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         /// <param name="userId"></param>
         /// <param name="email"></param>
         /// <returns></returns>
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
         public async Task SetEmail (string userId, string email)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
         {
-            if (userId == null)
-            {
-#pragma warning disable CS0219 // Variable is assigned but its value is never used
-                var x = 1;
-#pragma warning restore CS0219 // Variable is assigned but its value is never used
-            }
-            /*
             UserSetEmailRequest request = new UserSetEmailRequest()
             {
-                UserId = userId, Email = email
+                LoginId = userId, Email = email
             };
             var result = await userManager.SetEmailAsync(request);
-            */
+          }
         }
-    }
 }
