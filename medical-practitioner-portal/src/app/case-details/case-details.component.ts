@@ -23,7 +23,7 @@ import { EligibleLicenseClassComponent } from '../../../../shared-portal-ui/proj
 import { SubmissionTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
 import { SubmissionStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
 import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
-//import { EligibleLicenseClassComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/eligible-license-class/eligible-license-class.component';
+import {DmerStatusComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component'
 
 @Component({
   selector: 'app-case-details',
@@ -37,6 +37,7 @@ import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core
     CaseTypeComponent,
     CaseStatusComponent,
     DmerTypeComponent,
+    DmerStatusComponent,
     DecisionOutcomeComponent,
     EligibleLicenseClassComponent,
     SubmissionTypeComponent,
