@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import {
   Component,
   ChangeDetectionStrategy,
@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports:[RouterLink, MatIconModule, MatMenuModule, NgIf],
+  imports: [RouterLink, MatIconModule, MatMenuModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   schemas:[CUSTOM_ELEMENTS_SCHEMA]

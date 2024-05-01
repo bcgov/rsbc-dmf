@@ -20,4 +20,5 @@ export *from './lib/case-definitions/letter-topic/letter-topic.component'
 export *from './lib/case-definitions/rsbc-case-assignment/rsbc-case-assignment.component'
 export *from './lib/case-definitions/submission-status/submission-status.component'
 export *from './lib/case-definitions/submission-type/submission-type.component'
+export *from './lib/case-definitions/dmer-status/dmer-status.component'
 
