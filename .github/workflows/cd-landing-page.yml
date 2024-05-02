@@ -1,12 +1,11 @@
 name: cd-landing-page
 
 on:
+  workflow_dispatch:
   push:
-    tags:
-      - v*
     paths:
-      - "landing-page/src/**"
-      - ".github/workflows/cd-landing-page.yml"
+      - 'landing-page/src/**'
+      - '.github/workflows/cd-landing-page.yml'
 env:
   IMAGE_NAME: landing-page
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/landing-page
@@ -14,7 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

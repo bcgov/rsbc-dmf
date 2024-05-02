@@ -1,13 +1,11 @@
 name: cd-document-storage-adapter-artifactory
 
 on:
-  push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+  workflow_dispatch:
+  push:  
     paths:    
-      - "document-storage-adapter/src/**"
-      - ".github/workflows/cd-document-storage-adapter-artifactory.yml"
+      - 'document-storage-adapter/src/**'
+      - '.github/workflows/cd-document-storage-adapter-artifactory.yml'
 
 env:
   IMAGE_NAME: document-storage-adapter
@@ -20,7 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

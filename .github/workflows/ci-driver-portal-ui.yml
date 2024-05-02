@@ -1,13 +1,11 @@
 name: ci-driver-portal-ui
 
 on:
-  push:
-     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "driver-portal/src/ClientApp/**"
-      - ".github/workflows/ci-driver-portal-ui.yml"
+      - 'driver-portal/src/ClientApp/**'
+      - '.github/workflows/ci-driver-portal-ui.yml'
 
 env:
   IMAGE_NAME: driver-portal-ui
@@ -18,6 +16,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
         with:

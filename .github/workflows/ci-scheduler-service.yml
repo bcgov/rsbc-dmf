@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "scheduler/src/**"
-      - ".github/workflows/ci-scheduler-service.yml"
+      - 'scheduler/src/**'
+      - '.github/workflows/ci-scheduler-service.yml'
 
 env:
   IMAGE_NAME: scheduler-service
@@ -13,6 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
 

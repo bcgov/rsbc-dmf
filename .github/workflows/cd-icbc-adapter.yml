@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:    
-      - "icbc-adapter/src/**"
-      - ".github/workflows/cd-icbc-adapter.yml"
+      - 'icbc-adapter/src/**'
+      - '.github/workflows/cd-icbc-adapter.yml'
 
 env:
   IMAGE_NAME: icbc-adapter
@@ -17,7 +17,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
     env:
        working-directory: ./icbc-adapter/src
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

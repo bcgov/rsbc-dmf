@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "document-storage-adapter/src/**"
-      - ".github/workflows/ci-document-storage-adapter.yml"
+      - 'document-storage-adapter/src/**'
+      - '.github/workflows/ci-document-storage-adapter.yml'
 
 env:
   IMAGE_NAME: document-storage-adapter
@@ -16,6 +16,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
 
