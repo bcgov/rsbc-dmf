@@ -1,16 +1,9 @@
 <div class="container">
   <div class="list">
-    <h2>Most Recent Case</h2>
-  </div>
-  <app-recent-case></app-recent-case>
-  <div id="ScrollToSubmissionRequirement"></div>
-
-  <div class="list" >
-    <h2 >Submission Requirements</h2>
+    <h2>Submission Requirements</h2>
     <app-submission-requirements
       [submissionRequirementDocuments]="caseDocuments?.submissionRequirements"
-      [isLoading]= "isLoading"
-     
+      [isLoading]="isLoading"
     ></app-submission-requirements>
   </div>
 
