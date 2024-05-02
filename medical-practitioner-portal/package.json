@@ -23,6 +23,7 @@
     "@angular/router": "^17.3.0",
     "angular-oauth2-oidc": "^17.0.2",
     "ng-openapi-gen": "^0.51.0",
+    "ngx-dropzone": "^3.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
