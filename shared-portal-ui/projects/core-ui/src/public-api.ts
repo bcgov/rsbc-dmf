@@ -22,3 +22,5 @@ export *from './lib/case-definitions/submission-status/submission-status.compone
 export *from './lib/case-definitions/submission-type/submission-type.component'
 export *from './lib/case-definitions/dmer-status/dmer-status.component'
 
+// Upload-Document
+export *from './lib/upload-document/upload-document.component'

@@ -1,0 +1,31 @@
+.submissions {
+    display: flex;
+    flex-direction: row;
+    padding-top: 24px;
+    gap: 100px;
+  }
+  .submissionRequirement {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    gap: 100px;
+  }
+
+  .secondaryButton {
+    border-width: 0px;
+    width: 170px;
+    height: 49px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    border: 2px solid #003366;
+    background-color: #003366;
+    color: #fff;
+  }
+  
+  .secondaryButton :disabled, button[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+  }
