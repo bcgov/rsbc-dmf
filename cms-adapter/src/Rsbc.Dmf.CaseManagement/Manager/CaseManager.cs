@@ -4132,18 +4132,48 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
+        /// Get Dps Uploaded Date
+        /// </summary>
+        /// <returns></returns>
+        public DateTimeOffset GetDpsUploadedDate()
+        {
+            var mostRecentRecord = dynamicsContext.bcgov_documenturls
+                .Where(x => x.dfp_uploadeddate != null)
+                .OrderByDescending(i => i.dfp_uploadeddate)
+                .Take(1)
+                .FirstOrDefault();
+
+            if (mostRecentRecord != null)
+            {
+                return mostRecentRecord.dfp_uploadeddate.Value;
+            }
+            else
+            {
+                return DateTimeOffset.UtcNow;
+            }
+        }
+
+        /// <summary>
         /// Update NonComply Documents
         /// </summary>
         /// <returns></returns>
         public async Task UpdateNonComplyDocuments()
         {
+            // new calculation for DPS processing Date
+            // Check DocumentStatus = Uplaoded 100,000,010
+            // Document Business are not equal to remedial
+            // Check for Compliance date < Uplaoded Date
+            // Check DPS class is 9-General
+            // DFTDP # 977 Change made on 05/02/2024
 
-            var dpsProcessingDate = GetDpsProcessingDate();
-
+            var dpsUplaodedDate = GetDpsUploadedDate();
             var query = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
-                        where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open - Required
-                        && bcgov_documenturl.dfp_compliancedate < dpsProcessingDate 
+                        where bcgov_documenturl.dfp_submittalstatus == 100000010 // Uploaded
+                        && bcgov_documenturl.dfp_dpsclass.Contains("9-General") 
+                        && bcgov_documenturl.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not include Remedial document Type
+                        && bcgov_documenturl.dfp_compliancedate < dpsUplaodedDate
+
                         select bcgov_documenturl;
 
             DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(query);
