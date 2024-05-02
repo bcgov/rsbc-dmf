@@ -1,13 +1,11 @@
 name: cd-migration-metrics-ui
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases. 
-    tags:
-      - v*
     paths:
-      - "migration-metrics/src/ClientApp/**"
-      - ".github/workflows/cd-migration-metrics-ui.yml"
+      - 'migration-metrics/src/ClientApp/**'
+      - '.github/workflows/cd-migration-metrics-ui.yml'
 env:
   IMAGE_NAME: migration-metrics-ui
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/migration-metrics-ui
@@ -15,7 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

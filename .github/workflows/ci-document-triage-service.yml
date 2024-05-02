@@ -13,6 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
 

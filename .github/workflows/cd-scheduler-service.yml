@@ -1,13 +1,11 @@
 name: cd-scheduler-service
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:    
-      - "scheduler/src/**"
-      - ".github/workflows/cd-scheduler-service.yml"
+      - 'scheduler/src/**'
+      - '.github/workflows/cd-scheduler-service.yml'
 
 env:
   IMAGE_NAME: scheduler-service
@@ -16,7 +14,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
     env:
        working-directory: ./scheduler/src
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,10 +1,11 @@
 name: cd-medical-portal-ui
 
 on:
+  workflow_dispatch:
   push:
     paths:
-      - "medical-practitioner-portal/**"
-      - ".github/workflows/cd-medical-portal-ui.yml"
+      - 'medical-practitioner-portal/**'
+      - '.github/workflows/cd-medical-portal-ui.yml'
 env:
   IMAGE_NAME: medical-portal-ui
   IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/medical-portal-ui
@@ -12,7 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

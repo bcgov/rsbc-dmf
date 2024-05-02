@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "migration-metrics/src/ClientApp/**"
-      - ".github/workflows/ci-migration-metrics-ui.yml"
+      - 'migration-metrics/src/ClientApp/**'
+      - '.github/workflows/ci-migration-metrics-ui.yml'
 
 env:
   IMAGE_NAME: migration-metrics-ui
@@ -18,6 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
         with:

@@ -1,14 +1,12 @@
 name: cd-bcmail-adapter
 
 on:
-  push:
 
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
-    paths:    
-      - "bcmail-adapter/src/**"
-      - ".github/workflows/cd-bcmail-adapter.yml"
+  workflow_dispatch:
+  push:
+    paths:
+      - 'bcmail-adapter/src/**'
+      - '.github/workflows/cd-bcmail-adapter.yml'
 
 env:
   IMAGE_NAME: bcmail-adapter
@@ -20,7 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
     env:
        working-directory: ./bcmail-adapter/src
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
