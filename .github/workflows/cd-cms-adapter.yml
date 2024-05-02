@@ -1,14 +1,12 @@
 name: cd-cms-adapter
 
 on:
-  push:
-
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
+  pull_request:
+    types:
+      - closed    
     paths:
-      - "cms-adapter/src/**"
-      - ".github/workflows/cd-cms-adapter.yml"
+      - 'cms-adapter/src/**'
+      - '.github/workflows/cd-cms-adapter.yml'
 
 env:
   IMAGE_NAME: cms-adapter
@@ -19,6 +17,7 @@ env:
 
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
 
