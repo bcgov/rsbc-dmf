@@ -21,3 +21,6 @@
 /oauth-server/src/OAuthServer/Data/IdentityServer.db-wal
 /medical-portal/docs/.$CHEFS-Integration.drawio.dtmp
 *.bkp
+
+/medical-portal/src/PidpAdpater.API/PidpAdpater.API/bin
+/medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj

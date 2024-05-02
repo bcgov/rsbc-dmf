@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,38 @@ namespace Rsbc.Dmf.CaseManagement.Service
             _userManager = userManager;
             _mapper = mapper;
         }
+
+        #region Practitioner
+
+        public async override Task<PractitionerReply> GetPractitionerContact(PractitionerRequest request, ServerCallContext context)
+        {
+            try
+            {
+                var getPcontact = await _userManager.GetPractitionerContact(new CaseManagement.PractitionerRequest { hpdid = request.Hpdid });
+
+                if (getPcontact.contactId == string.Empty) { return new PractitionerReply(); }
+
+                return new PractitionerReply
+                {
+                    FirstName = getPcontact.FirstName,
+                    LastName = getPcontact.LastName,
+                    Email = getPcontact.Email,
+                    ContactId = getPcontact.contactId,
+                    Gender = getPcontact.Gender,
+                    IdpId = getPcontact.IdpId,
+                    Birthdate = Timestamp.FromDateTime(DateTime.SpecifyKind(getPcontact.Birthdate.Value, DateTimeKind.Utc)),
+                    Role = getPcontact.Role,
+                    ClinicName = getPcontact.ClinicName
+                };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        #endregion Practitioner
 
         public async override Task<UsersSearchReply> Search(UsersSearchRequest request, ServerCallContext context)
         {

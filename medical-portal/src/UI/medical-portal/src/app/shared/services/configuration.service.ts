@@ -50,6 +50,7 @@ export class ConfigurationService {
         requestAccessToken: true,
         issuer: c.oidcConfiguration?.issuer || undefined,
         clientId: c.oidcConfiguration?.clientId || undefined,
+        requireHttps: false,
         redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
         responseType: 'code',
         scope: c.oidcConfiguration?.scope || undefined,
