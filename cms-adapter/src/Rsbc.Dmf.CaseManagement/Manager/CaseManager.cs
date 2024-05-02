@@ -4137,9 +4137,19 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public DateTimeOffset GetDpsUploadedDate()
         {
+            // new calculation for DPS processing Date
+            // Check DocumentStatus = Uplaoded 100,000,010
+            // Document Business are not equal to remedial
+            // Check for Compliance date < Uplaoded Date
+            // Check DPS class is 9-General
+            // DFTDP # 977 Change made on 05/02/2024
+
             var mostRecentRecord = dynamicsContext.bcgov_documenturls
-                .Where(x => x.dfp_uploadeddate != null)
-                .OrderByDescending(i => i.dfp_uploadeddate)
+                .Where(x => x.dfp_uploadeddate != null 
+                && x.dfp_submittalstatus == 100000010 // Document status Uplaoded
+                && x.dfp_dpsclass.Contains("9 - General") // Check for 9 - General
+                && x.dfp_DocumentTypeID.dfp_businessarea != 100000001) // Does not contain remedial
+                .OrderBy(i => i.dfp_uploadeddate)
                 .Take(1)
                 .FirstOrDefault();
 
@@ -4159,19 +4169,10 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task UpdateNonComplyDocuments()
         {
-            // new calculation for DPS processing Date
-            // Check DocumentStatus = Uplaoded 100,000,010
-            // Document Business are not equal to remedial
-            // Check for Compliance date < Uplaoded Date
-            // Check DPS class is 9-General
-            // DFTDP # 977 Change made on 05/02/2024
-
             var dpsUplaodedDate = GetDpsUploadedDate();
             var query = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
-                        where bcgov_documenturl.dfp_submittalstatus == 100000010 // Uploaded
-                        && bcgov_documenturl.dfp_dpsclass.Contains("9-General") 
-                        && bcgov_documenturl.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not include Remedial document Type
+                        where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open Required                                                  
                         && bcgov_documenturl.dfp_compliancedate < dpsUplaodedDate
 
                         select bcgov_documenturl;
