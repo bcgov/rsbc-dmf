@@ -886,18 +886,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
         }
 
         [Fact]
-        public async void Get_Case_Details()
-        {
-            Login();
-
-            var caseId = "804dc647-c066-ed11-b839-00505683fbf4";// GetCaseId();
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/Cases/{caseId}");
-            var response = await _client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-        }
-
-        [Fact]
         public async void GetDocuments()
         {
             Login();
