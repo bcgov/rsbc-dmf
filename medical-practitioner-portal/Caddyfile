@@ -25,7 +25,7 @@
 
 	route {
 		uri strip_prefix /medical-portal
-		reverse_proxy /api* {$API_URL}
+		reverse_proxy /medical-portal/api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 	}
 	

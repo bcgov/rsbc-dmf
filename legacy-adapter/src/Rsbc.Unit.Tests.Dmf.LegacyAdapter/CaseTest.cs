@@ -1,7 +1,5 @@
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -10,19 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-
 namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
 {
     [Collection(nameof(HttpClientCollection))]
     public class CaseTest : ApiIntegrationTestBase
     {
-
-        public CaseTest(HttpClientFixture fixture)
-            : base(fixture)
-        {
-
-        }
-
+        public CaseTest(HttpClientFixture fixture) : base(fixture) { }
 
         /// <summary>
         /// Test the case exist service - parameters are license number and surcode.
@@ -829,7 +820,7 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
             }
         }
 
-            [Fact]
+        [Fact]
         public async void AddCaseDocumentSparse()
         {
             if (!string.IsNullOrEmpty(testDl))
@@ -893,7 +884,6 @@ namespace Rsbc.Unit.Tests.Dmf.LegacyAdapter
                 response.EnsureSuccessStatusCode();
             }
         }
-
 
         [Fact]
         public async void GetDocuments()

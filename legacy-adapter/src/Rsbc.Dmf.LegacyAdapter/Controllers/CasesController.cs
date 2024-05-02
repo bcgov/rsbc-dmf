@@ -1,17 +1,14 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Interfaces;
 using Pssg.Interfaces.Icbc.Models;
-using Pssg.Interfaces.Icbc.ViewModels;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.LegacyAdapter.ViewModels;
 using Serilog;
@@ -23,14 +20,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-
-
 namespace Rsbc.Dmf.LegacyAdapter.Controllers
 {
-
-    /// <summary>
-    /// Case Controller
-    /// </summary>
     [ApiController]
     [Route("[controller]")]
     [Produces("application/json")]
@@ -45,14 +36,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
         private readonly IIcbcClient _icbcClient;
         private readonly IMemoryCache _cache;
 
-        /// <summary>
-        /// Cases Controller
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <param name="configuration"></param>
-        /// <param name="cmsAdapterClient"></param>
-        /// <param name="documentStorageAdapterClient"></param>
-        /// <param name="icbcClient"></param>
         public CasesController(ILogger<CasesController> logger, IConfiguration configuration, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient, IIcbcClient icbcClient,
             IMemoryCache memoryCache)
         {
@@ -64,14 +47,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             _icbcClient = icbcClient;
         }
 
-
-        /// <summary>
-        /// DoesCaseExist
-        /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <param name="surcode"></param>
-        /// <returns>The Case Id or Null</returns>
-        // GET: /Cases/Exist
         [HttpGet("Exist")]
         public ActionResult DoesCaseExist([Required] string licenseNumber, [Required] string surcode)
         {
@@ -259,12 +234,6 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
             }
         }
 
-        /// <summary>
-        /// DoesCaseExist
-        /// </summary>
-        /// <param name="licenseNumber"></param>
-        /// <returns>The Case Id or Null</returns>
-        // GET: /Cases/ExistByDl
         [HttpGet("ExistByDl")]
         public ActionResult DoesCaseExistByDl([Required] string licenseNumber)
         {
@@ -287,10 +256,7 @@ namespace Rsbc.Dmf.LegacyAdapter.Controllers
 
             return Json(caseId);
         }
-
-        /// <summary>
-        /// Get Case
-        /// </summary>        
+     
         [HttpGet("{caseId}")]
         [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]

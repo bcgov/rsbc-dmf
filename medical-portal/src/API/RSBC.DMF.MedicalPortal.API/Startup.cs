@@ -109,14 +109,14 @@ namespace RSBC.DMF.MedicalPortal.API
                     };
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("OAuth", policy =>
-                {
-                    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
-                    policy.RequireClaim("scope", "doctors-portal-api");
-                });
-            });
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("OAuth", policy =>
+            //    {
+            //        policy.RequireAuthenticatedUser().AddAuthenticationSchemes("token");
+            //        policy.RequireClaim("scope", "doctors-portal-api");
+            //    });
+            //});
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 //JWT tokens handling
@@ -131,17 +131,17 @@ namespace RSBC.DMF.MedicalPortal.API
                     };
                 });
 
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(Policies.MedicalPractitioner, policy => policy
-                .RequireAuthenticatedUser()
-                .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
+            //services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy(Policies.MedicalPractitioner, policy => policy
+            //    .RequireAuthenticatedUser()
+            //    .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
 
-                options.AddPolicy(Policies.Enrolled, policy => policy
-                    .RequireAuthenticatedUser()
-                    .RequireRole(Claims.IdentityProvider, Roles.Dmft));
+            //    options.AddPolicy(Policies.Enrolled, policy => policy
+            //        .RequireAuthenticatedUser()
+            //        .RequireRole(Claims.IdentityProvider, Roles.Dmft));
 
-            });
+            //});
 
             services.AddControllers(options =>
             {
@@ -326,7 +326,8 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled);
+                    //.RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled)
+                    ;
                 endpoints.MapSwagger();
             });
 
