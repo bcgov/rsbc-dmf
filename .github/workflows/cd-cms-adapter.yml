@@ -1,6 +1,7 @@
 name: cd-cms-adapter
 
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - closed    
@@ -16,10 +17,9 @@ env:
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
 jobs:
-  build:
-    if: github.event.pull_request.merged == true
+  build:    
     runs-on: ubuntu-latest
-
+    if: github.event.pull_request.merged == true
     steps:
       - uses: actions/checkout@v4
 
