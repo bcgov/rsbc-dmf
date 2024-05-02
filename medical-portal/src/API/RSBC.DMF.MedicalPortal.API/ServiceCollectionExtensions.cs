@@ -12,9 +12,9 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["CMS_ADAPTER_URI"];
-            var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
-            var validateServerCertificate = config.GetValue("CMS_VALIDATE_SERVER_CERT", true);
+            var serviceUrl = config["ServerUrl"];
+            var clientSecret = config["ClientSecret"];
+            var validateServerCertificate = config.GetValue("ValidateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
