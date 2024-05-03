@@ -24,8 +24,8 @@
 	encode zstd gzip
 
 	route {
-		uri strip_prefix /medical-portal
-		reverse_proxy /medical-portal/api* {$API_URL}
+		uri strip_prefix {$BASE_URL}
+		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
 	}
 	
