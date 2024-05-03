@@ -31,7 +31,7 @@ jobs:
           node-version: "18.17"
       - run: npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
-      - run: npm ci
+      - run: npm i
         working-directory: "shared-portal-ui/projects/core-ui/src"
 
       - run: npm run lint
