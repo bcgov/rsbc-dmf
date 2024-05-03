@@ -6,8 +6,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "medical-portal/src/UI/**"
-      - ".github/workflows/ci-medical-portal-ui.yml"
+      - 'medical-portal/src/UI/**'
+      - '.github/workflows/ci-medical-portal-ui.yml'
 
 env:
   IMAGE_NAME: medical-portal-ui
@@ -18,6 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
         with:

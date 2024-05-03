@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

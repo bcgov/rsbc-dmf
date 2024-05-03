@@ -1,14 +1,12 @@
 name: cd-phsa-adapter
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:    
-      - "phsa-adapter/**"
-      - "interfaces/icbc-adapter/**"
-      - ".github/workflows/cd-phsa-adapter.yml"
+      - 'phsa-adapter/**'
+      - 'interfaces/icbc-adapter/**'
+      - '.github/workflows/cd-phsa-adapter.yml'
 
 env:
   IMAGE_NAME: phsa-adapter
@@ -17,7 +15,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

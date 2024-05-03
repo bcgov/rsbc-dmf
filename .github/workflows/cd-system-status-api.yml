@@ -1,13 +1,11 @@
 name: cd-system-status-api
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:
-      - "system-status/src/**"
-      - ".github/workflows/cd-system-status-api.yml"
+      - 'system-status/src/**'
+      - '.github/workflows/cd-system-status-api.yml'
 
 env:
   IMAGE_NAME: system-status-api
@@ -20,7 +18,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

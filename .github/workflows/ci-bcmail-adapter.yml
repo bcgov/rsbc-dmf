@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "bcmail-adapter/src/**"
-      - ".github/workflows/ci-bcmail-adapter.yml"
+      - 'bcmail-adapter/src/**'
+      - '.github/workflows/ci-bcmail-adapter.yml'
 
 env:
   IMAGE_NAME: bcmail-adapter
@@ -14,6 +14,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
         with:

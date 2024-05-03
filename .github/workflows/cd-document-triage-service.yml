@@ -1,13 +1,11 @@
 name: cd-document-triage-service
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:    
-      - "document-triage-service/src/**"
-      - ".github/workflows/cd-document-triage-service.yml"
+      - 'document-triage-service/src/**'
+      - '.github/workflows/cd-document-triage-service.yml'
 
 env:
   IMAGE_NAME: document-triage-service
@@ -16,7 +14,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

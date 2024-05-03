@@ -1,14 +1,11 @@
 name: cd-cms-adapter-artifactory
 
 on:
+  workflow_dispatch:
   push:
-
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:
-      - "cms-adapter/src/**"
-      - ".github/workflows/cd-cms-adapter-artifactory.yml"
+      - 'cms-adapter/src/**'
+      - '.github/workflows/cd-cms-adapter-artifactory.yml'
 
 env:
   IMAGE_NAME: cms-adapter
@@ -20,7 +17,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

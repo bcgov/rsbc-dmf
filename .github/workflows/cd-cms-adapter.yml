@@ -1,14 +1,11 @@
 name: cd-cms-adapter
 
 on:
+  workflow_dispatch:
   push:
-
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:
-      - "cms-adapter/src/**"
-      - ".github/workflows/cd-cms-adapter.yml"
+      - 'cms-adapter/src/**'
+      - '.github/workflows/cd-cms-adapter.yml'
 
 env:
   IMAGE_NAME: cms-adapter
@@ -18,10 +15,9 @@ env:
   BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-
+  build:    
+    runs-on: ubuntu-latest    
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
 
