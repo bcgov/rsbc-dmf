@@ -1,13 +1,11 @@
 name: cd-oauth-server
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:
-      - "oauth-server/src/**"
-      - ".github/workflows/cd-oauth-server.yml"
+      - 'oauth-server/src/**'
+      - '.github/workflows/cd-oauth-server.yml'
 
 env:
   IMAGE_NAME: oauth-server
@@ -19,7 +17,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
 
     steps:
       - uses: actions/checkout@v4

@@ -1,13 +1,11 @@
 name: cd-legacy-adapter
 
 on:
+  workflow_dispatch:
   push:
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
     paths:    
-      - "legacy-adapter/src/**"
-      - ".github/workflows/cd-legacy-adapter.yml"
+      - 'legacy-adapter/src/**'
+      - '.github/workflows/cd-legacy-adapter.yml'
 
 env:
   IMAGE_NAME: legacy-adapter
@@ -19,7 +17,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    if: github.repository_owner == 'bcgov'
     env:
        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
        GIT_BRANCH: "${{github.ref}}"

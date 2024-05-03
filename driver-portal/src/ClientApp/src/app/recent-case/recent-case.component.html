@@ -1,11 +1,11 @@
 <div>
-  <mat-card routerLink="/caseDetails" class="caseDetails" fragment="submissionRequirement">
+  <mat-card>
     <mat-card-content class="recentCaseContent">
       <div style="grid-area: A">
         <label>Case ID</label>
         <div>
           <b>
-            <a routerLink="/caseDetails" fragment="submissionRequirement">
+            <a>
               <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>
@@ -85,41 +85,40 @@
   </mat-stepper>
 </div>
 
-
 <div class="caseStatus">
-<mat-accordian>
-  <mat-expansion-panel (opened)="panelOpenState = true"
-  (closed)="panelOpenState = false">
-<mat-expansion-panel-header class="panel-header">
-<mat-panel-title class="accordian-Title">
-  Understanding Case Statuses
-</mat-panel-title>
-
-</mat-expansion-panel-header>
-<div>
-     
-  <p>
-    <b>Opened – </b>This is the date your case was opened at RoadSafetyBC.
-  </p>
-  <p>
-    <b>Open Pending Submission –</b> This case has been opened by requesting
-    a document (as opposed to receiving a submission), and has not yet had
-    any documents submitted to it.
-  </p>
-  <p>
-    <b>Under Review –</b> The case has at least one document submitted to
-    it, and has not yet rendered a decision.
-  </p>
-  <p>
-    <b>Decision Rendered –</b> A decision has been rendered, and a (usually)
-    30 day timer is underway for follow-ups, challenges, or additional
-    documents that might change things.
-  </p>
-  <p>
-    <b>Resolved –</b> The case is now closed. If new information is
-    received, a new case will be opened rather than adding to this case.
-  </p>
-</div>
-</mat-expansion-panel>
-</mat-accordian>
+  <mat-accordian>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header class="panel-header">
+        <mat-panel-title class="accordian-Title">
+          Understanding Case Statuses
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <p>
+          <b>Opened – </b>This is the date your case was opened at RoadSafetyBC.
+        </p>
+        <p>
+          <b>Open Pending Submission –</b> This case has been opened by
+          requesting a document (as opposed to receiving a submission), and has
+          not yet had any documents submitted to it.
+        </p>
+        <p>
+          <b>Under Review –</b> The case has at least one document submitted to
+          it, and has not yet rendered a decision.
+        </p>
+        <p>
+          <b>Decision Rendered –</b> A decision has been rendered, and a
+          (usually) 30 day timer is underway for follow-ups, challenges, or
+          additional documents that might change things.
+        </p>
+        <p>
+          <b>Resolved –</b> The case is now closed. If new information is
+          received, a new case will be opened rather than adding to this case.
+        </p>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordian>
 </div>

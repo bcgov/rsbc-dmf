@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "icbc-adapter/src/**"
-      - ".github/workflows/ci-icbc-adapter.yml"
+      - 'icbc-adapter/src/**'
+      - '.github/workflows/ci-icbc-adapter.yml'
 
 env:
   IMAGE_NAME: icbc-adapter
@@ -15,6 +15,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
         with:

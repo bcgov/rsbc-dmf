@@ -35,7 +35,7 @@
           Upload File
         </button>
       </div>
-      @if(showUpload) {
+      <!-- @if(showUpload) {
       <div class="fileUpload">
         <b> Upload Your File</b>
         <br />
@@ -47,22 +47,22 @@
         Learn how to submit additional documentation.
 
         <div style="padding-top: 24px">
-          <!-- <mat-form-field appearance="outline" style="width: 350px">
-              <mat-label>Select Document Type</mat-label>
-              <mat-select
-                name="documentType"
-                [formControl]="uploadForm.controls.documentSubType"
-              >
-                @for (documentType of documentSubTypes; track documentType) {
-                <mat-option [value]="documentType.id">{{
-                  documentType.name
-                }}</mat-option>
-                }
-              </mat-select>
-              @if (uploadForm.controls.documentSubType.getError('required')) {
-              <mat-error>This Field is required</mat-error>
+          <mat-form-field appearance="outline" style="width: 350px">
+            <mat-label>Select Document Type</mat-label>
+            <mat-select
+              name="documentType"
+              [formControl]="uploadForm.controls.documentSubType"
+            >
+              @for (documentType of documentSubTypes; track documentType) {
+              <mat-option [value]="documentType.id">{{
+                documentType.name
+              }}</mat-option>
               }
-            </mat-form-field> -->
+            </mat-select>
+            @if (uploadForm.controls.documentSubType.getError('required')) {
+            <mat-error>This Field is required</mat-error>
+            }
+          </mat-form-field>
         </div>
 
         <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
@@ -89,7 +89,7 @@
         </ngx-dropzone>
         <div style="padding-top: 24px">
           <label>
-            <!-- <input type="checkbox" #confirmed [formControl]="acceptControl" /> -->
+            <input type="checkbox" #confirmed [formControl]="acceptControl" />
             By checking this box, I confirm that I am submitting an unaltered
             copy of documentation provided by a medical professional.
           </label>
@@ -112,7 +112,7 @@
           </button>
         </div>
       </div>
-      }
+      } -->
     </div>
   </div>
 </div>

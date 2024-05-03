@@ -4,9 +4,9 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - "phsa-adapter/src/**"
-      - "interfaces/icbc-adapter/**"
-      - ".github/workflows/ci-phsa-adapter.yml"
+      - 'phsa-adapter/src/**'
+      - 'interfaces/icbc-adapter/**'
+      - '.github/workflows/ci-phsa-adapter.yml'
 
 env:
   IMAGE_NAME: phsa-adapter
@@ -14,6 +14,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
     steps:
       - uses: actions/checkout@v4
 
