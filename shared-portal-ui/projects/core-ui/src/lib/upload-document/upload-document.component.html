@@ -35,7 +35,7 @@
           Upload File
         </button>
       </div>
-      @if(showUpload) {
+      <!-- @if(showUpload) {
       <div class="fileUpload">
         <b> Upload Your File</b>
         <br />
@@ -47,7 +47,7 @@
         Learn how to submit additional documentation.
 
         <div style="padding-top: 24px">
-          <!-- <mat-form-field appearance="outline" style="width: 350px">
+          <mat-form-field appearance="outline" style="width: 350px">
             <mat-label>Select Document Type</mat-label>
             <mat-select
               name="documentType"
@@ -62,7 +62,7 @@
             @if (uploadForm.controls.documentSubType.getError('required')) {
             <mat-error>This Field is required</mat-error>
             }
-          </mat-form-field> -->
+          </mat-form-field>
         </div>
 
         <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
@@ -112,7 +112,7 @@
           </button>
         </div>
       </div>
-      }
+      } -->
     </div>
   </div>
 </div>
