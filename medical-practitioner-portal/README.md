@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Install Packages
 
-Run `ng i` to install packages on first run. You will also need install packages on 'shared-portal-ui'
+Run `ng i` to install packages on first run. You will also need install packages on 'shared-portal-ui', run `npm i` in folder /shared-portal-ui/src
 
 ## Development server
 
