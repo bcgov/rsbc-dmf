@@ -1,8 +1,7 @@
 name: ci-medical-portal-ui
 
 on:
-  push:
-     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
+  workflow_dispatch:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
@@ -12,7 +11,7 @@ on:
 env:
   IMAGE_NAME: medical-portal-ui
   working-directory: ./
-  solution-folder: medical-portal/src/UI/medical-portal
+  solution-folder: medical-practitioner-portal
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
@@ -30,9 +29,13 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v4
         with:
-          node-version: '14'
+          node-version: '18.17'
+          
       - run: npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - run: npm i
+        working-directory: "shared-portal-ui/projects/core-ui/src"
 
       - run: npm run lint
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
