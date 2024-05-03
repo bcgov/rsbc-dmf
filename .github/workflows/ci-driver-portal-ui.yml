@@ -4,8 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - 'driver-portal/src/ClientApp/**'
-      - '.github/workflows/ci-driver-portal-ui.yml'
+      - "driver-portal/src/ClientApp/**"
+      - ".github/workflows/ci-driver-portal-ui.yml"
 
 env:
   IMAGE_NAME: driver-portal-ui
@@ -28,9 +28,11 @@ jobs:
         id: extract_branch
       - uses: actions/setup-node@v4
         with:
-          node-version: '18.17'
+          node-version: "18.17"
       - run: npm ci
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
+      - run: npm i
+        working-directory: "shared-portal-ui/projects/core-ui/src"
 
       - run: npm run lint
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
@@ -38,11 +40,11 @@ jobs:
       - run: npm run build --if-present
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
       - name: Test
-        run: |          
+        run: |
           npm install
           npm test --codeCoverage=true --watch=false
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
-        
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
         with:
@@ -52,4 +54,3 @@ jobs:
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
           env_vars: javascript
-
