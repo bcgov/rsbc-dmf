@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiRootUrl: '/medical-portal'
+  apiRootUrl: '/roadsafetybc/medical-portal'
 };
