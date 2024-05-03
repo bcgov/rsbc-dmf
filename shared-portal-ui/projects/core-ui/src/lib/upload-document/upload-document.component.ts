@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import {
   MatLabel,
@@ -11,7 +17,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {MatCheckboxModule} from '@angular/material/checkbox'
+import { MatCheckboxModule } from '@angular/material/checkbox';
 //import { HttpClient } from '@angular/common/http';
 //import { ApiConfiguration } from '../shared/api/api-configuration';
 
@@ -24,10 +30,8 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
     FormsModule,
     MatFormFieldModule,
     MatCheckboxModule,
-    MatLabel,
     MatSelectModule,
     MatOptionModule,
-    MatError,
     NgxDropzoneModule,
     MatIconModule,
   ],
@@ -37,14 +41,13 @@ import {MatCheckboxModule} from '@angular/material/checkbox'
 export class UploadDocumentComponent {
   fileToUpload: File | null = null;
 
-  constructor(private _snackBar: MatSnackBar,  private fb: FormBuilder) {}
+  constructor(private _snackBar: MatSnackBar, private fb: FormBuilder) {}
   public files: any[] = [];
   acceptControl = new FormControl(false);
 
   uploadForm = this.fb.group({
-    documentSubType : ['', Validators.required],
-
-  })
+    documentSubType: ['', Validators.required],
+  });
 
   onSelect(event: any) {
     this.fileToUpload = event.addedFiles[0];
