@@ -34,7 +34,7 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - run: npm i
-        working-directory: "shared-portal-ui/projects/core-ui/src"
+        working-directory: "shared-portal-ui/projects"
 
       
       - run: npm run build --if-present
