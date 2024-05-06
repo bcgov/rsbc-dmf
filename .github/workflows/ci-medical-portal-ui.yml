@@ -57,5 +57,5 @@ jobs:
           env_vars: javascript
 
       - name: Build image
-        working-directory: ./medical-portal/src/UI
+        working-directory: ./medical-practitioner-portal
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
