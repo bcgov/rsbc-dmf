@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: '18.17'
 
-      - run: npm ci
+      - run: npm i
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - run: npm i
