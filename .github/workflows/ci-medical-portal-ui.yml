@@ -58,4 +58,4 @@ jobs:
 
       - name: Build image
         #working-directory: ./medical-practitioner-portal
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file ./medical-practitioner-portal/Dockerfile --tag $IMAGE_NAME
