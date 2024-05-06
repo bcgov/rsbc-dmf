@@ -2,6 +2,10 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
 
+## Install Packages
+
+Run `ng i` to install packages on first run. You will also need install packages on 'shared-portal-ui', run `npm i` in folder /shared-portal-ui/src
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

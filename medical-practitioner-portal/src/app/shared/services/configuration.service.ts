@@ -1,4 +1,4 @@
-//import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { Observable, of } from 'rxjs';
@@ -14,7 +14,7 @@ export class ConfigurationService {
   private config: Configuration | null = null;
 
   constructor(
-    //@Inject(APP_BASE_HREF) public baseHref: string,
+    @Inject(APP_BASE_HREF) public baseHref: string,
     private configurationService: ConfigService
   ) {}
 
@@ -42,7 +42,7 @@ export class ConfigurationService {
           clientId: c.oidcConfiguration?.clientId || undefined,
           requireHttps: false,
           strictDiscoveryDocumentValidation: false,
-          redirectUri: window.location.origin,// + this.baseHref, // concat base href to the redirect URI
+          redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
           responseType: 'code',
           scope: c.oidcConfiguration?.scope || undefined,
           showDebugInformation: true, //!environment.production,
