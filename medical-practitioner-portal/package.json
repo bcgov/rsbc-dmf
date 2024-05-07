@@ -17,7 +17,7 @@
     "@angular/compiler": "^17.3.7",
     "@angular/core": "^17.3.7",
     "@angular/forms": "^17.3.7",
-    "@angular/material": "^17.3.6",
+    "@angular/material": "~17.3.6",
     "@angular/platform-browser": "^17.3.7",
     "@angular/platform-browser-dynamic": "^17.3.7",
     "@angular/router": "^17.3.7",
@@ -39,6 +39,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "karma-typescript": "^5.5.4",
+    "karma-typescript-angular2-transform": "^5.5.4",
     "typescript": "~5.4.2"
   }
 }
