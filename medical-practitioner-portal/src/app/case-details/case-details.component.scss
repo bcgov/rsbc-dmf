@@ -3,6 +3,16 @@
     justify-content: space-between;
     line-height: 24px;
   }
+
+  .driver-details{
+    display: flex;
+    justify-content: space-evenly;
+    line-height: 24px;
+  }
+
+  .top-margin{
+    margin-top: 0px;
+  }
   
   mat-card {
     margin-bottom: 24px;
@@ -68,3 +78,4 @@
   color: white;
   cursor: pointer;
   }
+
