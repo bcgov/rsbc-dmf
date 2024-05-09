@@ -1034,7 +1034,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber, true);
                 foreach (var item in result)
             {
                 if (string.IsNullOrEmpty(item.DocumentUrl) && item.DocumentType == "DMER" &&
@@ -1103,7 +1103,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var reply = new GetDocumentsReply();
             try
             {
-                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber);
+                var result = await _documentManager.GetDriverLegacyDocuments(request.DriverLicenseNumber, false);
 
                 foreach (var item in result)
                 {
