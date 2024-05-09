@@ -420,7 +420,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             // confirm it is present
 
-            var docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            var docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber, false);
 
             bool found = false;
 
@@ -452,7 +452,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             found = false;
 
-            docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber);
+            docs = await _documentManager.GetDriverLegacyDocuments(driverLicenseNumber, false);
 
             foreach (var doc in docs)
             {
