@@ -63,7 +63,12 @@
         <div>
           <label class="form-label">Middle Name</label>
           <mat-form-field appearance="outline" class="disabledInput">
-            <input matInput name="middleName" placeholder="Middle Name" [formControl]="accountForm.controls.middleName"/>
+            <input
+              matInput
+              name="middleName"
+              placeholder="Middle Name"
+              [formControl]="accountForm.controls.middleName"
+            />
           </mat-form-field>
         </div>
         <div>
@@ -81,7 +86,9 @@
 
       <div>
         <div style="padding-top: 16px">
-          <label class="form-label">Email Address <span style="color: red;">*</span></label>
+          <label class="form-label"
+            >Email Address <span style="color: red">*</span></label
+          >
           <mat-form-field
             appearance="outline"
             class="inputWidth"
@@ -279,7 +286,9 @@
         >
           Submit
         </button>
-        <button class="cancelButton" (click)="onCancel()">Cancel</button>
+        <button mat-flat-button class="cancelButton" (click)="onCancel()">
+          Cancel
+        </button>
       </div>
     </div>
   </div>

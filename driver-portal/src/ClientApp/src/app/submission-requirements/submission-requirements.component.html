@@ -28,8 +28,8 @@
       </div>
       <div style="padding-bottom: 24px">
         <button
-          class="secondaryButton"
           mat-flat-button
+          class="primaryButton"
           (click)="openUploadFile()"
         >
           Upload File
@@ -110,7 +110,7 @@
           <div class="uploadbutton">
             <button
               mat-flat-button
-              class="secondaryButton"
+              class="primaryButton"
               (click)="fileUpload()"
               [disabled]="!confirmed.checked"
             >
@@ -118,7 +118,7 @@
             </button>
             <button
               mat-flat-button
-              class="primaryButton"
+              class="cancelButton"
               (click)="closeUploadFile()"
             >
               Cancel
