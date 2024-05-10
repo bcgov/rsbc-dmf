@@ -27,6 +27,6 @@ input[type="checkbox"] {
 
 .acceptButton :disabled, button[disabled] {
   border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
+  background: rgb(217, 228, 255);
+  color: rgb(0, 0, 0);
 }
