@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -12,14 +13,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
     public class DocumentService : DocumentManager.DocumentManagerBase
     {
+        private readonly IDocumentManager _documentManager;
         private readonly IDocumentTypeManager _documentTypeManager;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ILogger<DocumentService> _logger;
         private readonly string _driverDocumentTypeCode;
 
-        public DocumentService(IDocumentTypeManager documentTypeManager, IMapper mapper, IConfiguration configuraiton, ILoggerFactory loggerFactory)
+        public DocumentService(IDocumentManager documentManager, IDocumentTypeManager documentTypeManager, IMapper mapper, IConfiguration configuraiton, ILoggerFactory loggerFactory)
         {
+            _documentManager = documentManager;
             _documentTypeManager = documentTypeManager;
             _mapper = mapper;
             _configuration = configuraiton;
@@ -76,6 +79,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
 
             return reply;
+        }
+        public async override Task<GetDocumentsByTypeForUsersReply> GetDocumentsByTypeForUsers(GetDocumentsByTypeForUsersRequest request, ServerCallContext context)
+        {
+            var result = new GetDocumentsByTypeForUsersReply();
+
+            try
+            {
+                var loginIds = request.LoginIds.Select(Guid.Parse);
+                var documents = _documentManager.GetDocumentsByTypeForUsers(loginIds, request.DocumentTypeCode);
+                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
+                result.Items.AddRange(mappedDocuments);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
         }
     }
 }

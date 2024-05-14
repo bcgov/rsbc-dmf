@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Rsbc.Dmf.CaseManagement.DomainModels;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,11 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
                     .AddTransform(NullStringConverter);
+
+                CreateMap<bcgov_documenturl, Document>()
+                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.dfp_dmertype))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.dfp_dmerstatus))
+                    .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId));
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

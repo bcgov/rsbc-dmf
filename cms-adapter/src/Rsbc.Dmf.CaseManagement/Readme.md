@@ -22,12 +22,9 @@ Click Finish and it should update the client.
 
 # Dynamics Mapping
 
-TODO make a table with columns e.g. ViewModel, Service, Dynamics
-Document bcgov_documenturl (LegacyDocument)
-DocumentType dfp_DocumentTypeID
-  bcgov_documenturls.dfp_DocumentTypeID
-DocumentSubType dfp_DocumentSubType
-  bcgov_documenturls.dfp_DocumentSubType
-Submittal Type dfp_submittaltype
-
-Callback/BringForward -> task
+| Name              | Schema              | ViewModel      | Foreign Key
+|-------------------|---------------------|----------------|----------------
+| Document          | bcgov_documenturl   | LegacyDocument | dfp_DocumentTypeID, dfp_DocumentSubType
+| Document Type     | dfp_submittaltype   | | dfp_submittaltypeid
+| Document Sub-Type | dfp_documentsubtype | | dfp_DocumentSubType
+| BringForward      | task                | Callback

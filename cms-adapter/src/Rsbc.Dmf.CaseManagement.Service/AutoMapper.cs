@@ -19,6 +19,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ConvertUsing(x => x == null ? null : Timestamp.FromDateTimeOffset(x.Value));
             CreateMap<DateTime, Timestamp>()
                 .ConvertUsing(x => Timestamp.FromDateTime(x.ToUniversalTime()));
+            CreateMap<DateTime?, Timestamp>()
+                .ConvertUsing(x => x == null ? null : Timestamp.FromDateTime(x.Value.ToUniversalTime()));
             CreateMap<Timestamp, DateTimeOffset>()
                 .ConvertUsing(x => x.ToDateTimeOffset());
             CreateMap<Timestamp, DateTimeOffset?>()
@@ -40,6 +42,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
             CreateMap<FullAddress, CaseManagement.FullAddress>();
+            CreateMap<DomainModels.Document, Document>();
+            CreateMap<DomainModels.Case, Case>();
+            CreateMap<DomainModels.Person, Person>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
@@ -55,6 +60,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new DocumentAutoMapperProfile());
                 mc.AddProfile(new DocumentTypeAutoMapperProfile());
                 mc.AddProfile(new CallbackMapperProfile());
+                mc.AddProfile(new CaseAutoMapperProfile());
+                mc.AddProfile(new ContactAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

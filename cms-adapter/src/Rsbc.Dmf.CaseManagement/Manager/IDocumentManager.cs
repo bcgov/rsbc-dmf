@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Rsbc.Dmf.CaseManagement.DomainModels;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
@@ -8,5 +10,6 @@ namespace Rsbc.Dmf.CaseManagement
         Task<LegacyDocument> GetLegacyDocument(string documentId);
         Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber);
+        IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode);
     }
 }
