@@ -56,6 +56,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                         services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                         services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+                        services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                     }
                     else
                     {
