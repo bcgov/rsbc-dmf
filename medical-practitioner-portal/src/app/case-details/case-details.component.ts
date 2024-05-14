@@ -25,6 +25,7 @@ import { SubmissionStatusComponent } from '../../../../shared-portal-ui/projects
 import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
 import {DmerStatusComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component'
 import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component'
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-case-details',
@@ -34,6 +35,7 @@ import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/cor
     MatStepperModule,
     MatInputModule,
     MatIconModule,
+    MatButtonModule,
     MatExpansionModule,
     CaseTypeComponent,
     CaseStatusComponent,

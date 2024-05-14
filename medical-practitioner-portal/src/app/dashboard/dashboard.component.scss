@@ -38,20 +38,12 @@ form {
   font-weight: 700;
 }
 
-.dmer-button {
-  background-color: #003366 !important;
-  border: none;
-  border-radius: 5px;
-  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-}
 
 .search-button:hover {
   text-decoration: underline;
   opacity: 0.8;
 }
+
 
 .search-container {
   display: flex;
@@ -71,6 +63,19 @@ form {
 .filter-dmer {
   display: flex;
   gap: 50px;
+ 
+}
+
+.filter-icon{
+  vertical-align: middle;
+}
+
+.status-filter{
+  width: 300px;
+}
+
+.cases-input{
+  width:400px;
 }
 
 .dmer-details {

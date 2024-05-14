@@ -127,7 +127,7 @@
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button color="primary" class="dmer-button">
+                    <button mat-flat-button class="primaryButton">
                       Start DMER
                     </button>
                   </div>
@@ -194,7 +194,7 @@
       <div>
         <mat-icon class="filter-icon">filter_alt</mat-icon>
         <mat-label style="color: #003366">Filter By: </mat-label>
-        <mat-form-field>
+        <mat-form-field class="status-filter">
           <mat-select [(ngModel)]="selectedStatus" name="status">
             @for (status of status; track status) {
             <mat-option [value]="status.value">{{
@@ -204,7 +204,12 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div><button mat-button (click)="clear()">Clear</button></div>
+      <!-- <div><button mat-button (click)="clear()">Clear</button></div> -->
+      <div>
+        <button mat-flat-button class="cancelButton" (click)="clear()">
+          Clear
+        </button>
+      </div>
     </div>
     <div>
       <mat-card style="margin-bottom: 24px">
@@ -248,7 +253,9 @@
               </div>
             </div>
 
-            <div class="dmer-details-row-1">This needs to be submitted by DATE HERE.</div>
+            <div class="dmer-details-row-1">
+              This needs to be submitted by DATE HERE.
+            </div>
           </div>
         </mat-card-content>
       </mat-card>
