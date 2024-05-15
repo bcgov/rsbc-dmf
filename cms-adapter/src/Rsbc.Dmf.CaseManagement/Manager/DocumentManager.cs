@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
+using Rsbc.Dmf.CaseManagement.DomainModels;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
@@ -167,7 +168,6 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-
         /// <summary>
         /// Get Legacy Document
         /// </summary>
@@ -249,6 +249,24 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return legacyDocument;
+        }
+
+        public IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode)
+        {
+            var documents = new List<bcgov_documenturl>();
+            foreach (var loginId in loginIds)
+            {
+                documents.AddRange(dynamicsContext.bcgov_documenturls
+                    .Expand(doc => doc.dfp_DocumentTypeID)
+                    .Expand(doc => doc.bcgov_CaseId)
+                    .Expand(doc => doc.bcgov_CaseId.customerid_contact)
+                    .Where(doc => 
+                        doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
+                        && (doc._dfp_loginid_value != null && doc._dfp_loginid_value.Value == loginId)
+                    ));
+            }
+
+            return _mapper.Map<IEnumerable<Document>>(documents);
         }
     }
 }

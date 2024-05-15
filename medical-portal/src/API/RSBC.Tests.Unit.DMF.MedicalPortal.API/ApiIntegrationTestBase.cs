@@ -10,6 +10,7 @@ public abstract class ApiIntegrationTestBase : IDisposable
     protected readonly HttpClient _client;
     protected readonly IConfiguration _configuration;
     protected const string CASE_API_BASE = "/api/Cases";
+    protected const string DOCUMENT_API_BASE = "/api/Document";
 
     public ApiIntegrationTestBase(IConfiguration configuration)
     {

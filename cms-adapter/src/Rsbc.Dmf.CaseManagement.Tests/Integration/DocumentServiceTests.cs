@@ -17,11 +17,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
         public DocumentServiceTests(ITestOutputHelper output) : base(output)
         {
+            var documentManager = services.GetRequiredService<IDocumentManager>();
             var documentTypeManager = services.GetRequiredService<IDocumentTypeManager>();
             var mapper = services.GetRequiredService<IMapper>();
             var loggerFactory = services.GetRequiredService<ILoggerFactory>();
             _configuration = services.GetRequiredService<IConfiguration>();
-            _documentService = new DocumentService(documentTypeManager, mapper, _configuration, loggerFactory);
+            _documentService = new DocumentService(documentManager, documentTypeManager, mapper, _configuration, loggerFactory);
         }
 
         [Fact(Skip = RequiresDynamics)]

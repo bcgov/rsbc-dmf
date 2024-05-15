@@ -12,21 +12,20 @@ using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Helpers;
 using RSBC.DMF.MedicalPortal.API;
 using RSBC.DMF.MedicalPortal.API.Services;
-
-
-//using Moq;
+using Moq;
 //using Pssg.DocumentStorageAdapter.Helpers;
 //using Rsbc.Dmf.CaseManagement.Helpers;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 
-    /// <summary>
-    /// web application factory used for testing HttpClient
-    /// </summary>
-    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+/// <summary>
+/// web application factory used for testing HttpClient
+/// </summary>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         private readonly IConfiguration _configuration;
 
@@ -56,17 +55,17 @@ using System.Threading.Tasks;
                 services.AddTransient<ICaseQueryService, CaseService>();
                 services.AddTransient<IUserService, UserService>();
 
-                //services.AddAutoMapperSingleton(LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole()));
+                services.AddAutoMapperSingleton();
 
                 // setup http context with mocked user claims
-                //var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-                //var context = new DefaultHttpContext();
-                //var user = new ClaimsPrincipal();
+                var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+                var context = new DefaultHttpContext();
+                var user = new ClaimsPrincipal();
                 //var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
                 //var userId = "6c24e1c4-0bd1-4812-ad6a-b012e0c3ed8c";
                 //var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
-                //var claims = new List<Claim>
-                //{
+                var claims = new List<Claim>
+                {
                 //    new Claim(ClaimTypes.Sid, userId),
                 //    new Claim(UserClaimTypes.DriverId, driverId),
                 //    new Claim(ClaimTypes.Email, "Email"),
@@ -75,12 +74,12 @@ using System.Threading.Tasks;
                 //    new Claim(ClaimTypes.Surname, "MASON"),
                 //    new Claim(UserClaimTypes.BirthDate, "01/01/2000"),
                 //    new Claim(UserClaimTypes.DisplayName, "John Smith")
-                //};
-                //user.AddIdentity(new ClaimsIdentity(claims));
-                //context.User = user;
-                //mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
-                //services.AddTransient(x => mockHttpContextAccessor.Object);
-                //services.AddTransient<IUserService, UserService>();
+                    new Claim(Claims.LoginIds, _configuration["Tests:LoginIds"])
+                };
+                user.AddIdentity(new ClaimsIdentity(claims));
+                context.User = user;
+                mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
+                services.AddTransient(x => mockHttpContextAccessor.Object);
                 services.AddHttpContextAccessor();
 
                 // document storage client
@@ -97,7 +96,7 @@ using System.Threading.Tasks;
                 //}
 
                 // case management client
-                string cmsAdapterURI = _configuration["CMS_ADAPTER_URI"];
+                string cmsAdapterURI = _configuration["CMS:ServerUrl"];
                 if (string.IsNullOrEmpty(cmsAdapterURI))
                 {
                     // setup from Mock
@@ -106,7 +105,7 @@ using System.Threading.Tasks;
                 }
                 else
                 {
-                    services.AddCaseManagementAdapterClient(_configuration);
+                    services.AddCaseManagementAdapterClient(_configuration.GetSection("CMS"));
                 }
             });
 

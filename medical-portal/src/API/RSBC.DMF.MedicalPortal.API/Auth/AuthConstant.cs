@@ -16,6 +16,7 @@ public class AuthConstant
         public const string ResourceAccess = "resource_access";
         public const string Subject = "sub";
         public const string Roles = "roles";
+        public const string LoginIds = "login_ids";
     }
     public static class Roles
     {

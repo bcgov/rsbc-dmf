@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
+using Rsbc.Dmf.CaseManagement.DomainModels;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 //using SharedUtils;
 using System;
@@ -171,6 +172,49 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.NotNull(deserializedCallback);
             Assert.Equal("Phone", deserializedCallback.Phone);
             Assert.Equal(PreferredTime.Morning, deserializedCallback.PreferredTime);
+        }
+
+        [Fact]
+        public void Map_bcgov_documenturl_To_CaseManagement_Document()
+        {
+            var document = new bcgov_documenturl();
+            document.dfp_dmertype = 10000001;
+            document.dfp_dmerstatus = 10000002;
+            document.bcgov_CaseId = new incident();
+            document.bcgov_CaseId.ticketnumber = "C123";
+            document.bcgov_CaseId.customerid_contact = new contact();
+            document.bcgov_CaseId.customerid_contact.fullname = "Joe Smithers";
+            document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
+
+            var mappedDocument = _mapper.Map<Document>(document);
+
+            Assert.NotNull(mappedDocument);
+            Assert.Equal(document.dfp_dmertype, mappedDocument.DmerType);
+            Assert.Equal(document.dfp_dmerstatus, mappedDocument.DmerStatus);
+            Assert.Equal(document.bcgov_CaseId.ticketnumber, mappedDocument.Case.CaseNumber);
+            Assert.Equal(document.bcgov_CaseId.customerid_contact.fullname, mappedDocument.Case.Person.FullName);
+            Assert.Equal(document.bcgov_CaseId.customerid_contact.birthdate, mappedDocument.Case.Person.Birthday.Value);
+        }
+
+        [Fact]
+        public void Map_CaseManagement_Document_To_Service_Document()
+        {
+            var document = new Document();
+            document.DmerType = 10000001;
+            document.DmerStatus = 10000002;
+            document.Case = new DomainModels.Case();
+            document.Case.CaseNumber = "C123";
+            document.Case.Person = new Person();
+            document.Case.Person.FullName = "Joe Smithers";
+            document.Case.Person.Birthday = new DateTime(2000, 1, 1);
+
+            var mappedDocument = _mapper.Map<Service.Document>(document);
+
+            Assert.NotNull(mappedDocument);
+            Assert.Equal(document.DmerType, mappedDocument.DmerType);
+            Assert.Equal(document.DmerStatus, mappedDocument.DmerStatus);
+            Assert.Equal(document.Case.CaseNumber, mappedDocument.Case.CaseNumber);
+            Assert.Equal(document.Case.Person.FullName, mappedDocument.Case.Person.FullName);
         }
     }
 }
