@@ -253,13 +253,20 @@ namespace Rsbc.Dmf.CaseManagement
 
         public IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode)
         {
-            return dynamicsContext.bcgov_documenturls
-                .Expand(doc => doc._dfp_documenttypeid_value)
-                .Expand(doc => doc.bcgov_CaseId)
-                .Expand(doc => doc.bcgov_CaseId._contactid_value)
-                .Where(doc => doc.dfp_DocumentTypeID.dfp_code == documentTypeCode && (doc._dfp_loginid_value != null && loginIds.Contains(doc._dfp_loginid_value.Value)))
-                .Select(doc => _mapper.Map<Document>(doc))
-                .ToList();         
+            var documents = new List<bcgov_documenturl>();
+            foreach (var loginId in loginIds)
+            {
+                documents.AddRange(dynamicsContext.bcgov_documenturls
+                    .Expand(doc => doc.dfp_DocumentTypeID)
+                    .Expand(doc => doc.bcgov_CaseId)
+                    .Expand(doc => doc.bcgov_CaseId.customerid_contact)
+                    .Where(doc => 
+                        doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
+                        && (doc._dfp_loginid_value != null && doc._dfp_loginid_value.Value == loginId)
+                    ));
+            }
+
+            return _mapper.Map<IEnumerable<Document>>(documents);
         }
     }
 }

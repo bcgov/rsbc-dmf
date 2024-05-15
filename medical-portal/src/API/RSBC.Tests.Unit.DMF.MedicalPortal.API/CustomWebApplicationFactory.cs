@@ -55,7 +55,7 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
                 services.AddTransient<ICaseQueryService, CaseService>();
                 services.AddTransient<IUserService, UserService>();
 
-                //services.AddAutoMapperSingleton(LoggerFactory.Create(loggingBuilder => loggingBuilder.AddConsole()));
+                services.AddAutoMapperSingleton();
 
                 // setup http context with mocked user claims
                 var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
@@ -97,7 +97,7 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
                 //}
 
                 // case management client
-                string cmsAdapterURI = _configuration["CMS_ADAPTER_URI"];
+                string cmsAdapterURI = _configuration["CMS:ServerUrl"];
                 if (string.IsNullOrEmpty(cmsAdapterURI))
                 {
                     // setup from Mock
@@ -106,7 +106,7 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
                 }
                 else
                 {
-                    services.AddCaseManagementAdapterClient(_configuration);
+                    services.AddCaseManagementAdapterClient(_configuration.GetSection("CMS"));
                 }
             });
 
