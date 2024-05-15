@@ -24,4 +24,10 @@
     <ProjectReference Include="..\RSBC.DMF.MedicalPortal.API\RSBC.DMF.MedicalPortal.API.csproj" />
   </ItemGroup>
 
+  <!-- NOTE this shouldn't be needed, it could just be a local compilation issue. This will force XUnit DI to use the Startup for DI wire-up -->
+  <PropertyGroup>
+    <XunitStartupAssembly>RSBC.Tests.Unit.DMF.MedicalPortal.API</XunitStartupAssembly>
+    <XunitStartupFullName>Startup</XunitStartupFullName>
+  </PropertyGroup>
+
 </Project>
