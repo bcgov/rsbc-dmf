@@ -13,7 +13,6 @@ public class Startup
     {
         var _configuration = new ConfigurationBuilder()
             .AddUserSecrets<ApplicationVersionInfo>()
-            .AddJsonFile("AppSettings.json")
             .AddEnvironmentVariables()
             .Build();
         services.AddSingleton<IConfiguration>(_configuration);
