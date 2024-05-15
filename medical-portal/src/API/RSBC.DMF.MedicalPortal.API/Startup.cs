@@ -206,7 +206,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management System (CMS) Adapter 
 
-            services.AddCaseManagementAdapterClient(configuration.GetSection("cms"));
+            services.AddCaseManagementAdapterClient(configuration);
 
             // Add Document Storage Adapter
 
