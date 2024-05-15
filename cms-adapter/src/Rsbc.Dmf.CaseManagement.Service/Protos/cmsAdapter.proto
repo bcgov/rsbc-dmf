@@ -531,7 +531,8 @@ message GetDocumentsByTypeForUsersReply {
  message Document {
      int32 dmerType = 1;
      int32 dmerStatus = 2;
-     Case case = 3;
+     google.protobuf.Timestamp complianceDate = 3;
+     Case case = 4;
  }
 
 message LegacyDocument {

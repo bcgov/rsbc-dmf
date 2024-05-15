@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Rsbc.Dmf.CaseManagement.DomainModels
 {
@@ -12,6 +10,9 @@ namespace Rsbc.Dmf.CaseManagement.DomainModels
 
         // dfp_dmerstatus
         public int DmerStatus { get; set; }
+
+        // dfp_compliancedate
+        public DateTime? ComplianceDate { get; set; }
 
         // bcgov_caseid
         public Case Case { get; set; }

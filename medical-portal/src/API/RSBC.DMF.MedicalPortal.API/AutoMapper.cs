@@ -13,7 +13,8 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.Case.CaseNumber))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
-                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday));
+                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday))
+                .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.ComplianceDate));
         }
     }
 

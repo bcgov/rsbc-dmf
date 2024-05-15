@@ -22,10 +22,10 @@ using System.Threading.Tasks;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 
-    /// <summary>
-    /// web application factory used for testing HttpClient
-    /// </summary>
-    public class CustomWebApplicationFactory : WebApplicationFactory<Program>
+/// <summary>
+/// web application factory used for testing HttpClient
+/// </summary>
+public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         private readonly IConfiguration _configuration;
 
@@ -74,8 +74,7 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
                 //    new Claim(ClaimTypes.Surname, "MASON"),
                 //    new Claim(UserClaimTypes.BirthDate, "01/01/2000"),
                 //    new Claim(UserClaimTypes.DisplayName, "John Smith")
-                //};
-                //user.AddIdentity(new ClaimsIdentity(claims));
+                    new Claim(Claims.LoginIds, _configuration["Tests:LoginIds"])
                 };
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;
