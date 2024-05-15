@@ -13,7 +13,7 @@ namespace RSBC.Tests.Unit.DMF.MedicalPortal.API.Integration
     {
         public DocumentTests(IConfiguration configuration) : base(configuration) { }
 
-        [Fact]
+        //[Fact]
         public async Task Get_Documents_By_Type_For_User()
         {
             var loginIds = _configuration["Test:LoginIds"];

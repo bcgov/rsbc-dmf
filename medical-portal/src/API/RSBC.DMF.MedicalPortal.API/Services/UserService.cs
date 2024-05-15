@@ -70,7 +70,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             return await Task.FromResult(new UserContext
             {
                 Id = user.FindFirstValue(Claims.PreferredUsername),
-                LoginIds = user.FindFirstValue(Claims.LoginIds).Split(',').ToList(),
+                LoginIds = user.FindFirstValue(Claims.LoginIds)?.Split(',').ToList(),
                 FirstName = user.FindFirstValue(Claims.GivenName),
                 LastName = user.FindFirstValue(Claims.FamilyName),
                 Email = user.FindFirstValue(ClaimTypes.Email),
