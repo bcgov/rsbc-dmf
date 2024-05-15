@@ -251,6 +251,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddAutoMapperSingleton();
         }
 
         private Task OnTokenValidatedAsync(Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContext context)
