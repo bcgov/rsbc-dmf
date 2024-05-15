@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
@@ -16,15 +18,19 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<DocumentController> _logger;
 
-        public DocumentController(DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IMapper mapper)
+        public DocumentController(DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IMapper mapper, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _documentManagerClient = documentManagerClient;
             _userService = userService;
             _mapper = mapper;
+            _configuration = configuration;
+            _logger = loggerFactory.CreateLogger<DocumentController>();
         }
 
-        [HttpGet("Type/{documentTypeCode}")]
+        [HttpGet("MyDmers")]
         // TODO
         //[Authorize(Policy = Policy.MedicalPractitioner)]
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
@@ -37,8 +43,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             // TODO we need to set this before this controller method will work
             var loginIds = profile.LoginIds;
 
-            // TODO add setting for document type code "001"
-            var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = "001", LoginIds = { loginIds } };
+            var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
+            var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
             var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
             if (reply.ResultStatus == ResultStatus.Success)
             {
@@ -48,7 +54,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else
             {
                 // TODO
-                //_logger.LogError($"Unexpected error - unable to get documents meta-data for id {documentId} - {reply.ErrorDetail}");
+                _logger.LogError($"{nameof(GetMyDocumentsByType)} error: unable to get documents by type - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }

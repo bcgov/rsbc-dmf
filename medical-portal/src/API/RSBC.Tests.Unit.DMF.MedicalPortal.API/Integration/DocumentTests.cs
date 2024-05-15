@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
-using Xunit.DependencyInjection;
 
 namespace RSBC.Tests.Unit.DMF.MedicalPortal.API.Integration
 {
@@ -17,9 +16,9 @@ namespace RSBC.Tests.Unit.DMF.MedicalPortal.API.Integration
         [Fact]
         public async Task Get_Documents_By_Type_For_User()
         {
-            var caseId = _configuration["ICBC_TEST_CASEID"];
-            //if (string.IsNullOrEmpty(caseId))
-            //    return;
+            var loginIds = _configuration["Test:LoginIds"];
+            if (string.IsNullOrEmpty(loginIds))
+                return;
 
             var documentTypeCode = "001";
             var request = new HttpRequestMessage(HttpMethod.Get, $"{DOCUMENT_API_BASE}/Type/{documentTypeCode}");
