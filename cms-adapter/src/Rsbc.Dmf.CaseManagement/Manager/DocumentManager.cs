@@ -92,7 +92,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="driverLicenceNumber"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber)
+        public async Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenceNumber, bool includeEmpty)
         {
             var result = new List<LegacyDocument>();
             var driversRaw = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statecode == 0);
@@ -108,7 +108,7 @@ namespace Rsbc.Dmf.CaseManagement
                         foreach (var document in driverDocuments)
                         {
                             // only include documents that have a URL
-                            if (!string.IsNullOrEmpty(document.bcgov_url))
+                            if (!string.IsNullOrEmpty(document.bcgov_url) || includeEmpty)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.bcgov_documenturlid));
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(bcgov_documenturl.dfp_DocumentTypeID));

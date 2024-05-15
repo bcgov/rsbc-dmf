@@ -61,7 +61,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         [HttpPost("preview")]
         public async Task<ActionResult> Preview([FromBody] ViewModels.Download download)
         {
-            return await Download(download);
+            return await DownloadInternal(download, true);
         }
 
         /// <summary>
@@ -70,6 +70,11 @@ namespace Pssg.DocumentStorageAdapter.Controllers
         /// </summary>
         [HttpPost("download")]
         public async Task<ActionResult> Download([FromBody] ViewModels.Download download)
+        {
+            return await DownloadInternal(download, false);
+        }
+
+        public async Task<ActionResult> DownloadInternal( ViewModels.Download download, bool convert)
         {
             string fileName = download.FileUrl;
             if (fileName.StartsWith("https://"))
@@ -120,7 +125,7 @@ namespace Pssg.DocumentStorageAdapter.Controllers
                     
                     
                     // Check the file type is .tiff by filename
-                    if (fileName.ToLower().Contains(".tif"))
+                    if (fileName.ToLower().Contains(".tif") && convert)
                     {
                         SixLabors.ImageSharp.Configuration.Default.Configure(new TiffLibrary.ImageSharpAdapter.TiffConfigurationModule());
                         try

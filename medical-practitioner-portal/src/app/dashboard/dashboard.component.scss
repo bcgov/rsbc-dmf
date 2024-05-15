@@ -10,7 +10,6 @@
 }
 
 form {
-  width: 100%;
   padding: 30px;
   display: flex;
   flex-flow: row;
@@ -19,8 +18,8 @@ form {
   padding-bottom: 1px;
 }
 .search-input {
-  width: 845px;
-
+  // width: 845px;
+    flex: 1;
   ::ng-deep .mat-form-field-flex {
     background-color: #ffffff;
     //border: solid 2px  #003366;
@@ -39,23 +38,16 @@ form {
   font-weight: 700;
 }
 
-.dmer-button {
-  background-color: #003366 !important;
-  border: none;
-  border-radius: 5px;
-  font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-}
 
 .search-button:hover {
   text-decoration: underline;
   opacity: 0.8;
 }
 
+
 .search-container {
   display: flex;
+  flex-wrap: wrap;
   gap: 32px;
   padding-top: 12px;
 }
@@ -71,17 +63,41 @@ form {
 .filter-dmer {
   display: flex;
   gap: 50px;
+ 
+}
+
+.filter-icon{
+  vertical-align: middle;
+}
+
+.status-filter{
+  width: 300px;
+}
+
+.cases-input{
+  width:400px;
 }
 
 .dmer-details {
   display: flex;
-  justify-content: space-between;
+  //justify-content: space-between;
   line-height: 24px;
+  gap: 24px;
+}
+
+.dmer-details > div{
+  //flex:1;
+  padding-right: 24px;
+}
+
+.dmer-details > div:first-child{
+  border-right: 2px solid grey;
 }
 
 mat-card {
   margin-bottom: 24px;
 }
+
 
 .mat-mdc-card {
   border: 1px solid gray;
@@ -104,6 +120,7 @@ mat-card {
   flex-direction: row;
 }
 
+
 .serachResultRow2 {
   display: flex;
   flex: 1;
@@ -112,8 +129,35 @@ mat-card {
   line-height: 24px;
 }
 
+.dmer-details-row{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+}
+
+.dmer-details-row-1{
+  display: flex;
+ flex-direction: row;
+ flex: 1;
+  gap: 105px;
+
+}
+
 a {
   cursor: pointer;
   color: #003366;
   text-decoration: underline;
+}
+
+@media only screen and (max-width: 1024px) {
+  /* For Tablets: */
+
+  .dmer-details {
+    display: flex;
+  }
+
+  .dmer-details-row-1{
+    gap:20px;
+  }
+  
 }

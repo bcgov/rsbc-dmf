@@ -23,7 +23,7 @@
     </mat-card-header>
     <mat-card-content>
       <form>
-        <div>
+        <div style="width: 100%">
           <label class="form-label">DMER Case ID</label>
 
           <div class="search-container">
@@ -31,6 +31,7 @@
               <input
                 matInput
                 placeholder="Enter the DMER Case ID to start or access a DMER "
+                [formControl]="searchBox"
               />
             </mat-form-field>
             <button
@@ -64,7 +65,7 @@
         </button>
       </div>
 
-      <mat-card>
+      <mat-card *ngIf="searchedCase">
         <mat-card-content>
           <div class="serachResultRow1">
             <div style="padding: 30px; border-right: 2px solid grey">
@@ -72,9 +73,9 @@
                 <label>Case Id</label>
                 <div>
                   <b
-                    ><a routerLink="/caseDetails" routerLinkActive="active"
-                      >A71267137</a
-                    >
+                    ><a routerLink="/caseDetails" routerLinkActive="active">{{
+                      searchedCase?.title
+                    }}</a>
                     <br
                   /></b>
                   View case details
@@ -85,12 +86,18 @@
               <div>
                 <div>
                   <label>Patient's Name</label>
-                  <div><b>Minto, Rahul Anu</b></div>
+                  <div>
+                    <b
+                      >{{ searchedCase?.patientLastname }},
+                      {{ searchedCase?.patientFirstname }}
+                      {{ searchedCase?.patientMiddlename }}</b
+                    >
+                  </div>
                 </div>
                 <div>
                   <label>DMER Type</label>
                   <div>
-                    <b>Scheduled Age</b>
+                    <b>{{ searchedCase?.dmerType }}</b>
                   </div>
                 </div>
               </div>
@@ -99,13 +106,13 @@
                 <div>
                   <label>Driver License Number</label>
                   <div>
-                    <b>6034197</b>
+                    <b>{{ searchedCase?.driverLicense }}</b>
                   </div>
                 </div>
                 <div>
                   <label>DMER Status</label>
                   <div>
-                    <b>Required - Unclaimed</b>
+                    <b>{{ searchedCase?.status }}</b>
                   </div>
                 </div>
               </div>
@@ -113,14 +120,14 @@
                 <div>
                   <label>Date Of Birth</label>
                   <div>
-                    <b>May 12, 1989</b>
+                    <b>{{ searchedCase?.driverBirthDate }}</b>
                   </div>
                 </div>
 
                 <div>
                   <label></label>
                   <div>
-                    <button mat-flat-button color="primary" class="dmer-button">
+                    <button mat-flat-button class="primaryButton">
                       Start DMER
                     </button>
                   </div>
@@ -149,7 +156,7 @@
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">DMER Type</mat-panel-title>
           </mat-expansion-panel-header>
-         <app-dmer-type></app-dmer-type>
+          <app-dmer-type></app-dmer-type>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
@@ -157,8 +164,8 @@
               >DMER Status</mat-panel-title
             >
           </mat-expansion-panel-header>
-       
-          <app-dmer-status></app-dmer-status> 
+
+          <app-dmer-status></app-dmer-status>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
@@ -187,7 +194,7 @@
       <div>
         <mat-icon class="filter-icon">filter_alt</mat-icon>
         <mat-label style="color: #003366">Filter By: </mat-label>
-        <mat-form-field>
+        <mat-form-field class="status-filter">
           <mat-select [(ngModel)]="selectedStatus" name="status">
             @for (status of status; track status) {
             <mat-option [value]="status.value">{{
@@ -197,7 +204,12 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <div><button mat-button (click)="clear()">Clear</button></div>
+      <!-- <div><button mat-button (click)="clear()">Clear</button></div> -->
+      <div>
+        <button mat-flat-button class="cancelButton" (click)="clear()">
+          Clear
+        </button>
+      </div>
     </div>
     <div>
       <mat-card style="margin-bottom: 24px">
@@ -213,28 +225,36 @@
             </div>
             <div>View Case Details</div>
           </div>
-          <div>
-            <label>Patient's Name</label>
-            <div>
-              <b>Rahul Minto</b>
+          <div class="dmer-details-row">
+            <div class="dmer-details-row-1">
+              <div>
+                <label>Patient's Name</label>
+                <div>
+                  <b>Rahul Minto</b>
+                </div>
+              </div>
+              <div>
+                <label>Date of Birth</label>
+                <div>
+                  <b>May 13, 1952</b>
+                </div>
+              </div>
+              <div>
+                <label>DMER Type</label>
+                <div>
+                  <b>Suspected Medical Condition</b>
+                </div>
+              </div>
+              <div>
+                <label>DMER Status</label>
+                <div>
+                  <b>Required - Unclaimed</b>
+                </div>
+              </div>
             </div>
-          </div>
-          <div>
-            <label>Date of Birth</label>
-            <div>
-              <b>May 13, 1952</b>
-            </div>
-          </div>
-          <div>
-            <label>DMER Type</label>
-            <div>
-              <b>Suspected Medical Condition</b>
-            </div>
-          </div>
-          <div>
-            <label>DMER Status</label>
-            <div>
-              <b>Required - Unclaimed</b>
+
+            <div class="dmer-details-row-1">
+              This needs to be submitted by DATE HERE.
             </div>
           </div>
         </mat-card-content>
