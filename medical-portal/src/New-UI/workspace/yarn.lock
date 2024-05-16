@@ -161,9 +161,9 @@
     "@typescript-eslint/experimental-utils" "4.28.2"
 
 "@angular/animations@^13.0.0":
-  version "13.0.2"
-  resolved "https://registry.npmjs.org/@angular/animations/-/animations-13.0.2.tgz"
-  integrity sha512-ROR70rM6E13pIJzaYf0Su/ALSoBm5fIMjozey636pAq21TxTy5IfhgaBjv/vflC9psbpaySGw2H5XnwejP0gSw==
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-13.4.0.tgz#f70a69c4fd5009ba6dcd7e9ad6b71872e7597139"
+  integrity sha512-PkEmDd5zpbz/7fudxyb6qL9sBMTPlzpSIh85AapGhjgRSUSRSGuJLj49R35fQ/44c4K5bHMPEsGZjMR0oDsGdg==
   dependencies:
     tslib "^2.3.0"
 
@@ -255,9 +255,9 @@
     tslib "^2.3.0"
 
 "@angular/platform-browser@^13.0.0":
-  version "13.0.2"
-  resolved "https://registry.npmjs.org/@angular/platform-browser/-/platform-browser-13.0.2.tgz"
-  integrity sha512-fkLGr9Vj2cvFzXefyhNaqwXX90+WbpYj5cCii7S1HcbJ9qSM5ZenLp1t8mGRhmWI7odY4BrFskWOChlWFrLEkA==
+  version "13.4.0"
+  resolved "https://registry.yarnpkg.com/@angular/platform-browser/-/platform-browser-13.4.0.tgz#0e3ef34228d03d32f0e027bd566145f930749951"
+  integrity sha512-kq4TpdkSS0Z/7ToFzWhyBbh4Ai1uOKFVdL9/TAm19dLnYNIInrN3KYW6GRxZ+pkJJA9Vkq4NtgcxysQ42VFotA==
   dependencies:
     tslib "^2.3.0"
 
@@ -9018,7 +9018,7 @@ tsconfig-paths@^3.11.0, tsconfig-paths@^3.9.0:
     minimist "^1.2.0"
     strip-bom "^3.0.0"
 
-tslib@2.3.1, tslib@^2.0.0, tslib@^2.3.0:
+tslib@2.3.1, tslib@^2.0.0:
   version "2.3.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.3.1.tgz"
   integrity sha512-77EbyPPpMz+FRFRuAFlWMtmgUWGe9UOG2Z25NqCwiIjRhOf5iKGuzSe5P2w1laq+FkRy4p+PCuVkJSGkzTEKVw==
@@ -9027,6 +9027,11 @@ tslib@^1.8.1, tslib@^1.9.0:
   version "1.14.1"
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
+
+tslib@^2.3.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
 tslib@^2.3.1:
   version "2.4.1"
