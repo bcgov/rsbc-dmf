@@ -96,7 +96,7 @@ export class AccountComponent implements OnInit {
       error: (err) => {
         if (err.status === 401) {
           this._snackBar.open(
-            'Unable To Register. Please Check that the address does not match with ICBC address',
+            'Unable To Register. Please check that the address matches ICBC address',
             'Close',
             {
               horizontalPosition: 'center',
