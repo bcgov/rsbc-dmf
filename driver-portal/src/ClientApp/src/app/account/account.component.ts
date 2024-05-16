@@ -16,7 +16,6 @@ import { MatInput } from '@angular/material/input';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatButton } from '@angular/material/button';
 import { NgIf, NgClass } from '@angular/common';
-import { error } from 'console';
 
 @Component({
   selector: 'app-account',
