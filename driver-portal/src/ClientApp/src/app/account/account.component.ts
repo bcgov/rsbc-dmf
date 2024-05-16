@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { LoginService } from '../shared/services/login.service';
@@ -12,20 +18,20 @@ import { MatButton } from '@angular/material/button';
 import { NgIf, NgClass } from '@angular/common';
 
 @Component({
-    selector: 'app-account',
-    templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss'],
-    standalone: true,
-    imports: [
-        NgIf,
-        MatButton,
-        ReactiveFormsModule,
-        FormsModule,
-        MatFormField,
-        MatInput,
-        NgClass,
-        MatError,
-    ],
+  selector: 'app-account',
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.scss'],
+  standalone: true,
+  imports: [
+    NgIf,
+    MatButton,
+    ReactiveFormsModule,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    NgClass,
+    MatError,
+  ],
 })
 export class AccountComponent implements OnInit {
   isEditView = false;
@@ -37,7 +43,7 @@ export class AccountComponent implements OnInit {
     notifyByMail: [false],
     firstName: [''],
     lastName: [''],
-    middleName : [''],
+    middleName: [''],
     emailAddress: ['', Validators.required],
     driverLicenseNumber: ['', Validators.maxLength(8)],
     addressLine1: [''],
@@ -82,8 +88,23 @@ export class AccountComponent implements OnInit {
   }
 
   getDriverAddress() {
-    this.caseManagementService.getDriverAddress({}).subscribe((userAddress) => {
-      this.accountForm.patchValue(userAddress as any);
+    this.caseManagementService.getDriverAddress({}).subscribe({
+      next: (userAddress) => {
+        this.accountForm.patchValue(userAddress as any);
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this._snackBar.open(
+            'Unable To Register. Please check that the address matches ICBC address',
+            'Close',
+            {
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              duration: 5000,
+            }
+          );
+        }
+      },
     });
   }
   onEdit() {
