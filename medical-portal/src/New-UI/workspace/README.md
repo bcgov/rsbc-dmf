@@ -8,6 +8,24 @@
 
 The installation and configuration of the Medical Portal development environment is sequentially ordered to ensure software dependencies are available when needed during setup.
 
+Known working versions:
+
+- npm 7.24.0
+- ng 14.2.0
+- node 16.10.0
+
+Also, run the following:
+yarn install @angular/animations
+yarn install @angular/platform-browser
+
+With the above configuration, I did not need to adjust app.scss. With other versions, I had to add the following, to fix a @theme-version-rgb error:
+@import 'bootstrap/scss/mixins';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/variables-dark';
+@import 'bootstrap/scss/maps';
+@import 'bootstrap/scss/utilities';
+
 ### Installation
 
 The following list includes the required software needed to run the application, as well as, the suggested IDE with extensions for web client development, and software for source control management and API development/testing.
