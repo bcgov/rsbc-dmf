@@ -47,10 +47,11 @@
         <form>
           <div style="padding-top: 24px">
             <mat-form-field appearance="outline" style="width: 350px">
-              <mat-label>Select Document Type</mat-label>
+              <mat-label for="document-type">Select Document Type</mat-label>
               <mat-select
                 name="documentType"
                 [formControl]="uploadForm.controls.documentSubType"
+                id="document-type"
               >
                 @for (documentType of documentSubTypes; track documentType) {
                 <mat-option [value]="documentType.id">{{
@@ -156,7 +157,6 @@
           </div>
 
           <div style="grid-area: D">
-            <label></label>
             <div>
               <button
                 mat-flat-button
