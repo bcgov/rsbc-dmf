@@ -53,7 +53,7 @@ export class AccountComponent implements OnInit {
     country: [''],
   });
 
-  isCreateProfile = this.route.snapshot.routeConfig?.path === 'create-profile';
+  isCreateProfile = this.router.url.includes('create-profile');
 
   constructor(
     private fb: FormBuilder,
@@ -69,7 +69,7 @@ export class AccountComponent implements OnInit {
     if (this.loginService.userProfile?.id) {
       this.getuserDetails(this.loginService.userProfile?.id as string);
     }
-    this.getDriverAddress();
+
     this.accountForm.disable();
 
     if (this.isCreateProfile) {
@@ -78,6 +78,8 @@ export class AccountComponent implements OnInit {
       this.accountForm.controls.driverLicenseNumber.enable();
       this.accountForm.controls.notifyByEmail.enable();
       this.accountForm.controls.notifyByMail.enable();
+    } else {
+      this.getDriverAddress();
     }
   }
 
@@ -180,6 +182,16 @@ export class AccountComponent implements OnInit {
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
                 duration: 5000,
+              }
+            );
+          } else if (err.status === 500) {
+            this._snackBar.open(
+              'Unable To Register. Please check that the Driver Licence Number is correct. Note: Please append Zero if the driver licence number is less than 8 digits',
+              'Close',
+              {
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                duration: 10000,
               }
             );
           }
