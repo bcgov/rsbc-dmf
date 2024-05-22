@@ -1,0 +1,50 @@
+<mxfile host="Electron" modified="2024-05-10T22:11:32.114Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="0tEUN5PLP0PKcQWZqZdw" version="24.2.5" type="device">
+  <diagram name="Page-1" id="dgPUxnL9LP32ORX09Mg_">
+    <mxGraphModel dx="1694" dy="1113" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2q2XnQflXqHdECmAihBm-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2q2XnQflXqHdECmAihBm-1" target="2q2XnQflXqHdECmAihBm-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-1" value="User logs in through Keycloak - redirects to the login action" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="210" y="130" width="310" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2q2XnQflXqHdECmAihBm-2" target="2q2XnQflXqHdECmAihBm-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-2" value="login action will lookup the did from keycloak&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;dfp_login&lt;br&gt;- look for dfp_type set to HealthId&amp;nbsp; (HealthID does not exist yet)&lt;/div&gt;&lt;div&gt;- look for a dfp_userid that matches the did from keycloak&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="150" y="280" width="430" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2q2XnQflXqHdECmAihBm-3" target="2q2XnQflXqHdECmAihBm-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-7" value="NO" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2q2XnQflXqHdECmAihBm-6">
+          <mxGeometry x="-0.0667" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="2q2XnQflXqHdECmAihBm-3" target="2q2XnQflXqHdECmAihBm-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-3" value="Login exists?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="510" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="2q2XnQflXqHdECmAihBm-5" target="2q2XnQflXqHdECmAihBm-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="630" />
+              <mxPoint x="290" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-5" value="Add login record" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="520" width="120" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="2q2XnQflXqHdECmAihBm-8" value="show dashboard." style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

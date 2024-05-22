@@ -1,0 +1,66 @@
+<mxfile host="Electron" modified="2024-05-10T22:02:57.096Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.2.5 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="lCNkLIMSleXDCAmoNAsc" version="24.2.5" type="device">
+  <diagram name="Page-1" id="YIxBYGwgkHoChAtr8OqS">
+    <mxGraphModel dx="1384" dy="823" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-1" value="jag.gov.bc.ca/roadsafetybc&lt;br&gt;(apache proxy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007FFF;" parent="1" vertex="1">
+          <mxGeometry x="90" y="210" width="310" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-2" value="&lt;span style=&quot;font-family: RedHatText, Overpass, overpass, helvetica, arial, sans-serif; font-size: 14px; text-align: left; white-space: pre; background-color: rgb(255, 255, 255);&quot;&gt;https://roadsafetybcportal-prod.silver.devops.bcgov/driver-portal&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-family: RedHatText, Overpass, overpass, helvetica, arial, sans-serif; font-size: 14px; text-align: left; white-space: pre; background-color: rgb(255, 255, 255);&quot;&gt;(OpenShift Route)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD966;" parent="1" vertex="1">
+          <mxGeometry x="390" y="460" width="430" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-5" value="Driver Portal UI&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;(Caddy)&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#99FF99;" parent="1" vertex="1">
+          <mxGeometry x="550" y="560" width="170" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-6" value="Driver Portal API&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;(.NET 8)&lt;/div&gt;" style="whiteSpace=wrap;html=1;aspect=fixed;fillColor=#33FFFF;" parent="1" vertex="1">
+          <mxGeometry x="820" y="560" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-8" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="530" as="sourcePoint" />
+            <mxPoint x="530" y="600" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-9" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" target="W_e_Ygjir-Ev0TualUp5-6" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="660" as="sourcePoint" />
+            <mxPoint x="810" y="730" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-10" value="/API&amp;nbsp;&amp;nbsp;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="W_e_Ygjir-Ev0TualUp5-9" vertex="1" connectable="0">
+          <mxGeometry x="-0.3556" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-11" value="&lt;span style=&quot;font-family: RedHatText, Overpass, overpass, helvetica, arial, sans-serif; font-size: 14px; text-align: left; white-space: pre; background-color: rgb(255, 255, 255);&quot;&gt;https://roadsafetybcportal-prod.silver.devops.bcgov/rsbc-dfp-oidc&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-family: RedHatText, Overpass, overpass, helvetica, arial, sans-serif; font-size: 14px; text-align: left; white-space: pre; background-color: rgb(255, 255, 255);&quot;&gt;(OpenShift Route)&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD966;" parent="1" vertex="1">
+          <mxGeometry x="550" y="360" width="430" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-12" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="370" y="300" as="sourcePoint" />
+            <mxPoint x="530" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-13" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="310" as="sourcePoint" />
+            <mxPoint x="460" y="450" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-15" value="" style="endArrow=classic;html=1;rounded=0;" parent="1" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="660" y="330" as="sourcePoint" />
+            <mxPoint x="710" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="W_e_Ygjir-Ev0TualUp5-16" value="oauth-server&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;ISSUER_URI&amp;nbsp; =&amp;nbsp;&lt;span style=&quot;background-color: transparent; font-family: var(--pf-c-code-block__code--FontFamily, inherit); font-size: var(--pf-c-code-block__pre--FontSize); text-align: left;&quot;&gt;https://jag.gov.bc.ca/roadsafetybc/rsbc-dfp-oidc&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; font-family: var(--pf-c-code-block__code--FontFamily, inherit); font-size: var(--pf-c-code-block__pre--FontSize); text-align: left;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; font-family: var(--pf-c-code-block__code--FontFamily, inherit); font-size: var(--pf-c-code-block__pre--FontSize); text-align: left;&quot;&gt;BASE PATH&amp;nbsp; =&amp;nbsp;&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: var(--pf-c-code-block__code--FontFamily, inherit); font-size: var(--pf-c-code-block__pre--FontSize); text-align: left;&quot;&gt;/rsbc-dfp-oidc&lt;/span&gt;&lt;span style=&quot;background-color: transparent; font-family: var(--pf-c-code-block__code--FontFamily, inherit); font-size: var(--pf-c-code-block__pre--FontSize); text-align: left;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="730" y="80" width="520" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="kGN0JNgS_KWZfhk6NVAM-1" value="roadsafetybc.gov.bc.ca&lt;br&gt;(apache proxy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007FFF;" parent="1" vertex="1">
+          <mxGeometry x="20" y="350" width="310" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
