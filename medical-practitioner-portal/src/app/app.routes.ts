@@ -11,7 +11,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
   },
-  { path: 'caseDetails', component: CaseDetailsComponent },
+  { path: 'caseDetails/:caseId', component: CaseDetailsComponent },
   { path: 'account', component: AccountComponent },
   { path: 'getHelp', component: GetHelpComponent },
   { path: 'caseSubmissions', component: CaseSubmissionsComponent },

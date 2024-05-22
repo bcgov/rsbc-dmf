@@ -10,9 +10,7 @@ import { firstValueFrom } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-
 export class AppComponent implements OnInit {
-
   public isLoading: boolean = true;
 
   constructor(
@@ -20,14 +18,17 @@ export class AppComponent implements OnInit {
     private loginService: LoginService,
     private configService: ConfigurationService,
     private router: Router
-  ) { }
+  ) {}
 
   public async ngOnInit(): Promise<void> {
+    console.log('Testing CI');
     try {
       //load the configuration from the server
       await firstValueFrom(this.configService.load());
       //attempt to log in
-      let nextRoute = await firstValueFrom(this.loginService.login(location.pathname.substring(1) || 'dashboard'));
+      let nextRoute = await firstValueFrom(
+        this.loginService.login(location.pathname.substring(1) || 'dashboard')
+      );
 
       //get the user's profile
       await firstValueFrom(this.loginService.getUserProfile());
@@ -36,11 +37,14 @@ export class AppComponent implements OnInit {
       nextRoute = '/' + decodeURIComponent(nextRoute);
 
       // remove base path.
-      if (this.baseHref && nextRoute.substring(0, this.baseHref.length) === this.baseHref) {
+      if (
+        this.baseHref &&
+        nextRoute.substring(0, this.baseHref.length) === this.baseHref
+      ) {
         nextRoute = nextRoute.substring(this.baseHref.length);
       }
 
-      this.router.navigate([nextRoute]).then(() => this.isLoading = false)
+      this.router.navigate([nextRoute]).then(() => (this.isLoading = false));
     } catch (e) {
       console.error(e);
       throw e;

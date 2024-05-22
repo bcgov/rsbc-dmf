@@ -76,3 +76,19 @@
     justify-content: space-between;
     gap: 100px;
   }
+
+  ::ng-deep .mat-mdc-tab-label-container {
+    max-width: 60%;
+}
+
+::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
+
+    border-color:#fcba19 !important;
+}
+
+::ng-deep .mdc-tab__text-label{
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: rgba(51, 51, 51, 0.996078431372549) !important;
+}

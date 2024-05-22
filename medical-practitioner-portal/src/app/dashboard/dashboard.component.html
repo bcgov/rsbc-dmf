@@ -112,7 +112,7 @@
                 <div>
                   <label>DMER Status</label>
                   <div>
-                    <b>{{ searchedCase?.status }}</b>
+                    <b>{{ SubmissionStatusEnum[searchedCase?.status] }}</b>
                   </div>
                 </div>
               </div>
@@ -125,9 +125,11 @@
                 </div>
                 <div>
                   <div>
+                    @if(searchedCase.status == 100000005){
                     <button mat-flat-button class="primaryButton">
                       Start DMER
                     </button>
+                    }
                   </div>
                 </div>
               </div>
@@ -202,7 +204,6 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <!-- <div><button mat-button (click)="clear()">Clear</button></div> -->
       <div>
         <button mat-flat-button class="cancelButton" (click)="clear()">
           Clear
@@ -217,7 +218,9 @@
             <label>DMER Case Id</label>
             <div>
               <b>
-                <a routerLink="/caseDetails" routerLinkActive="active"
+                <a
+                  [routerLink]="['/caseDetails', dmer.caseNumber]"
+                  routerLinkActive="active"
                   >{{ dmer.caseNumber }}
                 </a>
               </b>
@@ -247,7 +250,11 @@
               <div>
                 <label>DMER Status</label>
                 <div>
-                  <b>{{ dmer.dmerStatus }}</b>
+                  @if (dmer && dmer.dmerStatus) {
+                  <b> {{ SubmissionStatusEnum[dmer.dmerStatus] }}</b>
+                  } @else {
+                  {{ " " }}
+                  }
                 </div>
               </div>
             </div>
