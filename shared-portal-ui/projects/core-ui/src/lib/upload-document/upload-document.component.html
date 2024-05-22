@@ -28,14 +28,14 @@
       </div>
       <div style="padding-bottom: 24px">
         <button
-          class="secondaryButton"
+          class="primaryButton"
           mat-flat-button
           (click)="openUploadFile()"
         >
           Upload File
         </button>
       </div>
-      <!-- @if(showUpload) {
+      @if(showUpload) {
       <div class="fileUpload">
         <b> Upload Your File</b>
         <br />
@@ -46,7 +46,7 @@
         File button Certain documents cannot be uploaded (e.g., example here).
         Learn how to submit additional documentation.
 
-        <div style="padding-top: 24px">
+        <!-- <div style="padding-top: 24px">
           <mat-form-field appearance="outline" style="width: 350px">
             <mat-label>Select Document Type</mat-label>
             <mat-select
@@ -63,9 +63,9 @@
             <mat-error>This Field is required</mat-error>
             }
           </mat-form-field>
-        </div>
+        </div> -->
 
-        <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+        <!-- <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
           <ngx-dropzone-label
             ><div>
               <mat-icon> file_present </mat-icon>
@@ -93,26 +93,22 @@
             By checking this box, I confirm that I am submitting an unaltered
             copy of documentation provided by a medical professional.
           </label>
-        </div>
+        </div> -->
 
-        <div class="uploadbutton">
-          <button
-            mat-flat-button
-            class="secondaryButton"
-            (click)="fileUpload()"
-          >
+        <!-- <div class="uploadbutton">
+          <button mat-flat-button class="primaryButton" (click)="fileUpload()">
             Upload File
           </button>
           <button
             mat-flat-button
-            class="primaryButton"
+            class="cancelButton"
             (click)="closeUploadFile()"
           >
             Cancel
           </button>
-        </div>
+        </div> -->
       </div>
-      } -->
+      }
     </div>
   </div>
 </div>

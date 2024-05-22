@@ -123,9 +123,7 @@
                     <b>{{ searchedCase?.driverBirthDate }}</b>
                   </div>
                 </div>
-
                 <div>
-                  <label></label>
                   <div>
                     <button mat-flat-button class="primaryButton">
                       Start DMER
@@ -212,16 +210,17 @@
       </div>
     </div>
     <div>
+      @for (dmer of practitionerDMERList; track dmer.caseNumber){
       <mat-card style="margin-bottom: 24px">
         <mat-card-content class="dmer-details">
           <div>
             <label>DMER Case Id</label>
             <div>
-              <b
-                ><a routerLink="/caseDetails" routerLinkActive="active"
-                  >A71267137</a
-                ></b
-              >
+              <b>
+                <a routerLink="/caseDetails" routerLinkActive="active"
+                  >{{ dmer.caseNumber }}
+                </a>
+              </b>
             </div>
             <div>View Case Details</div>
           </div>
@@ -230,35 +229,36 @@
               <div>
                 <label>Patient's Name</label>
                 <div>
-                  <b>Rahul Minto</b>
+                  <b>{{ dmer.fullName }}</b>
                 </div>
               </div>
               <div>
                 <label>Date of Birth</label>
                 <div>
-                  <b>May 13, 1952</b>
+                  <b>{{ dmer.birthday }}</b>
                 </div>
               </div>
               <div>
                 <label>DMER Type</label>
                 <div>
-                  <b>Suspected Medical Condition</b>
+                  <b>{{ dmer.dmerType }}</b>
                 </div>
               </div>
               <div>
                 <label>DMER Status</label>
                 <div>
-                  <b>Required - Unclaimed</b>
+                  <b>{{ dmer.dmerStatus }}</b>
                 </div>
               </div>
             </div>
 
             <div class="dmer-details-row-1">
-              This needs to be submitted by DATE HERE.
+              This needs to be submitted by {{ dmer.complianceDate }}.
             </div>
           </div>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </div>
 </div>

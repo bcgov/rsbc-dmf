@@ -98,6 +98,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
             // get driver info
             var driverInfoRequest = new DriverInfoRequest();
+            if (userRegistration.DriverLicenseNumber.Length < 8)
+            {
+                var missingNumbers = string.Join("", Enumerable.Range(0,  8 - userRegistration.DriverLicenseNumber.Length).Select(i => 0).ToArray());
+                userRegistration.DriverLicenseNumber = $"{missingNumbers}{userRegistration.DriverLicenseNumber}";
+            }
+
             driverInfoRequest.DriverLicence = userRegistration.DriverLicenseNumber;
             var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(driverInfoRequest);
 

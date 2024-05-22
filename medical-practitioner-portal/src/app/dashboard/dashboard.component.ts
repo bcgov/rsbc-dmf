@@ -1,6 +1,7 @@
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
+  OnInit,
   ViewChild,
   signal,
 } from '@angular/core';
@@ -22,7 +23,8 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
-import { CasesService } from '../shared/api/services';
+import { CasesService, DocumentService } from '../shared/api/services';
+import { CaseDocument } from '../shared/api/models';
 
 interface Status {
   value: string;
@@ -53,7 +55,7 @@ interface Status {
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
   status: Status[] = [
     { value: 'allStatus', viewValue: 'All Status' },
     { value: 'notRequested', viewValue: 'Not Requested' },
@@ -70,16 +72,27 @@ export class DashboardComponent {
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
   public searchedCase: any | null = {};
+  public practitionerDMERList: CaseDocument[] = [];
+
+
+ 
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
     private viewportScroller: ViewportScroller,
-    private casesService: CasesService
+    private casesService: CasesService,
+    private documentService : DocumentService
   ) {}
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
     this.viewportScroller.scrollToAnchor(elementId);
+  }
+
+  ngOnInit(): void {
+    this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
+      this.practitionerDMERList = data;
+    });
   }
 
   searchDmerCase(): void {
@@ -102,6 +115,8 @@ export class DashboardComponent {
     this.prevSearchBox = this.searchBox.value as string;
     this.showSearchResults = true;
   }
+
+
 
   searchCases() {
     console.log('search cases');
