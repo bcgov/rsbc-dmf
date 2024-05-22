@@ -25,6 +25,8 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument } from '../shared/api/models';
+import { SubmissionStatusEnum } from '../app.model';
+import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
 
 interface Status {
   value: string;
@@ -55,7 +57,9 @@ interface Status {
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
+  SubmissionStatusEnum = SubmissionStatusEnum;
+
   status: Status[] = [
     { value: 'allStatus', viewValue: 'All Status' },
     { value: 'notRequested', viewValue: 'Not Requested' },
@@ -74,14 +78,11 @@ export class DashboardComponent implements OnInit{
   public searchedCase: any | null = {};
   public practitionerDMERList: CaseDocument[] = [];
 
-
- 
-
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
-    private documentService : DocumentService
+    private documentService: DocumentService
   ) {}
 
   public onClick(event: any, elementId: string): void {
@@ -90,9 +91,11 @@ export class DashboardComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
-      this.practitionerDMERList = data;
-    });
+    this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
+
+    // this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
+    //   this.practitionerDMERList = data;
+    // });
   }
 
   searchDmerCase(): void {
@@ -115,8 +118,6 @@ export class DashboardComponent implements OnInit{
     this.prevSearchBox = this.searchBox.value as string;
     this.showSearchResults = true;
   }
-
-
 
   searchCases() {
     console.log('search cases');
