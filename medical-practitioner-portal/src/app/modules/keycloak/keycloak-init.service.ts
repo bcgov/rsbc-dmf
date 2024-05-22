@@ -1,10 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
-
-import { APP_CONFIG, AppConfig } from '@app/app.config';
-
 import { AuthRoutes } from '../../features/auth/auth.routes';
 import { ConfigurationService } from '../../shared/services/configuration.service';
 
@@ -13,7 +9,6 @@ import { ConfigurationService } from '../../shared/services/configuration.servic
 })
 export class KeycloakInitService {
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
     private configService: ConfigurationService,
     private router: Router,
     private keycloakService: KeycloakService

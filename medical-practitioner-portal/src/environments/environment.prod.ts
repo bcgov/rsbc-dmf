@@ -8,6 +8,10 @@ export const environment = {
       clientId: 'DMFT-WEBAPP',
     },
     initOptions: {
+      onLoad: 'check-sso',
+      flow: 'standard',
+      responseMode: 'fragment',
+      pkceMethod: 'S256',
     },
-    },
+  },
 };
