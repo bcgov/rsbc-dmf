@@ -6,6 +6,7 @@ import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 import { AuthRoutes } from '../../features/auth/auth.routes';
+import { ConfigurationService } from '../../shared/services/configuration.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +14,7 @@ import { AuthRoutes } from '../../features/auth/auth.routes';
 export class KeycloakInitService {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
+    private configService: ConfigurationService,
     private router: Router,
     private keycloakService: KeycloakService
   ) {}
@@ -35,6 +37,7 @@ export class KeycloakInitService {
   }
 
   private getKeycloakOptions(): KeycloakOptions {
-    return this.config.keycloakConfig;
+    console.info('config', this.configService.getKeycloakOptions());
+    return this.configService.getKeycloakOptions();
   }
 }

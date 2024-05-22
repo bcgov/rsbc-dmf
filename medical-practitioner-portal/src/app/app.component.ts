@@ -4,7 +4,8 @@ import { HeaderComponent } from './Layout/header/header.component';
 import { FooterComponent } from './Layout/footer/footer.component';
 import { NavMenuComponent } from './Layout/nav-menu/nav-menu.component';
 import { firstValueFrom } from 'rxjs';
-import { LoginService } from './shared/services/login.service';
+import { AuthService } from './features/auth/services/auth.service';
+import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
 
 @Component({
   selector: 'app-root',
@@ -20,12 +21,19 @@ import { LoginService } from './shared/services/login.service';
 export class AppComponent {
   title = 'medical-practitioner-portal';
 
-  constructor(private loginService: LoginService) { }
+  constructor(private authService: AuthService) { }
 
   public async ngOnInit(): Promise<void> {
     try {
       //attempt to log in
-      let nextRoute = await firstValueFrom(this.loginService.login(location.pathname.substring(1) || 'dashboard'));
+      this.authService.isLoggedIn().subscribe((isLoggedIn) => {
+        console.log("isLoggedIn", isLoggedIn);
+        if (!isLoggedIn) {
+          this.authService.login({
+            idpHint: IdentityProvider.BCSC,
+          })
+        }
+    });
 
       //get the user's profile
       await firstValueFrom(this.loginService.getUserProfile());
