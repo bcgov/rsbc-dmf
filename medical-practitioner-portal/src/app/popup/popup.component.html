@@ -1,0 +1,14 @@
+<div mat-dialog-content>
+  <iframe
+    #iframe
+    [src]="getSourceURL()"
+    height="800"
+    width="100%"
+    title="Demographic Info in CHEFS"
+    (load)="iframeLoaded()"
+  >
+  </iframe>
+</div>
+<!-- <div mat-dialog-actions>
+  <button mat-button (click)="closePopup()">Close</button>
+</div> -->
