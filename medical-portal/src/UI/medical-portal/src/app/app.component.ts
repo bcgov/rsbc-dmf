@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    console.log('Testing CI');
     try {
       //load the configuration from the server
       await firstValueFrom(this.configService.load());
