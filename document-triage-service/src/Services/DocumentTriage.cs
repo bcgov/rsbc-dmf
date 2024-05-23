@@ -106,6 +106,7 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
             // if the flags were received, update the practitioner.
             _logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
 
+            /*
             SetCasePractitionerClinicRequest scpcr = new SetCasePractitionerClinicRequest()
             {
                 CaseId = request.Id,
@@ -116,7 +117,7 @@ namespace Pssg.Rsbc.Dmf.DocumentTriage.Services
 
             _logger.LogInformation($"SetCasePractitionerClinic Result is {setCpcResult.ResultStatus}");
 
-
+            */
 
             result.ResultStatus = ResultStatus.Success;
             result.ErrorDetail = "";

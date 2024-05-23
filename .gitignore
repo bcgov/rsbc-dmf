@@ -24,3 +24,4 @@
 
 /medical-portal/src/PidpAdpater.API/PidpAdpater.API/bin
 /medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj
+*.dtmp

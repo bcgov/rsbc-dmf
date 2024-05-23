@@ -36,6 +36,7 @@ using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Pssg.Interfaces;
 using Newtonsoft.Json.Serialization;
+using Rsbc.Dmf.IcbcAdapter.BackgroundWorkItem;
 
 namespace Rsbc.Dmf.IcbcAdapter
 {
@@ -121,7 +122,10 @@ namespace Rsbc.Dmf.IcbcAdapter
             {
                 services.AddSingleton<IAuthorizationHandler, AllowAnonymous>();
             }
-            
+
+            services.AddHostedService<QueuedHostedService>();
+            services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
             services.AddAuthorization();
 
             // basic REST controller for Dynamics.
