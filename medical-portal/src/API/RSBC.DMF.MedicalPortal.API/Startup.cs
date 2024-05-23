@@ -50,64 +50,65 @@ namespace RSBC.DMF.MedicalPortal.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO add user secrets to configuration settings
+            // TODO change this later, this is not standard configuration, used driver-portal as a reference
             var config = this.InitializeConfiguration(services);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication()
+            //services.AddAuthentication("introspection")
                 //JWT tokens handling
-                .AddJwtBearer("token", options =>
-                {
-                    options.BackchannelHttpHandler = new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
+            //.AddJwtBearer("token", options =>
+            //{
+            //    options.BackchannelHttpHandler = new HttpClientHandler
+            //    {
+            //        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            //    };
 
-                    configuration.GetSection("auth:token").Bind(options);
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateAudience = false
-                    };
+            //    configuration.GetSection("auth:token").Bind(options);
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateAudience = false
+            //    };
 
-                    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
-                    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
-                    options.ForwardDefaultSelector = ctx =>
-                    {
-                        var authHeader = (string)ctx.Request.Headers["Authorization"];
-                        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
-                        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
-                    };
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            ctx.Principal = await userService.Login(ctx.Principal);
-                            ctx.Success();
-                        }
-                    };
-                })
+            //    options.TokenValidationParameters.ValidTypes = new[] { "at+jwt" };
+            //    // if token does not contain a dot, it is a reference token, forward to introspection auth scheme
+            //    options.ForwardDefaultSelector = ctx =>
+            //    {
+            //        var authHeader = (string)ctx.Request.Headers["Authorization"];
+            //        if (string.IsNullOrEmpty(authHeader) || !authHeader.StartsWith("Bearer ")) return null;
+            //        return authHeader.Substring("Bearer ".Length).Trim().Contains(".") ? null : "introspection";
+            //    };
+            //    options.Events = new JwtBearerEvents
+            //    {
+            //        OnTokenValidated = async ctx =>
+            //        {
+            //            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+            //            ctx.Principal = await userService.Login(ctx.Principal);
+            //            ctx.Success();
+            //        }
+            //    };
+            //})
                 //reference tokens handling
-                .AddOAuth2Introspection("introspection", options =>
-                {
-                    options.EnableCaching = true;
-                    options.CacheDuration = TimeSpan.FromMinutes(1);
-                    configuration.GetSection("auth:introspection").Bind(options);
-                    options.Events = new OAuth2IntrospectionEvents
-                    {
-                        OnTokenValidated = async ctx =>
-                        {
-                            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                            ctx.Principal = await userService.Login(ctx.Principal);
-                            ctx.Success();
-                        },
-                        OnUpdateClientAssertion =
-                        async ctx =>
-                        {
-                            await Task.CompletedTask;
-                        }
-                    };
-                });
+            //.AddOAuth2Introspection("introspection", options =>
+            //{
+            //    options.EnableCaching = true;
+            //    options.CacheDuration = TimeSpan.FromMinutes(1);
+            //    configuration.GetSection("auth:introspection").Bind(options);
+            //    options.Events = new OAuth2IntrospectionEvents
+            //    {
+            //        OnTokenValidated = async ctx =>
+            //        {
+            //            var userService = ctx.HttpContext.RequestServices.GetRequiredService<IUserService>();
+            //            ctx.Principal = await userService.Login(ctx.Principal);
+            //            ctx.Success();
+            //        },
+            //        OnUpdateClientAssertion =
+            //        async ctx =>
+            //        {
+            //            await Task.CompletedTask;
+            //        }
+            //    };
+            //})
+            //.AddIdentityCookies();
 
             //services.AddAuthorization(options =>
             //{
@@ -131,17 +132,34 @@ namespace RSBC.DMF.MedicalPortal.API
                     };
                 });
 
-            //services.AddAuthorization(options =>
+            services.AddAuthorization(options =>
+            {
+                // TODO enable authentication, confirm by using invalide clientsecret
+                // the old oauth will not work with keycloak, need to update or use OIDC instead
+                // oauth authentication
+                //options.AddPolicy("OAuth", policy =>
             //{
-            //    options.AddPolicy(Policies.MedicalPractitioner, policy => policy
-            //    .RequireAuthenticatedUser()
-            //    .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
+                //    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection");
+                //    //policy.RequireClaim("scope", "doctors-portal-api");
+                //});
 
-            //    options.AddPolicy(Policies.Enrolled, policy => policy
-            //        .RequireAuthenticatedUser()
-            //        .RequireRole(Claims.IdentityProvider, Roles.Dmft));
+                // TODO uncomment this and add it to all policies, also update the user secrets scope
+                // check if we need scope medical-portal-ui, if not, rename to medical-portal
+                //policy.RequireClaim("scope", "medical-portal-api");
 
-            //});
+                options.AddPolicy(
+                    Policies.MedicalPractitioner, 
+                    policy => policy
+                        .RequireAuthenticatedUser()
+                        .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa)
+                );
+
+                options.AddPolicy(Policies.Enrolled, policy => policy
+                    .RequireAuthenticatedUser()
+                    // TODO uncomment to validate the user is enrolled, we may need to make sure that the claim name has not changed since POC
+                    //.RequireRole(Claims.IdentityProvider, Roles.Dmft)
+                    );
+            });
 
             services.AddControllers(options =>
             {
