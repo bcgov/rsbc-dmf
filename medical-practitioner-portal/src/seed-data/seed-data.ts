@@ -1,4 +1,4 @@
-import { SubmissionStatusEnum } from '../app/app.model';
+import { TranslatDmerStatus } from '../app/app.model';
 import { CaseDocument } from '../app/shared/api/models';
 
 export const PractitionerDMERList_SEED_DATA: CaseDocument[] = [
