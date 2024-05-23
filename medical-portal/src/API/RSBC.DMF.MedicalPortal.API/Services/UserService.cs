@@ -26,10 +26,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
     public record UserContext
     {
+        // OneHealth id
         public string Id { get; set; }
+        // Dynamics login ids matching the above OneHealth id
+        public List<string> LoginIds { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }        
-    public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
+        public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
         public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
         public string Email { get; set; }
 
@@ -67,6 +70,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             return await Task.FromResult(new UserContext
             {
                 Id = user.FindFirstValue(Claims.PreferredUsername),
+                LoginIds = user.FindFirstValue(Claims.LoginIds)?.Split(',').ToList(),
                 FirstName = user.FindFirstValue(Claims.GivenName),
                 LastName = user.FindFirstValue(Claims.FamilyName),
                 Email = user.FindFirstValue(ClaimTypes.Email),

@@ -1,3 +1,23 @@
+<div>
+  <mat-card style="margin-top: 0px">
+    <mat-card-content class="driver-details">
+      <div>
+        <label>First Name</label>
+        <div>
+          <b>{{ caseDetails?.fullName }}</b>
+        </div>
+      </div>
+      <div>
+        <label>SUR</label>
+        <div><b>Minto</b></div>
+      </div>
+      <div>
+        <label>Driver’s License Number</label>
+        <div><b>A71267137</b></div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
 <div class="container">
   <div class="list">
     <h2>Active Case Details</h2>
@@ -5,24 +25,26 @@
       <mat-card-content class="dmer-details">
         <div>
           <label>DMER Case Id</label>
-          <div><b>A71267137</b></div>
+          <div>
+            <b>{{ caseDetails?.caseNumber }}</b>
+          </div>
         </div>
         <div>
           <label>DMER Type</label>
           <div>
-            <b>Scheduled Age</b>
+            <b>{{ caseDetails?.dmerType }}</b>
           </div>
         </div>
         <div>
           <label>DMER Status</label>
           <div>
-            <b>Required- Unclaimed</b>
+            <b>{{ caseDetails?.dmerStatus }}</b>
           </div>
         </div>
         <div>
           <label>Submission Date</label>
           <div>
-            <b>May 13, 1952</b>
+            <b>{{ caseDetails?.complianceDate }}</b>
           </div>
         </div>
         <div>
@@ -32,7 +54,6 @@
           </div>
         </div>
         <div>
-          <label></label>
           <div>
             <button mat-flat-button class="primaryButton">Start DMER</button>
           </div>
@@ -116,12 +137,54 @@
 
     <div>
       <h2>Case Documentation</h2>
-      <div>
+      <!-- <div>
         <app-upload-document></app-upload-document>
-      </div>
+      </div> -->
+
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Submission Requirements">
+          <!-- <app-upload-document></app-upload-document> -->
+          <app-submission-requirements></app-submission-requirements>
+          <div>
+            <mat-card>
+              <mat-card-content class="submissionRequirement">
+                <div style="grid-area: A">
+                  <label>Due Date</label>
+                  <div>
+                    <b>May 2, 2022</b>
+                  </div>
+                </div>
+                <div style="grid-area: B">
+                  <label>Submission Type</label>
+                  <div>
+                    <b>Driver Medical Examination Report</b>
+                  </div>
+                </div>
+                <div style="grid-area: C">
+                  <label>Description</label>
+                  <div>
+                    <b>Description</b>
+                  </div>
+                </div>
+                <div style="grid-area: D">
+                  <div>
+                    <button mat-flat-button class="primaryButton">
+                      Start DMER
+                    </button>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </mat-tab>
+        <mat-tab label="Driver Submissions">
+          <app-case-submissions></app-case-submissions>
+        </mat-tab>
+      </mat-tab-group>
     </div>
-    <div>
-      <h2>Definations</h2>
+
+    <div class="list" id="definitions">
+      <h2>Definitions</h2>
       <div class="accordion-btn-container">
         <a class="accordion-btn show-btn" (click)="accordion.openAll()"
           >Expand All</a
@@ -198,7 +261,7 @@
                 >Document subtype</mat-panel-title
               >
             </mat-expansion-panel-header>
-           <p>Upwards of 90 subtypes</p>
+            <p>Upwards of 90 subtypes</p>
           </mat-expansion-panel>
           <mat-expansion-panel>
             <mat-expansion-panel-header class="panel-header">

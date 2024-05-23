@@ -4,6 +4,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  input,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
@@ -23,8 +24,14 @@ import { EligibleLicenseClassComponent } from '../../../../shared-portal-ui/proj
 import { SubmissionTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
 import { SubmissionStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
 import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
-import {DmerStatusComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component'
-import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component'
+import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
+import { UploadDocumentComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component';
+import { MatButtonModule } from '@angular/material/button';
+import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
+import { CaseDocument } from '../shared/api/models';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CaseSubmissionsComponent } from '../../case-submissions/case-submissions.component';
+import { SubmissionRequirementsComponent } from '../../submission-requirements/submission-requirements.component';
 
 @Component({
   selector: 'app-case-details',
@@ -34,6 +41,7 @@ import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/cor
     MatStepperModule,
     MatInputModule,
     MatIconModule,
+    MatButtonModule,
     MatExpansionModule,
     CaseTypeComponent,
     CaseStatusComponent,
@@ -44,8 +52,10 @@ import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/cor
     SubmissionTypeComponent,
     SubmissionStatusComponent,
     LetterTopicComponent,
-    UploadDocumentComponent
-
+    UploadDocumentComponent,
+    MatTabsModule,
+    CaseSubmissionsComponent,
+    SubmissionRequirementsComponent
   ],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
@@ -59,6 +69,9 @@ import {UploadDocumentComponent} from '../../../../shared-portal-ui/projects/cor
   ],
 })
 export class CaseDetailsComponent implements OnInit {
+  caseId = input();
+  caseDetails: CaseDocument | undefined;
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
   @ViewChild('stepper') stepper!: MatStepper;
@@ -79,6 +92,10 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    console.log(this.caseId());
+    this.caseDetails = PractitionerDMERList_SEED_DATA.find(
+      (c) => c.caseNumber === this.caseId()
+    );
     // this.caseManagementService
     //   .getMostRecentCase(this.loginService.userProfile?.id as string)
     //   .subscribe((recentCase) => {

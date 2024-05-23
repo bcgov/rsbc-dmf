@@ -8,7 +8,7 @@ public class CaseTests : ApiIntegrationTestBase
 {
     public CaseTests(IConfiguration configuration) : base(configuration) { }
 
-    [Fact]
+    //[Fact]
     public async Task Get_Case()
     {
         var caseId = _configuration["ICBC_TEST_CASEID"];

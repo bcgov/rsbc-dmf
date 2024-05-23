@@ -206,7 +206,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management System (CMS) Adapter 
 
-            services.AddCaseManagementAdapterClient(configuration.GetSection("cms"));
+            services.AddCaseManagementAdapterClient(configuration);
 
             // Add Document Storage Adapter
 
@@ -251,6 +251,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddAutoMapperSingleton();
         }
 
         private Task OnTokenValidatedAsync(Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContext context)

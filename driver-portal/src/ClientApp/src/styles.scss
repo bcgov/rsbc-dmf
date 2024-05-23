@@ -326,18 +326,38 @@ a.accordion-btn {
   color: #003366;
 }
 
-button {
-  border: 2px solid #003366;
-  color: #003366;
-}
 
-button:hover {
-  color: #fff;
+.mat-mdc-button-base.primaryButton {
+  border-width: 0px;
+  width: 170px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  color: #f2f2f2;
   background-color: #003366;
+
+  --mdc-filled-button-label-text-color: #f2f2f2;
+  --mdc-filled-button-container-color: #003366;
 }
 
-button:disabled:hover {
-  border: 2px solid #003366;
-  color: #003366;
-  background-color: #fff;
+.mat-mdc-button-base.primaryButton:disabled, button[disabled] {
+  border: 1px solid #999999;
+  background: rgb(217, 228, 255);
+  color: rgb(0, 0, 0);
 }
+
+.mat-mdc-button-base.cancelButton {
+  border-width: 0px;
+  width: 170px;
+  height: 49px;
+  font-family: "BC Sans Bold", "BC Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 16px;
+  border: 2px solid #003366;
+  background-color: #ffff;
+  color: #003366;
+}
+

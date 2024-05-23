@@ -31,48 +31,12 @@ mat-card {
   }
 }
 
-button:hover {
-  color: #fff;
-  background-color: #003366;
-}
-
-.primaryButton {
-  border-width: 0px;
-  width: 170px;
-  height: 49px;
-  font-family: "BC Sans Bold", "BC Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 16px;
-  border: 2px solid #003366;
-  color: #003366;
-}
-
-.secondaryButton {
-  border-width: 0px;
-  width: 170px;
-  height: 49px;
-  font-family: "BC Sans Bold", "BC Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  font-size: 16px;
-  border: 2px solid #003366;
-  background-color: #003366;
-  color: #fff;
-}
-
-.secondaryButton :disabled, button[disabled] {
-  border: 1px solid #999999;
-  background-color: #cccccc;
-  color: #666666;
-}
-
 .fileUpload {
   border-width: 0px;
   left: 0px;
   top: 0px;
   width: 960px;
-  height: 600px;
+  height: 625px;
   background: inherit;
   background-color: rgba(255, 255, 255, 1);
   box-sizing: border-box;

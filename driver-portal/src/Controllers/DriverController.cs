@@ -51,7 +51,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 var replyItemsExcludingUploaded = reply.Items.Where(i => i.SubmittalStatus != "Uploaded");
                 foreach (var item in replyItemsExcludingUploaded)
                 {
-                    var document = _mapper.Map<Document>(item);
+                    var document = _mapper.Map<ViewModels.Document>(item);
 
                     switch (document.SubmittalStatus)
                     {
@@ -107,7 +107,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// </summary>
         /// <returns>IEnumerable&lt;Document&gt;</returns>
         [HttpGet("AllDocuments")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetAllDocuments")]
@@ -123,7 +123,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 var replyItemsWithDocuments = reply.Items
                     .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
                     .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent" );
-                var result = _mapper.Map<List<Document>>(replyItemsWithDocuments);
+                var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
 
                 // sort the documents
                 if (result.Count > 0)
@@ -139,10 +139,9 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
-
        
         [HttpGet("info")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Document>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetHistory))]

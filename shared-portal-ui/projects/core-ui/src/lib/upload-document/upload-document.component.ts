@@ -6,16 +6,15 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  MatFormFieldModule,
-} from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 //import { MatIconModule } from '@angular/material/icon';
 //import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton } from '@angular/material/button';
 //import { HttpClient } from '@angular/common/http';
 //import { ApiConfiguration } from '../shared/api/api-configuration';
 
@@ -23,7 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   selector: 'app-upload-document',
   standalone: true,
   imports: [
-    MatButtonModule,
+    MatButton,
     ReactiveFormsModule,
     FormsModule,
     MatFormFieldModule,
@@ -31,6 +30,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatSelectModule,
     MatOptionModule,
     //NgxDropzoneModule,
+    MatIcon,
     //MatIconModule,
   ],
   templateUrl: './upload-document.component.html',

@@ -1,4 +1,10 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  OnInit,
+  ViewChild,
+  signal,
+} from '@angular/core';
 
 import { CommonModule, ViewportScroller } from '@angular/common';
 
@@ -13,10 +19,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import {DmerStatusComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component'
-import {DmerTypeComponent} from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component'
+import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
+import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
+import { CasesService, DocumentService } from '../shared/api/services';
+import { CaseDocument } from '../shared/api/models';
+import { SubmissionStatusEnum } from '../app.model';
+import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
 
 interface Status {
   value: string;
@@ -35,18 +45,21 @@ interface Status {
     MatSelectModule,
     FormsModule,
     CommonModule,
+    ReactiveFormsModule,
     RouterLink,
     RouterLinkActive,
     DmerStatusComponent,
-    DmerTypeComponent
+    DmerTypeComponent,
   ],
-  
+
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  SubmissionStatusEnum = SubmissionStatusEnum;
+
   status: Status[] = [
     { value: 'allStatus', viewValue: 'All Status' },
     { value: 'notRequested', viewValue: 'Not Requested' },
@@ -59,24 +72,59 @@ export class DashboardComponent {
 
   selectedStatus: string = 'allStatus';
   showSearchResults = false;
+  public searchBox = new FormControl('');
+  public prevSearchBox: string = '';
+  public searchCasesInput: string = '';
+  public searchedCase: any | null = {};
+  public practitionerDMERList: CaseDocument[] = [];
+
   @ViewChild(MatAccordion) accordion!: MatAccordion;
-  constructor(private viewportScroller: ViewportScroller) {}
+  constructor(
+    private viewportScroller: ViewportScroller,
+    private casesService: CasesService,
+    private documentService: DocumentService
+  ) {}
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
     this.viewportScroller.scrollToAnchor(elementId);
   }
+
+  ngOnInit(): void {
+    this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
+
+    // this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
+    //   this.practitionerDMERList = data;
+    // });
+  }
+
+  searchDmerCase(): void {
+    console.log('search DMER Case');
+    if (
+      this.prevSearchBox === '' ||
+      this.prevSearchBox !== this.searchBox.value
+    ) {
+      let searchParams: Parameters<CasesService['apiCasesCaseIdGet$Json']>[0] =
+        {
+          caseId: this.searchBox.value as string,
+        };
+      this.casesService
+        .apiCasesCaseIdGet$Json(searchParams)
+        .subscribe((dmerCase) => {
+          if (dmerCase) this.searchedCase = dmerCase;
+          console.log(searchParams, this.searchedCase);
+        });
+    }
+    this.prevSearchBox = this.searchBox.value as string;
+    this.showSearchResults = true;
+  }
+
   searchCases() {
     console.log('search cases');
   }
 
   clear() {
     console.log('clear');
-  }
-
-  searchDmerCase() {
-    console.log('search DMER Case');
-    this.showSearchResults = true;
   }
 
   clearResults() {

@@ -12,9 +12,9 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["ServerUrl"];
-            var clientSecret = config["ClientSecret"];
-            var validateServerCertificate = config.GetValue("ValidateServerCertificate", true);
+            var serviceUrl = config["CMS:ServerUrl"];
+            var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
+            var validateServerCertificate = config.GetValue("CMS:ValidateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -56,6 +56,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                         services.AddTransient(_ => new CaseManager.CaseManagerClient(channel));
                         services.AddTransient(_ => new UserManager.UserManagerClient(channel));
+                        services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                     }
                     else
                     {
