@@ -3,7 +3,6 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './Layout/header/header.component';
 import { FooterComponent } from './Layout/footer/footer.component';
 import { NavMenuComponent } from './Layout/nav-menu/nav-menu.component';
-import { firstValueFrom } from 'rxjs';
 import { AuthService } from './features/auth/services/auth.service';
 import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
 
@@ -30,13 +29,11 @@ export class AppComponent {
         console.log("isLoggedIn", isLoggedIn);
         if (!isLoggedIn) {
           this.authService.login({
-            idpHint: IdentityProvider.BCSC,
+            idpHint: IdentityProvider.BCSC
           })
         }
     });
 
-      //get the user's profile
-      await firstValueFrom(this.loginService.getUserProfile());
     } catch (e) {
       console.error(e);
       throw e;
