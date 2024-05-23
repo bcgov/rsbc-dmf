@@ -20,6 +20,7 @@ using Org.BouncyCastle.Bcpg;
 using Microsoft.Extensions.Caching.Memory;
 using Pssg.Interfaces.IcbcModels;
 using Serilog;
+using Rsbc.Dmf.IcbcAdapter.BackgroundWorkItem;
 
 namespace Rsbc.Dmf.IcbcAdapter.Controllers
 {
@@ -65,16 +66,18 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<DriverHistoryController> _logger;
         private readonly IIcbcClient _icbcClient;
+        private readonly IBackgroundTaskQueue _backgroundWorkerQueue;
 
         private readonly IMemoryCache _cache;
 
         private readonly CaseManager.CaseManagerClient _caseManagerClient;
 
-        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IMemoryCache cache, IIcbcClient icbcClient)
+        public IcbcController(ILogger<DriverHistoryController> logger, IConfiguration configuration, CaseManager.CaseManagerClient caseManagerClient, IMemoryCache cache, IIcbcClient icbcClient, IBackgroundTaskQueue backgroundTaskQueue)
         {
             _configuration = configuration;
             _logger = logger;
             _icbcClient = icbcClient;
+            _backgroundWorkerQueue = backgroundTaskQueue;
             _caseManagerClient = caseManagerClient;
             _cache = cache; 
         }
@@ -90,10 +93,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
         [SwaggerResponse(500, "An unexpected server error occurred while processing. Please retry.")]
         public ActionResult CreateCandidates([FromBody] List<NewCandidate> newCandidates)
         {
-            if (!string.IsNullOrEmpty(_configuration["DISABLE_CREATE_CANDIDATE"]))
-            {
-                return Ok();
-            }
+            _backgroundWorkerQueue.QueueBackgroundWorkItem(async token =>
+            {                
 
             //check for duplicates; if there is an existing case then do not create a new one
 
@@ -272,6 +273,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Controllers
                 _logger.LogInformation($"Received Candidate {item.DlNumber}");
 
             }
+
+            });
 
             return Ok();
         }
