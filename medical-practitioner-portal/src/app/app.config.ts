@@ -2,15 +2,17 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApiModule } from './shared/api/api.module';
 import { environment } from '../environments/environment';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
+import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideAnimationsAsync(), provideHttpClient(),
+  providers: [provideRouter(routes), provideAnimationsAsync(),
+    provideHttpClient(withInterceptors([BearerTokenInterceptor])),
     importProvidersFrom(
       KeycloakModule,
       PermissionsModule.forRoot(),
