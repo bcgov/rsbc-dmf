@@ -25,9 +25,11 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument } from '../shared/api/models';
+import { TranslatDmerStatus } from '../app.model';
+import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
 
 interface Status {
-  value: string;
+  value: number;
   viewValue: string;
 }
 @Component({
@@ -55,33 +57,34 @@ interface Status {
   viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent implements OnInit {
+  SubmissionStatusEnum = TranslatDmerStatus;
+
   status: Status[] = [
-    { value: 'allStatus', viewValue: 'All Status' },
-    { value: 'notRequested', viewValue: 'Not Requested' },
-    { value: 'requiredUnclaimed', viewValue: 'Required - Unclaimed' },
-    { value: 'requiredClaimed', viewValue: 'Required - Claimed' },
-    { value: 'submitted', viewValue: 'Submitted' },
-    { value: 'reviewed', viewValue: 'Reviewed' },
-    { value: 'noncomply', viewValue: 'Non-Comply' },
+    { value: 1, viewValue: 'All Status' },
+    { value: 2, viewValue: 'Not Requested' },
+    { value: 3, viewValue: 'Required - Unclaimed' },
+    { value: 4, viewValue: 'Required - Claimed' },
+    { value: 5, viewValue: 'Submitted' },
+    { value: 100000003, viewValue: 'Reviewed' },
+    { value: 100000005, viewValue: 'Non-Comply' },
+    { value: 100000001, viewValue: 'Received' },
   ];
 
-  selectedStatus: string = 'allStatus';
+  selectedStatus: number = 1;
   showSearchResults = false;
   public searchBox = new FormControl('');
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
   public searchedCase: any | null = {};
   public practitionerDMERList: CaseDocument[] = [];
-
-
- 
+  public filteredData: CaseDocument[] = [];
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
-    private documentService : DocumentService
+    private documentService: DocumentService
   ) {}
 
   public onClick(event: any, elementId: string): void {
@@ -90,9 +93,12 @@ export class DashboardComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
-      this.practitionerDMERList = data;
-    });
+    this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
+    this.filteredData = [...this.practitionerDMERList];
+
+    // this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
+    //   this.practitionerDMERList = data;
+    // });
   }
 
   searchDmerCase(): void {
@@ -116,17 +122,29 @@ export class DashboardComponent implements OnInit{
     this.showSearchResults = true;
   }
 
-
-
-  searchCases() {
-    console.log('search cases');
-  }
-
   clear() {
     console.log('clear');
+    this.searchCasesInput = '';
+    this.selectedStatus = 1;
+    this.filterCasesData();
   }
 
   clearResults() {
     this.showSearchResults = false;
+  }
+
+  filterCasesData() {
+    this.filteredData = this.practitionerDMERList.filter((item) => {
+      const matchStatus =
+        this.selectedStatus === 1 || item.dmerStatus === this.selectedStatus;
+
+      const matchCaseNumber =
+        this.searchCasesInput?.length === 0 ||
+        item.caseNumber?.includes(this.searchCasesInput) ||
+        item.fullName?.includes(this.searchCasesInput);
+
+      if (matchStatus && matchCaseNumber) return true;
+      else return false;
+    });
   }
 }

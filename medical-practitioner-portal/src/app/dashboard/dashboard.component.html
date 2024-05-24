@@ -112,7 +112,7 @@
                 <div>
                   <label>DMER Status</label>
                   <div>
-                    <b>{{ searchedCase?.status }}</b>
+                    <b>{{ SubmissionStatusEnum[searchedCase?.status] }}</b>
                   </div>
                 </div>
               </div>
@@ -125,9 +125,11 @@
                 </div>
                 <div>
                   <div>
+                    @if(searchedCase.status == 100000005){
                     <button mat-flat-button class="primaryButton">
                       Start DMER
                     </button>
+                    }
                   </div>
                 </div>
               </div>
@@ -178,12 +180,17 @@
     <div class="filter-dmer">
       <div>
         <mat-form-field class="cases-input" appearance="outline">
-          <input matInput type="text" placeholder="Search by Name or Case ID" />
+          <input
+            matInput
+            type="text"
+            placeholder="Search by Name or Case ID"
+            [(ngModel)]="searchCasesInput"
+          />
           <button
             matSuffix
             mat-icon-button
             aria-label="search"
-            (click)="searchCases()"
+            (click)="filterCasesData()"
           >
             <mat-icon>search</mat-icon>
           </button>
@@ -193,7 +200,11 @@
         <mat-icon class="filter-icon">filter_alt</mat-icon>
         <mat-label style="color: #003366">Filter By: </mat-label>
         <mat-form-field class="status-filter">
-          <mat-select [(ngModel)]="selectedStatus" name="status">
+          <mat-select
+            [(ngModel)]="selectedStatus"
+            name="status"
+            (selectionChange)="filterCasesData()"
+          >
             @for (status of status; track status) {
             <mat-option [value]="status.value">{{
               status.viewValue
@@ -202,7 +213,6 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <!-- <div><button mat-button (click)="clear()">Clear</button></div> -->
       <div>
         <button mat-flat-button class="cancelButton" (click)="clear()">
           Clear
@@ -210,14 +220,16 @@
       </div>
     </div>
     <div>
-      @for (dmer of practitionerDMERList; track dmer.caseNumber){
+      @for (dmer of filteredData; track dmer.caseNumber){
       <mat-card style="margin-bottom: 24px">
         <mat-card-content class="dmer-details">
           <div>
             <label>DMER Case Id</label>
             <div>
               <b>
-                <a routerLink="/caseDetails" routerLinkActive="active"
+                <a
+                  [routerLink]="['/caseDetails', dmer.caseNumber]"
+                  routerLinkActive="active"
                   >{{ dmer.caseNumber }}
                 </a>
               </b>
@@ -226,28 +238,32 @@
           </div>
           <div class="dmer-details-row">
             <div class="dmer-details-row-1">
-              <div>
+              <div class="column-width">
                 <label>Patient's Name</label>
                 <div>
                   <b>{{ dmer.fullName }}</b>
                 </div>
               </div>
-              <div>
+              <div class="column-width">
                 <label>Date of Birth</label>
                 <div>
                   <b>{{ dmer.birthday }}</b>
                 </div>
               </div>
-              <div>
+              <div class="column-width">
                 <label>DMER Type</label>
                 <div>
                   <b>{{ dmer.dmerType }}</b>
                 </div>
               </div>
-              <div>
+              <div class="column-width">
                 <label>DMER Status</label>
                 <div>
-                  <b>{{ dmer.dmerStatus }}</b>
+                  @if (dmer && dmer.dmerStatus) {
+                  <b> {{ SubmissionStatusEnum[dmer.dmerStatus] }}</b>
+                  } @else {
+                  {{ " " }}
+                  }
                 </div>
               </div>
             </div>

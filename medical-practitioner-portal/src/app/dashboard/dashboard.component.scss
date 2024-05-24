@@ -139,14 +139,15 @@ mat-card {
   display: flex;
  flex-direction: row;
  flex: 1;
-  gap: 105px;
+  gap: 125px;
+  
 
 }
 
-a {
-  cursor: pointer;
-  color: #003366;
-  text-decoration: underline;
+
+
+.column-width{
+   width: 150px;
 }
 
 @media only screen and (max-width: 1024px) {
