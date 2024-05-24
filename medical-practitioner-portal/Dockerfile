@@ -5,7 +5,7 @@ COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
 
 WORKDIR /app/shared-portal-ui
 
-RUN npm install 
+RUN npm install --force
 
 WORKDIR /app/medical-practitioner-portal
 
