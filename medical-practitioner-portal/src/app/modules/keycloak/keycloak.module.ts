@@ -1,7 +1,5 @@
 import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
-
 import { KeycloakAngularModule } from 'keycloak-angular';
-
 import { KeycloakInitService } from './keycloak-init.service';
 
 export function keycloakFactory(

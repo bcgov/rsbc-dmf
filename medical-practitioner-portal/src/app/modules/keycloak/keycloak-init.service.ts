@@ -1,8 +1,10 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { AuthRoutes } from '../../features/auth/auth.routes';
 import { ConfigurationService } from '../../shared/services/configuration.service';
+// TODO
+import { environment } from '@src/environments/environment.prod';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +34,8 @@ export class KeycloakInitService {
   }
 
   private getKeycloakOptions(): KeycloakOptions {
-    console.info('config', this.configService.getKeycloakOptions());
-    return this.configService.getKeycloakOptions();
+    //console.info('getKeycloakOptions', this.configService.getKeycloakOptions());
+    //return this.configService.getKeycloakOptions();
+    return environment.keycloakOptions as KeycloakOptions;
   }
 }

@@ -9,7 +9,7 @@ import { AuthGuard } from './abstract-auth.guard';
 })
 export abstract class AuthenticationGuard extends AuthGuard {
   public constructor(
-    protected authService: AuthService,
+    protected override authService: AuthService,
     private router: Router
   ) {
     super(authService);

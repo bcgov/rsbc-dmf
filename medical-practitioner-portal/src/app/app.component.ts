@@ -32,8 +32,7 @@ export class AppComponent {
             idpHint: IdentityProvider.BCSC
           })
         }
-    });
-
+      });
     } catch (e) {
       console.error(e);
       throw e;
