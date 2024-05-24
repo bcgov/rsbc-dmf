@@ -19,9 +19,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     {
         private readonly ILogger<ConfigController> _logger;
         private readonly IHostEnvironment env;
-        private readonly IConfiguration configuration;
+        private readonly MedicalPortalConfiguration configuration;
 
-        public ConfigController(ILogger<ConfigController> logger, IHostEnvironment env, IConfiguration configuration)
+        public ConfigController(ILogger<ConfigController> logger, IHostEnvironment env, MedicalPortalConfiguration configuration)
         {
             _logger = logger;
             this.env = env;
@@ -34,29 +34,16 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<Configuration> Get()
+        public ActionResult<object> Get()
         {
-            var v = configuration.GetSection("AUTH:OIDC").Value;
-            var config = new Configuration
+            var config = new
             {
                 Environment = env.EnvironmentName,
-                EformsConfiguration = configuration.GetSection("eforms").Get<EFormsOptions>(),
-                OidcConfiguration = configuration.GetSection("auth:oidc").Get<OidcOptions>()
+                configuration.Keycloak
             };
 
             return Ok(config);
         }
-
-        /// <summary>
-        /// Client configuration settings
-        /// </summary>
-        public class Configuration
-        {
-            public string Environment { get; set; }
-            public EFormsOptions EformsConfiguration { get; set; }
-            public OidcOptions OidcConfiguration { get; set; }
-        }
-
         public class EFormsOptions
         {
             public string FormServerUrl { get; set; }
