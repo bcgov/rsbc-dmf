@@ -43,7 +43,6 @@ namespace RSBC.DMF.MedicalPortal.API
             this.configuration = configuration;
             this.environment = environment;
         }
-
         private IConfiguration configuration { get; }
         private const string HealthCheckReadyTag = "ready";
         private readonly IHostEnvironment environment;
@@ -55,7 +54,7 @@ namespace RSBC.DMF.MedicalPortal.API
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             //services.AddAuthentication("introspection")
-                //JWT tokens handling
+            //JWT tokens handling
             //.AddJwtBearer("token", options =>
             //{
             //    options.BackchannelHttpHandler = new HttpClientHandler
@@ -138,7 +137,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 // the old oauth will not work with keycloak, need to update or use OIDC instead
                 // oauth authentication
                 //options.AddPolicy("OAuth", policy =>
-            //{
+                //{
                 //    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection");
                 //    //policy.RequireClaim("scope", "doctors-portal-api");
                 //});
@@ -210,7 +209,7 @@ namespace RSBC.DMF.MedicalPortal.API
             }));*/
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
-            services.AddHealthChecks().AddCheck("Doctors portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
@@ -345,46 +344,8 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    //.RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled)
-                    ;
-                endpoints.MapSwagger();
+                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled/*, "OAuth"*/);
             });
-
-            /*
-             *             Action<SwaggerOptions> endpointSetupAction = options =>
-            {
-                var endpointOptions = new SwaggerEndpointOptions();
-
-                setupAction?.Invoke(endpointOptions);
-
-                options.RouteTemplate = pattern;
-                options.SerializeAsV2 = endpointOptions.SerializeAsV2;
-                options.PreSerializeFilters.AddRange(endpointOptions.PreSerializeFilters);
-            };
-
-            var pipeline = endpoints.CreateApplicationBuilder()
-                .UseSwagger(endpointSetupAction)
-                .Build();
-
-            return endpoints.MapGet(pattern, pipeline);
-            */
-            if (!string.IsNullOrEmpty(configuration["USE_SPA"]))
-            {
-                app.UseSpa(spa =>
-                {
-                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                    // see https://go.microsoft.com/fwlink/?linkid=864501
-                    if (string.IsNullOrEmpty(configuration["ANGULAR_DEV_SERVER"]))
-                    {
-                        spa.Options.SourcePath = "../UI/medical-portal";
-                        spa.UseAngularCliServer(npmScript: "start");
-                    }
-                    else
-                    {
-                        spa.UseProxyToSpaDevelopmentServer(configuration["ANGULAR_DEV_SERVER"]);
-                    }
-                });
-            }
         }
 
         private static LogEventLevel ExcludeHealthChecks(HttpContext ctx, double _, Exception ex) =>
