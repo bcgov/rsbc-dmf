@@ -26,7 +26,6 @@ export class AppComponent {
     try {
       //attempt to log in
       this.authService.isLoggedIn().subscribe((isLoggedIn) => {
-        console.log("isLoggedIn", isLoggedIn);
         if (!isLoggedIn) {
           this.authService.login({
             idpHint: IdentityProvider.BCSC

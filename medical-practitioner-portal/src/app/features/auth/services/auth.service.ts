@@ -20,10 +20,13 @@ export class AuthService implements IAuthService {
   public login(options?: KeycloakLoginOptions): Observable<void> {
     return from(this.keycloakService.login(options));
   }
-  // public getHpdid(): string {
-  //   return this.keycloakService.getKeycloakInstance().idTokenParsed
-  //     .preferred_username;
-  // }
+
+  public getHpdid(): string | undefined {
+    return this.keycloakService.getKeycloakInstance()?.idTokenParsed?.sub;
+      // Stanley's POC used this but I would think it would be "sid"
+      //.preferred_username;
+  }
+
   public isLoggedIn(): Observable<boolean> {
     return from(this.keycloakService.isLoggedIn());
   }
