@@ -100,5 +100,28 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+        public async override Task<GetDriverDocumentsReply> GetAllDriverDocuments(GetDriverDocumentsRequest request, ServerCallContext context)
+        {
+            var result = new GetDriverDocumentsReply();
+
+            try
+            {
+                // var loginIds = request.LoginIds.Select(Guid.Parse);
+                 var caseId = request.CaseId.ToString();
+                
+                var documents = _documentManager.GetAllDriverDocuments(caseId, request.LoginId);
+                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
+                result.Items.AddRange(mappedDocuments);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

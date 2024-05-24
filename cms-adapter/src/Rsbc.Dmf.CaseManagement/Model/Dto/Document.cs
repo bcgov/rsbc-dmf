@@ -16,5 +16,14 @@ namespace Rsbc.Dmf.CaseManagement.DomainModels
 
         // bcgov_caseid
         public Case Case { get; set; }
+
+        public DateTimeOffset CreateDate { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
+        public string Description { get; set; }
+
+        public string SubmittalStatus { get; set; }
+        public string DocumentType { get; set; }
+        public string DocumentSubType { get; set; }
+        public string DocumentUrl { get; set; }
     }
 }

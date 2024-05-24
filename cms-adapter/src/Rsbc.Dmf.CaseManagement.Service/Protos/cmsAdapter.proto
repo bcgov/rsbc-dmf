@@ -514,6 +514,7 @@ service DocumentManager {
     rpc GetDocumentsByTypeForUsers(GetDocumentsByTypeForUsersRequest) returns (GetDocumentsByTypeForUsersReply);
 	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
 	rpc GetDocumentSubTypeGuid(DocumentIdRequest) returns (GetDocumentSubTypeIdReply);
+    rpc GetAllDriverDocuments(GetDriverDocumentsRequest) returns (GetDriverDocumentsReply);
 }
 
 message GetDocumentsByTypeForUsersRequest {
@@ -533,7 +534,26 @@ message GetDocumentsByTypeForUsersReply {
      int32 dmerStatus = 2;
      google.protobuf.Timestamp complianceDate = 3;
      Case case = 4;
+     string SubmittalStatus = 5;
+     google.protobuf.Timestamp CreateDate = 6;
+	 google.protobuf.Timestamp DueDate = 7;
+	 string Description = 8;
+     string DocumentSubType = 9;
+	 string DocumentType = 10;
+     string DocumentUrl = 11;
  }
+
+ message GetDriverDocumentsRequest{
+     string loginId = 1;
+     Driver Driver = 2;
+     string caseId = 3;
+ }
+
+ message GetDriverDocumentsReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    repeated Document items = 3;
+}
 
 message LegacyDocument {
 	int64 SequenceNumber = 1;
