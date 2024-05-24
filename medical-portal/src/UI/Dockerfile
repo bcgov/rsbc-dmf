@@ -1,7 +1,7 @@
 FROM trion/ng-cli-karma AS ng-builder
 WORKDIR /src
 COPY ./medical-portal/package*.json ./
-RUN npm install
+RUN npm ci
 COPY ./medical-portal/ .
 RUN npm run lint
 RUN npm run test -- --no-watch --no-progress
