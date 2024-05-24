@@ -5,11 +5,11 @@ COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
 
 WORKDIR /app/shared-portal-ui
 
-RUN npm install --force
+RUN npm install 
 
 WORKDIR /app/medical-practitioner-portal
 
-RUN npm ci 
+RUN npm ci --force
 
 RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production
 
