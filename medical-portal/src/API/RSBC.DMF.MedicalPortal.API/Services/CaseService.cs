@@ -84,7 +84,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             }
             else
             {
-                searchRequest.ClinicId = userContext.CurrentClinicAssignment.ClinicId;
+                searchRequest.ClinicId = userContext.CurrentClinicAssignment?.ClinicId;
             }
             
             searchRequest.Statuses.Add(query.ByStatus);

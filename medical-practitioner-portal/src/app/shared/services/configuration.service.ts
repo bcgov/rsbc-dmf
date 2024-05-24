@@ -1,16 +1,17 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { AuthConfig } from 'angular-oauth2-oidc';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-//import { environment } from 'src/environments/environment';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
+//import { environment } from '@src/environments/environment.prod';
 import { Configuration } from '../api/models';
 import { ConfigService } from '../api/services';
+//import { KeycloakOptions } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigurationService {
+  public onLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
   private config: Configuration | null = null;
 
   constructor(
@@ -25,32 +26,16 @@ export class ConfigurationService {
     return this.configurationService.apiConfigGet$Json().pipe(
       tap((c) => {
         this.config = { ...c };
+        this.onLoaded.next(true);
       })
     );
   }
 
-  public isConfigured(): boolean {
-    return this.config !== null;
-  }
+  // public isConfigured(): boolean {
+  //   return this.config !== null;
+  // }
 
-  public getOAuthConfig(): Observable<AuthConfig> {
-    return this.load().pipe(
-      map((c) => {
-        return {
-          requestAccessToken: true,
-          issuer: c.oidcConfiguration?.issuer || undefined,
-          clientId: c.oidcConfiguration?.clientId || undefined,
-          requireHttps: false,
-          strictDiscoveryDocumentValidation: false,
-          redirectUri: window.location.origin + this.baseHref, // concat base href to the redirect URI
-          responseType: 'code',
-          scope: c.oidcConfiguration?.scope || undefined,
-          showDebugInformation: true, //!environment.production,
-          customQueryParams: {
-            acr_values: 'idp:bcsc',
-          },
-        };
-      })
-    );
-  }
+  // public getKeycloakOptions(): KeycloakOptions {
+  //   return this.config?.keycloakOptions || {};
+  // }
 }
