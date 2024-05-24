@@ -19,12 +19,9 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "paths": {
-      "@shared/core-ui": [
-        "../shared-portal-ui/projects/core-ui/src/public-api",
-      ] ,
-    //   "@angular/*": [
-    //     "./node_modules/@angular/*"
-    //  ],
+      "@shared/core-ui/*": ["../shared-portal-ui/projects/core-ui/src/public-api/*"],
+      "@app/*": ["./src/app/*"],
+      "@src/*": ["./src/*"]
     },
     "lib": [
       "ES2022",
