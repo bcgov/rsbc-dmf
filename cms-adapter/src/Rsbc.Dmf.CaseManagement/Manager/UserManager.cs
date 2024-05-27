@@ -69,10 +69,12 @@ namespace Rsbc.Dmf.CaseManagement
 
     public class LoginUserResponse
     {
+        // NOTE this really should be named LoginId
         public string Userid { get; set; }
         public string Email { get; set; }
         public string DriverId { get; set; }
         public string DriverLicenseNumber { get; set; }
+        public List<string> LoginIds { get; set; }
     }
 
     public abstract class User
@@ -446,19 +448,17 @@ namespace Rsbc.Dmf.CaseManagement
             var loginId = request.User.ExternalSystemUserId;
             string userEmail = null;
 
-            var login = dynamicsContext.dfp_logins
+            var logins = dynamicsContext.dfp_logins
                 .Expand(l => l.dfp_DriverId)
                 .Expand(l => l.dfp_DriverId.dfp_PersonId)
                 .Where(l => l.dfp_userid == loginId && l.dfp_type == (int)loginType)
-                .SingleOrDefault();
+                .ToList();
+
+            var login = logins.SingleOrDefault();
 
             if (login == null)
             {
                 login = CreateLogin(loginId, loginType);
-            }
-            else
-            {
-                await dynamicsContext.LoadPropertyAsync(login, nameof(dfp_login.dfp_login_dfp_medicalpractitioner));
             }
 
             if (request.User is DriverUser driver)
@@ -484,49 +484,14 @@ namespace Rsbc.Dmf.CaseManagement
             else if (request.User is MedicalPractitionerUser medicalPractitioner)
             {
                 //get or create person
-
-                var person = login.dfp_login_dfp_medicalpractitioner.FirstOrDefault();
-                if (person != null)
-                {
-                    await dynamicsContext.LoadPropertyAsync(person, nameof(dfp_medicalpractitioner.dfp_PersonId));
-                    userEmail = person.dfp_PersonId?.emailaddress1;
-                }
-                
-                var personId = person?._dfp_personid_value;
-                
-                contact personEntity;
-                if (!personId.HasValue)
-                {
-                    personEntity = new contact
-                    {
-                        contactid = Guid.NewGuid(),
-                        firstname = request.User.FirstName,
-                        lastname = request.User.LastName
-                    };
-                    dynamicsContext.AddTocontacts(personEntity);
-                }
-                else
-                {
-                    personEntity = new contact { contactid = personId };
-                };
-
-                foreach (var cliniceAssignment in medicalPractitioner.ClinicAssignments)
-                {
-                    if (!login.dfp_login_dfp_medicalpractitioner.Any(mp => mp._dfp_clinicid_value == Guid.Parse(cliniceAssignment.Clinic.Id)))
-                    {
-                        //create a new clinic assignment if doesn't exist
-                        var medicalPractitionerEntity = AddMedicalPractitioner(cliniceAssignment);
-                        dynamicsContext.AddLink(login, nameof(dfp_login.dfp_login_dfp_medicalpractitioner), medicalPractitionerEntity);
-                        dynamicsContext.SetLink(medicalPractitionerEntity, nameof(dfp_driver.dfp_PersonId), personEntity);
-                    }
-                }
             }
             await dynamicsContext.SaveChangesAsync();
 
             dynamicsContext.DetachAll();
 
             var loginUserResponse = new LoginUserResponse { Userid = login.dfp_loginid.ToString(), Email = userEmail, DriverId = login._dfp_driverid_value.ToString() };
-            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? string.Empty; ;
+            loginUserResponse.DriverLicenseNumber = login.dfp_DriverId?.dfp_licensenumber ?? string.Empty;
+            loginUserResponse.LoginIds = logins.Select(l => l.dfp_loginid.ToString()).ToList();
             return loginUserResponse;
         }
 
@@ -551,24 +516,6 @@ namespace Rsbc.Dmf.CaseManagement
             dynamicsContext.SaveChanges();
 
             return login;
-        }
-
-        private dfp_medicalpractitioner AddMedicalPractitioner(ClinicAssignment clinicAssignment)
-        {
-            var medicalPractitioner = new dfp_medicalpractitioner
-            {
-                dfp_medicalpractitionerid = Guid.NewGuid(),
-                dfp_providerrole = clinicAssignment.Roles.Any() ? (int)Enum.Parse<ProviderRole>(clinicAssignment.Roles.FirstOrDefault()) : (int?)null
-            };
-            dynamicsContext.AddTodfp_medicalpractitioners(medicalPractitioner);
-
-            var clinicEntity = dynamicsContext.accounts.Where(a => a.statecode == (int)EntityState.Active && a.accountid == Guid.Parse(clinicAssignment.Clinic.Id)).FirstOrDefault();
-
-            if (clinicEntity == null) throw new Exception($"Clinic id {clinicAssignment.Clinic.Id} not found");
-
-            dynamicsContext.SetLink(medicalPractitioner, nameof(dfp_medicalpractitioner.dfp_ClinicId), clinicEntity);
-
-            return medicalPractitioner;
         }
     }
 

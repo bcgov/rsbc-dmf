@@ -740,6 +740,7 @@ message UserLoginReply {
 	string userEmail = 11;
 	string driverId = 12;
     string driverLicenseNumber = 13;
+    repeated string loginIds = 14;
 }
 
 message User {

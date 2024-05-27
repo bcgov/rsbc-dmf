@@ -140,6 +140,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 userLoginReply.UserId = loginResult.Userid;
                 userLoginReply.DriverId = loginResult.DriverId;
                 userLoginReply.UserEmail = loginResult.Email ?? String.Empty;
+                if (loginResult.LoginIds?.Count > 0)
+                {
+                    userLoginReply.LoginIds.AddRange(loginResult.LoginIds);
+                }
                 return userLoginReply;
             }
             catch (Exception e)
