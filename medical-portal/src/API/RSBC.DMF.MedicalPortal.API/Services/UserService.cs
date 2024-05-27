@@ -71,15 +71,17 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 Id = user.FindFirstValue(Claims.PreferredUsername),
                 LoginIds = user.FindFirstValue(Claims.LoginIds)?.Split(',').ToList(),
-                FirstName = user.FindFirstValue(Claims.GivenName),
-                LastName = user.FindFirstValue(Claims.FamilyName),
-                Email = user.FindFirstValue(ClaimTypes.Email),
-                ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
+                FirstName = user.FindFirstValue(ClaimTypes.GivenName),
+                LastName = user.FindFirstValue(ClaimTypes.Surname),
+                Email = user.FindFirstValue(Claims.Email),
+                //ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
             });
         }
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
         {
+            try
+            {
             logger.LogDebug("Processing login {0}", user.Identity.Name);
             logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
@@ -87,25 +89,24 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 ? configuration["CLINIC_ID"]
                 : "3bec7901-541d-ec11-b82d-00505683fbf4";
 
-            var loginRequest = new UserLoginRequest
-            {
-                UserType = UserType.MedicalPractitionerUserType,
-                Email = user.FindFirstValue(Claims.Email),
-                ExternalSystem = user.GetIdentityProvider(),
-                ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername) ?? user.FindFirstValue("sub"),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
-                LastName = user.FindFirstValue(ClaimTypes.Surname) ?? user.FindFirstValue("last_name") ?? string.Empty,
-                UserProfiles = { new UserProfile
-                {
-                    MedicalPractitioner = new MedicalPractitionerProfile
-                    {
-                        Role =  user.GetRoles().SingleOrDefault(),//"Physician", Get roles from claims
-                        Clinic = new Clinic { Id = clinicId }
-                    }
-                }
-                }
-            };
-            if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
+                var role = user.GetRoles().SingleOrDefault();
+                var loginRequest = new UserLoginRequest();
+                loginRequest.UserType = UserType.MedicalPractitionerUserType;
+                loginRequest.Email = user.FindFirstValue(Claims.Email);
+                loginRequest.ExternalSystem = user.GetIdentityProvider();
+                loginRequest.ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername);
+                loginRequest.FirstName = user.FindFirstValue(ClaimTypes.GivenName);
+                loginRequest.LastName = user.FindFirstValue(ClaimTypes.Surname);
+                var userProfileRequest = new UserProfile();
+                userProfileRequest.MedicalPractitioner = new MedicalPractitionerProfile();
+                // TODO need to uncomment this line to get roles working
+                //userProfileRequest.MedicalPractitioner.Role = user.GetRoles().SingleOrDefault();
+                userProfileRequest.MedicalPractitioner.Role = user.FindFirstValue(ClaimTypes.Role);
+                userProfileRequest.MedicalPractitioner.Clinic = new Clinic { Id = clinicId };
+                loginRequest.UserProfiles.Add(userProfileRequest);
+
+                // TODO uncomment after roles are fixed
+                //if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
             
             var loginResponse = await userManager.LoginAsync(loginRequest);
             if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
@@ -118,23 +119,30 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-            claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
+                //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
             claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
             claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
-            claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));            
-            claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
-            {
-                PractitionerId = p.MedicalPractitioner.Id,
-                Role = p.MedicalPractitioner.Role,
-                ClinicId = p.MedicalPractitioner.Clinic.Id,
-                ClinicName = p.MedicalPractitioner.Clinic.Name
-            }))));
+                //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
+                //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+                //claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
+                //{
+                //    PractitionerId = p.MedicalPractitioner.Id,
+                //    Role = p.MedicalPractitioner.Role,
+                //    ClinicId = p.MedicalPractitioner.Clinic.Id,
+                //    ClinicName = p.MedicalPractitioner.Clinic.Name
+                //}))));
 
             user.AddIdentity(new ClaimsIdentity(claims));
 
             logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
             return user;
+        }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error logging in user {0}", user.Identity.Name);
+                throw;
+            }
         }
 
         /// <summary>
