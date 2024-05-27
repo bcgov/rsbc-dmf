@@ -207,6 +207,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.Case.Person = new Person();
             document.Case.Person.FullName = "Joe Smithers";
             document.Case.Person.Birthday = new DateTime(2000, 1, 1);
+            document.Description = "Test Discription";
+            document.ComplianceDate = DateTimeOffset.Now;
+            document.DocumentType = new DomainModels.DocumentType();
+            document.DocumentType.DocumentName = "DMER";
+            document.DocumentSubType = new DocumentSubType();
+            document.DocumentSubType.Name = "Sub type test";
+            document.DocumentUrl = "DocumentUrl";
+            document.SubmittalStatus = "Received";
 
             var mappedDocument = _mapper.Map<Service.Document>(document);
 
@@ -215,6 +223,12 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.DmerStatus, mappedDocument.DmerStatus);
             Assert.Equal(document.Case.CaseNumber, mappedDocument.Case.CaseNumber);
             Assert.Equal(document.Case.Person.FullName, mappedDocument.Case.Person.FullName);
+            Assert.Equal(document.Description, mappedDocument.Description);
+            Assert.Equal(document.ComplianceDate, mappedDocument.ComplianceDate.ToDateTimeOffset());
+            Assert.Equal(document.DocumentType.DocumentName, mappedDocument.DocumentType.DocumentName);
+            Assert.Equal(document.DocumentSubType.Name, mappedDocument.DocumentSubType.Name);
+            Assert.Equal(document.DocumentUrl, mappedDocument.DocumentUrl);
+            Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
         }
     }
 }

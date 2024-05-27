@@ -538,13 +538,16 @@ message GetDocumentsByTypeForUsersReply {
      google.protobuf.Timestamp createdOn = 6;
 	 string description = 8;
      DocumentType documentType = 9;
-     string documentUrl = 10;
+     DocumentSubType documentSubType = 10;
+     string documentUrl = 11;
  }
 
  message DocumentType{
-     string documentSubType = 1;
-	 string documentName = 2;
+     
+	 string documentName = 1;
  }
+
+
 
  message GetDriverAndCaseDocumentsRequest{
      string loginId = 1;

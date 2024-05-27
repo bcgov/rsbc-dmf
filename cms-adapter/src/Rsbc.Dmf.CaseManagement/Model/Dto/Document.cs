@@ -1,5 +1,4 @@
-﻿using Rsbc.Dmf.CaseManagement.Model.Dto;
-using System;
+﻿using System;
 
 namespace Rsbc.Dmf.CaseManagement.DomainModels
 {
@@ -13,7 +12,7 @@ namespace Rsbc.Dmf.CaseManagement.DomainModels
         public int DmerStatus { get; set; }
 
         // dfp_compliancedate
-        public DateTime? ComplianceDate { get; set; }
+        public DateTimeOffset? ComplianceDate { get; set; }
 
         // bcgov_caseid
         public Case Case { get; set; }
@@ -26,6 +25,7 @@ namespace Rsbc.Dmf.CaseManagement.DomainModels
         public DocumentType DocumentType { get; set; }
 
         public DocumentSubType DocumentSubType { get; set; }
+
         public string DocumentUrl { get; set; }
     }
 }

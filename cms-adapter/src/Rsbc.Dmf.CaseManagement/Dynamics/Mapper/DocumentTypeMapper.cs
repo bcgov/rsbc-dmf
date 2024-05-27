@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Rsbc.Dmf.CaseManagement.Model.Dto;
+using Rsbc.Dmf.CaseManagement.DomainModels;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
