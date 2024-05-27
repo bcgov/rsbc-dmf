@@ -63,9 +63,9 @@ namespace RSBC.DMF.MedicalPortal.API
                         Secret = configuration.GetValue<string>("Keycloak:Secret")
                     };
                 },
-                options => 
+                jwtBearerOptions => 
                 { 
-                    options.Events = new JwtBearerEvents
+                    jwtBearerOptions.Events = new JwtBearerEvents
                     {
                         OnTokenValidated = async context => await OnTokenValidatedAsync(context),
                         OnAuthenticationFailed = context =>
