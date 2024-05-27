@@ -71,7 +71,7 @@ namespace RSBC.DMF.MedicalPortal.API
                         OnAuthenticationFailed = context =>
                         {
                             Log.Error(context.Exception, "Error validating bearer token");
-                            context.Response.StatusCode = 401;
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                             return Task.CompletedTask;
                         }
                     };
