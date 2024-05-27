@@ -30,6 +30,8 @@ using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using System.IdentityModel.Tokens.Jwt;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using System.Text.Json;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Common;
 
 
 namespace RSBC.DMF.MedicalPortal.API
@@ -51,6 +53,32 @@ namespace RSBC.DMF.MedicalPortal.API
             var config = this.InitializeConfiguration(services);
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
+            services.AddKeycloakWebApiAuthentication(
+                config => 
+                {
+                    config.Realm = "moh_applications";
+                    config.Audience = "LICENCE-STATUS";
+                    config.SslRequired = "false";
+                    config.VerifyTokenAudience = false;
+                    config.AuthServerUrl = "https://common-logon-test.hlth.gov.bc.ca/auth";
+                    //config.Resource = "DMFT-WEBAPP";
+                    config.Credentials = new KeycloakClientInstallationCredentials
+                    {                  
+                    };
+                },
+                options => 
+                { 
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnTokenValidated = async context => await OnTokenValidatedAsync(context),
+                        OnAuthenticationFailed = context =>
+                        {
+                            // TODO log the error
+                            context.Response.StatusCode = 401;
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
             //services.AddAuthentication("introspection")
             //JWT tokens handling
             //.AddJwtBearer("token", options =>
@@ -115,19 +143,6 @@ namespace RSBC.DMF.MedicalPortal.API
             //        policy.RequireClaim("scope", "doctors-portal-api");
             //    });
             //});
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                //JWT tokens handling
-                .AddJwtBearer(options =>
-                {
-                    options.Authority = config.Keycloak.RealmUrl;
-                    options.Audience = "LICENCE-STATUS";
-                    options.MetadataAddress = config.Keycloak.WellKnownConfig;
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnTokenValidated = async context => await OnTokenValidatedAsync(context)
-                    };
-                });
 
             services.AddAuthorization(options =>
             {
@@ -269,7 +284,7 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddAutoMapperSingleton();
         }
 
-        private Task OnTokenValidatedAsync(Microsoft.AspNetCore.Authentication.JwtBearer.TokenValidatedContext context)
+        private async Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.Principal?.Identity is ClaimsIdentity identity
             && identity.IsAuthenticated)
@@ -277,9 +292,10 @@ namespace RSBC.DMF.MedicalPortal.API
                 // Flatten the Resource Access claim
                 identity.AddClaims(identity.GetResourceAccessRoles(Clients.License)
                     .Select(role => new Claim(ClaimTypes.Role, role)));
-            }
 
-            return Task.CompletedTask;
+                var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                context.Principal = await userService.Login(context.Principal);
+            }
         }
         private MedicalPortalConfiguration InitializeConfiguration(IServiceCollection services)
         {
