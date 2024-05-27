@@ -269,7 +269,7 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<Document>>(documents);
         }
 
-        public IEnumerable<Document> GetAllDriverDocuments(string caseId, string loginId )
+        public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
         {
             var documents = new List<bcgov_documenturl>();
 

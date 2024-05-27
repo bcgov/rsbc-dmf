@@ -49,10 +49,10 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
             var caseId = _configuration["ICBC_TEST_CASEID"];
 
-            var request = new GetDriverDocumentsRequest();
+            var request = new GetDriverAndCaseDocumentsRequest();
 
             request.CaseId= caseId;
-            var response = _documentService.GetAllDriverDocuments(request, null);
+            var response = _documentService.GetDriverAndCaseDocuments(request, null);
 
             Assert.NotNull(response);
             //response.Items.ShouldNotBeEmpty();

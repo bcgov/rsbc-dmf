@@ -101,16 +101,16 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        public async override Task<GetDriverDocumentsReply> GetAllDriverDocuments(GetDriverDocumentsRequest request, ServerCallContext context)
+        public async override Task<GetDriverAndCaseDocumentsReply> GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest request, ServerCallContext context)
         {
-            var result = new GetDriverDocumentsReply();
+            var result = new GetDriverAndCaseDocumentsReply();
 
             try
             {
                 // var loginIds = request.LoginIds.Select(Guid.Parse);
                  var caseId = request.CaseId.ToString();
                 
-                var documents = _documentManager.GetAllDriverDocuments(caseId, request.LoginId);
+                var documents = _documentManager.GetDriverAndCaseDocuments(caseId, request.LoginId);
                 var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
                 result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;

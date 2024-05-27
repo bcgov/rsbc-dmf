@@ -28,3 +28,12 @@ Click Finish and it should update the client.
 | Document Type     | dfp_submittaltype   | | dfp_submittaltypeid
 | Document Sub-Type | dfp_documentsubtype | | dfp_DocumentSubType
 | BringForward      | task                | Callback
+
+
+# Dynamic Field Mapping
+
+
+| Name              | Schema              | ViewModel      | Foreign Key
+|-------------------------------------------------------------------------
+| Document Type    | dfp_submittalType   | Document 
+| DocumentTYpe.Name, Documenttype.SubmittalStatus, documentsubtype.name

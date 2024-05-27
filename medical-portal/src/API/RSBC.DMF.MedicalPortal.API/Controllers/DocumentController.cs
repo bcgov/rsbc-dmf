@@ -61,22 +61,22 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
         }
 
-        [HttpGet("AllDriverDocuments")]
+        [HttpGet("GetDriverAndCaseDocuments")]
        // TODO
         //[Authorize(Policy = Policy.MedicalPractitioner)]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetAllDriverDocuments")]
-        public async Task<IActionResult> GetAllDriverDocuments([FromRoute] string caseId)
+        [ActionName("GetDriverAndCaseDocuments")]
+        public async Task<IActionResult> GetDriverAndCaseDocuments([FromRoute] string caseId)
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginIds = profile.LoginIds;
 
             // TODO # Change the loginId to claim.loginid 
-            var request = new GetDriverDocumentsRequest { CaseId = caseId, LoginId = loginIds.FirstOrDefault() };
+            var request = new GetDriverAndCaseDocumentsRequest { CaseId = caseId, LoginId = loginIds.FirstOrDefault() };
 
-            var reply = _documentManagerClient.GetAllDriverDocuments(request);
+            var reply = _documentManagerClient.GetDriverAndCaseDocuments(request);
             if (reply.ResultStatus == ResultStatus.Success)
             {
                 // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
@@ -100,7 +100,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
              else
             {
                
-                _logger.LogError($"{nameof(GetAllDriverDocuments)} error: unable to get documents for this case - {reply.ErrorDetail}");
+                _logger.LogError($"{nameof(GetDriverAndCaseDocuments)} error: unable to get documents for this case - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
 

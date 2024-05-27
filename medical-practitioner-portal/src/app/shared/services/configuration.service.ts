@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 //import { environment } from '@src/environments/environment.prod';
-import { Configuration } from '../api/models';
+// import { Configuration } from '../api/models';
 import { ConfigService } from '../api/services';
 //import { KeycloakOptions } from 'keycloak-angular';
 
@@ -12,19 +12,19 @@ import { ConfigService } from '../api/services';
 })
 export class ConfigurationService {
   public onLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private config: Configuration | null = null;
+  private config: unknown | null = null;
 
   constructor(
     @Inject(APP_BASE_HREF) public baseHref: string,
     private configurationService: ConfigService
   ) {}
 
-  public load(): Observable<Configuration> {
+  public load(): Observable<unknown> {
     if (this.config != null) {
       return of(this.config);
     }
-    return this.configurationService.apiConfigGet$Json().pipe(
-      tap((c) => {
+    return this.configurationService.apiConfigGet().pipe(
+      tap((c: any) => {
         this.config = { ...c };
         this.onLoaded.next(true);
       })
