@@ -70,7 +70,7 @@ namespace RSBC.DMF.MedicalPortal.API
                         OnTokenValidated = async context => await OnTokenValidatedAsync(context),
                         OnAuthenticationFailed = context =>
                         {
-                            // TODO log the error
+                            Log.Error(context.Exception, "Error validating bearer token");
                             context.Response.StatusCode = 401;
                             return Task.CompletedTask;
                         }
