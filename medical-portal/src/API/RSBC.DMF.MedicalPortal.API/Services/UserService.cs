@@ -67,10 +67,12 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
+            var loginIds = user.FindFirstValue(Claims.LoginIds);
+
             return await Task.FromResult(new UserContext
             {
                 Id = user.FindFirstValue(Claims.PreferredUsername),
-                LoginIds = user.FindFirstValue(Claims.LoginIds)?.Split(',').ToList(),
+                LoginIds = loginIds != null ? JsonSerializer.Deserialize<List<string>>(loginIds) : null,
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
                 Email = user.FindFirstValue(Claims.Email),
@@ -82,12 +84,12 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             try
             {
-            logger.LogDebug("Processing login {0}", user.Identity.Name);
-            logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
+                logger.LogDebug("Processing login {0}", user.Identity.Name);
+                logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
-            var clinicId = configuration["CLINIC_ID"] != null
-                ? configuration["CLINIC_ID"]
-                : "3bec7901-541d-ec11-b82d-00505683fbf4";
+                var clinicId = configuration["CLINIC_ID"] != null
+                    ? configuration["CLINIC_ID"]
+                    : "3bec7901-541d-ec11-b82d-00505683fbf4";
 
                 var role = user.GetRoles().SingleOrDefault();
                 var loginRequest = new UserLoginRequest();
@@ -107,21 +109,21 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
                 // TODO uncomment after roles are fixed
                 //if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
-            
-            var loginResponse = await userManager.LoginAsync(loginRequest);
-            if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-            var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
-            if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
+                var loginResponse = await userManager.LoginAsync(loginRequest);
+                if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-            var userProfile = searchResults.User.SingleOrDefault();
-            if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
+                var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
+                if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+                var userProfile = searchResults.User.SingleOrDefault();
+                if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
+
+                var claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
                 //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
-            claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
-            claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
+                claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
+                claims.Add(new Claim(Claims.LoginIds, JsonSerializer.Serialize(loginResponse.LoginIds.ToList())));
                 //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
                 //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
                 //claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
@@ -132,12 +134,12 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 //    ClinicName = p.MedicalPractitioner.Clinic.Name
                 //}))));
 
-            user.AddIdentity(new ClaimsIdentity(claims));
+                user.AddIdentity(new ClaimsIdentity(claims));
 
-            logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
+                logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
-            return user;
-        }
+                return user;
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "Error logging in user {0}", user.Identity.Name);
