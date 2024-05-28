@@ -762,10 +762,12 @@ message UserProfile {
 
 message MedicalPractitionerProfile {
     string id = 1;
+    // TODO remove role, clinic after regression testing UsersSearchReply
     string role = 2;
     Clinic clinic = 3;
 }
 
+// TODO remove this after regression testing UsersSearchReply
 message Clinic {
     string id = 1;
     string name = 2;

@@ -1,15 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -33,16 +26,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("MyDmers")]
-        // TODO
-        //[Authorize(Policy = Policy.MedicalPractitioner)]
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetMyDocumentsByType()
         {
             var profile = await _userService.GetCurrentUserContext();
-
-            // TODO we need to set this before this controller method will work
             var loginIds = profile.LoginIds;
 
             var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
@@ -55,15 +44,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else
             {
-                // TODO
                 _logger.LogError($"{nameof(GetMyDocumentsByType)} error: unable to get documents by type - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
 
         [HttpGet("GetDriverAndCaseDocuments")]
-       // TODO
-        //[Authorize(Policy = Policy.MedicalPractitioner)]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
@@ -93,9 +79,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
                 
                 return Json(result);
-
-               
-
             }
              else
             {

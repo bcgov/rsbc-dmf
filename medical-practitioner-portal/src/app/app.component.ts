@@ -44,6 +44,8 @@ export class AppComponent {
         if (!isLoggedIn) {
           this.authService.login({
             idpHint: IdentityProvider.BCSC,
+            // TODO add medical-portal scope and move this to api/Config
+            scope: 'openid profile email',
           });
         }
       });
