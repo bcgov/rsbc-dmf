@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { ChefsService } from '../shared/api/services';
 
 @Component({
   selector: 'app-popup',
@@ -15,7 +16,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss',
 })
-export class PopupComponent implements AfterViewInit {
+export class PopupComponent {
   @ViewChild('iframe') iframe!: ElementRef;
   public sanitizedSource!: SafeResourceUrl;
   iframeUrl: string =
@@ -23,8 +24,8 @@ export class PopupComponent implements AfterViewInit {
 
   constructor(
     private popupService: PopupService,
+    private chefsService: ChefsService,
     private sanitizer: DomSanitizer,
-    private renderer: Renderer2
   ) {}
 
   getSourceURL(): SafeResourceUrl {
@@ -39,67 +40,48 @@ export class PopupComponent implements AfterViewInit {
     window.addEventListener('message', this.receiveMessage.bind(this), false);
   }
 
-  ngAfterViewInit() {
-    // const iframe = this.iframe.nativeElement;
-    // // Add event listener to detect changes in iframe's URL
-    // iframe.addEventListener('load', () => {
-    //   const currentUrl = iframe.contentWindow.location.href;
-    //   console.log('Current URL:', currentUrl);
-    //   // You can perform any actions here based on the URL change
-    // });
-  }
-
-  // addScriptToIframe() {
-  //   const script = this.renderer.createElement('script');
-  //   script.text = `
-  //     window.addEventListener("message", receiveMessage, false);
-
-  //     function receiveMessage(event) {
-  //       window.parent.postMessage({ successMessagePresent: true }, event.origin);
-  //     }
-  //   `;
-  //   if (this.iframe.nativeElement?.contentWindow) {
-  //     console.log('appending iframe script');
-  //     this.renderer.appendChild(
-  //       this.iframe.nativeElement.contentWindow.document.body,
-  //       script
-  //     );
-  //   }
-  // }
-
   closePopup() {
     this.popupService.closePopup();
   }
 
   iframeLoaded() {
-    console.log('Iframe loaded');
-    console.log(this.iframe);
-    if (this.iframe) {
-      // Send message to iframe to check for success message
-      console.log('posting message to iframe...');
-      this.iframe.nativeElement.contentWindow.postMessage(
-        'checkSuccessMessage',
-        'https://submit.digital.gov.bc.ca'
-      );
-    }
+    // call sendMessage() and pass in data needed
   }
 
-  receiveMessage(event: { data: { successMessagePresent: any } }) {
-    console.log('received message from iframe....');
-    console.log(event);
+  sendMessage() {
     if (this.iframe) {
-      // Send message back to iframe to ack initial message
       console.log('acknowledging message from iframe...');
       this.iframe.nativeElement.contentWindow.postMessage(
         'ackMessage',
         'https://submit.digital.gov.bc.ca'
       );
     }
-    // if (event.origin !== 'https://localhost:4200') return; // Ensure message is from expected origin
-    // Handle messages from iframe
-    if (event.data.successMessagePresent) {
-      console.log('Success message found in iframe content');
-      // You can perform any action you want here
+  }
+
+  receiveMessage(event: {
+    origin: string;
+    data: { type: string; status: string; submission: any };
+  }): void {
+    if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
+
+    const {
+      data: { type, status, submission },
+    } = event;
+
+    if (type === 'PUT_CHEFS_SUBMISSION') {
+      let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
+        status,
+        submission,
+      };
+      this.chefsService
+        .apiChefsSubmissionPut({ ...params })
+        .subscribe((submission) => {
+          console.log(submission);
+          return submission;
+        });
+    }
+    if (status === 'FINAL') {
+      this.closePopup();
     }
   }
 }

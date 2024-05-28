@@ -13,9 +13,11 @@
     <Folder Include="Protos\" />
   </ItemGroup>
   <ItemGroup>
-	<Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
-		<Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
-	</Protobuf>
+    <Protobuf
+      Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto"
+      GrpcServices="Client">
+      <Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
+    </Protobuf>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
@@ -35,11 +37,11 @@
     <PackageReference Include="Winista.MimeDetect" Version="1.1.0" />
   </ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Entities\" />
-		<Folder Include="Services\" />
-		<Folder Include="gRPC Prototypes\" />
-	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="Entities\" />
+    <Folder Include="Services\" />
+    <Folder Include="gRPC Prototypes\" />
+  </ItemGroup>
 
 
 	<ItemGroup>
