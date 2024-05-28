@@ -42,7 +42,7 @@ namespace Rsbc.Dmf.CaseManagement
                 DecisionDate = null,
                 Name = @case.dfp_DriverId?.dfp_fullname,
                 BirthDate = @case.dfp_DriverId?.dfp_dob,
-                DriverLicenseNumber = @case.dfp_DriverId.dfp_licensenumber,
+                DriverLicenseNumber = @case.dfp_DriverId.dfp_licensenumber ?? string.Empty,
                 FirstName = @case.dfp_DriverId.dfp_PersonId.firstname,
                 Surname = @case.dfp_DriverId.dfp_PersonId.lastname,
                 
