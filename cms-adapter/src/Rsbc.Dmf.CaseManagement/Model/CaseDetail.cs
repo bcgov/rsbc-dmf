@@ -80,6 +80,12 @@ namespace Rsbc.Dmf.CaseManagement
         public string Name { get; set; }
         public string DriverLicenseNumber { get; set; }
         public DateTimeOffset? BirthDate { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string Surname { get; set; }
+
+        public string MiddleName { get; set; }
     }
 
 }

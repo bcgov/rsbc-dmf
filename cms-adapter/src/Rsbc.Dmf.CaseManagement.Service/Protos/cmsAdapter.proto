@@ -47,6 +47,9 @@ service CaseManager {
 
   rpc GetMostRecentCaseDetail (DriverIdRequest) returns (GetCaseDetailReply);
 
+  // Search Case By IdCode
+  rpc GetCaseByIdCode (GetCaseByIdCodeRequest) returns (GetCaseDetailReply);
+
   rpc GetCaseDocuments (CaseIdRequest) returns (GetDocumentsReply);
 
   rpc GetDriverComments (DriverLicenseRequest) returns (GetCommentsReply);
@@ -122,6 +125,7 @@ service CaseManager {
 
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
+
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
@@ -282,6 +286,8 @@ message CaseDetail {
     string name = 18;
     string driverLicenseNumber = 19;
     google.protobuf.Timestamp birthDate = 20;
+    string firstName = 21;
+    string surname = 22;
 }
 
 message CreateStatusReply {	
@@ -304,6 +310,11 @@ message SearchReply {
   ResultStatus resultStatus = 2;
   string errorDetail = 3;
 }
+
+message GetCaseByIdCodeRequest {
+    string idCode= 1;
+}
+
 
 message EmptyRequest {	
 }

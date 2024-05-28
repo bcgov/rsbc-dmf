@@ -8,14 +8,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { PatientCase } from '../../models/patient-case';
 
-export interface ApiCasesCaseIdGet$Plain$Params {
-  caseId: string;
+export interface ApiCasesIdCodeGet$Plain$Params {
+  idCode: string;
 }
 
-export function apiCasesCaseIdGet$Plain(http: HttpClient, rootUrl: string, params: ApiCasesCaseIdGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PatientCase>> {
-  const rb = new RequestBuilder(rootUrl, apiCasesCaseIdGet$Plain.PATH, 'get');
+export function apiCasesIdCodeGet$Plain(http: HttpClient, rootUrl: string, params: ApiCasesIdCodeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<PatientCase>> {
+  const rb = new RequestBuilder(rootUrl, apiCasesIdCodeGet$Plain.PATH, 'get');
   if (params) {
-    rb.path('caseId', params.caseId, {});
+    rb.path('idCode', params.idCode, {});
   }
 
   return http.request(
@@ -28,4 +28,4 @@ export function apiCasesCaseIdGet$Plain(http: HttpClient, rootUrl: string, param
   );
 }
 
-apiCasesCaseIdGet$Plain.PATH = '/api/Cases/{caseId}';
+apiCasesIdCodeGet$Plain.PATH = '/api/Cases/{idCode}';

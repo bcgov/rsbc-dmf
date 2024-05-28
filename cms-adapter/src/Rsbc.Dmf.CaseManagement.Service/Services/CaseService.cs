@@ -663,6 +663,39 @@ namespace Rsbc.Dmf.CaseManagement.Service
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
+
+        public async override Task<GetCaseDetailReply> GetCaseByIdCode(GetCaseByIdCodeRequest request, ServerCallContext context)
+        {
+            var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
+
+            try
+            {
+                var c = await _caseManager.GetCaseByIdCode(request.IdCode);
+                if (c != null)
+                {
+                    reply.Item = _mapper.Map<CaseDetail>(c);
+                    reply.ResultStatus = ResultStatus.Success;
+                }
+                else
+                {
+                    reply.ErrorDetail = "Case Number not found";
+                }
+            }
+            catch (Exception e)
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = e.Message;
+            }
+
+            return reply;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<GetCaseDetailReply> GetMostRecentCaseDetail(DriverIdRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
