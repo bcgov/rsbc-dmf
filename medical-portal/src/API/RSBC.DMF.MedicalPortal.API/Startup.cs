@@ -1,38 +1,24 @@
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using RSBC.DMF.MedicalPortal.API.Services;
 using Serilog;
 using Serilog.Events;
-using System;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Reflection;
 using Grpc.Net.Client;
 using Pssg.DocumentStorageAdapter;
 using System.Data;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
-using System.IdentityModel.Tokens.Jwt;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using System.Text.Json;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Common;
-
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -79,30 +65,26 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddAuthorization(options =>
             {
-                // TODO confirm by using invalid clientsecret, might need to add policy "Bearer" to force authentication check above
-                // oauth authentication
-                //options.AddPolicy("OAuth", policy =>
-                //{
-                //    policy.RequireAuthenticatedUser().AddAuthenticationSchemes("introspection");
-                //    //policy.RequireClaim("scope", "doctors-portal-api");
-                //});
-
-                // TODO uncomment this and add it to all policies, also update the user secrets scope
-                // check if we need scope medical-portal-ui, if not, rename to medical-portal
-                //policy.RequireClaim("scope", "medical-portal-api");
+                options.AddPolicy(
+                    Policies.Oidc,
+                    policy => policy
+                        // confirm this is working by using a bad secret, currently the secret is not being validated
+                        .RequireAuthenticatedUser().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                        // TODO verify if we need to add scope medical-portal-ui and medical-portal-api or if just medical-portal will do, in other projects there are api and ui
+                        // the below does not work, since the scope claim looks something like "email profile openid". This problem has already been solved, research the proper way to handle scope
+                        // need to add the scope to keycloak admin UI before we can add the scope to FE, which would pass the scope claim to the BE
+                        //.RequireClaim(Claims.Scope, "medical-portal")
+                        );
 
                 options.AddPolicy(
                     Policies.MedicalPractitioner,
                     policy => policy
                         .RequireAuthenticatedUser()
-                        .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa)
-                );
+                        .RequireRole(Claims.IdentityProvider, Roles.Practitoner, Roles.Moa));
 
                 options.AddPolicy(Policies.Enrolled, policy => policy
                     .RequireAuthenticatedUser()
-                    // TODO uncomment to validate the user is enrolled, we may need to make sure that the claim name has not changed since POC
-                    //.RequireRole(Claims.IdentityProvider, Roles.Dmft)
-                    );
+                    .RequireRole(Claims.IdentityProvider, Roles.Dmft));
             });
 
             services.AddControllers(options =>
@@ -112,11 +94,6 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddSwaggerGen(c =>
             {
-                // add Xml comments to the swagger docs
-                //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
-                //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlPath));
-                //c.SchemaFilter<EnumTypesSchemaFilter>(xmlPath);
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
             });            
 
@@ -220,11 +197,19 @@ namespace RSBC.DMF.MedicalPortal.API
         {
             if (context.Principal?.Identity is ClaimsIdentity identity
             && identity.IsAuthenticated)
-            {
+            {                
                 // Flatten the Resource Access claim
-                identity.AddClaims(identity.GetResourceAccessRoles(Clients.License)
-                    .Select(role => new Claim(ClaimTypes.Role, role)));
+                identity.AddClaims(
+                    identity.GetResourceAccessRoles(Clients.License)
+                        .Select(role => new Claim(identity.RoleClaimType, role))
+                );
 
+                identity.AddClaims(
+                    identity.GetResourceAccessRoles(Clients.DmftStatus)
+                        .Select(role => new Claim(identity.RoleClaimType, role))
+                );
+
+                // TODO I think this is wrong, we should only need to call this once but this is validating on every request
                 var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                 context.Principal = await userService.Login(context.Principal);
             }
@@ -290,7 +275,7 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers()
-                    .RequireAuthorization(/*Policies.MedicalPractitioner/*, Policies.Enrolled/*, "OAuth"*/);
+                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled, Policies.Oidc);
             });
         }
 

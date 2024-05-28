@@ -11,6 +11,7 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, CaseDocument>()
                 .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.DmerType))
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
+                // TODO rename to IdCode
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.Case.CaseNumber))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday))

@@ -12,13 +12,14 @@ import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-toke
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        provideRouter(routes, withComponentInputBinding()),
-        provideAnimationsAsync(),
-        provideHttpClient(withInterceptors([BearerTokenInterceptor])),
-        importProvidersFrom(
-      KeycloakModule,
-      PermissionsModule.forRoot(),
-      ApiModule.forRoot({ rootUrl: environment.apiRootUrl })),
+      provideRouter(routes, withComponentInputBinding()),
+      provideAnimationsAsync(),
+      provideHttpClient(withInterceptors([BearerTokenInterceptor])),
+      importProvidersFrom(
+        KeycloakModule,
+        PermissionsModule.forRoot(),
+        ApiModule.forRoot({ rootUrl: environment.apiRootUrl })
+      ),
       {
         provide: APP_BASE_HREF,
           useFactory: (s: PlatformLocation) => {
