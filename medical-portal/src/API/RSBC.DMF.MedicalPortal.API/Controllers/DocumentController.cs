@@ -89,7 +89,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 if(result.Count > 0)
                 {
-                    result = result.OrderByDescending(doc =>doc.CreateDate).ToList();
+                    result = result.OrderByDescending(doc =>doc.CreatedOn).ToList();
                 }
                 
                 return Json(result);

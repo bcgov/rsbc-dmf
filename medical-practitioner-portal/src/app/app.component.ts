@@ -28,7 +28,7 @@ import { NgIf } from '@angular/common';
 })
 export class AppComponent {
   title = 'medical-practitioner-portal';
-  public versionInfo: ApplicationVersionInfo | null = null;
+  //public versionInfo: ApplicationVersionInfo | null = null;
   public isLoading = true;
   public profileName: string = '';
 
@@ -56,13 +56,6 @@ export class AppComponent {
         }
 
         // Get Version info on footer
-        if (this.versionInfoDataService !== null) {
-          this.versionInfoDataService
-            .apiApplicationVersionInfoGet$Json()
-            .subscribe((versionInfo: ApplicationVersionInfo) => {
-              this.versionInfo = versionInfo;
-            });
-        }
       });
     } catch (e) {
       console.error(e);
