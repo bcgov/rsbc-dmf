@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export interface EFormDetails {
-  id?: string | null;
+export interface DocumentSubType {
+  id?: number;
   name?: string | null;
 }

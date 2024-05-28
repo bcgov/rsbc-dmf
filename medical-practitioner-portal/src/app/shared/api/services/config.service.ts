@@ -9,11 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiConfigGet$Json } from '../fn/config/api-config-get-json';
-import { ApiConfigGet$Json$Params } from '../fn/config/api-config-get-json';
-import { apiConfigGet$Plain } from '../fn/config/api-config-get-plain';
-import { ApiConfigGet$Plain$Params } from '../fn/config/api-config-get-plain';
-import { Configuration } from '../models/configuration';
+import { apiConfigGet } from '../fn/config/api-config-get';
+import { ApiConfigGet$Params } from '../fn/config/api-config-get';
 
 @Injectable({ providedIn: 'root' })
 export class ConfigService extends BaseService {
@@ -26,45 +23,23 @@ export class ConfigService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiConfigGet$Plain()` instead.
+   * To access only the response body, use `apiConfigGet()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiConfigGet$Plain$Response(params?: ApiConfigGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Configuration>> {
-    return apiConfigGet$Plain(this.http, this.rootUrl, params, context);
+  apiConfigGet$Response(params?: ApiConfigGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+    return apiConfigGet(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiConfigGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiConfigGet$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiConfigGet$Plain(params?: ApiConfigGet$Plain$Params, context?: HttpContext): Observable<Configuration> {
-    return this.apiConfigGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Configuration>): Configuration => r.body)
-    );
-  }
-
-  /**
-   * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiConfigGet$Json()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiConfigGet$Json$Response(params?: ApiConfigGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Configuration>> {
-    return apiConfigGet$Json(this.http, this.rootUrl, params, context);
-  }
-
-  /**
-   * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiConfigGet$Json$Response()` instead.
-   *
-   * This method doesn't expect any request body.
-   */
-  apiConfigGet$Json(params?: ApiConfigGet$Json$Params, context?: HttpContext): Observable<Configuration> {
-    return this.apiConfigGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Configuration>): Configuration => r.body)
+  apiConfigGet(params?: ApiConfigGet$Params, context?: HttpContext): Observable<void> {
+    return this.apiConfigGet$Response(params, context).pipe(
+      map((r: StrictHttpResponse<void>): void => r.body)
     );
   }
 

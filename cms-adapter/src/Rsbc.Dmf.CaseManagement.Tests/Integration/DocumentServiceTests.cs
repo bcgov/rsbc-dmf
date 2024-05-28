@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using Shouldly;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,5 +41,22 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             Assert.NotNull(response);
             response.Items.ShouldNotBeEmpty();
         }
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task Get_Driver_Documents()
+        {
+
+
+            var caseId = _configuration["ICBC_TEST_CASEID"];
+
+            var request = new GetDriverAndCaseDocumentsRequest();
+
+            request.CaseId= caseId;
+            var response = _documentService.GetDriverAndCaseDocuments(request, null);
+
+            Assert.NotNull(response);
+            
+        }
+
     }
 }

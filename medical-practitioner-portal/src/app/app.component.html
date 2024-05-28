@@ -1,6 +1,17 @@
 <ng-container>
-  <app-header></app-header>
-  <app-nav-menu></app-nav-menu>
-  <router-outlet />
-  <app-footer></app-footer>
+  <header>
+    <app-header (logout)="onLogout()"></app-header>
+  </header>
+
+  <nav>
+    <app-nav-menu></app-nav-menu>
+  </nav>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <footer>
+    <app-footer></app-footer>
+  </footer>
 </ng-container>

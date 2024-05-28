@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Rsbc.Dmf.CaseManagement.DomainModels;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 
 namespace Rsbc.Dmf.CaseManagement.Dynamics
@@ -11,6 +12,12 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             {
                 CreateMap<dfp_documentsubtype, DocumentSubType>()
                     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.dfp_name));
+
+                CreateMap<dfp_submittaltype, DocumentType>()
+                    .ForMember(dest => dest.DocumentName, opt => opt.MapFrom(src => src.dfp_name));
+                   
+
+
             }
         }
     }

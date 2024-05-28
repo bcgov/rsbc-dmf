@@ -45,6 +45,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<DomainModels.Document, Document>();
             CreateMap<DomainModels.Case, Case>();
             CreateMap<DomainModels.Person, Person>();
+            CreateMap<DomainModels.DocumentType, DocumentType>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

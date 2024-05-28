@@ -11,5 +11,7 @@ namespace Rsbc.Dmf.CaseManagement
         Task<IEnumerable<LegacyDocument>> GetCaseLegacyDocuments(string caseId);
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber, bool includeEmpty);
         IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode);
+
+        IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId);
     }
 }

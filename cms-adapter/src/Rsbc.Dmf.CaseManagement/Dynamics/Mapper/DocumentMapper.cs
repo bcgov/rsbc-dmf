@@ -40,7 +40,15 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.dfp_dmertype))
                     .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.dfp_dmerstatus))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
-                    .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate));
+                    .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
+                    .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID))
+                    .ForMember(dest => dest.DocumentSubType, opt => opt.MapFrom(src => src.dfp_DocumentSubType))
+                    .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
+                    .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
+                    .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
+                    .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()));
+
+
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
