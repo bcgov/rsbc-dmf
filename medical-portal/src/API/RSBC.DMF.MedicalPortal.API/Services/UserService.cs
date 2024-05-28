@@ -87,10 +87,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 logger.LogDebug("Processing login {0}", user.Identity.Name);
                 logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
-                var clinicId = configuration["CLINIC_ID"] != null
-                    ? configuration["CLINIC_ID"]
-                    : "3bec7901-541d-ec11-b82d-00505683fbf4";
-
                 var loginRequest = new UserLoginRequest();
                 loginRequest.UserType = UserType.MedicalPractitionerUserType;
                 loginRequest.Email = user.FindFirstValue(Claims.Email);
@@ -98,14 +94,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 loginRequest.ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername);
                 loginRequest.FirstName = user.FindFirstValue(ClaimTypes.GivenName);
                 loginRequest.LastName = user.FindFirstValue(ClaimTypes.Surname);
-                var userProfileRequest = new UserProfile();
-                userProfileRequest.MedicalPractitioner = new MedicalPractitionerProfile();
-                userProfileRequest.MedicalPractitioner.Role = user.GetRoles().SingleOrDefault();
-                userProfileRequest.MedicalPractitioner.Clinic = new Clinic { Id = clinicId };
-                loginRequest.UserProfiles.Add(userProfileRequest);
-
-                // TODO uncomment after roles are fixed
-                //if (!user.IsInRole(Roles.Moa) || !user.IsInRole(Roles.Practitoner)) throw new Exception("User not enrolled");
 
                 var loginResponse = await userManager.LoginAsync(loginRequest);
                 if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
@@ -118,19 +106,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-                //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
                 claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
                 claims.Add(new Claim(Claims.LoginIds, JsonSerializer.Serialize(loginResponse.LoginIds.ToList())));
-                //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
-                //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
-                //claims.AddRange(userProfile.LinkedProfiles.Select(p => new Claim("clinic_assignment", JsonSerializer.Serialize(new ClinicAssignment
-                //{
-                //    PractitionerId = p.MedicalPractitioner.Id,
-                //    Role = p.MedicalPractitioner.Role,
-                //    ClinicId = p.MedicalPractitioner.Clinic.Id,
-                //    ClinicName = p.MedicalPractitioner.Clinic.Name
-                //}))));
-
                 user.AddIdentity(new ClaimsIdentity(claims));
 
                 logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);

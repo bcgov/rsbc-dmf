@@ -87,6 +87,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 MedicalPractitioner = new MedicalPractitionerProfile
                 {
                     Id = medicalPractictioner.Id,
+                    // TODO remove this after regression testing UsersSearchReply
                     Role = ca.Roles.FirstOrDefault() ?? String.Empty,
                     Clinic = new Clinic { Id = ca.Clinic.Id, Name = ca.Clinic.Name }
                 }
@@ -120,12 +121,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         ExternalSystem = request.ExternalSystem,
                         ExternalSystemUserId = request.ExternalSystemUserId,
                         FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        ClinicAssignments = medicalPractitionerProfiles.Select(p => new ClinicAssignment
-                        {
-                            Roles = new[] { p.MedicalPractitioner.Role },
-                            Clinic = new CaseManagement.Clinic { Id = p.MedicalPractitioner.Clinic.Id }
-                        })
+                        LastName = request.LastName
                     };
                 }
                 else

@@ -17,6 +17,7 @@ public class AuthConstant
         public const string Subject = "sub";
         public const string Roles = "roles";
         public const string LoginIds = "login_ids";
+        public const string Scope = "scope";
     }
     public static class Roles
     {
@@ -27,13 +28,13 @@ public class AuthConstant
     }
     public static class Policies
     {
+        public const string Oidc = "oidc";
         public const string MedicalPractitioner = "medical-practitioner";
-
         public const string Enrolled = "dmft-enrolled";
     }
     public static class Clients
     {
         public const string License = "LICENCE-STATUS";
+        public const string DmftStatus = "DMFT-WEBAPP";
     }
 }
-
