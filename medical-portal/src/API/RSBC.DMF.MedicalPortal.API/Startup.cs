@@ -222,8 +222,10 @@ namespace RSBC.DMF.MedicalPortal.API
             && identity.IsAuthenticated)
             {
                 // Flatten the Resource Access claim
-                identity.AddClaims(identity.GetResourceAccessRoles(Clients.License)
-                    .Select(role => new Claim(ClaimTypes.Role, role)));
+                identity.AddClaims(
+                    identity.GetResourceAccessRoles(Clients.License)
+                        .Select(role => new Claim(identity.RoleClaimType, role))
+                );
 
                 var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                 context.Principal = await userService.Login(context.Principal);

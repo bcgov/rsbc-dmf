@@ -91,7 +91,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                     ? configuration["CLINIC_ID"]
                     : "3bec7901-541d-ec11-b82d-00505683fbf4";
 
-                var role = user.GetRoles().SingleOrDefault();
                 var loginRequest = new UserLoginRequest();
                 loginRequest.UserType = UserType.MedicalPractitionerUserType;
                 loginRequest.Email = user.FindFirstValue(Claims.Email);
@@ -101,9 +100,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 loginRequest.LastName = user.FindFirstValue(ClaimTypes.Surname);
                 var userProfileRequest = new UserProfile();
                 userProfileRequest.MedicalPractitioner = new MedicalPractitionerProfile();
-                // TODO need to uncomment this line to get roles working
-                //userProfileRequest.MedicalPractitioner.Role = user.GetRoles().SingleOrDefault();
-                userProfileRequest.MedicalPractitioner.Role = user.FindFirstValue(ClaimTypes.Role);
+                userProfileRequest.MedicalPractitioner.Role = user.GetRoles().SingleOrDefault();
                 userProfileRequest.MedicalPractitioner.Clinic = new Clinic { Id = clinicId };
                 loginRequest.UserProfiles.Add(userProfileRequest);
 
