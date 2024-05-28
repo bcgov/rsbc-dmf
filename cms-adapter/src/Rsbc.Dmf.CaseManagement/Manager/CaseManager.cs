@@ -842,6 +842,11 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// GetCaseDetail
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <returns></returns>
         public async Task<CaseDetail> GetCaseDetail(string caseId)
         {
             CaseDetail result = null;
@@ -865,6 +870,42 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
+        /// <summary>
+        /// Get Case By IdCode
+        /// </summary>
+        /// <param name="IdCode"></param>
+        /// <returns></returns>
+        public async Task<CaseDetail> GetCaseByIdCode(string IdCode)
+        {
+            CaseDetail result = null;
+
+            try
+            {
+                var fetchedCase = dynamicsContext.incidents
+                    .Expand(d => d.dfp_DriverId.dfp_PersonId)
+
+                    //.Expand(d => d.bcgov_incident_bcgov_documenturl)
+                    .Where( d => d.ticketnumber == IdCode)
+                    .FirstOrDefault();
+                if (fetchedCase != null)
+                {
+                    result = await _caseMapper.Map(fetchedCase);
+                    //result.DpsProcessingDate = GetDpsProcessingDate();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error(ex, $"Error getting case {IdCode}");
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// GetMostRecentCaseDetail
+        /// </summary>
+        /// <param name="driverId"></param>
+        /// <returns></returns>
         public async Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId)
         {
             CaseDetail result = null;

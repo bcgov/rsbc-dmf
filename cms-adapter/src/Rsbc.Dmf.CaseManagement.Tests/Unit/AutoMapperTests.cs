@@ -111,6 +111,9 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             caseDetail.LatestDecision = "LatestDecision";
             caseDetail.DecisionForClass = "DecisionForClass";
             caseDetail.DpsProcessingDate = DateTimeOffset.Now;
+            caseDetail.DriverLicenseNumber = "123344";
+            caseDetail.FirstName = "Joe";
+            caseDetail.Surname = "Trader";
 
             var mappedCaseDetail = _mapper.Map<Service.CaseDetail>(caseDetail);
 
