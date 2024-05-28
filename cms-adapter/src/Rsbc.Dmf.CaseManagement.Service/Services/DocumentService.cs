@@ -107,10 +107,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             try
             {
-                // var loginIds = request.LoginIds.Select(Guid.Parse);
+                 var loginId = request.LoginId;
                  var caseId = request.CaseId.ToString();
                 
-                var documents = _documentManager.GetDriverAndCaseDocuments(caseId, request.LoginId);
+                var documents = _documentManager.GetDriverAndCaseDocuments(caseId, loginId);
                 var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
                 result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;

@@ -39,14 +39,6 @@ export class AppComponent {
 
   public async ngOnInit(): Promise<void> {
     try {
-      // Load Configuration from server
-      // await firstValueFrom(this.authService.)
-
-      //attempt to log in
-      // let nextRoute = await firstValueFrom(
-      //   this.authService.login(location.pathname.substring(1) || 'dashboard')
-      // );
-
       //attempt to log in
       this.authService.isLoggedIn().subscribe((isLoggedIn) => {
         if (!isLoggedIn) {
@@ -54,8 +46,6 @@ export class AppComponent {
             idpHint: IdentityProvider.BCSC,
           });
         }
-
-        // Get Version info on footer
       });
     } catch (e) {
       console.error(e);

@@ -55,16 +55,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var response = _documentService.GetDriverAndCaseDocuments(request, null);
 
             Assert.NotNull(response);
-            //response.Items.ShouldNotBeEmpty();
+            
         }
-
-        //[Fact(Skip = RequiresDynamics)]
-        //public async Task CanGetCaseDetails()
-        //{
-        //    var caseId = _configuration["ICBC_TEST_CASEID"];
-        //   var response = _documentService.GetAllDriverDocuments(request, null);
-        //    Assert.NotNull(c);
-        //}
 
     }
 }

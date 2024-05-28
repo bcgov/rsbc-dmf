@@ -4,7 +4,7 @@ export interface CaseDocument {
   birthday?: string | null;
   caseNumber?: string | null;
   complianceDate?: string | null;
-  createDate?: string;
+  createdOn?: string;
   description?: string | null;
   dmerStatus?: number;
   dmerType?: number;
