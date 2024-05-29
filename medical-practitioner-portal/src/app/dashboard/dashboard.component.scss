@@ -124,10 +124,16 @@ mat-card {
 .serachResultRow2 {
   display: flex;
   flex: 1;
+  flex-wrap: wrap;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
   line-height: 24px;
+
+  > div > div {
+    padding: 18px;
+  }
 }
+
 
 .dmer-details-row{
   display: flex;

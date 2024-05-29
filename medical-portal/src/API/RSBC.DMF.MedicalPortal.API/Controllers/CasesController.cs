@@ -21,12 +21,52 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             _cmsAdapterClient = cmsAdapterClient;
         }
 
+        [HttpGet("search/{idCode}")]
+        [ProducesResponseType(typeof(PatientCase), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("SearchCaseByIdCode")]
+        public ActionResult SearchCaseByIdCode([Required][FromRoute] string idCode)
+        {
+            var result = new PatientCase();
+
+            if (string.IsNullOrEmpty(idCode) || idCode == Guid.Empty.ToString())
+            {
+                return BadRequest("Case Number  was invalid.");
+            }
+
+            
+             var c = _cmsAdapterClient.GetCaseByIdCode(new GetCaseByIdCodeRequest { IdCode = idCode});
+            if (c != null && c.ResultStatus == ResultStatus.Success)
+            {
+                result.CaseId = c.Item.CaseId;
+                result.DmerType = c.Item.DmerType;
+                result.Status = c.Item.Status;
+                result.Name = c.Item.Name;
+                result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
+                result.BirthDate = c.Item.BirthDate.ToDateTime();
+                result.IdCode = c.Item.IdCode;
+                result.FirstName = c.Item.FirstName;
+                result.SurName = c.Item.Surname;
+                //result.DueDate = c.Item.da
+                
+            }
+
+            // set to null if no decision has been made.
+            if (result.BirthDate == DateTime.MinValue)
+            {
+                result.BirthDate = null;
+            }
+
+            return Ok(result);
+        }
+
         [HttpGet("{caseId}")]
         [ProducesResponseType(typeof(PatientCase), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        [ActionName("GetCase")]
-        public ActionResult GetCase([Required][FromRoute] string caseId)
+        [ActionName("GetCaseById")]
+        public ActionResult GetCaseById([Required][FromRoute] string caseId)
         {
             var result = new PatientCase();
 
@@ -44,6 +84,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.Name = c.Item.AssigneeTitle;
                 result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
                 result.BirthDate = c.Item.BirthDate.ToDateTime();
+                result.IdCode = c.Item.IdCode;
+                result.FirstName = c.Item.FirstName;
+                result.SurName = c.Item.Surname;
             }
 
             // set to null if no decision has been made.
@@ -54,6 +97,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             return Ok(result);
         }
+
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)

@@ -29,6 +29,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId);
 
+        Task<CaseDetail> GetCaseByIdCode(string IdCode);
+
         Task<LegacyComment> GetComment(string commentId);
 
         Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);

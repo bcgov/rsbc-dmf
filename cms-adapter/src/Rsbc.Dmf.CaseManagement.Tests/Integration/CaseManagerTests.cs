@@ -778,5 +778,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
             var c = await _caseManager.GetCaseDetail(caseId);
             Assert.NotNull(c);
         }
+
+
+        [Fact(Skip = RequiresDynamics)]
+        public async Task CanGetCaseByIdCode()
+        {
+            var IdCode = _configuration["ICBC_TEST_IDCODE"];
+            var c = await _caseManager.GetCaseByIdCode(IdCode);
+            Assert.NotNull(c);
+        }
     }
 }

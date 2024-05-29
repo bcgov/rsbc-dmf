@@ -4,16 +4,20 @@
       <div>
         <label>First Name</label>
         <div>
-          <b>{{ caseDetails?.fullName }}</b>
+          <b>{{ caseDetails?.firstName }}</b>
         </div>
       </div>
       <div>
         <label>SUR</label>
-        <div><b>Minto</b></div>
+        <div>
+          <b>{{ caseDetails?.surName }}</b>
+        </div>
       </div>
       <div>
         <label>Driver’s License Number</label>
-        <div><b>A71267137</b></div>
+        <div>
+          <b>{{ caseDetails?.driverLicenseNumber }}</b>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>
@@ -26,7 +30,7 @@
         <div>
           <label>DMER Case Id</label>
           <div>
-            <b>{{ caseDetails?.caseNumber }}</b>
+            <b>{{ caseDetails?.idCode }}</b>
           </div>
         </div>
         <div>
@@ -38,13 +42,13 @@
         <div>
           <label>DMER Status</label>
           <div>
-            <b>{{ caseDetails?.dmerStatus }}</b>
+            <b>{{ caseDetails?.status }}</b>
           </div>
         </div>
         <div>
           <label>Submission Date</label>
           <div>
-            <b>{{ caseDetails?.complianceDate }}</b>
+            <b>{{ caseDetails?.dueDate }}</b>
           </div>
         </div>
         <div>

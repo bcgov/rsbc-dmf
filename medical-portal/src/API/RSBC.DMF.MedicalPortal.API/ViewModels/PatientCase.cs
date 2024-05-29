@@ -7,8 +7,16 @@ public class PatientCase
     public string DmerType { get; set; }
     public string Status { get; set; }
 
+    public string IdCode { get; set; }
+
+    public DateTime DueDate { get; set; } 
+
+
     // Patient
     public string Name { get; set; }
     public string DriverLicenseNumber { get; set; }
     public DateTime? BirthDate { get; set; }
+
+    public string FirstName { get; set; }
+    public string SurName { get; set; }
 }

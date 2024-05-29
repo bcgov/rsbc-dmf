@@ -24,7 +24,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
-import { CaseDocument } from '../shared/api/models';
+import { CaseDocument, PatientCase } from '../shared/api/models';
 import { TranslatDmerStatus } from '../app.model';
 import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
 
@@ -76,7 +76,7 @@ export class DashboardComponent implements OnInit {
   public searchBox = new FormControl('');
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
-  public searchedCase: any | null = {};
+  public searchedCase?: PatientCase;
   public practitionerDMERList: CaseDocument[] = [];
   public filteredData: CaseDocument[] = [];
 
@@ -107,12 +107,13 @@ export class DashboardComponent implements OnInit {
       this.prevSearchBox === '' ||
       this.prevSearchBox !== this.searchBox.value
     ) {
-      let searchParams: Parameters<CasesService['apiCasesCaseIdGet$Json']>[0] =
-        {
-          caseId: this.searchBox.value as string,
-        };
+      let searchParams: Parameters<
+        CasesService['apiCasesSearchIdCodeGet$Json']
+      >[0] = {
+        idCode: this.searchBox.value as string,
+      };
       this.casesService
-        .apiCasesCaseIdGet$Json(searchParams)
+        .apiCasesSearchIdCodeGet$Json(searchParams)
         .subscribe((dmerCase) => {
           if (dmerCase) this.searchedCase = dmerCase;
           console.log(searchParams, this.searchedCase);

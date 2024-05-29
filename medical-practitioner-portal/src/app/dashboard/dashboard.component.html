@@ -73,65 +73,69 @@
                 <label>Case Id</label>
                 <div>
                   <b
-                    ><a routerLink="/caseDetails" routerLinkActive="active">{{
-                      searchedCase?.title
-                    }}</a>
+                    ><a
+                      [routerLink]="['/caseDetails', searchedCase.caseId]"
+                      routerLinkActive="active"
+                      >{{ searchedCase.idCode }}</a
+                    >
                     <br
                   /></b>
                   View case details
                 </div>
               </div>
             </div>
-            <div class="serachResultRow2">
-              <div>
+            <div style="flex: 1">
+              <div class="serachResultRow2">
                 <div>
-                  <label>Patient's Name</label>
                   <div>
-                    <b
-                      >{{ searchedCase?.patientLastname }},
-                      {{ searchedCase?.patientFirstname }}
-                      {{ searchedCase?.patientMiddlename }}</b
-                    >
+                    <label>Patient's Name</label>
+                    <div>
+                      <b
+                        >{{ searchedCase.surName }},
+                        {{ searchedCase.firstName }}</b
+                      >
+                    </div>
+                  </div>
+                  <div>
+                    <label>DMER Type</label>
+                    <div>
+                      <b>{{ searchedCase.dmerType }}</b>
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <label>DMER Type</label>
-                  <div>
-                    <b>{{ searchedCase?.dmerType }}</b>
-                  </div>
-                </div>
-              </div>
 
-              <div>
                 <div>
-                  <label>Driver License Number</label>
                   <div>
-                    <b>{{ searchedCase?.driverLicense }}</b>
+                    <label>Driver License Number</label>
+                    <div>
+                      <b>{{ searchedCase.driverLicenseNumber }}</b>
+                    </div>
+                  </div>
+                  <div>
+                    <label>DMER Status</label>
+                    <div>
+                      <b>{{ searchedCase.status }}</b>
+                    </div>
                   </div>
                 </div>
                 <div>
-                  <label>DMER Status</label>
                   <div>
-                    <b>{{ SubmissionStatusEnum[searchedCase?.status] }}</b>
+                    <label>Date Of Birth</label>
+                    <div>
+                      <b>{{ searchedCase.birthDate | date : "longDate" }}</b>
+                    </div>
+                  </div>
+                  <div>
+                    <div>
+                      <button mat-flat-button class="primaryButton">
+                        Start DMER
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div>
-                <div>
-                  <label>Date Of Birth</label>
-                  <div>
-                    <b>{{ searchedCase?.driverBirthDate }}</b>
-                  </div>
-                </div>
-                <div>
-                  <div>
-                    @if(searchedCase.status == 100000005){
-                    <button mat-flat-button class="primaryButton">
-                      Start DMER
-                    </button>
-                    }
-                  </div>
-                </div>
+              <div style="padding-left: 18px">
+                This needs to be submitted by
               </div>
             </div>
           </div>
