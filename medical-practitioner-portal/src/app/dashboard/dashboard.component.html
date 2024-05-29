@@ -73,9 +73,11 @@
                 <label>Case Id</label>
                 <div>
                   <b
-                    ><a routerLink="/caseDetails" routerLinkActive="active">{{
-                      searchedCase?.idCode
-                    }}</a>
+                    ><a
+                      [routerLink]="['/caseDetails', searchedCase.caseId]"
+                      routerLinkActive="active"
+                      >{{ searchedCase.idCode }}</a
+                    >
                     <br
                   /></b>
                   View case details
@@ -89,7 +91,7 @@
                     <label>Patient's Name</label>
                     <div>
                       <b
-                        >{{ searchedCase?.surName }},
+                        >{{ searchedCase.surName }},
                         {{ searchedCase.firstName }}</b
                       >
                     </div>
@@ -97,7 +99,7 @@
                   <div>
                     <label>DMER Type</label>
                     <div>
-                      <b>{{ searchedCase?.dmerType }}</b>
+                      <b>{{ searchedCase.dmerType }}</b>
                     </div>
                   </div>
                 </div>
@@ -106,13 +108,13 @@
                   <div>
                     <label>Driver License Number</label>
                     <div>
-                      <b>{{ searchedCase?.driverLicenseNumber }}</b>
+                      <b>{{ searchedCase.driverLicenseNumber }}</b>
                     </div>
                   </div>
                   <div>
                     <label>DMER Status</label>
                     <div>
-                      <b>{{ searchedCase?.status }}</b>
+                      <b>{{ searchedCase.status }}</b>
                     </div>
                   </div>
                 </div>
@@ -120,7 +122,7 @@
                   <div>
                     <label>Date Of Birth</label>
                     <div>
-                      <b>{{ searchedCase?.birthDate | date : "longDate" }}</b>
+                      <b>{{ searchedCase.birthDate | date : "longDate" }}</b>
                     </div>
                   </div>
                   <div>
@@ -132,7 +134,7 @@
                   </div>
                 </div>
               </div>
-              <div style="padding-left: 24px">
+              <div style="padding-left: 18px">
                 This needs to be submitted by
               </div>
             </div>
