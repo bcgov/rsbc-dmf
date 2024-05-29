@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
@@ -22,13 +22,15 @@ export class AuthService implements IAuthService {
   }
 
   public getHpdid(): string | undefined {
-    return this.keycloakService.getKeycloakInstance()?.idTokenParsed?.sub;
-      // Stanley's POC used this but I would think it would be "sid"
-      //.preferred_username;
+    const idTokenParsed = this.keycloakService.getKeycloakInstance().idTokenParsed;
+    if (idTokenParsed !== undefined) {
+      return idTokenParsed['preferred_username'];
+    }
+    return undefined;
   }
 
   public isLoggedIn(): Observable<boolean> {
-    return from(this.keycloakService.isLoggedIn());
+    return of(this.keycloakService.isLoggedIn());
   }
 
   public logout(redirectUri: string): Observable<void> {
