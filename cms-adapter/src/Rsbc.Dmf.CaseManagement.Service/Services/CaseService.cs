@@ -640,6 +640,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Item.Name = c.Name ?? string.Empty;
                     reply.Item.DriverLicenseNumber = c.DriverLicenseNumber ?? string.Empty;
                     reply.Item.BirthDate = c.BirthDate?.ToTimestamp() ?? DateTimeOffset.MinValue.ToTimestamp();
+                    reply.Item.Surname = c.Surname ?? string.Empty;
+                    reply.Item.FirstName = c.FirstName ?? string.Empty;
 
                     reply.ResultStatus = ResultStatus.Success;
                 }

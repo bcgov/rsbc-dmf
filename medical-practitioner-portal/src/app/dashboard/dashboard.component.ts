@@ -107,12 +107,13 @@ export class DashboardComponent implements OnInit {
       this.prevSearchBox === '' ||
       this.prevSearchBox !== this.searchBox.value
     ) {
-      let searchParams: Parameters<CasesService['apiCasesIdCodeGet$Json']>[0] =
-        {
-          idCode: this.searchBox.value as string,
-        };
+      let searchParams: Parameters<
+        CasesService['apiCasesSearchIdCodeGet$Json']
+      >[0] = {
+        idCode: this.searchBox.value as string,
+      };
       this.casesService
-        .apiCasesIdCodeGet$Json(searchParams)
+        .apiCasesSearchIdCodeGet$Json(searchParams)
         .subscribe((dmerCase) => {
           if (dmerCase) this.searchedCase = dmerCase;
           console.log(searchParams, this.searchedCase);

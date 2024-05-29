@@ -27,11 +27,11 @@ import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core
 import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
 import { UploadDocumentComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component';
 import { MatButtonModule } from '@angular/material/button';
-import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
-import { CaseDocument } from '../shared/api/models';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CaseSubmissionsComponent } from '../../case-submissions/case-submissions.component';
 import { SubmissionRequirementsComponent } from '../../submission-requirements/submission-requirements.component';
+import { CasesService } from '@app/shared/api/services';
+import { PatientCase } from '@app/shared/api/models';
 
 @Component({
   selector: 'app-case-details',
@@ -55,7 +55,7 @@ import { SubmissionRequirementsComponent } from '../../submission-requirements/s
     UploadDocumentComponent,
     MatTabsModule,
     CaseSubmissionsComponent,
-    SubmissionRequirementsComponent
+    SubmissionRequirementsComponent,
   ],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
@@ -69,14 +69,17 @@ import { SubmissionRequirementsComponent } from '../../submission-requirements/s
   ],
 })
 export class CaseDetailsComponent implements OnInit {
-  caseId = input();
-  caseDetails: CaseDocument | undefined;
+  caseId = input<string>();
+  caseDetails?: PatientCase;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
   @ViewChild('stepper') stepper!: MatStepper;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private casesService: CasesService
+  ) {}
 
   ngAfterViewInit(): void {
     this.breakpointObserver
@@ -93,31 +96,29 @@ export class CaseDetailsComponent implements OnInit {
 
   public ngOnInit(): void {
     console.log(this.caseId());
-    this.caseDetails = PractitionerDMERList_SEED_DATA.find(
-      (c) => c.caseNumber === this.caseId()
-    );
-    // this.caseManagementService
-    //   .getMostRecentCase(this.loginService.userProfile?.id as string)
-    //   .subscribe((recentCase) => {
-    //     this.caseDetails = recentCase;
-    //     if (recentCase.status === 'Opened') {
-    //       this.selectedIndex = 0;
-    //     }
-    //     if (recentCase.status === 'Open Pending Submission') {
-    //       this.selectedIndex = 1;
-    //     }
-    //     if (recentCase.status === 'Under Review') {
-    //       this.selectedIndex = 2;
-    //     }
-    //     if (recentCase.status === 'File End Tasks') {
-    //       this.selectedIndex = 3;
-    //     }
-    //     if (recentCase.status === 'Intake Validation') {
-    //       this.selectedIndex = 4;
-    //     }
-    //     if (recentCase.status === 'Closed') {
-    //       this.selectedIndex = 5;
-    //     }
-    //   });
+    this.casesService
+      .apiCasesCaseIdGet$Json({ caseId: this.caseId() as string })
+      .subscribe((caseDetails) => {
+        console.log(this.caseDetails);
+        this.caseDetails = caseDetails;
+        if (caseDetails?.status === 'Opened') {
+          this.selectedIndex = 0;
+        }
+        if (caseDetails.status === 'Open Pending Submission') {
+          this.selectedIndex = 1;
+        }
+        if (caseDetails.status === 'Under Review') {
+          this.selectedIndex = 2;
+        }
+        if (caseDetails.status === 'File End Tasks') {
+          this.selectedIndex = 3;
+        }
+        if (caseDetails.status === 'Intake Validation') {
+          this.selectedIndex = 4;
+        }
+        if (caseDetails.status === 'Closed') {
+          this.selectedIndex = 5;
+        }
+      });
   }
 }
