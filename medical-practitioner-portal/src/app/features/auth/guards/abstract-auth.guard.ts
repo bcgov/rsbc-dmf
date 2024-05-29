@@ -6,10 +6,9 @@ import {
   Route,
   UrlTree,
 } from '@angular/router';
-
 import { Observable, catchError, map, of } from 'rxjs';
-
 import { AuthService } from '../services/auth.service';
+import { ROUTE_DENIED } from '@app/app.routes';
 
 export abstract class AuthGuard
   implements CanActivate, CanActivateChild, CanLoad
@@ -23,7 +22,7 @@ export abstract class AuthGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess(route.data?.routes?.auth);
+    return this.checkAccess(ROUTE_DENIED);
   }
 
   public canActivateChild(
@@ -33,7 +32,7 @@ export abstract class AuthGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess(childRoute.data?.routes?.auth);
+    return this.checkAccess(ROUTE_DENIED);
   }
 
   public canLoad(
@@ -43,7 +42,7 @@ export abstract class AuthGuard
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    return this.checkAccess(route.data?.routes?.auth);
+    return this.checkAccess(ROUTE_DENIED);
   }
 
   protected checkAccess(

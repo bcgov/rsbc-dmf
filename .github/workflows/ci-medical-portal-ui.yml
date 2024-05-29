@@ -1,11 +1,10 @@
 name: ci-medical-portal-ui
 
 on:
-  workflow_dispatch:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - 'medical-portal/src/UI/**'
+      - 'medical-practitioner-portal/src/**'
       - '.github/workflows/ci-medical-portal-ui.yml'
 
 env:
