@@ -264,7 +264,7 @@
                 <label>DMER Status</label>
                 <div>
                   @if (dmer && dmer.dmerStatus) {
-                  <b> {{ SubmissionStatusEnum[dmer.dmerStatus] }}</b>
+                  <b> {{ dmer.dmerStatus }}</b>
                   } @else {
                   {{ " " }}
                   }

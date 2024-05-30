@@ -33,6 +33,7 @@ import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.c
 import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
 import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
+import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
   selector: 'app-case-details',
@@ -110,32 +111,31 @@ export class CaseDetailsComponent implements OnInit {
       .subscribe((caseDetails) => {
         console.log(this.caseDetails);
         this.caseDetails = caseDetails;
-        if (caseDetails?.status === 'Opened') {
+        if (caseDetails?.status === CaseStageEnum.Opened) {
           this.selectedIndex = 0;
         }
-        if (caseDetails.status === 'Open Pending Submission') {
+        if (caseDetails.status === CaseStageEnum.OpenPendingSubmission) {
           this.selectedIndex = 1;
         }
-        if (caseDetails.status === 'Under Review') {
+        if (caseDetails.status === CaseStageEnum.UnderReview) {
           this.selectedIndex = 2;
         }
-        if (caseDetails.status === 'File End Tasks') {
+        if (caseDetails.status === CaseStageEnum.FileEndTasks) {
           this.selectedIndex = 3;
         }
-        if (caseDetails.status === 'Intake Validation') {
+        if (caseDetails.status === CaseStageEnum.IntakeValidation) {
           this.selectedIndex = 4;
         }
-        if (caseDetails.status === 'Closed') {
+        if (caseDetails.status === CaseStageEnum.Closed) {
           this.selectedIndex = 5;
         }
 
         // Load docuemnts
-        this.getdriverdocuments(this.caseDetails?.driverId as string);
+        this.getDriverDocuments(this.caseDetails?.driverId as string);
       });
   }
 
-  getdriverdocuments(driverId: string) {
-    console.log(driverId);
+  getDriverDocuments(driverId: string) {
     this.documentService
       .apiDocumentDriverIdAllDocumentsGet$Json({
         driverId: driverId,
@@ -147,17 +147,22 @@ export class CaseDetailsComponent implements OnInit {
         this.allDocuments = documents;
 
         documents.forEach((doc) => {
-          if (['Open-Required'].includes(doc.submittalStatus as string)) {
+          if (
+            [SubmittalStatusEnum.OpenRequired].includes(
+              doc.submittalStatus as SubmittalStatusEnum
+            )
+          ) {
             this.submissionRequirementDocuments.push(doc);
           } else if (
-            !['Open-Required', 'Issued', 'Sent'].includes(
-              doc.submittalStatus as string
-            )
+            ![
+              SubmittalStatusEnum.OpenRequired,
+              SubmittalStatusEnum.Issued,
+              SubmittalStatusEnum.Sent,
+            ].includes(doc.submittalStatus as SubmittalStatusEnum)
           ) {
             this.driverSubmissionDocuments.push(doc);
           }
         });
-        //this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
       });
   }
 }

@@ -25,8 +25,7 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
-import { TranslatDmerStatus } from '../app.model';
-import { PractitionerDMERList_SEED_DATA } from '../../seed-data/seed-data';
+
 
 interface Status {
   value: number;
@@ -58,7 +57,7 @@ interface Status {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent implements OnInit {
-  SubmissionStatusEnum = TranslatDmerStatus;
+  
 
   status: Status[] = [
     { value: 1, viewValue: 'All Status' },

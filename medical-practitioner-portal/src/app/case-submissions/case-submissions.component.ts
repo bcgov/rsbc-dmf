@@ -40,6 +40,7 @@ export class CaseSubmissionsComponent {
 
   constructor(private datePipe: DatePipe) {}
 
+  //#TODO Move this to backend
   getFormattedDate(date: string | undefined | null) {
     if (!date) {
       return ' ';
