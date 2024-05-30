@@ -8,6 +8,7 @@ import { ApplicationVersionInfoService } from './services/application-version-in
 import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
+import { DocumentTypeService } from './services/document-type.service';
 import { ProfileService } from './services/profile.service';
 
 /**
@@ -22,6 +23,7 @@ import { ProfileService } from './services/profile.service';
     CasesService,
     ConfigService,
     DocumentService,
+    DocumentTypeService,
     ProfileService,
     ApiConfiguration
   ],

@@ -32,13 +32,20 @@
     <PackageReference Include="Serilog.Sinks.Splunk" Version="3.7.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="8.0.0" />
+    <PackageReference Include="Winista.MimeDetect" Version="1.1.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Entities\" />
+		<Folder Include="Services\" />
+		<Folder Include="gRPC Prototypes\" />
+	</ItemGroup>
 
-  <ItemGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\shared-utils\SharedUtils.csproj" />
+	
+	
   </ItemGroup>
 </Project>

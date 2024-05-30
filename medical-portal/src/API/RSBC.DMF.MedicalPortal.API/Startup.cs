@@ -19,6 +19,7 @@ using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using System.Text.Json;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Common;
+using RSBC.DMF.MedicalPortal.API.Model;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -190,6 +191,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<DocumentFactory>();
             services.AddAutoMapperSingleton();
         }
 
