@@ -2,6 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
+  Input,
   OnInit,
   ViewChild,
   input,
@@ -28,10 +29,11 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { UploadDocumentComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CaseSubmissionsComponent } from '../../case-submissions/case-submissions.component';
-import { SubmissionRequirementsComponent } from '../../submission-requirements/submission-requirements.component';
-import { CasesService } from '@app/shared/api/services';
-import { PatientCase } from '@app/shared/api/models';
+import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.component';
+import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
+import { CasesService, DocumentService } from '@app/shared/api/services';
+import { CaseDocument, PatientCase } from '@app/shared/api/models';
+import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
   selector: 'app-case-details',
@@ -74,11 +76,19 @@ export class CaseDetailsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
+  pageSize = 10;
   @ViewChild('stepper') stepper!: MatStepper;
+
+  filteredDocuments?: CaseDocument[] | null = [];
+
+  allDocuments: CaseDocument[] = [];
+  submissionRequirementDocuments: CaseDocument[] = [];
+  driverSubmissionDocuments: CaseDocument[] = [];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private casesService: CasesService
+    private casesService: CasesService,
+    private documentService: DocumentService
   ) {}
 
   ngAfterViewInit(): void {
@@ -101,24 +111,58 @@ export class CaseDetailsComponent implements OnInit {
       .subscribe((caseDetails) => {
         console.log(this.caseDetails);
         this.caseDetails = caseDetails;
-        if (caseDetails?.status === 'Opened') {
+        if (caseDetails?.status === CaseStageEnum.Opened) {
           this.selectedIndex = 0;
         }
-        if (caseDetails.status === 'Open Pending Submission') {
+        if (caseDetails.status === CaseStageEnum.OpenPendingSubmission) {
           this.selectedIndex = 1;
         }
-        if (caseDetails.status === 'Under Review') {
+        if (caseDetails.status === CaseStageEnum.UnderReview) {
           this.selectedIndex = 2;
         }
-        if (caseDetails.status === 'File End Tasks') {
+        if (caseDetails.status === CaseStageEnum.FileEndTasks) {
           this.selectedIndex = 3;
         }
-        if (caseDetails.status === 'Intake Validation') {
+        if (caseDetails.status === CaseStageEnum.IntakeValidation) {
           this.selectedIndex = 4;
         }
-        if (caseDetails.status === 'Closed') {
+        if (caseDetails.status === CaseStageEnum.Closed) {
           this.selectedIndex = 5;
         }
+
+        // Load docuemnts
+        this.getDriverDocuments(this.caseDetails?.driverId as string);
+      });
+  }
+
+  getDriverDocuments(driverId: string) {
+    this.documentService
+      .apiDocumentDriverIdAllDocumentsGet$Json({
+        driverId: driverId,
+      })
+      .subscribe((documents) => {
+        if (!documents) {
+          return;
+        }
+        this.allDocuments = documents;
+
+        documents.forEach((doc) => {
+          if (
+            [SubmittalStatusEnum.OpenRequired].includes(
+              doc.submittalStatus as SubmittalStatusEnum
+            )
+          ) {
+            this.submissionRequirementDocuments.push(doc);
+          } else if (
+            ![
+              SubmittalStatusEnum.OpenRequired,
+              SubmittalStatusEnum.Issued,
+              SubmittalStatusEnum.Sent,
+            ].includes(doc.submittalStatus as SubmittalStatusEnum)
+          ) {
+            this.driverSubmissionDocuments.push(doc);
+          }
+        });
       });
   }
 }

@@ -1,13 +1,23 @@
 ﻿using AutoMapper;
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
+using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
+using System.Linq.Expressions;
+
 
 namespace RSBC.DMF.MedicalPortal.API
 {
     public class MappingProfile : Profile
     {
+        private readonly ILogger<MappingProfile> _logger;
+        private readonly TimeZoneInfo _pacificZone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
         public MappingProfile()
         {
+            //#TODO Move this to shared folder
+            CreateMap<Timestamp, DateTimeOffset>()
+             .ConvertUsing(src => src.ToDateTimeOffset());
+
             CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, CaseDocument>()
                 .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.DmerType))
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
@@ -16,8 +26,16 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
                 .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday))
                 .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.ComplianceDate));
+
+            CreateMap<LegacyDocument, ViewModels.CaseDocument>()
+             .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+             .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate));
+             
         }
+
     }
+
+
 
     public static class AutoMapperExtensions
     {

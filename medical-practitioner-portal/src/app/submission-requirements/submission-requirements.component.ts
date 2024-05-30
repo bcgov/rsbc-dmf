@@ -1,24 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { CaseDocument } from '@app/shared/api/models';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-submission-requirements',
   standalone: true,
-  imports: [QuickLinksComponent, MatButton],
+  imports: [QuickLinksComponent, MatButton, MatCardModule],
+  providers: [DatePipe],
   templateUrl: './submission-requirements.component.html',
   styleUrl: './submission-requirements.component.scss',
 })
 export class SubmissionRequirementsComponent {
   fileToUpload: File | null = null;
 
-  constructor(private _snackBar: MatSnackBar, private fb: FormBuilder) {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    private fb: FormBuilder,
+    private datePipe: DatePipe
+  ) {}
   public files: any[] = [];
   acceptControl = new FormControl(false);
+  @Input() documents: CaseDocument[] = [];
+
+  getFormattedDate(date: string | undefined | null) {
+    if (!date) {
+      return ' ';
+    }
+    return this.datePipe.transform(date, 'longDate');
+  }
 
   uploadForm = this.fb.group({
     documentSubType: ['', Validators.required],

@@ -59,7 +59,7 @@
   <div *ngIf="showSearchResults">
     <div class="result-card">
       <div>
-        Showing Search Results for <b>DMER Case Id</b>
+        Showing Search Results for <b>{{ searchedCase?.idCode }}</b>
         <button mat-button color="primary" (click)="clearResults()">
           Clear
         </button>
@@ -264,7 +264,7 @@
                 <label>DMER Status</label>
                 <div>
                   @if (dmer && dmer.dmerStatus) {
-                  <b> {{ SubmissionStatusEnum[dmer.dmerStatus] }}</b>
+                  <b> {{ dmer.dmerStatus }}</b>
                   } @else {
                   {{ " " }}
                   }

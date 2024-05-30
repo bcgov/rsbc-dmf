@@ -1,0 +1,37 @@
+.submissions {
+    display: flex;
+    flex-direction: row;
+    gap: 100px;
+    padding-top: 32px;
+  }
+
+  .file-upload {
+    display: block;
+  }
+
+  mat-card {
+    margin-bottom: 24px;
+  }
+  
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 12px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .submissionRequirement {
+    display: flex;
+   // width: 100%;
+    justify-content: space-between;
+    gap: 100px;
+  }

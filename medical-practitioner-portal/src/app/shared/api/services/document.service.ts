@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiDocumentDriverIdAllDocumentsGet$Json } from '../fn/document/api-document-driver-id-all-documents-get-json';
+import { ApiDocumentDriverIdAllDocumentsGet$Json$Params } from '../fn/document/api-document-driver-id-all-documents-get-json';
+import { apiDocumentDriverIdAllDocumentsGet$Plain } from '../fn/document/api-document-driver-id-all-documents-get-plain';
+import { ApiDocumentDriverIdAllDocumentsGet$Plain$Params } from '../fn/document/api-document-driver-id-all-documents-get-plain';
 import { apiDocumentGetDriverAndCaseDocumentsGet$Json } from '../fn/document/api-document-get-driver-and-case-documents-get-json';
 import { ApiDocumentGetDriverAndCaseDocumentsGet$Json$Params } from '../fn/document/api-document-get-driver-and-case-documents-get-json';
 import { apiDocumentGetDriverAndCaseDocumentsGet$Plain } from '../fn/document/api-document-get-driver-and-case-documents-get-plain';
@@ -117,6 +121,53 @@ export class DocumentService extends BaseService {
   apiDocumentGetDriverAndCaseDocumentsGet$Json(params: ApiDocumentGetDriverAndCaseDocumentsGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
     return this.apiDocumentGetDriverAndCaseDocumentsGet$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+    );
+  }
+
+  /** Path part for operation `apiDocumentDriverIdAllDocumentsGet()` */
+  static readonly ApiDocumentDriverIdAllDocumentsGetPath = '/api/Document/{driverId}/AllDocuments';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDocumentDriverIdAllDocumentsGet$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentDriverIdAllDocumentsGet$Plain$Response(params: ApiDocumentDriverIdAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDocument>>> {
+    return apiDocumentDriverIdAllDocumentsGet$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDocumentDriverIdAllDocumentsGet$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentDriverIdAllDocumentsGet$Plain(params: ApiDocumentDriverIdAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<Array<CaseDocument>> {
+    return this.apiDocumentDriverIdAllDocumentsGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CaseDocument>>): Array<CaseDocument> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDocumentDriverIdAllDocumentsGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentDriverIdAllDocumentsGet$Json$Response(params: ApiDocumentDriverIdAllDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDocument>>> {
+    return apiDocumentDriverIdAllDocumentsGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDocumentDriverIdAllDocumentsGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentDriverIdAllDocumentsGet$Json(params: ApiDocumentDriverIdAllDocumentsGet$Json$Params, context?: HttpContext): Observable<Array<CaseDocument>> {
+    return this.apiDocumentDriverIdAllDocumentsGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<CaseDocument>>): Array<CaseDocument> => r.body)
     );
   }
 

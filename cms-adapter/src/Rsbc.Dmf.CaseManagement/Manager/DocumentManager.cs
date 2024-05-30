@@ -273,9 +273,10 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var documents = new List<bcgov_documenturl>();
 
-            documents.AddRange(dynamicsContext.bcgov_documenturls.Expand(doc => doc.bcgov_CaseId).Expand(doc => doc.dfp_DocumentTypeID)
-                .Where(doc => doc._bcgov_caseid_value.Value == Guid.Parse(caseId) || (doc._dfp_loginid_value != null && doc._dfp_loginid_value.Value == Guid.Parse(loginId))));
-                 
+            var documentQuery = dynamicsContext.bcgov_documenturls
+                .Expand(doc => doc.bcgov_CaseId)
+                .Expand(doc => doc.dfp_DocumentTypeID)
+                .Where(doc => doc.bcgov_CaseId.incidentid == Guid.Parse(caseId));
 
             return _mapper.Map<IEnumerable<Document>>(documents);
         }

@@ -1,8 +1,8 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { NgClass, NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import {
   MatAccordion,
@@ -10,6 +10,7 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
+import { CaseDocument } from '@app/shared/api/models';
 
 @Component({
   selector: 'app-case-submissions',
@@ -29,8 +30,21 @@ import {
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
   ],
+  providers: [DatePipe],
   templateUrl: './case-submissions.component.html',
   styleUrl: './case-submissions.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class CaseSubmissionsComponent {}
+export class CaseSubmissionsComponent {
+  @Input() documents: CaseDocument[] = [];
+
+  constructor(private datePipe: DatePipe) {}
+
+  //#TODO Move this to backend
+  getFormattedDate(date: string | undefined | null) {
+    if (!date) {
+      return ' ';
+    }
+    return this.datePipe.transform(date, 'longDate');
+  }
+}

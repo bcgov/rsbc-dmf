@@ -48,6 +48,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Integration
 
 
             var caseId = _configuration["ICBC_TEST_CASEID"];
+           // var loginId = _configuration["LoginIds"];
 
             var request = new GetDriverAndCaseDocumentsRequest();
 

@@ -87,6 +87,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.IdCode = c.Item.IdCode;
                 result.FirstName = c.Item.FirstName;
                 result.SurName = c.Item.Surname;
+                result.DriverId = c.Item.DriverId;
             }
 
             // set to null if no decision has been made.
@@ -108,5 +109,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             return Ok(cases);
         }
+
+      
     }
 }
