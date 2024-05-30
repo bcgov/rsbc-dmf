@@ -2,6 +2,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
+  Input,
   OnInit,
   ViewChild,
   input,
@@ -30,8 +31,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CaseSubmissionsComponent } from '../../case-submissions/case-submissions.component';
 import { SubmissionRequirementsComponent } from '../../submission-requirements/submission-requirements.component';
-import { CasesService } from '@app/shared/api/services';
-import { PatientCase } from '@app/shared/api/models';
+import { CasesService, DocumentService } from '@app/shared/api/services';
+import { CaseDocument, PatientCase } from '@app/shared/api/models';
 
 @Component({
   selector: 'app-case-details',
@@ -74,11 +75,17 @@ export class CaseDetailsComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   selectedIndex = 0;
+  pageSize = 10;
   @ViewChild('stepper') stepper!: MatStepper;
+
+  filteredDocuments?: CaseDocument[] | null = [];
+
+  allDocuments: CaseDocument[] = [];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private casesService: CasesService
+    private casesService: CasesService,
+    private documentService: DocumentService
   ) {}
 
   ngAfterViewInit(): void {
@@ -119,6 +126,21 @@ export class CaseDetailsComponent implements OnInit {
         if (caseDetails.status === 'Closed') {
           this.selectedIndex = 5;
         }
+
+        // Load docuemnts
+        this.getdriverdocuments(this.caseDetails?.driverId as string);
+      });
+  }
+
+  getdriverdocuments(driverId: string) {
+    console.log(driverId);
+    this.documentService
+      .apiDocumentDriverIdAllDocumentsGet$Json({
+        driverId: driverId,
+      })
+      .subscribe((documents: any) => {
+        this.allDocuments = documents;
+        //this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
       });
   }
 }

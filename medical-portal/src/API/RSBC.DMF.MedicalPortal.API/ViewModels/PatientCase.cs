@@ -11,6 +11,8 @@ public class PatientCase
 
     public DateTime DueDate { get; set; } 
 
+    public string DriverId { get; set; }
+
 
     // Patient
     public string Name { get; set; }

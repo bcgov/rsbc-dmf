@@ -3,13 +3,19 @@
     <div class="submissions">
       <div>
         <p>
-          The Document History tab displays the documents and reports that RSBC has received regarding your case. Unfortunately, you cannot download a copy of these submissions.
+          The Document History tab displays the documents and reports that RSBC
+          has received regarding your case. Unfortunately, you cannot download a
+          copy of these submissions.
         </p>
         <p>
-          Please note that if your medical practitioner or you have sent a document through fax, it might take a while for it to appear in the Document History tab from the Submission Requirements tab.
+          Please note that if your medical practitioner or you have sent a
+          document through fax, it might take a while for it to appear in the
+          Document History tab from the Submission Requirements tab.
         </p>
         <p>
-          Find out more about <a> how to resubmit a document</a> as well as if and <a> how to request a copy of a submission.</a></p>
+          Find out more about <a> how to resubmit a document</a> as well as if
+          and <a> how to request a copy of a submission.</a>
+        </p>
       </div>
       <div>
         <app-quick-links></app-quick-links>
@@ -19,6 +25,8 @@
 
   <div class="list">
     <div>
+      @for( document of documents ; track document.documentUrl) {
+
       <mat-card>
         <mat-card-content class="caseSubmissions">
           <div style="text-align: center">
@@ -33,45 +41,40 @@
               <div>
                 <label>Submission Type</label>
                 <div>
-                  <b>Medical Report</b>
+                  <b>{{ document.documentType }}</b>
                 </div>
               </div>
               <div>
                 <label>Submission Status</label>
                 <div>
-                  <b>Received</b>
+                  <b>{{ document.submittalStatus }}</b>
                 </div>
               </div>
               <div>
                 <label>Submission Date</label>
                 <div>
-                  <b>May 1, 2019</b>
+                  <b>{{ getFormattedDate(document.dueDate) }}</b>
                 </div>
               </div>
             </div>
             <div class="caseDetailRow">
               <div>
-                <label>Case Id</label>
-                <div>
-                  <b>CAJ7777</b>
-                </div>
-              </div>
-              <div>
                 <label>Created Date</label>
                 <div>
-                  <b>April 12, 2019</b>
+                  <b>{{ getFormattedDate(document.createdOn) }}</b>
                 </div>
               </div>
               <div>
                 <label>Description</label>
                 <div>
-                  <b>jkhkjhkjhefkjhafkj</b>
+                  <b>{{ document.description }}</b>
                 </div>
               </div>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
+      }
     </div>
   </div>
 </div>
