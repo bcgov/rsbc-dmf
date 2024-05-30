@@ -105,8 +105,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
 
                 var claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-                claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
+                //claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+                //claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
                 claims.Add(new Claim(Claims.LoginIds, JsonSerializer.Serialize(loginResponse.LoginIds.ToList())));
                 user.AddIdentity(new ClaimsIdentity(claims));
 
