@@ -60,6 +60,12 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     .Map<IEnumerable<CaseDetail>>(reply.Items)
                     .ToList();
 
+                // sort the documents
+                if (result.Count > 0)
+                {
+                    result = result.OrderByDescending(cs => cs.OpenedDate).ToList();
+                }
+
                 return Json(result);
             }
             else
@@ -91,6 +97,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 // these properties are needed in other mappings but not here, only show minimal information
                 result.DriverId = null;
                 result.EligibleLicenseClass = null;
+
             }
             
             return Json(result);
