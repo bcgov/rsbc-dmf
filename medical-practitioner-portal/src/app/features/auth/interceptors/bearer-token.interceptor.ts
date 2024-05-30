@@ -9,7 +9,14 @@ export const BearerTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
 
 async function handle(req: any, next: any) {
   const keycloakService = inject(KeycloakService);
-  const bearerToken = await keycloakService.getToken();
+  let bearerToken: string;
+
+  try {
+    bearerToken = await keycloakService.getToken();
+  } catch (error) {
+    // if keycloak is not initialized, getToken will error
+    return next(req);
+  }
 
   if (!req.headers.has('Authorization')) {
       req = req.clone({

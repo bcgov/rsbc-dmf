@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
-
 import { AuthService } from '../services/auth.service';
 import { AuthGuard } from './abstract-auth.guard';
 
@@ -9,7 +8,7 @@ import { AuthGuard } from './abstract-auth.guard';
 })
 export abstract class AuthorizationRedirectGuard extends AuthGuard {
   public constructor(
-    protected authService: AuthService,
+    protected override authService: AuthService,
     private router: Router
   ) {
     super(authService);
