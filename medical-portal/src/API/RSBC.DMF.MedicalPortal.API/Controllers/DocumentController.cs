@@ -111,8 +111,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (reply != null && reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
                 // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
-                var replyItemsWithDocuments = reply.Items
-                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent");
+                var replyItemsWithDocuments = reply.Items;
+             
                 var result = _mapper.Map<List<CaseDocument>>(replyItemsWithDocuments);
 
                 // sort the documents

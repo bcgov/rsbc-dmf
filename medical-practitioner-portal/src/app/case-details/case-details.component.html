@@ -148,41 +148,14 @@
       <mat-tab-group animationDuration="0ms">
         <mat-tab label="Submission Requirements">
           <!-- <app-upload-document></app-upload-document> -->
-          <app-submission-requirements></app-submission-requirements>
-          <div>
-            <mat-card>
-              <mat-card-content class="submissionRequirement">
-                <div style="grid-area: A">
-                  <label>Due Date</label>
-                  <div>
-                    <b>May 2, 2022</b>
-                  </div>
-                </div>
-                <div style="grid-area: B">
-                  <label>Submission Type</label>
-                  <div>
-                    <b>Driver Medical Examination Report</b>
-                  </div>
-                </div>
-                <div style="grid-area: C">
-                  <label>Description</label>
-                  <div>
-                    <b>Description</b>
-                  </div>
-                </div>
-                <div style="grid-area: D">
-                  <div>
-                    <button mat-flat-button class="primaryButton">
-                      Start DMER
-                    </button>
-                  </div>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+          <app-submission-requirements
+            [documents]="submissionRequirementDocuments"
+          ></app-submission-requirements>
         </mat-tab>
         <mat-tab label="Driver Submissions">
-          <app-case-submissions [documents]="allDocuments"></app-case-submissions>
+          <app-case-submissions
+            [documents]="driverSubmissionDocuments"
+          ></app-case-submissions>
         </mat-tab>
       </mat-tab-group>
     </div>

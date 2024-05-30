@@ -29,8 +29,8 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { UploadDocumentComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CaseSubmissionsComponent } from '../../case-submissions/case-submissions.component';
-import { SubmissionRequirementsComponent } from '../../submission-requirements/submission-requirements.component';
+import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.component';
+import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
 import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
 
@@ -81,6 +81,8 @@ export class CaseDetailsComponent implements OnInit {
   filteredDocuments?: CaseDocument[] | null = [];
 
   allDocuments: CaseDocument[] = [];
+  submissionRequirementDocuments: CaseDocument[] = [];
+  driverSubmissionDocuments: CaseDocument[] = [];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -138,8 +140,23 @@ export class CaseDetailsComponent implements OnInit {
       .apiDocumentDriverIdAllDocumentsGet$Json({
         driverId: driverId,
       })
-      .subscribe((documents: any) => {
+      .subscribe((documents) => {
+        if (!documents) {
+          return;
+        }
         this.allDocuments = documents;
+
+        documents.forEach((doc) => {
+          if (['Open-Required'].includes(doc.submittalStatus as string)) {
+            this.submissionRequirementDocuments.push(doc);
+          } else if (
+            !['Open-Required', 'Issued', 'Sent'].includes(
+              doc.submittalStatus as string
+            )
+          ) {
+            this.driverSubmissionDocuments.push(doc);
+          }
+        });
         //this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
       });
   }

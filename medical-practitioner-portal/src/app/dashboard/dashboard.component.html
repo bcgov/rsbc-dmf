@@ -59,7 +59,7 @@
   <div *ngIf="showSearchResults">
     <div class="result-card">
       <div>
-        Showing Search Results for <b>DMER Case Id</b>
+        Showing Search Results for <b>{{ searchedCase?.idCode }}</b>
         <button mat-button color="primary" (click)="clearResults()">
           Clear
         </button>
