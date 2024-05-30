@@ -160,7 +160,7 @@ public class Startup
         {
             options.AddPolicy("CorsPolicy",
                 builder => builder
-                    .WithOrigins("http://localhost:8089", "http://localhost:9092", "http://localhost:4200", "https://medical-portal-pidp-0137d5-dev.apps.silver.devops.gov.bc.ca") //use config later
+                    .WithOrigins("https://localhost:4200") //use config later
                     .AllowAnyMethod()
                     .AllowAnyHeader());
         }); 
