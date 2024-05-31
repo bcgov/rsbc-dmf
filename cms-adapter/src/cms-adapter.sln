@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Moq
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{48E6EFCA-5C3C-480B-881B-B3F305D92A27}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\..\shared-utils\SharedUtils.csproj", "{2771CFA3-F3BD-427F-BA56-023A88501F79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,18 @@ Global
 		{48E6EFCA-5C3C-480B-881B-B3F305D92A27}.Release|x64.Build.0 = Release|Any CPU
 		{48E6EFCA-5C3C-480B-881B-B3F305D92A27}.Release|x86.ActiveCfg = Release|Any CPU
 		{48E6EFCA-5C3C-480B-881B-B3F305D92A27}.Release|x86.Build.0 = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|x64.Build.0 = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Debug|x86.Build.0 = Debug|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|x64.ActiveCfg = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|x64.Build.0 = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|x86.ActiveCfg = Release|Any CPU
+		{2771CFA3-F3BD-427F-BA56-023A88501F79}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
