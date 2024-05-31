@@ -10,8 +10,13 @@ public class MedicalPortalConfiguration
     public class SettingsConfiguration
     {
         public string PidpApiUrl { get; set; }
+        public CorsConfiguration Cors { get; set; } = new();
     }
 
+    public class CorsConfiguration
+    {
+        public string AllowedOrigins { get; set; }
+    }
 
     public class KeycloakConfiguration
     {

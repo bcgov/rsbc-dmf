@@ -115,20 +115,7 @@ namespace RSBC.DMF.MedicalPortal.API
                     options.KnownNetworks.Add(knownNetwork);
                 }
             });
-            services.AddCors();/* opts => opts.AddDefaultPolicy(policy =>
-            {
-                // try to get array of origins from section array
-                var corsOrigins = configuration.GetSection("app:cors:origins").GetChildren().Select(c => c.Value).ToArray();
-                // try to get array of origins from value
-                if (!corsOrigins.Any()) corsOrigins = configuration.GetValue("app:cors:origins", string.Empty).Split(',');
-                corsOrigins = corsOrigins.Where(o => !string.IsNullOrWhiteSpace(o)).ToArray();
-                if (corsOrigins.Any())
-                {
-                    policy.SetIsOriginAllowedToAllowWildcardSubdomains().WithOrigins(corsOrigins)
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
-                }
-            }));*/
+            services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy, corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
             services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
@@ -266,7 +253,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             app.UseAuthentication();
 
-            app.UseCors();
+            app.UseCors(Constants.CorsPolicy);
 
             app.UseRouting();
             app.UseResponseCompression();
