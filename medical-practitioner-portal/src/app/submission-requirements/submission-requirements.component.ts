@@ -16,9 +16,10 @@ import { CaseDocument, DocumentSubType } from '@app/shared/api/models';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '@app/shared/api/api-configuration';
-import { NgxDropzoneComponent, NgxDropzoneModule } from 'ngx-dropzone';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentTypeService } from '@app/shared/api/services';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -32,6 +33,7 @@ import { DocumentTypeService } from '@app/shared/api/services';
     MatSelectModule,
     ReactiveFormsModule,
     NgxDropzoneModule,
+    MatIcon,
   ],
   providers: [DatePipe],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -47,7 +49,7 @@ export class SubmissionRequirementsComponent {
     private _http: HttpClient,
     private datePipe: DatePipe,
     private apiConfig: ApiConfiguration,
-    private documentTypeService: DocumentTypeService
+    private documentTypeService: DocumentTypeService,
   ) {}
   public files: any[] = [];
   acceptControl = new FormControl(false);
@@ -129,7 +131,7 @@ export class SubmissionRequirementsComponent {
     formData.append('file', this.fileToUpload as File);
     formData.append(
       'documentSubTypeId',
-      this.uploadForm.controls.documentSubType.value as any
+      this.uploadForm.controls.documentSubType.value as any,
     );
     formData.append('driverId', this.driverId as string);
     this.isFileUploading = true;

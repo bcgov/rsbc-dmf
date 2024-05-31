@@ -58,12 +58,22 @@
 
   <div *ngIf="showSearchResults">
     <div class="result-card">
-      <div>
-        Showing Search Results for <b>{{ searchedCase?.idCode }}</b>
-        <button mat-button color="primary" (click)="clearResults()">
-          Clear
-        </button>
-      </div>
+      @if (isSearching) {
+        <div>
+          Showing Search Results for <b>{{ searchedCase?.idCode }}</b>
+          <button mat-button color="primary" (click)="clearResults()">
+            Clear
+          </button>
+        </div>
+      }
+
+      @if (noResults) {
+        <mat-card>
+          <mat-card-content>
+            <h2>No Results Found for this search</h2>
+          </mat-card-content>
+        </mat-card>
+      }
 
       <mat-card *ngIf="searchedCase">
         <mat-card-content>
@@ -122,7 +132,7 @@
                   <div>
                     <label>Date Of Birth</label>
                     <div>
-                      <b>{{ searchedCase.birthDate | date : "longDate" }}</b>
+                      <b>{{ searchedCase.birthDate | date: "longDate" }}</b>
                     </div>
                   </div>
                   <div>
@@ -210,9 +220,9 @@
             (selectionChange)="filterCasesData()"
           >
             @for (status of status; track status) {
-            <mat-option [value]="status.value">{{
-              status.viewValue
-            }}</mat-option>
+              <mat-option [value]="status.value">{{
+                status.viewValue
+              }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -224,60 +234,68 @@
       </div>
     </div>
     <div>
-      @for (dmer of filteredData; track dmer.caseNumber){
-      <mat-card style="margin-bottom: 24px">
-        <mat-card-content class="dmer-details">
-          <div>
-            <label>DMER Case Id</label>
+      @for (dmer of filteredData; track dmer.caseNumber) {
+        <mat-card style="margin-bottom: 24px">
+          <mat-card-content class="dmer-details">
             <div>
-              <b>
-                <a
-                  [routerLink]="['/caseDetails', dmer.caseNumber]"
-                  routerLinkActive="active"
-                  >{{ dmer.caseNumber }}
-                </a>
-              </b>
+              <label>DMER Case Id</label>
+              <div>
+                <b>
+                  <a
+                    [routerLink]="['/caseDetails', dmer.caseNumber]"
+                    routerLinkActive="active"
+                    >{{ dmer.caseNumber }}
+                  </a>
+                </b>
+              </div>
+              <div>View Case Details</div>
             </div>
-            <div>View Case Details</div>
-          </div>
-          <div class="dmer-details-row">
-            <div class="dmer-details-row-1">
-              <div class="column-width">
-                <label>Patient's Name</label>
-                <div>
-                  <b>{{ dmer.fullName }}</b>
+            <div class="dmer-details-row">
+              <div class="dmer-details-row-1">
+                <div class="column-width">
+                  <label>Patient's Name</label>
+                  <div>
+                    <b>{{ dmer.fullName }}</b>
+                  </div>
+                </div>
+                <div class="column-width">
+                  <label>Date of Birth</label>
+                  <div>
+                    <b>{{ dmer.birthday }}</b>
+                  </div>
+                </div>
+                <div class="column-width">
+                  <label>DMER Type</label>
+                  <div>
+                    <b>{{ dmer.dmerType }}</b>
+                  </div>
+                </div>
+                <div class="column-width">
+                  <label>DMER Status</label>
+                  <div>
+                    @if (dmer && dmer.dmerStatus) {
+                      <b> {{ dmer.dmerStatus }}</b>
+                    } @else {
+                      {{ " " }}
+                    }
+                  </div>
                 </div>
               </div>
-              <div class="column-width">
-                <label>Date of Birth</label>
-                <div>
-                  <b>{{ dmer.birthday }}</b>
-                </div>
-              </div>
-              <div class="column-width">
-                <label>DMER Type</label>
-                <div>
-                  <b>{{ dmer.dmerType }}</b>
-                </div>
-              </div>
-              <div class="column-width">
-                <label>DMER Status</label>
-                <div>
-                  @if (dmer && dmer.dmerStatus) {
-                  <b> {{ dmer.dmerStatus }}</b>
-                  } @else {
-                  {{ " " }}
-                  }
-                </div>
-              </div>
-            </div>
 
-            <div class="dmer-details-row-1">
-              This needs to be submitted by {{ dmer.complianceDate }}.
+              <div class="dmer-details-row-1">
+                This needs to be submitted by {{ dmer.complianceDate }}.
+              </div>
             </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      @if (noResults) {
+        <mat-card>
+          <mat-card-content>
+            <h2>No Results Found for this search</h2>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   </div>
