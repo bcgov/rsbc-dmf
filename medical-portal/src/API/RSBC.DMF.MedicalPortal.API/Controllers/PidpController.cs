@@ -20,7 +20,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("endorsements")]
-        public async Task<ActionResult> GetEndorsements()
+        [ProducesResponseType(typeof(JsonResult), 200)] // change this after converted to GRPC
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(500)]
+        [ActionName(nameof(GetMyEndorsements))]
+        public async Task<ActionResult> GetMyEndorsements()
         {
             var profile = _userService.GetCurrentUserContext();
             var userId = profile.Id;

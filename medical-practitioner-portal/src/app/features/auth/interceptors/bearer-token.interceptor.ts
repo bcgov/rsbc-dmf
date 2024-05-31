@@ -7,7 +7,7 @@ export const BearerTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
   return from(handle(req, next));
 };
 
-async function handle(req: any, next: any) {
+async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
   const keycloakService = inject(KeycloakService);
   let bearerToken: string;
 
