@@ -4,8 +4,13 @@ namespace RSBC.DMF.MedicalPortal.API;
 
 public class MedicalPortalConfiguration
 {
-
+    public SettingsConfiguration Settings { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
+
+    public class SettingsConfiguration
+    {
+        public string PidpApiUrl { get; set; }
+    }
 
 
     public class KeycloakConfiguration
