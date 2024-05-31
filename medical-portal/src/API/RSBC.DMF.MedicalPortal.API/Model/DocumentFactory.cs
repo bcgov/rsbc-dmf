@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
+using SharedUtils.Model.Enum;
 
 
 namespace RSBC.DMF.MedicalPortal.API.Model
@@ -36,7 +37,7 @@ namespace RSBC.DMF.MedicalPortal.API.Model
                 Priority = string.Empty,
                 // maps to "Intake Team"
                 Owner = "Client Services",
-                Origin = "Medical Portal",
+                Origin = Origin.PractitionerPortal.ToString(),
                 BatchId = string.Empty,
                 ValidationMethod = string.Empty,
                 ValidationPrevious = string.Empty,

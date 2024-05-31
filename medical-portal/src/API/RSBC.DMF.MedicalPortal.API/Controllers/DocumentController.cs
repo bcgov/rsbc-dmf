@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
-
-using System.Reflection.Emit;
 using Google.Protobuf;
-using Microsoft.AspNetCore.Authorization;
 using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Winista.Mime;
