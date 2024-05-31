@@ -35,110 +35,116 @@
         Upload File
       </button>
     </div>
-    <!-- @if(showUpload) {
-    <div class="fileUpload">
-      <b> Upload Your File</b>
-      <br />
-      1. Select the appropriate document type based on the submission
-      requirement below. <br />
-      2. Browse for your file <br />
-      3. Click Upload <br />
-      File button Certain documents cannot be uploaded (e.g., example here).
-      Learn how to submit additional documentation. -->
+    @if (showUpload) {
+      <div class="fileUpload">
+        <b> Upload Your File</b>
+        <br />
+        1. Select the appropriate document type based on the submission
+        requirement below. <br />
+        2. Browse for your file <br />
+        3. Click Upload <br />
+        File button Certain documents cannot be uploaded (e.g., example here).
+        Learn how to submit additional documentation.
 
-    <!-- <div style="padding-top: 24px">
-            <mat-form-field appearance="outline" style="width: 350px">
-              <mat-label>Select Document Type</mat-label>
-              <mat-select
-                name="documentType"
-                [formControl]="uploadForm.controls.documentSubType"
-              >
-                @for (documentType of documentSubTypes; track documentType) {
+        <div style="padding-top: 24px">
+          <mat-form-field appearance="outline" style="width: 350px">
+            <mat-label>Select Document Type</mat-label>
+            <mat-select
+              name="documentType"
+              [formControl]="uploadForm.controls.documentSubType"
+            >
+              @for (documentType of documentSubTypes; track documentType) {
                 <mat-option [value]="documentType.id">{{
                   documentType.name
                 }}</mat-option>
-                }
-              </mat-select>
-              @if (uploadForm.controls.documentSubType.getError('required')) {
-              <mat-error>This Field is required</mat-error>
               }
-            </mat-form-field>
-          </div> -->
+            </mat-select>
+            @if (uploadForm.controls.documentSubType.getError("required")) {
+              <mat-error>This Field is required</mat-error>
+            }
+          </mat-form-field>
+        </div>
 
-    <!-- <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
-            <ngx-dropzone-label
-              ><div>
-                <mat-icon> file_present </mat-icon>
-                <div>
-                  <p>
-                    Browse your file <br />
-                    File Upload Specifications <br />
-                    Maximum file size: 20MB <br />
-                    Accepted file types: PDF,PNG,JPEG
-                  </p>
-                </div>
-              </div></ngx-dropzone-label
-            >
-            @if(fileToUpload) {
+        <div style="padding-bottom: 24px">
+          <b>Note :Only one document can be uploaded at a time</b>
+        </div>
+
+        <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+          <ngx-dropzone-label
+            ><div>
+              <mat-icon> file_present </mat-icon>
+              <div>
+                <p>
+                  Browse your file <br />
+                  File Upload Specifications <br />
+                  Maximum file size: 20MB <br />
+                  Accepted file types: PDF,PNG,JPEG
+                </p>
+              </div>
+            </div></ngx-dropzone-label
+          >
+          @if (fileToUpload) {
             <ngx-dropzone-preview [removable]="true" (removed)="onRemove()">
               <ngx-dropzone-label>
                 {{ fileToUpload.name }} ({{ fileToUpload.type }})
               </ngx-dropzone-label>
             </ngx-dropzone-preview>
-            }
-          </ngx-dropzone>
-          <div style="padding-top: 24px">
-            <label>
-              <input type="checkbox" #confirmed [formControl]="acceptControl" />
-              By checking this box, I confirm that I am submitting an unaltered
-              copy of documentation provided by a medical professional.
-            </label>
-          </div> -->
+          }
+        </ngx-dropzone>
+        <div style="padding-top: 24px">
+          <label>
+            <input type="checkbox" #confirmed [formControl]="acceptControl" />
+            By checking this box, I confirm that I am submitting an unaltered
+            copy of documentation provided by a medical professional.
+          </label>
+        </div>
 
-    <!-- <div class="uploadbutton">
-            <button mat-flat-button class="primaryButton" (click)="fileUpload()">
-              Upload File
-            </button>
-            <button
-              mat-flat-button
-              class="cancelButton"
-              (click)="closeUploadFile()"
-            >
-              Cancel
-            </button>
-          </div> -->
-    <!-- </div>
-    } -->
+        <div class="buttonGroup">
+          <button mat-flat-button class="primaryButton" (click)="fileUpload()">
+            Upload File
+          </button>
+          <button
+            mat-flat-button
+            class="cancelButton"
+            (click)="closeUploadFile()"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    }
 
     <div>
-      @for( document of documents ; track document.documentUrl) {
-      <mat-card>
-        <mat-card-content class="submissionRequirement">
-          <div style="grid-area: A">
-            <label>Due Date</label>
-            <div>
-              <b>{{ getFormattedDate(document.dueDate) }}</b>
+      @for (document of documents; track document.documentUrl) {
+        <mat-card>
+          <mat-card-content class="submissionRequirement">
+            <div style="grid-area: A" class="submissionRequirementColumn">
+              <label>Due Date</label>
+              <div>
+                <b>{{ getFormattedDate(document.dueDate) }}</b>
+              </div>
             </div>
-          </div>
-          <div style="grid-area: B">
-            <label>Submission Type</label>
-            <div>
-              <b>{{ document.documentType }}</b>
+            <div style="grid-area: B"  class="submissionRequirementColumn">
+              <label>Submission Type</label>
+              <div>
+                <b>{{ document.documentType }}</b>
+              </div>
             </div>
-          </div>
-          <div style="grid-area: C">
-            <label>Description</label>
-            <div>
-              <b>{{ document.description }}</b>
+            <div style="grid-area: C" >
+              <label>Description</label>
+              <div>
+                <b>{{ document.description }}</b>
+              </div>
             </div>
-          </div>
-          <div style="grid-area: D">
-            <div>
-              <button mat-flat-button class="primaryButton">Start DMER</button>
+            <div style="grid-area: D">
+              <div>
+                <button mat-flat-button class="primaryButton">
+                  Start DMER
+                </button>
+              </div>
             </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+          </mat-card-content>
+        </mat-card>
       }
     </div>
   </div>

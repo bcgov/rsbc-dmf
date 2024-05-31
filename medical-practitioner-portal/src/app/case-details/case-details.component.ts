@@ -84,6 +84,7 @@ export class CaseDetailsComponent implements OnInit {
   allDocuments: CaseDocument[] = [];
   submissionRequirementDocuments: CaseDocument[] = [];
   driverSubmissionDocuments: CaseDocument[] = [];
+  
 
   constructor(
     private breakpointObserver: BreakpointObserver,

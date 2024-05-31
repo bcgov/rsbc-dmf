@@ -30,7 +30,9 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<LegacyDocument, ViewModels.CaseDocument>()
              .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
              .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate));
-             
+
+            CreateMap<Rsbc.Dmf.CaseManagement.Service.DocumentSubType, ViewModels.DocumentSubTypes>();
+
         }
 
     }

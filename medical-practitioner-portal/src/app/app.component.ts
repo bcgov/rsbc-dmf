@@ -9,6 +9,7 @@ import { ApplicationVersionInfoService } from './shared/api/services';
 import { ApplicationVersionInfo } from './shared/api/models';
 import { firstValueFrom } from 'rxjs';
 import { NgIf } from '@angular/common';
+import { NgxSpinnerComponent } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import { NgIf } from '@angular/common';
     FooterComponent,
     NavMenuComponent,
     NgIf,
+    NgxSpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //exports : [],
@@ -34,7 +36,7 @@ export class AppComponent {
 
   constructor(
     private authService: AuthService,
-    @Optional() private versionInfoDataService: ApplicationVersionInfoService
+    @Optional() private versionInfoDataService: ApplicationVersionInfoService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
@@ -47,6 +49,9 @@ export class AppComponent {
             // TODO add medical-portal scope and move this to api/Config
             scope: 'openid profile email',
           });
+        }
+        if (isLoggedIn) {
+          this.isLoading = false;
         }
       });
     } catch (e) {

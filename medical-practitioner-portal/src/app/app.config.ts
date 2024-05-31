@@ -9,28 +9,33 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
-    providers: [
-      provideRouter(routes, withComponentInputBinding()),
-      provideAnimationsAsync(),
-      provideHttpClient(withInterceptors([BearerTokenInterceptor])),
-      importProvidersFrom(
-        KeycloakModule,
-        PermissionsModule.forRoot(),
-        ApiModule.forRoot({ rootUrl: environment.apiRootUrl })
-      ),
-      {
-        provide: APP_BASE_HREF,
-          useFactory: (s: PlatformLocation) => {
-              let result = s.getBaseHrefFromDOM();
-              const hasTrailingSlash = result[result.length - 1] === '/';
-              if (hasTrailingSlash) {
-                  result = result.substr(0, result.length - 1);
-              }
-              return result;
-          },
-          deps: [PlatformLocation],
+  providers: [
+    provideRouter(routes, withComponentInputBinding()),
+    provideAnimationsAsync(),
+    provideHttpClient(
+      withInterceptors([BearerTokenInterceptor, ApiLoaderInterceptor]),
+    ),
+    importProvidersFrom(
+      KeycloakModule,
+      PermissionsModule.forRoot(),
+      ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
+      NgxSpinnerModule,
+    ),
+    {
+      provide: APP_BASE_HREF,
+      useFactory: (s: PlatformLocation) => {
+        let result = s.getBaseHrefFromDOM();
+        const hasTrailingSlash = result[result.length - 1] === '/';
+        if (hasTrailingSlash) {
+          result = result.substr(0, result.length - 1);
+        }
+        return result;
       },
-    ]
+      deps: [PlatformLocation],
+    },
+  ],
 };

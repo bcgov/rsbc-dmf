@@ -34,6 +34,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.CreateDate, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
+                    .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => src.dfp_documentorigin))
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()

@@ -52,6 +52,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         private readonly IHttpContextAccessor httpContext;
         private readonly IConfiguration configuration;
         private readonly ILogger<UserService> logger;
+        
 
         public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration, ILogger<UserService> logger)
         {

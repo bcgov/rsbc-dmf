@@ -1,4 +1,16 @@
-<ng-container>
+<!-- Loading The spinner -->
+
+<ngx-spinner
+  name="apiLoadingSpinner"
+  type="ball-clip-rotate"
+  [fullScreen]="true"
+  bdColor="rgba(0,0,0,0.8)"
+  color="#fff"
+>
+  <p style="color: #fff">Loading...</p>
+</ngx-spinner>
+
+@if (!isLoading) {
   <header>
     <app-header (logout)="onLogout()"></app-header>
   </header>
@@ -14,4 +26,4 @@
   <footer>
     <app-footer></app-footer>
   </footer>
-</ng-container>
+}

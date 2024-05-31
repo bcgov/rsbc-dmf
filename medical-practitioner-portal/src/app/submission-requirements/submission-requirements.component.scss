@@ -31,7 +31,68 @@
 
   .submissionRequirement {
     display: flex;
-   // width: 100%;
+    
     justify-content: space-between;
-    gap: 100px;
+    gap: 50px;
+  }
+
+  .submissionRequirementColumn{
+    min-width: 130px;
+  }
+  .fileUpload {
+    border-width: 0px;
+    left: 0px;
+    top: 0px;
+    width: 960px;
+    height: 625px;
+    background: inherit;
+    background-color: rgba(255, 255, 255, 1);
+    box-sizing: border-box;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(150, 192, 230, 1);
+    border-radius: 5px;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    padding: 24px;
+  }
+  
+  .form-label {
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    padding-top: 24px;
+  }
+  
+  label {
+    display: block;
+  }
+
+
+  input[type="checkbox"] {
+    transform: scale(1.5);
+    margin: 15px;
+  }
+  
+  .buttonGroup{
+    display: flex;
+  gap: 25px;
+  padding: 16px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .submissions {
+      display: block;
+    }
+  
+    .submissionRequirement {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "A B"
+        "C C"
+        "D D";
+    }
   }
