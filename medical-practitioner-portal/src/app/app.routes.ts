@@ -6,7 +6,6 @@ import { GetHelpComponent } from './get-help/get-help.component';
 import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
 import { AuthenticationGuard } from './features/auth/guards/authentication.guard';
 import { DeniedComponent } from './denied/denied.component';
-import { ProfileComponent } from './profile/profile.component';
 
 export const ROUTE_DENIED = 'denied';
 export const routes: Routes = [
@@ -21,7 +20,6 @@ export const routes: Routes = [
       { path: 'account', component: AccountComponent },
       { path: 'getHelp', component: GetHelpComponent },
       { path: 'caseSubmissions', component: CaseSubmissionsComponent },
-      { path: 'profile', component: ProfileComponent },
     ],
   },
 ];
