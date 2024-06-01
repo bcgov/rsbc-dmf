@@ -33,6 +33,7 @@
             ],
             "styles": [
               "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/ngx-spinner/animations/ball-clip-rotate.css",
               "src/styles.scss"
             ],
             "scripts": []

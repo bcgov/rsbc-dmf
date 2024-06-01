@@ -1,19 +1,42 @@
-import { Component, Input } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatSelectModule } from '@angular/material/select';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import {
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatFormField, MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { CaseDocument } from '@app/shared/api/models';
+import { CaseDocument, DocumentSubType } from '@app/shared/api/models';
 import { DatePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ApiConfiguration } from '@app/shared/api/api-configuration';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { DocumentTypeService } from '@app/shared/api/services';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-submission-requirements',
   standalone: true,
-  imports: [QuickLinksComponent, MatButton, MatCardModule],
+  imports: [
+    QuickLinksComponent,
+    MatButton,
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    ReactiveFormsModule,
+    NgxDropzoneModule,
+    MatIcon,
+  ],
   providers: [DatePipe],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './submission-requirements.component.html',
   styleUrl: './submission-requirements.component.scss',
 })
@@ -23,11 +46,33 @@ export class SubmissionRequirementsComponent {
   constructor(
     private _snackBar: MatSnackBar,
     private fb: FormBuilder,
-    private datePipe: DatePipe
+    private _http: HttpClient,
+    private datePipe: DatePipe,
+    private apiConfig: ApiConfiguration,
+    private documentTypeService: DocumentTypeService,
   ) {}
   public files: any[] = [];
   acceptControl = new FormControl(false);
   @Input() documents: CaseDocument[] = [];
+  @Input() driverId?: string | null;
+
+  documentSubTypes?: DocumentSubType[];
+
+  uploadForm = this.fb.group({
+    documentSubType: ['', Validators.required],
+  });
+
+  ngOnInit() {
+    this.getDocumentSubtypes();
+  }
+
+  getDocumentSubtypes() {
+    this.documentTypeService
+      .apiDocumentTypeDocumentSubTypeGet$Json({})
+      .subscribe((response) => {
+        this.documentSubTypes = response;
+      });
+  }
 
   getFormattedDate(date: string | undefined | null) {
     if (!date) {
@@ -35,10 +80,6 @@ export class SubmissionRequirementsComponent {
     }
     return this.datePipe.transform(date, 'longDate');
   }
-
-  uploadForm = this.fb.group({
-    documentSubType: ['', Validators.required],
-  });
 
   onSelect(event: any) {
     this.fileToUpload = event.addedFiles[0];
@@ -75,35 +116,38 @@ export class SubmissionRequirementsComponent {
   isFileUploading = false;
 
   fileUpload() {
-    // if (this.isFileUploading) {
-    //   return;
-    // }
-    // if (!this.fileToUpload) {
-    //   this._snackBar.open('Please select the file to Upload', 'Close', {
-    //     horizontalPosition: 'center',
-    //     verticalPosition: 'top',
-    //     duration: 5000,
-    //   });
-    //   return;
-    // }
-    // const formData = new FormData();
-    // formData.append('file', this.fileToUpload as File);
-    // //formData.append('documentSubTypeId', this.uploadForm.controls.documentSubType.value as any);
-    // this.isFileUploading = true;
-    // this._http
-    // .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {
-    //   })
-    //   .subscribe(() => {
-    //     this.fileToUpload = null;
-    //     //this.uploadForm.controls.documentSubType.setValue('');
-    //     //this.acceptControl.reset();
-    //     this._snackBar.open('Successfully uploaded!', 'Close', {
-    //       horizontalPosition: 'center',
-    //       verticalPosition: 'top',
-    //       duration: 5000,
-    //     });
-    //     this.showUpload = false;
-    //     this.isFileUploading = false;
-    //   });
+    if (this.isFileUploading) {
+      return;
+    }
+    if (!this.fileToUpload) {
+      this._snackBar.open('Please select the file to Upload', 'Close', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 5000,
+      });
+      return;
+    }
+    const formData = new FormData();
+    formData.append('file', this.fileToUpload as File);
+    formData.append(
+      'documentSubTypeId',
+      this.uploadForm.controls.documentSubType.value as any,
+    );
+    formData.append('driverId', this.driverId as string);
+    this.isFileUploading = true;
+    this._http
+      .post(`${this.apiConfig.rootUrl}/api/Document/upload`, formData, {})
+      .subscribe(() => {
+        this.fileToUpload = null;
+        this.uploadForm.controls.documentSubType.setValue('');
+        this.acceptControl.reset();
+        this._snackBar.open('Successfully uploaded!', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000,
+        });
+        this.showUpload = false;
+        this.isFileUploading = false;
+      });
   }
 }

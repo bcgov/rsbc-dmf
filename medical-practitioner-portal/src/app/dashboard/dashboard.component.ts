@@ -1,6 +1,7 @@
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
+  Input,
   OnInit,
   ViewChild,
   signal,
@@ -25,7 +26,6 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
-
 
 interface Status {
   value: number;
@@ -57,8 +57,6 @@ interface Status {
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent implements OnInit {
-  
-
   status: Status[] = [
     { value: 1, viewValue: 'All Status' },
     { value: 2, viewValue: 'Not Requested' },
@@ -77,13 +75,21 @@ export class DashboardComponent implements OnInit {
   public searchCasesInput: string = '';
   public searchedCase?: PatientCase;
   public practitionerDMERList: CaseDocument[] = [];
-  public filteredData: CaseDocument[] = [];
+  public filteredData?: CaseDocument[] = [];
+  public _allDocuments?: CaseDocument[] | null = [];
+
+  isSearching: boolean = false;
+  noResults: boolean = false;
+
+  isExpanded: Record<string, boolean> = {};
+
+  pageSize = 10;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {}
 
   public onClick(event: any, elementId: string): void {
@@ -111,12 +117,22 @@ export class DashboardComponent implements OnInit {
       >[0] = {
         idCode: this.searchBox.value as string,
       };
-      this.casesService
-        .apiCasesSearchIdCodeGet$Json(searchParams)
-        .subscribe((dmerCase) => {
+
+      this.isSearching = true;
+      this.noResults = false;
+
+      this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
+        next: (dmerCase) => {
           if (dmerCase) this.searchedCase = dmerCase;
           console.log(searchParams, this.searchedCase);
-        });
+        },
+        error: (err) => {
+          this.noResults = true;
+        },
+        complete: () => {
+          this.isSearching = false;
+        },
+      });
     }
     this.prevSearchBox = this.searchBox.value as string;
     this.showSearchResults = true;
@@ -146,5 +162,11 @@ export class DashboardComponent implements OnInit {
       if (matchStatus && matchCaseNumber) return true;
       else return false;
     });
+  }
+
+  viewMore() {
+    const pageSize = (this.filteredData?.length ?? 0) + this.pageSize;
+
+    this.filteredData = this._allDocuments?.slice(0, pageSize);
   }
 }
