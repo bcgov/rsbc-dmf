@@ -19,7 +19,7 @@ public class Endorsement : BaseClient, IEndorsement
 
     public async Task<IEnumerable<Model.Endorsement>> GetEndorsement(string hpDid)
     {
-        hpDid = hpDid.Replace("@", "%40");
+        hpDid = hpDid.Replace("@bcsc", "");
         var endorsementResult = await this.GetAsync<IEnumerable<EndorsementData.Model>>($"/api/v1/ext/parties/{hpDid}/endorsements").ConfigureAwait(false);
 
         if (!endorsementResult.IsSuccess || !endorsementResult.Value.Any())
