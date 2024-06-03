@@ -5,6 +5,18 @@ public class PdipadapterConfiguration
     public static bool IsDevelopment() => EnvironmentName == Environments.Development;
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
+    public SettingsConfiguration Settings { get; set; } = new();
+
+    public class SettingsConfiguration
+    {
+        public CorsConfiguration Cors { get; set; } = new();
+    }
+
+    public class CorsConfiguration
+    {
+        public string AllowedOrigins { get; set; }
+    }
+
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public ChesClientConfiguration ChesClient { get; set; } = new();
