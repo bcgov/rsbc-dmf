@@ -13,6 +13,8 @@ public class PatientCase
 
     public string DriverId { get; set; }
 
+    public DateTimeOffset? LatestComplianceDate { get; set; }
+
 
     // Patient
     public string Name { get; set; }
@@ -20,5 +22,9 @@ public class PatientCase
     public DateTime? BirthDate { get; set; }
 
     public string FirstName { get; set; }
-    public string SurName { get; set; }
+    public string LastName { get; set; }
+
+    public string MiddleName { get; set; }
+
+   
 }

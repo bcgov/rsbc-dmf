@@ -17,5 +17,6 @@ namespace RSBC.DMF.MedicalPortal.API.ViewModels
         public string SubmittalStatus { get; set; }
         public string DocumentType { get; set; }
         public string DocumentSubType { get; set; }
+        public string DocumentId { get; set; }
     }
 }

@@ -75,6 +75,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         public int OutstandingDocuments { get; set; }
 
+        /// <summary>
+        /// Indicates the LatestCompliance Date
+        /// </summary>
+        public DateTimeOffset LatestComplianceDate { get; set; }
+
         // Driver
         public string DriverId { get; set; }
         public string Name { get; set; }
@@ -83,7 +88,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string FirstName { get; set; }
 
-        public string Surname { get; set; }
+        public string LastName { get; set; }
 
         public string MiddleName { get; set; }
     }

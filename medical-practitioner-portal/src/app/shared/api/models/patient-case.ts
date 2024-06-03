@@ -9,7 +9,9 @@ export interface PatientCase {
   dueDate?: string;
   firstName?: string | null;
   idCode?: string | null;
+  lastName?: string | null;
+  latestComplianceDate?: string | null;
+  middleName?: string | null;
   name?: string | null;
   status?: string | null;
-  surName?: string | null;
 }
