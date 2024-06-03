@@ -9,6 +9,7 @@ import { CasesService } from './services/cases.service';
 import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
+import { PidpService } from './services/pidp.service';
 import { ProfileService } from './services/profile.service';
 
 /**
@@ -23,6 +24,7 @@ import { ProfileService } from './services/profile.service';
     CasesService,
     ConfigService,
     DocumentService,
+    PidpService,
     DocumentTypeService,
     ProfileService,
     ApiConfiguration

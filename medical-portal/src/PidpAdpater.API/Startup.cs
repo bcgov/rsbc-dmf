@@ -27,7 +27,6 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
-//using static MedicalPortal.API.Features.Users.Commands.CreateUser;
 
 namespace pdipadapter;
 public class Startup
@@ -156,18 +155,10 @@ public class Startup
             options.CustomSchemaIds(x => x.FullName);
         });
 
-        services.AddCors(options =>
-        {
-            options.AddPolicy("CorsPolicy",
-                builder => builder
-                    .WithOrigins("http://localhost:8089", "http://localhost:9092", "http://localhost:4200", "https://medical-portal-pidp-0137d5-dev.apps.silver.devops.gov.bc.ca") //use config later
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
-        }); 
-
+        services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy, corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
         services.AddFluentValidationRulesToSwagger();
-
     }
+
     private PdipadapterConfiguration InitializeConfiguration(IServiceCollection services)
     {
         var config = new PdipadapterConfiguration();
@@ -200,7 +191,7 @@ public class Startup
             }
         });
         app.UseRouting();
-        app.UseCors("CorsPolicy");
+        app.UseCors(Constants.CorsPolicy);
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>

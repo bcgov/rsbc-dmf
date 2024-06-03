@@ -17,20 +17,30 @@ export class KeycloakInitService {
   ) {}
 
   public async load(): Promise<void> {
+    console.info('Keycloak initializing...');
     const authenticated = await this.keycloakService.init(
       this.getKeycloakOptions()
     );
+    console.info('Keycloak authenticated:', authenticated);
 
     this.keycloakService.getKeycloakInstance().onTokenExpired = (): void => {
+      console.info('Keycloak token expired, updating token');
       this.keycloakService
         .updateToken()
-        .catch(() => this.router.navigateByUrl(AuthRoutes.MODULE_PATH));
+        .catch((reason) => {
+          console.error('Keycloak failed to update token', reason);
+          this.router.navigateByUrl(AuthRoutes.MODULE_PATH)
+        });
     };
 
-    if (authenticated) {
-      // Force refresh to begin expiry timer
-      await this.keycloakService.updateToken(-1);
-    }
+    // Code from POC that I don't fully understand. It was working but at some point either stopped working or became red herring
+    // Gonna try disabling this and see if the DEV javascript error changes
+    // if (authenticated) {
+    //   // Force refresh to begin expiry timer
+    //   await this.keycloakService.updateToken(-1);
+    // }
+
+    console.info('Keycloak initialization completed.');
   }
 
   private getKeycloakOptions(): KeycloakOptions {
