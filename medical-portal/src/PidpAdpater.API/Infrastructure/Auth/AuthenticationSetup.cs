@@ -1,7 +1,4 @@
-﻿using Confluent.Kafka;
-using pdipadapter.Extensions;
-using pdipadapter.Kafka.Producer;
-using pdipadapter.Kafka.Producer.Interfaces;
+﻿using pdipadapter.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +25,7 @@ namespace pdipadapter.Infrastructure.Auth
                 option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
+            // TODO consolidate with medical-portal auth
             .AddJwtBearer(options =>
             {
                 options.Authority = config.Keycloak.RealmUrl;
