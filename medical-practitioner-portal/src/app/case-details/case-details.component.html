@@ -10,7 +10,7 @@
       <div>
         <label>SUR</label>
         <div>
-          <b>{{ caseDetails?.surName }}</b>
+          <b>{{ caseDetails?.lastName }}</b>
         </div>
       </div>
       <div>
@@ -48,7 +48,7 @@
         <div>
           <label>Submission Date</label>
           <div>
-            <b>{{ caseDetails?.dueDate }}</b>
+            <b>{{ caseDetails?.latestComplianceDate | date: "longDate" }}</b>
           </div>
         </div>
         <div>
@@ -102,13 +102,7 @@
         </ng-template>
       </mat-stepper>
     </div>
-    <div>
-      <p>Processing Date: July 2, 2023</p>
-      <p>
-        RSBC is currently processing submitted documents received on or before
-        the date above.
-      </p>
-    </div>
+
     <div>
       <mat-card class="caseStatus">
         <div>

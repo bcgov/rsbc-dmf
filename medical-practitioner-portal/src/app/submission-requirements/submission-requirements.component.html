@@ -124,13 +124,13 @@
                 <b>{{ getFormattedDate(document.dueDate) }}</b>
               </div>
             </div>
-            <div style="grid-area: B"  class="submissionRequirementColumn">
+            <div style="grid-area: B" class="submissionRequirementColumn">
               <label>Submission Type</label>
               <div>
                 <b>{{ document.documentType }}</b>
               </div>
             </div>
-            <div style="grid-area: C" >
+            <div style="grid-area: C">
               <label>Description</label>
               <div>
                 <b>{{ document.description }}</b>
@@ -145,6 +145,11 @@
             </div>
           </mat-card-content>
         </mat-card>
+      }
+    </div>
+    <div class="numberOfItems">
+      @if (documents && documents.length > 0) {
+        Showing {{ documents.length }} of {{ documents.length }} records
       }
     </div>
   </div>

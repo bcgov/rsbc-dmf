@@ -61,6 +61,7 @@
               "outputHashing": "all"
             },
             "production": {
+              "sourceMap": true,
               "budgets": [
                 {
                   "type": "initial",

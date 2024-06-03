@@ -34,6 +34,7 @@ import { SubmissionRequirementsComponent } from '../submission-requirements/subm
 import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
 import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-case-details',
@@ -58,6 +59,7 @@ import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
     MatTabsModule,
     CaseSubmissionsComponent,
     SubmissionRequirementsComponent,
+    DatePipe,
   ],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
@@ -84,12 +86,11 @@ export class CaseDetailsComponent implements OnInit {
   allDocuments: CaseDocument[] = [];
   submissionRequirementDocuments: CaseDocument[] = [];
   driverSubmissionDocuments: CaseDocument[] = [];
-  
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private casesService: CasesService,
-    private documentService: DocumentService
+    private documentService: DocumentService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -150,7 +151,7 @@ export class CaseDetailsComponent implements OnInit {
         documents.forEach((doc) => {
           if (
             [SubmittalStatusEnum.OpenRequired].includes(
-              doc.submittalStatus as SubmittalStatusEnum
+              doc.submittalStatus as SubmittalStatusEnum,
             )
           ) {
             this.submissionRequirementDocuments.push(doc);
