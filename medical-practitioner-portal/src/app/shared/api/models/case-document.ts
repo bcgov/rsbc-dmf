@@ -8,6 +8,7 @@ export interface CaseDocument {
   description?: string | null;
   dmerStatus?: number;
   dmerType?: number;
+  documentId?: string | null;
   documentSubType?: string | null;
   documentType?: string | null;
   documentUrl?: string | null;

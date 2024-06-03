@@ -47,9 +47,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.BirthDate = c.Item.BirthDate.ToDateTime();
                 result.IdCode = c.Item.IdCode;
                 result.FirstName = c.Item.FirstName;
-                result.SurName = c.Item.Surname;
-                //result.DueDate = c.Item.da
-                
+                result.LastName = c.Item.LastName;
+                result.MiddleName = c.Item.Middlename;
+                result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
+               
             }
 
             // set to null if no decision has been made.
@@ -86,8 +87,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.BirthDate = c.Item.BirthDate.ToDateTime();
                 result.IdCode = c.Item.IdCode;
                 result.FirstName = c.Item.FirstName;
-                result.SurName = c.Item.Surname;
+                result.LastName = c.Item.LastName;
+                result.MiddleName = c.Item.Middlename;
                 result.DriverId = c.Item.DriverId;
+                result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
             }
 
             // set to null if no decision has been made.

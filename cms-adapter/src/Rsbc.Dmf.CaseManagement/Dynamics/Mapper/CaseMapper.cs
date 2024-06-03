@@ -44,7 +44,9 @@ namespace Rsbc.Dmf.CaseManagement
                 BirthDate = @case.dfp_DriverId?.dfp_dob,
                 DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
                 FirstName = @case.dfp_DriverId?.dfp_PersonId?.firstname,
-                Surname = @case.dfp_DriverId?.dfp_PersonId?.lastname,
+                LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname,
+                MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename,
+                LatestComplianceDate = @case.dfp_latestcompliancedate.Value
                 
 
             };

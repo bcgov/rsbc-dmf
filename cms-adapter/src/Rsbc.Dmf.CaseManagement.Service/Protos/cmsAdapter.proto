@@ -287,7 +287,9 @@ message CaseDetail {
     string driverLicenseNumber = 19;
     google.protobuf.Timestamp birthDate = 20;
     string firstName = 21;
-    string surname = 22;
+    string lastName = 22;
+    string middlename = 23;
+    google.protobuf.Timestamp latestComplianceDate = 24;
 }
 
 message CreateStatusReply {	

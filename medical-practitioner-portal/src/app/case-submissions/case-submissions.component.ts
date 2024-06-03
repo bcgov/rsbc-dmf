@@ -37,6 +37,7 @@ import { CaseDocument } from '@app/shared/api/models';
 })
 export class CaseSubmissionsComponent {
   @Input() documents: CaseDocument[] = [];
+  isExpanded: Record<string, boolean> = {};
 
   constructor(private datePipe: DatePipe) {}
 
@@ -46,5 +47,9 @@ export class CaseSubmissionsComponent {
       return ' ';
     }
     return this.datePipe.transform(date, 'longDate');
+  }
+
+  toggleIsExpandable(id?: string | null) {
+    if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
 }

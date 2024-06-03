@@ -26,10 +26,19 @@
   <div class="list">
     <div>
       @for (document of documents; track document.documentUrl) {
-        <mat-card>
+        <mat-card
+          [ngClass]="{
+            open: document.documentId && isExpanded[document.documentId]
+          }"
+        >
           <mat-card-content class="caseSubmissions">
             <div style="text-align: center">
-              <mat-icon class="expandedIcon"> expand_circle_down </mat-icon>
+              <mat-icon
+                class="expandedIcon"
+                (click)="toggleIsExpandable(document.documentId)"
+              >
+                expand_circle_down
+              </mat-icon>
             </div>
             <div style="display: flex; flex-direction: column">
               <div class="case-details-border">&nbsp;</div>
@@ -46,7 +55,13 @@
                 <div>
                   <label>Submission Status</label>
                   <div>
-                    <b>{{ document.submittalStatus }}</b>
+                    <b
+                      >{{ document.submittalStatus }}
+                      @if (document?.documentSubType) {
+                        -
+                        {{ document?.documentSubType }}
+                      }
+                    </b>
                   </div>
                 </div>
                 <div>
@@ -56,24 +71,38 @@
                   </div>
                 </div>
               </div>
-              <div class="caseDetailRow">
-                <div>
-                  <label>Created Date</label>
+              @if (document.documentId && isExpanded?.[document.documentId]) {
+                <div
+                  class="caseDetailRow"
+                  style="
+                    border-top: 2px solid gray;
+                    padding-top: 20px;
+                    padding-bottom: 20px;
+                  "
+                >
                   <div>
-                    <b>{{ getFormattedDate(document.createdOn) }}</b>
+                    <label>Created Date</label>
+                    <div>
+                      <b>{{ getFormattedDate(document.createdOn) }}</b>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <label>Description</label>
                   <div>
-                    <b>{{ document.description }}</b>
+                    <label>Description</label>
+                    <div>
+                      <b>{{ document.description }}</b>
+                    </div>
                   </div>
+                  <div></div>
                 </div>
-                <div></div>
-              </div>
+              }
             </div>
           </mat-card-content>
         </mat-card>
+      }
+    </div>
+    <div class="numberOfItems">
+      @if (documents && documents.length > 0) {
+        Showing {{ documents.length }} of {{ documents.length }} records
       }
     </div>
   </div>
