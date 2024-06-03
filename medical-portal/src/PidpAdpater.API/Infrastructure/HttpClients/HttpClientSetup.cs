@@ -33,8 +33,6 @@ public static class HttpClientSetup
                 ClientSecret = config.PidpEndorsementAPI.ClientSecret,
             });
 
-        //services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(config.LdapClient.Url);
-
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
             {

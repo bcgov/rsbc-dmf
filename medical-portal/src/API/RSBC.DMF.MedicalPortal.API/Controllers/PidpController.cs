@@ -27,7 +27,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ActionName(nameof(GetMyEndorsements))]
         public async Task<ActionResult> GetMyEndorsements()
         {
-            var profile = _userService.GetCurrentUserContext();
+            var profile = await _userService.GetCurrentUserContext();
             var userId = profile.Id;
 
             // TODO temp code until this is replaced with GRPC

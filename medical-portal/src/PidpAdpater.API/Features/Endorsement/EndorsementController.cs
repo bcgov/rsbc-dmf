@@ -18,6 +18,7 @@ namespace MedicalPortal.API.Features.Endorsement
 
         #endregion
 
+        // TODO return no content and not found status codes, fix the false 200 Ok status returns and replace with no content and not found errors
         [HttpGet("contacts/{hpdid}/endorsements")]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         [Authorize(Policy = Policies.DmftEnroledUser)]
@@ -27,6 +28,7 @@ namespace MedicalPortal.API.Features.Endorsement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Model.Endorsement>>> ContactEndorsements(string hpdid)
         {
+            // TODO remove the @bcsc part, it doesn't work AND I proved it with hard-coded ids that without the bcsc it does work by using valid and invalid ids
             var endorsements = await endorsement.GetEndorsement(hpdid);
             return new JsonResult(endorsements);
         }
