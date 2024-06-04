@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "gen-api": "ng-openapi-gen -i http://localhost:5000/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true"
+    "gen-api": "ng-openapi-gen -i http://localhost:5000/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true",
+    "start:prod" : "ng serve --proxy-config --configuration production"
   },
   "private": true,
   "dependencies": {
