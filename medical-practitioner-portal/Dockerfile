@@ -1,4 +1,4 @@
-FROM trion/ng-cli-karma AS ng-builder
+FROM trion/ng-cli-karma:17.3.7 AS ng-builder
 
 COPY ./shared-portal-ui/ ./shared-portal-ui
 COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
