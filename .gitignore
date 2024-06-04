@@ -26,3 +26,4 @@
 /medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj
 *.dtmp
 /medical-portal/src/PidpAdpater.API/logs
+/medical-portal/src/OneHealthAdapter/logs
