@@ -1,7 +1,5 @@
-﻿using FluentValidation.AspNetCore;
-using Mapster;
+﻿using Mapster;
 using MediatR;
-using MediatR.Extensions.FluentValidation.AspNetCore;
 using MediatR.Registration;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -10,7 +8,6 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using NodaTime;
-using pdipadapter.Core.Http;
 using pdipadapter.Extensions;
 using pdipadapter.Helpers.Mapping;
 using pdipadapter.Infrastructure.Auth;
@@ -79,7 +76,6 @@ public class Startup
         services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
-        services.AddScoped<IProxyRequestClient, ProxyRequestClient>();
 
         services.AddDistributedMemoryCache();
 
