@@ -13,6 +13,7 @@ export const BearerTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<any>,
 };
 
 async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
+  console.info("bearer token handle 1");
   const keycloakService = inject(KeycloakService);
   let bearerToken: string;
 
@@ -28,6 +29,7 @@ async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
           headers: req.headers.set('Authorization', `Bearer ${bearerToken}`)
       });
   }
+  console.info("bearer token handle 2");
 
   return lastValueFrom(next(req));
 }
