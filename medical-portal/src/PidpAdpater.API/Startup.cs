@@ -1,6 +1,4 @@
-﻿using MediatR;
-using MediatR.Registration;
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -34,16 +32,6 @@ public class Startup
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
         services.AddHttpClient();
-
-        var serviceConfig = new MediatRServiceConfiguration();
-        ServiceRegistrar.AddRequiredServices(services, serviceConfig);
-
-        services.Scan(scan => scan
-            .AddTypes(typeof(IRequestHandler<>))
-            .AsSelf()
-            .WithScopedLifetime());
-
-        services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
         services.AddSingleton<IAuthorizationHandler, RealmAccessRoleHandler>();
         services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
