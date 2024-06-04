@@ -1,18 +1,12 @@
 ﻿using pdipadapter.Infrastructure.HttpClients;
 using MedicalPortal.API.Features.Endorsement.Model;
 using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
-using MapsterMapper;
 using static MedicalPortal.API.Features.Endorsement.Model.EndorsementData.Model;
-using Mapster;
 
 namespace MedicalPortal.API.Features.Endorsement.Services;
 public class Endorsement : BaseClient, IEndorsement
 {
-    private readonly IMapper mapper;
-    public Endorsement(HttpClient client, ILogger<Endorsement> logger, IMapper mapper) : base(client, logger)
-    {
-        this.mapper = mapper;
-    }
+    public Endorsement(HttpClient client, ILogger<Endorsement> logger) : base(client, logger) { }
 
     public async Task<IEnumerable<Model.Endorsement>> GetEndorsement(string hpDid)
     {

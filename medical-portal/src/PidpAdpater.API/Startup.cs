@@ -1,5 +1,4 @@
-﻿using Mapster;
-using MediatR;
+﻿using MediatR;
 using MediatR.Registration;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using pdipadapter.Extensions;
-using pdipadapter.Helpers.Mapping;
 using pdipadapter.Infrastructure.Auth;
 using pdipadapter.Infrastructure.HttpClients;
 using Serilog;
@@ -28,24 +26,10 @@ public class Startup
         var config = this.InitializeConfiguration(services);
 
         services
-          .AddAutoMapper(typeof(Startup))
           .AddHttpClients(config)
           .AddKeycloakAuth(config)
           .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
           .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
-
-        services.AddMapster(options =>
-        {
-            options.Default.IgnoreNonMapped(true);
-            options.Default.IgnoreNullValues(true);
-            options.AllowImplicitDestinationInheritance = true;
-            options.AllowImplicitSourceInheritance = true;
-            options.Default.UseDestinationValue(member =>
-                member.SetterModifier == AccessModifier.None &&
-                member.Type.IsGenericType &&
-                member.Type.GetGenericTypeDefinition() == typeof(ICollection<>));
-        });
-
 
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
