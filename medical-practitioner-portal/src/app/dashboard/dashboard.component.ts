@@ -26,6 +26,7 @@ import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-
 import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
+import { MatCommonModule } from '@angular/material/core';
 
 interface Status {
   value: number;
@@ -35,6 +36,7 @@ interface Status {
   selector: 'app-dashboard',
   standalone: true,
   imports: [
+    MatCommonModule,
     MatExpansionModule,
     MatCardModule,
     MatIconModule,
