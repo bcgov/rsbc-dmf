@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Infrastructure.Auth;
+﻿namespace OneHealthAdapter.Infrastructure.Auth;
 
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;

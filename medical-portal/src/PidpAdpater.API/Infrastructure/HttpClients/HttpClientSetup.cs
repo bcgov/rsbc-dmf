@@ -1,11 +1,11 @@
-namespace pdipadapter.Infrastructure.HttpClients;
+namespace OneHealthAdapter.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
-using pdipadapter.Infrastructure.Auth;
-using pdipadapter.Infrastructure.HttpClients.Keycloak;
-using pdipadapter.Extensions;
-using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
-using MedicalPortal.API.Features.Endorsement.Services;
+using OneHealthAdapter.Infrastructure.Auth;
+using OneHealthAdapter.Infrastructure.HttpClients.Keycloak;
+using OneHealthAdapter.Extensions;
+using OneHealthAdapter.Endorsement.Services.Interfaces;
+using OneHealthAdapter.Endorsement.Services;
 
 public static class HttpClientSetup
 {

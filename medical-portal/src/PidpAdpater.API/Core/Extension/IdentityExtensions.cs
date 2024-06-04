@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace pdipadapter.Core.Extension;
+namespace OneHealthAdapter.Core.Extension;
 
 /// <summary>
 /// IdentityExtensions static class, provides extension methods for user identity.

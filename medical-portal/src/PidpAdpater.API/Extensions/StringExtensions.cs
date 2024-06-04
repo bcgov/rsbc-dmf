@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Extensions;
+﻿namespace OneHealthAdapter.Extensions;
 
 public static class StringExtensions
 {

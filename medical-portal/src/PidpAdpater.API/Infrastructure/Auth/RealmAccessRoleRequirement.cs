@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace pdipadapter.Infrastructure.Auth
+namespace OneHealthAdapter.Infrastructure.Auth
 {
     public class RealmAccessRoleRequirement : IAuthorizationRequirement
     {

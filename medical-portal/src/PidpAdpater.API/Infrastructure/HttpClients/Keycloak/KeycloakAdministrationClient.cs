@@ -1,10 +1,10 @@
 ﻿using System.Net;
 
-namespace pdipadapter.Infrastructure.HttpClients.Keycloak;
+namespace OneHealthAdapter.Infrastructure.HttpClients.Keycloak;
 
 public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
 {
-
+    // TODO do we need this, because if not we can delete appsettings config for keycloak { adminclientid and secret }
     public KeycloakAdministrationClient(HttpClient httpClient, ILogger<KeycloakAdministrationClient> logger) : base(httpClient, logger) { }
 
     public async Task<bool> AssignClientRole(Guid userId, string clientId, string roleName)

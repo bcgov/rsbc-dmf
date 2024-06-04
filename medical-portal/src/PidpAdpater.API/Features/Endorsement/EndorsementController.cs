@@ -1,9 +1,9 @@
-﻿using pdipadapter.Infrastructure.Auth;
-using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
+﻿using OneHealthAdapter.Infrastructure.Auth;
+using OneHealthAdapter.Endorsement.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace MedicalPortal.API.Features.Endorsement
+namespace OneHealthAdapter.Endorsement
 {
     [Route("api/")]
     [ApiController]

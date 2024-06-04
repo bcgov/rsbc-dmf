@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Infrastructure.Auth;
+﻿namespace OneHealthAdapter.Infrastructure.Auth;
 
 using System.Linq;
 using System.Security.Claims;

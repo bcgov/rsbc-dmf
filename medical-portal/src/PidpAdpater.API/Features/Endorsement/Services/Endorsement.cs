@@ -1,9 +1,9 @@
-﻿using pdipadapter.Infrastructure.HttpClients;
-using MedicalPortal.API.Features.Endorsement.Model;
-using MedicalPortal.API.Features.Endorsement.Services.Interfaces;
-using static MedicalPortal.API.Features.Endorsement.Model.EndorsementData.Model;
+﻿using OneHealthAdapter.Infrastructure.HttpClients;
+using OneHealthAdapter.Endorsement.Model;
+using OneHealthAdapter.Endorsement.Services.Interfaces;
+using static OneHealthAdapter.Endorsement.Model.EndorsementData.Model;
 
-namespace MedicalPortal.API.Features.Endorsement.Services;
+namespace OneHealthAdapter.Endorsement.Services;
 public class Endorsement : BaseClient, IEndorsement
 {
     public Endorsement(HttpClient client, ILogger<Endorsement> logger) : base(client, logger) { }

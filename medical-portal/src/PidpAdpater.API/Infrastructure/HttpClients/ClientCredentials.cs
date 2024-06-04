@@ -1,4 +1,4 @@
-namespace pdipadapter.Infrastructure.HttpClients;
+namespace OneHealthAdapter.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
 

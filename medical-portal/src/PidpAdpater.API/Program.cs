@@ -1,6 +1,6 @@
-namespace pdipadapter;
+namespace OneHealthAdapter;
 
-using pdipadapter.Infrastructure.Auth;
+using OneHealthAdapter.Infrastructure.Auth;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;

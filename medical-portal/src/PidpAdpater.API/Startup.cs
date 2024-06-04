@@ -5,15 +5,16 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using NodaTime;
-using pdipadapter.Extensions;
-using pdipadapter.Infrastructure.Auth;
-using pdipadapter.Infrastructure.HttpClients;
+using OneHealthAdapter.Extensions;
+using OneHealthAdapter.Infrastructure.Auth;
+using OneHealthAdapter.Infrastructure.HttpClients;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text.Json;
 
-namespace pdipadapter;
+namespace OneHealthAdapter;
+
 public class Startup
 {
     public IConfiguration Configuration { get; }

@@ -1,4 +1,4 @@
-﻿namespace pdipadapter
+﻿namespace OneHealthAdapter
 {
     public class Constants
     {

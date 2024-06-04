@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Infrastructure.HttpClients.Keycloak;
+﻿namespace OneHealthAdapter.Infrastructure.HttpClients.Keycloak;
 using System.Text.Json;
 public class Client
 {

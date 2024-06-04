@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Core.Extension;
+﻿namespace OneHealthAdapter.Core.Extension;
 
 public static class EnumerableExtensions
 {

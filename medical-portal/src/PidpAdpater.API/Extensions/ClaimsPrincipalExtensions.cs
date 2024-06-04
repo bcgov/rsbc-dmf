@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
 using System.Text.Json;
-using pdipadapter.Infrastructure.Auth;
+using OneHealthAdapter.Infrastructure.Auth;
 
-namespace pdipadapter.Extensions;
+namespace OneHealthAdapter.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {

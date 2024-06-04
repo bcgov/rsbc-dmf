@@ -1,4 +1,5 @@
-﻿namespace MedicalPortal.API.Features.Endorsement.Model;
+﻿namespace OneHealthAdapter.Endorsement.Model;
+
 public class EndorsementData
 {
     public class Model

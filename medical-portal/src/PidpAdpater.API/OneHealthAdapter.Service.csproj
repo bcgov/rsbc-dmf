@@ -55,5 +55,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\Lookups\" />
+    <Folder Include="Protos\" />
   </ItemGroup>
 </Project>

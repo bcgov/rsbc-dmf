@@ -1,13 +1,11 @@
-namespace pdipadapter.Infrastructure.HttpClients;
+namespace OneHealthAdapter.Infrastructure.HttpClients;
 
 using DomainResults.Common;
 using Flurl;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using pdipadapter.Extensions;
-
-namespace pdipadapter.Infrastructure.HttpClients;
+using OneHealthAdapter.Extensions;
 
 public enum PropertySerialization
 {

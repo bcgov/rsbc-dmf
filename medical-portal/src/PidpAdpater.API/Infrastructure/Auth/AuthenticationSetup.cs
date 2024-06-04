@@ -1,4 +1,4 @@
-﻿using pdipadapter.Extensions;
+﻿using OneHealthAdapter.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace pdipadapter.Infrastructure.Auth
+namespace OneHealthAdapter.Infrastructure.Auth
 {
     public static class AuthenticationSetup
     {

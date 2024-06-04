@@ -1,4 +1,4 @@
-﻿namespace pdipadapter.Infrastructure.Auth;
+﻿namespace OneHealthAdapter.Infrastructure.Auth;
 
 public class Configuration
 {
