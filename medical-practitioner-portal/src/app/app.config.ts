@@ -11,6 +11,7 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
+import { AuthService } from './features/auth/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +26,7 @@ export const appConfig: ApplicationConfig = {
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
       NgxSpinnerModule,
     ),
+    AuthService,
     {
       provide: APP_BASE_HREF,
       useFactory: (s: PlatformLocation) => {
