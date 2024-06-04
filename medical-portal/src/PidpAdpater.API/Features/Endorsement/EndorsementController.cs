@@ -18,6 +18,7 @@ namespace MedicalPortal.API.Features.Endorsement
 
         #endregion
 
+        // TODO return no content and not found status codes, fix the false 200 Ok status returns and replace with no content and not found errors
         [HttpGet("contacts/{hpdid}/endorsements")]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         [Authorize(Policy = Policies.DmftEnroledUser)]

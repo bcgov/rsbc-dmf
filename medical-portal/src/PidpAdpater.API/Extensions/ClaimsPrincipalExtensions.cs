@@ -1,11 +1,8 @@
-﻿namespace pdipadapter.Extensions;
-using NodaTime;
-using NodaTime.Text;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text.Json;
-
 using pdipadapter.Infrastructure.Auth;
-using Microsoft.OData.Edm;
+
+namespace pdipadapter.Extensions;
 
 public static class ClaimsPrincipalExtensions
 {
