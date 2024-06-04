@@ -4,7 +4,12 @@ import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/h
 import { from, lastValueFrom } from 'rxjs';
 
 export const BearerTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): any => {
-  return from(handle(req, next));
+  try {
+    return from(handle(req, next));
+  } catch (error) {
+    console.error('Error adding bearer token to request', error);
+    return next(req);
+  }
 };
 
 async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
@@ -14,7 +19,7 @@ async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
   try {
     bearerToken = await keycloakService.getToken();
   } catch (error) {
-    // if keycloak is not initialized, getToken will error
+    console.error('Error getting token', error);
     return next(req);
   }
 
