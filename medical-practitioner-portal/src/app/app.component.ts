@@ -9,7 +9,7 @@ import { ApplicationVersionInfoService } from './shared/api/services';
 import { ApplicationVersionInfo } from './shared/api/models';
 import { firstValueFrom } from 'rxjs';
 import { NgIf } from '@angular/common';
-import { NgxSpinnerComponent } from 'ngx-spinner';
+//import { NgxSpinnerComponent } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
@@ -20,7 +20,7 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
     FooterComponent,
     NavMenuComponent,
     NgIf,
-    NgxSpinnerComponent,
+    //NgxSpinnerComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   //exports : [],
