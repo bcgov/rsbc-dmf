@@ -28,7 +28,6 @@ namespace MedicalPortal.API.Features.Endorsement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Model.Endorsement>>> ContactEndorsements(string hpdid)
         {
-            // TODO remove the @bcsc part, it doesn't work AND I proved it with hard-coded ids that without the bcsc it does work by using valid and invalid ids
             var endorsements = await endorsement.GetEndorsement(hpdid);
             return new JsonResult(endorsements);
         }

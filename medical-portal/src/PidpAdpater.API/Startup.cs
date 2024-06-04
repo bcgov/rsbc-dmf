@@ -13,7 +13,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using pdipadapter.Common;
 using pdipadapter.Core.Http;
 using pdipadapter.Extensions;
 using pdipadapter.Helpers.Mapping;
@@ -90,26 +89,16 @@ public class Startup
         .AsSelf()
         .WithScopedLifetime());
 
-        //services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
-       // services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
-        //services.AddFluentValidation(new[] { typeof(UpdatePlayerCommandHandler).GetTypeInfo().Assembly });
-        //services.AddValidatorsFromAssembly(typeof(Startup).Assembly);
-        //services.AddTransient<ExceptionHandlingMiddleware>();
-        services.AddSingleton<ProblemDetailsFactory, UserManagerProblemDetailsFactory>();
 
         services.AddSingleton<IAuthorizationHandler, RealmAccessRoleHandler>();
         services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
         services.AddHttpContextAccessor();
-        services.AddTransient<ClaimsPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
+        services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         services.AddScoped<IProxyRequestClient, ProxyRequestClient>();
 
-       // services.AddMediatR(typeof(MedicalPortal.API.Features.Users.Commands.CreateUser).GetTypeInfo().Assembly);
-        //services.AddDynamics(this.Configuration);
         services.AddDistributedMemoryCache();
         services.AddCmsAdapterGrpcService(config);
-
-        //services.AddGrpc(o => o.Interceptors.Add<UserManagerProblemDetailsFactory>());
 
         services.AddHealthChecks()
             .AddCheck("liveliness", () => HealthCheckResult.Healthy())
@@ -169,6 +158,7 @@ public class Startup
 
         return config;
     }
+
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
