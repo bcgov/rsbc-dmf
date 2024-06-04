@@ -35,10 +35,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             _cmsAdapterClient = cmsAdapterClient;
             _documentStorageAdapterClient = documentStorageAdapterClient;
             _documentFactory = documentFactory;
+        }
 
-    }
-
-    [HttpGet("MyDmers")]
+        [HttpGet("MyDmers")]
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]

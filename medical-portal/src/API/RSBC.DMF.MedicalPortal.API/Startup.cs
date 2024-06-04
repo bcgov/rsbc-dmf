@@ -45,11 +45,6 @@ namespace RSBC.DMF.MedicalPortal.API
                     keycloakOptions.Realm = config.Keycloak.Config.Realm;
                     keycloakOptions.Audience = config.Keycloak.Config.Audience;
                     keycloakOptions.AuthServerUrl = config.Keycloak.Config.Url;
-                    // TODO pidp-adapter does not use this, spend some time to see if we can get this to work and if not, delete this code
-                    keycloakOptions.Credentials = new KeycloakClientInstallationCredentials
-                    {                  
-                        Secret = configuration.GetValue<string>("Keycloak:Secret")
-                    };
                 },
                 jwtBearerOptions => 
                 { 
