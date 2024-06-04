@@ -103,7 +103,6 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddTransient<ClaimsPrincipal>(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         services.AddScoped<IProxyRequestClient, ProxyRequestClient>();
-        //services.AddScoped<IOpenIdConnectRequestClient, OpenIdConnectRequestClient>();
 
        // services.AddMediatR(typeof(MedicalPortal.API.Features.Users.Commands.CreateUser).GetTypeInfo().Assembly);
         //services.AddDynamics(this.Configuration);
