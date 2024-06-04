@@ -45,10 +45,6 @@ namespace RSBC.DMF.MedicalPortal.API
                     keycloakOptions.Realm = config.Keycloak.Config.Realm;
                     keycloakOptions.Audience = config.Keycloak.Config.Audience;
                     keycloakOptions.AuthServerUrl = config.Keycloak.Config.Url;
-                    keycloakOptions.Credentials = new KeycloakClientInstallationCredentials
-                    {                  
-                        Secret = configuration.GetValue<string>("Keycloak:Secret")
-                    };
                 },
                 jwtBearerOptions => 
                 { 

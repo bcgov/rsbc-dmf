@@ -5,9 +5,9 @@ using Flurl;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-
 using pdipadapter.Extensions;
-using System.Net.Http.Headers;
+
+namespace pdipadapter.Infrastructure.HttpClients;
 
 public enum PropertySerialization
 {
