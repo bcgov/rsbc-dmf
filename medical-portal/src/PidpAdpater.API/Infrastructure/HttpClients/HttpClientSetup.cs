@@ -9,7 +9,7 @@ using MedicalPortal.API.Features.Endorsement.Services;
 
 public static class HttpClientSetup
 {
-    public static IServiceCollection AddHttpClients(this IServiceCollection services, PdipadapterConfiguration config)
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, Configuration config)
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 

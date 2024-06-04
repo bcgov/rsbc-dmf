@@ -50,7 +50,7 @@ public class Program
 
         try
         {
-            if (PdipadapterConfiguration.IsDevelopment())
+            if (Configuration.IsDevelopment())
             {
                 Directory.CreateDirectory(path);
             }

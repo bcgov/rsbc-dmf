@@ -12,7 +12,7 @@ namespace pdipadapter.Infrastructure.Auth
     public static class AuthenticationSetup
     {
         //public IConfiguration Configuration { get; }
-        public static IServiceCollection AddKeycloakAuth(this IServiceCollection services, PdipadapterConfiguration config)
+        public static IServiceCollection AddKeycloakAuth(this IServiceCollection services, Configuration config)
         {
             //Configuration = configuration;
             services.ThrowIfNull(nameof(services));

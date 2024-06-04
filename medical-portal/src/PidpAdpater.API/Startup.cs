@@ -64,8 +64,7 @@ public class Startup
         services.AddDistributedMemoryCache();
 
         services.AddHealthChecks()
-            .AddCheck("liveliness", () => HealthCheckResult.Healthy())
-            .AddSqlServer(config.ConnectionStrings.JumDatabase, tags: new[] { "services" });
+            .AddCheck("liveliness", () => HealthCheckResult.Healthy());
 
         services.AddApiVersioning(options =>
         {
@@ -110,9 +109,9 @@ public class Startup
         services.AddFluentValidationRulesToSwagger();
     }
 
-    private PdipadapterConfiguration InitializeConfiguration(IServiceCollection services)
+    private Configuration InitializeConfiguration(IServiceCollection services)
     {
-        var config = new PdipadapterConfiguration();
+        var config = new Configuration();
         this.Configuration.Bind(config);
         services.AddSingleton(config);
 
