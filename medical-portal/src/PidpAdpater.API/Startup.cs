@@ -6,25 +6,18 @@ using MediatR.Registration;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using NodaTime;
-using NodaTime.Serialization.SystemTextJson;
 using pdipadapter.Core.Http;
 using pdipadapter.Extensions;
 using pdipadapter.Helpers.Mapping;
-using pdipadapter.Infrastructure;
 using pdipadapter.Infrastructure.Auth;
 using pdipadapter.Infrastructure.HttpClients;
-using pdipadapter.Infrastructure.Services;
-using PidpAdapter.API.Infrastructure;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
-using System.Security.Claims;
 using System.Text.Json;
 
 namespace pdipadapter;
@@ -36,12 +29,11 @@ public class Startup
     public void ConfigureServices(IServiceCollection services)
     {
         var config = this.InitializeConfiguration(services);
-       // var jsonSerializerOptions = this.Configuration.GenerateJsonSerializerOptions();
+
         services
           .AddAutoMapper(typeof(Startup))
           .AddHttpClients(config)
           .AddKeycloakAuth(config)
-          .AddScoped<IPidpAdapterAuthorizationService, PidpAdapterAuthorizationService>()
           .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
           .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
@@ -71,23 +63,15 @@ public class Startup
         //    .RequireRole(Roles.DfmtEnroledRole));
         //});
 
-        services.AddControllers(options => options.Conventions.Add(new RouteTokenTransformerConvention(new KabobCaseParameterTransformer())))
-            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
-            .AddJsonOptions(options => options.JsonSerializerOptions.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb))
-            .AddHybridModelBinder();
         services.AddHttpClient();
-
-        //services.AddDbContext<JumDbContext>(options => options
-        //    .UseSqlServer(config.ConnectionStrings.JumDatabase, sql => sql.UseNodaTime())
-        //    .EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false));
 
         var serviceConfig = new MediatRServiceConfiguration();
         ServiceRegistrar.AddRequiredServices(services, serviceConfig);
 
         services.Scan(scan => scan
-        .AddTypes(typeof(IRequestHandler<>))
-        .AsSelf()
-        .WithScopedLifetime());
+            .AddTypes(typeof(IRequestHandler<>))
+            .AsSelf()
+            .WithScopedLifetime());
 
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -98,7 +82,6 @@ public class Startup
         services.AddScoped<IProxyRequestClient, ProxyRequestClient>();
 
         services.AddDistributedMemoryCache();
-        services.AddCmsAdapterGrpcService(config);
 
         services.AddHealthChecks()
             .AddCheck("liveliness", () => HealthCheckResult.Healthy())
@@ -166,8 +149,6 @@ public class Startup
             app.UseDeveloperExceptionPage();
          
         }
-        //app.UseMiddleware<ExceptionHandlingMiddleware>();
-        app.UseExceptionHandler("/error");
         app.UseSwagger();
         app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "Pidp Api Adapter"));
 

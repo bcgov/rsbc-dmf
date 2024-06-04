@@ -97,10 +97,4 @@
     <Folder Include="Models\Lookups\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Protobuf Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Protos\cmsAdapter.proto" GrpcServices="Client">
-      <Link>Protos\cmsAdapter.proto</Link>
-    </Protobuf>
-  </ItemGroup>
-
 </Project>
