@@ -1,17 +1,17 @@
-FROM trion/ng-cli-karma AS ng-builder
+FROM trion/ng-cli-karma:17.3.7 AS ng-builder
 
 COPY ./shared-portal-ui/ ./shared-portal-ui
 COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
 
 WORKDIR /app/shared-portal-ui
 
-RUN npm install 
+RUN npm install
 
 WORKDIR /app/medical-practitioner-portal
 
-RUN npm ci --force
+RUN npm install
 
-RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production
+RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production --source-map
 
 FROM caddy:alpine as final
 COPY ./medical-practitioner-portal/Caddyfile /etc/caddy/Caddyfile
