@@ -9,7 +9,7 @@ RUN npm install
 
 WORKDIR /app/medical-practitioner-portal
 
-RUN npm ci --force
+RUN npm install
 
 RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production
 
