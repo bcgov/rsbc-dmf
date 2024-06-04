@@ -4,23 +4,17 @@ import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/h
 import { from, lastValueFrom } from 'rxjs';
 
 export const BearerTokenInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn): any => {
-  try {
-    return from(handle(req, next));
-  } catch (error) {
-    console.error('Error adding bearer token to request', error);
-    return next(req);
-  }
+  return from(handle(req, next));
 };
 
 async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
-  console.info("bearer token handle 1");
   const keycloakService = inject(KeycloakService);
   let bearerToken: string;
 
   try {
     bearerToken = await keycloakService.getToken();
   } catch (error) {
-    console.error('Error getting token', error);
+    // if keycloak is not initialized, getToken will error
     return next(req);
   }
 
@@ -29,7 +23,6 @@ async function handle(req: HttpRequest<any>, next: HttpHandlerFn) {
           headers: req.headers.set('Authorization', `Bearer ${bearerToken}`)
       });
   }
-  console.info("bearer token handle 2");
 
   return lastValueFrom(next(req));
 }

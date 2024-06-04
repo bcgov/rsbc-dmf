@@ -9,21 +9,21 @@ import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
 import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
-//import { NgxSpinnerModule } from 'ngx-spinner';
-//import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     provideHttpClient(
-      withInterceptors([BearerTokenInterceptor/*, ApiLoaderInterceptor*/]),
+      withInterceptors([BearerTokenInterceptor, ApiLoaderInterceptor]),
     ),
     importProvidersFrom(
       KeycloakModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
-      //NgxSpinnerModule,
+      NgxSpinnerModule,
     ),
     {
       provide: APP_BASE_HREF,
