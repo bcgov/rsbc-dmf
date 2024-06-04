@@ -8,7 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "gen-api": "ng-openapi-gen -i http://localhost:5000/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true",
-    "start:prod" : "ng serve --proxy-config --configuration production"
+    "start:prod": "ng serve --proxy-config --configuration production"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^17.3.2",
-    "@angular/cli": "^17.3.2",
+    "@angular/cli": "^17.3.8",
     "@angular/compiler-cli": "^17.3.7",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.1.0",
