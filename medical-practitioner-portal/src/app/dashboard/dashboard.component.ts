@@ -99,10 +99,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     // this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
-    this.filteredData = [...this.practitionerDMERList];
 
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
       this.practitionerDMERList = data;
+      this.filteredData = [...this.practitionerDMERList];
     });
   }
 
