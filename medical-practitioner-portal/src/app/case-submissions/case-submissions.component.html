@@ -25,7 +25,7 @@
 
   <div class="list">
     <div>
-      @for (document of documents; track document.documentUrl) {
+      @for (document of documents; track document.documentUrl){
         <mat-card
           [ngClass]="{
             open: document.documentId && isExpanded[document.documentId]
@@ -71,7 +71,7 @@
                   </div>
                 </div>
               </div>
-              @if (document.documentId && isExpanded.[document.documentId]) {
+              @if (document.documentId && isExpanded?.[document.documentId]) {
                 <div
                   class="caseDetailRow"
                   style="
