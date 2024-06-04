@@ -5,13 +5,13 @@ COPY ./medical-practitioner-portal/ ./medical-practitioner-portal
 
 WORKDIR /app/shared-portal-ui
 
-RUN npm install 
+RUN npm install
 
 WORKDIR /app/medical-practitioner-portal
 
 RUN npm install
 
-RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production
+RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production --source-map
 
 FROM caddy:alpine as final
 COPY ./medical-practitioner-portal/Caddyfile /etc/caddy/Caddyfile
