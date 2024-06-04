@@ -33,17 +33,6 @@ public class Startup
 
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-        //services.AddAuthorization(options =>
-        //{
-        //    options.AddPolicy("Administrator", policy => policy.Requirements.Add(new RealmAccessRoleRequirement("administrator")));
-        //    options.AddPolicy(Infrastructure.Auth.Policies.MedicalPractitioner, policy => policy
-        //    .RequireAuthenticatedUser()
-        //    .RequireRole(Roles.Practitoner, Roles.Moa));
-        //    options.AddPolicy(Infrastructure.Auth.Policies.DmftEnroledUser, policy => policy
-        //    .RequireAuthenticatedUser()
-        //    .RequireRole(Roles.DfmtEnroledRole));
-        //});
-
         services.AddHttpClient();
 
         var serviceConfig = new MediatRServiceConfiguration();
