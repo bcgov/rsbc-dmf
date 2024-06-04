@@ -5,13 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace pdipadapter.Infrastructure.Auth
 {
     public static class AuthenticationSetup
     {
-        //public IConfiguration Configuration { get; }
         public static IServiceCollection AddKeycloakAuth(this IServiceCollection services, Configuration config)
         {
             //Configuration = configuration;
