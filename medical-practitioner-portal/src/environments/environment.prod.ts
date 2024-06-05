@@ -13,6 +13,7 @@ export const environment = {
       flow: 'standard',
       responseMode: 'fragment',
       pkceMethod: 'S256',
+      checkLoginIframe: false
     },
   },
 };
