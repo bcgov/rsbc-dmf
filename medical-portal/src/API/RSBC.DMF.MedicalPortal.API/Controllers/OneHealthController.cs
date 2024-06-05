@@ -37,17 +37,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var userId = profile.Id;
 
-                // TODO temp code until this is replaced with GRPC
-                /*var bearerToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"]
-                    .ToString()
-                    .Split(" ")[1];
-
-                var httpClient = new HttpClient();
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-                var responseStream = await httpClient.GetAsync($"{_configuration.Settings.PidpApiUrl}/api/contacts/{userId}/endorsements");
-                var response = await responseStream.Content.ReadAsStringAsync();
-                */
-
                 // fake data until we are unblocked from OneHealth endorsements
                 userId = "test";
                 var response = await _oneHealthAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
