@@ -1,8 +1,8 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Optional } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './Layout/header/header.component';
-import { FooterComponent } from './Layout/footer/footer.component';
-import { NavMenuComponent } from './Layout/nav-menu/nav-menu.component';
+import { MedicalHeaderComponent } from './Layout/medical-header/medical-header.component';
+import { MedicalFooterComponent } from './Layout/medical-footer/medical-footer.component';
+import { MedicalNavMenuComponent } from './Layout/medical-nav-menu/medical-nav-menu.component';
 //import { AuthService } from './features/auth/services/auth.service';
 import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
 import { ApplicationVersionInfoService } from './shared/api/services';
@@ -16,9 +16,9 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
   standalone: true,
   imports: [
     RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    NavMenuComponent,
+    MedicalHeaderComponent,
+    MedicalFooterComponent,
+    MedicalNavMenuComponent,
     NgIf,
     NgxSpinnerComponent,
   ],
@@ -54,7 +54,7 @@ export class AppComponent {
     //       });
     //     } else {
     //       // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
-           this.isLoading = false;
+    this.isLoading = false;
     //     }
     //   });
     // } catch (e) {

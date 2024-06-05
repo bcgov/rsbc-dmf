@@ -20,8 +20,9 @@ import { MatButtonModule } from '@angular/material/button';
 // import { MatSelectModule } from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
-import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
+// import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
+// import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
+import { DmerStatusComponent, DmerTypeComponent } from '@shared/core-ui';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
 // import { MatCommonModule } from '@angular/material/core';
@@ -49,11 +50,11 @@ interface Status {
     RouterLinkActive,
     DmerStatusComponent,
     DmerTypeComponent,
+    MatExpansionPanel,
   ],
 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent {
@@ -90,7 +91,9 @@ export class DashboardComponent {
     // private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
-  ) { console.info('At Dashboard Constructor');}
+  ) {
+    console.info('At Dashboard Constructor');
+  }
 
   // public onClick(event: any, elementId: string): void {
   //   event.preventDefault();
@@ -107,7 +110,6 @@ export class DashboardComponent {
   //     console.info('Got data');
   //     this.filterCasesData();
   //   });
-
 
   // }
 
