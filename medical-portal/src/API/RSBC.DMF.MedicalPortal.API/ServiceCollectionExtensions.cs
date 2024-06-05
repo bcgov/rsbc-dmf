@@ -1,11 +1,8 @@
 ﻿using Grpc.Net.Client;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using OneHealthAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System.Net;
-using System.Net.Http;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -44,7 +41,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                     var initialClient = new CaseManager.CaseManagerClient(initialChannel);
                     // call the token service to get a token.
-                    var tokenRequest = new TokenRequest { Secret = clientSecret };
+                    var tokenRequest = new Rsbc.Dmf.CaseManagement.Service.TokenRequest { Secret = clientSecret };
 
                     var tokenReply = initialClient.GetToken(tokenRequest);
 
@@ -71,9 +68,9 @@ namespace RSBC.DMF.MedicalPortal.API
 
         public static IServiceCollection AddOneHealthAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["OneHealth:ServerUrl"];
-            var clientSecret = config["OneHealth:ClientSecret"];
-            var validateServerCertificate = config.GetValue("OneHealth:ValidateServerCertificate", true);
+            var serviceUrl = config["OneHealthAdapter:ServerUrl"];
+            var clientSecret = config["OneHealthAdapter:Secret"];
+            var validateServerCertificate = config.GetValue("OneHealthAdapter:ValidateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -93,23 +90,23 @@ namespace RSBC.DMF.MedicalPortal.API
 
                 var initialClient = new OneHealthManager.OneHealthManagerClient(initialChannel);
                 // call the token service to get a token.
-                //var tokenRequest = new TokenRequest { Secret = clientSecret };
+                var tokenRequest = new OneHealthAdapter.TokenRequest { Secret = clientSecret };
 
-                //var tokenReply = initialClient.GetToken(tokenRequest);
+                var tokenReply = initialClient.GetToken(tokenRequest);
 
-                //if (tokenReply != null && tokenReply.ResultStatus == OneHealthAdapter.ResultStatus.Success)
-                //{
+                if (tokenReply != null && tokenReply.ResultStatus == OneHealthAdapter.ResultStatus.Success)
+                {
                     // Add the bearer token to the client.
-                    //httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
                     services.AddTransient(_ => new OneHealthManager.OneHealthManagerClient(channel));
-                //}
-                //else
-                //{
-                //    Log.Logger.Information("Error getting token for Case Management Service");
-                //}
+                }
+                else
+                {
+                    Log.Logger.Information("Error getting token for OneHealth Service");
+                }
             }
             return services;
         }

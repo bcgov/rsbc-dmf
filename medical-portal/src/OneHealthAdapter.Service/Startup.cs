@@ -1,8 +1,10 @@
 ﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using OneHealthAdapter.Extensions;
@@ -12,6 +14,7 @@ using OneHealthAdapter.Services;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 
 namespace OneHealthAdapter;
@@ -33,11 +36,9 @@ public class Startup
           .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
           .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
-        // TODO jwt auth
-        /*
-         *             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+        if (!string.IsNullOrEmpty(Configuration["Jwt:Secret"]))
             {
-                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+            byte[] key = Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]);
                 Array.Resize(ref key, 32);
 
                 // Configure JWT authentication
@@ -52,8 +53,8 @@ public class Startup
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         RequireExpirationTime = false,
-                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
-                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
                         IssuerSigningKey =
                             new SymmetricSecurityKey(key)
                     };
@@ -64,7 +65,7 @@ public class Startup
                 services.AddAuthentication();
             }
                 
-            services.AddAuthorization();*/
+        services.AddAuthorization();
 
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 

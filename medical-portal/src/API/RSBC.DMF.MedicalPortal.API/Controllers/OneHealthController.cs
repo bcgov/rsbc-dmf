@@ -47,7 +47,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var responseStream = await httpClient.GetAsync($"{_configuration.Settings.PidpApiUrl}/api/contacts/{userId}/endorsements");
                 var response = await responseStream.Content.ReadAsStringAsync();
                 */
-                
+
+                // fake data until we are unblocked from OneHealth endorsements
+                userId = "test";
                 var response = await _oneHealthAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
                 return new JsonResult(response);
             }

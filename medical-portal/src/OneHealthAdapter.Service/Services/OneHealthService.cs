@@ -11,13 +11,14 @@ namespace OneHealthAdapter.Services
     {
         private readonly ILogger<OneHealthService> _logger;
         private readonly IEndorsement _endorsement;
+        private readonly IConfiguration _configuration;
 
-        public OneHealthService(ILogger<OneHealthService> logger, IEndorsement endorsement)
+        public OneHealthService(ILogger<OneHealthService> logger, IEndorsement endorsement, IConfiguration configuration)
         {
             _logger = logger;
             _endorsement = endorsement;
+            _configuration = configuration;
         }
-
 
         /// <summary>
         /// Get Token
@@ -25,27 +26,24 @@ namespace OneHealthAdapter.Services
         /// <param name="request"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        /*[AllowAnonymous]
+        [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
         {
             var result = new TokenReply();
             result.ResultStatus = ResultStatus.Fail;
 
-            var configuredSecret = _configuration["JWT_TOKEN_KEY"];
-
-
+            var configuredSecret = _configuration["Jwt:Secret"];
             if (configuredSecret != null && !string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
-
-                byte[] key = Encoding.UTF8.GetBytes(_configuration["JWT_TOKEN_KEY"]);
+                byte[] key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
                 Array.Resize(ref key, 32);
 
                 var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
                 var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
-                    _configuration["JWT_VALID_ISSUER"],
-                    _configuration["JWT_VALID_AUDIENCE"],
+                    _configuration["Jwt:Issuer"],
+                    _configuration["Jwt:Audience"],
                     expires: DateTime.UtcNow.AddYears(5),
                     signingCredentials: creds
                 );
@@ -58,7 +56,7 @@ namespace OneHealthAdapter.Services
             }
 
             return Task.FromResult(result);
-        }*/
+        }
 
         public override async Task<GetEndorsementsReply> GetEndorsements(GetEndorsementsRequest request, ServerCallContext context)
         {

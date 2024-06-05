@@ -7,7 +7,10 @@ option csharp_namespace = "OneHealthAdapter";
 package OneHealth;
 
 service OneHealthManager {
-	rpc GetEndorsements(GetEndorsementsRequest) returns (GetEndorsementsReply);
+  rpc GetEndorsements(GetEndorsementsRequest) returns (GetEndorsementsReply);
+
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
 }
 
 message GetEndorsementsRequest {
@@ -34,4 +37,14 @@ message LicenseDto {
 enum ResultStatus {
     Fail = 0;
     Success = 1;
+}
+
+message TokenRequest {
+    string secret = 1;
+}
+
+message TokenReply {
+    ResultStatus resultStatus = 1;
+    string token = 2;
+    string errorDetail = 3;
 }
