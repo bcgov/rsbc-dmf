@@ -15,8 +15,8 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "es2021",
+    "module": "es2020",
     "useDefineForClassFields": false,
     "paths": {
       "@shared/core-ui/*": ["../shared-portal-ui/projects/core-ui/src/public-api/*"],
