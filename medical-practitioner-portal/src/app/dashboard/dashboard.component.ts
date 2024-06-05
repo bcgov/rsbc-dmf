@@ -23,7 +23,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
-// import { MatCommonModule } from '@angular/material/core';
+import { MatCommonModule } from '@angular/material/core';
 
 interface Status {
   value: number;
@@ -33,7 +33,7 @@ interface Status {
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    // MatCommonModule,
+    MatCommonModule,
     MatExpansionModule,
     MatCardModule,
     // MatIconModule,
