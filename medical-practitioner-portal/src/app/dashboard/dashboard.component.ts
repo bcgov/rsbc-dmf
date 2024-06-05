@@ -71,7 +71,7 @@ export class DashboardComponent {
   showSearchResults = false;
   public searchBox = new FormControl('');
   public prevSearchBox: string = '';
-  // public searchCasesInput: string = '';
+  public searchCasesInput: string = '';
   public searchedCase?: PatientCase;
   // public practitionerDMERList: CaseDocument[] = [];
   // public filteredData?: CaseDocument[] = [];
