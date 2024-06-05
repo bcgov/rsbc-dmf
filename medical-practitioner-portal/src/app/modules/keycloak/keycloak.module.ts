@@ -1,5 +1,5 @@
 import { APP_INITIALIZER, NgModule, Provider } from '@angular/core';
-import { KeycloakAngularModule } from 'keycloak-angular';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
 import { KeycloakInitService } from './keycloak-init.service';
 
 export function keycloakFactory(
@@ -12,7 +12,7 @@ export const keycloakProvider: Provider = {
   provide: APP_INITIALIZER,
   useFactory: keycloakFactory,
   multi: true,
-  deps: [KeycloakInitService],
+  deps: [KeycloakInitService,KeycloakService],
 };
 
 @NgModule({
