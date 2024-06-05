@@ -8,13 +8,18 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [MatMenuModule, MatIconModule, MatButtonModule, RouterLink, RouterLinkActive],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss',
+  imports: [
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    RouterLink,
+    RouterLinkActive,
+  ],
+  templateUrl: './medical-header.component.html',
+  styleUrl: './medical-header.component.scss',
 })
-export class HeaderComponent {
-
-  constructor(/*private authService: AuthService*/) { }
+export class MedicalHeaderComponent {
+  constructor(/*private authService: AuthService*/) {}
 
   logOut() {
     //this.authService.logout(window.location.href);
