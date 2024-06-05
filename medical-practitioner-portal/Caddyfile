@@ -14,6 +14,7 @@
 		uri strip_prefix {$BASE_URL}
 		reverse_proxy /api* {$API_URL}
 		try_files {path} {path}/ /index.html?{query}
+		header_down Access-Control-Allow-Origin *
 	}
 
 	header {
@@ -24,6 +25,7 @@
   		# Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
   		#X-Content-Type-Options "nosniff"
 
+      Access-Control-Allow-Origin *
   		# Disallow the site to be rendered within a frame (clickjacking protection)
   		#X-Frame-Options "DENY"
 

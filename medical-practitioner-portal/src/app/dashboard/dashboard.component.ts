@@ -1,10 +1,8 @@
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
-  Input,
   OnInit,
   ViewChild,
-  signal,
 } from '@angular/core';
 
 import { CommonModule, ViewportScroller } from '@angular/common';
@@ -104,7 +102,8 @@ export class DashboardComponent implements OnInit {
 
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
       this.practitionerDMERList = data;
-      this.filteredData = [...this.practitionerDMERList];
+      //this.filteredData = [...this.practitionerDMERList];
+      this.filterCasesData();
     });
   }
 
