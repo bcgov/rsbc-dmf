@@ -29,10 +29,10 @@
   		#X-Frame-Options "DENY"
 
   		# Set CSP to support Angular
-  		Content-Security-Policy "default-src 'self';base-uri 'self';'unsafe-eval' https://fonts.gstatic.com https://*.gov.bc.ca https://*.bcgov https://localhost:5020; connect-src 'self' https://*.gov.bc.ca http://*.gov.bc.ca; font-src 'self' 'unsafe-inline' https://fonts.googleapis.com; form-action 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; frame-src 'self' https://*.gov.bc.ca; frame-ancestors 'self' https://*.gov.bc.ca; upgrade-insecure-requests"
+  		Content-Security-Policy "default-src 'self';base-uri 'self';connect-src 'self' https://*.gov.bc.ca http://*.gov.bc.ca; font-src 'self' 'unsafe-inline' https://fonts.googleapis.com; form-action 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; frame-src 'self' https://*.gov.bc.ca; frame-ancestors 'self' https://*.gov.bc.ca; upgrade-insecure-requests"
   		# Set referrer policy
 
-  		#Referrer-Policy "same-origin"
+  		Referrer-Policy "same-origin"
   	}
 
 	file_server
