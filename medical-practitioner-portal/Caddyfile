@@ -18,17 +18,20 @@
 
 	header {
   		# Enable HTTP Strict Transport Security (HSTS) to force clients to always connect via HTTPS (do not use if only testing)
-  		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  		#Strict-Transport-Security "max-age=31536000; includeSubDomains"
   		# Enable cross-site filter (XSS) and tell browser to block detected attacks
-  		X-XSS-Protection "1; mode=block"
+  		#X-XSS-Protection "1; mode=block"
   		# Prevent some browsers from MIME-sniffing a response away from the declared Content-Type
-  		X-Content-Type-Options "nosniff"
+  		#X-Content-Type-Options "nosniff"
+
   		# Disallow the site to be rendered within a frame (clickjacking protection)
-  		X-Frame-Options "DENY"
+  		#X-Frame-Options "DENY"
+
   		# Set CSP to support Angular
   		Content-Security-Policy "default-src 'self' 'unsafe-eval' https://fonts.gstatic.com https://*.gov.bc.ca https://*.bcgov https://localhost:5020; connect-src 'self' https://*.gov.bc.ca http://*.gov.bc.ca; form-action 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; frame-src 'self' https://*.gov.bc.ca; frame-ancestors 'self' https://*.gov.bc.ca; upgrade-insecure-requests"
   		# Set referrer policy
-  		Referrer-Policy "same-origin"
+
+  		#Referrer-Policy "same-origin"
   	}
 
 	file_server
