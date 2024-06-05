@@ -7,11 +7,11 @@ import {
 
 // import { CommonModule, ViewportScroller } from '@angular/common';
 
-// import {
-//   MatExpansionModule,
-//   MatAccordion,
-//   MatExpansionPanel,
-// } from '@angular/material/expansion';
+import {
+  MatExpansionModule,
+  MatAccordion,
+  MatExpansionPanel,
+} from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 // import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,8 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 // import { MatSelectModule } from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-// import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
-// import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
+import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
+import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
 // import { MatCommonModule } from '@angular/material/core';
@@ -35,7 +35,7 @@ interface Status {
   standalone: true,
   imports: [
     // MatCommonModule,
-    // MatExpansionModule,
+    MatExpansionModule,
     MatCardModule,
     // MatIconModule,
     MatFormFieldModule,
@@ -46,14 +46,14 @@ interface Status {
     // CommonModule,
     ReactiveFormsModule,
     RouterLink,
-    // RouterLinkActive,
-    // DmerStatusComponent,
-    // DmerTypeComponent,
+    RouterLinkActive,
+    DmerStatusComponent,
+    DmerTypeComponent,
   ],
 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  // viewProviders: [MatExpansionPanel],
+  viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent {
@@ -85,7 +85,7 @@ export class DashboardComponent {
 
   // pageSize = 10;
 
-  // @ViewChild(MatAccordion) accordion!: MatAccordion;
+  @ViewChild(MatAccordion) accordion!: MatAccordion;
   constructor(
     // private viewportScroller: ViewportScroller,
     private casesService: CasesService,
