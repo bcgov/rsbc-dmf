@@ -20,8 +20,8 @@ import { MatButtonModule } from '@angular/material/button';
 // import { MatSelectModule } from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
-import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
+// import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
+// import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
 // import { MatCommonModule } from '@angular/material/core';
@@ -47,8 +47,8 @@ interface Status {
     ReactiveFormsModule,
     RouterLink,
     RouterLinkActive,
-    DmerStatusComponent,
-    DmerTypeComponent,
+    // DmerStatusComponent,
+    // DmerTypeComponent,
     MatExpansionPanel,
   ],
 
