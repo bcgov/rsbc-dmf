@@ -13,6 +13,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
 import { AuthService } from './features/auth/services/auth.service';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,6 +24,7 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(
       BrowserModule,
+      BrowserAnimationsModule,
       KeycloakModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
