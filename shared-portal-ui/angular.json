@@ -34,9 +34,8 @@
         }
       }
     }
-   
+
   },
-  "defaultProject": "core-ui",
   "cli": {
     "analytics": false
   }
