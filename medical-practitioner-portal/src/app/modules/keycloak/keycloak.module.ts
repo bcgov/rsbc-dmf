@@ -12,7 +12,7 @@ export const keycloakProvider: Provider = {
   provide: APP_INITIALIZER,
   useFactory: keycloakFactory,
   multi: true,
-  deps: [KeycloakInitService,KeycloakService],
+  deps: [KeycloakInitService],
 };
 
 @NgModule({

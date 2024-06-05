@@ -79,7 +79,7 @@ export class DashboardComponent implements OnInit {
   isSearching: boolean = false;
   noResults: boolean = false;
 
-  isExpanded: Record<string, boolean> = {};
+  //isExpanded: Record<string, boolean> = {};
 
   pageSize = 10;
 
@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
-  ) {}
+  ) { console.info('At Dashboard Constructor');}
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
@@ -98,14 +98,14 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     // this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
     console.info('At Dashboard OnInit');
-    /*
+
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
       this.practitionerDMERList = data;
       //this.filteredData = [...this.practitionerDMERList];
       console.info('Got data');
       this.filterCasesData();
     });
-    */
+
 
   }
 
