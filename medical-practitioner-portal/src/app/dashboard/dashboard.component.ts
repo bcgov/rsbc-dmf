@@ -49,11 +49,11 @@ interface Status {
     RouterLinkActive,
     DmerStatusComponent,
     DmerTypeComponent,
+    MatExpansionPanel,
   ],
 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
-  viewProviders: [MatExpansionPanel],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DashboardComponent {
@@ -90,7 +90,9 @@ export class DashboardComponent {
     // private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
-  ) { console.info('At Dashboard Constructor');}
+  ) {
+    console.info('At Dashboard Constructor');
+  }
 
   // public onClick(event: any, elementId: string): void {
   //   event.preventDefault();
@@ -107,7 +109,6 @@ export class DashboardComponent {
   //     console.info('Got data');
   //     this.filterCasesData();
   //   });
-
 
   // }
 
