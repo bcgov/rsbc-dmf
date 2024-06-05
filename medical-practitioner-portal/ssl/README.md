@@ -8,7 +8,7 @@ Run the following command in the ssl folder:
 
 ## Windows 10/11
 
-- Double click on the certificate (server.crt)
+- Double-click on the certificate (server.crt)
 - Click on the button “Install Certificate …”
 - Select whether you want to store it on user level or on machine level
 - Click “Next”
@@ -23,13 +23,13 @@ Run the following command in the ssl folder:
 
 ## For OS X
 
-- Double click on the certificate (server.crt)
+- Double-click on the certificate (server.crt)
 - Select your desired keychain (login should suffice)
 - Add the certificate
 - Open Keychain Access if it isn’t already open
 - Select the keychain you chose earlier
 - You should see the certificate localhost
-- Double click on the certificate
+- Double click-on the certificate
 - Expand Trust
 - Select the option Always Trust in When using this certificate
 - Close the certificate window
