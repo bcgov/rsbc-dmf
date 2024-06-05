@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OneHealthAdapter;
+using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Net.Http.Headers;
 
@@ -11,6 +13,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
         private readonly MedicalPortalConfiguration _configuration;
+        private readonly OneHealthManager.OneHealthManagerClient _oneHealthAdapterClient;
 
         public PidpController(IHttpContextAccessor httpContextAccessor, IUserService userService, MedicalPortalConfiguration configuration)
         {
@@ -31,7 +34,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var userId = profile.Id;
 
             // TODO temp code until this is replaced with GRPC
-            var bearerToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"]
+            /*var bearerToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"]
                 .ToString()
                 .Split(" ")[1];
 
@@ -39,6 +42,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
             var responseStream = await httpClient.GetAsync($"{_configuration.Settings.PidpApiUrl}/api/contacts/{userId}/endorsements");
             var response = await responseStream.Content.ReadAsStringAsync();
+            */
+            var response = await _oneHealthAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
             return new JsonResult(response);
         }
     }

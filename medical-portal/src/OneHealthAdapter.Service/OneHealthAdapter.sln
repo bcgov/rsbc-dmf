@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneHealthAdapter.Service", "OneHealthAdapter.Service.csproj", "{08D07974-0AA0-4B27-A9BC-66CA469C3A3C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneHealthAdapter.Client", "..\OneHealthAdapter.Client\OneHealthAdapter.Client.csproj", "{4F352518-E819-431B-8785-825F472F9B8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{08D07974-0AA0-4B27-A9BC-66CA469C3A3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08D07974-0AA0-4B27-A9BC-66CA469C3A3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08D07974-0AA0-4B27-A9BC-66CA469C3A3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F352518-E819-431B-8785-825F472F9B8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F352518-E819-431B-8785-825F472F9B8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F352518-E819-431B-8785-825F472F9B8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F352518-E819-431B-8785-825F472F9B8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

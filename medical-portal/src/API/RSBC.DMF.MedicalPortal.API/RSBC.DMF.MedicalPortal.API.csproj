@@ -45,6 +45,7 @@
 	<ItemGroup>
     <ProjectReference Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
     <ProjectReference Include="..\..\..\..\shared-utils\SharedUtils.csproj" />
+    <ProjectReference Include="..\..\OneHealthAdapter.Client\OneHealthAdapter.Client.csproj" />
 	
 	
   </ItemGroup>

@@ -8,6 +8,7 @@ using NodaTime;
 using OneHealthAdapter.Extensions;
 using OneHealthAdapter.Infrastructure.Auth;
 using OneHealthAdapter.Infrastructure.HttpClients;
+using OneHealthAdapter.Services;
 using Serilog;
 using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
@@ -26,9 +27,45 @@ public class Startup
 
         services
           .AddHttpClients(config)
-          .AddKeycloakAuth(config)
+          // keycloak auth needed for keycloak role management - I don't think we will need this or the keycloak role management, if we did, I think this should be moved to a new
+          // project that would serve the keycloak role management controllers. Role management will likely be managed by OneHealth UI
+          //.AddKeycloakAuth(config)
           .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
-          .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
+          .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>())
+          .AddTransient<IOneHealthManager, OneHealthManager>();
+
+        // TODO jwt auth
+        /*
+         *             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
+            {
+                byte[] key = Encoding.UTF8.GetBytes(Configuration["JWT_TOKEN_KEY"]);
+                Array.Resize(ref key, 32);
+
+                // Configure JWT authentication
+                services.AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                }).AddJwtBearer(o =>
+                {
+                    o.SaveToken = true;
+                    o.RequireHttpsMetadata = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        RequireExpirationTime = false,
+                        ValidIssuer = Configuration["JWT_VALID_ISSUER"],
+                        ValidAudience = Configuration["JWT_VALID_AUDIENCE"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(key)
+                    };
+                });
+            }
+            else
+            {
+                services.AddAuthentication();
+            }
+                
+            services.AddAuthorization();*/
 
         services.AddControllers().AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -123,8 +160,16 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapGrpcService<OneHealthService>();
             endpoints.MapControllers();
-            // endpoints.MapHealthChecks("/health");
+            endpoints.MapGet("/", async context =>
+            {
+                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client");
+            });
+            if (env.IsDevelopment())
+            {
+                endpoints.MapGrpcReflectionService();
+            }
         });
 
     }

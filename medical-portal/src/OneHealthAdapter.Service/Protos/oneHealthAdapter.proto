@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "OneHealthAdapter";
+
+package OneHealth;
+
+service OneHealthManager {
+	rpc GetEndorsements(GetEndorsementsRequest) returns (GetEndorsementsReply);
+}
+
+message GetEndorsementsRequest {
+	string userId = 1;
+}
+
+message GetEndorsementsReply {
+	repeated EndorsementDto endorsements = 1;
+	ResultStatus resultStatus = 2;
+    string errorDetail = 3;
+}
+
+message EndorsementDto {
+	string userId = 1;
+	repeated LicenseDto licenses = 2;
+}
+
+message LicenseDto {
+	string identifierType = 1;
+	string statusCode = 2;
+	string statusReasonCode = 3;
+}
+
+enum ResultStatus {
+    Fail = 0;
+    Success = 1;
+}

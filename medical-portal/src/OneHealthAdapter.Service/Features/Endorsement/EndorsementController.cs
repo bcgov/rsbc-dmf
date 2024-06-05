@@ -19,7 +19,8 @@ namespace OneHealthAdapter.Endorsement
         #endregion
 
         // TODO return no content and not found status codes, fix the false 200 Ok status returns and replace with no content and not found errors
-        [HttpGet("contacts/{hpdid}/endorsements")]
+        //[HttpGet("contacts/{hpdid}/endorsements")]
+        [HttpGet("endorsements/{hpdid}")]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         [Authorize(Policy = Policies.DmftEnroledUser)]
         [Produces("application/json")]
