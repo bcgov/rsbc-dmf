@@ -1,6 +1,7 @@
 ﻿using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OneHealthAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System.Net;
@@ -47,7 +48,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                     var tokenReply = initialClient.GetToken(tokenRequest);
 
-                    if (tokenReply != null && tokenReply.ResultStatus == ResultStatus.Success)
+                    if (tokenReply != null && tokenReply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
                     {
                         // Add the bearer token to the client.
                         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
@@ -64,6 +65,51 @@ namespace RSBC.DMF.MedicalPortal.API
                     }
                 }
 
+            }
+            return services;
+        }
+
+        public static IServiceCollection AddOneHealthAdapterClient(this IServiceCollection services, IConfiguration config)
+        {
+            var serviceUrl = config["OneHealth:ServerUrl"];
+            var clientSecret = config["OneHealth:ClientSecret"];
+            var validateServerCertificate = config.GetValue("OneHealth:ValidateServerCertificate", true);
+            if (!string.IsNullOrEmpty(serviceUrl))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                if (!validateServerCertificate) // Ignore certificate errors in non-production modes.
+                                                // This allows you to use OpenShift self-signed certificates for testing.
+                {
+                    // Return `true` to allow certificates that are untrusted/invalid
+                    httpClientHandler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+
+                var initialClient = new OneHealthManager.OneHealthManagerClient(initialChannel);
+                // call the token service to get a token.
+                //var tokenRequest = new TokenRequest { Secret = clientSecret };
+
+                //var tokenReply = initialClient.GetToken(tokenRequest);
+
+                //if (tokenReply != null && tokenReply.ResultStatus == OneHealthAdapter.ResultStatus.Success)
+                //{
+                    // Add the bearer token to the client.
+                    //httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
+
+                    services.AddTransient(_ => new OneHealthManager.OneHealthManagerClient(channel));
+                //}
+                //else
+                //{
+                //    Log.Logger.Information("Error getting token for Case Management Service");
+                //}
             }
             return services;
         }

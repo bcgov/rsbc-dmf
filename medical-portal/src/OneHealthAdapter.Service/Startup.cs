@@ -31,8 +31,7 @@ public class Startup
           // project that would serve the keycloak role management controllers. Role management will likely be managed by OneHealth UI
           //.AddKeycloakAuth(config)
           .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
-          .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>())
-          .AddTransient<IOneHealthManager, OneHealthManager>();
+          .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
         // TODO jwt auth
         /*
@@ -76,6 +75,11 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
 
+        services.AddGrpc(opts =>
+        {
+            opts.EnableDetailedErrors = true;
+        });
+        services.AddGrpcReflection();
         services.AddDistributedMemoryCache();
 
         services.AddHealthChecks()
