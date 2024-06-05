@@ -26,7 +26,7 @@
   		# Disallow the site to be rendered within a frame (clickjacking protection)
   		X-Frame-Options "DENY"
   		# Set CSP to support Angular
-  		Content-Security-Policy "default-src 'self' 'unsafe-eval' https://fonts.gstatic.com https://*.gov.bc.ca https://*.bcgov https://localhost:5020; connect-src 'self' https://*.gov.bc.ca http://*.gov.bc.ca; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; frame-src https://*.gov.bc.ca frame-ancestors 'self' https://*.gov.bc.ca"
+  		Content-Security-Policy "default-src 'self' 'unsafe-eval' https://fonts.gstatic.com https://*.gov.bc.ca https://*.bcgov https://localhost:5020; connect-src 'self' https://*.gov.bc.ca http://*.gov.bc.ca; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; frame-src https://*.gov.bc.ca; frame-ancestors 'self' https://*.gov.bc.ca"
   		# Set referrer policy
   		Referrer-Policy "same-origin"
   	}
