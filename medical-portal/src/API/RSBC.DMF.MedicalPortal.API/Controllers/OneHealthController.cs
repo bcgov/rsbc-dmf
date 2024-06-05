@@ -37,8 +37,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var userId = profile.Id;
 
-                // fake data until we are unblocked from OneHealth endorsements
+                // TODO remove fake data after we are unblocked from OneHealth endorsements
                 userId = "test";
+
                 var response = await _oneHealthAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
                 return new JsonResult(response);
             }
