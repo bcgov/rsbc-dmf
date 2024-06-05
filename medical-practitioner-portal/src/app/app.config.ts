@@ -12,6 +12,8 @@ import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-toke
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
 import { AuthService } from './features/auth/services/auth.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,6 +23,8 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([BearerTokenInterceptor, ApiLoaderInterceptor]),
     ),
     importProvidersFrom(
+      BrowserModule,
+      BrowserAnimationsModule,
       KeycloakModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
