@@ -12,18 +12,18 @@ import {
 //   MatAccordion,
 //   MatExpansionPanel,
 // } from '@angular/material/expansion';
-// import { MatCardModule } from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 // import { MatIconModule } from '@angular/material/icon';
-// import { MatFormFieldModule } from '@angular/material/form-field';
-// import { MatInputModule } from '@angular/material/input';
-// import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 // import { MatSelectModule } from '@angular/material/select';
-// import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 // import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
 // import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
-// import { CasesService, DocumentService } from '../shared/api/services';
-// import { CaseDocument, PatientCase } from '../shared/api/models';
+import { CasesService, DocumentService } from '../shared/api/services';
+import { CaseDocument, PatientCase } from '../shared/api/models';
 // import { MatCommonModule } from '@angular/material/core';
 
 interface Status {
@@ -36,15 +36,15 @@ interface Status {
   imports: [
     // MatCommonModule,
     // MatExpansionModule,
-    // MatCardModule,
+    MatCardModule,
     // MatIconModule,
-    // MatFormFieldModule,
-    // MatInputModule,
-    // MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
     // MatSelectModule,
-    // FormsModule,
+    FormsModule,
     // CommonModule,
-    // ReactiveFormsModule,
+    ReactiveFormsModule,
     RouterLink,
     // RouterLinkActive,
     // DmerStatusComponent,
@@ -69,28 +69,28 @@ export class DashboardComponent {
   // ];
 
   // selectedStatus: number = 1;
-  // showSearchResults = false;
-  // public searchBox = new FormControl('');
-  // public prevSearchBox: string = '';
+  showSearchResults = false;
+  public searchBox = new FormControl('');
+  public prevSearchBox: string = '';
   // public searchCasesInput: string = '';
-  // public searchedCase?: PatientCase;
+  public searchedCase?: PatientCase;
   // public practitionerDMERList: CaseDocument[] = [];
   // public filteredData?: CaseDocument[] = [];
   // public _allDocuments?: CaseDocument[] | null = [];
 
-  // isSearching: boolean = false;
-  // noResults: boolean = false;
+  isSearching: boolean = false;
+  noResults: boolean = false;
 
   // //isExpanded: Record<string, boolean> = {};
 
   // pageSize = 10;
 
   // @ViewChild(MatAccordion) accordion!: MatAccordion;
-  // constructor(
-  //   private viewportScroller: ViewportScroller,
-  //   private casesService: CasesService,
-  //   private documentService: DocumentService,
-  // ) { console.info('At Dashboard Constructor');}
+  constructor(
+    // private viewportScroller: ViewportScroller,
+    private casesService: CasesService,
+    private documentService: DocumentService,
+  ) { console.info('At Dashboard Constructor');}
 
   // public onClick(event: any, elementId: string): void {
   //   event.preventDefault();
@@ -111,37 +111,37 @@ export class DashboardComponent {
 
   // }
 
-  // searchDmerCase(): void {
-  //   console.log('search DMER Case');
-  //   if (
-  //     this.prevSearchBox === '' ||
-  //     this.prevSearchBox !== this.searchBox.value
-  //   ) {
-  //     let searchParams: Parameters<
-  //       CasesService['apiCasesSearchIdCodeGet$Json']
-  //     >[0] = {
-  //       idCode: this.searchBox.value as string,
-  //     };
+  searchDmerCase(): void {
+    console.log('search DMER Case');
+    if (
+      this.prevSearchBox === '' ||
+      this.prevSearchBox !== this.searchBox.value
+    ) {
+      let searchParams: Parameters<
+        CasesService['apiCasesSearchIdCodeGet$Json']
+      >[0] = {
+        idCode: this.searchBox.value as string,
+      };
 
-  //     this.isSearching = true;
-  //     this.noResults = false;
+      this.isSearching = true;
+      this.noResults = false;
 
-  //     this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
-  //       next: (dmerCase) => {
-  //         if (dmerCase) this.searchedCase = dmerCase;
-  //         console.log(searchParams, this.searchedCase);
-  //       },
-  //       error: (err) => {
-  //         this.noResults = true;
-  //       },
-  //       complete: () => {
-  //         this.isSearching = false;
-  //       },
-  //     });
-  //   }
-  //   this.prevSearchBox = this.searchBox.value as string;
-  //   this.showSearchResults = true;
-  // }
+      this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
+        next: (dmerCase) => {
+          if (dmerCase) this.searchedCase = dmerCase;
+          console.log(searchParams, this.searchedCase);
+        },
+        error: (err) => {
+          this.noResults = true;
+        },
+        complete: () => {
+          this.isSearching = false;
+        },
+      });
+    }
+    this.prevSearchBox = this.searchBox.value as string;
+    this.showSearchResults = true;
+  }
 
   // clear() {
   //   console.log('clear');
