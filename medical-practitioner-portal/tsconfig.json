@@ -3,20 +3,22 @@
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
+    //"noImplicitOverride": true,
+    //"noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
+    //"skipLibCheck": true,
+    //"esModuleInterop": true,
     "sourceMap": true,
     "declaration": false,
+    "downlevelIteration": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022",
+    "target": "es2021",
+    "module": "es2020",
     "useDefineForClassFields": false,
     "paths": {
       "@shared/core-ui/*": ["../shared-portal-ui/projects/core-ui/src/public-api/*"],
@@ -24,7 +26,7 @@
       "@src/*": ["./src/*"]
     },
     "lib": [
-      "ES2022",
+      "es2018",
       "dom"
     ]
   },
@@ -32,7 +34,6 @@
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true,
-    "enableIvy": true
+    "strictTemplates": true
   }
 }
