@@ -20,12 +20,7 @@ namespace OneHealthAdapter.Services
             _configuration = configuration;
         }
 
-        /// <summary>
-        /// Get Token
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        // TODO check if this can be moved to SharedUtils
         [AllowAnonymous]
         public override Task<TokenReply> GetToken(TokenRequest request, ServerCallContext context)
         {
@@ -64,9 +59,12 @@ namespace OneHealthAdapter.Services
 
             try
             {
+                // real data from OneHealth with no results
+                request.UserId = "kkpqtjseoyaygbqxmjq7kltol7wffrn6";
                 var endorsements = await _endorsement.GetEndorsement(request.UserId);
+                // TODO check fail and status code
 
-                // fake data
+                // fake data to test with results, until above is working
                 var license = new LicenseDto
                 {
                     IdentifierType = "1",
