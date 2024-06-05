@@ -13,7 +13,7 @@ import {
   MatExpansionPanel,
 } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
-// import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
+import { DmerTypeComponent } from '@shared/core-ui';
 import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
@@ -36,7 +37,7 @@ interface Status {
     MatCommonModule,
     MatExpansionModule,
     MatCardModule,
-    // MatIconModule,
+    MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -47,7 +48,7 @@ interface Status {
     RouterLink,
     RouterLinkActive,
     DmerStatusComponent,
-    // DmerTypeComponent,
+    DmerTypeComponent,
     MatExpansionPanel,
   ],
 
