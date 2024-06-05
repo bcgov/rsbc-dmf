@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-nav-menu',
   standalone: true,
   imports: [MatToolbarModule, RouterLink],
-  templateUrl: './nav-menu.component.html',
-  styleUrl: './nav-menu.component.scss',
+  templateUrl: './medical-nav-menu.component.html',
+  styleUrl: './medical-nav-menu.component.scss',
 })
-export class NavMenuComponent {}
+export class MedicalNavMenuComponent {}
