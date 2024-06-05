@@ -16,6 +16,7 @@ using Swashbuckle.AspNetCore.Filters;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace OneHealthAdapter;
 
@@ -30,8 +31,7 @@ public class Startup
 
         services
           .AddHttpClients(config)
-          .AddSingleton<IClock>(NodaTime.SystemClock.Instance)
-          .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
+          .AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
         if (!string.IsNullOrEmpty(Configuration["Jwt:Secret"]))
         {

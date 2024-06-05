@@ -2,7 +2,6 @@ namespace OneHealthAdapter.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
 using OneHealthAdapter.Infrastructure.Auth;
-using OneHealthAdapter.Infrastructure.HttpClients.Keycloak;
 using OneHealthAdapter.Extensions;
 using OneHealthAdapter.Endorsement.Services.Interfaces;
 using OneHealthAdapter.Endorsement.Services;
@@ -19,14 +18,6 @@ public static class HttpClientSetup
                 Address = config.PidpEndorsementAPI.TokenUrl,
                 ClientId = config.PidpEndorsementAPI.ClientId,
                 ClientSecret = config.PidpEndorsementAPI.ClientSecret,
-            });
-
-        services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
-            .WithBearerToken(new KeycloakAdministrationClientCredentials
-            {
-                Address = config.Keycloak.TokenUrl,
-                ClientId = config.Keycloak.AdministrationClientId,
-                ClientSecret = config.Keycloak.AdministrationClientSecret
             });
 
         return services;
