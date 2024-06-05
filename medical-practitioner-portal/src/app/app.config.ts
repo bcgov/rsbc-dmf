@@ -6,27 +6,27 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { ApiModule } from './shared/api/api.module';
 import { environment } from '../environments/environment';
 import { APP_BASE_HREF, PlatformLocation } from '@angular/common';
-import { KeycloakModule } from './modules/keycloak/keycloak.module';
+//import { KeycloakModule } from './modules/keycloak/keycloak.module';
 import { PermissionsModule } from './modules/permissions/permissions.module';
 import { BearerTokenInterceptor } from './features/auth/interceptors/bearer-token.interceptor';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ApiLoaderInterceptor } from './features/auth/interceptors/loading.interceptor';
-import { AuthService } from './features/auth/services/auth.service';
+//import { AuthService } from './features/auth/services/auth.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     provideHttpClient(
-      withInterceptors([BearerTokenInterceptor, ApiLoaderInterceptor]),
+      withInterceptors([/*BearerTokenInterceptor, */ApiLoaderInterceptor]),
     ),
     importProvidersFrom(
-      KeycloakModule,
+      //KeycloakModule,
       PermissionsModule.forRoot(),
       ApiModule.forRoot({ rootUrl: environment.apiRootUrl }),
       NgxSpinnerModule,
     ),
-    AuthService,
+    //AuthService,
     {
       provide: APP_BASE_HREF,
       useFactory: (s: PlatformLocation) => {

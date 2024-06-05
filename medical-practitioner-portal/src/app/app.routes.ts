@@ -4,7 +4,7 @@ import { CaseDetailsComponent } from './case-details/case-details.component';
 import { AccountComponent } from './account/account.component';
 import { GetHelpComponent } from './get-help/get-help.component';
 import { CaseSubmissionsComponent } from './case-submissions/case-submissions.component';
-import { AuthenticationGuard } from './features/auth/guards/authentication.guard';
+//import { AuthenticationGuard } from './features/auth/guards/authentication.guard';
 import { DeniedComponent } from './denied/denied.component';
 
 export const ROUTE_DENIED = 'denied';
@@ -13,7 +13,7 @@ export const routes: Routes = [
   { path: ROUTE_DENIED, component: DeniedComponent },
   {
     path: '',
-    canActivateChild: [AuthenticationGuard],
+    //canActivateChild: [AuthenticationGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'caseDetails/:caseId', component: CaseDetailsComponent },
