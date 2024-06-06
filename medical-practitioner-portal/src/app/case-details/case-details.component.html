@@ -145,6 +145,7 @@
           <app-submission-requirements
             [documents]="submissionRequirementDocuments"
             [driverId]="caseDetails?.driverId"
+            (uploadedDocument)="onUploadDocument()"
           ></app-submission-requirements>
         </mat-tab>
         <mat-tab label="Driver Submissions">
@@ -200,7 +201,7 @@
               >
             </mat-expansion-panel-header>
 
-            <app-dmer-type></app-dmer-type>
+            <app-medical-dmer-types></app-medical-dmer-types>
           </mat-expansion-panel>
 
           <mat-expansion-panel>

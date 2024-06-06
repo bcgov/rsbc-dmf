@@ -37,6 +37,7 @@ import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
 import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
 import { DatePipe } from '@angular/common';
+import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 
 @Component({
   selector: 'app-case-details',
@@ -50,7 +51,7 @@ import { DatePipe } from '@angular/common';
     MatExpansionModule,
     CaseTypeComponent,
     CaseStatusComponent,
-    //MedicalDmerTypeComponent,
+    MedicalDmerTypesComponent,
     DmerStatusComponent,
     DecisionOutcomeComponent,
     EligibleLicenseClassComponent,
@@ -140,6 +141,9 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   getDriverDocuments(driverId: string) {
+    this.submissionRequirementDocuments = [];
+    this.driverSubmissionDocuments = [];
+
     this.documentService
       .apiDocumentDriverIdAllDocumentsGet$Json({
         driverId: driverId,
@@ -168,5 +172,10 @@ export class CaseDetailsComponent implements OnInit {
           }
         });
       });
+  }
+
+  onUploadDocument() {
+    // Refresh the documents tab after uploading a document
+    this.getDriverDocuments(this.caseDetails?.driverId as string);
   }
 }
