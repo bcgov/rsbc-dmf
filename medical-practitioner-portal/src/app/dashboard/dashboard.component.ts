@@ -24,6 +24,7 @@ import { CasesService, DocumentService } from '../shared/api/services';
 import { CaseDocument, PatientCase } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
+import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 
 interface Status {
   value: number;
@@ -49,6 +50,7 @@ interface Status {
     DmerStatusComponent,
     //DmerTypeComponent,
     MatExpansionPanel,
+    MedicalDmerTypesComponent,
   ],
 
   templateUrl: './dashboard.component.html',
