@@ -33,12 +33,10 @@ export class KeycloakInitService {
         });
     };
 
-    // Code from POC that I don't fully understand. It was working but at some point either stopped working or became red herring
-    // Gonna try disabling this and see if the DEV javascript error changes
-    // if (authenticated) {
-    //   // Force refresh to begin expiry timer
-    //   await this.keycloakService.updateToken(-1);
-    // }
+    if (authenticated) {
+      // Force refresh to begin expiry timer
+      await this.keycloakService.updateToken(-1);
+    }
 
     console.info('Keycloak initialization completed.');
   }
