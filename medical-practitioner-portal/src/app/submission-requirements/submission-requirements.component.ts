@@ -1,4 +1,10 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, Input } from '@angular/core';
+import {
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -55,6 +61,7 @@ export class SubmissionRequirementsComponent {
   acceptControl = new FormControl(false);
   @Input() documents: CaseDocument[] = [];
   @Input() driverId?: string | null;
+  @Output() uploadedDocument = new EventEmitter();
 
   documentSubTypes?: DocumentSubType[];
 
@@ -148,6 +155,7 @@ export class SubmissionRequirementsComponent {
         });
         this.showUpload = false;
         this.isFileUploading = false;
+        this.uploadedDocument.emit();
       });
   }
 }

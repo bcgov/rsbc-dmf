@@ -17,16 +17,18 @@ import {
   MatExpansionModule,
   MatExpansionPanel,
 } from '@angular/material/expansion';
-import { CaseTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
-import { CaseStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-status/case-status.component';
-import { DmerTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-type/dmer-type.component';
-import { DecisionOutcomeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
-import { EligibleLicenseClassComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/eligible-license-class/eligible-license-class.component';
-import { SubmissionTypeComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
-import { SubmissionStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
-import { LetterTopicComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
-import { DmerStatusComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/dmer-status/dmer-status.component';
-import { UploadDocumentComponent } from '../../../../shared-portal-ui/projects/core-ui/src/lib/upload-document/upload-document.component';
+import {
+  CaseStatusComponent,
+  CaseTypeComponent,
+  DecisionOutcomeComponent,
+  DmerStatusComponent,
+  EligibleLicenseClassComponent,
+  LetterTopicComponent,
+  SubmissionStatusComponent,
+  SubmissionTypeComponent,
+  UploadDocumentComponent,
+} from '@shared/core-ui';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.component';
@@ -35,6 +37,7 @@ import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
 import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
 import { DatePipe } from '@angular/common';
+import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 
 @Component({
   selector: 'app-case-details',
@@ -48,7 +51,7 @@ import { DatePipe } from '@angular/common';
     MatExpansionModule,
     CaseTypeComponent,
     CaseStatusComponent,
-    DmerTypeComponent,
+    MedicalDmerTypesComponent,
     DmerStatusComponent,
     DecisionOutcomeComponent,
     EligibleLicenseClassComponent,
@@ -138,6 +141,9 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   getDriverDocuments(driverId: string) {
+    this.submissionRequirementDocuments = [];
+    this.driverSubmissionDocuments = [];
+
     this.documentService
       .apiDocumentDriverIdAllDocumentsGet$Json({
         driverId: driverId,
@@ -166,5 +172,10 @@ export class CaseDetailsComponent implements OnInit {
           }
         });
       });
+  }
+
+  onUploadDocument() {
+    // Refresh the documents tab after uploading a document
+    this.getDriverDocuments(this.caseDetails?.driverId as string);
   }
 }
