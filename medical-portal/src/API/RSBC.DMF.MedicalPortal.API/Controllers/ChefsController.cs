@@ -1,15 +1,17 @@
+using System.ComponentModel.DataAnnotations;
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using Pssg.Rsbc.Dmf.DocumentTriage;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
-using System.Security.AccessControl;
+using System.Text.Json;
+using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using Pssg.DocumentStorageAdapter;
+using Pssg.Rsbc.Dmf.DocumentTriage;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
+using ResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -17,161 +19,163 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     [Route("api/[controller]")]
     public class ChefsController : ControllerBase
     {
+        private readonly ILogger<ChefsController> logger;
+        private readonly IConfiguration configuration;
         private readonly ICaseQueryService caseQueryService;
-        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
-        // private readonly ILogger<ChefsController> logger;
+        private readonly IUserService userService;
+        private readonly CaseManager.CaseManagerClient cmsAdapterClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
 
-        public ChefsController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient)
+        private const string DATA_ENTITY_NAME = "incident";
+        private const string DATA_FILENAME = "data.json";
+
+        public ChefsController(ILogger<ChefsController> logger, IConfiguration configuration,
+            IUserService userService,
+            ICaseQueryService caseQueryService,
+            CaseManager.CaseManagerClient cmsAdapterClient,
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
+            this.logger = logger;
+            this.configuration = configuration;
             this.caseQueryService = caseQueryService;
-            _cmsAdapterClient = cmsAdapterClient;
+            this.cmsAdapterClient = cmsAdapterClient;
+            this.documentStorageAdapterClient = documentStorageAdapterClient;
+            this.userService = userService;
+        }
+
+        [HttpGet("submission")]
+        public async Task<ActionResult> GetSubmission([FromQuery] SubmissionStatus status = SubmissionStatus.Final)
+        {
+            UserContext profile = await this.userService.GetCurrentUserContext();
+            logger.LogInformation($"GET Submission - SubmissionStatus: {status}, userId is {profile.Id}");
+
+            string documentUrl = "";
+
+            if (status == SubmissionStatus.Draft)
+            {
+                documentUrl = $"{DATA_ENTITY_NAME}/{profile.Id}/{DATA_FILENAME}";
+            }
+            else if (status == SubmissionStatus.Final)
+            {
+                documentUrl = $"dfp/triage-request/{profile.Id}.json";
+            }
+
+            if (documentUrl == "")
+            {
+                logger.LogError($"Unexpected error - unable to generate documentUrl");
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    "Unexpected error - unable to generate documentUrl");
+            }
+
+            // fetch the file from S3
+            var downloadFileRequest = new DownloadFileRequest()
+            {
+                ServerRelativeUrl = documentUrl
+            };
+            var documentReply = documentStorageAdapterClient.DownloadFile(downloadFileRequest);
+            if (documentReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
+            {
+                logger.LogError($"Unexpected error - unable to fetch file");
+                return StatusCode((int)HttpStatusCode.InternalServerError,
+                    "Unexpected error - unable to fetch file from storage");
+            }
+
+            byte[] fileContents = documentReply.Data.ToByteArray();
+            string jsonContent = System.Text.Encoding.UTF8.GetString(fileContents);
+
+            try
+            {
+                var jsonData = JsonSerializer.Deserialize<object>(jsonContent);
+                logger.LogInformation("JSON Data: {0}",
+                    JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
+                return Ok(jsonData);
+            }
+            catch (JsonException ex)
+            {
+                logger.LogError("Error deserializing JSON content: {0}", ex.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Error processing JSON content");
+            }
         }
 
         [HttpPut("submission")]
-        public IActionResult PutSubmission([FromBody] ChefsSubmission submission)
+        public async Task<ActionResult> PutSubmission([FromBody] ChefsSubmission submission)
         {
+            UserContext profile = await this.userService.GetCurrentUserContext();
+
             // get the practitioner ID
             string practitionerId = User.FindFirstValue("sid");
-            practitionerId = null;
 
-            Serilog.Log.Logger.Information($"PUT Submission - practitionerId is {practitionerId}");
+            SubmissionStatus status = submission.Status;
 
-            // Access variables dynamically
-            foreach (var kvp in submission.Submission)
+            logger.LogInformation($"PUT Submission - userId is {profile.Id}, practitionerId is {practitionerId}");
+
+            var jsonString = JsonSerializer.Serialize(submission);
+            logger.LogInformation($"ChefsSubmission payload: {jsonString}");
+
+            UploadFileRequest jsonData = null;
+            if (status == SubmissionStatus.Draft)
             {
-                var variableName = kvp.Key;
-                var variableValue = kvp.Value;
-                // Handle variable as needed
+                jsonData = new UploadFileRequest()
+                {
+                    ContentType = "application/json",
+                    Data = ByteString.CopyFromUtf8(jsonString),
+                    EntityName = DATA_ENTITY_NAME,
+                    FileName = DATA_FILENAME,
+                    FolderName = profile.Id
+                };
+            }
+            else if (status == SubmissionStatus.Final)
+            {
+                jsonData = new UploadFileRequest()
+                {
+                    ContentType = "application/json",
+                    Data = ByteString.CopyFromUtf8(jsonString),
+                    EntityName = "dfp",
+                    FileName = $"{profile.Id}.json",
+                    FolderName = "triage-request"
+                };
             }
 
-            // using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
-            // {
-            //     string body = await reader.ReadToEndAsync();
-            //
-            //     // FhirJsonParser can return a typed object.
-            //     // There is also a more generic FhirJsonNode.Parse
-            //     // The built in Json Deserializer does not seem to work
-            //
-            //     var parser = new FhirJsonParser();
-            //     var bundle = parser.Parse<Bundle>(body);
-            //
-            //     string dataFileKey = "";
-            //     string pdfFileKey = "";
-            //     Int64 dataFileSize = 0;
-            //     Int64 pdfFileSize = 0;
-            //
-            //     logger.LogInformation(bundle.ToJson());
-            //
-            //     // AFIAK there are no files yet from CHEFS that we need to process
-            //     // first pass to get the files.
-            //     // foreach (var entry in bundle.Entry)
-            //     // {
-            //     //   // find the PDF entry
-            //     //   if (entry.Resource.ResourceType == ResourceType.Binary &&
-            //     //       ((Binary)entry.Resource).ContentType == "application/pdf")
-            //     //   {
-            //     //     var b = (Binary)entry.Resource;
-            //     //     UploadFileRequest pdfData = new UploadFileRequest()
-            //     //     {
-            //     //       ContentType = "application/pdf",
-            //     //       Data = ByteString.CopyFrom(b.Data),
-            //     //       EntityName = "incident",
-            //     //       FileName = $"DMER.pdf",
-            //     //       FolderName = bundle.Id,
-            //     //     };
-            //
-            //     //     var reply = _documentStorageAdapterClient.UploadFile(pdfData);
-            //     //     pdfFileKey = reply.FileName;
-            //     //     pdfFileSize = pdfData.Data.Length;
-            //     //   }
-            //
-            //     //   if (entry.Resource.ResourceType == ResourceType.Binary &&
-            //     //       ((Binary)entry.Resource).ContentType == "application/eforms")
-            //     //   {
-            //     //     var b = (Binary)entry.Resource;
-            //     //     UploadFileRequest jsonData = new UploadFileRequest()
-            //     //     {
-            //     //       ContentType = "application/json",
-            //     //       Data = ByteString.CopyFrom(b.Data),
-            //     //       EntityName = DATA_ENTITY_NAME,
-            //     //       FileName = DATA_FILENAME,
-            //     //       FolderName = bundle.Id
-            //     //     };
-            //
-            //     //     var reply = _documentStorageAdapterClient.UploadFile(jsonData);
-            //     //     dataFileKey = reply.FileName;
-            //     //     dataFileSize = jsonData.Data.Length;
-            //     //   }
-            //     // }
-            //
-            //     // second pass to handle the questionnaire response
-            //     foreach (var entry in bundle.Entry)
-            //     {
-            //
-            //         if (entry.Resource.ResourceType == ResourceType.QuestionnaireResponse)
-            //         {
-            //             var questionnaireResponse = (QuestionnaireResponse)entry.Resource;
-            //             // only triage completed items.
-            //             if (questionnaireResponse.StatusElement.Value ==
-            //                 QuestionnaireResponse.QuestionnaireResponseStatus.Completed)
-            //             {
-            //
-            //                 // convert the questionnaire response into json.
-            //                 TriageRequest triageRequest = new TriageRequest()
-            //                 {
-            //                     Processed = false,
-            //                     TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
-            //                     Id = bundle.Id,
-            //                     PdfFileKey = pdfFileKey,
-            //                     PdfFileSize = pdfFileSize,
-            //                     DataFileKey = dataFileKey,
-            //                     DataFileSize = dataFileSize,
-            //                     PractitionerId = practitionerId == null ? "" : practitionerId,
-            //                     ClinicId = "" // in order to pass this by value we would need some way to pass the data to the PHSA controller.
-            //                 };
-            //
-            //                 triageRequest.AddItems(questionnaireResponse.Item);
-            //
-            //                 // unlike the others this file is saved into a "folder" that can be used for queueing.
-            //                 // S3 does not use folders like a file system, it is simple a convention for the key.
-            //                 string jsonString = JsonConvert.SerializeObject(triageRequest);
-            //                 UploadFileRequest jsonData = new UploadFileRequest()
-            //                 {
-            //                     ContentType = "application/json",
-            //                     Data = ByteString.CopyFromUtf8(jsonString),
-            //                     EntityName = "dfp",
-            //                     FileName = $"{bundle.Id}.json",
-            //                     FolderName = "triage-request"
-            //                 };
-            //
-            //                 // save a copy in the S3.
-            //                 _documentStorageAdapterClient.UploadFile(jsonData);
-            //
-            //                 // and send to the triage service.
-            //                 _documentTriageClient.Triage(triageRequest);
-            //             }
-            //             else // it is a save as draft.
-            //             {
-            //                 // No additional logic required for save as draft at this time.
-            //             }
-            //         }
-            //     }
-            //
-            //
-            // }
+            if (jsonData == null)
+            {
+                logger.LogError($"{nameof(PutSubmission)} error: unable to get upload jsonData");
+                return StatusCode(500);
+            }
+
+            string dataFileKey = "";
+            Int64 dataFileSize = 0;
+
+            var reply = documentStorageAdapterClient.UploadFile(jsonData);
+
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                logger.LogError(
+                    $"{nameof(PutSubmission)} error: unable to upload documents for this case - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+
+
+            dataFileKey = reply.FileName;
+            dataFileSize = jsonData.Data.Length;
+
+            if (status == SubmissionStatus.Final)
+            {
+                // TriageRequest triageRequest = new TriageRequest()
+                // {
+                //     Processed = false,
+                //     TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
+                //     Id = profile.Id,
+                //     DataFileKey = dataFileKey,
+                //     DataFileSize = dataFileSize,
+                //     PractitionerId = practitionerId == null ? "" : practitionerId,
+                //     ClinicId = "" // in order to pass this by value we would need some way to pass the data to the PHSA controller.
+                // };
+            }
+
+            logger.LogInformation(
+                $"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {dataFileKey}, dataFileSize: {dataFileSize}, reply: {JsonSerializer.Serialize(reply)}");
 
             return Ok(submission);
-        }
-
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)
-        {
-            var cases = await caseQueryService.SearchCases(query);
-
-            // second pass to populate birthdate.
-
-            return Ok(cases);
         }
     }
 }

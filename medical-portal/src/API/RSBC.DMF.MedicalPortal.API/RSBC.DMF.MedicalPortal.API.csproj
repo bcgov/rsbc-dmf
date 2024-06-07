@@ -18,6 +18,10 @@
       GrpcServices="Client">
       <Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
     </Protobuf>
+    <Protobuf Include="../../../../document-triage-service/src/Protos/documentTriage.proto"
+      GrpcServices="Client">
+      <Link>gRPC Prototypes\documentTriage.proto</Link>
+    </Protobuf>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
