@@ -44,13 +44,23 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.Status = c.Item.Status;
                 result.Name = c.Item.Name;
                 result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
-                result.BirthDate = c.Item.BirthDate.ToDateTime();
+                
                 result.IdCode = c.Item.IdCode;
                 result.FirstName = c.Item.FirstName;
                 result.LastName = c.Item.LastName;
                 result.MiddleName = c.Item.Middlename;
-                result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
-               
+                
+
+                if (c.Item.BirthDate != null)
+                {
+                    result.BirthDate = c.Item.BirthDate.ToDateTime();
+                }
+
+                if (c.Item.LatestComplianceDate != null)
+                {
+                    result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
+                }
+
             }
 
             // set to null if no decision has been made.
