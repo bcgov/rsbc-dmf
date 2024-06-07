@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using PidpAdapter;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Net.Http.Headers;
 
@@ -11,10 +13,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
         private readonly MedicalPortalConfiguration _configuration;
+        private readonly PidpManager.PidpManagerClient _pidpAdapterClient;
 
-        public PidpController(IHttpContextAccessor httpContextAccessor, IUserService userService, MedicalPortalConfiguration configuration)
+        public PidpController(IHttpContextAccessor httpContextAccessor, PidpManager.PidpManagerClient pidpAdapterClient, IUserService userService, MedicalPortalConfiguration configuration)
         {
             _httpContextAccessor = httpContextAccessor;
+            _pidpAdapterClient = pidpAdapterClient;
             _configuration = configuration;
             _userService = userService;
         }
@@ -27,19 +31,21 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ActionName(nameof(GetMyEndorsements))]
         public async Task<ActionResult> GetMyEndorsements()
         {
-            var profile = await _userService.GetCurrentUserContext();
-            var userId = profile.Id;
+            try
+            {
+                var profile = await _userService.GetCurrentUserContext();
+                var userId = profile.Id;
 
-            // TODO temp code until this is replaced with GRPC
-            var bearerToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"]
-                .ToString()
-                .Split(" ")[1];
+                // TODO remove fake data after we are unblocked from pidp endorsements
+                userId = "test";
 
-            var httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-            var responseStream = await httpClient.GetAsync($"{_configuration.Settings.PidpApiUrl}/api/contacts/{userId}/endorsements");
-            var response = await responseStream.Content.ReadAsStringAsync();
-            return new JsonResult(response);
+                var response = await _pidpAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
+                return new JsonResult(response);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message);
+            }
         }
     }
 }

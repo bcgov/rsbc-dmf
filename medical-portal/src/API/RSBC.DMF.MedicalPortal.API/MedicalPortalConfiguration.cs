@@ -9,7 +9,6 @@ public class MedicalPortalConfiguration
 
     public class SettingsConfiguration
     {
-        public string PidpApiUrl { get; set; }
         public CorsConfiguration Cors { get; set; } = new();
     }
 
