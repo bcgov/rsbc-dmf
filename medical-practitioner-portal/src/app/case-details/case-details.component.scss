@@ -3,37 +3,10 @@
     justify-content: space-between;
     line-height: 24px;
     gap:24px;
+    flex-wrap:wrap ;
   }
 
-  .driver-details{
-    display: flex;
-    justify-content: space-evenly;
-    line-height: 24px;
-  }
 
-  .top-margin{
-    margin-top: 0px;
-  }
-  
-  mat-card {
-    margin-bottom: 24px;
-  }
-  
-  .mat-mdc-card {
-    border: 1px solid gray;
-    box-shadow: none !important;
-    margin: 30px 0 30px 0;
-    padding: 12px;
-  
-    .mat-mdc-card-header {
-      padding-top: 12px;
-  
-      .mat-mdc-card-header-text {
-        width: 100%;
-        vertical-align: middle;
-      }
-    }
-  }
 
   .mat-mdc-card.caseStatus {
     background-color: white;
@@ -75,10 +48,11 @@
    // width: 100%;
     justify-content: space-between;
     gap: 100px;
+    flex-wrap: wrap;
   }
 
   ::ng-deep .mat-mdc-tab-label-container {
-    max-width: 60%;
+    max-width: 70%;
 }
 
 ::ng-deep .mat-mdc-tab .mdc-tab-indicator__content--underline {
@@ -92,3 +66,33 @@
     font-style: normal;
     color: rgba(51, 51, 51, 0.996078431372549) !important;
 }
+
+  .driver-details{
+    display: flex;
+    justify-content: space-evenly;
+    line-height: 24px;
+  }
+
+  .top-margin{
+    margin-top: 0px;
+  }
+  
+  mat-card {
+    margin-bottom: 24px;
+  }
+  
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 12px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
