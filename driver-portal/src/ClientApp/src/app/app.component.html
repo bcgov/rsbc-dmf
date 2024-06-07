@@ -2,7 +2,7 @@
   <header style="position: fixed; width: 100%; z-index: 2">
     <app-header [profileName]="profileName" (logout)="onLogout()"></app-header>
   </header>
-  <nav style="position: fixed; width: 100%; z-index: 1; top: 146px">
+  <nav style="position: fixed; width: 100%; z-index: 1; top: 100px">
     <app-nav-menu
       *ngIf="loginService.isLoggedIn() && loginService.userProfile?.driverId"
     ></app-nav-menu>
