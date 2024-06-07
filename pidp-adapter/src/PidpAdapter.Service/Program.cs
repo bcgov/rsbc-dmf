@@ -41,7 +41,8 @@ public class Program
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+            .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/var/run/secrets/service-cert")
+            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())            
             .UseSerilog();
 
     private static void CreateLogger()
