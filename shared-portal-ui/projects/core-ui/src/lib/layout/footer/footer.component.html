@@ -8,50 +8,20 @@
             <br />
             We are available to provide support.
           </p>
-          <button class="help-button">Get Help</button>
+          <a  [routerLink]="'/getAssistance'"
+            ><button class="help-button">Get Help</button></a
+          >
         </div>
         <div>
           <p>
             We are always looking to improve and welcome <br />your feedback.
           </p>
-          <button class="help-button">Feedback</button>
-        </div>
-
-        <div>
-          <p>Increase font size</p>
-          <p style="font-size: 16px">
-            <span style="font-family: 'BC Sans', sans-serif; font-weight: 400"
-              >&nbsp; </span
-              ><span
-              style="
-                font-family: 'BC Sans Bold', 'BC Sans', sans-serif;
-                font-weight: 700;
-              "
-              >A&nbsp; </span
-              ><span
-              style="
-                font-family: 'BC Sans Bold', 'BC Sans', sans-serif;
-                font-weight: 700;
-                font-size: 18px;
-              "
-              >A</span
-              ><span
-              style="
-                font-family: 'BC Sans Bold', 'BC Sans', sans-serif;
-                font-weight: 700;
-              "
-              >&nbsp; </span
-              ><span
-              style="
-                font-family: 'BC Sans Bold', 'BC Sans', sans-serif;
-                font-weight: 700;
-                font-size: 20px;
-              "
-              >A</span
-              ><span style="font-family: 'BC Sans', sans-serif; font-weight: 400"
-              >&nbsp;&nbsp;
-            </span>
-          </p>
+          <a
+            href="https://www2.gov.bc.ca/gov/content/transportation/driving-and-cycling/roadsafetybc/contact"
+            target="_blank"
+          >
+            <button class="help-button">Feedback</button>
+          </a>
         </div>
       </div>
     </div>
@@ -67,43 +37,45 @@
         <li>
           <a href="https://www2.gov.bc.ca/gov/content/about-gov-bc-ca"
             >About gov.bc.ca</a
-            >
-            <span class="footer-divider">|</span>
-          </li>
-          <li>
-            <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
-              >Disclaimer</a
-              >
-              <span class="footer-divider">|</span>
-            </li>
-            <li>
-              <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a
-                ><span class="footer-divider">|</span>
-              </li>
+          >
+          <span class="footer-divider">|</span>
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
+            >Disclaimer</a
+          >
+          <span class="footer-divider">|</span>
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a
+          ><span class="footer-divider">|</span>
+        </li>
 
-              <li>
-                <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
-                  >Accessibility</a
-                  ><span class="footer-divider">|</span>
-                </li>
-                <li>
-                  <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
-                    >Copyright</a
-                    ><span class="footer-divider">|</span>
-                  </li>
-                  <li>
-                    <a
-                      href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services"
-                      >Contact Us</a
-                      >
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </footer>
-            <div class="footer-clear-box">
-              Copyright © 2024 Province of British Columbia. All rights reserved.
-              @if (versionInfo !== undefined && versionInfo?.fileVersion) {
-                <a (click)="openVersionInfoDialog()">Version {{versionInfo?.fileVersion}}</a>
-              }
-            </div>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
+            >Accessibility</a
+          ><span class="footer-divider">|</span>
+        </li>
+        <li>
+          <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
+            >Copyright</a
+          ><span class="footer-divider">|</span>
+        </li>
+        <li>
+          <a
+            href="https://www2.gov.bc.ca/gov/content/home/get-help-with-government-services"
+            >Contact Us</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div class="footer-clear-box">
+  Copyright © 2024 Province of British Columbia. All rights reserved. @if
+  (versionInfo !== undefined && versionInfo?.fileVersion) {
+  <a (click)="openVersionInfoDialog()"
+    >Version {{ versionInfo?.fileVersion }}</a
+  >
+  }
+</div>
