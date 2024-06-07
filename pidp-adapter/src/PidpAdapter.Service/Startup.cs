@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
+using HealthChecks.UI.Client;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using PidpAdapter.Extensions;
@@ -70,6 +72,13 @@ public class Startup
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
 
+
+        // health checks. 
+        services.AddHealthChecks()
+            .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
+
+
+
         services.AddGrpc(opts =>
         {
             opts.EnableDetailedErrors = true;
@@ -110,6 +119,19 @@ public class Startup
             }
         });
         app.UseRouting();
+
+        app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+        {
+            Predicate = _ => true,
+            ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+        });
+
+        app.UseHealthChecks("/hc/live", new HealthCheckOptions
+        {
+            // Exclude all checks and return a 200-Ok.
+            Predicate = _ => false
+        });
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
