@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_ID
 ARG BUILD_VERSION
 WORKDIR /src
-COPY ["PidpAdapter.Client/PidpAdapter.Client", "PidpAdapter.Client/"]
+COPY ["PidpAdapter.Client/PidpAdapter.Client.csproj", "PidpAdapter.Client/"]
 COPY ["PidpAdapter.Service/PidpAdapter.Service.csproj", "PidpAdapter.Service/"]
 COPY ["pidp-adapter.sln", "./"]
 
