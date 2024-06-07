@@ -77,10 +77,8 @@ namespace PidpAdapter
                 options.ListenAnyIP(8080, configureListen =>
                 {
                     configureListen.UseHttps(_certificateLoader.ServiceCertificate);
-
                     // enable Http2, for gRPC
-                    configureListen.Protocols = HttpProtocols.Http1AndHttp2;
-
+                    configureListen.Protocols = HttpProtocols.Http2;
                     configureListen.UseConnectionLogging();
                 });
             else
@@ -91,10 +89,8 @@ namespace PidpAdapter
                     configureListen.UseConnectionLogging();
                 });
 
-            options.ConfigureHttpsDefaults(opt => opt.AllowAnyClientCertificate());
-
             // Also listen on port 8088 for health checks. Note that you won't be able to do gRPC calls on this port; 
-            // it is only required because the OpenShift health check system does not seem to be compatible with HTTP2.
+            // it is only required because the OpenShift 3.11 health check system does not seem to be compatible with HTTP2.
             options.ListenAnyIP(8088, configureListen => { configureListen.Protocols = HttpProtocols.Http1; });
         }
     }
@@ -136,7 +132,7 @@ namespace PidpAdapter
                             {
                                 // Wait until we are in the RestartSpan.
                                 var delay = tillExpires - RestartSpan
-                                            + TimeSpan.FromSeconds(new Random().Next((int) RestartSpan.TotalSeconds));
+                                            + TimeSpan.FromSeconds(new Random().Next((int)RestartSpan.TotalSeconds));
                                 if (delay.TotalMilliseconds > int.MaxValue)
                                 {
                                     // Task.Delay is limited to int.MaxValue.
@@ -207,11 +203,11 @@ namespace RedHat.OpenShift.Utils
                 var obj = new PemReader(reader).ReadObject();
                 if (obj is AsymmetricCipherKeyPair)
                 {
-                    var cipherKey = (AsymmetricCipherKeyPair) obj;
+                    var cipherKey = (AsymmetricCipherKeyPair)obj;
                     obj = cipherKey.Private;
                 }
 
-                var privKey = (RsaPrivateCrtKeyParameters) obj;
+                var privKey = (RsaPrivateCrtKeyParameters)obj;
                 return RSA.Create(DotNetUtilities.ToRSAParameters(privKey));
             }
         }
@@ -275,7 +271,10 @@ namespace Microsoft.AspNetCore.Hosting
             if (configureOptions == null) throw new ArgumentNullException(nameof(configureOptions));
 
             if (PlatformEnvironment.IsOpenShift)
-            {                
+            {
+                // Clear the urls. We'll explicitly configure Kestrel depending on the options.
+                //builder.UseUrls();
+
                 builder.ConfigureServices(services =>
                 {
                     services.Configure(configureOptions);
