@@ -44,8 +44,8 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\pidp-adapter\src\PidpAdapter.Client\PidpAdapter.Client.csproj" />
     <ProjectReference Include="..\..\..\..\shared-utils\SharedUtils.csproj" />
-    <ProjectReference Include="..\..\Pidp\PidpAdapter.Client\PidpAdapter.Client.csproj" />
 	
 	
   </ItemGroup>
