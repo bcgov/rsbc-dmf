@@ -23,6 +23,4 @@
 *.bkp
 
 *.dtmp
-/medical-portal/src/OneHealthAdapter/logs
-/medical-portal/src/OneHealthAdapter.Service/logs
 /medical-portal/src/Pidp/PidpAdapter.Service/logs

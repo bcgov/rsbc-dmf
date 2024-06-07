@@ -29,7 +29,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(403)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetMyEndorsements))]
-        [AllowAnonymous]
         public async Task<ActionResult> GetMyEndorsements()
         {
             try
