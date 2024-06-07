@@ -1,5 +1,5 @@
 ﻿using Grpc.Net.Client;
-using OneHealthAdapter;
+using PidpAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System.Net;
@@ -10,9 +10,9 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["CMS:ServerUrl"];
+            var serviceUrl = config["CMS_SERVER_URL"];
             var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
-            var validateServerCertificate = config.GetValue("CMS:ValidateServerCertificate", true);
+            var validateServerCertificate = config.GetValue("CMS_VALIDATE_SERVER_CERT", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -66,11 +66,11 @@ namespace RSBC.DMF.MedicalPortal.API
             return services;
         }
 
-        public static IServiceCollection AddOneHealthAdapterClient(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddPidpAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["OneHealthAdapter:ServerUrl"];
-            var clientSecret = config["OneHealthAdapter:Secret"];
-            var validateServerCertificate = config.GetValue("OneHealthAdapter:ValidateServerCertificate", true);
+            var serviceUrl = config["PidpAdapter:ServerUrl"];
+            var clientSecret = config["PidpAdapter:Secret"];
+            var validateServerCertificate = config.GetValue("PidpAdapter:ValidateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -88,24 +88,24 @@ namespace RSBC.DMF.MedicalPortal.API
 
                 var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
-                var initialClient = new OneHealthManager.OneHealthManagerClient(initialChannel);
+                var initialClient = new PidpManager.PidpManagerClient(initialChannel);
                 // call the token service to get a token.
-                var tokenRequest = new OneHealthAdapter.TokenRequest { Secret = clientSecret };
+                var tokenRequest = new PidpAdapter.TokenRequest { Secret = clientSecret };
 
                 var tokenReply = initialClient.GetToken(tokenRequest);
 
-                if (tokenReply != null && tokenReply.ResultStatus == OneHealthAdapter.ResultStatus.Success)
+                if (tokenReply != null && tokenReply.ResultStatus == PidpAdapter.ResultStatus.Success)
                 {
                     // Add the bearer token to the client.
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
-                    services.AddTransient(_ => new OneHealthManager.OneHealthManagerClient(channel));
+                    services.AddTransient(_ => new PidpManager.PidpManagerClient(channel));
                 }
                 else
                 {
-                    Log.Logger.Information("Error getting token for OneHealth Service");
+                    Log.Logger.Information("Error getting token for Pidp Service");
                 }
             }
             return services;

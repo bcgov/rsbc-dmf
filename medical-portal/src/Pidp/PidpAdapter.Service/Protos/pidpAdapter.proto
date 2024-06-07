@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "PidpAdapter";
+
+package Pidp;
+
+service PidpManager {
+  rpc GetEndorsements(GetEndorsementsRequest) returns (GetEndorsementsReply);
+
+  // Get a token given a secret.
+  rpc GetToken (TokenRequest) returns (TokenReply);
+}
+
+message GetEndorsementsRequest {
+	string userId = 1;
+}
+
+message GetEndorsementsReply {
+	repeated EndorsementDto endorsements = 1;
+	ResultStatus resultStatus = 2;
+    string errorDetail = 3;
+}
+
+// TODO remove Dto affix after removing Endorsement code, for consistency with cms-adapter
+message EndorsementDto {
+	string userId = 1;
+	repeated LicenseDto licenses = 2;
+}
+
+// TODO
+message LicenseDto {
+	string identifierType = 1;
+	string statusCode = 2;
+	string statusReasonCode = 3;
+}
+
+enum ResultStatus {
+    Fail = 0;
+    Success = 1;
+}
+
+message TokenRequest {
+    string secret = 1;
+}
+
+message TokenReply {
+    ResultStatus resultStatus = 1;
+    string token = 2;
+    string errorDetail = 3;
+}

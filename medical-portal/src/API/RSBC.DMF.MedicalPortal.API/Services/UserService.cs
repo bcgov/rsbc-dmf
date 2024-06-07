@@ -26,9 +26,9 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
     public record UserContext
     {
-        // OneHealth id
+        // Pidp user id
         public string Id { get; set; }
-        // Dynamics login ids matching the above OneHealth id
+        // Dynamics login ids matching the above Pidp user id
         public List<string> LoginIds { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }        
