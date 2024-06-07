@@ -1,9 +1,9 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, Optional } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HeaderComponent } from './Layout/header/header.component';
-import { FooterComponent } from './Layout/footer/footer.component';
-import { NavMenuComponent } from './Layout/nav-menu/nav-menu.component';
-//import { AuthService } from './features/auth/services/auth.service';
+import { MedicalHeaderComponent } from './Layout/medical-header/medical-header.component';
+import { MedicalFooterComponent } from './Layout/medical-footer/medical-footer.component';
+import { MedicalNavMenuComponent } from './Layout/medical-nav-menu/medical-nav-menu.component';
+import { AuthService } from './features/auth/services/auth.service';
 import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
 import { ApplicationVersionInfoService } from './shared/api/services';
 import { ApplicationVersionInfo } from './shared/api/models';
@@ -16,9 +16,9 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
   standalone: true,
   imports: [
     RouterOutlet,
-    HeaderComponent,
-    FooterComponent,
-    NavMenuComponent,
+    MedicalHeaderComponent,
+    MedicalFooterComponent,
+    MedicalNavMenuComponent,
     NgIf,
     NgxSpinnerComponent,
   ],
@@ -35,38 +35,38 @@ export class AppComponent {
   public profileName: string = '';
 
   constructor(
-    //private authService: AuthService,
+    private authService: AuthService,
     @Optional() private versionInfoDataService: ApplicationVersionInfoService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
-    // try {
-    //   console.info('AppComponent initializing...');
-    //   //attempt to log in
-    //   this.authService.isLoggedIn().subscribe((isLoggedIn) => {
-    //     console.info('Are you logged in?', isLoggedIn);
-    //     if (!isLoggedIn) {
-    //       console.info('Redirect to login page');
-    //       this.authService.login({
-    //         idpHint: IdentityProvider.BCSC,
-    //         // TODO add medical-portal scope and move this to api/Config
-    //         scope: 'openid profile email',
-    //       });
-    //     } else {
-    //       // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
-           this.isLoading = false;
-    //     }
-    //   });
-    // } catch (e) {
-    //   console.error(e);
-    //   throw e;
-    // } finally {
-    //   console.info('AppComponent initialization completed.');
-    // }
+    try {
+      console.info('AppComponent initializing...');
+      //attempt to log in
+      this.authService.isLoggedIn().subscribe((isLoggedIn) => {
+        console.info('Are you logged in?', isLoggedIn);
+        if (!isLoggedIn) {
+          console.info('Redirect to login page');
+          this.authService.login({
+            idpHint: IdentityProvider.BCSC,
+            // TODO add medical-portal scope and move this to api/Config
+            scope: 'openid profile email',
+          });
+        } else {
+          // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
+          this.isLoading = false;
+        }
+      });
+    } catch (e) {
+      console.error(e);
+      throw e;
+    } finally {
+      console.info('AppComponent initialization completed.');
+    }
   }
 
   //  Logout
   public onLogout(): void {
-    //this.authService.logout;
+    this.authService.logout;
   }
 }

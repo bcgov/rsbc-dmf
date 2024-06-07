@@ -2,6 +2,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -21,9 +22,12 @@
     "module": "es2020",
     "useDefineForClassFields": false,
     "paths": {
-      "@shared/core-ui/*": ["../shared-portal-ui/projects/core-ui/src/public-api/*"],
+      "@shared/core-ui": ["../shared-portal-ui/projects/core-ui/src/public-api"],
       "@app/*": ["./src/app/*"],
-      "@src/*": ["./src/*"]
+      "@src/*": ["./src/*"],
+      "@angular/*": [
+        "./node_modules/@angular/*"
+     ],
     },
     "lib": [
       "es2018",

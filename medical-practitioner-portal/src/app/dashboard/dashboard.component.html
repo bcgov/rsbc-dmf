@@ -56,7 +56,7 @@
     </mat-card-content>
   </mat-card>
 
-  <!-- <div *ngIf="showSearchResults">
+  <div *ngIf="showSearchResults">
     <div class="result-card">
       @if (isSearching) {
         <div>
@@ -153,7 +153,6 @@
       </mat-card>
     </div>
   </div>
--->
 
   <div class="list">
     <h2>DMER Definitions</h2>
@@ -172,7 +171,7 @@
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">DMER Type</mat-panel-title>
           </mat-expansion-panel-header>
-          <app-dmer-type></app-dmer-type>
+          <app-medical-dmer-types></app-medical-dmer-types>
         </mat-expansion-panel>
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
@@ -186,8 +185,8 @@
       </mat-accordion>
     </div>
   </div>
-  <!--
-    <div class="list">
+
+  <div class="list">
     <h2>DMERs</h2>
     <p>
       Browse the list or search for DMERs you have been working on using the
@@ -301,5 +300,5 @@
         </mat-card>
       }
     </div>
-  </div> -->
+  </div>
 </div>
