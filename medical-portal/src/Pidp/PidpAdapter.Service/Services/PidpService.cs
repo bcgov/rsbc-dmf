@@ -27,18 +27,18 @@ namespace PidpAdapter.Services
             var result = new TokenReply();
             result.ResultStatus = ResultStatus.Fail;
 
-            var configuredSecret = _configuration["Jwt:Secret"];
+            var configuredSecret = _configuration["JWT_TOKEN_KEY"];
             if (configuredSecret != null && !string.IsNullOrEmpty(request?.Secret) && configuredSecret.Equals(request.Secret))
             {
-                byte[] key = Encoding.UTF8.GetBytes(_configuration["Jwt:Secret"]);
+                byte[] key = Encoding.UTF8.GetBytes(_configuration["JWT_TOKEN_KEY"]);
                 Array.Resize(ref key, 32);
 
                 var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuredSecret));
                 var creds = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
 
                 var jwtSecurityToken = new JwtSecurityToken(
-                    _configuration["Jwt:Issuer"],
-                    _configuration["Jwt:Audience"],
+                    _configuration["JWT_VALID_ISSUER"],
+                    _configuration["JWT_VALID_AUDIENCE"],
                     expires: DateTime.UtcNow.AddYears(5),
                     signingCredentials: creds
                 );
