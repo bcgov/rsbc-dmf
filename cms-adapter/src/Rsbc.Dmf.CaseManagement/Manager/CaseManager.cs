@@ -4184,25 +4184,87 @@ namespace Rsbc.Dmf.CaseManagement
             // 3. Document Business are not equal to remedial
             // 4. Order By oldest uploaded date from the result of the filter 
             // DFTDP # 977 Change made on 05/02/2024
+            // 5. Exclude  "ERA Result" and "Road Test - ICBC Re-exams" they should have the current Date 06/04/2024
+            // Get the guid for the 
+
+            Guid? eraResultsGuid = null;
+
+            var tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "ERA Results").FirstOrDefault();
+            if(tempQuery != null)
+            {
+                eraResultsGuid = tempQuery.dfp_submittaltypeid.Value;
+            }
+
+
+            Guid? reExamResultsGuid = null;
+
+            tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "Road Test - ICBC Re-exam").FirstOrDefault();
+            if (tempQuery != null)
+            {
+                reExamResultsGuid = tempQuery.dfp_submittaltypeid.Value;
+            }
+
+                var mostRecentRecord = dynamicsContext.bcgov_documenturls
+                    .Expand(x => x.dfp_DocumentTypeID)
+                    .Where(x => x.dfp_uploadeddate != null
+                    && x.dfp_submittalstatus == 100000010 // Document status Uplaoded
+                    && x.dfp_dpsclass.Contains("9 - General") // Check for 9 - General
+                    && x.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not contain remedial
+                    && x._dfp_documenttypeid_value != eraResultsGuid
+                    && x._dfp_documenttypeid_value != reExamResultsGuid )// Exclude ERA Results and Road Test - ICBC Re-exam docuemnt types
+                    .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date 
+                    .Take(1)
+                    .FirstOrDefault();
+
+                if (mostRecentRecord != null)
+                {
+                    return mostRecentRecord.dfp_uploadeddate.Value;
+                }
+                else
+                {
+                    return DateTimeOffset.UtcNow;
+                }
+            
+
+        }
+
+        /// <summary>
+        /// GetDpsProcessingDateForERAResults
+        /// </summary>
+        /// <returns></returns>
+        public DateTimeOffset GetDpsUplaodDateForERAResults()
+        {
+            Guid? eraResultsGuid = null;
+
+            var tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "ERA Results").FirstOrDefault();
+            if (tempQuery != null)
+            {
+                eraResultsGuid = tempQuery.dfp_submittaltypeid.Value;
+            }
+
+
+            Guid? reExamResultsGuid = null;
+
+            tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "Road Test - ICBC Re-exam").FirstOrDefault();
+            if (tempQuery != null)
+            {
+                reExamResultsGuid = tempQuery.dfp_submittaltypeid.Value;
+            }
 
             var mostRecentRecord = dynamicsContext.bcgov_documenturls
-                .Where(x => x.dfp_uploadeddate != null 
-                && x.dfp_submittalstatus == 100000010 // Document status Uplaoded
-                && x.dfp_dpsclass.Contains("9 - General") // Check for 9 - General
-                && x.dfp_DocumentTypeID.dfp_businessarea != 100000001) // Does not contain remedial
-                .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date 
-                .Take(1)
-                .FirstOrDefault();
+                .Where(x => x.dfp_uploadeddate != null
+                      && x.dfp_dpsclass.Contains("1 - Priority")
+                        && (x._dfp_documenttypeid_value == eraResultsGuid || x._dfp_documenttypeid_value == reExamResultsGuid)
+                        )
+                    .OrderByDescending(i => i.dfp_uploadeddate)
+                    .Take(1)
+                    .FirstOrDefault();
 
-            if (mostRecentRecord != null)
-            {
-                return mostRecentRecord.dfp_uploadeddate.Value;
-            }
-            else
-            {
                 return DateTimeOffset.UtcNow;
-            }
+            
+           
         }
+
 
         /// <summary>
         /// Update NonComply Documents
@@ -4210,13 +4272,22 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task UpdateNonComplyDocuments()
         {
+            // This Calculated Date calculation is applicable to all documents except ERA results and Road Test - ICBC Re-exam
+
             var dpsUploadedDate = GetDpsUploadedDate();
+
+            // This Current Date is applicable to only  ERA results and Road Test - ICBC Re-exam
+            var dpsUploadDateEraResults = GetDpsUplaodDateForERAResults();
+
+
             var query = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
                         where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open Required                                                  
                         && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
 
                         select bcgov_documenturl;
+
+            
 
             DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(query);
 
