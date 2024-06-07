@@ -10,7 +10,7 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["CMS:ServerUrl"];
+            var serviceUrl = config["CMS_ADAPTER_URI"];
             var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
             var validateServerCertificate = config.GetValue("CMS:ValidateServerCertificate", true);
             if (!string.IsNullOrEmpty(serviceUrl))
@@ -25,7 +25,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 }
 
                 var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                // set default request version to HTTP 2. 
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
                 if (string.IsNullOrEmpty(clientSecret))
                 {
