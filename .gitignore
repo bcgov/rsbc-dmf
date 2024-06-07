@@ -22,8 +22,5 @@
 /medical-portal/docs/.$CHEFS-Integration.drawio.dtmp
 *.bkp
 
-/medical-portal/src/PidpAdpater.API/PidpAdpater.API/bin
-/medical-portal/src/PidpAdpater.API/PidpAdpater.API/obj
 *.dtmp
-/medical-portal/src/PidpAdpater.API/logs
-/medical-portal/src/OneHealthAdapter/logs
+/medical-portal/src/Pidp/PidpAdapter.Service/logs

@@ -135,6 +135,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
             services.AddDocumentStorageClient(configuration);
 
+            services.AddPidpAdapterClient(configuration);
             services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<DocumentFactory>();
