@@ -62,11 +62,19 @@ namespace PidpAdapter.Services
 
             try
             {
-                var endorsements = await _endorsement.GetEndorsement(request.UserId);
-                // TODO check fail and status code
-                var mappedEndorsements = _mapper.Map<IEnumerable<EndorsementDto>>(endorsements);
-                response.Endorsements.AddRange(mappedEndorsements);
-                response.ResultStatus = ResultStatus.Success;
+                var hpDid = request.UserId.Replace("@bcsc", "");
+                var endorsements = await _endorsement.GetEndorsements(hpDid);
+                if (endorsements == null)
+                {
+                    response.ResultStatus = ResultStatus.Fail;
+                    response.ErrorDetail = "Error getting endorsements";
+                }
+                else
+                {
+                    var mappedEndorsements = _mapper.Map<IEnumerable<EndorsementDto>>(endorsements);
+                    response.Endorsements.AddRange(mappedEndorsements);
+                    response.ResultStatus = ResultStatus.Success;
+                }
             }
             catch (Exception ex)
             {

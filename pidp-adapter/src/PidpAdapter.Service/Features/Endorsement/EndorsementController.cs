@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PidpAdapter.Endorsement
 {
+    // TODO
     [Route("api/")]
     [ApiController]
     public class EndorsementController : ControllerBase
@@ -28,7 +29,7 @@ namespace PidpAdapter.Endorsement
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<List<Model.Endorsement>>> ContactEndorsements(string hpdid)
         {
-            var endorsements = await endorsement.GetEndorsement(hpdid);
+            var endorsements = await endorsement.GetEndorsements(hpdid);
             return new JsonResult(endorsements);
         }
     }
