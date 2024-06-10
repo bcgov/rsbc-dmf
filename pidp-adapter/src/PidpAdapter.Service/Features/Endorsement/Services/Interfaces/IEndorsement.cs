@@ -1,6 +1,8 @@
-﻿namespace PidpAdapter.Endorsement.Services.Interfaces;
+﻿using PidpAdapter.Endorsement.Model;
+
+namespace PidpAdapter.Endorsement.Services.Interfaces;
 
 public interface IEndorsement
 {
-    Task<IEnumerable<Model.Endorsement>> GetEndorsement(string hpidp);
+    Task<IEnumerable<EndorsementData.Model>> GetEndorsement(string hpidp);
 }

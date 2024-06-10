@@ -24,3 +24,4 @@
 
 *.dtmp
 /medical-portal/src/Pidp/PidpAdapter.Service/logs
+/pidp-adapter/src/PidpAdapter.Service/logs

@@ -36,9 +36,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var userId = profile.Id;
 
-                // TODO remove fake data after we are unblocked from pidp endorsements
-                userId = "test";
-
                 var response = await _pidpAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
                 return new JsonResult(response);
             }

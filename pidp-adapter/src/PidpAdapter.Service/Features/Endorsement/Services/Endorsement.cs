@@ -9,6 +9,7 @@ public class Endorsement : BaseClient, IEndorsement
     public Endorsement(HttpClient client, ILogger<Endorsement> logger) : base(client, logger) { }
 
     public async Task<IEnumerable<Model.Endorsement>> GetEndorsement(string hpDid)
+    public async Task<IEnumerable<EndorsementData.Model>> GetEndorsement(string hpDid)
     {
         hpDid = hpDid.Replace("@bcsc", "");
         var endorsementResult = await this.GetAsync<IEnumerable<EndorsementData.Model>>($"/api/v1/ext/parties/{hpDid}/endorsements").ConfigureAwait(false);
@@ -27,20 +28,7 @@ public class Endorsement : BaseClient, IEndorsement
             return null;
         }
 
-        var endorsementList = endorsementResult.Value;
-
-        var endorsements = endorsementList.Select((endorsement, index) => new Model.Endorsement
-        {
-            Hpdid = endorsement.Hpdid,
-            Licences = endorsement.Licences.Select(licence => new LicenceInformation
-            {
-                IdentifierType = licence.IdentifierType,
-                StatusCode = licence.StatusCode,
-                StatusReasonCode = licence.StatusReasonCode
-            }).ToList(),
-        }).ToList();
-
-        return endorsements;
+        return endorsementResult.Value;
     }
 }
 

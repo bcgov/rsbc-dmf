@@ -71,13 +71,11 @@ public class Startup
         services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
-
+        services.AddAutoMapperSingleton();
 
         // health checks. 
         services.AddHealthChecks()
             .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
-
-
 
         services.AddGrpc(opts =>
         {
