@@ -10,7 +10,6 @@ using HealthChecks.UI.Client;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using PidpAdapter.Extensions;
-using PidpAdapter.Infrastructure.Auth;
 using PidpAdapter.Infrastructure.HttpClients;
 using PidpAdapter.Services;
 using Serilog;
@@ -29,8 +28,6 @@ public class Startup
     public Startup(IConfiguration configuration) => this.Configuration = configuration;
     public void ConfigureServices(IServiceCollection services)
     {
-        var config = this.InitializeConfiguration(services);
-
         services
           .AddHttpClients(this.Configuration)
           .AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
@@ -86,24 +83,11 @@ public class Startup
             .AddCheck("liveliness", () => HealthCheckResult.Healthy());
     }
 
-    private Configuration InitializeConfiguration(IServiceCollection services)
-    {
-        var config = new Configuration();
-        this.Configuration.Bind(config);
-        services.AddSingleton(config);
-
-        Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
-        Log.Logger.Information("### Pidp Adapter Configuration:{0} ###", JsonSerializer.Serialize(config));
-
-        return config;
-    }
-
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
-         
+            app.UseDeveloperExceptionPage();     
         }
 
         app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
