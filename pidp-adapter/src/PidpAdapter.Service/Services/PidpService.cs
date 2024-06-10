@@ -11,11 +11,11 @@ namespace PidpAdapter.Services
     public class PidpService : PidpManager.PidpManagerBase
     {
         private readonly ILogger<PidpService> _logger;
-        private readonly IEndorsement _endorsement;
+        private readonly IPidpHttpClient _endorsement;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public PidpService(ILogger<PidpService> logger, IEndorsement endorsement, IMapper mapper, IConfiguration configuration)
+        public PidpService(ILogger<PidpService> logger, IPidpHttpClient endorsement, IMapper mapper, IConfiguration configuration)
         {
             _logger = logger;
             _endorsement = endorsement;

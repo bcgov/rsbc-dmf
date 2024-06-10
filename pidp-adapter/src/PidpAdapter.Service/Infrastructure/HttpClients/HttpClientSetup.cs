@@ -12,7 +12,7 @@ public static class HttpClientSetup
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
-        services.AddHttpClientWithBaseAddress<IEndorsement, Endorsement>(configuration["PIDP_URL"])
+        services.AddHttpClientWithBaseAddress<IPidpHttpClient, PidpHttpClient>(configuration["PIDP_URL"])
             .WithBearerToken(new PidpEndorsmentClientCredentials
             {
                 Address = configuration["PIDP_TOKEN_URL"],

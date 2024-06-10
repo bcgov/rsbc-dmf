@@ -1,13 +1,13 @@
-using PidpAdapter.Endorsement.Model;
+﻿using PidpAdapter.Endorsement.Model;
 using PidpAdapter.Endorsement.Services.Interfaces;
 
 namespace PidpAdapter.Endorsement.Services;
 
-public class Endorsement : IEndorsement
+public class PidpHttpClient : IPidpHttpClient
 {
     private readonly HttpClient _httpClient;
 
-    public Endorsement(HttpClient httpClient, ILogger<Endorsement> logger) 
+    public PidpHttpClient(HttpClient httpClient, ILogger<PidpHttpClient> logger) 
     { 
         _httpClient = httpClient;
     }
@@ -16,9 +16,9 @@ public class Endorsement : IEndorsement
     {
         var response = await _httpClient.GetAsync($"/api/v1/ext/parties/{hpDid}/endorsements").ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
-            {
+        {
             return null;
-            }
+        }
         return await response.Content.ReadFromJsonAsync<IEnumerable<EndorsementData.Model>>();
     }
 }

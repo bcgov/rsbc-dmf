@@ -67,8 +67,6 @@ public class Startup
 
         services.AddHttpClient();
 
-        services.AddSingleton<IAuthorizationHandler, RealmAccessRoleHandler>();
-        services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
         services.AddAutoMapperSingleton();
