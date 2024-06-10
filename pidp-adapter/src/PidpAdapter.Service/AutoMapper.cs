@@ -7,9 +7,8 @@ namespace PidpAdapter
         public MappingProfile()
         {
             CreateMap<Endorsement.Model.EndorsementData.Model, EndorsementDto>()
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Hpdid))
-                .ForMember(dest => dest.Licenses, opt => opt.MapFrom(src => src.Licences));
-            CreateMap<Endorsement.Model.EndorsementData.Model.LicenceInformation, LicenseDto>();
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Hpdid));
+            CreateMap<Endorsement.Model.EndorsementData.Model.LicenceInformation, Licence>();
         }
     }
 

@@ -12,13 +12,13 @@ public class PidpHttpClient : IPidpHttpClient
         _httpClient = httpClient;
     }
 
-    public async Task<IEnumerable<EndorsementData.Model>> GetEndorsements(string hpDid)
+    public async Task<IEnumerable<Model.EndorsementData.Model>> GetEndorsements(string hpDid)
     {
         var response = await _httpClient.GetAsync($"/api/v1/ext/parties/{hpDid}/endorsements").ConfigureAwait(false);
         if (!response.IsSuccessStatusCode)
         {
             return null;
         }
-        return await response.Content.ReadFromJsonAsync<IEnumerable<EndorsementData.Model>>();
+        return await response.Content.ReadFromJsonAsync<IEnumerable<Model.EndorsementData.Model>>();
     }
 }

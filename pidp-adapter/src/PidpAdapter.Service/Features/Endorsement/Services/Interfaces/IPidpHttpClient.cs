@@ -1,8 +1,6 @@
-﻿using PidpAdapter.Endorsement.Model;
-
-namespace PidpAdapter.Endorsement.Services.Interfaces;
+﻿namespace PidpAdapter.Endorsement.Services.Interfaces;
 
 public interface IPidpHttpClient
 {
-    Task<IEnumerable<EndorsementData.Model>> GetEndorsements(string hpidp);
+    Task<IEnumerable<Model.EndorsementData.Model>> GetEndorsements(string hpidp);
 }
