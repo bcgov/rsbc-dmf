@@ -32,7 +32,7 @@ public class Startup
         var config = this.InitializeConfiguration(services);
 
         services
-          .AddHttpClients(config)
+          .AddHttpClients(this.Configuration)
           .AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
         if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))

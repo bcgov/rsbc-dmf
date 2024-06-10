@@ -8,16 +8,16 @@ using PidpAdapter.Endorsement.Services;
 
 public static class HttpClientSetup
 {
-    public static IServiceCollection AddHttpClients(this IServiceCollection services, Configuration config)
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
-        services.AddHttpClientWithBaseAddress<IEndorsement, Endorsement>(config.PidpEndorsementAPI.Url)
+        services.AddHttpClientWithBaseAddress<IEndorsement, Endorsement>(configuration["PIDP_URL"])
             .WithBearerToken(new PidpEndorsmentClientCredentials
             {
-                Address = config.PidpEndorsementAPI.TokenUrl,
-                ClientId = config.PidpEndorsementAPI.ClientId,
-                ClientSecret = config.PidpEndorsementAPI.ClientSecret,
+                Address = configuration["PIDP_TOKEN_URL"],
+                ClientId = configuration["PIDP_CLIENT_ID"],
+                ClientSecret = configuration["PIDP_CLIENT_SECRET"],
             });
 
         return services;
