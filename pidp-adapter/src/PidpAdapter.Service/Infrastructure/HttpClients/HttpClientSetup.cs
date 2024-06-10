@@ -1,7 +1,6 @@
 namespace PidpAdapter.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
-using PidpAdapter.Infrastructure.Auth;
 using PidpAdapter.Extensions;
 using PidpAdapter.Endorsement.Services.Interfaces;
 using PidpAdapter.Endorsement.Services;
@@ -13,7 +12,7 @@ public static class HttpClientSetup
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
         services.AddHttpClientWithBaseAddress<IPidpHttpClient, PidpHttpClient>(configuration["PIDP_URL"])
-            .WithBearerToken(new PidpEndorsmentClientCredentials
+            .WithBearerToken(new ClientCredentialsTokenRequest
             {
                 Address = configuration["PIDP_TOKEN_URL"],
                 ClientId = configuration["PIDP_CLIENT_ID"],

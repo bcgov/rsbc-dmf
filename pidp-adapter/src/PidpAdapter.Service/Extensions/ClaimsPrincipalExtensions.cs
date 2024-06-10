@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using PidpAdapter.Infrastructure.Auth;
+using IdentityModel;
 
 namespace PidpAdapter.Extensions;
 
@@ -10,9 +10,7 @@ public static class ClaimsPrincipalExtensions
     /// </summary>
     public static Guid GetUserId(this ClaimsPrincipal? user)
     {
-        var userId = user?.FindFirstValue(Claims.Subject);
-       // var idp = user.get
-
+        var userId = user?.FindFirstValue(JwtClaimTypes.Subject);
         return Guid.TryParse(userId, out var parsed)
             ? parsed
             : Guid.Empty;
