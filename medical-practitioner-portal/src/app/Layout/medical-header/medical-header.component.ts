@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-//import { AuthService } from '../../features/auth/services/auth.service';
+import { AuthService } from '../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -19,9 +19,9 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './medical-header.component.scss',
 })
 export class MedicalHeaderComponent {
-  constructor(/*private authService: AuthService*/) {}
+  constructor(private authService: AuthService) {}
 
   logOut() {
-    //this.authService.logout(window.location.href);
+    this.authService.logout(window.location.href);
   }
 }

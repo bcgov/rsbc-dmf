@@ -70,8 +70,8 @@
         </div>
 
         <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
-          <ngx-dropzone-label
-            ><div>
+          <ngx-dropzone-label for="dropzone-label"
+            ><div id="dropzone-label">
               <mat-icon> file_present </mat-icon>
               <div>
                 <p>
@@ -85,22 +85,29 @@
           >
           @if (fileToUpload) {
             <ngx-dropzone-preview [removable]="true" (removed)="onRemove()">
-              <ngx-dropzone-label>
-                {{ fileToUpload.name }} ({{ fileToUpload.type }})
+              <ngx-dropzone-label for="dropzone-label-remove">
+                <span id="dropzone-label-remove">
+                  {{ fileToUpload.name }} ({{ fileToUpload.type }})
+                </span>
               </ngx-dropzone-label>
             </ngx-dropzone-preview>
           }
         </ngx-dropzone>
         <div style="padding-top: 24px">
-          <label>
-            <input type="checkbox" #confirmed [formControl]="acceptControl" />
+          <label for="check-box">
+            <input
+              type="checkbox"
+              #confirmed
+              [formControl]="acceptControl"
+              id="check-box"
+            />
             By checking this box, I confirm that I am submitting an unaltered
             copy of documentation provided by a medical professional.
           </label>
         </div>
 
         <div class="buttonGroup">
-          <button mat-flat-button class="primaryButton" (click)="fileUpload()">
+          <button mat-flat-button class="primaryButton" (click)="fileUpload()" [disabled]="!confirmed.checked">
             Upload File
           </button>
           <button

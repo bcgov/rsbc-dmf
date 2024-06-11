@@ -1,51 +1,3 @@
-<div class="grey-box">
-  <div class="container">
-    <div class="grey-box-text">
-      <span
-        style="
-          font-family: 'BCSans-Regular', 'BC Sans Regular', 'BC Sans',
-            sans-serif;
-          font-weight: 400;
-        "
-        >Get help&nbsp; &nbsp; &nbsp; |&nbsp;&nbsp; Increase font
-        size&nbsp;&nbsp; </span
-      ><span
-        style="
-          font-family: 'BCSans-Bold', 'BC Sans Bold', 'BC Sans', sans-serif;
-          font-weight: 700;
-        "
-        >A&nbsp; </span
-      ><span
-        style="
-          font-family: 'BCSans-Bold', 'BC Sans Bold', 'BC Sans', sans-serif;
-          font-weight: 700;
-          font-size: 18px;
-        "
-        >A</span
-      ><span
-        style="
-          font-family: 'BCSans-Bold', 'BC Sans Bold', 'BC Sans', sans-serif;
-          font-weight: 700;
-        "
-        >&nbsp; </span
-      ><span
-        style="
-          font-family: 'BCSans-Bold', 'BC Sans Bold', 'BC Sans', sans-serif;
-          font-weight: 700;
-          font-size: 20px;
-        "
-        >A</span
-      ><span
-        style="
-          font-family: 'BCSans-Regular', 'BC Sans Regular', 'BC Sans',
-            sans-serif;
-          font-weight: 400;
-        "
-        >&nbsp;&nbsp;
-      </span>
-    </div>
-  </div>
-</div>
 <header class="site-header">
   <div class="container">
     <div class="site-header-content">
@@ -63,20 +15,11 @@
           <mat-icon class="icon-display">account_circle</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink="/account" routerLinkActive="active">My Profile</button>
+          <button mat-menu-item routerLink="/account" routerLinkActive="active">
+            My Profile
+          </button>
           <button mat-menu-item (click)="logOut()">Sign out</button>
         </mat-menu>
-      </div>
-      <div class="profile">
-        <!-- <h1 class="avatar" routerLink="/userProfile" style="cursor: pointer">
-            {{ profileInitials }}
-          </h1> -->
-        <!-- <div>
-          <span class="user-name" routerLink="/userProfile">{{
-            profileName
-          }}</span
-          ><br />
-        </div> -->
       </div>
     </div>
   </div>

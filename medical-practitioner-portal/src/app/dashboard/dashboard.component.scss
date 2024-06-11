@@ -62,8 +62,9 @@ form {
 
 .filter-dmer {
   display: flex;
-  gap: 50px;
- 
+  justify-content: space-between;
+  flex-wrap: wrap;
+    
 }
 
 .filter-icon{
@@ -71,11 +72,11 @@ form {
 }
 
 .status-filter{
-  width: 300px;
+  width: 350px;
 }
 
 .cases-input{
-  width:400px;
+  width:500px;
 }
 
 .dmer-details {

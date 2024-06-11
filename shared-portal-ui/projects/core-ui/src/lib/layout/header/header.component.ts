@@ -1,4 +1,3 @@
-
 import {
   Component,
   ChangeDetectionStrategy,
@@ -9,9 +8,8 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import {MatMenuModule} from '@angular/material/menu';
+import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
-
 
 @Component({
   selector: 'app-header',
@@ -20,11 +18,11 @@ import { RouterLink } from '@angular/router';
   imports: [RouterLink, MatIconModule, MatMenuModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  schemas:[CUSTOM_ELEMENTS_SCHEMA]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class HeaderComponent {
   @Input() showProfile = false;
- 
+
   showMobileMenu = false;
 
   @Input() profileName?: string;
@@ -32,13 +30,10 @@ export class HeaderComponent {
   @Input() profileInitials?: string;
   @Output() logout = new EventEmitter();
 
-  constructor() {
-   
-  }
+  constructor() {}
 
   public logOut(): void {
     //this.loginService.logout();
     this.logout.emit();
   }
-
 }

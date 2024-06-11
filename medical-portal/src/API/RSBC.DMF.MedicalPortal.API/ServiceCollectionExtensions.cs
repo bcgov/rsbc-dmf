@@ -1,5 +1,6 @@
 ﻿using Grpc.Net.Client;
-using OneHealthAdapter;
+using PidpAdapter;
+using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System.Net;
@@ -10,9 +11,9 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)
         {
-            var serviceUrl = config["CMS:ServerUrl"];
+            var serviceUrl = config["CMS_ADAPTER_URI"];
             var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
-            var validateServerCertificate = config.GetValue("CMS:ValidateServerCertificate", true);
+            var validateServerCertificate = config.GetValue("CMS_VALIDATE_SERVER_CERT", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -25,7 +26,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 }
 
                 var httpClient = new HttpClient(httpClientHandler);
-                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                // set default request version to HTTP 2. 
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
                 if (string.IsNullOrEmpty(clientSecret))
                 {
@@ -61,16 +62,53 @@ namespace RSBC.DMF.MedicalPortal.API
                         Log.Logger.Information("Error getting token for Case Management Service");
                     }
                 }
-
             }
             return services;
         }
 
-        public static IServiceCollection AddOneHealthAdapterClient(this IServiceCollection services, IConfiguration config)
+        public static void AddDocumentStorageClient(this IServiceCollection services, IConfiguration configuration)
         {
-            var serviceUrl = config["OneHealthAdapter:ServerUrl"];
-            var clientSecret = config["OneHealthAdapter:Secret"];
-            var validateServerCertificate = config.GetValue("OneHealthAdapter:ValidateServerCertificate", true);
+            var documentStorageAdapterURI = configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+            if (!string.IsNullOrEmpty(documentStorageAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+
+                // Return `true` to allow certificates that are untrusted/invalid                    
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+                var httpClient = new HttpClient(httpClientHandler);
+                // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
+                httpClient.DefaultRequestVersion = HttpVersion.Version20;
+
+                var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+
+                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                // call the token service to get a token.
+                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
+                {
+                    Secret = configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
+                };
+
+                var tokenReply = initialClient.GetToken(tokenRequest);
+
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+
+                    var channel = GrpcChannel.ForAddress(documentStorageAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+
+                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
+                }
+            }
+        }
+
+        public static IServiceCollection AddPidpAdapterClient(this IServiceCollection services, IConfiguration config)
+        {
+            var serviceUrl = config["PIDP_SERVER_URL"];
+            var clientSecret = config["PIDP_SECRET"];
+            var validateServerCertificate = config.GetValue("PIDP_VALIDATE_SERVER_CERT", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {
                 var httpClientHandler = new HttpClientHandler();
@@ -88,24 +126,24 @@ namespace RSBC.DMF.MedicalPortal.API
 
                 var initialChannel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
-                var initialClient = new OneHealthManager.OneHealthManagerClient(initialChannel);
+                var initialClient = new PidpManager.PidpManagerClient(initialChannel);
                 // call the token service to get a token.
-                var tokenRequest = new OneHealthAdapter.TokenRequest { Secret = clientSecret };
+                var tokenRequest = new PidpAdapter.TokenRequest { Secret = clientSecret };
 
                 var tokenReply = initialClient.GetToken(tokenRequest);
 
-                if (tokenReply != null && tokenReply.ResultStatus == OneHealthAdapter.ResultStatus.Success)
+                if (tokenReply != null && tokenReply.ResultStatus == PidpAdapter.ResultStatus.Success)
                 {
                     // Add the bearer token to the client.
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
 
                     var channel = GrpcChannel.ForAddress(serviceUrl, new GrpcChannelOptions { HttpClient = httpClient });
 
-                    services.AddTransient(_ => new OneHealthManager.OneHealthManagerClient(channel));
+                    services.AddTransient(_ => new PidpManager.PidpManagerClient(channel));
                 }
                 else
                 {
-                    Log.Logger.Information("Error getting token for OneHealth Service");
+                    Log.Logger.Information("Error getting token for Pidp Service");
                 }
             }
             return services;

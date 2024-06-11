@@ -1,0 +1,51 @@
+name: ci-pidp-adapter
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - 'pidp-adapter/src/**'
+      - '.github/workflows/ci-pidp-adapter.yml'
+
+env:
+  working-directory: ./
+  solution-folder: /pidp-adapter/src
+  IMAGE_NAME: pidp-adapter
+  RUN_NUMBER: ${{ github.run_number }}
+  BUILD_PREFIX: ${{ vars.versionprefix }}
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ vars.versionprefix }}!${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: rlespinasse/git-commit-data-action@v1.x
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Setup .NET 
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.x"
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - name: Install coverlet for code coverage
+        run: dotnet tool install -g coverlet.console --version 1.7.2
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
+      - name: Test
+        run: |          
+          dotnet test -c Release --no-restore --verbosity normal           
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+        
