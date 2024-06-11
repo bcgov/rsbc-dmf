@@ -1,90 +1,54 @@
 namespace PidpAdapter;
 
-using PidpAdapter.Infrastructure.Auth;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 public class Program
 {
-    public static int Main(string[] args)
-    {
-        CreateLogger();
 
-        try
-        {
-            Log.Information("Starting web host");
-            var builder = CreateHostBuilder(args);
-            if (args.Contains("/seed"))
-            {
-                //builder.EnsureSeedData(args).Wait();
-                return 0;
-            }
-            builder
-                .Build()
-                .Run();
-            return 0;
-        }
-        catch (Exception ex)
-        {
-            Log.Fatal(ex, "Host terminated unexpectedly");
-            return 1;
-        }
-        finally
-        {
-            // Ensure buffered logs are written to their target sink
-            Log.CloseAndFlush();
-        }
+    public static void Main(string[] args)
+    {
+        CreateWebHostBuilder(args)
+            .Build()
+            .Run();
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/var/run/secrets/service-cert")
-            .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())            
-            .UseSerilog();
 
-    private static void CreateLogger()
+    public static IWebHostBuilder CreateWebHostBuilder(string[] args)
     {
-        var path = Environment.GetEnvironmentVariable("LogFilePath") ?? "logs";
-
-        try
-        {
-            if (Configuration.IsDevelopment())
+        return WebHost.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                Directory.CreateDirectory(path);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine("Creating the logging directory failed: {0}", e.ToString());
-        }
-
-        var name = Assembly.GetExecutingAssembly().GetName();
-        var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
-
-        Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Information()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-            .MinimumLevel.Override("System", LogEventLevel.Warning)
-            .Enrich.FromLogContext()
-            .Enrich.WithMachineName()
-            .Enrich.WithProperty("Assembly", $"{name.Name}")
-            .Enrich.WithProperty("Version", $"{name.Version}")
-            .WriteTo.Console(
-                outputTemplate: outputTemplate,
-                theme: AnsiConsoleTheme.Code)
-            .WriteTo.Async(a => a.File(
-                $@"{path}/jum.log",
-                outputTemplate: outputTemplate,
-                rollingInterval: RollingInterval.Day,
-                shared: true))
-            .WriteTo.Async(a => a.File(
-                new JsonFormatter(),
-                $@"{path}/jum.json",
-                rollingInterval: RollingInterval.Day))
-            .CreateLogger();
+                config.AddUserSecrets(Assembly.GetExecutingAssembly());
+                config.AddEnvironmentVariables();
+            })
+            .ConfigureLogging((hostingContext, logging) =>
+            {
+                logging.ClearProviders();
+                logging.SetMinimumLevel(LogLevel.Debug);
+                logging.AddDebug();
+                logging.AddEventSourceLogger();
+            })
+            .UseSerilog()
+            .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/var/run/secrets/service-cert")
+            .UseStartup<Startup>()
+            .UseKestrel(options =>
+            {
+                options.AllowSynchronousIO = true;
+                options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(5);
+                options.Limits.MaxRequestBodySize = 512 * 1024 * 1024; // allow large transfers
+                                                                       // for macOS local dev but don't have env
+                                                                       // options.ListenLocalhost(5001, o => {
+                                                                       //     o.Protocols = HttpProtocols.Http2;
+                                                                       // });
+            });
     }
 }
+ 

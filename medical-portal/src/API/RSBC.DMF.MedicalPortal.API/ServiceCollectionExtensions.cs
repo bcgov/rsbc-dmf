@@ -107,7 +107,7 @@ namespace RSBC.DMF.MedicalPortal.API
         public static IServiceCollection AddPidpAdapterClient(this IServiceCollection services, IConfiguration config)
         {
             var serviceUrl = config["PIDP_SERVER_URL"];
-            var clientSecret = config["PIDP_SECRET"];
+            var clientSecret = config["PIDP_ADAPTER_JWT_SECRET"];
             var validateServerCertificate = config.GetValue("PIDP_VALIDATE_SERVER_CERT", true);
             if (!string.IsNullOrEmpty(serviceUrl))
             {

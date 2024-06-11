@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using AutoMapper;
+using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using PidpAdapter.Endorsement.Services.Interfaces;
@@ -10,13 +11,15 @@ namespace PidpAdapter.Services
     public class PidpService : PidpManager.PidpManagerBase
     {
         private readonly ILogger<PidpService> _logger;
-        private readonly IEndorsement _endorsement;
+        private readonly IPidpHttpClient _endorsement;
+        private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
 
-        public PidpService(ILogger<PidpService> logger, IEndorsement endorsement, IConfiguration configuration)
+        public PidpService(ILogger<PidpService> logger, IPidpHttpClient endorsement, IMapper mapper, IConfiguration configuration)
         {
             _logger = logger;
             _endorsement = endorsement;
+            _mapper = mapper;
             _configuration = configuration;
         }
 
@@ -59,40 +62,19 @@ namespace PidpAdapter.Services
 
             try
             {
-                // real data from Pidp with no results
-                request.UserId = "kkpqtjseoyaygbqxmjq7kltol7wffrn6";
-                var endorsements = await _endorsement.GetEndorsement(request.UserId);
-                // TODO check fail and status code
-
-                // fake data to test with results, until above is working
-                var license = new LicenseDto
+                var hpDid = request.UserId.Replace("@bcsc", "");
+                var endorsements = await _endorsement.GetEndorsements(hpDid);
+                if (endorsements == null)
                 {
-                    IdentifierType = "1",
-                    StatusCode = "2",
-                    StatusReasonCode = "3"
-                };
-                var endorsement = new EndorsementDto
+                    response.ResultStatus = ResultStatus.Fail;
+                    response.ErrorDetail = "Error getting endorsements";
+                }
+                else
                 {
-                    UserId = "2p3qysl7dn6kvboslzc2k7uimevuxusk",
-                };
-                endorsement.Licenses.AddRange(new List<LicenseDto> { license });
-                var endorsementList = new List<EndorsementDto>();
-                endorsementList.Add(endorsement);
-                response.Endorsements.AddRange(endorsementList);
-
-                // TODO
-                //response.Endorsements.AddRange(endorsements.Select(endorsement => new EndorsementDto
-                //{
-                //    UserId = endorsement.Hpdid,
-                //    Licences = endorsement.Licences.Select(licence => new LicenseDto
-                //    {
-                //        IdentifierType = licence.IdentifierType,
-                //        StatusCode = licence.StatusCode,
-                //        StatusReasonCode = licence.StatusReasonCode
-                //    }).ToList()
-                //}));
-                //response.Endorsements.AddRange(_mapper.Map<IEnumerable<EndorsementDto>>(endorsements));
-                response.ResultStatus = ResultStatus.Success;
+                    var mappedEndorsements = _mapper.Map<IEnumerable<EndorsementDto>>(endorsements);
+                    response.Endorsements.AddRange(mappedEndorsements);
+                    response.ResultStatus = ResultStatus.Success;
+                }
             }
             catch (Exception ex)
             {

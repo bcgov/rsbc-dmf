@@ -1,23 +1,22 @@
 namespace PidpAdapter.Infrastructure.HttpClients;
 
 using IdentityModel.Client;
-using PidpAdapter.Infrastructure.Auth;
 using PidpAdapter.Extensions;
 using PidpAdapter.Endorsement.Services.Interfaces;
 using PidpAdapter.Endorsement.Services;
 
 public static class HttpClientSetup
 {
-    public static IServiceCollection AddHttpClients(this IServiceCollection services, Configuration config)
+    public static IServiceCollection AddHttpClients(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
-        services.AddHttpClientWithBaseAddress<IEndorsement, Endorsement>(config.PidpEndorsementAPI.Url)
-            .WithBearerToken(new PidpEndorsmentClientCredentials
+        services.AddHttpClientWithBaseAddress<IPidpHttpClient, PidpHttpClient>(configuration["PIDP_URL"])
+            .WithBearerToken(new ClientCredentialsTokenRequest
             {
-                Address = config.PidpEndorsementAPI.TokenUrl,
-                ClientId = config.PidpEndorsementAPI.ClientId,
-                ClientSecret = config.PidpEndorsementAPI.ClientSecret,
+                Address = configuration["PIDP_TOKEN_URL"],
+                ClientId = configuration["PIDP_CLIENT_ID"],
+                ClientSecret = configuration["PIDP_CLIENT_SECRET"],
             });
 
         return services;

@@ -265,7 +265,7 @@ namespace Microsoft.AspNetCore.Hosting
 {
     public static class OpenShiftWebHostBuilderExtensions
     {
-        public static IHostBuilder UseOpenShiftIntegration(this IHostBuilder builder,
+        public static IWebHostBuilder UseOpenShiftIntegration(this IWebHostBuilder builder,
             Action<OpenShiftIntegrationOptions> configureOptions)
         {
             if (configureOptions == null) throw new ArgumentNullException(nameof(configureOptions));
@@ -273,7 +273,7 @@ namespace Microsoft.AspNetCore.Hosting
             if (PlatformEnvironment.IsOpenShift)
             {
                 // Clear the urls. We'll explicitly configure Kestrel depending on the options.
-                //builder.UseUrls();
+                builder.UseUrls();
 
                 builder.ConfigureServices(services =>
                 {

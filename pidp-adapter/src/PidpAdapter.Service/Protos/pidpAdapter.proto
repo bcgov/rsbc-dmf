@@ -26,11 +26,10 @@ message GetEndorsementsReply {
 // TODO remove Dto affix after removing Endorsement code, for consistency with cms-adapter
 message EndorsementDto {
 	string userId = 1;
-	repeated LicenseDto licenses = 2;
+	repeated Licence licences = 2;
 }
 
-// TODO
-message LicenseDto {
+message Licence {
 	string identifierType = 1;
 	string statusCode = 2;
 	string statusReasonCode = 3;
