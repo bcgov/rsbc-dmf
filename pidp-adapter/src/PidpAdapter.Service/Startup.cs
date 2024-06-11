@@ -1,22 +1,13 @@
-﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.IdentityModel.Tokens;
 using HealthChecks.UI.Client;
-using Microsoft.OpenApi.Models;
-using NodaTime;
 using PidpAdapter.Extensions;
 using PidpAdapter.Infrastructure.HttpClients;
 using PidpAdapter.Services;
 using Serilog;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 using System.Text;
-using System.Text.Json;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace PidpAdapter;
