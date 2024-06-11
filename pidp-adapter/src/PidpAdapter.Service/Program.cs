@@ -1,6 +1,5 @@
 namespace PidpAdapter;
 
-using PidpAdapter.Infrastructure.Auth;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;

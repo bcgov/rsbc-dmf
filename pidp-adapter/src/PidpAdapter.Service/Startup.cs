@@ -10,7 +10,6 @@ using HealthChecks.UI.Client;
 using Microsoft.OpenApi.Models;
 using NodaTime;
 using PidpAdapter.Extensions;
-using PidpAdapter.Infrastructure.Auth;
 using PidpAdapter.Infrastructure.HttpClients;
 using PidpAdapter.Services;
 using Serilog;
@@ -29,10 +28,8 @@ public class Startup
     public Startup(IConfiguration configuration) => this.Configuration = configuration;
     public void ConfigureServices(IServiceCollection services)
     {
-        var config = this.InitializeConfiguration(services);
-
         services
-          .AddHttpClients(config)
+          .AddHttpClients(this.Configuration)
           .AddSingleton<ILogger>(svc => svc.GetRequiredService<ILogger<Startup>>());
 
         if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
@@ -67,17 +64,13 @@ public class Startup
 
         services.AddHttpClient();
 
-        services.AddSingleton<IAuthorizationHandler, RealmAccessRoleHandler>();
-        services.AddTransient<IClaimsTransformation, KeycloakClaimTransformer>();
         services.AddHttpContextAccessor();
         services.AddTransient(s => s.GetService<IHttpContextAccessor>().HttpContext.User);
-
+        services.AddAutoMapperSingleton();
 
         // health checks. 
         services.AddHealthChecks()
             .AddCheck("legacy-adapter", () => HealthCheckResult.Healthy("OK"));
-
-
 
         services.AddGrpc(opts =>
         {
@@ -90,24 +83,11 @@ public class Startup
             .AddCheck("liveliness", () => HealthCheckResult.Healthy());
     }
 
-    private Configuration InitializeConfiguration(IServiceCollection services)
-    {
-        var config = new Configuration();
-        this.Configuration.Bind(config);
-        services.AddSingleton(config);
-
-        Log.Logger.Information("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
-        Log.Logger.Information("### Pidp Adapter Configuration:{0} ###", JsonSerializer.Serialize(config));
-
-        return config;
-    }
-
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
         if (env.IsDevelopment())
         {
-            app.UseDeveloperExceptionPage();
-         
+            app.UseDeveloperExceptionPage();     
         }
 
         app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
