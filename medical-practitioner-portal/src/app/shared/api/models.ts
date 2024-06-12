@@ -10,6 +10,8 @@ export { DocumentSubType } from './models/document-sub-type';
 export { DocumentSubTypes } from './models/document-sub-types';
 export { DocumentType } from './models/document-type';
 export { EmailUpdate } from './models/email-update';
+export { Endorsement } from './models/endorsement';
+export { Licence } from './models/licence';
 export { PatientCase } from './models/patient-case';
 export { Person } from './models/person';
 export { PractitionerBridge } from './models/practitioner-bridge';

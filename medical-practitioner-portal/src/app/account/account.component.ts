@@ -17,7 +17,7 @@ export class AccountComponent {
 
   public constructor(private pidpService: PidpService)
   {
-    this.pidpService.apiPidpEndorsementsGet().subscribe((data) =>
+    this.pidpService.apiPidpEndorsementsGet$Json().subscribe((data) =>
     {
       console.log("endorsement response", data);
     });

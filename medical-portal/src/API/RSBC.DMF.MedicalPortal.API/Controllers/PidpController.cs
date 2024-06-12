@@ -1,30 +1,35 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PidpAdapter;
 using RSBC.DMF.MedicalPortal.API.Services;
-using System.Net.Http.Headers;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
+using System.Net;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class PidpController
+    public class PidpController : Controller
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserService _userService;
         private readonly MedicalPortalConfiguration _configuration;
         private readonly PidpManager.PidpManagerClient _pidpAdapterClient;
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
 
-        public PidpController(IHttpContextAccessor httpContextAccessor, PidpManager.PidpManagerClient pidpAdapterClient, IUserService userService, MedicalPortalConfiguration configuration)
+        public PidpController(IHttpContextAccessor httpContextAccessor, PidpManager.PidpManagerClient pidpAdapterClient, IUserService userService, IMapper mapper, MedicalPortalConfiguration configuration, ILoggerFactory loggerFactory)
         {
             _httpContextAccessor = httpContextAccessor;
             _pidpAdapterClient = pidpAdapterClient;
+            _mapper = mapper;
             _configuration = configuration;
             _userService = userService;
+            _logger = loggerFactory.CreateLogger<PidpController>();
         }
 
         [HttpGet("endorsements")]
-        [ProducesResponseType(typeof(JsonResult), 200)] // change this after converted to GRPC
+        [ProducesResponseType(typeof(IEnumerable<Endorsement>), 200)] // change this after converted to GRPC
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [ProducesResponseType(500)]
@@ -36,8 +41,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var userId = profile.Id;
 
-                var response = await _pidpAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
-                return new JsonResult(response);
+                var reply = await _pidpAdapterClient.GetEndorsementsAsync(new GetEndorsementsRequest { UserId = userId });
+                if (reply.ResultStatus == ResultStatus.Fail)
+                {
+                    _logger.LogError($"{nameof(GetMyEndorsements)} error: unable to get endorsements - {reply.ErrorDetail}");
+                    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
+                }
+                var endorsements = _mapper.Map<IEnumerable<Endorsement>>(reply.Endorsements);
+
+                return new JsonResult(reply);
             }
             catch (Exception ex)
             {

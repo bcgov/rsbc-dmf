@@ -12,7 +12,6 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
-using Serilog.Core;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Exceptions;
@@ -21,6 +20,7 @@ using Serilog.Sinks.Splunk;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Rsbc.Dmf.CaseManagement.Dynamics;
+using System.Reflection;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -38,6 +38,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Console.Write("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
+
             services.AddHealthChecks().AddCheck("Case Management Service", () => HealthCheckResult.Healthy("OK"), new[] { "ready" });
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))
@@ -91,7 +93,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
                 opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             });
-
 
             services.AddGrpc(opts =>
             {

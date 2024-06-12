@@ -854,6 +854,8 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var fetchedCase = dynamicsContext.incidents
+                    .Expand(c => c.dfp_DriverId)
+                    .Expand(c => c.dfp_DriverId.dfp_PersonId)
                     .Where(d => d.incidentid == Guid.Parse(caseId))
                     .FirstOrDefault();
                 if (fetchedCase != null)                
@@ -882,6 +884,7 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var fetchedCase = dynamicsContext.incidents
+                    .Expand(d => d.dfp_DriverId)
                     .Expand(d => d.dfp_DriverId.dfp_PersonId)
 
                     //.Expand(d => d.bcgov_incident_bcgov_documenturl)
