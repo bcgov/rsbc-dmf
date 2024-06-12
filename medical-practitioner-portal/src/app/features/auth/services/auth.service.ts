@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-
 import { Observable, from, of } from 'rxjs';
-
 import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
+import { Role } from '../enums/identity-provider.enum';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Observable<void>;
@@ -31,6 +30,11 @@ export class AuthService implements IAuthService {
 
   public isLoggedIn(): Observable<boolean> {
     return of(this.keycloakService.isLoggedIn());
+  }
+
+  public hasAccess(): boolean {
+    console.info('getUserRoles', this.keycloakService.getUserRoles());
+    return this.keycloakService.isLoggedIn() && this.keycloakService.isUserInRole(Role.Enrolled);
   }
 
   public logout(redirectUri: string): Observable<void> {

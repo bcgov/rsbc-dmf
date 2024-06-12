@@ -3,4 +3,8 @@ export enum IdentityProvider {
   IDIR = 'idir',
   PHSA = 'phsa',
 }
-//only bcsc for now
+
+export enum Role {
+  Practitioner = 'PRACTITIONER',
+  Enrolled = 'DMFT_ENROLLED'
+}

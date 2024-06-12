@@ -38,8 +38,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Console.Write("### App Version:{0} ###", Assembly.GetExecutingAssembly().GetName().Version);
-
             services.AddHealthChecks().AddCheck("Case Management Service", () => HealthCheckResult.Healthy("OK"), new[] { "ready" });
 
             if (!string.IsNullOrEmpty(Configuration["JWT_TOKEN_KEY"]))

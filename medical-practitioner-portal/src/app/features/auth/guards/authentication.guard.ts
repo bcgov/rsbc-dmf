@@ -17,8 +17,8 @@ export abstract class AuthenticationGuard extends AuthGuard {
   protected handleAccessCheck(
     routeRedirect: string | undefined
   ): (authenticated: boolean) => boolean | UrlTree {
-    return (authenticated: boolean): boolean | UrlTree => 
-      authenticated
+    return (authenticated: boolean): boolean | UrlTree =>
+      authenticated && this.authService.hasAccess()
         ? true
         : this.router.createUrlTree([routeRedirect ?? '/'], {
             queryParams:
