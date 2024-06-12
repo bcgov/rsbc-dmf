@@ -205,27 +205,4 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             return result;
         }
     }
-
-    public static string TranslateDocumentOrigin(string documentOrigin)
-    {
-        documentOrigin = documentOrigin.Replace(" ", "");
-        var statusMap = new Dictionary<int, string>()
-            {
-                { 100000000, "Practitioner Portal" },
-                { 100000001, "Partner Portal" },
-                { 100000014, "Mercury Uploaded RSBC" },
-                { 100000015, "Migration" },
-                { 100000016, "Driver Portal" },
-                { 100000017, "DPS/KOFAX" },
-            };
-
-        if (statusMap.ContainsKey(documentOrigin))
-        {
-            return statusMap[documentOrigin];
-        }
-        else
-        {
-            return statusMap[100000014];
-        }
-    }
 }
