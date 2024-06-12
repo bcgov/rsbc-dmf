@@ -90,7 +90,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
                 var loginRequest = new UserLoginRequest();
                 loginRequest.UserType = UserType.MedicalPractitionerUserType;
-                loginRequest.Email = user.FindFirstValue(Claims.Email);
+                loginRequest.Email = user.HasClaim(c => c.Type == Claims.Email) ? user.FindFirstValue(Claims.Email) : string.Empty;
                 loginRequest.ExternalSystem = user.GetIdentityProvider();
                 loginRequest.ExternalSystemUserId = user.FindFirstValue(Claims.PreferredUsername);
                 loginRequest.FirstName = user.FindFirstValue(ClaimTypes.GivenName);

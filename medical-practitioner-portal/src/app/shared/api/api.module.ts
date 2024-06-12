@@ -24,8 +24,8 @@ import { ProfileService } from './services/profile.service';
     CasesService,
     ConfigService,
     DocumentService,
-    PidpService,
     DocumentTypeService,
+    PidpService,
     ProfileService,
     ApiConfiguration
   ],
