@@ -34,7 +34,7 @@ export class PopupComponent {
 
   ngOnInit() {
     this.sanitizedSource = this.sanitizer.bypassSecurityTrustResourceUrl(
-      this.iframeUrl
+      this.iframeUrl,
     );
     // Listen for messages from iframe
     window.addEventListener('message', this.receiveMessage.bind(this), false);
@@ -53,7 +53,7 @@ export class PopupComponent {
       console.log('acknowledging message from iframe...');
       this.iframe.nativeElement.contentWindow.postMessage(
         'ackMessage',
-        'https://submit.digital.gov.bc.ca'
+        'https://submit.digital.gov.bc.ca',
       );
     }
   }
@@ -70,8 +70,10 @@ export class PopupComponent {
 
     if (type === 'PUT_CHEFS_SUBMISSION') {
       let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
-        status,
-        submission,
+        body: {
+          status,
+          submission,
+        },
       };
       this.chefsService
         .apiChefsSubmissionPut({ ...params })

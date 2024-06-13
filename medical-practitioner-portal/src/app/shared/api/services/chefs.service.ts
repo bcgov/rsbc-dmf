@@ -9,8 +9,8 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiChefsSubmissionPut } from '../fn/chefs/api-chefs-submission-json-post';
-import { ApiChefsSubmissionPut$Params } from '../fn/chefs/api-chefs-submission-json-post';
+import { apiChefsSubmissionPut } from '../fn/chefs/api-chefs-submission-json-put';
+import { ApiChefsSubmissionPut$Params } from '../fn/chefs/api-chefs-submission-json-put';
 import { ChefsSubmission } from '../models/chefs-submission';
 
 // import { ChefsSubmission } from '../models/chefs-submission';

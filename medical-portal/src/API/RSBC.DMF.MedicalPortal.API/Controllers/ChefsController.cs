@@ -8,9 +8,13 @@ using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using System.Text.Json;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Pssg.Rsbc.Dmf.DocumentTriage;
+using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
+using JsonException = System.Text.Json.JsonException;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 using ResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -75,9 +79,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var documentReply = documentStorageAdapterClient.DownloadFile(downloadFileRequest);
             if (documentReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
-                logger.LogError($"Unexpected error - unable to fetch file");
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    "Unexpected error - unable to fetch file from storage");
+                logger.LogError($"Not found error - unable to fetch file");
+                return StatusCode((int)HttpStatusCode.NotFound,
+                    "Not found error - unable to fetch file from storage");
             }
 
             byte[] fileContents = documentReply.Data.ToByteArray();
@@ -85,9 +89,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             try
             {
-                var jsonData = JsonSerializer.Deserialize<object>(jsonContent);
-                logger.LogInformation("JSON Data: {0}",
-                    JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
+                var jsonData = JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent, new LowercaseEnumConverter());
+                string formattedJson = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
+                logger.LogInformation("JSON Data: {0}", formattedJson);
                 return Ok(jsonData);
             }
             catch (JsonException ex)

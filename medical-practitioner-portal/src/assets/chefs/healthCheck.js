@@ -51,4 +51,4 @@ function sendSubmissionToParent(status) {
 window.sendSubmissionToParent = sendSubmissionToParent;
 
 // Call the function when you need to send the message and only when data is present
-sendSubmissionToParent('DRAFT');
+sendSubmissionToParent('Draft');
