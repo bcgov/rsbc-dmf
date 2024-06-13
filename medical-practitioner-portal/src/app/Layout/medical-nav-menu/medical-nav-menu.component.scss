@@ -14,10 +14,20 @@
     justify-content: stretch;
     align-items: center;
 
-    div.gethelp > a {
+    div.gethelp > div > a {
       font-weight:bold;
       color:#003366;
       margin:0 auto;
+      background-color:#96c0e6;
+      width:260px;
+      height:100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    div.gethelp > div > a:hover {
+      background-color: #c3cddc;
     }
 
     a {
