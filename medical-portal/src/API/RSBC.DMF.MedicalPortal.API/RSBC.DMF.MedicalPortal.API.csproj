@@ -16,10 +16,11 @@
     <Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
       <Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
     </Protobuf>
-    <Protobuf Include="../../../../document-triage-service/src/Protos/documentTriage.proto"
+    <!-- Commenting out for now, may need to re-add this -->
+    <!-- <Protobuf Include="../../../../document-triage-service/src/Protos/documentTriage.proto"
       GrpcServices="Client">
       <Link>gRPC Prototypes\documentTriage.proto</Link>
-    </Protobuf>
+    </Protobuf> -->
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
