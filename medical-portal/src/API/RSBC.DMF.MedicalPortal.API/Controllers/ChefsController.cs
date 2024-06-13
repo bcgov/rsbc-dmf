@@ -1,16 +1,12 @@
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Security.Claims;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
-using System.Text.Json;
 using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
-using Pssg.Rsbc.Dmf.DocumentTriage;
 using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 using JsonException = System.Text.Json.JsonException;
