@@ -11,6 +11,7 @@ import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { PidpService } from './services/pidp.service';
 import { ProfileService } from './services/profile.service';
+import { ChefsService } from './services/chefs.service';
 
 /**
  * Module that provides all services and configuration.
@@ -27,6 +28,7 @@ import { ProfileService } from './services/profile.service';
     DocumentTypeService,
     PidpService,
     ProfileService,
+    ChefsService,
     ApiConfiguration
   ],
 })

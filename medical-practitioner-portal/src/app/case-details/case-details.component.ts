@@ -38,6 +38,7 @@ import { CaseDocument, PatientCase } from '@app/shared/api/models';
 import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
 import { DatePipe } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
+import { PopupService } from '../popup/popup.service';
 
 @Component({
   selector: 'app-case-details',
@@ -94,6 +95,7 @@ export class CaseDetailsComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private casesService: CasesService,
     private documentService: DocumentService,
+    private popupService: PopupService
   ) {}
 
   ngAfterViewInit(): void {
@@ -177,5 +179,9 @@ export class CaseDetailsComponent implements OnInit {
   onUploadDocument() {
     // Refresh the documents tab after uploading a document
     this.getDriverDocuments(this.caseDetails?.driverId as string);
+  }
+
+  openPopup() {
+    this.popupService.openPopup();
   }
 }

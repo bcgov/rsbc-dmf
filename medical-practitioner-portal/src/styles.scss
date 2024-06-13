@@ -37,6 +37,11 @@ table td {
   padding-bottom: 30px;
 }
 
+.full-width-dialog .mat-dialog-container {
+  max-width: 100vw !important;
+  width: 100vw !important;
+}
+
 /* 
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   opacity: 1 !important;
