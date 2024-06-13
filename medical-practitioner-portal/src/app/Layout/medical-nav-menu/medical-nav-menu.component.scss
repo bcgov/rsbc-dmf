@@ -14,12 +14,21 @@
     justify-content: stretch;
     align-items: center;
 
+    div.gethelp {
+      width:40%;
+    }
+
+    div.gethelp > div {
+      width:100%;
+    }
+
     div.gethelp > div > a {
       font-weight:bold;
       color:#003366;
       margin:0 auto;
       background-color:#96c0e6;
-      width:260px;
+      width:100%;
+      max-width:260px;
       height:100%;
       display: flex;
       align-items: center;
