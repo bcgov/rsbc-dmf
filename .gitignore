@@ -24,3 +24,12 @@
 
 *.dtmp
 /pidp-adapter/src/PidpAdapter.Service/logs
+/medical-portal/src/PidpAdpater.API/logs
+/medical-portal/src/OneHealthAdapter/logs
+
+# Mac
+.DS_Store
+
+# IntelliJ IDEA
+.idea/
+*.iml

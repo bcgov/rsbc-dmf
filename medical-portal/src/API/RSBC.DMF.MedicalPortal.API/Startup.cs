@@ -16,10 +16,11 @@ using Pssg.DocumentStorageAdapter;
 using System.Data;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
-using System.Text.Json;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Common;
+using Newtonsoft.Json;
 using RSBC.DMF.MedicalPortal.API.Model;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -30,6 +31,7 @@ namespace RSBC.DMF.MedicalPortal.API
             this.configuration = configuration;
             this.environment = environment;
         }
+
         private IConfiguration configuration { get; }
         private const string HealthCheckReadyTag = "ready";
         private readonly IHostEnvironment environment;
@@ -40,14 +42,14 @@ namespace RSBC.DMF.MedicalPortal.API
             var config = this.InitializeConfiguration(services);
 
             services.AddKeycloakWebApiAuthentication(
-                keycloakOptions => 
+                keycloakOptions =>
                 {
                     keycloakOptions.Realm = config.Keycloak.Config.Realm;
                     keycloakOptions.Audience = config.Keycloak.Config.Audience;
                     keycloakOptions.AuthServerUrl = config.Keycloak.Config.Url;
                 },
-                jwtBearerOptions => 
-                { 
+                jwtBearerOptions =>
+                {
                     jwtBearerOptions.Events = new JwtBearerEvents
                     {
                         OnTokenValidated = async context => await OnTokenValidatedAsync(context),
@@ -67,11 +69,11 @@ namespace RSBC.DMF.MedicalPortal.API
                     policy => policy
                         // confirm this is working by using a bad secret, currently the secret is not being validated
                         .RequireAuthenticatedUser().AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                        // TODO verify if we need to add scope medical-portal-ui and medical-portal-api or if just medical-portal will do, in other projects there are api and ui
-                        // the below does not work, since the scope claim looks something like "email profile openid". This problem has already been solved, research the proper way to handle scope
-                        // need to add the scope to keycloak admin UI before we can add the scope to FE, which would pass the scope claim to the BE
-                        //.RequireClaim(Claims.Scope, "medical-portal")
-                        );
+                    // TODO verify if we need to add scope medical-portal-ui and medical-portal-api or if just medical-portal will do, in other projects there are api and ui
+                    // the below does not work, since the scope claim looks something like "email profile openid". This problem has already been solved, research the proper way to handle scope
+                    // need to add the scope to keycloak admin UI before we can add the scope to FE, which would pass the scope claim to the BE
+                    //.RequireClaim(Claims.Scope, "medical-portal")
+                );
 
                 options.AddPolicy(
                     Policies.MedicalPractitioner,
@@ -84,15 +86,23 @@ namespace RSBC.DMF.MedicalPortal.API
                     .RequireRole(Claims.IdentityProvider, Roles.Dmft));
             });
 
-            services.AddControllers(options =>
-            {
-                options.Filters.Add(new HttpResponseExceptionFilter());
-            });                
+            services.AddControllers(options => { options.Filters.Add(new HttpResponseExceptionFilter()); })
+                .AddNewtonsoftJson(opts =>
+                {
+                    opts.SerializerSettings.Formatting = Formatting.Indented;
+                    opts.SerializerSettings.DateFormatHandling = DateFormatHandling.IsoDateFormat;
+                    opts.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+
+                    opts.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+
+                    // ReferenceLoopHandling is set to Ignore to prevent JSON parser issues with the user / roles model.
+                    opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "RSBC.DMF.MedicalPortal.API", Version = "v1" });
-            });            
+            });
 
             var dpBuilder = services.AddDataProtection();
             var keyRingPath = configuration.GetValue("DATAPROTECTION__PATH", string.Empty);
@@ -101,6 +111,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 //configure data protection folder for key sharing
                 dpBuilder.PersistKeysToFileSystem(new DirectoryInfo(keyRingPath));
             }
+
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 //set known network of forward headers
@@ -108,14 +119,17 @@ namespace RSBC.DMF.MedicalPortal.API
                 var configvalue = configuration.GetValue("app:knownNetwork", string.Empty)?.Split('/');
                 if (configvalue.Length == 2)
                 {
-                    var knownNetwork = new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(configvalue[0]), int.Parse(configvalue[1]));
+                    var knownNetwork = new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse(configvalue[0]),
+                        int.Parse(configvalue[1]));
                     options.KnownNetworks.Add(knownNetwork);
                 }
             });
-            services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy, corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
+            services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy,
+                corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
             services.AddDistributedMemoryCache();
             services.AddResponseCompression();
-            services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"), new[] { HealthCheckReadyTag });
+            services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"),
+                new[] { HealthCheckReadyTag });
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
@@ -145,8 +159,8 @@ namespace RSBC.DMF.MedicalPortal.API
         private async Task OnTokenValidatedAsync(TokenValidatedContext context)
         {
             if (context.Principal?.Identity is ClaimsIdentity identity
-            && identity.IsAuthenticated)
-            {                
+                && identity.IsAuthenticated)
+            {
                 // Flatten the Resource Access claim
                 identity.AddClaims(
                     identity.GetResourceAccessRoles(Clients.License)
@@ -163,6 +177,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 context.Principal = await userService.Login(context.Principal);
             }
         }
+
         private MedicalPortalConfiguration InitializeConfiguration(IServiceCollection services)
         {
             var config = new MedicalPortalConfiguration();
@@ -237,5 +252,4 @@ namespace RSBC.DMF.MedicalPortal.API
                         ? LogEventLevel.Verbose
                         : LogEventLevel.Information;
     }
-
 }
