@@ -4,13 +4,13 @@ on:
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
-      - 'medical-practitioner-portal/src/**'
+      - 'medical-portal/src/UI/**'
       - '.github/workflows/ci-medical-portal-ui.yml'
 
 env:
   IMAGE_NAME: medical-portal-ui
   working-directory: ./
-  solution-folder: medical-practitioner-portal
+  solution-folder: medical-portal/src/UI/
   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
 jobs:
@@ -57,4 +57,4 @@ jobs:
 
       - name: Build image
         #working-directory: ./medical-practitioner-portal
-        run: docker build . --file ./medical-practitioner-portal/Dockerfile --tag $IMAGE_NAME
+        run: docker build . --file ./medical-portal/src/UI/Dockerfile --tag $IMAGE_NAME

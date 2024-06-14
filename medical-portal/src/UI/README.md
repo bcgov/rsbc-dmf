@@ -33,6 +33,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## Docker build
 
 change directory to root folder
-`docker build --file ./medical-practitioner-portal/Dockerfile . --tag medical-portal-ui`
+`docker build --file ./medical-portal/src/UI/Dockerfile . --tag medical-portal-ui`
 `docker run -p 4200:4200 --rm --name medical-portal-ui medical-portal-ui`
 
