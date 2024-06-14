@@ -25,9 +25,9 @@
       "@shared/core-ui": ["../../../shared-portal-ui/projects/core-ui/src/public-api"],
       "@app/*": ["./src/app/*"],
       "@src/*": ["./src/*"],
-    //   "@angular/*": [
-    //     "./node_modules/@angular/*"
-    //  ],
+      "@angular/*": [
+        "./node_modules/@angular/*"
+     ]
     },
     "lib": [
       "es2018",
