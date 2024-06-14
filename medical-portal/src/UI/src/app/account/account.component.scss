@@ -1,0 +1,58 @@
+.account-details {
+    display: flex;
+    justify-content: space-between;
+    line-height: 24px;
+  }
+  
+  .manage-button{
+    width: 158px;
+    height: 46px;
+    border-radius: 5px;
+    font-family: "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    cursor: pointer;
+   
+  }
+
+  mat-card {
+    margin-bottom: 24px;
+  }
+  
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 12px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .endorsementRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    line-height: 32px;
+    padding-bottom: 24px;
+    align-content: flex-start;
+  }
+  
+  
+
+  .endorsementeContent {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .endorsement-border {
+    border-left: 2px solid #808080;
+    height: 45%;
+  }

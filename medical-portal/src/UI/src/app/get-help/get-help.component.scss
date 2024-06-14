@@ -1,0 +1,29 @@
+.title{
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 24px;
+}
+
+.help-cards{
+    display: flex;
+    gap : 32px;
+}
+
+.mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    padding: 12px;
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  p{
+    line-height: 21px;
+  }

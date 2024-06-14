@@ -1,0 +1,226 @@
+<div>
+  <mat-card style="margin-top: 0px">
+    <mat-card-content class="driver-details">
+      <div>
+        <label>First Name</label>
+        <div>
+          <b>{{ caseDetails?.firstName }}</b>
+        </div>
+      </div>
+      <div>
+        <label>SUR</label>
+        <div>
+          <b>{{ caseDetails?.lastName }}</b>
+        </div>
+      </div>
+      <div>
+        <label>Driver’s License Number</label>
+        <div>
+          <b>{{ caseDetails?.driverLicenseNumber }}</b>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="container">
+  <div class="list">
+    <h2>Active Case Details</h2>
+    <mat-card>
+      <mat-card-content class="dmer-details">
+        <div>
+          <label>DMER Case Id</label>
+          <div>
+            <b>{{ caseDetails?.idCode }}</b>
+          </div>
+        </div>
+        <div>
+          <label>DMER Type</label>
+          <div>
+            <b>{{ caseDetails?.dmerType }}</b>
+          </div>
+        </div>
+        <div>
+          <label>DMER Status</label>
+          <div>
+            <b>{{ caseDetails?.status }}</b>
+          </div>
+        </div>
+        <div>
+          <label>Submission Date</label>
+          <div>
+            <b>{{ caseDetails?.latestComplianceDate | date: "longDate" }}</b>
+          </div>
+        </div>
+        <div>
+          <label>Medical Practitioner on record</label>
+          <div>
+            <b></b>
+          </div>
+        </div>
+        <div>
+          <div>
+            <button mat-flat-button class="primaryButton" (click)="openPopup()">
+              Start DMER
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div>
+      <mat-stepper
+        labelPosition="bottom"
+        #stepper
+        [selectedIndex]="selectedIndex"
+        orientation="horizontal"
+      >
+        <mat-step state="circle">
+          <ng-template matStepLabel>Opened:<br /></ng-template>
+        </mat-step>
+        <mat-step state="circle">
+          <ng-template matStepLabel>Open Pending Submission</ng-template>
+        </mat-step>
+        <mat-step state="circle">
+          <ng-template matStepLabel>Under Review</ng-template>
+        </mat-step>
+        <mat-step state="circle">
+          <ng-template matStepLabel>Decision rendered</ng-template>
+        </mat-step>
+        <mat-step state="circle">
+          <ng-template matStepLabel>Resolved</ng-template>
+        </mat-step>
+        <!-- Icon overrides. -->
+        <ng-template matStepperIcon="edit">
+          <mat-icon>circle</mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="active">
+          <mat-icon>circle</mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="done">
+          <mat-icon>circle</mat-icon>
+        </ng-template>
+        <ng-template matStepperIcon="number">
+          <mat-icon>circle</mat-icon>
+        </ng-template>
+      </mat-stepper>
+    </div>
+
+    <div>
+      <mat-card class="caseStatus">
+        <div>
+          <p><b>Understanding Case Statuses</b></p>
+          <p><b>Opened – </b>This is the date the case was opened with RSBC.</p>
+          <p>
+            <b>Open Pending Submission –</b> Document(s) have been requested by
+            RSBC and have not yet been received.
+          </p>
+          <p>
+            <b>Under Review –</b> The case has at least one document submitted
+            and a decision has not yet been made.
+          </p>
+          <p>
+            <b>Decision Rendered –</b>A decision has been rendered and the case
+            will close in 30 days unless new additions to the case received
+            during this time change the decision.
+          </p>
+          <p>
+            <b>Resolved –</b> The case is now closed. If new information is
+            received, a new case will be opened rather than adding it to a
+            closed case.
+          </p>
+        </div>
+      </mat-card>
+    </div>
+
+    <div>
+      <h2>Case Documentation</h2>
+      <!-- <div>
+        <app-upload-document></app-upload-document>
+      </div> -->
+
+      <mat-tab-group animationDuration="0ms">
+        <mat-tab label="Submission Requirements">
+          <!-- <app-upload-document></app-upload-document> -->
+          <app-submission-requirements
+            [documents]="submissionRequirementDocuments"
+            [driverId]="caseDetails?.driverId"
+            (uploadedDocument)="onUploadDocument()"
+          ></app-submission-requirements>
+        </mat-tab>
+        <mat-tab label="Driver Submissions">
+          <app-case-submissions
+            [documents]="driverSubmissionDocuments"
+          ></app-case-submissions>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <div class="list" id="definitions">
+      <h2>Definitions</h2>
+      <div class="accordion-btn-container">
+        <a class="accordion-btn show-btn" (click)="accordion.openAll()"
+          >Expand All</a
+        >
+        <span class="accordion-bar">&nbsp;|&nbsp;</span>
+        <a class="accordion-btn hide-btn" (click)="accordion.closeAll()"
+          >Collapse All</a
+        >
+      </div>
+      <div style="padding-bottom: 30px">
+        <mat-accordion multi>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >Case status</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+            <app-case-status></app-case-status>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >DMER status</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+            <app-dmer-status></app-dmer-status>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >DMER Type</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+
+            <app-medical-dmer-types></app-medical-dmer-types>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >Submission type</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+            <app-submission-type></app-submission-type>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >Document subtype</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+            <p>Upwards of 90 subtypes</p>
+          </mat-expansion-panel>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header class="panel-header">
+              <mat-panel-title class="accordian-Title"
+                >Submission Status</mat-panel-title
+              >
+            </mat-expansion-panel-header>
+            <app-submission-status></app-submission-status>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+  </div>
+</div>
