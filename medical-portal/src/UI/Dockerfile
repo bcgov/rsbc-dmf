@@ -1,15 +1,20 @@
-FROM trion/ng-cli-karma AS ng-builder
-WORKDIR /src
-COPY ./medical-portal/package*.json ./
-RUN npm ci
-COPY ./medical-portal/ .
-RUN npm run lint
-RUN npm run test -- --no-watch --no-progress
+FROM trion/ng-cli-karma:17.0.10 AS ng-builder
 
-RUN npm run build -- --base-href /rsbc-dfp-medical-portal/ --deploy-url /rsbc-dfp-medical-portal/ --configuration production
+COPY ./shared-portal-ui/ ./shared-portal-ui
+COPY ./medical-portal/src/UI/ ./medical-portal/src/UI
+
+WORKDIR /app/shared-portal-ui
+
+RUN npm install
+
+WORKDIR /app/medical-portal/src/UI
+
+RUN npm install
+
+RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production --source-map
 
 FROM caddy:alpine as final
-COPY Caddyfile /etc/caddy/Caddyfile
-COPY --from=ng-builder /src/dist/medical-portal/ /site
+COPY ./medical-portal/src/UI/Caddyfile /etc/caddy/Caddyfile
+COPY --from=ng-builder /app/medical-portal/src/UI/dist/browser/ /site
 ENV API_URL=
 EXPOSE 2015
