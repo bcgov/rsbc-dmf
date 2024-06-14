@@ -1,0 +1,13 @@
+.bc-gov-alertbanner-error {
+  background-color: #fef4dd;
+  border-color: #fbdb8b;
+  color: #81692c;
+}
+
+.bc-gov-alertbanner-error:before {
+  content: "\f06a";
+}
+
+.bc-gov-alertbanner-error a {
+  color: #5b4a1f;
+}

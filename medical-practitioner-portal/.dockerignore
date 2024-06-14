@@ -1,6 +1,0 @@
-**/dist
-**/node_modules
-**/Dockerfile
-**/.dockerignore
-**/.gitignore
-**/.editorconfig

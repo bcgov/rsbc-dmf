@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     paths:
-      - 'medical-practitioner-portal/**'
+      - 'medical-portal/src/UI/**'
       - '.github/workflows/cd-medical-portal-ui.yml'
 env:
   IMAGE_NAME: medical-portal-ui
@@ -26,7 +26,7 @@ jobs:
 
       - name: Build image
         working-directory: ./
-        run: docker build . --file ./medical-practitioner-portal/Dockerfile --tag $IMAGE_NAME 
+        run: docker build . --file ./medical-portal/src/UI/Dockerfile --tag $IMAGE_NAME 
 
       - name: Push image
         run: |
