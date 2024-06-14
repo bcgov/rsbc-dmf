@@ -11,9 +11,7 @@ WORKDIR /app/medical-portal
 
 RUN npm install
 
-WORKDIR /app/
-
-RUN npm run build -- --base-href /medical-portal/ --deploy-url /medical-portal/ --configuration production --source-map
+RUN npm run build -- --configuration production --source-map
 
 FROM caddy:alpine as final
 COPY ./medical-portal/src/UI/Caddyfile /etc/caddy/Caddyfile
