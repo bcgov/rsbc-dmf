@@ -7,7 +7,6 @@ using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
-using Pssg.Rsbc.Dmf.DocumentTriage;
 using Rsbc.Dmf.IcbcAdapter;
 using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
