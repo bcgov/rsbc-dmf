@@ -8,6 +8,7 @@ using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
+using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
