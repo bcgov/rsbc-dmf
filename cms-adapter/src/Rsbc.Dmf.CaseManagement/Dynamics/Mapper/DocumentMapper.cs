@@ -118,6 +118,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             }
         }
 
+        // NOTE keep in sync with CaseManager.TranslateDocumentOrigin
         protected string TranslateDocumentOrigin(int documentOrigin)
         {
             var statusMap = new Dictionary<int, string>()
