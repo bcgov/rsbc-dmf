@@ -233,11 +233,6 @@ namespace Rsbc.Dmf.CaseManagement
                     legacyDocument.Priority = TranslatePriorityCode(document.dfp_priority.Value);
                 }
 
-                if (document.dfp_documentorigin != null)
-                {
-                    legacyDocument.Origin = TranslateDocumentOrigin(document.dfp_documentorigin.Value);
-                }
-
                 if (document.dfp_DriverId != null)
                 {
                     legacyDocument.Driver = new Driver

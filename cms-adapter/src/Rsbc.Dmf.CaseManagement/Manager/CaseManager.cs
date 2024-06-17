@@ -1833,10 +1833,13 @@ namespace Rsbc.Dmf.CaseManagement
             return result;       
         }
 
+        // NOTE keep in sync with DocumentMapper.TranslateDocumentOrigin
         protected int TranslateDocumentOrigin(string documentOrigin)
         {
             var statusMap = new Dictionary<string, int>()
             {
+                { "Practitioner Portal", 100000000 },
+                { "Partner Portal", 100000001 },
                 { "Mercury Uploaded RSBC", 100000014 },
                 { "Migration",  100000015 },
                 { "Driver Portal", 100000016 },

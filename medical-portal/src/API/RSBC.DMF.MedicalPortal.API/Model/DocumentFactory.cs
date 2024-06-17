@@ -1,13 +1,15 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using EnumsNET;
+using Google.Protobuf.WellKnownTypes;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using SharedUtils.Model.Enum;
-
+using System.ComponentModel;
 
 namespace RSBC.DMF.MedicalPortal.API.Model
 {
     public class DocumentFactory
     {
+        // TODO this should be moved to cms-adapter
         public LegacyDocument Create(Driver driver, string userId, string documentUrl, string documentType, string documentTypeCode, string caseId = "")
         {
             var importDate = DateTimeOffset.Now;
@@ -37,7 +39,7 @@ namespace RSBC.DMF.MedicalPortal.API.Model
                 Priority = string.Empty,
                 // maps to "Intake Team"
                 Owner = "Client Services",
-                Origin = Origin.PractitionerPortal.ToString(),
+                Origin = Origin.PractitionerPortal.AsString(EnumFormat.Description),
                 BatchId = string.Empty,
                 ValidationMethod = string.Empty,
                 ValidationPrevious = string.Empty,
