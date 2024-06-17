@@ -25,7 +25,7 @@
 
   <div class="list">
     <div>
-      @for (document of documents; track document.documentUrl){
+      @for (document of filteredDocuments; track document.documentUrl) {
         <mat-card
           [ngClass]="{
             open: document.documentId && isExpanded[document.documentId]
@@ -49,19 +49,19 @@
                 <div>
                   <label>Submission Type</label>
                   <div>
-                    <b>{{ document.documentType }}</b>
-                  </div>
-                </div>
-                <div>
-                  <label>Submission Status</label>
-                  <div>
                     <b
-                      >{{ document.submittalStatus }}
+                      >{{ document.documentType }}
                       @if (document?.documentSubType) {
                         -
                         {{ document?.documentSubType }}
                       }
                     </b>
+                  </div>
+                </div>
+                <div>
+                  <label>Submission Status</label>
+                  <div>
+                    <b>{{ document.submittalStatus }} </b>
                   </div>
                 </div>
                 <div>
@@ -100,10 +100,26 @@
         </mat-card>
       }
     </div>
-    <div class="numberOfItems">
-      @if (documents && documents.length > 0) {
-        Showing {{ documents.length }} of {{ documents.length }} records
-      }
+
+    <div *ngIf="!isLoading && documents?.length === 0">
+      <mat-card>
+        <mat-card-content>
+          <b>No Submission History records found for this case</b>
+        </mat-card-content>
+      </mat-card>
     </div>
+  </div>
+  <div class="numberOfItems">
+    @if (documents && documents.length > 0) {
+      Showing {{ filteredDocuments.length }} of {{ documents.length }} records
+    }
+    <br />
+    <a
+      *ngIf="filteredDocuments.length < documents.length"
+      (click)="viewMore()"
+      class="viewMore"
+      ><b style="color: #003366">View more records</b>
+      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+    >
   </div>
 </div>

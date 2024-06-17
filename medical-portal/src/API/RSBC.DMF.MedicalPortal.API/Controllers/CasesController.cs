@@ -28,7 +28,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ActionName("SearchCaseByIdCode")]
         public ActionResult SearchCaseByIdCode([Required][FromRoute] string idCode)
         {
-            var result = new PatientCase();
+            PatientCase result = null;
 
             if (string.IsNullOrEmpty(idCode) || idCode == Guid.Empty.ToString())
             {
@@ -39,6 +39,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
              var c = _cmsAdapterClient.GetCaseByIdCode(new GetCaseByIdCodeRequest { IdCode = idCode});
             if (c != null && c.ResultStatus == ResultStatus.Success)
             {
+                result = new PatientCase();
+
                 result.CaseId = c.Item.CaseId;
                 result.DmerType = c.Item.DmerType;
                 result.Status = c.Item.Status;
@@ -61,12 +63,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
                 }
 
+
+                // set to null if no decision has been made.
+                if (result.BirthDate == DateTime.MinValue)
+                {
+                    result.BirthDate = null;
+                }
+
             }
 
-            // set to null if no decision has been made.
-            if (result.BirthDate == DateTime.MinValue)
+            if(result == null)
             {
-                result.BirthDate = null;
+                return NotFound();
             }
 
             return Ok(result);

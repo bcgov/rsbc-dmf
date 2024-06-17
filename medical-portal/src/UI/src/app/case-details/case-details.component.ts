@@ -95,7 +95,7 @@ export class CaseDetailsComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private casesService: CasesService,
     private documentService: DocumentService,
-    private popupService: PopupService
+    private popupService: PopupService,
   ) {}
 
   ngAfterViewInit(): void {
