@@ -36,7 +36,26 @@ import { CaseDocument } from '@app/shared/api/models';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class CaseSubmissionsComponent {
-  @Input() documents: CaseDocument[] = [];
+  pageSize = 10;
+
+  isLoading = true;
+
+  filteredDocuments: CaseDocument[] = [];
+
+  _documents: CaseDocument[] = [];
+  @Input() 
+  set documents(docs: CaseDocument[]) {
+    console.log('set documents:', docs);
+    this._documents = docs;
+    this.filteredDocuments = docs.slice(0, this.pageSize);
+
+    console.log('filtered Documents:', this.filteredDocuments);
+  }
+
+  get documents() {
+    return this._documents;
+  }
+
   isExpanded: Record<string, boolean> = {};
 
   constructor(private datePipe: DatePipe) {}
@@ -51,5 +70,11 @@ export class CaseSubmissionsComponent {
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
+  viewMore() {
+    const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
+    console.log('view more:', this._documents);
+    this.filteredDocuments = this.documents?.slice(0, pageSize);
   }
 }
