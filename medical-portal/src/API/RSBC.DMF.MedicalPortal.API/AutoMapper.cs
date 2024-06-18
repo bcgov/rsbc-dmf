@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using PidpAdapter;
+using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
+
 
 namespace RSBC.DMF.MedicalPortal.API
 {
     public class MappingProfile : Profile
     {
+        private readonly ILogger<MappingProfile> _logger;
         public MappingProfile()
         {
             //#TODO Move this to shared folder
@@ -24,8 +27,9 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.ComplianceDate));
 
             CreateMap<LegacyDocument, ViewModels.CaseDocument>()
-                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
-                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate));
+             .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+             .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
+             .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
 
             CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, ViewModels.Document>()
                 .ForMember(dest => dest.PractitionerName, opt => opt.MapFrom(src => src.);
@@ -34,6 +38,8 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
         }
+
+      
     }
 
     public static class AutoMapperExtensions
@@ -49,4 +55,7 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddSingleton(mapper);
         }
     }
+
+
+  
 }
