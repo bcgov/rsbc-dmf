@@ -4,8 +4,7 @@ using PidpAdapter;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
-using System;
-using EnumsNET;
+
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -30,7 +29,7 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<LegacyDocument, ViewModels.CaseDocument>()
              .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
              .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
-             .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatus(src.SubmittalStatus)));
+             .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
 
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
 
@@ -38,34 +37,7 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
         }
 
-        private string GroupSubmittalStatus(string submittalStatus)
-        {
-            var canParseEnum = Enums.TryParse<SubmittalStatus>(submittalStatus, true, out var submittalStatusEnum, EnumFormat.Description);
-            if (!canParseEnum)
-                return submittalStatus;
-
-            switch (submittalStatusEnum)
-            {
-                case SubmittalStatus.OpenRequired:
-                    return SubmittalStatus.OpenRequired.AsString(EnumFormat.Description);
-                case SubmittalStatus.Noncomply:
-                case SubmittalStatus.ActionedNoncomply:
-                    return SubmittalStatus.Noncomply.AsString(EnumFormat.Description);
-                case SubmittalStatus.Received:
-                case SubmittalStatus.CleanPass:
-                case SubmittalStatus.ManualPass:
-                case SubmittalStatus.Reviewed:
-                case SubmittalStatus.UnderReview:
-                    return SubmittalStatus.Received.AsString(EnumFormat.Description);
-                case SubmittalStatus.Rejected:
-                    return SubmittalStatus.Rejected.AsString(EnumFormat.Description);
-                case SubmittalStatus.Uploaded:
-                    return SubmittalStatus.Uploaded.AsString(EnumFormat.Description);
-                default:
-                    _logger.LogError($"Error parsing SubmittalStatus: {submittalStatus}");
-                    return submittalStatus;
-            }
-        }
+      
     }
 
     public static class AutoMapperExtensions
