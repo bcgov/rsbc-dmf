@@ -886,7 +886,6 @@ namespace Rsbc.Dmf.CaseManagement
                 var fetchedCase = dynamicsContext.incidents
                     .Expand(d => d.dfp_DriverId)
                     .Expand(d => d.dfp_DriverId.dfp_PersonId)
-
                     //.Expand(d => d.bcgov_incident_bcgov_documenturl)
                     .Where( d => d.ticketnumber == IdCode)
                     .FirstOrDefault();

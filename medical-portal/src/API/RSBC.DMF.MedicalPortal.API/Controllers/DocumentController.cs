@@ -62,7 +62,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("GetDriverAndCaseDocuments")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Document>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetDriverAndCaseDocuments")]

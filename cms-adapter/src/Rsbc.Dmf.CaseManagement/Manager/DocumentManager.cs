@@ -255,7 +255,7 @@ namespace Rsbc.Dmf.CaseManagement
                     .Expand(doc => doc.dfp_DocumentTypeID)
                     .Expand(doc => doc.bcgov_CaseId)
                     .Expand(doc => doc.bcgov_CaseId.customerid_contact)
-                    .Where(doc => 
+                    .Where(doc =>
                         doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
                         && (doc._dfp_loginid_value != null && doc._dfp_loginid_value.Value == loginId)
                     ));
@@ -264,13 +264,16 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<Document>>(documents);
         }
 
-        public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
+        // TODO loginId is not used
+        public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId)
         {
             var documents = new List<bcgov_documenturl>();
 
             var documentQuery = dynamicsContext.bcgov_documenturls
                 .Expand(doc => doc.bcgov_CaseId)
                 .Expand(doc => doc.dfp_DocumentTypeID)
+                .Expand(doc => doc.dfp_LoginId)
+                //.Expand(doc => doc.dfp_LoginId.dfp_)
                 .Where(doc => doc.bcgov_CaseId.incidentid == Guid.Parse(caseId));
 
             return _mapper.Map<IEnumerable<Document>>(documents);

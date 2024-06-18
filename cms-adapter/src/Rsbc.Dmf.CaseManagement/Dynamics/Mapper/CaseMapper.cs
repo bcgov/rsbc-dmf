@@ -47,8 +47,6 @@ namespace Rsbc.Dmf.CaseManagement
                 LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname,
                 MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename,
                 LatestComplianceDate = @case.dfp_latestcompliancedate.Value
-                
-
             };
 
             if (@case.dfp_dfcmscasesequencenumber == null)

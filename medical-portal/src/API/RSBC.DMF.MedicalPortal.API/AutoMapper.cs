@@ -14,7 +14,7 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<Timestamp, DateTimeOffset>()
              .ConvertUsing(src => src.ToDateTimeOffset());
 
-            CreateMap<Document, CaseDocument>()
+            CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, CaseDocument>()
                 .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.DmerType))
                 .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
                 // TODO rename to IdCode
@@ -24,9 +24,11 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.ComplianceDate));
 
             CreateMap<LegacyDocument, ViewModels.CaseDocument>()
-             .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
-             .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate));
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate));
 
+            CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, ViewModels.Document>()
+                .ForMember(dest => dest.PractitionerName, opt => opt.MapFrom(src => src.);
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
 
             CreateMap<EndorsementDto, Endorsement>();

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,11 +16,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     {
         private readonly ICaseQueryService caseQueryService;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
+        private readonly IMapper _mapper;
 
-        public CasesController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient)
+        public CasesController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, IMapper mapper)
         {
             this.caseQueryService = caseQueryService;
             _cmsAdapterClient = cmsAdapterClient;
+            _documentManagerClient = documentManagerClient;
+            _mapper = mapper;
         }
 
         [HttpGet("search/{idCode}")]
@@ -26,7 +32,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("SearchCaseByIdCode")]
-        public ActionResult SearchCaseByIdCode([Required][FromRoute] string idCode)
+        public async Task<ActionResult> SearchCaseByIdCode([Required][FromRoute] string idCode)
         {
             var result = new PatientCase();
 
@@ -36,20 +42,19 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
 
             
-             var c = _cmsAdapterClient.GetCaseByIdCode(new GetCaseByIdCodeRequest { IdCode = idCode});
+             var c = await _cmsAdapterClient.GetCaseByIdCodeAsync(new GetCaseByIdCodeRequest { IdCode = idCode});
             if (c != null && c.ResultStatus == ResultStatus.Success)
             {
                 result.CaseId = c.Item.CaseId;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.Name = c.Item.Name;
+                //result.DmerType = c.Item.DmerType;
+                //result.Status = c.Item.Status;
+                //result.Name = c.Item.Name;
                 result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
                 
                 result.IdCode = c.Item.IdCode;
                 result.FirstName = c.Item.FirstName;
                 result.LastName = c.Item.LastName;
                 result.MiddleName = c.Item.Middlename;
-                
 
                 if (c.Item.BirthDate != null)
                 {
@@ -60,6 +65,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 {
                     result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
                 }
+
 
             }
 
@@ -77,7 +83,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCaseById")]
-        public ActionResult GetCaseById([Required][FromRoute] string caseId)
+        public async Task<ActionResult> GetCaseById([Required][FromRoute] string caseId)
         {
             var result = new PatientCase();
 
@@ -90,9 +96,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (c != null && c.ResultStatus == ResultStatus.Success)
             {
                 result.CaseId = c.Item.CaseId;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.Name = c.Item.AssigneeTitle;
+                //result.DmerType = c.Item.DmerType;
+                //result.Status = c.Item.Status;
+                //result.Name = c.Item.AssigneeTitle;
                 result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
                 result.BirthDate = c.Item.BirthDate.ToDateTime();
                 result.IdCode = c.Item.IdCode;
@@ -101,6 +107,17 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.MiddleName = c.Item.Middlename;
                 result.DriverId = c.Item.DriverId;
                 result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
+
+                // get dmer documents for the case
+                var caseDmerDocumentsRequest = new GetDriverAndCaseDocumentsRequest
+                {
+                    CaseId = c.Item.CaseId
+                };
+                var caseDmerDocuments = await _documentManagerClient.GetDriverAndCaseDocumentsAsync(caseDmerDocumentsRequest);
+                if (caseDmerDocuments != null && caseDmerDocuments.ResultStatus == ResultStatus.Success)
+                {
+                    result.Documents = _mapper.Map<IEnumerable<ViewModels.Document>>(caseDmerDocuments.Items);
+                }
             }
 
             // set to null if no decision has been made.
