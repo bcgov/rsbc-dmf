@@ -4238,9 +4238,11 @@ namespace Rsbc.Dmf.CaseManagement
         /// GetDpsProcessingDateForERAResults
         /// </summary>
         /// <returns></returns>
-        public DateTimeOffset GetDpsUplaodDateForERAResults()
+        public DateTimeOffset GetDpsUploadDateForERAResults()
         {
             Guid? eraResultsGuid = null;
+
+            DateTimeOffset result = DateTimeOffset.UtcNow;
 
             var tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "ERA Results").FirstOrDefault();
             if (tempQuery != null)
@@ -4262,12 +4264,15 @@ namespace Rsbc.Dmf.CaseManagement
                       && x.dfp_dpsclass.Contains("1 - Priority")
                         && (x._dfp_documenttypeid_value == eraResultsGuid || x._dfp_documenttypeid_value == reExamResultsGuid)
                         )
-                    .OrderByDescending(i => i.dfp_uploadeddate)
-                    .Take(1)
+                   
                     .FirstOrDefault();
 
-                return DateTimeOffset.UtcNow;
-            
+           if (mostRecentRecord != null)
+            {
+                result = DateTimeOffset.UtcNow;
+            }
+
+            return result;    
            
         }
 
@@ -4283,17 +4288,28 @@ namespace Rsbc.Dmf.CaseManagement
             var dpsUploadedDate = GetDpsUploadedDate();
 
             // This Current Date is applicable to only  ERA results and Road Test - ICBC Re-exam
-            var dpsUploadDateEraResults = GetDpsUplaodDateForERAResults();
+            var dpsUploadDateEraResults = GetDpsUploadDateForERAResults();
+
+            //Path 1 : This is non comply for all the documents except ERA results and Road Test
+
+            UpdateNonComplyDocumentsQuery(dpsUploadedDate);
+
+            // Path 2 : This is to set non comply on  ERA results and Road Test
 
 
+            UpdateNonComplyDocumentsQuery(dpsUploadDateEraResults);
+
+        }
+
+        private async void UpdateNonComplyDocumentsQuery(DateTimeOffset dpsUploadDate)
+        {
             var query = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
                         where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open Required                                                  
-                        && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
+                        && bcgov_documenturl.dfp_compliancedate < dpsUploadDate
 
                         select bcgov_documenturl;
 
-            
 
             DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(query);
 
@@ -4311,7 +4327,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     bcgov_documenturlid = documentId,
                     dfp_submittalstatus = 100000005
-            };
+                };
                 dynamicsContext.AttachTo("bcgov_documenturls", changedDocument);
                 dynamicsContext.UpdateObject(changedDocument);
             }
@@ -4327,8 +4343,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             dynamicsContext.DetachAll();
-
-
         }
 
         /// <summary>
