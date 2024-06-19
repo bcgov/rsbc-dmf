@@ -26,6 +26,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentTypeService } from '@app/shared/api/services';
 import { MatIcon } from '@angular/material/icon';
+import { PopupService } from '@app/popup/popup.service';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -56,6 +57,7 @@ export class SubmissionRequirementsComponent {
     private datePipe: DatePipe,
     private apiConfig: ApiConfiguration,
     private documentTypeService: DocumentTypeService,
+    private popupService: PopupService,
   ) {}
   public files: any[] = [];
   acceptControl = new FormControl(false);
@@ -157,5 +159,9 @@ export class SubmissionRequirementsComponent {
         this.isFileUploading = false;
         this.uploadedDocument.emit();
       });
+  }
+
+  openPopup() {
+    this.popupService.openPopup();
   }
 }
