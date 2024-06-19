@@ -43,13 +43,11 @@ export class CaseSubmissionsComponent {
   filteredDocuments: CaseDocument[] = [];
 
   _documents: CaseDocument[] = [];
-  @Input() 
-  set documents(docs: CaseDocument[]) {
-    console.log('set documents:', docs);
-    this._documents = docs;
-    this.filteredDocuments = docs.slice(0, this.pageSize);
 
-    console.log('filtered Documents:', this.filteredDocuments);
+  @Input()
+  set documents(docs: CaseDocument[]) {
+    this._documents = docs;
+    this.filteredDocuments = this._documents?.slice(0, this.pageSize);
   }
 
   get documents() {
@@ -74,7 +72,6 @@ export class CaseSubmissionsComponent {
 
   viewMore() {
     const pageSize = (this.filteredDocuments?.length ?? 0) + this.pageSize;
-    console.log('view more:', this._documents);
     this.filteredDocuments = this.documents?.slice(0, pageSize);
   }
 }
