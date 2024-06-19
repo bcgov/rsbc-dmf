@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -14,6 +15,7 @@ using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
+using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -184,13 +186,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return Ok(submission);
         }
 
-        [HttpGet("bundle")]
+        [HttpGet("{caseId}")]
         [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
-        [ActionName(nameof(GetDriverInfo))]
-        public async Task<ActionResult> GetDriverInfo([FromQuery] string caseId)
+        [ActionName(nameof(GetChefsBundle))]
+        public async Task<ActionResult> GetChefsBundle([Required] [FromRoute] string caseId)
         {
+            var chefsBundle = new ChefsBundle();
             var caseResult = new PatientCase();
 
             if (string.IsNullOrEmpty(caseId) || caseId == Guid.Empty.ToString())
@@ -201,14 +204,17 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var c = cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CMSResultStatus.Success)
             {
+                chefsBundle.patientCase = caseResult;
                 caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
             }
+
+            var driverInfoReply = new DriverInfoReply();
 
             if (caseResult.DriverLicenseNumber != null)
             {
                 var request = new DriverInfoRequest();
                 request.DriverLicence = caseResult.DriverLicenseNumber;
-                var reply = await icbcAdapterClient.GetDriverInfoAsync(request);
+                var result = await icbcAdapterClient.GetDriverInfoAsync(request);
             }
             else
             {
@@ -217,7 +223,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     "Not found error - could not find case details or driver license number");
             }
 
-            return Ok();
+            if (driverInfoReply.ResultStatus == ResultStatus.Success)
+            {
+                chefsBundle.driverInfoReply = driverInfoReply;
+            }
+            else
+            {
+                logger.LogInformation("Could not find icbc driver info details");
+                return StatusCode((int)HttpStatusCode.NotFound,
+                    "Not found error - could not find icbc driver info details");
+            }
+
+            return Ok(chefsBundle);
         }
     }
 }

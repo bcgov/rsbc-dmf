@@ -19,7 +19,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             _configuration = configuration;
             _mapper = mapper;
         }
-
+    
         // get document sub types that are children of driver document type code that matchs configuration value
         [HttpGet("documentSubType")]
         [ProducesResponseType(typeof(IEnumerable<ViewModels.DocumentSubTypes>), 200)]
