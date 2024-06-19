@@ -4234,47 +4234,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
-        /// <summary>
-        /// GetDpsProcessingDateForERAResults
-        /// </summary>
-        /// <returns></returns>
-        public DateTimeOffset GetDpsUploadDateForERAResults()
-        {
-            Guid? eraResultsGuid = null;
-
-            DateTimeOffset result = DateTimeOffset.UtcNow;
-
-            var tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "ERA Results").FirstOrDefault();
-            if (tempQuery != null)
-            {
-                eraResultsGuid = tempQuery.dfp_submittaltypeid.Value;
-            }
-
-
-            Guid? reExamResultsGuid = null;
-
-            tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "Road Test - ICBC Re-exam").FirstOrDefault();
-            if (tempQuery != null)
-            {
-                reExamResultsGuid = tempQuery.dfp_submittaltypeid.Value;
-            }
-
-            var mostRecentRecord = dynamicsContext.bcgov_documenturls
-                .Where(x => x.dfp_uploadeddate != null
-                      && x.dfp_dpsclass.Contains("1 - Priority")
-                        && (x._dfp_documenttypeid_value == eraResultsGuid || x._dfp_documenttypeid_value == reExamResultsGuid)
-                        )
-                   
-                    .FirstOrDefault();
-
-           if (mostRecentRecord != null)
-            {
-                result = DateTimeOffset.UtcNow;
-            }
-
-            return result;    
-           
-        }
+      
 
 
         /// <summary>
@@ -4287,32 +4247,45 @@ namespace Rsbc.Dmf.CaseManagement
 
             var dpsUploadedDate = GetDpsUploadedDate();
 
-            // This Current Date is applicable to only  ERA results and Road Test - ICBC Re-exam
-            var dpsUploadDateEraResults = GetDpsUploadDateForERAResults();
-
-            //Path 1 : This is non comply for all the documents except ERA results and Road Test
-
-            UpdateNonComplyDocumentsQuery(dpsUploadedDate);
-
-            // Path 2 : This is to set non comply on  ERA results and Road Test
-
-
-            UpdateNonComplyDocumentsQuery(dpsUploadDateEraResults);
-
-        }
-
-        private async void UpdateNonComplyDocumentsQuery(DateTimeOffset dpsUploadDate)
-        {
-            var query = from bcgov_documenturl
+            //Path 1 : This is for all the documents except ERA results and Road Test
+            var querydocuments = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
-                        where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open Required                                                  
-                        && bcgov_documenturl.dfp_compliancedate < dpsUploadDate
+                        where bcgov_documenturl.dfp_submittalstatus == 100000000// Open Required                                                  
+                        && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
 
                         select bcgov_documenturl;
 
 
-            DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(query);
+            DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(querydocuments);
 
+            UpdateNonComplyDocumentsQuery(nonComplyDocuments);
+
+            // Path 2 : This is to set non comply on  ERA results and Road Test
+            // This Current Date is applicable to only  ERA results and Road Test - ICBC Re-exam
+            var dpsUploadDateEraResults = DateTimeOffset.UtcNow;
+
+            if (dpsUploadDateEraResults != null)
+            {
+                var queryEraResults = from bcgov_documenturl
+                        in dynamicsContext.bcgov_documenturls
+                            where bcgov_documenturl.dfp_submittalstatus == 100000000  // Open Required
+                            && (bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "ERA Results" || bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "Road Test - ICBC Re-exam")
+                            && bcgov_documenturl.dfp_compliancedate < dpsUploadDateEraResults
+
+                            select bcgov_documenturl;
+
+
+                DataServiceCollection<bcgov_documenturl> nonComplyDocuments2 = new DataServiceCollection<bcgov_documenturl>(queryEraResults);
+
+                UpdateNonComplyDocumentsQuery(nonComplyDocuments2);
+            }
+            
+
+        }
+
+        private async void UpdateNonComplyDocumentsQuery(DataServiceCollection<bcgov_documenturl> nonComplyDocuments)
+        {
+            
             List<Guid> documentIds = new List<Guid>();
             foreach (var item in nonComplyDocuments)
             {
