@@ -4,9 +4,37 @@
   </div>
 </div>
 
-<a class="bc-gov-alertbanner-error">Login Process failed message</a>
+<div class="container">
 
-<p>Text to come outlining how and why PIdP is used and how to obtain a role.</p>
-<p>If you continue to experience difficulty, please contact RoadSafetyBC.</p>
-<p><b>Hours of operation:</b> Monday to Friday from 8am to 5pm</p>
-<p><b>Phone:</b> 1-855-387-7747</p>
+  <div class="bc-gov-alertbanner-info">
+    <div style="float:right">
+      <button
+        mat-flat-button
+        class="primaryButton"
+        (click)="manageRole()">
+          Manage Role
+      </button>
+    </div>
+    <div>
+      <mat-icon style="float:left">info-circle</mat-icon>
+      <div style="margin-left:40px">
+        <b>Login Process failed message</b>
+        <p>PIdP does not have a role specificed for your account.</p>
+      </div>
+    </div>
+  </div>
+
+  <br />
+
+  <div>
+    <p>Text to come outlining how and why PIdP is used and how to obtain a role.</p>
+    <p>If you continue to experience difficulty, please contact RoadSafetyBC.</p>
+    <p><b>Hours of operation:</b> Monday to Friday from 8am to 5pm</p>
+    <p>
+      <b>Phone:</b>&nbsp;<a href="tel:18553877747">1-855-387-7747</a>
+    </p>
+  </div>
+
+  <br />
+
+</div>
