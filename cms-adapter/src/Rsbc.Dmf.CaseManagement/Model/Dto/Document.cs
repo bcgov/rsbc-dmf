@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Rsbc.Dmf.CaseManagement.DomainModels
+namespace Rsbc.Dmf.CaseManagement.Dto
 {
     // Dynamics schema name bcgov_documenturl
     public class Document
     {
         // dfp_dmertype
-        public int DmerType { get; set; }
+        public string DmerType { get; set; }
 
         // dfp_dmerstatus
-        public int DmerStatus { get; set; }
+        public string DmerStatus { get; set; }
 
         // dfp_compliancedate
         public DateTimeOffset? ComplianceDate { get; set; }
@@ -27,5 +27,6 @@ namespace Rsbc.Dmf.CaseManagement.DomainModels
         public DocumentSubType DocumentSubType { get; set; }
 
         public string DocumentUrl { get; set; }
+        public Login Login { get; set; }
     }
 }

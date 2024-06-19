@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using static Rsbc.Dmf.CaseManagement.Service.DocumentManager;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -14,11 +17,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     {
         private readonly ICaseQueryService caseQueryService;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManagerClient _documentManagerClient;
+        private readonly IMapper _mapper;
 
-        public CasesController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient)
+        public CasesController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManager.DocumentManagerClient documentManagerClient, IMapper mapper)
         {
             this.caseQueryService = caseQueryService;
             _cmsAdapterClient = cmsAdapterClient;
+            _documentManagerClient = documentManagerClient;
+            _mapper = mapper;
         }
 
         [HttpGet("search/{idCode}")]
@@ -35,44 +42,50 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return BadRequest("Case Number  was invalid.");
             }
 
-            
-             var c = _cmsAdapterClient.GetCaseByIdCode(new GetCaseByIdCodeRequest { IdCode = idCode});
-            if (c != null && c.ResultStatus == ResultStatus.Success)
+            // get case by id code
+            var getCaseByIdCodeRequest = new GetCaseByIdCodeRequest { IdCode = idCode };
+            var @case = _cmsAdapterClient.GetCaseByIdCode(getCaseByIdCodeRequest);
+
+            // get DMER
+            var getDmerRequest = new CaseIdRequest { CaseId = @case.Item.CaseId };
+            var document = _documentManagerClient.GetDmer(getDmerRequest);
+
+            // TODO get ICBC driver name and birthdate
+
+            if (@case != null && @case.ResultStatus == ResultStatus.Success)
             {
                 result = new PatientCase();
 
-                result.CaseId = c.Item.CaseId;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.Name = c.Item.Name;
-                result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
+                result.CaseId = @case.Item.CaseId;
+                result.DmerType = document.Item.DmerType;
+                result.Status = document.Item.Status;
+                result.Name = document.Item.Provider.Name;
+                result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                 
-                result.IdCode = c.Item.IdCode;
-                result.FirstName = c.Item.FirstName;
-                result.LastName = c.Item.LastName;
-                result.MiddleName = c.Item.Middlename;
+                result.IdCode = @case.Item.IdCode;
+                // TODO get driver info from ICBC instead
+                result.FirstName = @case.Item.FirstName;
+                result.LastName = @case.Item.LastName;
+                result.MiddleName = @case.Item.Middlename;
                 
+                //if (@case.Item.DriverBirthDate != null)
+                //{
+                //    result.BirthDate = @case.Item.DriverBirthDate.ToDateTime();
+                //}
 
-                if (c.Item.BirthDate != null)
+                if (@case.Item.LatestComplianceDate != null)
                 {
-                    result.BirthDate = c.Item.BirthDate.ToDateTime();
+                    result.LatestComplianceDate = @case.Item.LatestComplianceDate.ToDateTimeOffset();
                 }
-
-                if (c.Item.LatestComplianceDate != null)
-                {
-                    result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
-                }
-
 
                 // set to null if no decision has been made.
                 if (result.BirthDate == DateTime.MinValue)
                 {
                     result.BirthDate = null;
                 }
-
             }
 
-            if(result == null)
+            if (result == null)
             {
                 return NotFound();
             }
@@ -85,7 +98,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("GetCaseById")]
-        public ActionResult GetCaseById([Required][FromRoute] string caseId)
+        public async Task<ActionResult> GetCaseById([Required][FromRoute] string caseId)
         {
             var result = new PatientCase();
 
@@ -110,6 +123,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DriverId = c.Item.DriverId;
                 result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
             }
+            // TODO handle failure
 
             // set to null if no decision has been made.
             if (result.BirthDate == DateTime.MinValue)

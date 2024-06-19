@@ -10,9 +10,12 @@ namespace Rsbc.Dmf.CaseManagement
     {
         public CaseAutoMapperProfile()
         {
-            CreateMap<incident, DomainModels.Case>()
+            CreateMap<incident, Dto.Case>()
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.ticketnumber))
-                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.customerid_contact));
+                .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.customerid_contact))
+                .ForMember(dest => dest.LatestComplianceDate, opt => opt.MapFrom(src => src.dfp_latestcompliancedate))
+                .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
+                .ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.bcgov_incident_bcgov_documenturl));
         }
     }
 
@@ -68,7 +71,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (@case.dfp_dmertype != null)
             {
-                result.DmerType = TranslateDmerTypeRaw(@case.dfp_dmertype);
+                result.DmerType = Translate.DmerType(@case.dfp_dmertype);
             }
 
             _dynamicsContext.LoadProperty(@case, nameof(incident.stageid_processstage));

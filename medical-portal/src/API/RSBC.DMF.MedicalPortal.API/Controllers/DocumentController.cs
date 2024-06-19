@@ -8,6 +8,8 @@ using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
+using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
+using Document = RSBC.DMF.MedicalPortal.API.ViewModels.Document;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {

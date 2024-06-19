@@ -1,5 +1,4 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
-using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +28,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseDetail> GetMostRecentCaseDetail(Guid driverId);
 
-        Task<CaseDetail> GetCaseByIdCode(string IdCode);
+        Task<Dto.Case> GetCaseByIdCode(string IdCode);
 
         Task<LegacyComment> GetComment(string commentId);
 

@@ -101,6 +101,29 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context) 
+        {
+            var result = new GetDmerReply();
+            
+            try {
+                var caseId = Guid.Parse(request.CaseId);
+                var dmerCase = _documentManager.GetDmer(caseId);
+                result.Item = new DmerCase();
+                result.Item.DmerType = dmerCase.DmerType;
+                result.Item.Status = dmerCase.DmerStatus;
+                result.Item.Provider = new Provider();
+                result.Item.Provider.Name = dmerCase.Login.FullName;
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
         public async override Task<GetDriverAndCaseDocumentsReply> GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest request, ServerCallContext context)
         {
             var result = new GetDriverAndCaseDocumentsReply();
