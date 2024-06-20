@@ -6,7 +6,20 @@
     flex-wrap:wrap ;
   }
 
+.activeCaseDetails{
+  display: flex;
+  flex-direction: row;
+}
 
+.activeCaseDetailsRow {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-between;
+  line-height: 24px;
+  padding: 24px;
+}
 
   .mat-mdc-card.caseStatus {
     background-color: white;
