@@ -33,7 +33,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("SearchCaseByIdCode")]
-        public ActionResult SearchCaseByIdCode([Required][FromRoute] string idCode)
+        public async Task<ActionResult> SearchCaseByIdCode([Required][FromRoute] string idCode)
         {
             PatientCase result = null;
 
@@ -44,11 +44,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             // get case by id code
             var getCaseByIdCodeRequest = new GetCaseByIdCodeRequest { IdCode = idCode };
-            var @case = _cmsAdapterClient.GetCaseByIdCode(getCaseByIdCodeRequest);
+            var @case = await _cmsAdapterClient.GetCaseByIdCodeAsync(getCaseByIdCodeRequest);
 
             // get DMER
             var getDmerRequest = new CaseIdRequest { CaseId = @case.Item.CaseId };
-            var document = _documentManagerClient.GetDmer(getDmerRequest);
+            var document = await _documentManagerClient.GetDmerAsync(getDmerRequest);
 
             // TODO get ICBC driver name and birthdate
 
