@@ -182,12 +182,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_bcgov_documenturl_To_CaseManagement_Document()
         {
             var document = new bcgov_documenturl();
-            document.dfp_dmertype = 1000000001;
-            document.dfp_dmerstatus = 1000000002;
+            document.dfp_dmertype = 100000001;
+            document.dfp_dmerstatus = 100000002;
             document.bcgov_CaseId = new incident();
             document.bcgov_CaseId.ticketnumber = "C123";
             document.bcgov_CaseId.customerid_contact = new contact();
             document.bcgov_CaseId.customerid_contact.fullname = "Joe Smithers";
+            document.bcgov_CaseId.customerid_contact.firstname = "Joe";
+            document.bcgov_CaseId.customerid_contact.lastname = "Smithers";
             document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
 
             var mappedDocument = _mapper.Map<Document>(document);

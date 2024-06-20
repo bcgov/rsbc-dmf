@@ -206,12 +206,6 @@ message GetCaseDetailReply {
     string errorDetail = 3;
 }
 
-message GetCaseByIdCodeReply {
-    CaseDetail item = 1;
-    ResultStatus resultStatus = 2;
-    string errorDetail = 3;
-}
-
 message GetCommentsReply {
     repeated LegacyComment items = 1;
     ResultStatus resultStatus = 2;
