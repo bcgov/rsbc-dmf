@@ -27,41 +27,61 @@
     <h2>Active Case Details</h2>
     <mat-card>
       <mat-card-content class="dmer-details">
-        <div>
-          <label>DMER Case Id</label>
-          <div>
-            <b>{{ caseDetails?.idCode }}</b>
+        <div class="activeCaseDetails">
+          <div style="padding: 30px; border-right: 2px solid grey">
+            <div>
+              <label>DMER Case Id</label>
+              <div>
+                <b>{{ caseDetails?.idCode }}</b>
+              </div>
+            </div>
           </div>
-        </div>
-        <div>
-          <label>DMER Type</label>
-          <div>
-            <b>{{ caseDetails?.dmerType }}</b>
-          </div>
-        </div>
-        <div>
-          <label>DMER Status</label>
-          <div>
-            <b>{{ caseDetails?.status }}</b>
-          </div>
-        </div>
-        <div>
-          <label>Submission Date</label>
-          <div>
-            <b>{{ caseDetails?.latestComplianceDate | date: "longDate" }}</b>
-          </div>
-        </div>
-        <div>
-          <label>Medical Practitioner on record</label>
-          <div>
-            <b></b>
-          </div>
-        </div>
-        <div>
-          <div>
-            <button mat-flat-button class="primaryButton" (click)="openPopup()">
-              Start DMER
-            </button>
+          <div style="flex: 1">
+            <div class="activeCaseDetailsRow">
+              <div>
+                <label>DMER Type</label>
+                <div>
+                  <b>{{ caseDetails?.dmerType }}</b>
+                </div>
+              </div>
+              <div>
+                <label>DMER Status</label>
+                <div>
+                  <b>{{ caseDetails?.status }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Submission Date</label>
+                <div>
+                  <b>{{
+                    caseDetails?.latestComplianceDate | date: "longDate"
+                  }}</b>
+                </div>
+              </div>
+              <div>
+                <label>Medical Practitioner on record</label>
+                <div>
+                  <b></b>
+                </div>
+              </div>
+              <div>
+                <div>
+                  <button
+                    mat-flat-button
+                    class="primaryButton"
+                    (click)="openPopup()"
+                  >
+                    Start DMER
+                  </button>
+                </div>
+              </div>
+              <div>
+                This needs to be submitted by :
+                <b>{{
+                  caseDetails?.latestComplianceDate | date: "longDate"
+                }}</b>
+              </div>
+            </div>
           </div>
         </div>
       </mat-card-content>
@@ -145,11 +165,13 @@
             [documents]="submissionRequirementDocuments"
             [driverId]="caseDetails?.driverId"
             (uploadedDocument)="onUploadDocument()"
+            [isLoading]="isLoading"
           ></app-submission-requirements>
         </mat-tab>
         <mat-tab label="Driver Submissions">
           <app-case-submissions
             [documents]="driverSubmissionDocuments"
+            [isLoading]="isLoading"
           ></app-case-submissions>
         </mat-tab>
       </mat-tab-group>

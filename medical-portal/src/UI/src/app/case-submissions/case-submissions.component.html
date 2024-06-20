@@ -100,26 +100,27 @@
         </mat-card>
       }
     </div>
-
-    <div *ngIf="!isLoading && documents?.length === 0">
-      <mat-card>
-        <mat-card-content>
-          <b>No Submission History records found for this case</b>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-  <div class="numberOfItems">
-    @if (documents && documents.length > 0) {
-      Showing {{ filteredDocuments.length }} of {{ documents.length }} records
+    @if (!isLoading && documents?.length === 0) {
+      <div>
+        <mat-card>
+          <mat-card-content>
+            <b>No Document Submission records found for this case</b>
+          </mat-card-content>
+        </mat-card>
+      </div>
     }
-    <br />
-    <a
-      *ngIf="filteredDocuments.length < documents.length"
-      (click)="viewMore()"
-      class="viewMore"
-      ><b style="color: #003366">View more records</b>
-      <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
-    >
   </div>
+  @if (documents && documents.length > 0) {
+    <div class="numberOfItems">
+      Showing {{ filteredDocuments.length }} of {{ documents.length }} records
+      <br />
+      <a
+        *ngIf="filteredDocuments.length < documents.length"
+        (click)="viewMore()"
+        class="viewMore"
+        ><b style="color: #003366">View more records</b>
+        <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+      >
+    </div>
+  }
 </div>
