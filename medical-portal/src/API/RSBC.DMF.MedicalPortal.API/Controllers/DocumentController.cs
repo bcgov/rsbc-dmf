@@ -10,6 +10,7 @@ using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
 using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
 using Document = RSBC.DMF.MedicalPortal.API.ViewModels.Document;
+using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {

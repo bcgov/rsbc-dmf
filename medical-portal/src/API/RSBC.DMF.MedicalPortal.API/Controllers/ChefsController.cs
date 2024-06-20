@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
@@ -7,11 +8,14 @@ using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Google.Protobuf;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
+using Rsbc.Dmf.IcbcAdapter;
 using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
-using ResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
+using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
+using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
+using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -23,6 +27,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IConfiguration configuration;
         private readonly ICaseQueryService caseQueryService;
         private readonly IUserService userService;
+        private readonly ICachedIcbcAdapterClient icbcAdapterClient;
         private readonly CaseManager.CaseManagerClient cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
 
@@ -33,6 +38,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             IUserService userService,
             ICaseQueryService caseQueryService,
             CaseManager.CaseManagerClient cmsAdapterClient,
+            ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             this.logger = logger;
@@ -41,6 +47,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             this.cmsAdapterClient = cmsAdapterClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;
+            this.icbcAdapterClient = icbcAdapterClient;
         }
 
         [HttpGet("submission")]
@@ -85,7 +92,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             try
             {
-                var jsonData = JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent, new LowercaseEnumConverter());
+                var jsonData =
+                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent, new LowercaseEnumConverter());
                 string formattedJson = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
                 logger.LogInformation("JSON Data: {0}", formattedJson);
                 return Ok(jsonData);
@@ -147,7 +155,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             var reply = documentStorageAdapterClient.UploadFile(jsonData);
 
-            if (reply.ResultStatus != ResultStatus.Success)
+            if (reply.ResultStatus != DocumentStorageResultStatus.Success)
             {
                 logger.LogError(
                     $"{nameof(PutSubmission)} error: unable to upload documents for this case - {reply.ErrorDetail}");
@@ -176,6 +184,57 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 $"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {dataFileKey}, dataFileSize: {dataFileSize}, reply: {JsonSerializer.Serialize(reply)}");
 
             return Ok(submission);
+        }
+
+        [HttpGet("{caseId}")]
+        [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(GetChefsBundle))]
+        public async Task<ActionResult> GetChefsBundle([Required] [FromRoute] string caseId)
+        {
+            var chefsBundle = new ChefsBundle();
+            var caseResult = new PatientCase();
+
+            if (string.IsNullOrEmpty(caseId) || caseId == Guid.Empty.ToString())
+            {
+                return BadRequest("Case id was invalid.");
+            }
+
+            var c = cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+            if (c != null && c.ResultStatus == CMSResultStatus.Success)
+            {
+                chefsBundle.patientCase = caseResult;
+                caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
+            }
+
+            var driverInfoReply = new DriverInfoReply();
+
+            if (caseResult.DriverLicenseNumber != null)
+            {
+                var request = new DriverInfoRequest();
+                request.DriverLicence = caseResult.DriverLicenseNumber;
+                var result = await icbcAdapterClient.GetDriverInfoAsync(request);
+            }
+            else
+            {
+                logger.LogInformation("Could not find DriverLicenseNumber in the case details");
+                return StatusCode((int)HttpStatusCode.NotFound,
+                    "Not found error - could not find case details or driver license number");
+            }
+
+            if (driverInfoReply.ResultStatus == ResultStatus.Success)
+            {
+                chefsBundle.driverInfoReply = driverInfoReply;
+            }
+            else
+            {
+                logger.LogInformation("Could not find icbc driver info details");
+                return StatusCode((int)HttpStatusCode.NotFound,
+                    "Not found error - could not find icbc driver info details");
+            }
+
+            return Ok(chefsBundle);
         }
     }
 }

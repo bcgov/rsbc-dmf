@@ -127,6 +127,7 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddCors(setupAction => setupAction.AddPolicy(Constants.CorsPolicy,
                 corsPolicyBuilder => corsPolicyBuilder.WithOrigins(config.Settings.Cors.AllowedOrigins)));
             services.AddDistributedMemoryCache();
+            services.AddMemoryCache();
             services.AddResponseCompression();
             services.AddHealthChecks().AddCheck("Medical Portal API", () => HealthCheckResult.Healthy("OK"),
                 new[] { HealthCheckReadyTag });
@@ -148,6 +149,10 @@ namespace RSBC.DMF.MedicalPortal.API
             // Add Document Storage Adapter
 
             services.AddDocumentStorageClient(configuration);
+
+            // Add ICBC Adapter
+            services.AddIcbcAdapterClient(configuration);
+            services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
             services.AddPidpAdapterClient(configuration);
             services.AddTransient<ICaseQueryService, CaseService>();
