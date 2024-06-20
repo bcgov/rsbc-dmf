@@ -46,7 +46,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Dto.Document, Document>();
             CreateMap<Dto.Case, Case>();
             CreateMap<Dto.Person, Person>();
-            CreateMap<Dto.Login, Login>();
+            //CreateMap<Dto.Login, Login>();
             CreateMap<Dto.DocumentType, DocumentType>();
         }
 

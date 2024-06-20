@@ -11,6 +11,7 @@ namespace Rsbc.Dmf.CaseManagement
         public CaseAutoMapperProfile()
         {
             CreateMap<incident, Dto.Case>()
+                // TODO rename
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.ticketnumber))
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.customerid_contact))
                 .ForMember(dest => dest.LatestComplianceDate, opt => opt.MapFrom(src => src.dfp_latestcompliancedate))
@@ -50,8 +51,6 @@ namespace Rsbc.Dmf.CaseManagement
                 LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname,
                 MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename,
                 LatestComplianceDate = @case.dfp_latestcompliancedate.Value
-                
-
             };
 
             if (@case.dfp_dfcmscasesequencenumber == null)
@@ -184,33 +183,6 @@ namespace Rsbc.Dmf.CaseManagement
                     break;
                 case 100000005:
                     result = "UNSL";
-                    break;
-            }
-            return result;
-        }
-
-        private string TranslateDmerTypeRaw(int? optionSetValue)
-        {
-            string result = null;
-            switch (optionSetValue)
-            {
-                case 100000000:
-                    result = "Commercial/NSC";
-                    break;
-                case 100000001:
-                    result = "Age";
-                    break;
-                case 100000002:
-                    result = "Industrial Road";
-                    break;
-                case 100000003:
-                    result = "Known Medical";
-                    break;
-                case 100000006:
-                    result = "Suspected Medical";
-                    break;
-                case 100000005:
-                    result = "No DMER";
                     break;
             }
             return result;

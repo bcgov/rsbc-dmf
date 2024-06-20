@@ -124,6 +124,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        // TODO driver id is no longer relevant and method name should be changed
         public async override Task<GetDriverAndCaseDocumentsReply> GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest request, ServerCallContext context)
         {
             var result = new GetDriverAndCaseDocumentsReply();

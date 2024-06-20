@@ -277,6 +277,7 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<Document>(document);
         }
 
+        // TODO loginId is not used
         public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
         {
             var documents = new List<bcgov_documenturl>();
