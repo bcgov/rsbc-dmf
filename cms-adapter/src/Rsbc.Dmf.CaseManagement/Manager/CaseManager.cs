@@ -872,9 +872,9 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        public async Task<Dto.Case> GetCaseByIdCode(string idCode)
+        public async Task<CaseDetail> GetCaseByIdCode(string idCode)
         {
-            Dto.Case result = null;
+            CaseDetail result = null;
 
             try
             {
@@ -885,8 +885,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (@case != null)
                 {
-                    result = new Dto.Case();
-                    result = _mapper.Map<Dto.Case>(@case);
+                    return await _caseMapper.Map(@case);
                 }
             }
             catch (Exception ex)

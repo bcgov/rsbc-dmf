@@ -108,11 +108,17 @@ namespace Rsbc.Dmf.CaseManagement.Service
             try {
                 var caseId = Guid.Parse(request.CaseId);
                 var dmerCase = _documentManager.GetDmer(caseId);
+                if (dmerCase == null)
+                {
+                    result.ResultStatus = ResultStatus.Fail;
+                    result.ErrorDetail = "No DMER found for the case";
+                    return result;
+                }
                 result.Item = new DmerCase();
-                result.Item.DmerType = dmerCase.DmerType;
-                result.Item.Status = dmerCase.DmerStatus;
+                result.Item.DmerType = dmerCase.DmerType ?? string.Empty;
+                result.Item.Status = dmerCase.DmerStatus ?? string.Empty;
                 result.Item.Provider = new Provider();
-                result.Item.Provider.Name = dmerCase.Login.FullName;
+                result.Item.Provider.Name = dmerCase.Login?.FullName ?? string.Empty;
                 result.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)

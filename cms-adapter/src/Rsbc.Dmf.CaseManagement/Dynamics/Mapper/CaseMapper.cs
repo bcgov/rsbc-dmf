@@ -34,24 +34,23 @@ namespace Rsbc.Dmf.CaseManagement
             var result = new CaseDetail();
 
             _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_DriverId));
-            result = new CaseDetail
-            {
-                CaseId = @case.incidentid.ToString(),
-                DriverId = @case.dfp_DriverId?.dfp_driverid.ToString() ?? string.Empty,
-                Title = @case.title,
-                IdCode = @case.ticketnumber,
-                OpenedDate = @case.createdon.Value,
-                LastActivityDate = @case.modifiedon.Value,
-                LatestDecision = null,
-                DecisionDate = null,
-                Name = @case.dfp_DriverId?.dfp_fullname,
-                BirthDate = @case.dfp_DriverId?.dfp_dob,
-                DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber,
-                FirstName = @case.dfp_DriverId?.dfp_PersonId?.firstname,
-                LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname,
-                MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename,
-                LatestComplianceDate = @case.dfp_latestcompliancedate.Value
-            };
+            result = new CaseDetail();
+            result.CaseId = @case.incidentid.ToString();
+            result.DriverId = @case.dfp_DriverId?.dfp_driverid.ToString() ?? string.Empty;
+            result.Title = @case.title;
+            result.IdCode = @case.ticketnumber;
+            result.OpenedDate = @case.createdon.Value;
+            result.LastActivityDate = @case.modifiedon.Value;
+            result.LatestDecision = null;
+            result.DecisionDate = null;
+            result.Name = @case.dfp_DriverId?.dfp_fullname;
+            result.DriverLicenseNumber = @case.dfp_DriverId?.dfp_licensenumber;
+            result.LatestComplianceDate = @case.dfp_latestcompliancedate.GetValueOrDefault();
+            // NOTE this is old code, now we get driver info from ICBC adapter, not Dynamics
+            result.BirthDate = @case.dfp_DriverId?.dfp_dob;
+            result.FirstName = @case.dfp_DriverId?.dfp_PersonId?.firstname;
+            result.LastName = @case.dfp_DriverId?.dfp_PersonId?.lastname;
+            result.MiddleName = @case.dfp_DriverId?.dfp_PersonId?.middlename;
 
             if (@case.dfp_dfcmscasesequencenumber == null)
             {
@@ -80,7 +79,7 @@ namespace Rsbc.Dmf.CaseManagement
             if (bpf != null)
             {
                 _dynamicsContext.LoadProperty(bpf, nameof(dfp_dmfcasebusinessprocessflow.activestageid));
-                result.Status = bpf.activestageid.stagename;
+                result.Status = bpf.activestageid?.stagename;
             }
 
             // case assignment
