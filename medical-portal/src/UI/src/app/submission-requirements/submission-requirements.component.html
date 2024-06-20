@@ -127,44 +127,59 @@
         </div>
       </div>
     }
+    <div class="list">
+      <div>
+        @for (document of documents; track document.documentUrl) {
+          <mat-card>
+            <mat-card-content class="submissionRequirement">
+              <div style="grid-area: A" class="submissionRequirementColumn">
+                <label>Due Date</label>
+                <div>
+                  <b>{{ getFormattedDate(document.dueDate) }}</b>
+                </div>
+              </div>
+              <div style="grid-area: B" class="submissionRequirementColumn">
+                <label>Submission Type</label>
+                <div>
+                  <b>{{ document.documentType }}</b>
+                </div>
+              </div>
+              <div style="grid-area: C">
+                <label>Description</label>
+                <div>
+                  <b>{{ document.description }}</b>
+                </div>
+              </div>
+              <div style="grid-area: D">
+                <div>
+                  <button
+                    mat-flat-button
+                    class="primaryButton"
+                    (click)="openPopup()"
+                  >
+                    Start DMER
+                  </button>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
 
-    <div>
-      @for (document of documents; track document.documentUrl) {
-        <mat-card>
-          <mat-card-content class="submissionRequirement">
-            <div style="grid-area: A" class="submissionRequirementColumn">
-              <label>Due Date</label>
-              <div>
-                <b>{{ getFormattedDate(document.dueDate) }}</b>
-              </div>
-            </div>
-            <div style="grid-area: B" class="submissionRequirementColumn">
-              <label>Submission Type</label>
-              <div>
-                <b>{{ document.documentType }}</b>
-              </div>
-            </div>
-            <div style="grid-area: C">
-              <label>Description</label>
-              <div>
-                <b>{{ document.description }}</b>
-              </div>
-            </div>
-            <div style="grid-area: D">
-              <div>
-                <button mat-flat-button class="primaryButton" (click)="openPopup()">
-                  Start DMER
-                </button>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      }
+      <div>
+        @if (!isLoading && documents.length === 0) {
+          <mat-card>
+            <mat-card-content>
+              <b>No Submission Requirement records found for this case</b>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
     </div>
-    <div class="numberOfItems">
-      @if (documents && documents.length > 0) {
+    @if (documents && documents.length > 0) {
+      <div class="numberOfItems">
         Showing {{ documents.length }} of {{ documents.length }} records
-      }
-    </div>
+      </div>
+    }
   </div>
 </div>

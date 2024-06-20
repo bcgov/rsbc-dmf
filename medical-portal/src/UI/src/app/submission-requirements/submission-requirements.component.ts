@@ -64,6 +64,7 @@ export class SubmissionRequirementsComponent {
   @Input() documents: CaseDocument[] = [];
   @Input() driverId?: string | null;
   @Output() uploadedDocument = new EventEmitter();
+  @Input() isLoading = true;
 
   documentSubTypes?: DocumentSubType[];
 
