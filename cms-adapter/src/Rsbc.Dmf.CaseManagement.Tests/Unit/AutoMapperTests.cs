@@ -206,7 +206,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_CaseManagement_Document_To_Service_Document()
         {
             var document = new Document();
-            document.DmerType = "Age";
+            document.DmerType = "2 - Age";
             document.DmerStatus = "Clean Pass";
             document.Case = new Dto.Case();
             document.Case.CaseNumber = "C123";
