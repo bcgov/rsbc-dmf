@@ -97,7 +97,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     }
                     result.FirstName = driverInfoReply.GivenName;
                     result.LastName = driverInfoReply.Surname;
-                    DateTimeOffset.TryParse(driverInfoReply.BirthDate, out DateTimeOffset parsedBirthdate);
+                    DateTime.TryParse(driverInfoReply.BirthDate, out DateTime parsedBirthdate);
                     result.BirthDate = parsedBirthdate;
                 }
             }

@@ -11,9 +11,9 @@ namespace RSBC.DMF.MedicalPortal.API
     {
         public MappingProfile()
         {
-            //#TODO Move this to shared folder
+            // TODO Move this to shared folder
             CreateMap<Timestamp, DateTimeOffset>()
-             .ConvertUsing(src => src.ToDateTimeOffset());
+                .ConvertUsing(src => src.ToDateTimeOffset());
 
             CreateMap<Rsbc.Dmf.CaseManagement.Service.Document, ViewModels.CaseDocument>()
                 .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.DmerType))
@@ -28,7 +28,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
                 .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
-
+                
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
 
             CreateMap<EndorsementDto, Endorsement>();

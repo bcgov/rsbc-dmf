@@ -11,7 +11,7 @@ public class PatientCase
 
     public string IdCode { get; set; }
 
-    public DateTimeOffset? DueDate { get; set; } 
+    public DateTime DueDate { get; set; } 
 
     public string DriverId { get; set; }
 
@@ -20,16 +20,16 @@ public class PatientCase
     // Patient
     public string Name { get; set; }
     public string DriverLicenseNumber { get; set; }
-    public DateTimeOffset? BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
 
     public string FirstName { get; set; }
     public string LastName { get; set; }
 
     public string MiddleName { get; set; }
 
-
+    // TODO do DMERs after Chef api changes are not causing errors
     // Documents
-    public IEnumerable<Document> Documents { get; set; }
+    //public IEnumerable<Document> Documents { get; set; }
 }
 
 public class Document
