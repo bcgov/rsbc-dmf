@@ -29,8 +29,6 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
                 .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
 
-            //CreateMap<Document, ViewModels.Document>();
-                
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
 
             CreateMap<EndorsementDto, Endorsement>();

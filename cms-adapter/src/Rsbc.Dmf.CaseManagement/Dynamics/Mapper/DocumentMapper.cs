@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()
-                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => Translate.DmerType(src.dfp_dmertype)))
+                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
                     .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
@@ -53,6 +53,24 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
 
+            private string TranslateDmerType(int? optionSetValue)
+            {
+                switch (optionSetValue)
+                {
+                    case 100000000:
+                        return "1 - NSC";
+                    case 100000001:
+                        return "2 - Age";
+                    case 100000002:
+                        return "3 - Industrial Road";
+                    case 100000003:
+                        return "4 - Known Condition";
+                    case 100000004:
+                        return "5 - Possible Condition";
+                    default:
+                        return null;
+                }
+            }
             private string TranslateDmerStatus(int? dmerStatus)
             {
                 switch (dmerStatus)

@@ -11,12 +11,11 @@ public class PatientCase
 
     public string IdCode { get; set; }
 
-    //public DateTime DueDate { get; set; } 
+    public DateTimeOffset? DueDate { get; set; } 
 
     public string DriverId { get; set; }
 
     public DateTimeOffset? LatestComplianceDate { get; set; }
-
 
     // Patient
     public string Name { get; set; }
