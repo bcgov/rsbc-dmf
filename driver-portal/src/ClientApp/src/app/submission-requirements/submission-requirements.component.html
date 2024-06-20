@@ -69,9 +69,13 @@
             <b>Note :Only one document can be uploaded at a time</b>
           </div>
 
-          <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+          <ngx-dropzone
+            [multiple]="false"
+            (change)="onSelect($event)"
+            id="dropzone-label"
+          >
             <ngx-dropzone-label for="dropzone-label"
-              ><div id="dropzone-label">
+              ><div>
                 <mat-icon> file_present </mat-icon>
                 <div>
                   <p>

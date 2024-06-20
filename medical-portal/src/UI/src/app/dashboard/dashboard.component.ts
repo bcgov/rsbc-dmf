@@ -25,6 +25,7 @@ import { CaseDocument, PatientCase } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
+import { PopupService } from '@app/popup/popup.service';
 
 interface Status {
   value: number;
@@ -91,6 +92,7 @@ export class DashboardComponent {
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
+    private popupService: PopupService,
   ) {
     console.info('At Dashboard Constructor');
   }
@@ -174,5 +176,9 @@ export class DashboardComponent {
     const pageSize = (this.filteredData?.length ?? 0) + this.pageSize;
 
     this.filteredData = this._allDocuments?.slice(0, pageSize);
+  }
+
+  openPopup() {
+    this.popupService.openPopup();
   }
 }

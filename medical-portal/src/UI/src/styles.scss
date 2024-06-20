@@ -42,7 +42,7 @@ table td {
   width: 100vw !important;
 }
 
-/* 
+/*
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
   opacity: 1 !important;
   color:rgb(0, 51, 102) !important;
@@ -128,15 +128,14 @@ table td {
 }
 
 .bc-gov-alertbanner-info {
-  background-color: #d9eaf7;
-}
-
-.bc-gov-alertbanner-info:before {
-  content: "\f05a";
+  background-color: #fef4dd;
+  border: solid 1px #fbdb8b;
+  color: #81692c;
+  margin:30px 60px 0 60px;padding:20px 20px 0 20px;
 }
 
 .bc-gov-alertbanner-info a {
-  color: #1a5a96;
+  color: #5b4a1f;
 }
 
 .bc-gov-alertbanner-success {
@@ -381,7 +380,7 @@ body {
     --mdc-filled-button-label-text-color: #f2f2f2;
     --mdc-filled-button-container-color: #003366;
   }
-  
+
   .mat-mdc-button-base.primaryButton:disabled, button[disabled] {
     border: 1px solid #999999;
     background: rgb(217, 228, 255);
@@ -406,7 +405,7 @@ body {
     color: #003366;
     text-decoration: underline;
     font-weight: bold;
-    
+
   }
 
   .numberOfItems {
@@ -421,15 +420,14 @@ body {
     color: #003366;
     flex-direction: column;
   }
-  
+
   .viewMore:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #003366;
   }
-  
+
   .ViewMoreIcon {
     position: absolute;
     color: #003366;
   }
-  

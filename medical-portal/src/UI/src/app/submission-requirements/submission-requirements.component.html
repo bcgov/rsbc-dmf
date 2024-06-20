@@ -69,9 +69,13 @@
           <b>Note :Only one document can be uploaded at a time</b>
         </div>
 
-        <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+        <ngx-dropzone
+          [multiple]="false"
+          (change)="onSelect($event)"
+          id="dropzone-label"
+        >
           <ngx-dropzone-label for="dropzone-label"
-            ><div id="dropzone-label">
+            ><div>
               <mat-icon> file_present </mat-icon>
               <div>
                 <p>
@@ -85,10 +89,8 @@
           >
           @if (fileToUpload) {
             <ngx-dropzone-preview [removable]="true" (removed)="onRemove()">
-              <ngx-dropzone-label for="dropzone-label-remove">
-                <span id="dropzone-label-remove">
-                  {{ fileToUpload.name }} ({{ fileToUpload.type }})
-                </span>
+              <ngx-dropzone-label>
+                <span> {{ fileToUpload.name }} ({{ fileToUpload.type }}) </span>
               </ngx-dropzone-label>
             </ngx-dropzone-preview>
           }
@@ -107,7 +109,12 @@
         </div>
 
         <div class="buttonGroup">
-          <button mat-flat-button class="primaryButton" (click)="fileUpload()" [disabled]="!confirmed.checked">
+          <button
+            mat-flat-button
+            class="primaryButton"
+            (click)="fileUpload()"
+            [disabled]="!confirmed.checked"
+          >
             Upload File
           </button>
           <button
@@ -145,7 +152,7 @@
             </div>
             <div style="grid-area: D">
               <div>
-                <button mat-flat-button class="primaryButton">
+                <button mat-flat-button class="primaryButton" (click)="openPopup()">
                   Start DMER
                 </button>
               </div>

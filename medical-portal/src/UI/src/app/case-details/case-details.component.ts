@@ -156,13 +156,15 @@ export class CaseDetailsComponent implements OnInit {
         }
         this.allDocuments = documents;
 
+        const submissionRequirementDocuments: CaseDocument[] = [];
+        const driverSubmissionDocuments: CaseDocument[] = [];
         documents.forEach((doc) => {
           if (
             [SubmittalStatusEnum.OpenRequired].includes(
               doc.submittalStatus as SubmittalStatusEnum,
             )
           ) {
-            this.submissionRequirementDocuments.push(doc);
+            submissionRequirementDocuments.push(doc);
           } else if (
             ![
               SubmittalStatusEnum.OpenRequired,
@@ -170,9 +172,12 @@ export class CaseDetailsComponent implements OnInit {
               SubmittalStatusEnum.Sent,
             ].includes(doc.submittalStatus as SubmittalStatusEnum)
           ) {
-            this.driverSubmissionDocuments.push(doc);
+            driverSubmissionDocuments.push(doc);
           }
         });
+
+        this.submissionRequirementDocuments = submissionRequirementDocuments;
+        this.driverSubmissionDocuments = driverSubmissionDocuments;
       });
   }
 

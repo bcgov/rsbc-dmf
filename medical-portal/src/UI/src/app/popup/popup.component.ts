@@ -83,6 +83,7 @@ export class PopupComponent {
         });
     }
     if (status === 'FINAL') {
+      console.log('close popup');
       this.closePopup();
     }
   }
