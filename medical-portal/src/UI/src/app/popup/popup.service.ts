@@ -8,8 +8,12 @@ import { PopupComponent } from './popup.component';
 export class PopupService {
   constructor(private dialog: MatDialog) {}
 
-  openPopup() {
-    this.dialog.open(PopupComponent, { width: '80vw', maxWidth: '80vw' });
+  openPopup(caseId?: string | null) {
+    this.dialog.open(PopupComponent, {
+      data: { caseId },
+      width: '80vw',
+      maxWidth: '80vw',
+    });
   }
 
   closePopup() {

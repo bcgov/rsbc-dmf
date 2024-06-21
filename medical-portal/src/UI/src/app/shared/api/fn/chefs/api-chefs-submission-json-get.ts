@@ -8,21 +8,19 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ChefsSubmission } from '../../models/chefs-submission';
 
-export interface ApiChefsSubmissionPut$Params {
-  caseId?: string | null;
-  body?: ChefsSubmission;
+export interface ApiChefsSubmissionGet$Params {
+  caseId: string | null;
 }
 
-export function apiChefsSubmissionPut(
+export function apiChefsSubmissionGet(
   http: HttpClient,
   rootUrl: string,
-  params?: ApiChefsSubmissionPut$Params,
+  params?: ApiChefsSubmissionGet$Params,
   context?: HttpContext,
 ): Observable<StrictHttpResponse<ChefsSubmission>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
+  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionGet.PATH, 'get');
   if (params) {
-    rb.query('caseId', params.caseId);
-    rb.body(params.body, 'application/*+json');
+    rb.query('caseId', params.caseId, {});
   }
   return http
     .request(
@@ -36,4 +34,4 @@ export function apiChefsSubmissionPut(
     );
 }
 
-apiChefsSubmissionPut.PATH = '/api/Chefs/submission';
+apiChefsSubmissionGet.PATH = '/api/Chefs/submission';
