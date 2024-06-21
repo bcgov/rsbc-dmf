@@ -40,10 +40,6 @@ export class AccessTokenService implements IAccessTokenService {
     );
   }
 
-  public loadBrokerProfile(forceReload?: boolean): Observable<BrokerProfile> {
-    return from(this.keycloakService.loadUserProfile(forceReload)) as Observable<BrokerProfile>;
-  }
-
   public roles(): string[] {
     return this.keycloakService.getUserRoles();
   }
