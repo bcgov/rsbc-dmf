@@ -6,10 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ChefsSubmission } from '../../models/chefs-submission';
+import { SubmissionStatus } from '../../models/submission-status';
+import { ChefsSubmission } from '../../models';
 
 export interface ApiChefsSubmissionGet$Params {
-  caseId: string | null;
+  caseId?: string;
+  status?: SubmissionStatus;
 }
 
 export function apiChefsSubmissionGet(
@@ -21,7 +23,9 @@ export function apiChefsSubmissionGet(
   const rb = new RequestBuilder(rootUrl, apiChefsSubmissionGet.PATH, 'get');
   if (params) {
     rb.query('caseId', params.caseId, {});
+    rb.query('status', params.status, {});
   }
+
   return http
     .request(
       rb.build({ responseType: 'json', accept: 'application/json', context }),
@@ -29,7 +33,9 @@ export function apiChefsSubmissionGet(
     .pipe(
       filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<any>;
+        return (r as HttpResponse<any>).clone({
+          body: undefined,
+        }) as StrictHttpResponse<any>;
       }),
     );
 }

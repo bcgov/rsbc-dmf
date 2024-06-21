@@ -11,5 +11,5 @@ if (
   return;
 
 // Call the function when you need to send the message and only when data is present
-window.putChefsSubmission('FINAL');
+window.putChefsSubmission('Final');
 window.isSubmitted = true;

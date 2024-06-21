@@ -5,26 +5,28 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
-import { ChefsBundle } from '../../models/chefs-bundle';
 
-export interface ApiChefsBundleGet$Params {
-  caseId: string | null;
+import { ChefsSubmission } from '../../models/chefs-submission';
+
+export interface ApiChefsSubmissionPut$Params {
+  caseId: string;
+  body: ChefsSubmission;
 }
 
-export function apiChefsBundleGet(
+export function apiChefsSubmissionPut(
   http: HttpClient,
   rootUrl: string,
-  params?: ApiChefsBundleGet$Params,
+  params?: ApiChefsSubmissionPut$Params,
   context?: HttpContext,
-): Observable<StrictHttpResponse<ChefsBundle>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsBundleGet.PATH, 'get');
+): Observable<StrictHttpResponse<ChefsSubmission>> {
+  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
   if (params) {
     rb.query('caseId', params.caseId, {});
+    rb.body(params.body, 'application/*+json');
   }
+
   return http
-    .request(
-      rb.build({ responseType: 'json', accept: 'application/json', context }),
-    )
+    .request(rb.build({ responseType: 'text', accept: '*/*', context }))
     .pipe(
       filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
@@ -33,4 +35,4 @@ export function apiChefsBundleGet(
     );
 }
 
-apiChefsBundleGet.PATH = '/api/Chefs/bundle';
+apiChefsSubmissionPut.PATH = '/api/Chefs/submission';

@@ -5,25 +5,23 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
+import { ChefsSubmission } from '../../models';
 
-import { ChefsSubmission } from '../../models/chefs-submission';
-
-export interface ApiChefsSubmissionPut$Params {
-  caseId?: string | null;
-  body?: ChefsSubmission;
+export interface ApiChefsBundleGet$Json$Params {
+  caseId: string;
 }
 
-export function apiChefsSubmissionPut(
+export function apiChefsBundleGet$Json(
   http: HttpClient,
   rootUrl: string,
-  params?: ApiChefsSubmissionPut$Params,
+  params: ApiChefsBundleGet$Json$Params,
   context?: HttpContext,
 ): Observable<StrictHttpResponse<ChefsSubmission>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
+  const rb = new RequestBuilder(rootUrl, apiChefsBundleGet$Json.PATH, 'get');
   if (params) {
-    rb.query('caseId', params.caseId);
-    rb.body(params.body, 'application/*+json');
+    rb.query('caseId', params.caseId, {});
   }
+
   return http
     .request(
       rb.build({ responseType: 'json', accept: 'application/json', context }),
@@ -36,4 +34,4 @@ export function apiChefsSubmissionPut(
     );
 }
 
-apiChefsSubmissionPut.PATH = '/api/Chefs/submission';
+apiChefsBundleGet$Json.PATH = '/api/Chefs/bundle';

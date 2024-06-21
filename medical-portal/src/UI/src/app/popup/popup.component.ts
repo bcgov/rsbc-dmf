@@ -11,6 +11,7 @@ import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChefsService } from '../shared/api/services';
 import { v4 as uuidv4 } from 'uuid';
+import { SubmissionStatus } from '@app/shared/api/models';
 
 @Component({
   selector: 'app-popup',
@@ -32,7 +33,9 @@ export class PopupComponent {
     private sanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) public data: { caseId: string | null },
   ) {
-    this.caseId = data.caseId;
+    if (data.caseId) {
+      this.caseId = data.caseId;
+    }
   }
 
   getSourceURL(): SafeResourceUrl {
@@ -75,7 +78,12 @@ export class PopupComponent {
 
   receiveMessage(event: {
     origin: string;
-    data: { instanceId: string; type: string; status: string; submission: any };
+    data: {
+      instanceId: string;
+      type: string;
+      status: SubmissionStatus;
+      submission: any;
+    };
   }): void {
     if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
 
@@ -95,17 +103,19 @@ export class PopupComponent {
     );
     console.log(event);
 
-    if (type === 'GET_CHEFS_BUNDLE') {
-      let params: Parameters<ChefsService['apiChefsBundleGet']>[0] = {
+    if (type === 'GET_CHEFS_BUNDLE' && this.caseId) {
+      let params: Parameters<ChefsService['apiChefsBundleGet$Json']>[0] = {
         caseId: this.caseId,
       };
 
-      this.chefsService.apiChefsBundleGet({ ...params }).subscribe((bundle) => {
-        console.log(bundle);
-        this.sendMessage(type, bundle);
-        return bundle;
-      });
-    } else if (type === 'GET_CHEFS_SUBMISSION') {
+      this.chefsService
+        .apiChefsBundleGet$Json({ ...params })
+        .subscribe((bundle) => {
+          console.log(bundle);
+          this.sendMessage(type, bundle);
+          return bundle;
+        });
+    } else if (type === 'GET_CHEFS_SUBMISSION' && this.caseId) {
       let params: Parameters<ChefsService['apiChefsSubmissionGet']>[0] = {
         caseId: this.caseId,
       };
@@ -128,7 +138,12 @@ export class PopupComponent {
           }
         },
       );
-    } else if (type === 'PUT_CHEFS_SUBMISSION' && status && submission) {
+    } else if (
+      type === 'PUT_CHEFS_SUBMISSION' &&
+      status &&
+      submission &&
+      this.caseId
+    ) {
       let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
         caseId: this.caseId,
         body: {
@@ -143,7 +158,7 @@ export class PopupComponent {
           return submission;
         });
     }
-    if (status === 'FINAL') {
+    if (status === SubmissionStatus.Final) {
       this.closePopup();
     }
   }
