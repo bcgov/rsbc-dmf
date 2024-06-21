@@ -18,7 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { CaseDocument, DocumentSubType } from '@app/shared/api/models';
+import { CaseDocument, DocumentSubTypes } from '@app/shared/api/models';
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ApiConfiguration } from '@app/shared/api/api-configuration';
@@ -66,7 +66,7 @@ export class SubmissionRequirementsComponent {
   @Output() uploadedDocument = new EventEmitter();
   @Input() isLoading = true;
 
-  documentSubTypes?: DocumentSubType[];
+  documentSubTypes?: DocumentSubTypes[];
 
   uploadForm = this.fb.group({
     documentSubType: ['', Validators.required],

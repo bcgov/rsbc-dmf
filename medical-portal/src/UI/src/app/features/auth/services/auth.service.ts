@@ -37,6 +37,15 @@ export class AuthService implements IAuthService {
     return this.keycloakService.isLoggedIn() && this.keycloakService.isUserInRole(Role.Enrolled);
   }
 
+  public getRoles(): Role[] {
+    const roleNames = this.keycloakService
+      .getUserRoles()
+      .filter((role) => role !== Role.Enrolled);
+    return roleNames
+      .map((role) => Object.values(Role).find((value) => value === role))
+      .filter((role) => role !== undefined) as Role[];
+  }
+
   public logout(redirectUri: string): Observable<void> {
     return from(this.keycloakService.logout(redirectUri));
   }
