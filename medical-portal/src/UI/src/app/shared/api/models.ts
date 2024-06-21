@@ -13,5 +13,6 @@ export { PatientCase } from './models/patient-case';
 export { PractitionerBridge } from './models/practitioner-bridge';
 export { ProblemDetails } from './models/problem-details';
 export { ProviderRole } from './models/provider-role';
+export { SubmissionStatus } from './models/submission-status';
 export { Timestamp } from './models/timestamp';
 export { UserProfile } from './models/user-profile';

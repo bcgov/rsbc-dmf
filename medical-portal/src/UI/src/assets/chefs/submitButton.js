@@ -5,11 +5,11 @@ if (
   !window ||
   !window.parent ||
   !window.parent.postMessage ||
-  !window.sendSubmissionToParent ||
+  !window.putChefsSubmission ||
   !data
 )
   return;
 
 // Call the function when you need to send the message and only when data is present
-window.sendSubmissionToParent('FINAL');
+window.putChefsSubmission('Final');
 window.isSubmitted = true;
