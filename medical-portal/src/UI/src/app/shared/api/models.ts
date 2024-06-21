@@ -2,6 +2,7 @@
 /* eslint-disable */
 export { ApplicationVersionInfo } from './models/application-version-info';
 export { CaseDocument } from './models/case-document';
+export { ChefsSubmission } from './models/chefs-submission';
 export { ClinicUserProfile } from './models/clinic-user-profile';
 export { DmerCaseListItem } from './models/dmer-case-list-item';
 export { Document } from './models/document';
