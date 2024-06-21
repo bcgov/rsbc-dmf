@@ -6,12 +6,12 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 
 import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CasesService } from './services/cases.service';
+import { ChefsService } from './services/chefs.service';
 import { ConfigService } from './services/config.service';
 import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { PidpService } from './services/pidp.service';
 import { ProfileService } from './services/profile.service';
-import { ChefsService } from './services/chefs.service';
 
 /**
  * Module that provides all services and configuration.
@@ -23,12 +23,12 @@ import { ChefsService } from './services/chefs.service';
   providers: [
     ApplicationVersionInfoService,
     CasesService,
+    ChefsService,
     ConfigService,
     DocumentService,
     DocumentTypeService,
     PidpService,
     ProfileService,
-    ChefsService,
     ApiConfiguration
   ],
 })

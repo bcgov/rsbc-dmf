@@ -51,20 +51,22 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("submission")]
-        public async Task<ActionResult> GetSubmission([FromQuery] SubmissionStatus status = SubmissionStatus.Final)
+        public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
+            [FromQuery] SubmissionStatus status = SubmissionStatus.Draft)
         {
             UserContext profile = await this.userService.GetCurrentUserContext();
-            logger.LogInformation($"GET Submission - SubmissionStatus: {status}, userId is {profile.Id}");
+            logger.LogInformation(
+                $"GET Submission - SubmissionStatus: {status}, userId is {profile.Id}, caseId is ${caseId}");
 
             string documentUrl = "";
 
             if (status == SubmissionStatus.Draft)
             {
-                documentUrl = $"{DATA_ENTITY_NAME}/{profile.Id}/{DATA_FILENAME}";
+                documentUrl = $"{DATA_ENTITY_NAME}/{caseId}/{DATA_FILENAME}";
             }
             else if (status == SubmissionStatus.Final)
             {
-                documentUrl = $"dfp/triage-request/{profile.Id}.json";
+                documentUrl = $"dfp/triage-request/{caseId}.json";
             }
 
             if (documentUrl == "")
@@ -106,7 +108,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpPut("submission")]
-        public async Task<ActionResult> PutSubmission([FromBody] ChefsSubmission submission)
+        public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromBody] ChefsSubmission submission)
         {
             UserContext profile = await this.userService.GetCurrentUserContext();
 
@@ -129,7 +131,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     Data = ByteString.CopyFromUtf8(jsonString),
                     EntityName = DATA_ENTITY_NAME,
                     FileName = DATA_FILENAME,
-                    FolderName = profile.Id
+                    FolderName = caseId
                 };
             }
             else if (status == SubmissionStatus.Final)
@@ -139,7 +141,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     ContentType = "application/json",
                     Data = ByteString.CopyFromUtf8(jsonString),
                     EntityName = "dfp",
-                    FileName = $"{profile.Id}.json",
+                    FileName = $"{caseId}.json",
                     FolderName = "triage-request"
                 };
             }
@@ -186,20 +188,28 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return Ok(submission);
         }
 
-        [HttpGet("{caseId}")]
+        [HttpGet("bundle")]
         [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
-        public async Task<ActionResult> GetChefsBundle([Required] [FromRoute] string caseId)
+        public async Task<ActionResult> GetChefsBundle([Required] [FromQuery] string caseId)
         {
             var chefsBundle = new ChefsBundle();
             var caseResult = new PatientCase();
 
             if (string.IsNullOrEmpty(caseId) || caseId == Guid.Empty.ToString())
             {
-                return BadRequest("Case id was invalid.");
+                return BadRequest("Bad caseId due to null or empty string.");
             }
+
+            if (!string.IsNullOrEmpty(caseId) && !Guid.TryParse(caseId, out Guid parsedUuid))
+            {
+                return BadRequest("Bad caseId due to invalid Guid format.");
+            }
+
+            // set caseId to return to CHEFS
+            chefsBundle.caseId = caseId;
 
             var c = cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CMSResultStatus.Success)
@@ -214,7 +224,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 var request = new DriverInfoRequest();
                 request.DriverLicence = caseResult.DriverLicenseNumber;
-                var result = await icbcAdapterClient.GetDriverInfoAsync(request);
+                driverInfoReply = await icbcAdapterClient.GetDriverInfoAsync(request);
             }
             else
             {
