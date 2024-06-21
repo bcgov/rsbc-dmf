@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { RoleDescription } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { PidpService } from '@app/shared/api/services/pidp.service';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
@@ -26,7 +27,10 @@ export class AccountComponent {
       this.fullName = profile.firstName + " " + profile.lastName;
       this.email = profile.email + "";
     });
-    this.role = this.authService.getRoles().join(", ");
+    this.role = this.authService
+      .getRoles()
+      .map((role) => RoleDescription.get(role))
+      .join(", ");
 
     this.pidpService.apiPidpEndorsementsGet$Json().subscribe((data) =>
     {
