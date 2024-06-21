@@ -317,7 +317,6 @@ message GetCaseByIdCodeRequest {
     string idCode= 1;
 }
 
-
 message EmptyRequest {	
 }
 
@@ -527,6 +526,7 @@ service DocumentManager {
     rpc GetDocumentsByTypeForUsers(GetDocumentsByTypeForUsersRequest) returns (GetDocumentsByTypeForUsersReply);
 	rpc GetDocumentSubTypes(DocumentTypeRequest) returns (GetDocumentSubTypesReply);
 	rpc GetDocumentSubTypeGuid(DocumentIdRequest) returns (GetDocumentSubTypeIdReply);
+    rpc GetDmer(CaseIdRequest) returns (GetDmerReply);
     rpc GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest) returns (GetDriverAndCaseDocumentsReply);
 }
 
@@ -541,10 +541,9 @@ message GetDocumentsByTypeForUsersReply {
     repeated Document items = 3;
 }
 
-// clean, use Dynamics display name when adding new fields
  message Document {
-     int32 dmerType = 1;
-     int32 dmerStatus = 2;
+     string dmerType = 1;
+     string dmerStatus = 2;
      google.protobuf.Timestamp complianceDate = 3;
      Case case = 4;
      string submittalStatus = 5;
@@ -556,16 +555,19 @@ message GetDocumentsByTypeForUsersReply {
  }
 
  message DocumentType{
-     
 	 string documentName = 1;
  }
 
-
-
- message GetDriverAndCaseDocumentsRequest{
+ message GetDriverAndCaseDocumentsRequest {
      string loginId = 1;
      Driver Driver = 2;
      string caseId = 3;
+ }
+
+ message GetDmerReply {
+     DmerCase item = 1;
+     ResultStatus resultStatus = 2;
+     string errorDetail = 3;
  }
 
  message GetDriverAndCaseDocumentsReply {

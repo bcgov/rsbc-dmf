@@ -872,33 +872,25 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        /// <summary>
-        /// Get Case By IdCode
-        /// </summary>
-        /// <param name="IdCode"></param>
-        /// <returns></returns>
-        public async Task<CaseDetail> GetCaseByIdCode(string IdCode)
+        public async Task<CaseDetail> GetCaseByIdCode(string idCode)
         {
             CaseDetail result = null;
 
             try
             {
-                var fetchedCase = dynamicsContext.incidents
-                    .Expand(d => d.dfp_DriverId)
-                    .Expand(d => d.dfp_DriverId.dfp_PersonId)
-
-                    //.Expand(d => d.bcgov_incident_bcgov_documenturl)
-                    .Where( d => d.ticketnumber == IdCode)
+                var @case = dynamicsContext.incidents
+                    .Expand(i => i.dfp_DriverId)
+                    .Where(i => i.ticketnumber == idCode)
                     .FirstOrDefault();
-                if (fetchedCase != null)
+
+                if (@case != null)
                 {
-                    result = await _caseMapper.Map(fetchedCase);
-                    //result.DpsProcessingDate = GetDpsProcessingDate();
+                    return await _caseMapper.Map(@case);
                 }
             }
             catch (Exception ex)
             {
-                Log.Logger.Error(ex, $"Error getting case {IdCode}");
+                Log.Logger.Error(ex, $"Error getting case {idCode}");
             }
 
             return result;
@@ -2443,6 +2435,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="cases"></param>
         /// <returns></returns>
+        [Obsolete]
         private CaseSearchReply MapCases(IEnumerable<incident> cases)
         {
             return new CaseSearchReply

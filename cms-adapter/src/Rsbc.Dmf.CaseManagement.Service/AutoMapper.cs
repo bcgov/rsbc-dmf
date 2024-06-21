@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.DependencyInjection;
+using Rsbc.Dmf.CaseManagement.Dynamics.Mapper;
 using System;
 using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
@@ -42,10 +43,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
             CreateMap<FullAddress, CaseManagement.FullAddress>();
-            CreateMap<DomainModels.Document, Document>();
-            CreateMap<DomainModels.Case, Case>();
-            CreateMap<DomainModels.Person, Person>();
-            CreateMap<DomainModels.DocumentType, DocumentType>();
+            CreateMap<Dto.Document, Document>();
+            CreateMap<Dto.Case, Case>();
+            CreateMap<Dto.Person, Person>();
+            CreateMap<Dto.DocumentType, DocumentType>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
@@ -63,6 +64,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new CallbackMapperProfile());
                 mc.AddProfile(new CaseAutoMapperProfile());
                 mc.AddProfile(new ContactAutoMapperProfile());
+                mc.AddProfile(new DriverAutoMapperProfile());
+                mc.AddProfile(new LoginAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Rsbc.Dmf.CaseManagement.DomainModels;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
@@ -38,8 +38,8 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()
-                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.dfp_dmertype))
-                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.dfp_dmerstatus))
+                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID))
@@ -47,12 +47,46 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => TranslateSubmittalStatusInt(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
-                    .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()));
-
-
+                    .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
+                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId));
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
+
+            private string TranslateDmerType(int? optionSetValue)
+            {
+                switch (optionSetValue)
+                {
+                    case 100000000:
+                        return "1 - NSC";
+                    case 100000001:
+                        return "2 - Age";
+                    case 100000002:
+                        return "3 - Industrial Road";
+                    case 100000003:
+                        return "4 - Known Condition";
+                    case 100000004:
+                        return "5 - Possible Condition";
+                    default:
+                        return null;
+                }
+            }
+            private string TranslateDmerStatus(int? dmerStatus)
+            {
+                switch (dmerStatus)
+                {
+                    case 100000000:
+                        return "Adjudicate";
+                    case 100000001:
+                        return "Reject";
+                    case 100000002:
+                        return "Clean Pass";
+                    case 100000003:
+                        return "Manual Pass";
+                    default:
+                        return null;
+                }
+            }
         }
 
         /// <summary>

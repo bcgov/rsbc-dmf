@@ -8,6 +8,8 @@ using Pssg.DocumentStorageAdapter;
 using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
+using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
+using Document = RSBC.DMF.MedicalPortal.API.ViewModels.Document;
 using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -62,6 +64,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
         }
 
+        // TODO not using this method, consider removing
         [HttpGet("GetDriverAndCaseDocuments")]
         [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
         [ProducesResponseType(401)]
@@ -102,10 +105,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         }
 
-        /// <summary>
-        /// Get all documents for a given driver but filter out documents without a url
-        /// </summary>
-        /// <returns>IEnumerable&lt;Document&gt;</returns>
         [HttpGet("{driverId}/AllDocuments")]
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
         [ProducesResponseType(401)]

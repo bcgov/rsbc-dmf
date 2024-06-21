@@ -52,14 +52,14 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
             if (reply != null)
             {
                 result.AddressLine1 = reply.ToAddressLine1();
-                result.BirthDate = reply.BIDT?.ToString();
-                result.City = reply.ADDR?.CITY;
-                result.GivenName = reply.INAM?.GIV1;
-                result.Postal = reply.ADDR?.POST;
-                result.Province = reply.ADDR?.PROV;
-                result.Country = reply.ADDR?.CNTY;
-                result.Sex = reply.SEX;
-                result.Surname = reply.INAM?.SURN;
+                result.BirthDate = reply.BIDT?.ToString() ?? string.Empty;
+                result.City = reply.ADDR?.CITY ?? string.Empty;
+                result.GivenName = reply.INAM?.GIV1 ?? string.Empty;
+                result.Postal = reply.ADDR?.POST ?? string.Empty;
+                result.Province = reply.ADDR?.PROV ?? string.Empty;
+                result.Country = reply.ADDR?.CNTY ?? string.Empty;
+                result.Sex = reply.SEX ?? string.Empty;
+                result.Surname = reply.INAM?.SURN ?? string.Empty;
                 result.ResultStatus = ResultStatus.Success;
             }
 

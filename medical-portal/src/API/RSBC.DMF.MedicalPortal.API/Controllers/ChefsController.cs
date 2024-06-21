@@ -16,6 +16,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
+using Document = RSBC.DMF.MedicalPortal.API.ViewModels.Document;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {

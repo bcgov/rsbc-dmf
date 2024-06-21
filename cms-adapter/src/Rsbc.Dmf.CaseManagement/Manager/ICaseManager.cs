@@ -1,5 +1,4 @@
 ﻿using Rsbc.Dmf.CaseManagement.Dynamics;
-using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

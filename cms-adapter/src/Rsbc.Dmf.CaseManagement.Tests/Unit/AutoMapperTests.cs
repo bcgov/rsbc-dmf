@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Google.Protobuf.Collections;
-using Rsbc.Dmf.CaseManagement.DomainModels;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 //using SharedUtils;
 using System;
@@ -182,19 +182,21 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_bcgov_documenturl_To_CaseManagement_Document()
         {
             var document = new bcgov_documenturl();
-            document.dfp_dmertype = 10000001;
-            document.dfp_dmerstatus = 10000002;
+            document.dfp_dmertype = 100000001;
+            document.dfp_dmerstatus = 100000002;
             document.bcgov_CaseId = new incident();
             document.bcgov_CaseId.ticketnumber = "C123";
             document.bcgov_CaseId.customerid_contact = new contact();
             document.bcgov_CaseId.customerid_contact.fullname = "Joe Smithers";
+            document.bcgov_CaseId.customerid_contact.firstname = "Joe";
+            document.bcgov_CaseId.customerid_contact.lastname = "Smithers";
             document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
 
             var mappedDocument = _mapper.Map<Document>(document);
 
             Assert.NotNull(mappedDocument);
-            Assert.Equal(document.dfp_dmertype, mappedDocument.DmerType);
-            Assert.Equal(document.dfp_dmerstatus, mappedDocument.DmerStatus);
+            Assert.Equal("2 - Age", mappedDocument.DmerType);
+            Assert.Equal("Clean Pass", mappedDocument.DmerStatus);
             Assert.Equal(document.bcgov_CaseId.ticketnumber, mappedDocument.Case.CaseNumber);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.fullname, mappedDocument.Case.Person.FullName);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.birthdate, mappedDocument.Case.Person.Birthday.Value);
@@ -204,16 +206,17 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_CaseManagement_Document_To_Service_Document()
         {
             var document = new Document();
-            document.DmerType = 10000001;
-            document.DmerStatus = 10000002;
-            document.Case = new DomainModels.Case();
+            document.DmerType = "2 - Age";
+            document.DmerStatus = "Clean Pass";
+            document.Case = new Dto.Case();
             document.Case.CaseNumber = "C123";
             document.Case.Person = new Person();
-            document.Case.Person.FullName = "Joe Smithers";
+            document.Case.Person.FirstName = "Joe";
+            document.Case.Person.LastName = "Smithers";
             document.Case.Person.Birthday = new DateTime(2000, 1, 1);
             document.Description = "Test Discription";
             document.ComplianceDate = DateTimeOffset.Now;
-            document.DocumentType = new DomainModels.DocumentType();
+            document.DocumentType = new Dto.DocumentType();
             document.DocumentType.DocumentName = "DMER";
             document.DocumentSubType = new DocumentSubType();
             document.DocumentSubType.Name = "Sub type test";

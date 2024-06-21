@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Logging;
-using Rsbc.Dmf.CaseManagement.DomainModels;
+using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
@@ -264,6 +264,20 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<IEnumerable<Document>>(documents);
         }
 
+        public Document GetDmer(Guid caseId)
+        {
+            var document = dynamicsContext.bcgov_documenturls
+                .Expand(doc => doc.bcgov_CaseId)
+                .Expand(doc => doc.dfp_DocumentTypeID)
+                .Expand(doc => doc.dfp_LoginId)
+                // TODO add configuration or enum for DMER type 001
+                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == "001")
+                .FirstOrDefault();
+
+            return _mapper.Map<Document>(document);
+        }
+
+        // TODO loginId is not used
         public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
         {
             var documents = new List<bcgov_documenturl>();

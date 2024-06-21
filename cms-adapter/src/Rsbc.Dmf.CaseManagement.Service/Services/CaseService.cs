@@ -660,13 +660,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-
         public async override Task<GetCaseDetailReply> GetCaseByIdCode(GetCaseByIdCodeRequest request, ServerCallContext context)
         {
             var reply = new GetCaseDetailReply() { ResultStatus = ResultStatus.Fail };
