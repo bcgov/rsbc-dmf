@@ -9,8 +9,8 @@ import { ProfileService } from '../api/services';
 export class ProfileManagementService {
   constructor(private profileService: ProfileService) { }
 
-  public getProfile(params: Parameters<ProfileService['apiProfileCurrentGet$Json']>[0]) {
-    return this.profileService.apiProfileCurrentGet$Json({...params}).pipe(map((res) => ({...res, businessName: 'Dr. Shelby Drew', licensingInstitution:"College of physicians and surgeons", licenseNumber:"12344555"})));
+  public getProfile() {
+    return this.profileService.apiProfileCurrentGet$Json();
   }
 
   public updateProfile(params: Parameters<ProfileService['apiProfileEmailPut']>[0]) {
@@ -22,11 +22,11 @@ export class ProfileManagementService {
   }
 
   public updateProfilePractitionerRoles(params: Parameters<ProfileService['apiProfilePractitionerRolesPut$Response']>[0]) {
-    return this.profileService.apiProfilePractitionerRolesPut$Response({...params}).pipe(map((res) => res.body));;
+    return this.profileService.apiProfilePractitionerRolesPut$Response({...params}).pipe(map((res) => res.body));
   }
 
   public deleteProfilePractitionerRoles(params: Parameters<ProfileService['apiProfilePractitionerRolesDelete$Response']>[0]) {
-    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body));;
+    return this.profileService.apiProfilePractitionerRolesDelete$Response({...params}).pipe(map((res) => res.body));
   }
 
 }

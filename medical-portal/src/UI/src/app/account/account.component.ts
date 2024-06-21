@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { PidpService } from '@app/shared/api/services/pidp.service';
+import { ProfileManagementService } from '@app/shared/services/profile.service';
 
 @Component({
   selector: 'app-account',
@@ -19,9 +20,14 @@ export class AccountComponent {
   email: string = "";
   role: string = "";
 
-  public constructor(private pidpService: PidpService, private authService: AuthService)
+  public constructor(private pidpService: PidpService, private authService: AuthService, private profileManagementService: ProfileManagementService)
   {
+    this.profileManagementService.getProfile().subscribe((profile) => {
+      this.fullName = profile.firstName + " " + profile.lastName;
+      this.email = profile.email + "";
+    });
     this.role = this.authService.getRoles().join(", ");
+
     this.pidpService.apiPidpEndorsementsGet$Json().subscribe((data) =>
     {
       console.log("endorsement response", data);
