@@ -163,7 +163,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             //new ServerErrorExceptionFilterAttribute());
 
             services.AddGrpc(options =>
-            {
+            {                
                 options.EnableDetailedErrors = true;
                 options.MaxReceiveMessageSize = null; 
                 options.MaxSendMessageSize = null; 

@@ -35,7 +35,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 .UseOpenShiftIntegration(_ => _.CertificateMountPoint = "/ssl")
                 .UseStartup<Startup>()
                 .UseKestrel(options =>
-                {
+                {                    
                     options.Limits.MaxRequestBodySize = 512 * 1024 * 1024; // allow large transfers
                     // for macOS local dev but don't have env
                     // options.ListenLocalhost(5001, o => {
