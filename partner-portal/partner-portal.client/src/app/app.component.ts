@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 
 interface WeatherForecast {
   date: string;
@@ -9,9 +10,11 @@ interface WeatherForecast {
 }
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
+    standalone: true,
+    imports: [NgIf, NgFor]
 })
 export class AppComponent implements OnInit {
   public forecasts: WeatherForecast[] = [];
