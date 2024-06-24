@@ -163,7 +163,7 @@ namespace Rsbc.Dmf.IcbcAdapter
             //new ServerErrorExceptionFilterAttribute());
 
             services.AddGrpc(options =>
-            {
+            {                
                 options.EnableDetailedErrors = true;
                 options.MaxReceiveMessageSize = null; 
                 options.MaxSendMessageSize = null; 
@@ -234,7 +234,7 @@ namespace Rsbc.Dmf.IcbcAdapter
 
                 var httpClient = new HttpClient(httpClientHandler) 
                 { 
-                    Timeout = TimeSpan.FromMinutes(30)
+                    Timeout = TimeSpan.FromMinutes(90)
                 };
                 // set default request version to HTTP 2.  Note that Dotnet Core does not currently respect this setting for all requests.
                 httpClient.DefaultRequestVersion = HttpVersion.Version20;
