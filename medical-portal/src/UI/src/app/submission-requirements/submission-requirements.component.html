@@ -152,13 +152,15 @@
               </div>
               <div style="grid-area: D">
                 <div>
-                  <button
-                    mat-flat-button
-                    class="primaryButton"
-                    (click)="openPopup()"
-                  >
-                    Start DMER
-                  </button>
+                  @if (document.documentType === "DMER") {
+                    <button
+                      mat-flat-button
+                      class="primaryButton"
+                      (click)="openPopup()"
+                    >
+                      Start DMER
+                    </button>
+                  }
                 </div>
               </div>
             </mat-card-content>

@@ -6,17 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ChefsSubmission } from '../../models/chefs-submission';
+import { NewCandidate } from '../../models/new-candidate';
 
-export interface ApiChefsSubmissionPut$Params {
-  caseId?: string;
-      body?: ChefsSubmission
+export interface IcbcCandidatesErrorPost$Params {
+      body?: Array<NewCandidate>
 }
 
-export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
+export function icbcCandidatesErrorPost(http: HttpClient, rootUrl: string, params?: IcbcCandidatesErrorPost$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, icbcCandidatesErrorPost.PATH, 'post');
   if (params) {
-    rb.query('caseId', params.caseId, {});
     rb.body(params.body, 'application/*+json');
   }
 
@@ -30,4 +28,4 @@ export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?
   );
 }
 
-apiChefsSubmissionPut.PATH = '/api/Chefs/submission';
+icbcCandidatesErrorPost.PATH = '/Icbc/CandidatesError';

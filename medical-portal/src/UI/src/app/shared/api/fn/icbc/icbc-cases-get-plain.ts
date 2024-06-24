@@ -6,14 +6,14 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Document } from '../../models/document';
+import { CaseStatus } from '../../models/case-status';
 
-export interface ApiChefsBundleGet$Plain$Params {
-  caseId: string;
+export interface IcbcCasesGet$Plain$Params {
+  caseId?: string;
 }
 
-export function apiChefsBundleGet$Plain(http: HttpClient, rootUrl: string, params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsBundleGet$Plain.PATH, 'get');
+export function icbcCasesGet$Plain(http: HttpClient, rootUrl: string, params?: IcbcCasesGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseStatus>> {
+  const rb = new RequestBuilder(rootUrl, icbcCasesGet$Plain.PATH, 'get');
   if (params) {
     rb.query('caseId', params.caseId, {});
   }
@@ -23,9 +23,9 @@ export function apiChefsBundleGet$Plain(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Document>>;
+      return r as StrictHttpResponse<CaseStatus>;
     })
   );
 }
 
-apiChefsBundleGet$Plain.PATH = '/api/Chefs/bundle';
+icbcCasesGet$Plain.PATH = '/Icbc/Cases';

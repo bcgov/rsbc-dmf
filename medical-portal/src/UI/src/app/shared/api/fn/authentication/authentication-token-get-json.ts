@@ -6,16 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Document } from '../../models/document';
 
-export interface ApiChefsBundleGet$Json$Params {
-  caseId: string;
+export interface AuthenticationTokenGet$Json$Params {
+  secret?: string;
 }
 
-export function apiChefsBundleGet$Json(http: HttpClient, rootUrl: string, params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsBundleGet$Json.PATH, 'get');
+export function authenticationTokenGet$Json(http: HttpClient, rootUrl: string, params?: AuthenticationTokenGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+  const rb = new RequestBuilder(rootUrl, authenticationTokenGet$Json.PATH, 'get');
   if (params) {
-    rb.query('caseId', params.caseId, {});
+    rb.query('secret', params.secret, {});
   }
 
   return http.request(
@@ -23,9 +22,9 @@ export function apiChefsBundleGet$Json(http: HttpClient, rootUrl: string, params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Document>>;
+      return r as StrictHttpResponse<string>;
     })
   );
 }
 
-apiChefsBundleGet$Json.PATH = '/api/Chefs/bundle';
+authenticationTokenGet$Json.PATH = '/Authentication/token';

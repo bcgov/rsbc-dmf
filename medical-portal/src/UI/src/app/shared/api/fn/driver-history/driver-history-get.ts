@@ -6,18 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ChefsSubmission } from '../../models/chefs-submission';
 
-export interface ApiChefsSubmissionPut$Params {
-  caseId?: string;
-      body?: ChefsSubmission
+export interface DriverHistoryGet$Params {
+  driversLicence?: string;
 }
 
-export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
+export function driverHistoryGet(http: HttpClient, rootUrl: string, params?: DriverHistoryGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
+  const rb = new RequestBuilder(rootUrl, driverHistoryGet.PATH, 'get');
   if (params) {
-    rb.query('caseId', params.caseId, {});
-    rb.body(params.body, 'application/*+json');
+    rb.query('driversLicence', params.driversLicence, {});
   }
 
   return http.request(
@@ -30,4 +27,4 @@ export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?
   );
 }
 
-apiChefsSubmissionPut.PATH = '/api/Chefs/submission';
+driverHistoryGet.PATH = '/DriverHistory';

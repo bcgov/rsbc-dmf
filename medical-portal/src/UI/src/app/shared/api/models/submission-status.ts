@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export enum SubmissionStatus {
-  Draft = 'Draft',
-  Final = 'Final',
+  $0 = 0,
+  $1 = 1,
+  Final
 }
