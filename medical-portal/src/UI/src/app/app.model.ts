@@ -12,3 +12,7 @@ export enum CaseStageEnum {
   'IntakeValidation' = 'Intake Validation',
   'Closed' = 'Closed',
 }
+
+export enum DocumentTypeEnum {
+  'DMER' = 'DMER',
+}
