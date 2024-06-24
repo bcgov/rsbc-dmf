@@ -2,6 +2,5 @@
 /* eslint-disable */
 export enum SubmissionStatus {
   $0 = 0,
-  $1 = 1,
-  Final
+  $1 = 1
 }
