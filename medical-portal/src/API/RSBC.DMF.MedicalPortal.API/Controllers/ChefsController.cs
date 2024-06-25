@@ -9,7 +9,6 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.IcbcAdapter;
-using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -51,8 +50,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("submission")]
+        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(GetSubmission))]
         public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
-            [FromQuery] SubmissionStatus status = SubmissionStatus.Draft)
+            [FromQuery] string status = SubmissionStatus.Draft)
         {
             UserContext profile = await this.userService.GetCurrentUserContext();
             logger.LogInformation(
@@ -95,7 +98,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             try
             {
                 var jsonData =
-                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent, new LowercaseEnumConverter());
+                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent);
                 string formattedJson = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
                 logger.LogInformation("JSON Data: {0}", formattedJson);
                 return Ok(jsonData);
@@ -115,7 +118,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             // get the practitioner ID
             string practitionerId = User.FindFirstValue("sid");
 
-            SubmissionStatus status = submission.Status;
+            string status = submission.Status;
 
             logger.LogInformation($"PUT Submission - userId is {profile.Id}, practitionerId is {practitionerId}");
 

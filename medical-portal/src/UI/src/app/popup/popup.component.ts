@@ -1,9 +1,7 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   Inject,
-  Renderer2,
   ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -11,7 +9,7 @@ import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChefsService } from '../shared/api/services';
 import { v4 as uuidv4 } from 'uuid';
-import { SubmissionStatus } from '@app/shared/api/models';
+import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
 
 @Component({
   selector: 'app-popup',
@@ -116,11 +114,11 @@ export class PopupComponent {
           return bundle;
         });
     } else if (type === 'GET_CHEFS_SUBMISSION' && this.caseId) {
-      let params: Parameters<ChefsService['apiChefsSubmissionGet']>[0] = {
+      let params: Parameters<ChefsService['apiChefsSubmissionGet$Json']>[0] = {
         caseId: this.caseId,
       };
 
-      this.chefsService.apiChefsSubmissionGet({ ...params }).subscribe(
+      this.chefsService.apiChefsSubmissionGet$Json({ ...params }).subscribe(
         (submission) => {
           console.log(submission);
           this.sendMessage(type, submission);
