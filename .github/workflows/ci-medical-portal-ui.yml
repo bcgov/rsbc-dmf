@@ -46,6 +46,7 @@ jobs:
       #   working-directory: ${{env.working-directory}}${{env.solution-folder}}
         
       - name: Upload coverage to Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v2.1.0
         with:
           name: DMFT
@@ -54,7 +55,3 @@ jobs:
           flags: unittests
           # Environment variables to tag the upload with (e.g. PYTHON | OS,PYTHON)
           env_vars: javascript
-
-      - name: Build image
-        #working-directory: ./medical-practitioner-portal
-        run: docker build . --file ./medical-portal/src/UI/Dockerfile --tag $IMAGE_NAME

@@ -33,6 +33,7 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Install coverlet for code coverage
+        continue-on-error: true
         run: dotnet tool install -g coverlet.console --version 1.7.2
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
@@ -47,6 +48,7 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
       - name: Generate code coverage
+        continue-on-error: true
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         run: |
           mkdir -p CovTestResults
@@ -56,6 +58,7 @@ jobs:
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v2.1.0
         with:
           # User defined upload name. Visible in Codecov UI

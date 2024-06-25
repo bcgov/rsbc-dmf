@@ -63,47 +63,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
         }
 
-        // TODO not using this method, consider removing
-        [HttpGet("GetDriverAndCaseDocuments")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetDriverAndCaseDocuments")]
-        public async Task<IActionResult> GetDriverAndCaseDocuments([FromRoute] string caseId)
-        {
-            var profile = await _userService.GetCurrentUserContext();
-            var loginIds = profile.LoginIds;
-
-            // TODO # Change the loginId to claim.loginid 
-            var request = new GetDriverAndCaseDocumentsRequest { CaseId = caseId, LoginId = loginIds.FirstOrDefault() };
-
-            var reply = _documentManagerClient.GetDriverAndCaseDocuments(request);
-            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-            {
-                // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
-                var replyItemsWithDocuments = reply.Items
-                    .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
-                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent");
-                var result = _mapper.Map<List<CaseDocument>>(replyItemsWithDocuments);
-
-                // Sort The documents
-
-                if (result.Count > 0)
-                {
-                    result = result.OrderByDescending(doc => doc.CreatedOn).ToList();
-                }
-
-                return Json(result);
-            }
-            else
-            {
-
-                _logger.LogError($"{nameof(GetDriverAndCaseDocuments)} error: unable to get documents for this case - {reply.ErrorDetail}");
-                return StatusCode(500, reply.ErrorDetail);
-            }
-
-        }
-
         [HttpGet("{driverId}/AllDocuments")]
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
         [ProducesResponseType(401)]

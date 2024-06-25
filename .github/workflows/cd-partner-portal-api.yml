@@ -1,0 +1,52 @@
+name: cd-partner-portal-api
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'partner-portal/src/API/**'
+      - '.github/workflows/cd-partner-portal-api.yml'
+
+env:
+  IMAGE_NAME: partner-portal-api
+  IMAGE_ID: ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }}/partner-portal-api
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log into registry
+        run: echo "${{ secrets.OCP4_PASSWORD  }}" | docker login ${{ secrets.OCP4_REGISTRY }}/${{ secrets.OCP4_NAMESPACE }} -u ${{ secrets.OCP4_USERNAME  }} --password-stdin
+
+      - name: Pull image
+        run: docker pull $IMAGE_ID || true
+
+      - name: Build image
+        run: |
+          echo "BUILD ID=$BUILD_ID"          
+          docker build --tag $IMAGE_NAME --build-arg BUILD_ID="$BUILD_ID" . --file ./partner-portal/src/API/Dockerfile --cache-from=$IMAGE_ID
+
+      - name: Push image
+        run: |
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "main" ] && VERSION=latest
+
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
