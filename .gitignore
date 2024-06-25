@@ -33,3 +33,4 @@
 # IntelliJ IDEA
 .idea/
 *.iml
+/medical-practitioner-portal/dist
