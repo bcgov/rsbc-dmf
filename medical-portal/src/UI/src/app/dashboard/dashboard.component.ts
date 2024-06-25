@@ -133,8 +133,6 @@ export class DashboardComponent {
       this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
         next: (dmerCase) => {
           if (dmerCase) this.searchedCase = dmerCase;
-          console.log('searchedCase', this.searchedCase);
-          console.log("searchParams", searchParams);
         },
         error: (err) => {
           this.noResults = true;
