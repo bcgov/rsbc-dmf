@@ -277,21 +277,6 @@ namespace Rsbc.Dmf.CaseManagement
                 .FirstOrDefault();
 
             return _mapper.Map<Document>(document);
-        }
-
-        // TODO loginId is not used
-        public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
-        {
-            var documents = new List<bcgov_documenturl>();
-
-            var documentQuery = dynamicsContext.bcgov_documenturls
-                .Expand(doc => doc.bcgov_CaseId)
-                .Expand(doc => doc.dfp_DocumentTypeID)
-                .Where(doc => doc.bcgov_CaseId.incidentid == Guid.Parse(caseId));
-
-            return _mapper.Map<IEnumerable<Document>>(documents);
-        }
-
-       
+        }   
     }
 }
