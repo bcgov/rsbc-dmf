@@ -46,6 +46,7 @@ jobs:
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
         
       - name: Upload coverage to Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v2.1.0
         with:
           name: DMFT
