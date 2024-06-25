@@ -77,6 +77,7 @@ import { PopupService } from '../popup/popup.service';
   ],
 })
 export class CaseDetailsComponent implements OnInit {
+  idCode = input<string>();
   caseId = input<string>();
   caseDetails?: PatientCase;
 
@@ -113,9 +114,8 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    console.log(this.caseId());
     this.casesService
-      .apiCasesCaseIdGet$Json({ caseId: this.caseId() as string })
+      .apiCasesSearchIdCodeGet$Json({ idCode: this.idCode() as string })
       .subscribe((caseDetails) => {
         console.log(this.caseDetails);
         this.caseDetails = caseDetails;

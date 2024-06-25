@@ -16,7 +16,7 @@ export const routes: Routes = [
     canActivateChild: [AuthenticationGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'caseDetails/:caseId', component: CaseDetailsComponent },
+      { path: 'caseDetails/:caseId/:idCode', component: CaseDetailsComponent },
       { path: 'account', component: AccountComponent },
       { path: 'getHelp', component: GetHelpComponent },
       { path: 'caseSubmissions', component: CaseSubmissionsComponent },
