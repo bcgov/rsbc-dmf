@@ -4,9 +4,6 @@ public class PatientCase
 {
     // Case
     public string CaseId { get; set; }
-    public string DmerType { get; set; }
-    // TODO rename DmerStatus
-    public string Status { get; set; }
     public string IdCode { get; set; }
     public DateTime DueDate { get; set; } 
     public string DriverId { get; set; }
@@ -21,13 +18,9 @@ public class PatientCase
     public string LastName { get; set; }
     public string MiddleName { get; set; }
 
-    // Documents
-    //public IEnumerable<Document> Documents { get; set; }
+    // Document
+    public string DmerType { get; set; }
+    // TODO rename DmerStatus
+    public string Status { get; set; }
     public bool IsOwner { get; set; }
 }
-
-//public class Document
-//{
-//    public string DmerType { get; set; }
-//    public string DmerStatus { get; set; }
-//}
