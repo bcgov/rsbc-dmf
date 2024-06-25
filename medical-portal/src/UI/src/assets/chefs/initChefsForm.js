@@ -125,30 +125,22 @@ function loadChefsBundleData(fetchedBundleData) {
     birthDate,
   };
 
-  const mapToApiKey = {
-    textTargetDriverLicense: "driverLicenseNumber",
-    textTargetDriverName: "surname",
-    tDateTargetDriverBirthdate: "birthDate",
-  };
-
-  Object.keys(mapToApiKey).forEach((chefsKey) => {
-    console.log(
-      `[IFRAME] SETTING... chefsKey: ${chefsKey}, value: ${values[mapToApiKey[chefsKey]]}`,
-    );
+  Object.keys(values).forEach((key) => {
+    console.log(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
 
     const component = utils.getComponent(
       Formio.forms[window.currentFormId].components,
-      chefsKey,
+      key,
     );
 
     if (!component) {
-      console.warn(`[IFRAME] No component found with key: ${chefsKey}`);
+      console.warn(`[IFRAME] No component found with key: ${key}`);
       return;
     }
 
     utils
-      .getComponent(Formio.forms[window.currentFormId].components, chefsKey)
-      .setValue(values[mapToApiKey[chefsKey]]);
+      .getComponent(Formio.forms[window.currentFormId].components, key)
+      .setValue(values[key]);
   });
 
   window.loadedChefsBundle = true;

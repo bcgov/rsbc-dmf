@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Document } from '../../models/document';
+import { ChefsBundle } from '../../models/chefs-bundle';
 
 export interface ApiChefsBundleGet$Json$Params {
   caseId: string;
 }
 
-export function apiChefsBundleGet$Json(http: HttpClient, rootUrl: string, params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+export function apiChefsBundleGet$Json(http: HttpClient, rootUrl: string, params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsBundle>> {
   const rb = new RequestBuilder(rootUrl, apiChefsBundleGet$Json.PATH, 'get');
   if (params) {
     rb.query('caseId', params.caseId, {});
@@ -23,7 +23,7 @@ export function apiChefsBundleGet$Json(http: HttpClient, rootUrl: string, params
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Document>>;
+      return r as StrictHttpResponse<ChefsBundle>;
     })
   );
 }

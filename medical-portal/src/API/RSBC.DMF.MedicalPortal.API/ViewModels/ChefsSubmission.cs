@@ -3,24 +3,16 @@ using Newtonsoft.Json.Converters;
 
 namespace RSBC.DMF.MedicalPortal.API.ViewModels;
 
-public enum SubmissionStatus
+public static class SubmissionStatus
 {
-    Draft,
-    Final
+    public const string Draft = "Draft";
+    public const string Final = "Final";
 }
 
 public class ChefsSubmission
 {
     [JsonProperty("status")]
-    [JsonConverter(typeof(StringEnumConverter))]
-    public SubmissionStatus Status { get; set; }
+    public string Status { get; set; } = SubmissionStatus.Draft;
 
-    [JsonProperty("submission")]
-    public Dictionary<string, object> Submission { get; set; }
-
-    public ChefsSubmission()
-    {
-        Status = SubmissionStatus.Draft;
-        Submission = new Dictionary<string, object>();
-    }
+    [JsonProperty("submission")] public Dictionary<string, object> Submission { get; set; } = new();
 }
