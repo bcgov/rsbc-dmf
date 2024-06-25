@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-import { DriverInfoReply } from '../models/driver-info-reply';
+import { Driver } from '../models/driver';
 import { PatientCase } from '../models/patient-case';
 export interface ChefsBundle {
   caseId?: string | null;
-  driverInfoReply?: DriverInfoReply;
+  driverInfo?: Driver;
   patientCase?: PatientCase;
 }

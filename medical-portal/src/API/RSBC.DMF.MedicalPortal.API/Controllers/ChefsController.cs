@@ -14,6 +14,7 @@ using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
+using Driver = RSBC.DMF.MedicalPortal.API.ViewModels.Driver;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -238,7 +239,20 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             if (driverInfoReply.ResultStatus == ResultStatus.Success)
             {
-                chefsBundle.driverInfoReply = driverInfoReply;
+                chefsBundle.driverInfo = new Driver()
+                {
+                    Name = driverInfoReply.GivenName + ' ' + driverInfoReply.Surname,
+                    GivenName = driverInfoReply.GivenName,
+                    Surname = driverInfoReply.Surname,
+                    BirthDate = driverInfoReply.BirthDate,
+                    DriverLicenceNumber = caseResult.DriverLicenseNumber,
+                    Address = new Address()
+                    {
+                        Line1 = driverInfoReply.AddressLine1,
+                        City = driverInfoReply.City,
+                        Postal = driverInfoReply.Postal
+                    }
+                };
             }
             else
             {
