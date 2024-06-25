@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace RSBC.DMF.MedicalPortal.API.ViewModels;
+﻿namespace RSBC.DMF.MedicalPortal.API.ViewModels;
 
 public class PatientCase
 {

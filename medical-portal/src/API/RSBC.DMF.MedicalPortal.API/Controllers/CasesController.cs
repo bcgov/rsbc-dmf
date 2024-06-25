@@ -4,13 +4,9 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
 using RSBC.DMF.MedicalPortal.API.Services;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DocumentManager;
-using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
