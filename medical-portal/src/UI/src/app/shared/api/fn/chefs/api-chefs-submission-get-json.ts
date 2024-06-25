@@ -6,28 +6,28 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { SubmissionStatus } from '../../models/submission-status';
+import { ChefsSubmission } from '../../models/chefs-submission';
 
-export interface ApiChefsSubmissionGet$Params {
+export interface ApiChefsSubmissionGet$Json$Params {
   caseId?: string;
-  status?: SubmissionStatus;
+  status?: string;
 }
 
-export function apiChefsSubmissionGet(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionGet$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionGet.PATH, 'get');
+export function apiChefsSubmissionGet$Json(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsSubmission>> {
+  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionGet$Json.PATH, 'get');
   if (params) {
     rb.query('caseId', params.caseId, {});
     rb.query('status', params.status, {});
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'json', accept: 'text/json', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<ChefsSubmission>;
     })
   );
 }
 
-apiChefsSubmissionGet.PATH = '/api/Chefs/submission';
+apiChefsSubmissionGet$Json.PATH = '/api/Chefs/submission';

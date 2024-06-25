@@ -6,5 +6,5 @@ public class ChefsBundle
 {
     public string caseId { get; set; }
     public PatientCase patientCase { get; set; }
-    public DriverInfoReply driverInfoReply { get; set; }
+    public Driver driverInfo { get; set; }
 }

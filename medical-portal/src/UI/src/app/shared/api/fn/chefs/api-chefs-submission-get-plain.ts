@@ -6,16 +6,18 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { ChefsBundle } from '../../models/chefs-bundle';
+import { ChefsSubmission } from '../../models/chefs-submission';
 
-export interface ApiChefsBundleGet$Plain$Params {
-  caseId: string;
+export interface ApiChefsSubmissionGet$Plain$Params {
+  caseId?: string;
+  status?: string;
 }
 
-export function apiChefsBundleGet$Plain(http: HttpClient, rootUrl: string, params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsBundle>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsBundleGet$Plain.PATH, 'get');
+export function apiChefsSubmissionGet$Plain(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsSubmission>> {
+  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionGet$Plain.PATH, 'get');
   if (params) {
     rb.query('caseId', params.caseId, {});
+    rb.query('status', params.status, {});
   }
 
   return http.request(
@@ -23,9 +25,9 @@ export function apiChefsBundleGet$Plain(http: HttpClient, rootUrl: string, param
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<ChefsBundle>;
+      return r as StrictHttpResponse<ChefsSubmission>;
     })
   );
 }
 
-apiChefsBundleGet$Plain.PATH = '/api/Chefs/bundle';
+apiChefsSubmissionGet$Plain.PATH = '/api/Chefs/submission';

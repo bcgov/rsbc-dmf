@@ -9,12 +9,12 @@ using Google.Protobuf;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.IcbcAdapter;
-using RSBC.DMF.MedicalPortal.API.Utilities;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 using JsonException = System.Text.Json.JsonException;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
+using Driver = RSBC.DMF.MedicalPortal.API.ViewModels.Driver;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -51,8 +51,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("submission")]
+        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(GetSubmission))]
         public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
-            [FromQuery] SubmissionStatus status = SubmissionStatus.Draft)
+            [FromQuery] string status = SubmissionStatus.Draft)
         {
             UserContext profile = await this.userService.GetCurrentUserContext();
             logger.LogInformation(
@@ -95,7 +99,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             try
             {
                 var jsonData =
-                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent, new LowercaseEnumConverter());
+                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent);
                 string formattedJson = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
                 logger.LogInformation("JSON Data: {0}", formattedJson);
                 return Ok(jsonData);
@@ -115,7 +119,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             // get the practitioner ID
             string practitionerId = User.FindFirstValue("sid");
 
-            SubmissionStatus status = submission.Status;
+            string status = submission.Status;
 
             logger.LogInformation($"PUT Submission - userId is {profile.Id}, practitionerId is {practitionerId}");
 
@@ -189,7 +193,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("bundle")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ChefsBundle), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
@@ -235,7 +239,20 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             if (driverInfoReply.ResultStatus == ResultStatus.Success)
             {
-                chefsBundle.driverInfoReply = driverInfoReply;
+                chefsBundle.driverInfo = new Driver()
+                {
+                    Name = driverInfoReply.GivenName + ' ' + driverInfoReply.Surname,
+                    GivenName = driverInfoReply.GivenName,
+                    Surname = driverInfoReply.Surname,
+                    BirthDate = driverInfoReply.BirthDate,
+                    DriverLicenceNumber = caseResult.DriverLicenseNumber,
+                    Address = new Address()
+                    {
+                        Line1 = driverInfoReply.AddressLine1,
+                        City = driverInfoReply.City,
+                        Postal = driverInfoReply.Postal
+                    }
+                };
             }
             else
             {
