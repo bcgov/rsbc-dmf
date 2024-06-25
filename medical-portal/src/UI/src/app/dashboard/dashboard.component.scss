@@ -151,7 +151,10 @@ mat-card {
 
 }
 
-
+.search-buttons{
+  display: flex;
+  gap:10px;
+}
 
 .column-width{
    width: 150px;
