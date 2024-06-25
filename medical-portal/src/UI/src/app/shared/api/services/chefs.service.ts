@@ -19,8 +19,8 @@ import { apiChefsSubmissionGet$Plain } from '../fn/chefs/api-chefs-submission-ge
 import { ApiChefsSubmissionGet$Plain$Params } from '../fn/chefs/api-chefs-submission-get-plain';
 import { apiChefsSubmissionPut } from '../fn/chefs/api-chefs-submission-put';
 import { ApiChefsSubmissionPut$Params } from '../fn/chefs/api-chefs-submission-put';
+import { ChefsBundle } from '../models/chefs-bundle';
 import { ChefsSubmission } from '../models/chefs-submission';
-import { Document } from '../models/document';
 
 @Injectable({ providedIn: 'root' })
 export class ChefsService extends BaseService {
@@ -109,7 +109,7 @@ export class ChefsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiChefsBundleGet$Plain$Response(params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+  apiChefsBundleGet$Plain$Response(params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsBundle>> {
     return apiChefsBundleGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -119,9 +119,9 @@ export class ChefsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiChefsBundleGet$Plain(params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<Array<Document>> {
+  apiChefsBundleGet$Plain(params: ApiChefsBundleGet$Plain$Params, context?: HttpContext): Observable<ChefsBundle> {
     return this.apiChefsBundleGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+      map((r: StrictHttpResponse<ChefsBundle>): ChefsBundle => r.body)
     );
   }
 
@@ -131,7 +131,7 @@ export class ChefsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiChefsBundleGet$Json$Response(params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+  apiChefsBundleGet$Json$Response(params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsBundle>> {
     return apiChefsBundleGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -141,9 +141,9 @@ export class ChefsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiChefsBundleGet$Json(params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
+  apiChefsBundleGet$Json(params: ApiChefsBundleGet$Json$Params, context?: HttpContext): Observable<ChefsBundle> {
     return this.apiChefsBundleGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+      map((r: StrictHttpResponse<ChefsBundle>): ChefsBundle => r.body)
     );
   }
 

@@ -192,7 +192,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("bundle")]
-        [ProducesResponseType(typeof(IEnumerable<Document>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ChefsBundle), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
