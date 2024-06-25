@@ -39,7 +39,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
 
                 CreateMap<bcgov_documenturl, Document>()
                     .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
-                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateDmerStatus(src.dfp_dmerstatus)))
+                    .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
                     .ForMember(dest => dest.DocumentType, opt => opt.MapFrom(src => src.dfp_DocumentTypeID))
@@ -71,6 +71,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                         return null;
                 }
             }
+
             private string TranslateDmerStatus(int? dmerStatus)
             {
                 switch (dmerStatus)
@@ -85,6 +86,21 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                         return "Manual Pass";
                     default:
                         return null;
+                }
+            }
+
+            private string TranslateSubmittalStatus(int? submittalStatusCode)
+            {
+                switch (submittalStatusCode)
+                {
+                    case 100000000:
+                        return "Open-Required";
+                    case 100000005:
+                        return "Non-Comply";
+                    case 100000007:
+                        return "Non-Comply";
+                    default:
+                        return "Submitted";
                 }
             }
         }

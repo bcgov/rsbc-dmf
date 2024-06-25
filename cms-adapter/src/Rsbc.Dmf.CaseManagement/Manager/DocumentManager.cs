@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
@@ -15,12 +16,14 @@ namespace Rsbc.Dmf.CaseManagement
         internal readonly DynamicsContext dynamicsContext;
         private readonly ILogger<DocumentManager> logger;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
 
-        public DocumentManager(DynamicsContext dynamicsContext, ILogger<DocumentManager> logger, IMapper mapper)
+        public DocumentManager(DynamicsContext dynamicsContext, ILogger<DocumentManager> logger, IMapper mapper, IConfiguration configuration)
         {
             this.dynamicsContext = dynamicsContext;
             this.logger = logger;
             _mapper = mapper;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -270,8 +273,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(doc => doc.bcgov_CaseId)
                 .Expand(doc => doc.dfp_DocumentTypeID)
                 .Expand(doc => doc.dfp_LoginId)
-                // TODO add configuration or enum for DMER type 001
-                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == "001")
+                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"])
                 .FirstOrDefault();
 
             return _mapper.Map<Document>(document);

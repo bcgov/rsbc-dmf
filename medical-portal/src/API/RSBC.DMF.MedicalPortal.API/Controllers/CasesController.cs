@@ -19,15 +19,17 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     public class CasesController : ControllerBase
     {
         private readonly ICaseQueryService caseQueryService;
+        private readonly IUserService _userService;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentManagerClient _documentManagerClient;
         private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public CasesController(ICaseQueryService caseQueryService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
+        public CasesController(ICaseQueryService caseQueryService, IUserService userService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
         {
             this.caseQueryService = caseQueryService;
+            _userService = userService;
             _cmsAdapterClient = cmsAdapterClient;
             _documentManagerClient = documentManagerClient;
             _icbcAdapterClient = icbcAdapterClient;
@@ -42,6 +44,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ActionName("SearchCaseByIdCode")]
         public async Task<ActionResult> SearchCaseByIdCode([Required][FromRoute] string idCode)
         {
+            var profile = await _userService.GetCurrentUserContext();
+
             PatientCase result = null;
 
             if (string.IsNullOrEmpty(idCode) || idCode == Guid.Empty.ToString())
@@ -77,16 +81,17 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = document.Item?.DmerType ?? string.Empty;
                 result.Status = document.Item?.Status ?? string.Empty;
+                result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
+                result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                 result.IdCode = @case.Item.IdCode;
-
                 result.LatestComplianceDate = @case.Item.LatestComplianceDate?.ToDateTimeOffset();
 
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)
                 {
-                    //result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
+                    result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                     var request = new DriverInfoRequest();
                     request.DriverLicence = @case.Item.DriverLicenseNumber;
                     var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(request);
@@ -160,6 +165,22 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             // second pass to populate birthdate.
 
             return Ok(cases);
+        }
+
+        private string TranslateDmerStatus(string dmerStatus, string loginId)
+        {
+            if (dmerStatus == "Open-Required")
+            {
+                if (string.IsNullOrEmpty(loginId))
+                {
+                    dmerStatus = "Required - Unclaimed";
+                }
+                else
+                {
+                    dmerStatus = "Required - Claimed";
+                }
+            }
+            return dmerStatus;
         }
 
       
