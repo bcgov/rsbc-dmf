@@ -7,7 +7,7 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 COPY . .
-RUN dotnet restore "./partner-portal/src/API/"
+RUN dotnet restore "./partner-portal/src/API/partner-portal.Server.csproj"
 # RUN dotnet test "./partner-portal/src/API/RSBC.DMF.MedicalPortal.API/" /p:InformationalVersion="$BUILD_ID" -c Release
 
 FROM build AS publish
