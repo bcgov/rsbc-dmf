@@ -9,6 +9,7 @@ export interface PatientCase {
   dueDate?: string;
   firstName?: string | null;
   idCode?: string | null;
+  isOwner?: boolean;
   lastName?: string | null;
   latestComplianceDate?: string | null;
   middleName?: string | null;
