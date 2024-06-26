@@ -49,7 +49,17 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
                 var endorsements = _mapper.Map<IEnumerable<Endorsement>>(reply.Endorsements);
 
-                return new JsonResult(reply);
+                // TODO remove this temporary hack
+                var i = 1;
+                foreach (var endorsement in endorsements)
+                {
+                    endorsement.FullName = $"PRACTITIONER FAKE{i}";
+                    endorsement.Email = $"fake.prac{i}@mailinator.com";
+                    endorsement.Role = "Practitioner";
+                    i++;
+                }
+
+                return Ok(endorsements);
             }
             catch (Exception ex)
             {

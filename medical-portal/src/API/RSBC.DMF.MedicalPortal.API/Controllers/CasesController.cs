@@ -76,7 +76,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = document.Item?.DmerType ?? string.Empty;
-                result.Status = document.Item?.Status ?? string.Empty;
+                result.Status = document.Item?.Status ?? "Not Requested";
                 result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
@@ -111,48 +111,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             return Ok(result);
         }
-
-        [HttpGet("{caseId}")]
-        [ProducesResponseType(typeof(PatientCase), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetCaseById")]
-        public async Task<ActionResult> GetCaseById([Required][FromRoute] string caseId)
-        {
-            var result = new PatientCase();
-
-            if (string.IsNullOrEmpty(caseId) || caseId == Guid.Empty.ToString())
-            {
-                return BadRequest("Case id was invalid.");
-            }
-
-            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
-            if (c != null && c.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-            {
-                result.CaseId = c.Item.CaseId;
-                result.DmerType = c.Item.DmerType;
-                result.Status = c.Item.Status;
-                result.Name = c.Item.AssigneeTitle;
-                result.DriverLicenseNumber = c.Item.DriverLicenseNumber;
-                result.BirthDate = c.Item.BirthDate.ToDateTime();
-                result.IdCode = c.Item.IdCode;
-                result.FirstName = c.Item.FirstName;
-                result.LastName = c.Item.LastName;
-                result.MiddleName = c.Item.Middlename;
-                result.DriverId = c.Item.DriverId;
-                result.LatestComplianceDate = c.Item.LatestComplianceDate.ToDateTimeOffset();
-            }
-            // TODO handle failure
-
-            // set to null if no decision has been made.
-            if (result.BirthDate == DateTime.MinValue)
-            {
-                result.BirthDate = null;
-            }
-
-            return Ok(result);
-        }
-
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)

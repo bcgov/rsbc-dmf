@@ -881,6 +881,7 @@ namespace Rsbc.Dmf.CaseManagement
                 var @case = dynamicsContext.incidents
                     .Expand(i => i.dfp_DriverId)
                     .Where(i => i.ticketnumber == idCode)
+                    .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent)
                     .FirstOrDefault();
 
                 if (@case != null)
