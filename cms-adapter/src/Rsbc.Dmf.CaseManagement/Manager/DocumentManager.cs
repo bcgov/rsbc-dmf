@@ -292,23 +292,21 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
-
-            var documents = new List<bcgov_documenturl>();
-            var querydocuments = dynamicsContext.bcgov_documenturls
+            var querydocument = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
 
            
-                if (querydocuments != null)
+                if (querydocument != null)
                 {
-                    querydocuments._dfp_loginid_value = loginId;
+                    querydocument._dfp_loginid_value = loginId;
                 }
 
-            dynamicsContext.UpdateObject(querydocuments);
+            dynamicsContext.UpdateObject(querydocument);
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
-            return _mapper.Map<Document>(querydocuments);
+            return _mapper.Map<Document>(querydocument);
         }
 
         /// <summary>
@@ -324,24 +322,21 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
-
-            var documents = new List<bcgov_documenturl>();
-
-            var querydocuments = dynamicsContext.bcgov_documenturls
+            var querydocument = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
 
 
-            if (querydocuments != null)
+            if (querydocument != null)
             {
-                querydocuments._dfp_loginid_value = null;
+                querydocument._dfp_loginid_value = null;
             }
 
-            dynamicsContext.UpdateObject(querydocuments);
+            dynamicsContext.UpdateObject(querydocument);
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
-            return _mapper.Map<Document>(querydocuments);
+            return _mapper.Map<Document>(querydocument);
         }
 
 
