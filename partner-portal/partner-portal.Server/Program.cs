@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -15,7 +14,9 @@ builder.WebHost
     .UseUrls()
     .UseKestrel(options => { options.Listen(IPAddress.Any, 8080); });
 var services = builder.Services;
+
 var env = builder.Environment;
+var isDevelopment = env.EnvironmentName == "Development";
 
 var config = builder.Configuration;
 services.AddSerilogBootstrapLogger();
@@ -36,7 +37,7 @@ services.AddCors(options =>
 
 services.AddControllers();
 
-services.AddSerilogLogger(config, builder.Environment.EnvironmentName == "Development");
+services.AddSerilogLogger(config, isDevelopment);
 
 services.AddSwaggerGen(options =>
 {
