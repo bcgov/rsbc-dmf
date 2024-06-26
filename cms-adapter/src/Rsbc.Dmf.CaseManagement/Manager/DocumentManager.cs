@@ -309,12 +309,7 @@ namespace Rsbc.Dmf.CaseManagement
             return _mapper.Map<Document>(querydocument);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="loginId"></param>
-        /// <param name="documentId"></param>
-        /// <returns></returns>
+   
         public Document UpdateUnClaimDmer(Guid loginId, Guid documentId)
         {
             ResultStatusReply result = new ResultStatusReply()
@@ -338,10 +333,6 @@ namespace Rsbc.Dmf.CaseManagement
             result.Success = true;
             return _mapper.Map<Document>(querydocument);
         }
-
-
-    
-
        
     }
 }
