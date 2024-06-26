@@ -285,49 +285,43 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="loginIds"></param>
         /// <returns></returns>
-        public IEnumerable<Document> UpdateClaimDmer(IEnumerable<Guid> loginIds, Guid driverId)
+        public Document UpdateClaimDmer(Guid loginId, Guid documentId)
         {
             ResultStatusReply result = new ResultStatusReply()
             {
                 Success = false
             };
 
-           
+
             var documents = new List<bcgov_documenturl>();
-            foreach (var loginId in loginIds)
-            {
-                // Query Login to get login ID Guid
-                var querydocuments = dynamicsContext.bcgov_documenturls
-                .Expand(doc => doc.dfp_DriverId)
-                .Expand(doc => doc.dfp_LoginId)
-                .Where(doc => doc._dfp_driverid_value != null && doc._dfp_driverid_value ==  driverId && doc.dfp_LoginId._dfp_driverid_value != loginId).ToList();
 
-                foreach(var document in querydocuments)
+            // Query Login to get login ID Guid
+            var querydocuments = dynamicsContext.bcgov_documenturls
+            .Expand(doc => doc.dfp_DocumentTypeID)
+            
+            // Document Id 
+            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
+
+           
+                if (querydocuments != null)
                 {
-                    if(document != null)
-                    {
-                        document._dfp_loginid_value = loginId;
-                    }
-
-                    dynamicsContext.UpdateObject(document);
-                   
-
+                    querydocuments._dfp_loginid_value = loginId;
                 }
-            }
 
+            dynamicsContext.UpdateObject(querydocuments);
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
-            return _mapper.Map<IEnumerable<Document>>(documents);
+            return _mapper.Map<Document>(querydocuments);
         }
-
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="loginIds"></param>
+        /// <param name="loginId"></param>
+        /// <param name="documentId"></param>
         /// <returns></returns>
-        public IEnumerable<Document> UpdateUnClaimDmer(IEnumerable<Guid> loginIds, Guid driverId)
+        public Document UpdateUnClaimDmer(Guid loginId, Guid documentId)
         {
             ResultStatusReply result = new ResultStatusReply()
             {
@@ -336,32 +330,26 @@ namespace Rsbc.Dmf.CaseManagement
 
 
             var documents = new List<bcgov_documenturl>();
-            foreach (var loginId in loginIds)
+
+            // Query Login to get login ID Guid
+            var querydocuments = dynamicsContext.bcgov_documenturls
+            .Expand(doc => doc.dfp_DocumentTypeID)
+            // Document Id 
+            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
+
+
+            if (querydocuments != null)
             {
-                // Query Login to get login ID Guid
-                var querydocuments = dynamicsContext.bcgov_documenturls
-                .Expand(doc => doc.dfp_DriverId)
-                .Expand(doc => doc.dfp_LoginId)
-                .Where(doc => doc._dfp_driverid_value != null && doc._dfp_driverid_value == driverId && doc.dfp_LoginId._dfp_driverid_value != loginId).ToList();
-
-                foreach (var document in querydocuments)
-                {
-                    if (document != null)
-                    {
-                        document._dfp_loginid_value = null;
-                    }
-
-                    dynamicsContext.UpdateObject(document);
-
-
-                }
+                querydocuments._dfp_loginid_value = null;
             }
 
+            dynamicsContext.UpdateObject(querydocuments);
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
-            return _mapper.Map<IEnumerable<Document>>(documents);
+            return _mapper.Map<Document>(querydocuments);
         }
+
 
         /// <summary>
         /// 
@@ -386,3 +374,5 @@ namespace Rsbc.Dmf.CaseManagement
        
     }
 }
+
+

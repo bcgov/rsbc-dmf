@@ -20,5 +20,6 @@ namespace RSBC.DMF.MedicalPortal.API.ViewModels
         public string DocumentId { get; set; }
 
         public string LoginId { get; set; }
+
     }
 }

@@ -119,7 +119,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 result.Item.Status = dmerCase.DmerStatus ?? string.Empty;
                 result.Item.Provider = new Provider();
                 result.Item.Provider.Name = dmerCase.Login?.FullName ?? string.Empty;
+                result.Item.DocumentId = dmerCase.DocumentId.ToString();
                 result.ResultStatus = ResultStatus.Success;
+                
             }
             catch (Exception ex)
             {
@@ -154,16 +156,22 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        /// <summary>
+        /// Update ClaimDmer
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<UpdateClaimReply> UpdateClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
 
             try
             {
-                var loginIds = request.LoginIds.Select(Guid.Parse);
-                var driverId = Guid.Parse(request.DriverId);
-                var documents = _documentManager.UpdateClaimDmer(loginIds, driverId);
-                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
+                var loginId = Guid.Parse(request.LoginId);
+                var documentId = Guid.Parse(request.DocumentId);
+                var documents = _documentManager.UpdateClaimDmer(loginId, documentId);
+                var mappedDocuments = _mapper.Map<Document>(documents);
                 //result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;
             }
@@ -176,15 +184,21 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        /// <summary>
+        /// Update UnClaimDmer
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
         public async override Task<UpdateClaimReply> UpdateUnClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
 
             try
             {
-                var loginIds = request.LoginIds.Select(Guid.Parse);
-                var driverId = Guid.Parse(request.DriverId);
-                var documents = _documentManager.UpdateUnClaimDmer(loginIds, driverId);
+                var loginId = Guid.Parse(request.LoginId);
+                var documentId = Guid.Parse(request.DocumentId);
+                var documents = _documentManager.UpdateUnClaimDmer(loginId, documentId);
                 var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
                 //result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;

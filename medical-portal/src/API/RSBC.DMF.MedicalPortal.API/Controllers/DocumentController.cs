@@ -176,23 +176,24 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
 
         [HttpPost("claimDmer")]
-        [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
+        [ProducesResponseType(typeof(CaseDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromRoute] string driverId)
+        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromRoute] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
-            var loginIds = profile.LoginIds;
+            var loginId = profile.LoginId;
 
             var request = new UpdateClaimRequest { 
-                LoginIds = { loginIds }, 
-                DriverId = driverId
+                LoginId = loginId,
+                DocumentId = documentId
             };
             
             var reply = _documentManagerClient.UpdateClaimDmer(request);
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Item);
+                var caseDocuments = _mapper.Map<CaseDocument>(reply.Item);
+
                 return Ok(caseDocuments);
             }
             else
@@ -204,30 +205,30 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
 
         [HttpPost("unclaimDmer")]
-        [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
+        [ProducesResponseType(typeof(CaseDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromRoute] string driverId)
+        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromRoute] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
-            var loginIds = profile.LoginIds;
+            var loginId = profile.LoginId;
 
             var request = new UpdateClaimRequest
             {
-                LoginIds = { loginIds },
-                DriverId = driverId
+                LoginId = loginId,
+                DocumentId = documentId
             };
 
             var reply = _documentManagerClient.UpdateClaimDmer(request);
 
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Item);
+                var caseDocuments = _mapper.Map<CaseDocument>(reply.Item);
                 return Ok(caseDocuments);
             }
             else
             {
-                _logger.LogError($"{nameof(UpdateUnclaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
+                _logger.LogError($"{nameof(UpdateUnclaimDmerOnDocument)} error: unable to Unclaim DMER document - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
