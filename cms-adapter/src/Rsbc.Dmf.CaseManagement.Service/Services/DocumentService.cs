@@ -148,8 +148,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var loginId = Guid.Parse(request.LoginId);
                 var documentId = Guid.Parse(request.DocumentId);
-                var documents = _documentManager.UpdateClaimDmer(loginId, documentId);
-                var mappedDocuments = _mapper.Map<Document>(documents);
+                var document = _documentManager.UpdateClaimDmer(loginId, documentId);
+                var mappedDocuments = _mapper.Map<Document>(document);
                 //result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;
             }
@@ -176,8 +176,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
             {
                 var loginId = Guid.Parse(request.LoginId);
                 var documentId = Guid.Parse(request.DocumentId);
-                var documents = _documentManager.UpdateUnClaimDmer(loginId, documentId);
-                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
+                var document = _documentManager.UpdateUnClaimDmer(loginId, documentId);
+                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(document);
                 //result.Items.AddRange(mappedDocuments);
                 result.ResultStatus = ResultStatus.Success;
             }
