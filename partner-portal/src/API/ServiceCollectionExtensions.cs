@@ -1,4 +1,5 @@
 ﻿using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
@@ -6,11 +7,12 @@ using System.Net;
 
 public static class CmsAdapterConfiguration
 {
-    public static IServiceCollection AddCmsAdapterGrpcService(this IServiceCollection services, AppConfig config, AppSecrets secrets)
+    public static IServiceCollection AddCmsAdapterGrpcService(this IServiceCollection services, IConfiguration config)
     {
-        var serviceUrl = config.CmsAdapter.ServerUrl;
-        var clientSecret = secrets.CmsAdapterClientSecret;
-        var validateServerCertificate = config.CmsAdapter.ValidateServerCertificate;
+        var serviceUrl = config["CMS_ADAPTER_URI"];
+        var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];
+        var validateServerCertificate = config["CMS_VALIDATE_SERVER_CERT"] != "false";
+
         if (!string.IsNullOrEmpty(serviceUrl))
         {
             var httpClientHandler = new HttpClientHandler();
