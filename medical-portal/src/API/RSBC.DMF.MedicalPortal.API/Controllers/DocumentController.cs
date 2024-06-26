@@ -10,6 +10,8 @@ using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
 using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
 using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
+using Microsoft.AspNetCore.Authorization;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -179,6 +181,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(typeof(CaseDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
+        [Authorize(Policy = Policies.MedicalPractitioner)]
         public async Task<IActionResult> UpdateClaimDmerOnDocument([FromRoute] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
@@ -208,6 +211,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(typeof(CaseDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
+        [Authorize(Policy = Policies.MedicalPractitioner)]
         public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromRoute] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
