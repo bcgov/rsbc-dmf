@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-[Route("[controller]")]
+[Route("api/[controller]")]
 [ApiController]
 public class WeatherForecastController : ControllerBase
 {

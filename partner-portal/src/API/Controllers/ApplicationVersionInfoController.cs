@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -6,11 +7,11 @@ using System.Reflection;
 [ApiController]
 public class ApplicationVersionInfoController : ControllerBase
 {
-    private readonly AppConfig _config;
+    private readonly IConfiguration _configuration;
 
-    public ApplicationVersionInfoController(AppConfig config)
+    public ApplicationVersionInfoController(IConfiguration configuration)
     {
-        _config = config;
+        _configuration = configuration;
     }
 
     [HttpGet]
@@ -22,9 +23,7 @@ public class ApplicationVersionInfoController : ControllerBase
 
         var avi = new ApplicationVersionInfo
         {
-            Environment = _config.EnvironmentName,
             FileVersion = fileVersion,
-            AppConfig = _config,
         };
 
         return new JsonResult(avi);
