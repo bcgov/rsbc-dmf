@@ -153,5 +153,27 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
             return result;
         }
+
+        public async override Task<UpdateClaimReply> UpdateClaimDmer(UpdateClaimRequest request, ServerCallContext context)
+        {
+            var result = new UpdateClaimReply();
+
+            try
+            {
+                var loginIds = request.LoginIds.Select(Guid.Parse);
+                var driverId = Guid.Parse(request.DriverId);
+                var documents = _documentManager.UpdateClaimDmer(loginIds, driverId);
+                var mappedDocuments = _mapper.Map<IEnumerable<Document>>(documents);
+                //result.Items.AddRange(mappedDocuments);
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

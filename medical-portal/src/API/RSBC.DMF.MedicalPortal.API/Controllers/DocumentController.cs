@@ -175,5 +175,59 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
 
+        [HttpPost("claimDmer")]
+        [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromRoute] string driverId)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            var loginIds = profile.LoginIds;
+
+            var request = new UpdateClaimRequest { 
+                LoginIds = { loginIds }, 
+                DriverId = driverId
+            };
+            
+            var reply = _documentManagerClient.UpdateClaimDmer(request);
+            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            {
+                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Item);
+                return Ok(caseDocuments);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(UpdateClaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+
+        [HttpPost("unclaimDmer")]
+        [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UpdateUnclaimDmerOnDocument()
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            var loginIds = profile.LoginIds;
+
+            // Get the DMER document Type for the logged in User
+            var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
+            var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
+            // ToDo Change this to UpdateUncliamDmer Method
+            var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
+            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            {
+                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Items);
+                return Ok(caseDocuments);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(UpdateUnclaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
     }
 }

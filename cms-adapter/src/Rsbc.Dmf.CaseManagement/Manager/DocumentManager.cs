@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -278,6 +279,48 @@ namespace Rsbc.Dmf.CaseManagement
 
             return _mapper.Map<Document>(document);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginIds"></param>
+        /// <returns></returns>
+        public IEnumerable<Document> UpdateClaimDmer(IEnumerable<Guid> loginIds, Guid driverId)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+           
+            var documents = new List<bcgov_documenturl>();
+            foreach (var loginId in loginIds)
+            {
+                // Query Login to get login ID Guid
+                var querydocuments = dynamicsContext.bcgov_documenturls
+                .Expand(doc => doc.dfp_DriverId)
+                .Expand(doc => doc.dfp_LoginId)
+                .Where(doc => doc._dfp_driverid_value != null && doc._dfp_driverid_value ==  driverId && doc.dfp_LoginId._dfp_driverid_value != loginId).ToList();
+
+                foreach(var document in querydocuments)
+                {
+                    if(document != null)
+                    {
+                        document._dfp_loginid_value = loginId;
+                    }
+
+                    dynamicsContext.UpdateObject(document);
+                   
+
+                }
+            }
+
+            dynamicsContext.SaveChanges();
+            dynamicsContext.DetachAll();
+            result.Success = true;
+            return _mapper.Map<IEnumerable<Document>>(documents);
+        }
+
 
         // TODO loginId is not used
         public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )

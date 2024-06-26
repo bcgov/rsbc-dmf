@@ -126,6 +126,7 @@ service CaseManager {
   // Update Non Comply documents
   rpc UpdateNonComplyDocuments(EmptyRequest) returns (ResultStatusReply);
 
+  
 }
 
 // sync with EntityState enum in Rsbc.Dmf.CaseManagement\Dynamics\DynamicsContext.cs
@@ -528,6 +529,23 @@ service DocumentManager {
 	rpc GetDocumentSubTypeGuid(DocumentIdRequest) returns (GetDocumentSubTypeIdReply);
     rpc GetDmer(CaseIdRequest) returns (GetDmerReply);
     rpc GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest) returns (GetDriverAndCaseDocumentsReply);
+    
+  // Update Claim DMER on documents
+    rpc UpdateClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
+
+ 
+}
+
+message UpdateClaimRequest{
+  repeated string loginIds = 1;
+  string caseId= 2;
+  string driverId = 3;
+}
+
+message UpdateClaimReply{
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+    DmerCase item = 3;
 }
 
 message GetDocumentsByTypeForUsersRequest {
@@ -811,6 +829,7 @@ message ResultStatusReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
 }
+
 
 // END UserManager
 ////////////////////////
