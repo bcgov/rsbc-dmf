@@ -1,8 +1,6 @@
 name: ci-migration-metrics-api
 
 on:
-  push:
-     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:
@@ -61,6 +59,7 @@ jobs:
           head CovTestResults/coverage.opencover.xml      
       
       - name: Codecov
+        continue-on-error: true
         uses: codecov/codecov-action@v2.1.0
         with:
           # User defined upload name. Visible in Codecov UI

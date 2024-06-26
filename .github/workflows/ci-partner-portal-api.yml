@@ -1,0 +1,40 @@
+name: ci-partner-portal-api
+
+on:
+  pull_request:
+    types: [opened, reopened, edited, synchronize]
+    paths:
+      - 'partner-portal/src/API/**'
+      - '.github/workflows/ci-partner-portal-api.yml'
+
+env:
+  working-directory: ./
+  solution-folder: partner-portal/src/API/  
+  IMAGE_NAME: partner-portal-api
+  BUILD_ID: ${{ github.server_url }}!${{ github.repository }}!${{ github.ref_name }}!${{ github.sha }}!${{ github.run_number }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'bcgov'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: rlespinasse/git-commit-data-action@v1.x
+      - name: Extract Branch Name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+      - name: Setup .NET 
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: "8.0.x"
+      - name: Install dependencies
+        run: dotnet restore partner-portal.Server.csproj
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}      
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore partner-portal.Server.csproj
+        working-directory: ${{env.working-directory}}${{env.solution-folder}}
+
