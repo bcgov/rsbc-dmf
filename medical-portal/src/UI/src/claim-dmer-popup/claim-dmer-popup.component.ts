@@ -20,5 +20,5 @@ import { MatSelectModule } from '@angular/material/select';
 })
 export class ClaimDmerPopupComponent {
   onClaimDmer() {}
-  onUncliamDmer() {}
+  onUnclaimDmer() {}
 }

@@ -192,9 +192,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var reply = _documentManagerClient.UpdateClaimDmer(request);
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocuments = _mapper.Map<CaseDocument>(reply.Item);
+                var caseDocument = _mapper.Map<CaseDocument>(reply.Item);
 
-                return Ok(caseDocuments);
+                return Ok(caseDocument);
             }
             else
             {
@@ -219,12 +219,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 DocumentId = documentId
             };
 
-            var reply = _documentManagerClient.UpdateClaimDmer(request);
+            var reply = _documentManagerClient.UpdateUnClaimDmer(request);
 
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocuments = _mapper.Map<CaseDocument>(reply.Item);
-                return Ok(caseDocuments);
+                var caseDocument = _mapper.Map<CaseDocument>(reply.Item);
+                return Ok(caseDocument);
             }
             else
             {
