@@ -17,23 +17,9 @@ builder.WebHost
 var services = builder.Services;
 var env = builder.Environment;
 
+var config = builder.Configuration;
 services.AddSerilogBootstrapLogger();
-
-var config = new AppConfig();
-builder.Configuration
-    .SetBasePath(env.ContentRootPath)
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-    .Build()
-    .Bind(nameof(AppConfig), config);
-config.EnvironmentName = env.EnvironmentName;
-services.AddSingleton(config);
-
-var secrets = new AppSecrets();
-new ConfigurationBuilder().AddUserSecrets<AppSecrets>().Build().Bind(secrets);
-services.AddSingleton(secrets);
-
-services.AddCmsAdapterGrpcService(config, secrets);
+services.AddCmsAdapterGrpcService(config);
 Console.WriteLine($"cms-adapter grpc service registered.");
 
 var corsPolicy = "CorsPolicy";
@@ -41,7 +27,7 @@ services.AddCors(options =>
 {
     options.AddPolicy(corsPolicy,
         builder => builder
-            .WithOrigins($"{config.CorsOrigins}")
+            .WithOrigins($"{config["CORS_ORIGINS"]}")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -50,7 +36,7 @@ services.AddCors(options =>
 
 services.AddControllers();
 
-services.AddSerilogLogger(builder.Configuration, config);
+services.AddSerilogLogger(config, builder.Environment.EnvironmentName == "Development");
 
 services.AddSwaggerGen(options =>
 {

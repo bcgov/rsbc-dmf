@@ -18,7 +18,7 @@ public static class SerilogExtensions
         );
     }
 
-    public static IServiceCollection AddSerilogLogger(this IServiceCollection services, IConfiguration config, AppConfig appConfig)
+    public static IServiceCollection AddSerilogLogger(this IServiceCollection services, IConfiguration config, bool isDevelopment)
     {
         return services.AddSerilog((loggerConfiguration) =>
             {
@@ -30,7 +30,7 @@ public static class SerilogExtensions
                     .Enrich.FromLogContext()
                     .Enrich.WithExceptionDetails();
 
-                if (appConfig.IsDevelopment())
+                if (isDevelopment)
                 {
                     loggerConfiguration.WriteTo.Console();
                 }
@@ -39,8 +39,8 @@ public static class SerilogExtensions
                     //configure default console logs to output json to allow Kibana indexing
                     loggerConfiguration.WriteTo.Console(formatter: new RenderedCompactJsonFormatter());
 
-                    var splunkUrl = appConfig.Splunk?.Url;
-                    var splunkToken = appConfig.Splunk?.Token;
+                    var splunkUrl = config["SPLUNK_URL"];
+                    var splunkToken = config["SPLUNK_TOKEN"];
                     if (string.IsNullOrWhiteSpace(splunkToken) || string.IsNullOrWhiteSpace(splunkUrl))
                     {
                         Log.Warning($"Splunk logging sink is not configured properly, check SPLUNK_TOKEN and SPLUNK_URL env vars");

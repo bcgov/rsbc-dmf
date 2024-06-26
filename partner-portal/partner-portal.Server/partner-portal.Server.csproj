@@ -11,15 +11,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AppSettings.Development.json" />
     <None Remove="AppSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="AppSettings.Development.json">
-      <DependentUpon>AppSettings.json</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="AppSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
