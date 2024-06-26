@@ -1,8 +1,6 @@
 name: ci-system-status-api
 
 on:
-  push:
-     branches: [main] #codecov uses default branch for dashboard stat. recommended change the default branch from main to dev
   pull_request:
     types: [opened, reopened, edited, synchronize]
     paths:

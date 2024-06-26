@@ -294,12 +294,8 @@ namespace Rsbc.Dmf.CaseManagement
 
 
             var documents = new List<bcgov_documenturl>();
-
-            // Query Login to get login ID Guid
             var querydocuments = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
-            
-            // Document Id 
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
 
            
@@ -331,10 +327,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             var documents = new List<bcgov_documenturl>();
 
-            // Query Login to get login ID Guid
             var querydocuments = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
-            // Document Id 
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
 
 
