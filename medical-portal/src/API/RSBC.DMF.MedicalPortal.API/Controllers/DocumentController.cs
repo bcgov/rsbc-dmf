@@ -207,19 +207,22 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
-        public async Task<IActionResult> UpdateUnclaimDmerOnDocument()
+        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromRoute] string driverId)
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginIds = profile.LoginIds;
 
-            // Get the DMER document Type for the logged in User
-            var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
-            var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
-            // ToDo Change this to UpdateUncliamDmer Method
-            var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
+            var request = new UpdateClaimRequest
+            {
+                LoginIds = { loginIds },
+                DriverId = driverId
+            };
+
+            var reply = _documentManagerClient.UpdateClaimDmer(request);
+
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Items);
+                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Item);
                 return Ok(caseDocuments);
             }
             else

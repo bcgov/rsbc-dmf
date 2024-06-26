@@ -15,5 +15,8 @@ namespace Rsbc.Dmf.CaseManagement
         IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId);
 
         IEnumerable<Document> UpdateClaimDmer(IEnumerable<Guid> loginIds, Guid driverId);
+
+        IEnumerable<Document> UpdateUnClaimDmer(IEnumerable<Guid> loginIds, Guid driverId);
+
     }
 }

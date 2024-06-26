@@ -532,7 +532,7 @@ service DocumentManager {
     
   // Update Claim DMER on documents
     rpc UpdateClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
-
+    rpc UpdateUnClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
  
 }
 

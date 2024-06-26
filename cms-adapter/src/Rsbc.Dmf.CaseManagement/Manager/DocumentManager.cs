@@ -322,6 +322,54 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginIds"></param>
+        /// <returns></returns>
+        public IEnumerable<Document> UpdateUnClaimDmer(IEnumerable<Guid> loginIds, Guid driverId)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+
+            var documents = new List<bcgov_documenturl>();
+            foreach (var loginId in loginIds)
+            {
+                // Query Login to get login ID Guid
+                var querydocuments = dynamicsContext.bcgov_documenturls
+                .Expand(doc => doc.dfp_DriverId)
+                .Expand(doc => doc.dfp_LoginId)
+                .Where(doc => doc._dfp_driverid_value != null && doc._dfp_driverid_value == driverId && doc.dfp_LoginId._dfp_driverid_value != loginId).ToList();
+
+                foreach (var document in querydocuments)
+                {
+                    if (document != null)
+                    {
+                        document._dfp_loginid_value = null;
+                    }
+
+                    dynamicsContext.UpdateObject(document);
+
+
+                }
+            }
+
+            dynamicsContext.SaveChanges();
+            dynamicsContext.DetachAll();
+            result.Success = true;
+            return _mapper.Map<IEnumerable<Document>>(documents);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="caseId"></param>
+        /// <param name="loginId"></param>
+        /// <returns></returns>
+
         // TODO loginId is not used
         public IEnumerable<Document> GetDriverAndCaseDocuments(string caseId, string loginId )
         {
