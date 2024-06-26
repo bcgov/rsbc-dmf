@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -15,25 +14,13 @@ builder.WebHost
     .UseUrls()
     .UseKestrel(options => { options.Listen(IPAddress.Any, 8080); });
 var services = builder.Services;
+
 var env = builder.Environment;
+var isDevelopment = env.EnvironmentName == "Development";
 
+var config = builder.Configuration;
 services.AddSerilogBootstrapLogger();
-
-var config = new AppConfig();
-builder.Configuration
-    .SetBasePath(env.ContentRootPath)
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true)
-    .Build()
-    .Bind(nameof(AppConfig), config);
-config.EnvironmentName = env.EnvironmentName;
-services.AddSingleton(config);
-
-var secrets = new AppSecrets();
-new ConfigurationBuilder().AddUserSecrets<AppSecrets>().Build().Bind(secrets);
-services.AddSingleton(secrets);
-
-services.AddCmsAdapterGrpcService(config, secrets);
+services.AddCmsAdapterGrpcService(config);
 Console.WriteLine($"cms-adapter grpc service registered.");
 
 var corsPolicy = "CorsPolicy";
@@ -41,7 +28,7 @@ services.AddCors(options =>
 {
     options.AddPolicy(corsPolicy,
         builder => builder
-            .WithOrigins($"{config.CorsOrigins}")
+            .WithOrigins($"{config["CORS_ORIGINS"]}")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
@@ -50,7 +37,7 @@ services.AddCors(options =>
 
 services.AddControllers();
 
-services.AddSerilogLogger(builder.Configuration, config);
+services.AddSerilogLogger(config, isDevelopment);
 
 services.AddSwaggerGen(options =>
 {
