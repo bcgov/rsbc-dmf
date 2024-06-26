@@ -65,6 +65,7 @@ export class DashboardComponent {
     { value: 3, viewValue: 'Required - Unclaimed' },
     { value: 4, viewValue: 'Required - Claimed' },
     { value: 5, viewValue: 'Submitted' },
+    // TODO values like this should only be in cms-adapter, since they are Dynamics specific data
     { value: 100000003, viewValue: 'Reviewed' },
     { value: 100000005, viewValue: 'Non-Comply' },
     { value: 100000001, viewValue: 'Received' },
@@ -132,7 +133,6 @@ export class DashboardComponent {
       this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
         next: (dmerCase) => {
           if (dmerCase) this.searchedCase = dmerCase;
-          console.log(searchParams, this.searchedCase);
         },
         error: (err) => {
           this.noResults = true;

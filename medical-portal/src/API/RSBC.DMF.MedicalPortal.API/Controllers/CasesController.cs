@@ -83,6 +83,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
                 result.IdCode = @case.Item.IdCode;
                 result.LatestComplianceDate = @case.Item.LatestComplianceDate?.ToDateTimeOffset();
+                result.DriverId = @case.Item.DriverId;
 
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)
