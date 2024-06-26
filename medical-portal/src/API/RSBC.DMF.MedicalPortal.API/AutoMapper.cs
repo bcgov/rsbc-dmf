@@ -21,8 +21,9 @@ namespace RSBC.DMF.MedicalPortal.API
                 // TODO rename to IdCode
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.Case.CaseNumber))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
-                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday))
+                .ForMember(dest => dest.Birthday, opt => opt.MapFrom(src => src.Case.Person.Birthday))              
                 .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.ComplianceDate));
+                
 
             CreateMap<LegacyDocument, ViewModels.CaseDocument>()
                 .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.DueDate))
@@ -30,6 +31,9 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
                 
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
+
+            CreateMap<DmerCase, ViewModels.CaseDocument>()
+                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id));
 
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();

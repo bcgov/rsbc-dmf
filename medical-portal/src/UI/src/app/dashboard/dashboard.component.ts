@@ -26,6 +26,8 @@ import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { PopupService } from '@app/popup/popup.service';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
 
 interface Status {
   value: number;
@@ -52,6 +54,8 @@ interface Status {
     //DmerTypeComponent,
     MatExpansionPanel,
     MedicalDmerTypesComponent,
+    MatDialogModule,
+    ClaimDmerPopupComponent,
   ],
 
   templateUrl: './dashboard.component.html',
@@ -94,6 +98,7 @@ export class DashboardComponent {
     private casesService: CasesService,
     private documentService: DocumentService,
     private popupService: PopupService,
+    private dialog: MatDialog,
   ) {
     console.info('At Dashboard Constructor');
   }
@@ -180,5 +185,15 @@ export class DashboardComponent {
 
   openPopup() {
     this.popupService.openPopup();
+  }
+
+  openClaimPopup() {
+    const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
+      height: '600px',
+      width: '820px',
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed', result);
+    });
   }
 }
