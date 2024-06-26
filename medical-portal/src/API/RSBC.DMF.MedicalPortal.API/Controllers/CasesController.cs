@@ -76,7 +76,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = document.Item?.DmerType ?? string.Empty;
-                result.Status = document.Item?.Status ?? string.Empty;
+                result.Status = document.Item?.Status ?? "Not Requested";
                 result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
