@@ -25,6 +25,8 @@ export class ClaimDmerPopupComponent {
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) public data: PatientCase,
   ) {}
+
+
   onClaimDmer() {
     this.documentService
       .apiDocumentClaimDmerPost$Json({
@@ -32,5 +34,11 @@ export class ClaimDmerPopupComponent {
       })
       .subscribe();
   }
-  onUnclaimDmer() {}
+
+
+  onUnclaimDmer() {
+    this.documentService.apiDocumentUnclaimDmerPost$Json({
+      documentId: this.data.documentId as string,
+    }).subscribe();
+  }
 }

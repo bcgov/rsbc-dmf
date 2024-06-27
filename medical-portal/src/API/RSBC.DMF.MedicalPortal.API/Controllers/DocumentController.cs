@@ -187,7 +187,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var profile = await _userService.GetCurrentUserContext();
             var loginId = profile.LoginId;
 
-            CaseDocument result = null;
+            DmerDocument result = null;
 
             var request = new UpdateClaimRequest { 
                 LoginId = loginId,
@@ -197,11 +197,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var reply = _documentManagerClient.UpdateClaimDmer(request);
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                result = new CaseDocument();
-                result.DocumentId = reply.Item.DocumentId;
-                
+                result = new DmerDocument();
                
-
                  return Ok(result);
             }
             else

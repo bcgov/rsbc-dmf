@@ -298,17 +298,10 @@ namespace Rsbc.Dmf.CaseManagement
             .Expand(doc => doc.dfp_DocumentTypeID)
             .Expand(doc => doc.dfp_LoginId)
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId ).FirstOrDefault();
-
-            
-
             if (querydocument != null && loggedinUser != null)
-                {
-
-                dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);
-                
-                }
-
-            //dynamicsContext.UpdateObject(querydocument);
+            {
+              dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);     
+            }
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
