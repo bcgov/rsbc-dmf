@@ -187,10 +187,11 @@ export class DashboardComponent {
     this.popupService.openPopup();
   }
 
-  openClaimPopup() {
+  openClaimPopup(searchedCase: PatientCase) {
     const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
       height: '600px',
       width: '820px',
+      data: searchedCase,
     });
     dialogRef.afterClosed().subscribe((result) => {
       console.log('The dialog was closed', result);
