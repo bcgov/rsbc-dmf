@@ -197,9 +197,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var reply = _documentManagerClient.UpdateClaimDmer(request);
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                result = new DmerDocument();
-               
-                 return Ok(result);
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
+                return Ok(caseDocument);
             }
             else
             {
