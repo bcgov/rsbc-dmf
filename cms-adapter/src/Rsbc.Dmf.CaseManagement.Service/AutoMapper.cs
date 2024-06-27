@@ -47,6 +47,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Dto.Case, Case>();
             CreateMap<Dto.Person, Person>();
             CreateMap<Dto.DocumentType, DocumentType>();
+            // CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>()
+            //     .ForMember(dest => dest.Id,
+            //         opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)));
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

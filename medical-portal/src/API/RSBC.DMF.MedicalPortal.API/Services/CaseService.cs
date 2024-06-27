@@ -19,6 +19,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public IEnumerable<string> ByStatus { get; set; } = Array.Empty<string>();
     }
 
+    public class MedicalCondition
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public string FormId { get; set; }
+    }
+
     public class DmerCaseListItem
     {
         public string ClinicName { get; set; }
@@ -37,9 +44,10 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string PatientMiddlename { get; set; }
         public string Status { get; set; }
         public string Title { get; set; }
-        public string DmerType {  get; set; }
-        public DateTimeOffset? DriverBirthDate {  get; set;}
-        public bool IsStarted { get; set;}
+        public string DmerType { get; set; }
+        public DateTimeOffset? DriverBirthDate { get; set; }
+        public bool IsStarted { get; set; }
+        public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
     }
 
     // TODO remove CaseService and use CaseManagerClient directly
@@ -59,6 +67,27 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             return true;
         }
 
+        private IEnumerable<MedicalCondition> MapMedicalConditions(
+            IEnumerable<MedicalConditionItem> medicalConditionItems)
+        {
+            var medicalConditions = new List<MedicalCondition>();
+            if (medicalConditionItems != null)
+            {
+                foreach (var item in medicalConditionItems)
+                {
+                    var newMedicalCondition = new MedicalCondition()
+                    {
+                        Id = item.Identifier,
+                        Description = item.Question,
+                        FormId = item.FormId
+                    };
+                    medicalConditions.Add(newMedicalCondition);
+                }
+            }
+
+            return medicalConditions;
+        }
+
         public async Task<IEnumerable<DmerCaseListItem>> SearchCases(CaseSearchQuery query)
         {
             var userContext = await userService.GetCurrentUserContext();
@@ -73,7 +102,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 // check that the user is a member of the clinic.
                 var canAccess = userContext.ClinicAssignments.Where(x => x.ClinicId == query.ByClinicId).Any();
-                if (! canAccess)
+                if (!canAccess)
                 {
                     return Array.Empty<DmerCaseListItem>();
                 }
@@ -86,7 +115,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 searchRequest.ClinicId = userContext.CurrentClinicAssignment?.ClinicId;
             }
-            
+
             searchRequest.Statuses.Add(query.ByStatus);
 
             var results = (await caseManager.SearchAsync(searchRequest)).Items;
@@ -108,10 +137,9 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 Status = c.Status,
                 DmerType = c.DmerType,
                 DriverBirthDate = c.Driver?.BirthDate != null ? c.Driver?.BirthDate.ToDateTimeOffset() : null,
+                MedicalConditions = MapMedicalConditions(c.MedicalConditions),
                 IsStarted = GetDmerStarted(c.CaseId)
             });
         }
     }
-
-
 }
