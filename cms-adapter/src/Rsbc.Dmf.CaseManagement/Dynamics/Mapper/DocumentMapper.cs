@@ -48,7 +48,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.dfp_DocumentTypeID.dfp_description))
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
+                    .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
                     .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId));
+                    
             }
 
             private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

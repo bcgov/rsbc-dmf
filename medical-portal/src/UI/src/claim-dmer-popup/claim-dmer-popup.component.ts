@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+import { DocumentService } from '@app/shared/api/services';
+import { PatientCase } from '@app/shared/api/models';
 
 @Component({
   selector: 'app-claim-dmer-popup',
@@ -19,6 +21,24 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './claim-dmer-popup.component.scss',
 })
 export class ClaimDmerPopupComponent {
-  onClaimDmer() {}
-  onUnclaimDmer() {}
+  constructor(
+    private documentService: DocumentService,
+    @Inject(MAT_DIALOG_DATA) public data: PatientCase,
+  ) {}
+
+
+  onClaimDmer() {
+    this.documentService
+      .apiDocumentClaimDmerPost$Json({
+        documentId: this.data.documentId as string,
+      })
+      .subscribe();
+  }
+
+
+  onUnclaimDmer() {
+    this.documentService.apiDocumentUnclaimDmerPost$Json({
+      documentId: this.data.documentId as string,
+    }).subscribe();
+  }
 }

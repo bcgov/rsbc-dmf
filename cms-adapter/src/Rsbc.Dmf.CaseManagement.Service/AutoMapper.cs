@@ -47,8 +47,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Dto.Case, Case>();
             CreateMap<Dto.Person, Person>();
             CreateMap<Dto.DocumentType, DocumentType>();
-            CreateMap<Document, DmerCase>()
+            CreateMap<Dto.Document, DmerCase>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.DmerStatus))
+                .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
                 .AddTransform(NullStringConverter);
             CreateMap<Dto.Login, Provider>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))

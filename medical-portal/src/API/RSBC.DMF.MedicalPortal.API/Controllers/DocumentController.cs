@@ -182,10 +182,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
-        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromRoute] string documentId)
+        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromQuery] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginId = profile.LoginId;
+
+            DmerDocument result = null;
 
             var request = new UpdateClaimRequest { 
                 LoginId = loginId,
@@ -195,8 +197,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var reply = _documentManagerClient.UpdateClaimDmer(request);
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocument = _mapper.Map<CaseDocument>(reply.Item);
-
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
                 return Ok(caseDocument);
             }
             else
@@ -212,7 +213,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
-        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromRoute] string documentId)
+        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromQuery] string documentId)
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginId = profile.LoginId;
@@ -227,7 +228,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocument = _mapper.Map<CaseDocument>(reply.Item);
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
                 return Ok(caseDocument);
             }
             else

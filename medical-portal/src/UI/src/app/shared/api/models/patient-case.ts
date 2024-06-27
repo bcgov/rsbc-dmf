@@ -4,6 +4,7 @@ export interface PatientCase {
   birthDate?: string | null;
   caseId?: string | null;
   dmerType?: string | null;
+  documentId?: string | null;
   driverId?: string | null;
   driverLicenseNumber?: string | null;
   dueDate?: string;

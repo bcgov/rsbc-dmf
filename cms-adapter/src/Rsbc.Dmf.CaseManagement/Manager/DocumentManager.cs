@@ -292,19 +292,18 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
+            var loggedinUser = dynamicsContext.dfp_logins.Where(login => login.dfp_loginid ==  loginId).FirstOrDefault();
+
             var querydocument = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
-            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
-
-           
-                if (querydocument != null)
-                {
-                    querydocument._dfp_loginid_value = loginId;
-                }
-
-            dynamicsContext.UpdateObject(querydocument);
+            .Expand(doc => doc.dfp_LoginId)
+            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId ).FirstOrDefault();
+            if (querydocument != null && loggedinUser != null)
+            {
+              dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);     
+            }
             dynamicsContext.SaveChanges();
-            dynamicsContext.DetachAll();
+            
             result.Success = true;
             return _mapper.Map<Document>(querydocument);
         }
@@ -317,17 +316,18 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
+            var loggedinUser = dynamicsContext.dfp_logins.Where(login => login.dfp_loginid == loginId).FirstOrDefault();
+
             var querydocument = dynamicsContext.bcgov_documenturls
             .Expand(doc => doc.dfp_DocumentTypeID)
             .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
 
-
             if (querydocument != null)
             {
-                querydocument._dfp_loginid_value = null;
+                dynamicsContext.DeleteLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);
             }
 
-            dynamicsContext.UpdateObject(querydocument);
+            //dynamicsContext.UpdateObject(querydocument);
             dynamicsContext.SaveChanges();
             dynamicsContext.DetachAll();
             result.Success = true;
