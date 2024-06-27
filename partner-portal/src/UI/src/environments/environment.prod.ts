@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiRootUrl: '/medical-portal',
+  apiRootUrl: '/partner-portal',
   // TODO remove this and use api/Config to get keycloak options, move the initOptions to AppSettings.json if they don't already exist
   keycloakOptions: {
     config: {

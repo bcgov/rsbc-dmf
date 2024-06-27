@@ -23,6 +23,7 @@ export class ConfigurationService {
     if (this.config != null) {
       return of(this.config);
     }
+    // TODO add backend configuration service and uncomment this code block and remove the hardcoded config below
     // return this.configurationService.apiConfigGet().pipe(
     //   tap((c: any) => {
     //     this.config = { ...c };

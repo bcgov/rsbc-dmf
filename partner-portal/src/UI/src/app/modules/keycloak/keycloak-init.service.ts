@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
-import { AuthRoutes } from '../../features/auth/auth.routes';
 import { ConfigurationService } from '../../shared/services/configuration.service';
 // TODO
 import { environment } from '@src/environments/environment.prod';
@@ -29,7 +28,8 @@ export class KeycloakInitService {
         .updateToken()
         .catch((reason) => {
           console.error('Keycloak failed to update token', reason);
-          this.router.navigateByUrl(AuthRoutes.MODULE_PATH)
+          // TODO
+          this.router.navigateByUrl('')
         });
     };
 
