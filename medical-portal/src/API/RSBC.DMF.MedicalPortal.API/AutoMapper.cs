@@ -33,7 +33,10 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<DocumentSubType, ViewModels.DocumentSubTypes>();
 
             CreateMap<DmerCase, ViewModels.CaseDocument>()
-                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id));
+                .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.Status))
+                .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn));
+                //.ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id));
 
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();

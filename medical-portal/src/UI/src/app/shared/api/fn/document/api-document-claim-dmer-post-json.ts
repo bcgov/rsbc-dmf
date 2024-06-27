@@ -9,13 +9,13 @@ import { RequestBuilder } from '../../request-builder';
 import { CaseDocument } from '../../models/case-document';
 
 export interface ApiDocumentClaimDmerPost$Json$Params {
-  documentId: string;
+  documentId?: string;
 }
 
-export function apiDocumentClaimDmerPost$Json(http: HttpClient, rootUrl: string, params: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+export function apiDocumentClaimDmerPost$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
   const rb = new RequestBuilder(rootUrl, apiDocumentClaimDmerPost$Json.PATH, 'post');
   if (params) {
-    rb.path('documentId', params.documentId, {});
+    rb.query('documentId', params.documentId, {});
   }
 
   return http.request(

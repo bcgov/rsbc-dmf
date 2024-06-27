@@ -5,53 +5,51 @@
   </button>
 </div>
 <div mat-dialog-content>
-  <form>
-    <div>
-      <p>
-        This DMER is currently assigned to : USER Name, and they are in your
-        network.
-      </p>
+  <div>
+    <p>
+      This DMER is currently assigned to : USER Name, and they are in your
+      network.
+    </p>
 
-      <ul>
-        <li>
-          Your Role is : Practitioner, and you are eligible to CLAIM or ASSIGN.
-        </li>
-        <li>
-          Your Role is : (Not Practitioner), and you are eligibile to ASSIGN.
-        </li>
-      </ul>
+    <ul>
+      <li>
+        Your Role is : Practitioner, and you are eligible to CLAIM or ASSIGN.
+      </li>
+      <li>
+        Your Role is : (Not Practitioner), and you are eligibile to ASSIGN.
+      </li>
+    </ul>
 
-      <p>
-        If you would like to open this in_network review, Please close the modal
-        and Launch DMER
-      </p>
-    </div>
-    <div>
-      <p>
-        Note that reassigning this review will reset its content when launched.
-      </p>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Assign Review To</mat-label>
-        <mat-select>
-          <mat-option></mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div class="action-buttons">
-      <button mat-raised-button color="primary" (click)="onClaimDmer()">
-        Claim DMER
-      </button>
-      <br />
-      <button
-        mat-button
-        mat-dialog-close
-        color="primary"
-        (click)="onUnclaimDmer()"
-      >
-        Unclaim DMER
-      </button>
-    </div>
-  </form>
+    <p>
+      If you would like to open this in_network review, Please close the modal
+      and Launch DMER
+    </p>
+  </div>
+  <div>
+    <p>
+      Note that reassigning this review will reset its content when launched.
+    </p>
+  </div>
+  <div>
+    <mat-form-field>
+      <mat-label>Assign Review To</mat-label>
+      <mat-select>
+        <mat-option></mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="onClaimDmer()">
+      Claim DMER
+    </button>
+    <br />
+    <button
+      mat-button
+      mat-dialog-close
+      color="primary"
+      (click)="onUnclaimDmer()"
+    >
+      Unclaim DMER
+    </button>
+  </div>
 </div>
