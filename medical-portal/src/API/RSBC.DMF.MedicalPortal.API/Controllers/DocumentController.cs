@@ -228,7 +228,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                var caseDocument = _mapper.Map<CaseDocument>(reply.Item);
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
                 return Ok(caseDocument);
             }
             else
