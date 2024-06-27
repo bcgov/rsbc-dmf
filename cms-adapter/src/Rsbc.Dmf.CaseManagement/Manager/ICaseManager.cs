@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace Rsbc.Dmf.CaseManagement
 {
-
     public interface ICaseManager
     {
         Task<CaseSearchReply> CaseSearch(CaseSearchRequest request);
@@ -32,9 +31,11 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<LegacyComment> GetComment(string commentId);
 
-        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
+        Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments,
+            OriginRestrictions orginRestrictions);
 
-        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string caseId, bool allComments, OriginRestrictions orginRestrictions);
+        Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string caseId, bool allComments,
+            OriginRestrictions orginRestrictions);
 
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(Guid driverId);
 
@@ -54,9 +55,12 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns>Guid of the created case</returns>
         /// 
         Task<Guid?> GetNewestCaseIdForDriver(LegacyCandidateSearchRequest request);
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string medicalType);
 
-        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType);
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate,
+            DateTimeOffset? effectiveDate, string medicalType);
+
+        Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate,
+            DateTimeOffset? effectiveDate, string source, string medicalType);
 
         Task<ResultStatusReply> LinkLoginToDriver(Guid loginId, Guid driverId);
 
@@ -64,11 +68,14 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<ResultStatusReply> MarkMedicalUpdateError(IcbcErrorRequest request);
 
-        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null);
+        Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags,
+            Microsoft.Extensions.Logging.ILogger logger = null);
 
         Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId);
 
         Task<List<Flag>> GetAllFlags();
+
+        Task<List<MedicalCondition>> GetAllMedicalConditions();
 
         Task<CaseSearchReply> GetUnsentMedicalPass();
 
@@ -122,6 +129,5 @@ namespace Rsbc.Dmf.CaseManagement
         Task<CreateStatusReply> CreateICBCDocumentEnvelope(LegacyDocument newDocument);
 
         Task<CreateStatusReply> CreateICBCMedicalCandidateComment(LegacyComment request);
-
     }
 }
