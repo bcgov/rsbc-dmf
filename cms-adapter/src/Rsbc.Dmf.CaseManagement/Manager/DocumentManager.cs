@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Rsbc.Dmf.CaseManagement
 {
@@ -277,6 +278,63 @@ namespace Rsbc.Dmf.CaseManagement
                 .FirstOrDefault();
 
             return _mapper.Map<Document>(document);
-        }   
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="loginIds"></param>
+        /// <returns></returns>
+        public Document UpdateClaimDmer(Guid loginId, Guid documentId)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            var querydocument = dynamicsContext.bcgov_documenturls
+            .Expand(doc => doc.dfp_DocumentTypeID)
+            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
+
+           
+                if (querydocument != null)
+                {
+                    querydocument._dfp_loginid_value = loginId;
+                }
+
+            dynamicsContext.UpdateObject(querydocument);
+            dynamicsContext.SaveChanges();
+            dynamicsContext.DetachAll();
+            result.Success = true;
+            return _mapper.Map<Document>(querydocument);
+        }
+
+   
+        public Document UpdateUnClaimDmer(Guid loginId, Guid documentId)
+        {
+            ResultStatusReply result = new ResultStatusReply()
+            {
+                Success = false
+            };
+
+            var querydocument = dynamicsContext.bcgov_documenturls
+            .Expand(doc => doc.dfp_DocumentTypeID)
+            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId).FirstOrDefault();
+
+
+            if (querydocument != null)
+            {
+                querydocument._dfp_loginid_value = null;
+            }
+
+            dynamicsContext.UpdateObject(querydocument);
+            dynamicsContext.SaveChanges();
+            dynamicsContext.DetachAll();
+            result.Success = true;
+            return _mapper.Map<Document>(querydocument);
+        }
+       
     }
 }
+
+
