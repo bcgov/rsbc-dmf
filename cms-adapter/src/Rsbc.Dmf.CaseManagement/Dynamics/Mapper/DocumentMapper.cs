@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()
-                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.dfp_DocumentSubType.dfp_name))
+                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype))
                     .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
