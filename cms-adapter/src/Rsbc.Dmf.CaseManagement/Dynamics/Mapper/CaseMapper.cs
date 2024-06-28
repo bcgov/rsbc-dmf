@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System.Linq;
@@ -74,7 +75,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             _dynamicsContext.LoadProperty(@case, nameof(incident.stageid_processstage));
 
-            var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows.Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
+            var bpf = _dynamicsContext.dfp_dmfcasebusinessprocessflows
+                .Where(x => x._bpf_incidentid_value == @case.incidentid).FirstOrDefault();
 
             if (bpf != null)
             {
@@ -89,13 +91,43 @@ namespace Rsbc.Dmf.CaseManagement
                 result.AssigneeTitle = @case.owningteam.name;
             }
 
+            // get the medical conditions.
+            List<MedicalCondition> medicalConditions = new List<MedicalCondition>();
+            _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_knownmedicalcondition));
+            if (@case.dfp_incident_dfp_knownmedicalcondition != null &&
+                @case.dfp_incident_dfp_knownmedicalcondition.Count > 0)
+            {
+                foreach (var m in @case.dfp_incident_dfp_knownmedicalcondition)
+                {
+                    if (m._dfp_medicalconditionid_value != null &&
+                        m.statecode == 0 &&
+                        (m.statuscode == 1 || m.statuscode == 100000003))
+                    {
+                        var medicalCondition = await _dynamicsContext.dfp_medicalconditions
+                            .ByKey(m._dfp_medicalconditionid_value.Value).GetValueAsync();
+                        if (medicalCondition != null)
+                        {
+                            medicalConditions.Add(new MedicalCondition
+                            {
+                                Id = medicalCondition.dfp_id,
+                                Description = medicalCondition.dfp_description ?? "Unknown",
+                                FormId = medicalCondition.dfp_formid ?? ""
+                            });
+                        }
+                    }
+                }
+            }
+
+            result.MedicalConditions = medicalConditions;
+
             // get the related decisions.
             _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_decision));
             if (@case.dfp_incident_dfp_decision != null && @case.dfp_incident_dfp_decision.Count > 0)
             {
                 foreach (var decision in @case.dfp_incident_dfp_decision)
                 {
-                    if ((result.DecisionDate == null || decision.createdon > result.DecisionDate) && decision.statecode == 0)
+                    if ((result.DecisionDate == null || decision.createdon > result.DecisionDate) &&
+                        decision.statecode == 0)
                     {
                         result.LatestDecision = "";
 
@@ -184,6 +216,7 @@ namespace Rsbc.Dmf.CaseManagement
                     result = "UNSL";
                     break;
             }
+
             return result;
         }
 
@@ -211,6 +244,7 @@ namespace Rsbc.Dmf.CaseManagement
                     result = "No DMER";
                     break;
             }
+
             return result;
         }
     }

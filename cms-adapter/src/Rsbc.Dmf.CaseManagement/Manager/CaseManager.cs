@@ -21,12 +21,12 @@ namespace Rsbc.Dmf.CaseManagement
         public string CaseId { get; set; }
         public string Title { get; set; }
         public string DriverLicenseNumber { get; set; }
-        public string ClinicId { get; set; }        
+        public string ClinicId { get; set; }
     }
 
     public class LegacyCandidateSearchRequest
     {
-        public string DriverLicenseNumber {  get; set;}
+        public string DriverLicenseNumber { get; set; }
         public string Surname { get; set; }
 
         public int? SequenceNumber { get; set; }
@@ -48,8 +48,8 @@ namespace Rsbc.Dmf.CaseManagement
 
 
     public class LegacyDocument
-    {     
-        public int? SequenceNumber { get; set; }    
+    {
+        public int? SequenceNumber { get; set; }
         public string IdCode { get; set; }
         public string DocumentTypeCode { get; set; }
         public string DocumentType { get; set; }
@@ -170,12 +170,13 @@ namespace Rsbc.Dmf.CaseManagement
 
         public string ClinicId { get; set; }
 
-        public string ClinicName { get; set;}
+        public string ClinicName { get; set; }
 
-        public string DmerType { get; set;}
+        public string DmerType { get; set; }
 
         public int CaseSequence { get; set; }
 
+        public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
     }
 
     public class Flag
@@ -183,21 +184,29 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public string Description { get; set; }
         public FlagTypeOptionSet? FlagType { get; set; }
+        public string FormId { get; set; }
+    }
+
+    public class MedicalCondition
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public string FormId { get; set; }
     }
 
     public enum DecisionOutcome
-    {        
+    {
         FitToDrive = 1,
         NonComply = 2,
         UnfitToDrive = 3
     }
 
-   
+
     public class Decision
     {
         public string Id { get; set; }
         public string Description { get; set; }
-        public DateTimeOffset CreatedOn {  get; set;}
+        public DateTimeOffset CreatedOn { get; set; }
         public DecisionOutcome? Outcome { get; set; }
     }
 
@@ -209,12 +218,11 @@ namespace Rsbc.Dmf.CaseManagement
     }
 
     [Obsolete("use shared-utils SubmittalStatus.cs")]
-
     public enum submittalStatusOptionSet
     {
         Accept = 100000001,
-        Reject = 100000004, 
-        CleanPass=  100000009,
+        Reject = 100000004,
+        CleanPass = 100000009,
         ManualPass = 100000012,
         Empty = 100000013,
         OpenRequired = 100000000,
@@ -254,10 +262,9 @@ namespace Rsbc.Dmf.CaseManagement
         public string DriverLicenseNumber { get; set; }
 
         public string DocumentType { get; set; }
-       
+
         public string CaseTypeCode { get; set; }
     }
-
 
 
     public class CreateDecisionRequest
@@ -280,17 +287,15 @@ namespace Rsbc.Dmf.CaseManagement
         public DateTimeOffset? BirthDate { get; set; }
 
         public int? SequenceNumber { get; set; }
-
     }
 
-    public enum StatusCodeOptionSet 
+    public enum StatusCodeOptionSet
     {
         SendToBCMail = 100000002,
         Sent = 100000005,
         FailedToSend = 100000006
     }
 
-    
 
     public class PdfDocument
     {
@@ -318,7 +323,8 @@ namespace Rsbc.Dmf.CaseManagement
         private readonly Dictionary<string, Guid> OutcomeStatusTypes;
         private readonly Dictionary<Guid, Dictionary<string, Guid>> OutcomeSubStatusTypes;
 
-        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper, IMapperAsync<incident, CaseDetail> caseMapper)
+        public CaseManager(DynamicsContext dynamicsContext, ILogger<CaseManager> logger, IMapper mapper,
+            IMapperAsync<incident, CaseDetail> caseMapper)
         {
             this.dynamicsContext = dynamicsContext;
             this.logger = logger;
@@ -343,6 +349,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     result.Add(code, id);
                 }
+
                 dynamicsContext.Detach(item);
             }
 
@@ -374,8 +381,8 @@ namespace Rsbc.Dmf.CaseManagement
                         subresult.Add(code, id);
                     }
                 }
-                dynamicsContext.Detach(item);
 
+                dynamicsContext.Detach(item);
             }
 
             return result;
@@ -389,20 +396,25 @@ namespace Rsbc.Dmf.CaseManagement
         private async Task LazyLoadProperties(incident @case)
         {
             //load clinic details (assuming customer as clinic for now)
-            if (@case.customerid_contact == null) await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
+            if (@case.customerid_contact == null)
+                await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.customerid_contact));
 
             if (@case._dfp_driverid_value.HasValue)
             {
                 //load driver info
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_DriverId));
-                if (@case.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                if (@case.dfp_DriverId != null)
+                    await dynamicsContext.LoadPropertyAsync(@case.dfp_DriverId,
+                        nameof(incident.dfp_DriverId.dfp_PersonId));
             }
 
             if (@case._dfp_medicalpractitionerid_value.HasValue)
             {
                 //load driver info
                 await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_MedicalPractitionerId));
-                if (@case.dfp_MedicalPractitionerId != null) await dynamicsContext.LoadPropertyAsync(@case.dfp_MedicalPractitionerId, nameof(incident.dfp_MedicalPractitionerId.dfp_PersonId));
+                if (@case.dfp_MedicalPractitionerId != null)
+                    await dynamicsContext.LoadPropertyAsync(@case.dfp_MedicalPractitionerId,
+                        nameof(incident.dfp_MedicalPractitionerId.dfp_PersonId));
             }
 
             //load case's flags
@@ -412,27 +424,38 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
             }
 
+            //load case's medical conditions (KMCs)
+            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_knownmedicalcondition));
+            foreach (var medicalcondition in @case.dfp_incident_dfp_knownmedicalcondition)
+            {
+                await dynamicsContext.LoadPropertyAsync(medicalcondition,
+                    nameof(dfp_knownmedicalcondition.dfp_MedicalConditionId));
+            }
+
             //load decisions
             await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
             foreach (var decision in @case.dfp_incident_dfp_decision)
             {
                 await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
-                if (decision.dfp_OutcomeStatus != null) await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus, nameof(dfp_decision.dfp_OutcomeStatus));
+                if (decision.dfp_OutcomeStatus != null)
+                    await dynamicsContext.LoadPropertyAsync(decision.dfp_OutcomeStatus,
+                        nameof(dfp_decision.dfp_OutcomeStatus));
             }
 
             // load owner
             //if (@case._ownerid_value.HasValue)
             //{
             //    //load driver info
-            //    await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.ownerid));
-               
+            //    await dynamicsContext.LoadPro pertyAsync(@case, nameof(incident.ownerid));
+
             //}
         }
 
         public async Task<CaseSearchReply> CaseSearch(CaseSearchRequest request)
         {
             //search matching cases
-            var cases = (await SearchCases(dynamicsContext, request)).Concat(await SearchDriverCases(dynamicsContext, request));
+            var cases = (await SearchCases(dynamicsContext, request)).Concat(
+                await SearchDriverCases(dynamicsContext, request));
 
             //lazy load case related properties
             foreach (var @case in cases)
@@ -452,7 +475,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <param name="allComments"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments, OriginRestrictions originRestrictions)
+        public async Task<IEnumerable<LegacyComment>> GetCaseLegacyComments(string caseId, bool allComments,
+            OriginRestrictions originRestrictions)
         {
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
@@ -460,7 +484,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             var @cases = dynamicsContext.incidents.Expand(x => x.dfp_incident_dfp_comment)
                 .Where(i => i.incidentid == Guid.Parse(caseId))
-            .ToList();
+                .ToList();
 
             foreach (var @case in @cases)
             {
@@ -483,12 +507,14 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 originMatch = true;
                             }
+
                             break;
                         case OriginRestrictions.SystemOnly:
                             if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.System)
                             {
                                 originMatch = true;
                             }
+
                             break;
                     }
 
@@ -519,10 +545,10 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                             }
+
                             result.Add(legacyComment);
                         }
                     }
-
                 }
             }
 
@@ -536,20 +562,21 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="driverId"></param>
         /// <param name="allComments"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverId, bool allComments, OriginRestrictions originRestrictions)
+        public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverId, bool allComments,
+            OriginRestrictions originRestrictions)
         {
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
 
 
             var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == Guid.Parse(driverId))
-            .ToList();
+                .ToList();
 
             foreach (var comment in comments)
             {
                 // ensure related data is loaded.
 
-                
+
                 // determine if there is a match.
 
                 bool originMatch = false;
@@ -564,12 +591,14 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             originMatch = true;
                         }
+
                         break;
                     case OriginRestrictions.SystemOnly:
                         if (comment.dfp_origin != null && comment.dfp_origin == (int?)OriginTypes.System)
                         {
                             originMatch = true;
                         }
+
                         break;
                 }
 
@@ -584,7 +613,7 @@ namespace Rsbc.Dmf.CaseManagement
                         int.TryParse(comment.dfp_caseidguid, out sequenceNumber);
 
                         LegacyComment legacyComment = new LegacyComment
-                        {                            
+                        {
                             CommentDate = comment.createdon.GetValueOrDefault(),
                             CommentId = comment.dfp_commentid.ToString(),
                             CommentText = comment.dfp_commentdetails,
@@ -599,8 +628,8 @@ namespace Rsbc.Dmf.CaseManagement
                         }
 
                         if (comment.owninguser != null &&
-                                comment.owninguser.dfp_signaturename != null &&
-                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
+                            comment.owninguser.dfp_signaturename != null &&
+                            !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                         {
                             legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                         }
@@ -609,7 +638,6 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Add(legacyComment);
                     }
                 }
-
             }
 
             return result;
@@ -621,12 +649,14 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="driverLicenceNumber"></param>
         /// <param name="allComments"></param>
         /// <returns></returns>
-        public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber, bool allComments)
+        public async Task<IEnumerable<LegacyComment>> GetDriverLegacyComments(string driverLicenceNumber,
+            bool allComments)
         {
             List<LegacyComment> result = new List<LegacyComment>();
             // start by the driver
 
-            var @drivers = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
+            var @drivers = dynamicsContext.dfp_drivers
+                .Where(d => d.dfp_licensenumber == driverLicenceNumber && d.statuscode == 1).ToList();
 
             foreach (var driverItem in @drivers)
             {
@@ -640,10 +670,9 @@ namespace Rsbc.Dmf.CaseManagement
                     };
 
 
-
-
                     // get the cases for that driver.
-                    var comments = dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid && i.dfp_origin == (int?)OriginTypes.User
+                    var comments = dynamicsContext.dfp_comments.Where(
+                        i => i._dfp_driverid_value == driverItem.dfp_driverid && i.dfp_origin == (int?)OriginTypes.User
                     ).OrderByDescending(x => x.dfp_legacyid).OrderByDescending(x => x.createdon).ToList();
 
 
@@ -680,15 +709,14 @@ namespace Rsbc.Dmf.CaseManagement
                                 };
 
                                 if (comment.owninguser != null &&
-                                comment.owninguser.dfp_signaturename != null &&
-                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
+                                    comment.owninguser.dfp_signaturename != null &&
+                                    !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                                 {
                                     legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                                 }
 
                                 result.Add(legacyComment);
                             }
-
                         }
                     }
                 }
@@ -716,12 +744,14 @@ namespace Rsbc.Dmf.CaseManagement
 
         public IEnumerable<dfp_driver> GetDriverObjects(string licensenumber)
         {
-            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_licensenumber == licensenumber).ToList();
         }
 
         public IEnumerable<dfp_driver> GetDriverObjectsById(string id)
         {
-            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
+            return dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.statuscode == 1 && d.dfp_driverid == Guid.Parse(id)).ToList();
         }
 
         public async Task<IEnumerable<Driver>> GetDriverByLicenseNumber(string licensenumber)
@@ -775,7 +805,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             List<Driver> result = new List<Driver>();
 
-            var @drivers = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1).ToList();
+            var @drivers = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.statuscode == 1)
+                .ToList();
 
             foreach (var item in @drivers)
             {
@@ -795,7 +826,8 @@ namespace Rsbc.Dmf.CaseManagement
         {
             Driver result = null;
 
-            var driver = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_driverid == id).FirstOrDefault();
+            var driver = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_driverid == id)
+                .FirstOrDefault();
 
             if (driver != null)
             {
@@ -821,7 +853,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-                var cases = dynamicsContext.incidents.Where(d => d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
+                var cases = dynamicsContext.incidents.Where(d =>
+                    d._dfp_driverid_value == driverId && d.statecode == (int)activeStatus);
                 if (cases != null)
                 {
                     var mostRecentProcessingDate = GetDpsProcessingDate();
@@ -856,9 +889,10 @@ namespace Rsbc.Dmf.CaseManagement
                 var fetchedCase = dynamicsContext.incidents
                     .Expand(c => c.dfp_DriverId)
                     .Expand(c => c.dfp_DriverId.dfp_PersonId)
+                    .Expand(c => c.dfp_incident_dfp_knownmedicalcondition)
                     .Where(d => d.incidentid == Guid.Parse(caseId))
                     .FirstOrDefault();
-                if (fetchedCase != null)                
+                if (fetchedCase != null)
                 {
                     result = await _caseMapper.Map(fetchedCase);
                     result.DpsProcessingDate = GetDpsProcessingDate();
@@ -880,6 +914,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var @case = dynamicsContext.incidents
                     .Expand(i => i.dfp_DriverId)
+                    .Expand(i => i.dfp_incident_dfp_knownmedicalcondition)
                     .Where(i => i.ticketnumber == idCode)
                     .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent)
                     .FirstOrDefault();
@@ -911,7 +946,7 @@ namespace Rsbc.Dmf.CaseManagement
                 var fetchedCase = dynamicsContext.incidents.Where(i => i.dfp_DriverId.dfp_driverid == driverId)
                     .OrderByDescending(x => x.createdon).FirstOrDefault();
 
-                if(fetchedCase != null)
+                if (fetchedCase != null)
                 {
                     result = await _caseMapper.Map(fetchedCase);
                 }
@@ -934,7 +969,8 @@ namespace Rsbc.Dmf.CaseManagement
             LegacyComment legacyComment = null;
             try
             {
-                var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId)).FirstOrDefault();
+                var comment = dynamicsContext.dfp_comments.Where(d => d.dfp_commentid == Guid.Parse(commentId))
+                    .FirstOrDefault();
                 await dynamicsContext.LoadPropertyAsync(comment, nameof(dfp_comment.owninguser));
 
                 if (comment != null)
@@ -962,8 +998,8 @@ namespace Rsbc.Dmf.CaseManagement
                     };
 
                     if (comment.owninguser != null &&
-                                comment.owninguser.dfp_signaturename != null &&
-                                !comment.owninguser.dfp_signaturename.Contains("Service Account"))
+                        comment.owninguser.dfp_signaturename != null &&
+                        !comment.owninguser.dfp_signaturename.Contains("Service Account"))
                     {
                         legacyComment.SignatureName = comment.owninguser.dfp_signaturename;
                     }
@@ -991,7 +1027,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 task newTask = new task()
                 {
-
                     description = request.Description,
                     subject = request.Subject,
                     scheduledend = DateTimeOffset.UtcNow,
@@ -1005,14 +1040,14 @@ namespace Rsbc.Dmf.CaseManagement
                 // load owner
                 if (string.IsNullOrEmpty(request.Assignee))
                 {
-                   if (@case._owningteam_value != null)
-                   {
+                    if (@case._owningteam_value != null)
+                    {
                         // create a reference to team
                         var caseTeam = dynamicsContext.teams.ByKey(@case._owningteam_value.Value).GetValue();
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), caseTeam);
                     }
-                    else 
+                    else
                     {
                         // create a reference to system user
                         var caseUser = dynamicsContext.systemusers.ByKey(@case._owninguser_value).GetValue();
@@ -1027,9 +1062,11 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         dynamicsContext.AddTotasks(newTask);
                         dynamicsContext.SetLink(newTask, nameof(task.ownerid), @case._ownerid_value);
-                    };
+                    }
+
+                    ;
                 }
-         
+
                 // Create a bring Forward
                 try
                 {
@@ -1047,9 +1084,9 @@ namespace Rsbc.Dmf.CaseManagement
                     result.ErrorDetail = ex.Message;
                 }
             }
+
             return result;
         }
-
 
 
         /// <summary>
@@ -1064,7 +1101,6 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-
                     Guid idGuid = Guid.Parse(id);
 
                     if (idGuid != Guid.Empty)
@@ -1073,7 +1109,6 @@ namespace Rsbc.Dmf.CaseManagement
                         // ensure the driver is fetched.
                         LazyLoadProperties(result).GetAwaiter().GetResult();
                     }
-                    
                 }
                 catch (Exception ex)
                 {
@@ -1127,7 +1162,6 @@ namespace Rsbc.Dmf.CaseManagement
                     statecode = 0,
                     statuscode = 1,
                     overriddencreatedon = request.CommentDate
-
                 };
                 int sequenceNumber = 0;
                 if (request.SequenceNumber != null)
@@ -1147,6 +1181,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
                     }
+
                     result.Success = true;
                 }
                 catch (Exception ex)
@@ -1154,7 +1189,6 @@ namespace Rsbc.Dmf.CaseManagement
                     Serilog.Log.Error(ex, "CreateLegacyCaseComment Error adding comment");
                     result.Success = false;
                     result.ErrorDetail = "CreateLegacyCaseComment Error adding comment" + ex.Message;
-
                 }
 
                 if (result.Success == true)
@@ -1162,7 +1196,7 @@ namespace Rsbc.Dmf.CaseManagement
                     try
                     {
                         dynamicsContext.SetLink(comment, nameof(dfp_comment.dfp_DriverId), driver);
-                        
+
                         await dynamicsContext.SaveChangesAsync();
                         result.Success = true;
                         result.Id = comment.dfp_commentid.ToString();
@@ -1191,19 +1225,18 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dynamicsContext.UpdateObject(comment);
                     dynamicsContext.SaveChanges();
-                    
+
                     result.Success = true;
                     result.Id = comment.dfp_commentid.ToString();
-                    
                 }
                 catch (Exception ex)
                 {
                     Serilog.Log.Error(ex, "CreateLegacyCaseComment Update Comment Error");
                     result.Success = false;
                     result.ErrorDetail = "CreateLegacyCaseComment Update Comment Error " + ex.Message;
-                }            
+                }
             }
-            
+
             if (!string.IsNullOrEmpty(request.CaseId))
             {
                 Guid caseId;
@@ -1275,8 +1308,7 @@ namespace Rsbc.Dmf.CaseManagement
                     statecode = 0,
                     statuscode = 1,
                     overriddencreatedon = request.CommentDate,
-                    dfp_origin = 100000001         
-                    
+                    dfp_origin = 100000001
                 };
 
 
@@ -1302,7 +1334,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         // create a reference to team
                         var caseTeam = dynamicsContext.teams.ByKey(getCase._owningteam_value.Value).GetValue();
-                  
+
                         assignee = (principal)caseTeam;
 
                         assigneeDisplayName = caseTeam.name;
@@ -1316,14 +1348,12 @@ namespace Rsbc.Dmf.CaseManagement
                         assignee = (principal)caseUser;
 
                         assigneeDisplayName = caseUser.dfp_signaturename;
-
                     }
 
                     comment.dfp_commentdetails = comment.dfp_commentdetails.Replace("{assignee}", assigneeDisplayName);
 
                     dynamicsContext.AddTodfp_comments(comment);
                     dynamicsContext.SetLink(comment, nameof(dfp_comment.ownerid), assignee);
-
                 }
 
                 try
@@ -1336,6 +1366,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         comment = dynamicsContext.dfp_comments.ByKey(tempId).GetValue();
                     }
+
                     result.Success = true;
                 }
                 catch (Exception ex)
@@ -1343,7 +1374,6 @@ namespace Rsbc.Dmf.CaseManagement
                     Serilog.Log.Error(ex, "CreateICBCMedicalCandidateComment Error adding comment");
                     result.Success = false;
                     result.ErrorDetail = "CreateICBCMedicalCandidateComment Error adding comment" + ex.Message;
-
                 }
 
                 if (result.Success == true)
@@ -1362,8 +1392,9 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Success = false;
                         result.ErrorDetail = "CreateICBCMedicalCandidateComment Set Links Error" + ex.Message;
                     }
-                } 
+                }
             }
+
             // Check if the CaseId is null
             if (!string.IsNullOrEmpty(request.CaseId))
             {
@@ -1391,7 +1422,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="documentType"></param>
         /// <param name="businessArea"></param>
         /// <returns></returns>
-        private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType, string businessArea)
+        private dfp_submittaltype GetDocumentType(string documentTypeCodeInput, string documentType,
+            string businessArea)
         {
             dfp_submittaltype result = null;
             string documentTypeCode = null;
@@ -1412,10 +1444,12 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+                    result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode)
+                        .FirstOrDefault();
                     if (result == null)
                     {
-                        result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode).FirstOrDefault();
+                        result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_code == documentTypeCode)
+                            .FirstOrDefault();
                     }
                 }
                 catch (Exception ex)
@@ -1444,7 +1478,8 @@ namespace Rsbc.Dmf.CaseManagement
                 dynamicsContext.AddTodfp_submittaltypes(newRecord);
                 dynamicsContext.SaveChanges();
 
-                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode)
+                    .FirstOrDefault();
             }
 
             return result;
@@ -1497,14 +1532,12 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     // create the case                   
                     await CreateCase(newCase);
-
                 }
-
             }
 
             // Create the unsolicitated document
 
-           
+
             result = await CreateCaseDocument(request);
 
             return result;
@@ -1520,7 +1553,7 @@ namespace Rsbc.Dmf.CaseManagement
         {
             CreateStatusReply result = new CreateStatusReply();
 
-          
+
             // Create a document enevelope
             var documentEnvelope = new LegacyDocument()
             {
@@ -1532,20 +1565,19 @@ namespace Rsbc.Dmf.CaseManagement
                     DriverLicenseNumber = request.Driver.DriverLicenseNumber
                 },
                 CaseId = request.CaseId,
-                
-              
+
+
                 ImportDate = request.ImportDate,
                 DocumentId = request.DocumentId,
                 SequenceNumber = request.SequenceNumber,
                 Solicited = true,
                 Owner = request.Owner,
-                
-                
+
+
                 //DueDate = request.DueDate
-                
             };
 
-            if(request.FaxReceivedDate != null)
+            if (request.FaxReceivedDate != null)
             {
                 documentEnvelope.FaxReceivedDate = request.FaxReceivedDate;
             }
@@ -1553,7 +1585,6 @@ namespace Rsbc.Dmf.CaseManagement
             result = await CreateCaseDocument(documentEnvelope);
 
             return result;
-
         }
 
         /// <summary>
@@ -1595,7 +1626,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (birthDate != null && !(birthDate.Year < 1753 || birthDate > DateTime.Now.AddHours(-1)))
                 {
-                    newDriver.BirthDate = request.Driver.BirthDate; 
+                    newDriver.BirthDate = request.Driver.BirthDate;
                 }
 
                 await CreateDriver(newDriver);
@@ -1616,17 +1647,16 @@ namespace Rsbc.Dmf.CaseManagement
                     //Create a new document with the reject status attached to the driver
 
                     found = false;
-
                 }
 
                 else
                 {
-
                     if (request.Driver.DriverLicenseNumber != "00000000")
                     {
                         // scan through the documents to see if there is document in open pending status
                         // ensure we have the documents.
-                        await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(searchdriver,
+                            nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
 
                         if (documentTypeId != null && request.DocumentType != "Unclassified")
@@ -1647,13 +1677,12 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
 
-               
-               
-                // Load Driver lookup from the documents entity
-               // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
 
-               principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
-               
+                // Load Driver lookup from the documents entity
+                // await dynamicsContext.LoadPropertyAsync(searchdriver, nameof(dfp_driver.dfp_driver_bcgov_documenturl));
+
+                principal newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
+
 
                 // Create the document 
 
@@ -1662,7 +1691,7 @@ namespace Rsbc.Dmf.CaseManagement
                     bcgovDocumentUrl = new bcgov_documenturl();
                 }
 
-                bcgovDocumentUrl.dfp_attachmentnumber = (int) request.DpsDocumentId;
+                bcgovDocumentUrl.dfp_attachmentnumber = (int)request.DpsDocumentId;
 
                 bcgovDocumentUrl.dfp_batchid = request.BatchId;
                 bcgovDocumentUrl.dfp_documentpages = request.DocumentPages.ToString();
@@ -1670,14 +1699,14 @@ namespace Rsbc.Dmf.CaseManagement
                 bcgovDocumentUrl.bcgov_receiveddate = request.FaxReceivedDate;
                 bcgovDocumentUrl.dfp_faxreceiveddate = request.FaxReceivedDate;
 
-                if (request.ImportDate != null && request.ImportDate.Value.Year > 1 )
+                if (request.ImportDate != null && request.ImportDate.Value.Year > 1)
                 {
                     bcgovDocumentUrl.dfp_uploadeddate = request.ImportDate;
                     bcgovDocumentUrl.dfp_dpsprocessingdate = request.ImportDate;
                 }
                 else
                 {
-                    bcgovDocumentUrl.dfp_uploadeddate = DateTimeOffset.Now; 
+                    bcgovDocumentUrl.dfp_uploadeddate = DateTimeOffset.Now;
                     bcgovDocumentUrl.dfp_dpsprocessingdate = DateTimeOffset.Now;
                 }
 
@@ -1711,7 +1740,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (!string.IsNullOrEmpty(request.Origin) && request.Origin == "DPS/KOFAX")
                 {
-
                     if (!found) // only clear the solicited flag if this is a new document; do not clear for "existing envelope"
                     {
                         bcgovDocumentUrl.dfp_solicited = false; // non-user documents default to not solicited
@@ -1719,21 +1747,25 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
                 if (found) // update
-                {    
+                {
                     // 12-20-2023 - Removed code to set solicited on a found document envelope; as it will be set by the ICBC service receiving candidates
                     try
                     {
                         dynamicsContext.UpdateObject(bcgovDocumentUrl);
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                            documentTypeId);
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), searchdriver);
                         dynamicsContext.SaveChanges();
-                        if (!string.IsNullOrEmpty(request.DocumentSubTypeId) && request.DocumentSubTypeId != Guid.Empty.ToString())
+                        if (!string.IsNullOrEmpty(request.DocumentSubTypeId) &&
+                            request.DocumentSubTypeId != Guid.Empty.ToString())
                         {
-                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
+                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d =>
+                                    d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
                                 .FirstOrDefault();
                             if (documentSubType != null)
                             {
-                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType), documentSubType);
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType),
+                                    documentSubType);
                             }
                         }
 
@@ -1762,7 +1794,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (documentTypeId != null)
                         {
-                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                            dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                                documentTypeId);
                         }
 
                         dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchdriver);
@@ -1771,39 +1804,47 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.ownerid), newOwner);
                         }
+
                         if (!string.IsNullOrEmpty(request.DocumentSubTypeId))
                         {
-                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d => d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
+                            var documentSubType = dynamicsContext.dfp_documentsubtypes.Where(d =>
+                                    d.dfp_documentsubtypeid == Guid.Parse(request.DocumentSubTypeId))
                                 .FirstOrDefault();
                             if (documentSubType != null)
                             {
-                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType), documentSubType);
+                                dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentSubType),
+                                    documentSubType);
                             }
                         }
 
                         dynamicsContext.SaveChanges();
 
-                        if (!string.IsNullOrEmpty(request.CaseId) && request.CaseId != Guid.Empty.ToString() && request.CaseId.ToLower() != "null" && request.CaseId.ToLower() != "error")
+                        if (!string.IsNullOrEmpty(request.CaseId) && request.CaseId != Guid.Empty.ToString() &&
+                            request.CaseId.ToLower() != "null" && request.CaseId.ToLower() != "error")
                         {
                             try
                             {
-                                Guid caseId = Guid.Parse(request.CaseId);                                
+                                Guid caseId = Guid.Parse(request.CaseId);
                                 if (caseId != Guid.Empty)
                                 {
-                                    var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId).FirstOrDefault(); ;
+                                    var theCase = dynamicsContext.incidents.Where(d => d.incidentid == caseId)
+                                        .FirstOrDefault();
+                                    ;
                                     if (theCase != null)
                                     {
-                                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId), theCase);
+                                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.bcgov_CaseId),
+                                            theCase);
                                         dynamicsContext.SaveChanges();
                                     }
+
                                     dynamicsContext.Detach(theCase);
-                                }                                
+                                }
                             }
                             catch (Exception ex)
                             {
-                                Log.Error(ex, $"CreateDocumentOnDriver Error linking Case {request.CaseId} to Document.");
+                                Log.Error(ex,
+                                    $"CreateDocumentOnDriver Error linking Case {request.CaseId} to Document.");
                             }
-                            
                         }
 
                         result.Success = true;
@@ -1820,10 +1861,9 @@ namespace Rsbc.Dmf.CaseManagement
                         result.Success = false;
                     }
                 }
-
             }
 
-            return result;       
+            return result;
         }
 
         // NOTE keep in sync with DocumentMapper.TranslateDocumentOrigin
@@ -1834,7 +1874,7 @@ namespace Rsbc.Dmf.CaseManagement
                 { "Practitioner Portal", 100000000 },
                 { "Partner Portal", 100000001 },
                 { "Mercury Uploaded RSBC", 100000014 },
-                { "Migration",  100000015 },
+                { "Migration", 100000015 },
                 { "Driver Portal", 100000016 },
                 { "DPS/KOFAX", 100000017 },
             };
@@ -1854,7 +1894,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-
         public async Task<CreateStatusReply> CreateCaseDocument(LegacyDocument request)
         {
             CreateStatusReply result = new CreateStatusReply();
@@ -1870,12 +1909,11 @@ namespace Rsbc.Dmf.CaseManagement
             if (searchcase != null && searchDriver != null)
             {
                 // Create the case document 
-               
+
 
                 bcgov_documenturl bcgovDocumentUrl = null;
 
                 await dynamicsContext.LoadPropertyAsync(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl));
-
 
 
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
@@ -1911,10 +1949,8 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
 
-
                 try
                 {
-
                     await dynamicsContext.SaveChangesAsync();
                     dynamicsContext.AddTobcgov_documenturls(bcgovDocumentUrl);
                     var saveResult = await dynamicsContext.SaveChangesAsync();
@@ -1926,13 +1962,16 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (documentTypeId != null)
                     {
-                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                        dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                            documentTypeId);
                     }
 
                     if (searchcase != null)
                     {
-                        dynamicsContext.AddLink(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl), bcgovDocumentUrl);
+                        dynamicsContext.AddLink(searchcase, nameof(incident.bcgov_incident_bcgov_documenturl),
+                            bcgovDocumentUrl);
                     }
+
                     dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgovDocumentUrl.dfp_DriverId), searchDriver);
 
 
@@ -1978,7 +2017,7 @@ namespace Rsbc.Dmf.CaseManagement
                     SequenceNumber = request.SequenceNumber,
                     Surname = request.Driver.Surname
                 });
-                
+
                 secondCandidateCreate = false;
                 driver = GetDriverObjects(request.Driver.DriverLicenseNumber).FirstOrDefault();
             }
@@ -1986,7 +2025,8 @@ namespace Rsbc.Dmf.CaseManagement
             if (driver != null && driver.dfp_licensenumber == "00000000") // bypass normal logic
             {
                 // document type ID
-                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+                var documentTypeId =
+                    GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
                 // find the owner.
                 var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
@@ -2028,7 +2068,8 @@ namespace Rsbc.Dmf.CaseManagement
 
                 if (documentTypeId != null)
                 {
-                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                    dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                        documentTypeId);
                 }
 
                 dynamicsContext.SetLink(bcgovDocumentUrl, nameof(bcgov_documenturl.dfp_DriverId), driver);
@@ -2039,8 +2080,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
             else
             {
-
-
                 incident driverCase = GetIncidentById(request.CaseId);
 
                 bool driverMismatch = false;
@@ -2053,17 +2092,22 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                 // document type ID
-                var documentTypeId = GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
+                var documentTypeId =
+                    GetDocumentType(request.DocumentTypeCode, request.DocumentType, request.BusinessArea);
 
 
                 if (driverCase == null)
                 {
-                    var newDriver = new LegacyCandidateSearchRequest() { DriverLicenseNumber = request.Driver.DriverLicenseNumber, Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber };
+                    var newDriver = new LegacyCandidateSearchRequest()
+                    {
+                        DriverLicenseNumber = request.Driver.DriverLicenseNumber,
+                        Surname = request.Driver.Surname ?? string.Empty, SequenceNumber = request.SequenceNumber
+                    };
                     if (secondCandidateCreate)
                     {
                         // create it.                    
-                        await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now, "CreateLegacyCaseDocument-2");
-
+                        await LegacyCandidateCreate(newDriver, request.Driver.BirthDate, DateTime.Now,
+                            "CreateLegacyCaseDocument-2");
                     }
 
                     var newCaseId = await GetNewestCaseIdForDriver(newDriver);
@@ -2084,14 +2128,14 @@ namespace Rsbc.Dmf.CaseManagement
                         // Create a new document with the reject status attached to the driver
 
                         found = false;
-
                     }
 
                     else
                     {
                         // scan through the documents to see if there is document in open pending status
                         // ensure we have the documents.
-                        await dynamicsContext.LoadPropertyAsync(driverCase, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(driverCase,
+                            nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         if (documentTypeId != null)
                         {
@@ -2108,11 +2152,10 @@ namespace Rsbc.Dmf.CaseManagement
                                 }
                             }
                         }
-
                     }
+
                     // find the owner.
                     var newOwner = LookupTeam(request.Owner, request.ValidationPrevious);
-
 
 
                     if (newDocument == null)
@@ -2153,9 +2196,9 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             dynamicsContext.UpdateObject(newDocument);
 
-                            dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);
+                            dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                                documentTypeId);
                             dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DriverId), driver);
-
 
 
                             await dynamicsContext.SaveChangesAsync();
@@ -2189,9 +2232,10 @@ namespace Rsbc.Dmf.CaseManagement
 
                             if (documentTypeId != null)
                             {
-                                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DocumentTypeID), documentTypeId);                                
+                                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DocumentTypeID),
+                                    documentTypeId);
                             }
-                            
+
                             dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.dfp_DriverId), driver);
 
                             var saveResult = dynamicsContext.SaveChanges();
@@ -2200,16 +2244,11 @@ namespace Rsbc.Dmf.CaseManagement
                             {
                                 newDocument = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
                             }
-                            
 
-                            
-                            
-                            
+
                             result.Success = true;
                             result.Id = tempId.ToString();
-
                         }
-
 
 
                         catch (Exception ex)
@@ -2221,7 +2260,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (request.SubmittalStatus == "Manual Pass" || request.SubmittalStatus == "Clean Pass")
                     {
-                        
                         try
                         {
                             var validationPrevious = request.ValidationPrevious;
@@ -2230,15 +2268,17 @@ namespace Rsbc.Dmf.CaseManagement
                                 validationPrevious = $"IDIR\\" + validationPrevious;
                             }
 
-                            systemuser manualPassOwner = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
+                            systemuser manualPassOwner = dynamicsContext.systemusers
+                                .Where(x => x.domainname == validationPrevious).FirstOrDefault();
 
 
                             if (manualPassOwner != null)
                             {
                                 // set the owner to DPSR
                                 //var manualPassOwner = dynamicsContext.systemusers.FirstOrDefault(u => u.domainname == request.ValidationPrevious);
-                                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.ownerid), manualPassOwner);
-                            }                            
+                                dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.ownerid),
+                                    manualPassOwner);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -2250,13 +2290,13 @@ namespace Rsbc.Dmf.CaseManagement
                         if (newOwner != null)
                         {
                             dynamicsContext.SetLink(newDocument, nameof(bcgov_documenturl.ownerid), newOwner);
-
                         }
                     }
                 }
-                await dynamicsContext.SaveChangesAsync();
 
+                await dynamicsContext.SaveChangesAsync();
             }
+
             dynamicsContext.DetachAll();
 
             return result;
@@ -2285,8 +2325,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 Log.Error($"Could not find comment {comment}");
             }
-            return result;
 
+            return result;
         }
 
         /// <summary>
@@ -2298,20 +2338,21 @@ namespace Rsbc.Dmf.CaseManagement
         {
             bool result = false;
 
-            var document = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+            var document = dynamicsContext.bcgov_documenturls
+                .Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
             if (document != null)
             {
                 dynamicsContext.DeactivateObject(document, 2);
                 // set to inactive.                
-                await dynamicsContext.SaveChangesAsync();                
+                await dynamicsContext.SaveChangesAsync();
                 result = true;
             }
             else
             {
                 Log.Error($"Could not find document {documentId}");
             }
-            return result;
 
+            return result;
         }
 
         public async Task<bool> DeleteLegacyDocument(string documentId)
@@ -2320,26 +2361,26 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-            var document = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
-            if (document != null)
-            {
-                dynamicsContext.DeleteObject(document);
-                // set to inactive.                
-                await dynamicsContext.SaveChangesAsync();                
-                result = true;
-            }
-            else
-            {
-                Log.Error($"Could not find document {documentId}");
-            }
+                var document = dynamicsContext.bcgov_documenturls
+                    .Where(x => x.bcgov_documenturlid == Guid.Parse(documentId)).FirstOrDefault();
+                if (document != null)
+                {
+                    dynamicsContext.DeleteObject(document);
+                    // set to inactive.                
+                    await dynamicsContext.SaveChangesAsync();
+                    result = true;
+                }
+                else
+                {
+                    Log.Error($"Could not find document {documentId}");
+                }
             }
             catch (Exception ex)
             {
                 Log.Error(ex, $"Error deleting document {documentId}");
             }
-            
-            return result;
 
+            return result;
         }
 
         /// <summary>
@@ -2358,7 +2399,8 @@ namespace Rsbc.Dmf.CaseManagement
                 if (d != null && d.dfp_OutcomeStatus != null)
                 {
                     // ensure the decision has data.
-                    dynamicsContext.LoadPropertyAsync(d, nameof(dfp_decision.dfp_OutcomeStatus)).GetAwaiter().GetResult();
+                    dynamicsContext.LoadPropertyAsync(d, nameof(dfp_decision.dfp_OutcomeStatus)).GetAwaiter()
+                        .GetResult();
                     switch (d.dfp_OutcomeStatus.dfp_name)
                     {
                         case "Fit to Drive":
@@ -2373,6 +2415,7 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
             }
+
             return result;
         }
 
@@ -2399,6 +2442,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     result += ", ";
                 }
+
                 result += firstname.ToUpper();
             }
 
@@ -2428,6 +2472,7 @@ namespace Rsbc.Dmf.CaseManagement
                         break;
                 }
             }
+
             return result;
         }
 
@@ -2493,9 +2538,9 @@ namespace Rsbc.Dmf.CaseManagement
                         Middlename = c.dfp_DriverId?.dfp_PersonId?.middlename ?? string.Empty,
                         Sex = TranslateGenderCode(c.dfp_DriverId?.dfp_PersonId?.gendercode),
                         Surname = c.dfp_DriverId?.dfp_PersonId?.lastname ?? string.Empty,
-                        Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname, c.dfp_DriverId?.dfp_PersonId?.firstname)
+                        Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname,
+                            c.dfp_DriverId?.dfp_PersonId?.firstname)
                     };
-
 
 
                     return new DmerCase
@@ -2519,7 +2564,19 @@ namespace Rsbc.Dmf.CaseManagement
                             .Select(f => new Flag
                             {
                                 Id = f.dfp_FlagId?.dfp_id,
-                                Description = f.dfp_FlagId?.dfp_description
+                                Description = f.dfp_FlagId?.dfp_description,
+                                FormId = f.dfp_FlagId?.dfp_formid
+                            }).ToArray(),
+                        MedicalConditions = c.dfp_incident_dfp_knownmedicalcondition
+                            .Where(f => f.dfp_MedicalConditionId != null &&
+                                        f.statecode == 0 &&
+                                        (f.statuscode == 100000003 ||
+                                         f.statuscode == 1))
+                            .Select(f => new MedicalCondition
+                            {
+                                Id = f.dfp_MedicalConditionId?.dfp_id,
+                                Description = f.dfp_MedicalConditionId?.dfp_description,
+                                FormId = f.dfp_MedicalConditionId?.dfp_formid
                             }).ToArray(),
                         Decisions = c.dfp_incident_dfp_decision
                             .Select(d => new Decision
@@ -2533,7 +2590,6 @@ namespace Rsbc.Dmf.CaseManagement
                     };
                 }).ToArray()
             };
-
         }
 
 
@@ -2554,6 +2610,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 result = value.Value.DateTime;
             }
+
             return result;
         }
 
@@ -2573,14 +2630,16 @@ namespace Rsbc.Dmf.CaseManagement
             contact driverContact;
             Guid? driverContactId;
 
-            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
+            var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d =>
+                d.dfp_licensenumber == request.DriverLicenseNumber && d.statuscode == 1);
             var driverList = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
             driver = driverList.FirstOrDefault();
 
             if (driver != null)
             {
-                var driverCase = dynamicsContext.incidents.OrderByDescending(x => x.createdon).Where(x => x._dfp_driverid_value == driver.dfp_driverid).FirstOrDefault();
+                var driverCase = dynamicsContext.incidents.OrderByDescending(x => x.createdon)
+                    .Where(x => x._dfp_driverid_value == driver.dfp_driverid).FirstOrDefault();
                 if (driverCase != null)
                 {
                     result = driverCase.incidentid;
@@ -2588,10 +2647,10 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
-
         }
 
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string MedicalType)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate,
+            DateTimeOffset? effectiveDate, string MedicalType)
         {
             await LegacyCandidateCreate(request, birthDate, effectiveDate, "Unknown", MedicalType);
         }
@@ -2603,22 +2662,25 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="birthDate"></param>
         /// <param name="effectiveDate"></param>
         /// <returns></returns>
-        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate, DateTimeOffset? effectiveDate, string source, string medicalType)
+        public async Task LegacyCandidateCreate(LegacyCandidateSearchRequest request, DateTimeOffset? birthDate,
+            DateTimeOffset? effectiveDate, string source, string medicalType)
         {
             dfp_driver driver = null;
             contact driverContact;
             Guid? driverContactId;
 
             string randomDriverId = string.Format("e27d7c69-3913-4116-a360-f5e99972b7e8");
-            string driverSubId = randomDriverId.Substring(0, randomDriverId.Length - request.DriverLicenseNumber.Length);
+            string driverSubId =
+                randomDriverId.Substring(0, randomDriverId.Length - request.DriverLicenseNumber.Length);
             Guid driverId = Guid.Parse(driverSubId + request.DriverLicenseNumber);
 
             // attempt to get the driver by guid.
 
-            
+
             if (driver == null) // get by DL 
             {
-                var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0); // active
+                var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d =>
+                    d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0); // active
                 var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
 
                 if (birthDate != null && birthDate.Value.Year < 1753)
@@ -2659,7 +2721,8 @@ namespace Rsbc.Dmf.CaseManagement
                 else
                 {
                     string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
-                    string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+                    string contactSubId =
+                        contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
 
                     var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
 
@@ -2716,6 +2779,7 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             Log.Error(e, "LegacyCandidateCreate ERROR CREATING Contact Null Person - " + e.Message);
                         }
+
                         driver.dfp_PersonId = driverContact;
                         try
                         {
@@ -2726,15 +2790,14 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             Log.Error(e, "LegacyCandidateCreate ERROR Linking Driver Null Person - " + e.Message);
                         }
-
                     }
-
                 }
             }
             else // create the driver.
             {
                 string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
-                string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+                string contactSubId =
+                    contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
 
                 var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
 
@@ -2760,6 +2823,7 @@ namespace Rsbc.Dmf.CaseManagement
                         driverContact.birthdate = new Microsoft.OData.Edm.Date(birthDate.Value.Year,
                             birthDate.Value.Month, birthDate.Value.Day);
                     }
+
                     try
                     {
                         await dynamicsContext.SaveChangesAsync();
@@ -2789,6 +2853,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     driver.dfp_dob = birthDate.Value;
                 }
+
                 await dynamicsContext.SaveChangesAsync();
                 dynamicsContext.AddTodfp_drivers(driver);
                 var saveResult = await dynamicsContext.SaveChangesAsync();
@@ -2798,6 +2863,7 @@ namespace Rsbc.Dmf.CaseManagement
                     driverId = tempId.Value;
                     driver = dynamicsContext.dfp_drivers.ByKey(tempId).GetValue();
                 }
+
                 dynamicsContext.SetLink(driver, nameof(dfp_driver.dfp_PersonId), driverContact);
 
                 // this save is necessary so that the create incident will work.
@@ -2805,20 +2871,19 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
 
-
             // create the case.
             incident newIncident = new incident()
-            {                
+            {
                 // set status to Open Pending for Submission
                 statuscode = 100000000,
                 casetypecode = 2, // DMER
                 // set progress status to in queue, ready for review
-                dfp_progressstatus = 100000000,                
+                dfp_progressstatus = 100000000,
             };
 
             if (medicalType != null)
             {
-                /* 
+                /*
                    1             Class
                    2             Age
                    3             Industrial Road Endorsement
@@ -2844,6 +2909,7 @@ namespace Rsbc.Dmf.CaseManagement
                         dmerType = 100000006; // Suspected
                         break;
                 }
+
                 if (dmerType != null)
                 {
                     newIncident.dfp_dmertype = dmerType;
@@ -2856,15 +2922,15 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
             }
-            else 
+            else
             {
                 // get the number of cases that the driver has.
 
                 await dynamicsContext.LoadPropertyAsync(driver, nameof(dfp_driver.dfp_driver_incident_DriverId));
 
                 sequenceNumber = driver.dfp_driver_incident_DriverId.Count + 1;
-                
             }
+
             if (sequenceNumber == 0)
             {
                 sequenceNumber = 1;
@@ -2876,7 +2942,7 @@ namespace Rsbc.Dmf.CaseManagement
             /*
             newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber.Value);
 
-            // Check sequence number on case 
+            // Check sequence number on case
 
 
 
@@ -2898,7 +2964,7 @@ namespace Rsbc.Dmf.CaseManagement
             */
 
 
-                newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
+            newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
 
             try
             {
@@ -2925,7 +2991,6 @@ namespace Rsbc.Dmf.CaseManagement
                     dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driver);
                     dynamicsContext.SaveChanges();
                 }
-
             }
             catch (Exception e)
             {
@@ -2933,7 +2998,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             dynamicsContext.Detach(newIncident);
-
         }
 
 
@@ -2960,14 +3024,13 @@ namespace Rsbc.Dmf.CaseManagement
 
         public void DeleteDecision(Guid id)
         {
-            dfp_decision itemToDelete = dynamicsContext.dfp_decisions.Where(x => x.dfp_decisionid == id).FirstOrDefault();
+            dfp_decision itemToDelete =
+                dynamicsContext.dfp_decisions.Where(x => x.dfp_decisionid == id).FirstOrDefault();
             if (itemToDelete != null)
             {
                 dynamicsContext.DeleteObject(itemToDelete);
                 dynamicsContext.SaveChanges();
             }
-            
-
         }
 
         public async Task<ResultStatusReply> CreateDecision(CreateDecisionRequest request)
@@ -2975,8 +3038,10 @@ namespace Rsbc.Dmf.CaseManagement
             ResultStatusReply result = new ResultStatusReply();
             result.Success = false;
 
-            var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == Guid.Parse(request.DriverId)).FirstOrDefault();
-            var sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault();
+            var driver = dynamicsContext.dfp_drivers.Where(x => x.dfp_driverid == Guid.Parse(request.DriverId))
+                .FirstOrDefault();
+            var sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId))
+                .FirstOrDefault();
 
             bool reOpenIncident = sparseCase.statecode != null && sparseCase.statecode == 1; // inactive
             int? currentStatus = sparseCase.statuscode;
@@ -2984,14 +3049,14 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 dynamicsContext.ActivateObject(sparseCase, 2);
                 dynamicsContext.SaveChanges();
-                sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId)).FirstOrDefault();
+                sparseCase = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(request.CaseId))
+                    .FirstOrDefault();
             }
 
             //try
             //{                
-            if (request.OutcomeText != null)  // only create if there was a decision.
+            if (request.OutcomeText != null) // only create if there was a decision.
             {
-
                 dfp_decision newDecision = new dfp_decision
                 {
                     //createdon = statusDateTime,
@@ -3019,21 +3084,19 @@ namespace Rsbc.Dmf.CaseManagement
                 }
 
 
-
                 // now check the decisions.
 
 
                 bool createDecision = false;
                 if (sparseCase.dfp_incident_dfp_decision == null || sparseCase.dfp_incident_dfp_decision.Count == 0
-                    )
-                
+                   )
+
                 {
                     createDecision = true;
                 }
 
                 if (!createDecision)
                 {
-
                     bool firstMatch = true;
                     List<Guid> itemsToDelete = new List<Guid>();
 
@@ -3042,12 +3105,12 @@ namespace Rsbc.Dmf.CaseManagement
                         if (item.dfp_decisionid != null)
                         {
                             if (item.createdon == newDecision.overriddencreatedon &&
-                            item.statecode == newDecision.statecode &&
-                            item.statuscode == newDecision.statuscode &&
-                            item.dfp_decisiontype == newDecision.dfp_decisiontype &&
-                            item.dfp_eligibledriverlicenceclass == newDecision.dfp_eligibledriverlicenceclass &&
-                            item._dfp_outcomestatus_value == outcomeStatusTypeId
-                            )
+                                item.statecode == newDecision.statecode &&
+                                item.statuscode == newDecision.statuscode &&
+                                item.dfp_decisiontype == newDecision.dfp_decisiontype &&
+                                item.dfp_eligibledriverlicenceclass == newDecision.dfp_eligibledriverlicenceclass &&
+                                item._dfp_outcomestatus_value == outcomeStatusTypeId
+                               )
                             {
                                 if (firstMatch) // keep the first match
                                 {
@@ -3059,7 +3122,6 @@ namespace Rsbc.Dmf.CaseManagement
                                     {
                                         itemsToDelete.Add(item.dfp_decisionid.Value);
                                     }
-
                                 }
                             }
                             else // remove it, not a match
@@ -3070,6 +3132,7 @@ namespace Rsbc.Dmf.CaseManagement
                                 }
                             }
                         }
+
                         dynamicsContext.Detach(item);
                     }
 
@@ -3084,11 +3147,11 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         createDecision = true;
                     }
+
                     if (dirty)
                     {
                         dynamicsContext.SaveChanges();
                     }
-
                 }
 
                 if (createDecision)
@@ -3120,7 +3183,8 @@ namespace Rsbc.Dmf.CaseManagement
                     if (request.OutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText))
                     {
                         outcomeStatusTypeId = OutcomeStatusTypes[request.OutcomeText];
-                        outcomeStatus = dynamicsContext.dfp_outcomestatuses.Where(x => x.dfp_outcomestatusid == outcomeStatusTypeId).FirstOrDefault();
+                        outcomeStatus = dynamicsContext.dfp_outcomestatuses
+                            .Where(x => x.dfp_outcomestatusid == outcomeStatusTypeId).FirstOrDefault();
 
                         dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_OutcomeStatus), outcomeStatus);
 
@@ -3128,19 +3192,23 @@ namespace Rsbc.Dmf.CaseManagement
                     }
 
                     bool outcomeSubStatusSet = false;
-                    if (request.SubOutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText) 
-                                                       && OutcomeSubStatusTypes.ContainsKey(outcomeStatusTypeId) 
-                                                       && OutcomeSubStatusTypes[outcomeStatusTypeId].ContainsKey(request.SubOutcomeText))
+                    if (request.SubOutcomeText != null && OutcomeStatusTypes.ContainsKey(request.OutcomeText)
+                                                       && OutcomeSubStatusTypes.ContainsKey(outcomeStatusTypeId)
+                                                       && OutcomeSubStatusTypes[outcomeStatusTypeId]
+                                                           .ContainsKey(request.SubOutcomeText))
                     {
                         outcomeSubStatusTypeId = OutcomeSubStatusTypes[outcomeStatusTypeId][request.SubOutcomeText];
 
-                        outcomeSubStatus = dynamicsContext.dfp_outcomesubstatuses.Where(x => x.dfp_outcomesubstatusid == outcomeSubStatusTypeId).FirstOrDefault();
+                        outcomeSubStatus = dynamicsContext.dfp_outcomesubstatuses
+                            .Where(x => x.dfp_outcomesubstatusid == outcomeSubStatusTypeId).FirstOrDefault();
 
-                        dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_OutcomeSubStatus), outcomeSubStatus);
+                        dynamicsContext.SetLink(newDecision, nameof(dfp_decision.dfp_OutcomeSubStatus),
+                            outcomeSubStatus);
                         //entity.dfp_OutcomeSubStatus = outcomeSubStatus;
                         dynamicsContext.SaveChanges();
                         outcomeSubStatusSet = true;
                     }
+
                     try
                     {
                         var saveResult = dynamicsContext.SaveChanges();
@@ -3152,13 +3220,19 @@ namespace Rsbc.Dmf.CaseManagement
                         Console.WriteLine("Error adding decision");
                         Console.WriteLine(ex.ToString());
                     }
+
                     // only close the case if it is open.
                     if (sparseCase.statecode != 1)
                     {
                         // close the incident.
-                        var theIncidentResolution = new incidentresolution { incidentid = sparseCase, subject = "Decision Rendered", description = "Decision Rendered" };
+                        var theIncidentResolution = new incidentresolution
+                        {
+                            incidentid = sparseCase, subject = "Decision Rendered", description = "Decision Rendered"
+                        };
                         theIncidentResolution._incidentid_value = sparseCase.incidentid;
-                        var closeIncident = dynamicsContext.CloseIncident(theIncidentResolution, 5); // no execute so it does not send the request.
+                        var closeIncident =
+                            dynamicsContext.CloseIncident(theIncidentResolution,
+                                5); // no execute so it does not send the request.
 
                         // construct a special request to close the incident - required because the OData Client is not sending the right parameters.
 
@@ -3168,12 +3242,15 @@ namespace Rsbc.Dmf.CaseManagement
                         closeRequest.Headers.Add("OData-Version", "4.0");
                         closeRequest.Headers.Add("Accept", "application/json");
 
-                        closeRequest.Content = new StringContent(@"{ ""IncidentResolution"": { ""subject"": ""Closed Case - Migration"",
-    ""incidentid@odata.bind"": ""/incidents(" + sparseCase.incidentid.Value.ToString() + @")""}, ""Status"": 5 }", Encoding.UTF8, "application/json");
+                        closeRequest.Content = new StringContent(
+                            @"{ ""IncidentResolution"": { ""subject"": ""Closed Case - Migration"",
+    ""incidentid@odata.bind"": ""/incidents(" + sparseCase.incidentid.Value.ToString() + @")""}, ""Status"": 5 }",
+                            Encoding.UTF8, "application/json");
 
                         HttpClient httpClient = new HttpClient();
 
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {dynamicsContext._tokenFactory().GetAwaiter().GetResult()}");
+                        httpClient.DefaultRequestHeaders.Add("Authorization",
+                            $"Bearer {dynamicsContext._tokenFactory().GetAwaiter().GetResult()}");
 
                         var response = httpClient.SendAsync(closeRequest).GetAwaiter().GetResult();
                     }
@@ -3182,6 +3259,7 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         dynamicsContext.Detach(outcomeStatus);
                     }
+
                     if (outcomeSubStatusSet)
                     {
                         dynamicsContext.Detach(outcomeSubStatus);
@@ -3189,7 +3267,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dynamicsContext.Detach(sparseCase);
                 }
-
             }
 
             return result;
@@ -3206,7 +3283,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 // step 1 : Create driver contact 
                 string contactIdString = string.Format("FCBCE0AC-82EF-411D-BD95-DB84D5E3D927");
-                string contactSubId = contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
+                string contactSubId =
+                    contactIdString.Substring(0, contactIdString.Length - request.DriverLicenseNumber.Length);
                 var contactId = new Guid(contactSubId + request.DriverLicenseNumber);
 
                 try
@@ -3227,10 +3305,11 @@ namespace Rsbc.Dmf.CaseManagement
                         firstname = request.GivenName,
                     };
 
-                    if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                    if (request.BirthDate != null &&
+                        request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
                     {
                         driverContact.birthdate = new Microsoft.OData.Edm.Date(request.BirthDate.Value.Year,
-                        request.BirthDate.Value.Month, request.BirthDate.Value.Day);
+                            request.BirthDate.Value.Month, request.BirthDate.Value.Day);
                     }
 
                     dynamicsContext.AddTocontacts(driverContact);
@@ -3255,7 +3334,8 @@ namespace Rsbc.Dmf.CaseManagement
                     statuscode = 1,
                 };
 
-                if (request.BirthDate != null && request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
+                if (request.BirthDate != null &&
+                    request.BirthDate > new DateTimeOffset(1900, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 {
                     driver.dfp_dob = request.BirthDate.Value;
                 }
@@ -3323,12 +3403,16 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var temp = dynamicsContext.incidents.Where(x => x.incidentid == id).FirstOrDefault();
-                if (temp != null) { found = true; }                
+                if (temp != null)
+                {
+                    found = true;
+                }
             }
             catch (Exception ex)
             {
                 found = false;
             }
+
             return found;
         }
 
@@ -3341,7 +3425,8 @@ namespace Rsbc.Dmf.CaseManagement
             string sequenceString = sequenceNumber.ToString();
             paddedSize += sequenceString.Length;
 
-            string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + driverLicenseNumber + sequenceString;
+            string incidentIdString = baseGuid.Substring(0, baseGuid.Length - paddedSize) + driverLicenseNumber +
+                                      sequenceString;
 
             return Guid.Parse(incidentIdString);
         }
@@ -3351,7 +3436,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<ResultStatusReply> CreateCase(CreateCaseRequest request )
+        public async Task<ResultStatusReply> CreateCase(CreateCaseRequest request)
         {
             //return case Id in response
             ResultStatusReply result = null;
@@ -3362,10 +3447,11 @@ namespace Rsbc.Dmf.CaseManagement
 
             // Query the driver
 
-            var driverQuery = dynamicsContext.dfp_drivers.Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0).FirstOrDefault();
+            var driverQuery = dynamicsContext.dfp_drivers
+                .Where(d => d.dfp_licensenumber == request.DriverLicenseNumber && d.statecode == 0).FirstOrDefault();
 
 
-            if(driverQuery != null)
+            if (driverQuery != null)
             {
                 await dynamicsContext.LoadPropertyAsync(driverQuery, nameof(dfp_driver.dfp_PersonId));
 
@@ -3379,17 +3465,16 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     // get the number of cases that the driver has.
 
-                    await dynamicsContext.LoadPropertyAsync(driverQuery, nameof(dfp_driver.dfp_driver_incident_DriverId));
+                    await dynamicsContext.LoadPropertyAsync(driverQuery,
+                        nameof(dfp_driver.dfp_driver_incident_DriverId));
 
                     sequenceNumber = driverQuery.dfp_driver_incident_DriverId.Count + 1;
-
                 }
 
                 if (sequenceNumber == 0)
                 {
                     sequenceNumber = 1;
                 }
-
 
 
                 incident newIncident = new incident()
@@ -3403,15 +3488,13 @@ namespace Rsbc.Dmf.CaseManagement
                     casetypecode = TranslateCaseType(request.CaseTypeCode ?? request.DocumentType),
                     dfp_progressstatus = 100000000,
                     dfp_dfcmscasesequencenumber = request.SequenceNumber,
-
-
                 };
 
                 // Check sequence number on case 
 
 
                 newIncident.incidentid = CreateIncidentGuid(request.DriverLicenseNumber, sequenceNumber);
-                
+
 
                 bool found = false;
                 int incidentLoop = 0;
@@ -3428,15 +3511,18 @@ namespace Rsbc.Dmf.CaseManagement
                         throw new Exception("IncidentLoop count exceeded");
                     }
                 }
+
                 newIncident.dfp_dfcmscasesequencenumber = sequenceNumber;
-                
+
                 try
                 {
                     dynamicsContext.AddToincidents(newIncident);
 
-                    if (driverQuery.dfp_PersonId != null && newIncident._customerid_value != driverQuery.dfp_PersonId.contactid)
+                    if (driverQuery.dfp_PersonId != null &&
+                        newIncident._customerid_value != driverQuery.dfp_PersonId.contactid)
                     {
-                        dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact), driverQuery.dfp_PersonId);
+                        dynamicsContext.SetLink(newIncident, nameof(incident.customerid_contact),
+                            driverQuery.dfp_PersonId);
                     }
 
                     var saveResult = await dynamicsContext.SaveChangesAsync();
@@ -3448,30 +3534,28 @@ namespace Rsbc.Dmf.CaseManagement
                         dynamicsContext.Detach(newIncident);
                         newIncident = dynamicsContext.incidents.ByKey(tempId).GetValue();
                     }
-
                 }
                 catch (Exception e)
                 {
                     Log.Error(e, $"CandidateCreate ERROR CREATING INCIDENT - " + e.Message);
                 }
-                
-                
+
+
                 try
                 {
                     // first check to see that the driver is not already linked.
 
                     //await dynamicsContext.LoadPropertyAsync(newIncident, nameof(incident.dfp_DriverId));
 
-                    if (newIncident._dfp_driverid_value == null || newIncident._dfp_driverid_value != driverQuery.dfp_driverid)
+                    if (newIncident._dfp_driverid_value == null ||
+                        newIncident._dfp_driverid_value != driverQuery.dfp_driverid)
                     {
                         dynamicsContext.SetLink(newIncident, nameof(incident.dfp_DriverId), driverQuery);
 
                         // add a link from driver to incident
-                       // dynamicsContext.SetLink(driverQuery, nameof(dfp_driver.dfp_driver_incident_DriverId), newIncident);
+                        // dynamicsContext.SetLink(driverQuery, nameof(dfp_driver.dfp_driver_incident_DriverId), newIncident);
                         await dynamicsContext.SaveChangesAsync();
                     }
-
-
                 }
                 catch (Exception e)
                 {
@@ -3482,7 +3566,6 @@ namespace Rsbc.Dmf.CaseManagement
                 dynamicsContext.DetachAll();
             }
 
- 
 
             return result;
         }
@@ -3497,11 +3580,11 @@ namespace Rsbc.Dmf.CaseManagement
             // name can be username IDIR\name or a Team Name like "Adjudicators"
             // this would need to check team first and then the systemuser entity
             principal result = null;
-            
+
             try
             {
                 string translatedOwner = TranslateOwner(name);
-                
+
                 team lookupTeam = dynamicsContext.teams.Where(x => x.name == translatedOwner).FirstOrDefault();
 
                 if (lookupTeam != null)
@@ -3516,22 +3599,23 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             validationPrevious = $"IDIR\\" + validationPrevious;
                         }
-                        systemuser lookupUser = dynamicsContext.systemusers.Where(x => x.domainname == validationPrevious).FirstOrDefault();
+
+                        systemuser lookupUser = dynamicsContext.systemusers
+                            .Where(x => x.domainname == validationPrevious).FirstOrDefault();
                         if (lookupUser != null)
                         {
                             result = lookupUser;
                         }
-                    }                    
-                }                  
+                    }
+                }
             }
             catch (Exception e)
             {
-                Log.Error (e, $"LookupOwner {name}");
+                Log.Error(e, $"LookupOwner {name}");
                 result = null;
             }
 
             return result;
-
         }
 
 
@@ -3540,7 +3624,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-        private string TranslateStatus (int? statusCode)
+        private string TranslateStatus(int? statusCode)
         {
             var statusMap = new Dictionary<int, string>()
             {
@@ -3578,8 +3662,8 @@ namespace Rsbc.Dmf.CaseManagement
                 { 100000001, "Scheduled Age" },
                 { 100000002, "Commercial" },
                 { 100000003, "Known/Suspected Condition" },
-                { 100000004, "Scheduled Routine"},
-                { 100000005, "No DMER"}
+                { 100000004, "Scheduled Routine" },
+                { 100000005, "No DMER" }
             };
 
             if (dmerType != null && statusMap.ContainsKey(dmerType.Value))
@@ -3600,11 +3684,11 @@ namespace Rsbc.Dmf.CaseManagement
         private int TranslatePriorityCode(string priorityCode)
         {
             var statusMap = new Dictionary<string, int>()
-            {  
-                {  "Regular", 100000000 },
-                { "Urgent / Immediate",  100000001 },
-                { "Expedited" ,  100000002},
-                { "Critical Review" , 100000003},
+            {
+                { "Regular", 100000000 },
+                { "Urgent / Immediate", 100000001 },
+                { "Expedited", 100000002 },
+                { "Critical Review", 100000003 },
             };
 
             if (priorityCode != null && statusMap.ContainsKey(priorityCode))
@@ -3626,17 +3710,17 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                { "Actioned Non-comply", 100000007},
-                { "Clean Pass" ,  100000009},
-                { "Issued", 100000011},
-                { "Manual Pass", 100000012},
-                { "Non-comply", 100000005},
+                { "Actioned Non-comply", 100000007 },
+                { "Clean Pass", 100000009 },
+                { "Issued", 100000011 },
+                { "Manual Pass", 100000012 },
+                { "Non-comply", 100000005 },
                 { "Open-Required", 100000000 },
                 { "Received", 100000001 },
-                { "Rejected",  100000004 },
+                { "Rejected", 100000004 },
                 { "Reviewed", 100000003 },
-                { "Sent", 100000008},
-                { "Uploaded", 100000010  },
+                { "Sent", 100000008 },
+                { "Uploaded", 100000010 },
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
@@ -3659,12 +3743,12 @@ namespace Rsbc.Dmf.CaseManagement
             var statusMap = new Dictionary<string, int>()
             {
                 { "Team - Intake", 100000000 },
-                { "Team - Adjudicators",  100000001 },
-                { "Team - Case Managers" ,  100000002},
+                { "Team - Adjudicators", 100000001 },
+                { "Team - Case Managers", 100000002 },
                 { "Team Leads Review", 100000000 },
                 { "Nurse Case Managers", 100000002 },
                 { "Adjudicators", 100000001 },
-                { "Client Services",100000000 },
+                { "Client Services", 100000000 },
             };
 
             if (queueCode != null && statusMap.ContainsKey(queueCode))
@@ -3685,13 +3769,12 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         private string TranslateOwner(string owner)
         {
-            
             var statusMap = new Dictionary<string, string>()
             {
-                {"Team Leads Review", "Team - Team Lead/Manager" },
-                {"Nurse Case Managers", "Team - Nurse Case Manager" },
-                {"Adjudicators", "Team - Adjudicator" },
-                {"Client Services", "Team - Intake" },
+                { "Team Leads Review", "Team - Team Lead/Manager" },
+                { "Nurse Case Managers", "Team - Nurse Case Manager" },
+                { "Adjudicators", "Team - Adjudicator" },
+                { "Client Services", "Team - Intake" },
             };
 
             if (owner != null && statusMap.ContainsKey(owner))
@@ -3714,16 +3797,15 @@ namespace Rsbc.Dmf.CaseManagement
         {
             var statusMap = new Dictionary<string, int>()
             {
-                { "DMER",2 }, // DMER
-                { "PDR",3 }, // PDR document
-                { "(PDR)PriorityDoctorsReport" , 3},
-                { "UNSL",100000005}, // Unsolisitated Document
-                { "UnsolicitedReportofConcern", 100000005  },
-                { "POL",100000002 }, //Police Report
-                { "Police Report",100000002 },
-                { "(POL)-PoliceReport", 100000002},
+                { "DMER", 2 }, // DMER
+                { "PDR", 3 }, // PDR document
+                { "(PDR)PriorityDoctorsReport", 3 },
+                { "UNSL", 100000005 }, // Unsolisitated Document
+                { "UnsolicitedReportofConcern", 100000005 },
+                { "POL", 100000002 }, //Police Report
+                { "Police Report", 100000002 },
+                { "(POL)-PoliceReport", 100000002 },
                 { "OTHR", 100000004 },
-
             };
 
             if (documentStatusCode != null && statusMap.ContainsKey(documentStatusCode))
@@ -3745,8 +3827,10 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         private static async Task<IEnumerable<incident>> SearchCases(DynamicsContext ctx, CaseSearchRequest criteria)
         {
-            bool notJustDriverLicenseSearch = !string.IsNullOrEmpty(criteria.CaseId) || !string.IsNullOrEmpty(criteria.Title) || !string.IsNullOrEmpty(criteria.ClinicId);
-            bool shouldSearchCases =                
+            bool notJustDriverLicenseSearch = !string.IsNullOrEmpty(criteria.CaseId) ||
+                                              !string.IsNullOrEmpty(criteria.Title) ||
+                                              !string.IsNullOrEmpty(criteria.ClinicId);
+            bool shouldSearchCases =
                 !string.IsNullOrEmpty(criteria.DriverLicenseNumber) ||
                 notJustDriverLicenseSearch;
 
@@ -3766,7 +3850,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
-            
+
             if (!shouldSearchCases) return Array.Empty<incident>();
 
             var caseQuery = ctx.incidents
@@ -3775,9 +3859,10 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
+                .Expand(i => i.dfp_incident_dfp_knownmedicalcondition)
                 .Where(i => i.statecode == 1);
 
-            if (!string.IsNullOrEmpty(criteria.CaseId)) 
+            if (!string.IsNullOrEmpty(criteria.CaseId))
             {
                 caseQuery = caseQuery.Where(i => i.incidentid == Guid.Parse(criteria.CaseId));
             }
@@ -3786,20 +3871,22 @@ namespace Rsbc.Dmf.CaseManagement
                 caseQuery = caseQuery.Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER);
             }
 
-            if (!string.IsNullOrEmpty(criteria.Title)) caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
-            if (!string.IsNullOrEmpty(criteria.ClinicId)) caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
-            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) 
+            if (!string.IsNullOrEmpty(criteria.Title))
+                caseQuery = caseQuery.Where(i => i.ticketnumber == criteria.Title);
+            if (!string.IsNullOrEmpty(criteria.ClinicId))
+                caseQuery = caseQuery.Where(i => i._dfp_clinicid_value == Guid.Parse(criteria.ClinicId));
+            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber))
             {
                 // abort the search if there is not an exact match for driver's licence number
                 // as we do not want the results to include all records...
                 if (driverId != null && driverId != Guid.Empty)
                 {
-                    return Array.Empty<incident>(); 
+                    return Array.Empty<incident>();
                 }
                 else
                 {
                     caseQuery = caseQuery.Where(i => i._dfp_driverid_value == driverId);
-                }                
+                }
             }
 
             return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
@@ -3811,7 +3898,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="ctx"></param>
         /// <param name="criteria"></param>
         /// <returns></returns>
-        private static async Task<IEnumerable<incident>> SearchLegacyCandidate(DynamicsContext ctx, LegacyCandidateSearchRequest criteria)
+        private static async Task<IEnumerable<incident>> SearchLegacyCandidate(DynamicsContext ctx,
+            LegacyCandidateSearchRequest criteria)
         {
             var shouldSearchCases =
                 !string.IsNullOrEmpty(criteria.DriverLicenseNumber) ||
@@ -3819,33 +3907,35 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (!shouldSearchCases) return Array.Empty<incident>();
 
-            Guid? driverId = Guid.Empty;            
-            var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId).Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber ).ToList();
-            
+            Guid? driverId = Guid.Empty;
+            var driverQuery = ctx.dfp_drivers.Expand(x => x.dfp_PersonId)
+                .Where(d => d.dfp_licensenumber == criteria.DriverLicenseNumber).ToList();
+
             dfp_driver driver = null;
 
             foreach (var item in driverQuery)
             {
                 // ensure the person is loaded.
                 await ctx.LoadPropertyAsync(item, nameof(dfp_driver.dfp_PersonId));
-                if (item.dfp_PersonId?.lastname != null && (bool)(item.dfp_PersonId?.lastname.ToUpper().StartsWith(criteria?.Surname.ToUpper())))
+                if (item.dfp_PersonId?.lastname != null &&
+                    (bool)(item.dfp_PersonId?.lastname.ToUpper().StartsWith(criteria?.Surname.ToUpper())))
                 {
                     driver = item;
                     break;
                 }
             }
 
-            
+
             if (driver != null)
             {
                 driverId = driver.dfp_driverid;
                 var caseQuery = ctx.incidents
-                .Expand(i => i.dfp_DriverId)
-                .Expand(i => i.customerid_contact)
-                .Expand(i => i.dfp_ClinicId)
-                .Expand(i => i.dfp_MedicalPractitionerId)
-                .Expand(i => i.dfp_incident_dfp_decision)
-                .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER && i._dfp_driverid_value == driverId);
+                    .Expand(i => i.dfp_DriverId)
+                    .Expand(i => i.customerid_contact)
+                    .Expand(i => i.dfp_ClinicId)
+                    .Expand(i => i.dfp_MedicalPractitionerId)
+                    .Expand(i => i.dfp_incident_dfp_decision)
+                    .Where(i => i.casetypecode == (int)CaseTypeOptionSet.DMER && i._dfp_driverid_value == driverId);
 
                 return (await ((DataServiceQuery<incident>)caseQuery).GetAllPagesAsync()).ToArray();
             }
@@ -3861,14 +3951,18 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="ctx"></param>
         /// <param name="criteria"></param>
         /// <returns></returns>
-        private static async Task<IEnumerable<incident>> SearchDriverCases(DynamicsContext ctx, CaseSearchRequest criteria)
+        private static async Task<IEnumerable<incident>> SearchDriverCases(DynamicsContext ctx,
+            CaseSearchRequest criteria)
         {
             var shouldSearchDrivers = !string.IsNullOrEmpty(criteria.DriverLicenseNumber);
 
             if (!shouldSearchDrivers) return Array.Empty<incident>();
 
-            var driverQuery = ctx.dfp_drivers.Expand(d => d.dfp_PersonId).Where(d => d.statecode == (int)EntityState.Active);
-            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber)) driverQuery = driverQuery.Where(i => i.dfp_licensenumber == criteria.DriverLicenseNumber);
+            var driverQuery = ctx.dfp_drivers
+                .Expand(d => d.dfp_PersonId)
+                .Where(d => d.statecode == (int)EntityState.Active);
+            if (!string.IsNullOrEmpty(criteria.DriverLicenseNumber))
+                driverQuery = driverQuery.Where(i => i.dfp_licensenumber == criteria.DriverLicenseNumber);
             var drivers = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToArray();
             foreach (var driver in drivers)
             {
@@ -3892,7 +3986,8 @@ namespace Rsbc.Dmf.CaseManagement
                 var newFlag = new Flag()
                 {
                     Id = flag.dfp_id,
-                    Description = flag.dfp_description
+                    Description = flag.dfp_description,
+                    FormId = flag.dfp_formid,
                 };
                 if (flag.dfp_type != null)
                 {
@@ -3906,12 +4001,35 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
         /// <summary>
+        /// Get All Known Medical Conditions (KMCs)
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<MedicalCondition>> GetAllMedicalConditions()
+        {
+            List<MedicalCondition> result = new List<MedicalCondition>();
+
+            var medicalConditions = dynamicsContext.dfp_medicalconditions.Execute();
+            foreach (var medicalCondition in medicalConditions)
+            {
+                var newMedicalCondition = new MedicalCondition()
+                {
+                    Id = medicalCondition.dfp_id,
+                    Description = medicalCondition.dfp_description,
+                    FormId = medicalCondition.dfp_formid
+                };
+
+                result.Add(newMedicalCondition);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Get Unsent Medical Updates for clean pass and manual pass
         /// </summary>
         /// <returns></returns>
         public async Task<CaseSearchReply> GetUnsentMedicalPass()
         {
-            
             Log.Information("Start GetUnsentMedicalPass");
             var outputArray = new List<incident>();
 
@@ -3919,10 +4037,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
                 .Where(i => i.statecode == 0 // Active
-                        && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000003
-                        && i._dfp_driverid_value != null
-                        ); // Case should be in File End Tasks (FET)
+                            && i.dfp_datesenttoicbc == null
+                            && i.dfp_bpfstage == 100000003
+                            && i._dfp_driverid_value != null
+                ); // Case should be in File End Tasks (FET)
 
 
             var response = caseQuery.Execute() as QueryOperationResponse<incident>;
@@ -3935,22 +4053,26 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     response = dynamicsContext.Execute<incident>(nextLink) as QueryOperationResponse<incident>;
                 }
+
                 if (response != null)
                 {
                     // You must enumerate the response before calling GetContinuation below.
                     foreach (var item in response)
                     {
-                       // Log.Information(JsonConvert.SerializeObject(item));
+                        // Log.Information(JsonConvert.SerializeObject(item));
 
                         if (item._dfp_driverid_value.HasValue)
                         {
                             //load driver info
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
-                            if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                            if (item.dfp_DriverId != null)
+                                await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId,
+                                    nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
                         // Load documents
-                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(item,
+                            nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         // Check for manual pass document if it exists break
 
@@ -3962,7 +4084,8 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                            Log.Information($"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
+                            Log.Information(
+                                $"{item.dfp_DriverId.dfp_licensenumber}, {item.incidentid.Value}, {item.ticketnumber} {document.bcgov_documenturlid.Value}, {document.dfp_submittalstatus}");
 
                             if (document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass)
                             {
@@ -3973,10 +4096,10 @@ namespace Rsbc.Dmf.CaseManagement
                             // Condition Check if the document is DMER and not manual pass
                             //Updating code on 2 / 29 / 2024 removed the check for manual pass
                             if (
-                                document.dfp_DocumentTypeID != null 
+                                document.dfp_DocumentTypeID != null
                                 && document.dfp_DocumentTypeID.dfp_name == "DMER"
                                 && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                )
+                            )
                             {
                                 addItem = true;
                             }
@@ -3984,7 +4107,6 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (hasManualPassDocument == false)
                         {
-
                             //load decisions
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_incident_dfp_decision));
                             if (item.dfp_incident_dfp_decision.Count > 0)
@@ -3992,11 +4114,12 @@ namespace Rsbc.Dmf.CaseManagement
                                 foreach (var decision in item.dfp_incident_dfp_decision)
                                 {
                                     //await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_decisionid));
-                                    if (decision._dfp_outcomestatus_value != null) await dynamicsContext.LoadPropertyAsync(decision, nameof(dfp_decision.dfp_OutcomeStatus));
+                                    if (decision._dfp_outcomestatus_value != null)
+                                        await dynamicsContext.LoadPropertyAsync(decision,
+                                            nameof(dfp_decision.dfp_OutcomeStatus));
                                 }
 
                                 addItem = true;
-
                             }
 
                             if (addItem)
@@ -4029,10 +4152,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             var caseQuery = (DataServiceQuery<incident>)dynamicsContext.incidents
                 .Where(i => i.statecode == 0 // Active
-                        && i.dfp_datesenttoicbc == null
-                        && i.dfp_bpfstage == 100000002
-                        && i._dfp_driverid_value != null
-                        ); // case is in under review);
+                            && i.dfp_datesenttoicbc == null
+                            && i.dfp_bpfstage == 100000002
+                            && i._dfp_driverid_value != null
+                ); // case is in under review);
 
             // Get the document of type DMER from documents entity and not in Rejected, Clean Pass, or Manual Pass(Query document entity)
             // Add condition to check document is in review (Document entity)
@@ -4046,6 +4169,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     response = dynamicsContext.Execute<incident>(nextLink) as QueryOperationResponse<incident>;
                 }
+
                 if (response != null)
                 {
                     // You must enumerate the response before calling GetContinuation below.
@@ -4055,17 +4179,19 @@ namespace Rsbc.Dmf.CaseManagement
                         {
                             //load driver info
                             await dynamicsContext.LoadPropertyAsync(item, nameof(incident.dfp_DriverId));
-                            if (item.dfp_DriverId != null) await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId, nameof(incident.dfp_DriverId.dfp_PersonId));
+                            if (item.dfp_DriverId != null)
+                                await dynamicsContext.LoadPropertyAsync(item.dfp_DriverId,
+                                    nameof(incident.dfp_DriverId.dfp_PersonId));
                         }
 
 
                         // Load documents
 
-                        await dynamicsContext.LoadPropertyAsync(item, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(item,
+                            nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         bool hasManualPassDocument = false;
 
-                        
 
                         foreach (var document in item.bcgov_incident_bcgov_documenturl)
                         {
@@ -4079,12 +4205,12 @@ namespace Rsbc.Dmf.CaseManagement
 
                         if (!hasManualPassDocument)
                         {
-
                             foreach (var document in item.bcgov_incident_bcgov_documenturl)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
-                                Log.Information($"{item.dfp_DriverId.dfp_licensenumber} typeID {document.dfp_DocumentTypeID} Ticket {item.ticketnumber} Submittal Status {document.dfp_submittalstatus}");
+                                Log.Information(
+                                    $"{item.dfp_DriverId.dfp_licensenumber} typeID {document.dfp_DocumentTypeID} Ticket {item.ticketnumber} Submittal Status {document.dfp_submittalstatus}");
                                 // condition 1: check for
                                 // 1. DMER type
                                 // 2. submital status is in review and not in  Rejected, Clean Pass
@@ -4108,9 +4234,9 @@ namespace Rsbc.Dmf.CaseManagement
                                 //3. Updating code on 2/21/2024 removed the check for manual pass
 
                                 else if (document.dfp_DocumentTypeID != null
-                                    && document.dfp_DocumentTypeID.dfp_name == "DMER"
-                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
-                                    )
+                                         && document.dfp_DocumentTypeID.dfp_name == "DMER"
+                                         && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass
+                                        )
                                 {
                                     outputArray.Add(item);
                                 }
@@ -4119,7 +4245,7 @@ namespace Rsbc.Dmf.CaseManagement
 
                                 else
                                 {
-                                    // condition 3 : Check for 
+                                    // condition 3 : Check for
                                     // 1. Document type is DMER
                                     // 2. Submital status is Uploaded
 
@@ -4128,14 +4254,13 @@ namespace Rsbc.Dmf.CaseManagement
                                           && (document.dfp_submittalstatus == (int)submittalStatusOptionSet.Uploaded)
                                           )
                                     {
-                                        // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag 
+                                        // This is an empty case for now and will be implemented in future for DMER when the document is uploaded state it should add the J flag
                                         //outputArray.Add(item);
                                     }
 
                                 }
 
                                 */
-
                             }
                         }
                     }
@@ -4165,11 +4290,11 @@ namespace Rsbc.Dmf.CaseManagement
             if (mostRecentRecord != null)
             {
                 return mostRecentRecord.dfp_processdate.Value;
-            } 
+            }
             else
             {
                 return DateTimeOffset.UtcNow;
-            }            
+            }
         }
 
         /// <summary>
@@ -4190,7 +4315,7 @@ namespace Rsbc.Dmf.CaseManagement
             Guid? eraResultsGuid = null;
 
             var tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "ERA Results").FirstOrDefault();
-            if(tempQuery != null)
+            if (tempQuery != null)
             {
                 eraResultsGuid = tempQuery.dfp_submittaltypeid.Value;
             }
@@ -4198,37 +4323,35 @@ namespace Rsbc.Dmf.CaseManagement
 
             Guid? reExamResultsGuid = null;
 
-            tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "Road Test - ICBC Re-exam").FirstOrDefault();
+            tempQuery = dynamicsContext.dfp_submittaltypes.Where(x => x.dfp_name == "Road Test - ICBC Re-exam")
+                .FirstOrDefault();
             if (tempQuery != null)
             {
                 reExamResultsGuid = tempQuery.dfp_submittaltypeid.Value;
             }
 
-                var mostRecentRecord = dynamicsContext.bcgov_documenturls
-                    .Expand(x => x.dfp_DocumentTypeID)
-                    .Where(x => x.dfp_uploadeddate != null
-                    && x.dfp_submittalstatus == 100000010 // Document status Uplaoded
-                    && x.dfp_dpsclass.Contains("9 - General") // Check for 9 - General
-                    && x.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not contain remedial
-                    && x._dfp_documenttypeid_value != eraResultsGuid
-                    && x._dfp_documenttypeid_value != reExamResultsGuid )// Exclude ERA Results and Road Test - ICBC Re-exam docuemnt types
-                    .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date 
-                    .Take(1)
-                    .FirstOrDefault();
+            var mostRecentRecord = dynamicsContext.bcgov_documenturls
+                .Expand(x => x.dfp_DocumentTypeID)
+                .Where(x => x.dfp_uploadeddate != null
+                            && x.dfp_submittalstatus == 100000010 // Document status Uplaoded
+                            && x.dfp_dpsclass.Contains("9 - General") // Check for 9 - General
+                            && x.dfp_DocumentTypeID.dfp_businessarea != 100000001 // Does not contain remedial
+                            && x._dfp_documenttypeid_value != eraResultsGuid
+                            && x._dfp_documenttypeid_value !=
+                            reExamResultsGuid) // Exclude ERA Results and Road Test - ICBC Re-exam docuemnt types
+                .OrderBy(i => i.dfp_uploadeddate) // order by oldest uploaded date 
+                .Take(1)
+                .FirstOrDefault();
 
-                if (mostRecentRecord != null)
-                {
-                    return mostRecentRecord.dfp_uploadeddate.Value;
-                }
-                else
-                {
-                    return DateTimeOffset.UtcNow;
-                }
-            
-
+            if (mostRecentRecord != null)
+            {
+                return mostRecentRecord.dfp_uploadeddate.Value;
+            }
+            else
+            {
+                return DateTimeOffset.UtcNow;
+            }
         }
-
-      
 
 
         /// <summary>
@@ -4243,14 +4366,15 @@ namespace Rsbc.Dmf.CaseManagement
 
             //Path 1 : This is for all the documents except ERA results and Road Test
             var querydocuments = from bcgov_documenturl
-                        in dynamicsContext.bcgov_documenturls
-                        where bcgov_documenturl.dfp_submittalstatus == 100000000// Open Required                                                  
-                        && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
+                    in dynamicsContext.bcgov_documenturls
+                where bcgov_documenturl.dfp_submittalstatus ==
+                      100000000 // Open Required                                                  
+                      && bcgov_documenturl.dfp_compliancedate < dpsUploadedDate
+                select bcgov_documenturl;
 
-                        select bcgov_documenturl;
 
-
-            DataServiceCollection<bcgov_documenturl> nonComplyDocuments = new DataServiceCollection<bcgov_documenturl>(querydocuments);
+            DataServiceCollection<bcgov_documenturl> nonComplyDocuments =
+                new DataServiceCollection<bcgov_documenturl>(querydocuments);
 
             UpdateNonComplyDocumentsQuery(nonComplyDocuments);
 
@@ -4262,24 +4386,22 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var queryEraResults = from bcgov_documenturl
                         in dynamicsContext.bcgov_documenturls
-                            where bcgov_documenturl.dfp_submittalstatus == 100000000  // Open Required
-                            && (bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "ERA Results" || bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "Road Test - ICBC Re-exam")
-                            && bcgov_documenturl.dfp_compliancedate < dpsUploadDateEraResults
+                    where bcgov_documenturl.dfp_submittalstatus == 100000000 // Open Required
+                          && (bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "ERA Results" ||
+                              bcgov_documenturl.dfp_DocumentTypeID.dfp_name == "Road Test - ICBC Re-exam")
+                          && bcgov_documenturl.dfp_compliancedate < dpsUploadDateEraResults
+                    select bcgov_documenturl;
 
-                            select bcgov_documenturl;
 
-
-                DataServiceCollection<bcgov_documenturl> nonComplyDocuments2 = new DataServiceCollection<bcgov_documenturl>(queryEraResults);
+                DataServiceCollection<bcgov_documenturl> nonComplyDocuments2 =
+                    new DataServiceCollection<bcgov_documenturl>(queryEraResults);
 
                 UpdateNonComplyDocumentsQuery(nonComplyDocuments2);
             }
-            
-
         }
 
         private async void UpdateNonComplyDocumentsQuery(DataServiceCollection<bcgov_documenturl> nonComplyDocuments)
         {
-            
             List<Guid> documentIds = new List<Guid>();
             foreach (var item in nonComplyDocuments)
             {
@@ -4289,7 +4411,6 @@ namespace Rsbc.Dmf.CaseManagement
 
             foreach (var documentId in documentIds)
             {
-
                 var changedDocument = new bcgov_documenturl
                 {
                     bcgov_documenturlid = documentId,
@@ -4316,21 +4437,18 @@ namespace Rsbc.Dmf.CaseManagement
         /// Method to set the resolve case status
         /// </summary>
         /// <returns></returns>
-
         public async Task ResolveCaseStatusUpdates()
         {
-            
             // 04/25/2024 Removing the check for dfp_bpfstage is FET as this field is inconsistant and this check is being done on mercury end
             var currentDate = DateTimeOffset.UtcNow;
 
             var query = from incident
-                        in dynamicsContext.incidents
-                        where( incident.dfp_caseresolvedate != null
-                        && incident.dfp_caseresolvedate <= currentDate 
-                        && incident.statecode == 0 )
-                        || incident.dfp_immediateclosure == true
-
-                        select incident;
+                    in dynamicsContext.incidents
+                where (incident.dfp_caseresolvedate != null
+                       && incident.dfp_caseresolvedate <= currentDate
+                       && incident.statecode == 0)
+                      || incident.dfp_immediateclosure == true
+                select incident;
 
             DataServiceCollection<incident> resolveCases = new DataServiceCollection<incident>(query);
 
@@ -4340,33 +4458,30 @@ namespace Rsbc.Dmf.CaseManagement
                 ids.Add(item.incidentid.Value);
                 dynamicsContext.Detach(item); // needed in order to allow the incident to be attached below
             }
-            
+
             foreach (var id in ids)
-            { 
-                
+            {
                 var changedIncident = new incident
                 {
                     incidentid = id,
                     dfp_resolvecase = true
                 };
-                dynamicsContext.AttachTo("incidents",changedIncident);
+                dynamicsContext.AttachTo("incidents", changedIncident);
                 dynamicsContext.UpdateObject(changedIncident);
             }
 
             DataServiceResponse response = null;
             try
             {
-                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);                
+                response = dynamicsContext.SaveChanges(SaveChangesOptions.PostOnlySetProperties);
             }
             catch (Exception ex)
             {
                 Serilog.Log.Error(ex, $"CMS.CaseManager ResolveCaseStatusUpdates  ex.Message");
             }
-            
+
             dynamicsContext.DetachAll();
         }
-
-       
 
 
         /// <summary>
@@ -4386,8 +4501,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (dmerEntity != null && resolvedDate != null)
             {
-                dmerEntity.dfp_caseresolvedate = resolvedDate;     
-                
+                dmerEntity.dfp_caseresolvedate = resolvedDate;
+
                 try
                 {
                     dynamicsContext.UpdateObject(dmerEntity);
@@ -4398,7 +4513,6 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     logger.LogError(e, $"SetCaseResolveDate - Error updating");
                 }
-
             }
         }
 
@@ -4417,7 +4531,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-               // string id = caseId;
+                // string id = caseId;
 
                 if (caseId != null && caseId != string.Empty)
                 {
@@ -4425,23 +4539,23 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (currentCase != null && currentCase.statecode == 0)
                     {
-                        await dynamicsContext.LoadPropertyAsync(currentCase, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(currentCase,
+                            nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         if (currentCase.bcgov_incident_bcgov_documenturl != null)
                         {
-                       
                             foreach (var document in currentCase.bcgov_incident_bcgov_documenturl)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.CleanPass)
+                                                                        && document.dfp_submittalstatus ==
+                                                                        (int)submittalStatusOptionSet.CleanPass)
                                 {
-                                    
                                     if (document.dfp_DocumentTypeID != null &&
-                                         document.dfp_DocumentTypeID.dfp_name != null &&
-                                         document.dfp_DocumentTypeID.dfp_name == "DMER")
+                                        document.dfp_DocumentTypeID.dfp_name != null &&
+                                        document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
                                         bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
@@ -4453,9 +4567,7 @@ namespace Rsbc.Dmf.CaseManagement
                                         dynamicsContext.UpdateObject(changedIncident);
                                         result.Success = true;
                                     }
-
                                 }
-
                             }
 
                             try
@@ -4468,12 +4580,11 @@ namespace Rsbc.Dmf.CaseManagement
                             }
 
                             dynamicsContext.DetachAll();
-
                         }
                     }
                 }
             }
-            
+
             catch (Exception e)
             {
                 logger.LogError(e, $"Update Clean Pass Flag - Error updating");
@@ -4481,7 +4592,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
-
         }
 
 
@@ -4491,7 +4601,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-
         public async Task<bool> SetCleanPassFlag(string caseId, bool cleanPassStatus)
         {
             // get the case
@@ -4537,11 +4646,11 @@ namespace Rsbc.Dmf.CaseManagement
 
                     if (currentCase != null && currentCase.statecode == 0)
                     {
-                        await dynamicsContext.LoadPropertyAsync(currentCase, nameof(incident.bcgov_incident_bcgov_documenturl));
+                        await dynamicsContext.LoadPropertyAsync(currentCase,
+                            nameof(incident.bcgov_incident_bcgov_documenturl));
 
                         if (currentCase.bcgov_incident_bcgov_documenturl != null)
                         {
-
                             foreach (var document in currentCase.bcgov_incident_bcgov_documenturl)
                             {
                                 await dynamicsContext.LoadPropertyAsync(document, nameof(document.dfp_DocumentTypeID));
@@ -4550,21 +4659,20 @@ namespace Rsbc.Dmf.CaseManagement
 
 
                                 if (document.dfp_DocumentTypeID != null && document.statecode == 0
-                                    && document.dfp_submittalstatus == (int)submittalStatusOptionSet.ManualPass
-                                    )
+                                                                        && document.dfp_submittalstatus ==
+                                                                        (int)submittalStatusOptionSet.ManualPass
+                                   )
                                 {
-
                                     if (document.dfp_DocumentTypeID != null &&
-                                         document.dfp_DocumentTypeID.dfp_name != null &&
-                                         document.dfp_DocumentTypeID.dfp_name == "DMER")
+                                        document.dfp_DocumentTypeID.dfp_name != null &&
+                                        document.dfp_DocumentTypeID.dfp_name == "DMER")
                                     {
                                         bool detach = dynamicsContext.Detach(currentCase);
                                         var changedIncident = new incident()
                                         {
                                             incidentid = currentCase.incidentid,
-                                                                                   
                                         };
-                                                                                
+
                                         dynamicsContext.AttachTo("incident", changedIncident);
                                         changedIncident.dfp_ismanualpass = true;
                                         dynamicsContext.UpdateObject(changedIncident);
@@ -4576,17 +4684,14 @@ namespace Rsbc.Dmf.CaseManagement
                                         {
                                             Serilog.Log.Error(ex, $"CMS.CaseManager Update Manual Pass  {ex.Message}");
                                         }
+
                                         result.Success = true;
                                     }
-
                                 }
-
                             }
 
-                            
 
                             dynamicsContext.DetachAll();
-
                         }
                     }
                 }
@@ -4599,7 +4704,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
 
             return result;
-
         }
 
         /// <summary>
@@ -4608,7 +4712,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-
         public async Task<bool> SetManualPassFlag(string caseId, bool manualPassStatus)
         {
             // get the case
@@ -4617,7 +4720,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 if (@case.statecode == 0)
                 {
-                   @case.dfp_ismanualpass = manualPassStatus;
+                    @case.dfp_ismanualpass = manualPassStatus;
 
                     dynamicsContext.UpdateObject(@case);
                     await dynamicsContext.SaveChangesAsync();
@@ -4645,8 +4748,9 @@ namespace Rsbc.Dmf.CaseManagement
             try
             {
                 var pdfDocuments = dynamicsContext.dfp_pdfdocuments.Where(
-                d => d.statuscode == (int)StatusCodeOptionSet.SendToBCMail // PDF documents in Send to BC mail Status
-                && d.statecode == 0).ToList();
+                    d =>
+                        d.statuscode == (int)StatusCodeOptionSet.SendToBCMail // PDF documents in Send to BC mail Status
+                        && d.statecode == 0).ToList();
 
 
                 int count = 0;
@@ -4658,30 +4762,33 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         // get the associated document.
 
-                        var document = dynamicsContext.bcgov_documenturls.Where(x => x._dfp_pdfdocumentid_value == pdfDocument.dfp_pdfdocumentid).FirstOrDefault();                         
+                        var document = dynamicsContext.bcgov_documenturls
+                            .Where(x => x._dfp_pdfdocumentid_value == pdfDocument.dfp_pdfdocumentid).FirstOrDefault();
 
                         if (document != null)
                         {
-                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DocumentTypeID));
-                            
-                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_CaseId));
+                            await dynamicsContext.LoadPropertyAsync(pdfDocument,
+                                nameof(pdfDocument.dfp_DocumentTypeID));
 
-                             await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DriverId));
-                            
-                            
+                            await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_CaseId));
+
+                            await dynamicsContext.LoadPropertyAsync(pdfDocument, nameof(pdfDocument.dfp_DriverId));
+
+
                             string filename = count.ToString();
 
-                            if (pdfDocument.dfp_DriverId?.dfp_licensenumber == null || pdfDocument.dfp_CaseId?.title == null)
+                            if (pdfDocument.dfp_DriverId?.dfp_licensenumber == null ||
+                                pdfDocument.dfp_CaseId?.title == null)
                             {
                                 //Log.Information("Info - PDF record has document with no driver ");
-                                Log.Information($"No driver record available for case {pdfDocument?.dfp_CaseId?.title}");
+                                Log.Information(
+                                    $"No driver record available for case {pdfDocument?.dfp_CaseId?.title}");
                             }
                             else
                             {
                                 var driverLicenceNumber = pdfDocument.dfp_DriverId.dfp_licensenumber;
 
-                               filename = $"{driverLicenceNumber}-{filename}-DMF";
-                                
+                                filename = $"{driverLicenceNumber}-{filename}-DMF";
                             }
 
                             filename += ".pdf";
@@ -4696,12 +4803,8 @@ namespace Rsbc.Dmf.CaseManagement
                             };
                             result.Add(pdfDoc);
                         }
-
-                        
                     }
-
                 }
-
             }
             catch (Exception e)
             {
@@ -4712,12 +4815,10 @@ namespace Rsbc.Dmf.CaseManagement
         }
 
 
-
         /// <summary>
         /// Method to set the resolve case status
         /// </summary>
         /// <returns></returns>
-
         public async Task<Guid> CreatePdfDocument(PdfDocument pdfDocumentRequest)
         {
             PdfDocumentReply result = new PdfDocumentReply()
@@ -4727,26 +4828,25 @@ namespace Rsbc.Dmf.CaseManagement
 
             dfp_pdfdocument newDoc = new dfp_pdfdocument()
             {
-                statuscode = (int)pdfDocumentRequest.StatusCode                    
+                statuscode = (int)pdfDocumentRequest.StatusCode
             };
 
             dynamicsContext.AddTodfp_pdfdocuments(newDoc);
-    
+
 
             DataServiceResponse saveResult = dynamicsContext.SaveChanges();
 
             return GetCreatedId(saveResult).Value;
-            
         }
 
-        Guid? GetCreatedId (DataServiceResponse saveResult)
+        Guid? GetCreatedId(DataServiceResponse saveResult)
         {
             Guid? result = null;
             try
             {
                 string returnId = null;
 
-                if(saveResult.Count() > 0)
+                if (saveResult.Count() > 0)
                 {
                     var tempId = saveResult.First().Headers["OData-EntityId"];
 
@@ -4758,10 +4858,10 @@ namespace Rsbc.Dmf.CaseManagement
                         result = Guid.Parse(returnId);
                     }
                 }
-               
             }
             catch (Exception)
-            { }
+            {
+            }
 
 
             return result;
@@ -4771,7 +4871,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// Method to set the resolve case status
         /// </summary>
         /// <returns></returns>
-
         public async Task<PdfDocumentReply> UpdatePdfDocumentStatus(PdfDocument pdfDocumentRequest)
         {
             PdfDocumentReply result = new PdfDocumentReply()
@@ -4779,28 +4878,30 @@ namespace Rsbc.Dmf.CaseManagement
                 Success = false
             };
 
-            try{
-                dfp_pdfdocument pdfDocument = dynamicsContext.dfp_pdfdocuments.ByKey(Guid.Parse(pdfDocumentRequest.PdfDocumentId)).GetValue();
+            try
+            {
+                dfp_pdfdocument pdfDocument = dynamicsContext.dfp_pdfdocuments
+                    .ByKey(Guid.Parse(pdfDocumentRequest.PdfDocumentId)).GetValue();
 
-                if(pdfDocument != null)
+                if (pdfDocument != null)
                 {
-
                     // status to SEND or Failed TO Send
                     pdfDocument.statuscode = (int)pdfDocumentRequest.StatusCode;
-                    
+
                     // 
 
                     dynamicsContext.UpdateObject(pdfDocument);
                     await dynamicsContext.SaveChangesAsync();
-                    result.Success = true;         
+                    result.Success = true;
                 }
-                dynamicsContext.DetachAll();
 
+                dynamicsContext.DetachAll();
             }
-             catch (Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e, $"Update Document Status - Error updating");
             }
+
             return result;
         }
 
@@ -4809,15 +4910,13 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="statusCode"></param>
         /// <returns></returns>
-         private int TranslatePdfDocumentStatus(string submittalStatusCode)
+        private int TranslatePdfDocumentStatus(string submittalStatusCode)
         {
             var statusMap = new Dictionary<string, int>()
             {
-               
                 { "Send To BCMail", 100000002 }, // Received
-                { "Sent",  100000005 }, // Rejected
-                { "Failed to Send" ,  100000006},
-                
+                { "Sent", 100000005 }, // Rejected
+                { "Failed to Send", 100000006 },
             };
 
             if (submittalStatusCode != null && statusMap.ContainsKey(submittalStatusCode))
@@ -4839,22 +4938,21 @@ namespace Rsbc.Dmf.CaseManagement
             ResultStatusReply result = new ResultStatusReply()
             {
                 Success = false
-            };          
+            };
             var driverQuery = dynamicsContext.dfp_drivers.Expand(x => x.dfp_PersonId)
                 .Where(x => x.dfp_licensenumber == driverRequest.DriverLicenseNumber);
 
             var data = (await ((DataServiceQuery<dfp_driver>)driverQuery).GetAllPagesAsync()).ToList();
-  
+
 
             try
             {
-
                 foreach (var driver in data)
                 {
                     dynamicsContext.LoadProperty(driver, nameof(dfp_driver.dfp_PersonId));
-                    
+
                     contact driverContact;
-                    
+
                     if (driver.dfp_PersonId != null)
                     {
                         driverContact = driver.dfp_PersonId;
@@ -4866,14 +4964,13 @@ namespace Rsbc.Dmf.CaseManagement
 
                     dynamicsContext.Detach(driver);
                 }
-
-                
             }
             catch (Exception e)
             {
                 logger.LogError(e, $"UpdateBirthdate - Error updating");
                 result.ErrorDetail = e.Message;
             }
+
             return result;
         }
 
@@ -4883,7 +4980,7 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <returns></returns>
         public async Task<ResultStatusReply> UpdateDriver(Driver driver)
-        {            
+        {
             bool written = false; // if true, we have writtent to Dynamics
 
             ResultStatusReply result = new ResultStatusReply()
@@ -4898,12 +4995,10 @@ namespace Rsbc.Dmf.CaseManagement
 
             try
             {
-
                 if (driverResults.Length > 0)
                 {
                     foreach (var item in driverResults)
                     {
-
                         // ensure the contact information exists.
 
                         var id = item.dfp_driverid;
@@ -4940,7 +5035,6 @@ namespace Rsbc.Dmf.CaseManagement
                                 result.ErrorDetail = e.Message;
                                 result.Success = false;
                             }
-
                         }
 
 
@@ -4965,16 +5059,10 @@ namespace Rsbc.Dmf.CaseManagement
                             result.ErrorDetail = e.Message;
                             result.Success = false;
                         }
-
-                        
-
-                        
-                        
                     }
-                    
                 }
 
-                if (written) 
+                if (written)
                 {
                     dynamicsContext.DetachAll();
                 }
@@ -4984,6 +5072,7 @@ namespace Rsbc.Dmf.CaseManagement
                 logger.LogError(e, $"UpdateDriver - Generic Error updating");
                 result.ErrorDetail = e.Message;
             }
+
             return result;
         }
 
@@ -4993,7 +5082,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="caseId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-
         public async Task<bool> SetCaseStatus(string caseId, bool caseStatus)
         {
             // get the case
@@ -5011,7 +5099,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 logger.LogError(e, $"SetCaseStatus - Error updating");
             }
-           
+
             return true;
         }
 
@@ -5045,6 +5133,7 @@ namespace Rsbc.Dmf.CaseManagement
                     await dynamicsContext.SaveChangesAsync();
                 }
             }
+
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
         }
@@ -5059,7 +5148,7 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dfp_licensenumber = fakeDl.ToString(),
                     dfp_dob = DateTime.Now,
-                    dfp_fullname = $"FAKE {dl}"                    
+                    dfp_fullname = $"FAKE {dl}"
                 };
                 dynamicsContext.AddTodfp_drivers(driver);
                 if (i % 500 == 0)
@@ -5067,6 +5156,7 @@ namespace Rsbc.Dmf.CaseManagement
                     await dynamicsContext.SaveChangesAsync();
                 }
             }
+
             await dynamicsContext.SaveChangesAsync();
         }
 
@@ -5086,9 +5176,9 @@ namespace Rsbc.Dmf.CaseManagement
                 {
                     dmerEntity.dfp_datesenttoicbc = dateSent;
                     dynamicsContext.UpdateObject(dmerEntity);
-                }                
+                }
             }
-            
+
             await dynamicsContext.SaveChangesAsync();
             dynamicsContext.DetachAll();
         }
@@ -5112,7 +5202,8 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 try
                 {
-                    var dmerEntity = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(caseId)).FirstOrDefault();
+                    var dmerEntity = dynamicsContext.incidents.Where(x => x.incidentid == Guid.Parse(caseId))
+                        .FirstOrDefault();
                     bool reOpenIncident = dmerEntity.statecode == 1; // inactive
                     int? currentStatus = dmerEntity.statuscode;
                     if (reOpenIncident)
@@ -5126,8 +5217,8 @@ namespace Rsbc.Dmf.CaseManagement
                     {
                         // Update the error message in CMS
                         dmerEntity.dfp_icbcerrorlog = errorMessage;
-                        
                     }
+
                     dynamicsContext.UpdateObject(dmerEntity);
                     await dynamicsContext.SaveChangesAsync();
 
@@ -5143,15 +5234,13 @@ namespace Rsbc.Dmf.CaseManagement
                 catch (Exception ex)
                 {
                     result.Success = false;
-                    Log.Logger.Error(ex,ex.Message);
+                    Log.Logger.Error(ex, ex.Message);
                     result.ErrorDetail = ex.Message;
                 }
             }
+
             return result;
-
         }
-
-       
 
 
         /// <summary>
@@ -5164,14 +5253,16 @@ namespace Rsbc.Dmf.CaseManagement
         public async Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize)
         {
             // add links to documents.
-            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.bcgov_incident_bcgov_documenturl).GetValue();
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier))
+                .Expand(x => x.bcgov_incident_bcgov_documenturl).GetValue();
 
             if (dmerEntity != null)
             {
                 if (dmerEntity.bcgov_incident_bcgov_documenturl.Count(x => x.bcgov_url == fileKey) == 0)
                 {
                     // add the document url.
-                    bcgov_documenturl givenUrl = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_url == fileKey).FirstOrDefault();
+                    bcgov_documenturl givenUrl = dynamicsContext.bcgov_documenturls.Where(x => x.bcgov_url == fileKey)
+                        .FirstOrDefault();
                     string filename;
                     if (fileKey.LastIndexOf("/") != -1)
                     {
@@ -5213,13 +5304,10 @@ namespace Rsbc.Dmf.CaseManagement
                         var tempId = GetCreatedId(saveResult);
                         if (tempId != null)
                         {
-
                             givenUrl = dynamicsContext.bcgov_documenturls.ByKey(tempId).GetValue();
                         }
-
-
-
                     }
+
                     dynamicsContext.AddLink(dmerEntity, nameof(incident.bcgov_incident_bcgov_documenturl), givenUrl);
                 }
 
@@ -5256,15 +5344,14 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 if (label.Length > maxFieldLength)
                 {
-                    result = label.Substring(0,maxFieldLength); // Max 200 chars
+                    result = label.Substring(0, maxFieldLength); // Max 200 chars
                 }
                 else
                 {
                     result = label;
                 }
-                
-                
             }
+
             return result;
         }
 
@@ -5276,7 +5363,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <param name="flags"></param>
         /// <param name="logger"></param>
         /// <returns></returns>
-        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags, Microsoft.Extensions.Logging.ILogger logger = null)
+        public async Task<SetCaseFlagsReply> SetCaseFlags(string dmerIdentifier, bool isCleanPass, List<Flag> flags,
+            Microsoft.Extensions.Logging.ILogger logger = null)
         {
             if (logger == null) logger = this.logger;
             /* The structure for cases is
@@ -5292,7 +5380,8 @@ namespace Rsbc.Dmf.CaseManagement
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
-            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier)).Expand(x => x.dfp_incident_dfp_dmerflag).GetValue();
+            incident dmerEntity = dynamicsContext.incidents.ByKey(Guid.Parse(dmerIdentifier))
+                .Expand(x => x.dfp_incident_dfp_dmerflag).GetValue();
 
             if (dmerEntity != null)
             {
@@ -5335,7 +5424,8 @@ namespace Rsbc.Dmf.CaseManagement
                             dfp_id = flag.Id,
                             dfp_description = flag.Description,
                             dfp_label = SanitizeLabel(flag.Description), // max 200 characters.
-                            dfp_type = (int?)FlagTypeOptionSet.Review
+                            dfp_type = (int?)FlagTypeOptionSet.Review,
+                            dfp_formid = flag.FormId
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
                     }
@@ -5407,7 +5497,8 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public async Task SetCasePractitionerClinic(string caseId, string practitionerId, string clinicId)
         {
-            logger.LogInformation($"SetCasePractitionerClinic - looking for DMER with identifier {caseId} {practitionerId} {clinicId}");
+            logger.LogInformation(
+                $"SetCasePractitionerClinic - looking for DMER with identifier {caseId} {practitionerId} {clinicId}");
 
             // future state - the case name will contain three letters of the name and the driver licence number
 
@@ -5420,12 +5511,14 @@ namespace Rsbc.Dmf.CaseManagement
                 if (!string.IsNullOrEmpty(practitionerId))
                 {
                     // set the Practitioner
-                    dfp_medicalpractitioner medicalpractitioner = dynamicsContext.dfp_medicalpractitioners.ByKey(Guid.Parse(caseId)).GetValue();
+                    dfp_medicalpractitioner medicalpractitioner =
+                        dynamicsContext.dfp_medicalpractitioners.ByKey(Guid.Parse(caseId)).GetValue();
 
-                    dynamicsContext.SetLink(dmerEntity, nameof(incident.dfp_MedicalPractitionerId), medicalpractitioner);
+                    dynamicsContext.SetLink(dmerEntity, nameof(incident.dfp_MedicalPractitionerId),
+                        medicalpractitioner);
                 }
 
-                if (! string.IsNullOrEmpty(clinicId))
+                if (!string.IsNullOrEmpty(clinicId))
                 {
                     // set the Clinic
                     account clinic = dynamicsContext.accounts.ByKey(Guid.Parse(caseId)).GetValue();
@@ -5438,15 +5531,13 @@ namespace Rsbc.Dmf.CaseManagement
                 try
                 {
                     await dynamicsContext.SaveChangesAsync();
-                    dynamicsContext.DetachAll();                    
+                    dynamicsContext.DetachAll();
                 }
                 catch (Exception e)
                 {
                     logger.LogError(e, $"SetCasePractitionerClinic - Error updating");
                 }
-
             }
-
         }
 
         /// <summary>
@@ -5503,6 +5594,7 @@ namespace Rsbc.Dmf.CaseManagement
                     result = "C"; // case comment
                     break;
             }
+
             return result;
         }
 
@@ -5539,9 +5631,9 @@ namespace Rsbc.Dmf.CaseManagement
                     result = 100000001;
                     break;
             }
+
             return result;
         }
-
     }
 
     /// <summary>

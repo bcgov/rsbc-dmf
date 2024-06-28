@@ -261,6 +261,16 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     "Not found error - could not find icbc driver info details");
             }
 
+            var searchRequest = new SearchRequest
+            {
+                DriverLicenseNumber = caseResult.DriverLicenseNumber,
+                CaseId = caseId
+            };
+
+            var searchResults = (await cmsAdapterClient.SearchAsync(searchRequest)).Items;
+            
+            
+
             return Ok(chefsBundle);
         }
     }
