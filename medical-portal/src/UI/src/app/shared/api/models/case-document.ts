@@ -14,5 +14,6 @@ export interface CaseDocument {
   documentUrl?: string | null;
   dueDate?: string | null;
   fullName?: string | null;
+  loginId?: string | null;
   submittalStatus?: string | null;
 }

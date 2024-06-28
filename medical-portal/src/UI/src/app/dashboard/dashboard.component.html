@@ -84,7 +84,11 @@
                 <div>
                   <b
                     ><a
-                      [routerLink]="['/caseDetails', searchedCase.caseId, searchedCase.idCode]"
+                      [routerLink]="[
+                        '/caseDetails',
+                        searchedCase.caseId,
+                        searchedCase.idCode
+                      ]"
                       routerLinkActive="active"
                       >{{ searchedCase.idCode }}</a
                     >
@@ -136,8 +140,19 @@
                     </div>
                   </div>
                   <div>
-                    <div>
-                      <button mat-flat-button class="primaryButton" (click)="openPopup()">
+                    <div class="search-buttons">
+                      <button
+                        mat-flat-button
+                        class="primaryButton"
+                        (click)="openClaimPopup(searchedCase)"
+                      >
+                        Claim Dmer
+                      </button>
+                      <button
+                        mat-flat-button
+                        class="primaryButton"
+                        (click)="openPopup()"
+                      >
                         Start DMER
                       </button>
                     </div>
