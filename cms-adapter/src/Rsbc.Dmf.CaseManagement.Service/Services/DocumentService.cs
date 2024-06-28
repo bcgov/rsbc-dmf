@@ -114,6 +114,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     result.ErrorDetail = "No DMER found for the case";
                     return result;
                 }
+
+               
                 var mappedDocument = _mapper.Map<DmerCase>(dmerCase);
                 result.Item = mappedDocument;
                 result.ResultStatus = ResultStatus.Success;

@@ -6,6 +6,7 @@ export { CaseDocument } from './models/case-document';
 export { ChefsBundle } from './models/chefs-bundle';
 export { ChefsSubmission } from './models/chefs-submission';
 export { DmerCaseListItem } from './models/dmer-case-list-item';
+export { DmerDocument } from './models/dmer-document';
 export { DocumentSubTypes } from './models/document-sub-types';
 export { Driver } from './models/driver';
 export { Endorsement } from './models/endorsement';

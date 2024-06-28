@@ -31,5 +31,7 @@ namespace Rsbc.Dmf.CaseManagement.Dto
 
         //bcgov_documenturlid
         public Guid DocumentId { get; set; }
+
+        public string IdCode { get; set; }
     }
 }

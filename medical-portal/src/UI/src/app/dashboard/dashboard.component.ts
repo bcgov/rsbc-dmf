@@ -21,7 +21,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
 
 import { CasesService, DocumentService } from '../shared/api/services';
-import { CaseDocument, PatientCase } from '../shared/api/models';
+import { CaseDocument, DmerDocument, PatientCase } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
@@ -75,15 +75,15 @@ export class DashboardComponent {
     { value: 100000001, viewValue: 'Received' },
   ];
 
-  selectedStatus: number = 1;
+  selectedStatus: string = 'All Status';
   showSearchResults = false;
   public searchBox = new FormControl('');
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
   public searchedCase?: PatientCase;
-  public practitionerDMERList: CaseDocument[] = [];
-  public filteredData?: CaseDocument[] = [];
-  public _allDocuments?: CaseDocument[] | null = [];
+  public practitionerDMERList: DmerDocument[] = [];
+  public filteredData?: DmerDocument[] = [];
+  public _allDocuments?: DmerDocument[] | null = [];
 
   isSearching: boolean = false;
   noResults: boolean = false;
@@ -154,7 +154,7 @@ export class DashboardComponent {
   clear() {
     console.log('clear');
     this.searchCasesInput = '';
-    this.selectedStatus = 1;
+    this.selectedStatus = 'All Status';
     this.filterCasesData();
   }
 
@@ -165,11 +165,12 @@ export class DashboardComponent {
   filterCasesData() {
     this.filteredData = this.practitionerDMERList.filter((item) => {
       const matchStatus =
-        this.selectedStatus === 1 || item.dmerStatus === this.selectedStatus;
+        this.selectedStatus === 'All Status' ||
+        item.dmerStatus === this.selectedStatus;
 
       const matchCaseNumber =
         this.searchCasesInput?.length === 0 ||
-        item.caseNumber?.includes(this.searchCasesInput) ||
+        item.idCode?.includes(this.searchCasesInput) ||
         item.fullName?.includes(this.searchCasesInput);
 
       if (matchStatus && matchCaseNumber) return true;
