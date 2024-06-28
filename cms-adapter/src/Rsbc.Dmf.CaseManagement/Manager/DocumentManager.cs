@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.OData.Client;
 using Rsbc.Dmf.CaseManagement.Dto;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
@@ -253,15 +254,17 @@ namespace Rsbc.Dmf.CaseManagement
         public IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode)
         {
             var documents = new List<bcgov_documenturl>();
+
             foreach (var loginId in loginIds)
             {
+
                 documents.AddRange(dynamicsContext.bcgov_documenturls
                     .Expand(doc => doc.dfp_DocumentTypeID)
                     .Expand(doc => doc.bcgov_CaseId)
                     .Expand(doc => doc.bcgov_CaseId.customerid_contact)
                     .Where(doc => 
                         doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
-                        && (doc._dfp_loginid_value != null && doc._dfp_loginid_value.Value == loginId)
+                        && doc.dfp_LoginId.dfp_loginid == loginId
                     ));
             }
 
@@ -326,11 +329,17 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (querydocument != null)
             {
+                dynamicsContext.EntityParameterSendOption = EntityParameterSendOption.SendFullProperties;
+
                 dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), null);
+
+               
             }
 
             //dynamicsContext.UpdateObject(querydocument);
             dynamicsContext.SaveChanges();
+
+            dynamicsContext.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
             dynamicsContext.DetachAll();
             result.Success = true;
             return _mapper.Map<Document>(querydocument);

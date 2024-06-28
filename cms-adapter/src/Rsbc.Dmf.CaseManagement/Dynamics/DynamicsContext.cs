@@ -18,9 +18,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
             this.SaveChangesDefaultOptions = SaveChangesOptions.BatchWithSingleChangeset;  // Set to SaveChangesOptions.None to troubleshoot query issues
             MergeOption = MergeOption.OverwriteChanges;
 
-           // this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
-
-             this.EntityParameterSendOption = EntityParameterSendOption.SendFullProperties;
+            this.EntityParameterSendOption = EntityParameterSendOption.SendOnlySetProperties;
 
             Func<Uri, Uri> formatUri = requestUri => requestUri.IsAbsoluteUri
                     ? new Uri(url, (url.AbsolutePath == "/" ? string.Empty : url.AbsolutePath) + requestUri.AbsolutePath + requestUri.Query)
