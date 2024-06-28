@@ -54,6 +54,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Dto.Login, Provider>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))
                 .AddTransform(NullStringConverter);
+            
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

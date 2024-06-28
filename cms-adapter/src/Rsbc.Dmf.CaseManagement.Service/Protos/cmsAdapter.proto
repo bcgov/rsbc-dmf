@@ -570,6 +570,9 @@ message GetDocumentsByTypeForUsersReply {
      DocumentType documentType = 9;
      DocumentSubType documentSubType = 10;
      string documentUrl = 11;
+     string documentId = 12;
+     Provider provider = 13;	
+     string IdCode = 14;
  }
 
  message DocumentType{

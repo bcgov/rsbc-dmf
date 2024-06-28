@@ -38,7 +38,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .AddTransform(NullStringConverter);
 
                 CreateMap<bcgov_documenturl, Document>()
-                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
+                    .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.dfp_DocumentSubType.dfp_name))
                     .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => TranslateSubmittalStatus(src.dfp_submittalstatus)))
                     .ForMember(dest => dest.Case, opt => opt.MapFrom(src => src.bcgov_CaseId))
                     .ForMember(dest => dest.ComplianceDate, opt => opt.MapFrom(src => src.dfp_compliancedate))
@@ -49,7 +49,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
                     .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId));
+                    .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.bcgov_CaseId.ticketnumber))
+                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId))
+                    .AddTransform(NullStringConverter);
                     
             }
 

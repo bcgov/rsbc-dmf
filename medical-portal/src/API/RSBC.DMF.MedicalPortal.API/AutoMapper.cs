@@ -38,10 +38,22 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn))
                 .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id));
 
+            CreateMap<Document, ViewModels.DmerDocument>()
+                .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
+                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.Provider.Id))
+                .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.Case.CaseNumber))
+                .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Case.Person.Birthday))
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.ComplianceDate));
+                
+
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
         }
+       
     }
+
+ 
 
     public static class AutoMapperExtensions
     {
@@ -55,5 +67,8 @@ namespace RSBC.DMF.MedicalPortal.API
             var mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
         }
-    } 
+    }
+
+  
 }
+

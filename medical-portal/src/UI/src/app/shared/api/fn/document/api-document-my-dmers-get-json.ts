@@ -6,12 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CaseDocument } from '../../models/case-document';
+import { DmerDocument } from '../../models/dmer-document';
 
 export interface ApiDocumentMyDmersGet$Json$Params {
 }
 
-export function apiDocumentMyDmersGet$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDocument>>> {
+export function apiDocumentMyDmersGet$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DmerDocument>>> {
   const rb = new RequestBuilder(rootUrl, apiDocumentMyDmersGet$Json.PATH, 'get');
   if (params) {
   }
@@ -21,7 +21,7 @@ export function apiDocumentMyDmersGet$Json(http: HttpClient, rootUrl: string, pa
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<CaseDocument>>;
+      return r as StrictHttpResponse<Array<DmerDocument>>;
     })
   );
 }
