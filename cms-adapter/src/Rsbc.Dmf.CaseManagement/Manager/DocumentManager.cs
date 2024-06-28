@@ -303,7 +303,9 @@ namespace Rsbc.Dmf.CaseManagement
               dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);     
             }
             dynamicsContext.SaveChanges();
-            
+
+            dynamicsContext.Detach(querydocument);
+
             result.Success = true;
             return _mapper.Map<Document>(querydocument);
         }
@@ -324,7 +326,7 @@ namespace Rsbc.Dmf.CaseManagement
 
             if (querydocument != null)
             {
-                dynamicsContext.DeleteLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);
+                dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), null);
             }
 
             //dynamicsContext.UpdateObject(querydocument);

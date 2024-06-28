@@ -186,9 +186,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginId = profile.LoginId;
-
-            DmerDocument result = null;
-
             var request = new UpdateClaimRequest { 
                 LoginId = loginId,
                 DocumentId = documentId
