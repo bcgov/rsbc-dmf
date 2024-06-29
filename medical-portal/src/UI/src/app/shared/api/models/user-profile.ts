@@ -5,4 +5,5 @@ export interface UserProfile {
   firstName?: string | null;
   id?: string | null;
   lastName?: string | null;
+  roles?: Array<string> | null;
 }
