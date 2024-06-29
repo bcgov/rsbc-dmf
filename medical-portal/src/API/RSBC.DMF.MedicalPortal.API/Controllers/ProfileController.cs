@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RSBC.DMF.MedicalPortal.API.Services;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -14,6 +15,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             this.userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpGet("current")]
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
@@ -26,7 +28,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 Id = profile.Id,
                 Email = profile.Email,
                 FirstName = profile.FirstName,
-                LastName = profile.LastName,                
+                LastName = profile.LastName,
+                Roles = profile.Roles
             };
         }
 
@@ -36,6 +39,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
+            public IEnumerable<string> Roles { get; set; }
         }
     }
 }
