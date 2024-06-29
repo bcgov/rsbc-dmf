@@ -35,7 +35,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
         public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
         public string Email { get; set; }
-
+        public IEnumerable<string> Roles { get; set; }
     }
 
     public record ClinicAssignment
