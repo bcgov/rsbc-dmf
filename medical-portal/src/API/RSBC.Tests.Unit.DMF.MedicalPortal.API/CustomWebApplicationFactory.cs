@@ -52,7 +52,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                     options.Filters.Add(new HttpResponseExceptionFilter());
                 });
 
-                services.AddTransient<ICaseQueryService, CaseService>();
                 services.AddTransient<IUserService, UserService>();
 
                 services.AddAutoMapperSingleton();

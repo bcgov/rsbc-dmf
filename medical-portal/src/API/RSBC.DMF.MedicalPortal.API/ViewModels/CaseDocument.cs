@@ -2,6 +2,7 @@
 
 namespace RSBC.DMF.MedicalPortal.API.ViewModels
 {
+    [Obsolete("This class is obsolete, use PatientCase instead.")]
     public class CaseDocument
     {
         public int DmerType { get; set; }

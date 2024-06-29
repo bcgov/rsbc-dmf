@@ -25,7 +25,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     {
         private readonly ILogger<ChefsController> logger;
         private readonly IConfiguration configuration;
-        private readonly ICaseQueryService caseQueryService;
         private readonly IUserService userService;
         private readonly ICachedIcbcAdapterClient icbcAdapterClient;
         private readonly CaseManager.CaseManagerClient cmsAdapterClient;
@@ -36,14 +35,12 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         public ChefsController(ILogger<ChefsController> logger, IConfiguration configuration,
             IUserService userService,
-            ICaseQueryService caseQueryService,
             CaseManager.CaseManagerClient cmsAdapterClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             this.logger = logger;
             this.configuration = configuration;
-            this.caseQueryService = caseQueryService;
             this.cmsAdapterClient = cmsAdapterClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;

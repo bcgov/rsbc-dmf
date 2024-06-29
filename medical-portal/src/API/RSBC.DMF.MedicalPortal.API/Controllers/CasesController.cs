@@ -14,7 +14,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     [Route("api/[controller]")]
     public class CasesController : ControllerBase
     {
-        private readonly ICaseQueryService caseQueryService;
         private readonly IUserService _userService;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentManagerClient _documentManagerClient;
@@ -22,9 +21,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
 
-        public CasesController(ICaseQueryService caseQueryService, IUserService userService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
+        public CasesController(IUserService userService, CaseManager.CaseManagerClient cmsAdapterClient, DocumentManagerClient documentManagerClient, ICachedIcbcAdapterClient icbcAdapterClient, IMapper mapper, ILoggerFactory loggerFactory)
         {
-            this.caseQueryService = caseQueryService;
             _userService = userService;
             _cmsAdapterClient = cmsAdapterClient;
             _documentManagerClient = documentManagerClient;
@@ -114,16 +112,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DmerCaseListItem>>> GetCases([FromQuery] CaseSearchQuery query)
-        {
-            var cases = await caseQueryService.SearchCases(query);
-
-            // second pass to populate birthdate.
-
-            return Ok(cases);
-        }
-
         private string TranslateDmerStatus(string dmerStatus, string loginId)
         {
             if (dmerStatus == "Open-Required")
@@ -138,8 +126,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
             }
             return dmerStatus;
-        }
-
-      
+        } 
     }
 }
