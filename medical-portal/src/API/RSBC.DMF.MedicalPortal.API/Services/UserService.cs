@@ -77,7 +77,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
                 Email = user.FindFirstValue(Claims.Email),
-                //ClinicAssignments = user.FindAll("clinic_assignment").Select(ca => JsonSerializer.Deserialize<ClinicAssignment>(ca.Value))
+                Roles = user.GetRoles(),
             });
         }
 
