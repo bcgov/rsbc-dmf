@@ -29,6 +29,7 @@ import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
 
+
 interface Status {
   value: number;
   viewValue: string;
@@ -109,12 +110,12 @@ export class DashboardComponent {
   }
 
   ngOnInit(): void {
-    // this.practitionerDMERList = PractitionerDMERList_SEED_DATA;
-    console.info('At Dashboard OnInit');
+    this.getClaimedDmerCases();
+  }
 
+  getClaimedDmerCases() {
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
       this.practitionerDMERList = data;
-      //this.filteredData = [...this.practitionerDMERList];
       console.info('Got data');
       this.filterCasesData();
     });
@@ -195,6 +196,7 @@ export class DashboardComponent {
       data: searchedCase,
     });
     dialogRef.afterClosed().subscribe((result) => {
+      this.getClaimedDmerCases();
       console.log('The dialog was closed', result);
     });
   }

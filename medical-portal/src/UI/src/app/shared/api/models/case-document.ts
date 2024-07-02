@@ -13,6 +13,7 @@ export interface CaseDocument {
   documentType?: string | null;
   documentUrl?: string | null;
   dueDate?: string | null;
+  faxReceivedDate?: string | null;
   fullName?: string | null;
   loginId?: string | null;
   submittalStatus?: string | null;

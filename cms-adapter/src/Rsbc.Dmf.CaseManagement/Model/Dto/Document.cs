@@ -33,5 +33,7 @@ namespace Rsbc.Dmf.CaseManagement.Dto
         public Guid DocumentId { get; set; }
 
         public string IdCode { get; set; }
+
+        public DateTimeOffset? FaxReceivedDate { get; set; }
     }
 }
