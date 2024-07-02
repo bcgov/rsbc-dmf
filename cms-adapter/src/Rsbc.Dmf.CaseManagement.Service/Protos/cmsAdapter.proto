@@ -573,6 +573,7 @@ message GetDocumentsByTypeForUsersReply {
      string documentId = 12;
      Provider provider = 13;	
      string IdCode = 14;
+     google.protobuf.Timestamp faxReceivedDate = 15;
  }
 
  message DocumentType{
