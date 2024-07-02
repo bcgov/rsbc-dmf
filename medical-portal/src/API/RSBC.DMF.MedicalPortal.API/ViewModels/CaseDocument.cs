@@ -18,8 +18,8 @@ namespace RSBC.DMF.MedicalPortal.API.ViewModels
         public string DocumentType { get; set; }
         public string DocumentSubType { get; set; }
         public string DocumentId { get; set; }
-
         public string LoginId { get; set; }
+        public DateTimeOffset? FaxReceivedDate { get; set; }
 
     }
 }
