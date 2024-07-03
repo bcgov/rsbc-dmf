@@ -28,7 +28,18 @@ namespace RSBC.DMF.MedicalPortal.API.Services
     {
         // Pidp user id
         public string Id { get; set; }
+
+        public string LoginId
+        {
+            get
+            {
+                return LoginIds.First();
+            }
+        }
+
         // Dynamics login ids matching the above Pidp user id
+
+
         public List<string> LoginIds { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }        

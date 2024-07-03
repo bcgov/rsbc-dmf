@@ -23,4 +23,6 @@ public class PatientCase
     // TODO rename DmerStatus
     public string Status { get; set; }
     public bool IsOwner { get; set; }
+
+    public string DocumentId { get; set; }
 }

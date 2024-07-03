@@ -28,5 +28,12 @@ namespace Rsbc.Dmf.CaseManagement.Dto
 
         public string DocumentUrl { get; set; }
         public Login Login { get; set; }
+
+        //bcgov_documenturlid
+        public Guid DocumentId { get; set; }
+
+        public string IdCode { get; set; }
+
+        public DateTimeOffset? FaxReceivedDate { get; set; }
     }
 }

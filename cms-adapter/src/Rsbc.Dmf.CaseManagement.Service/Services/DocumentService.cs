@@ -114,11 +114,60 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     result.ErrorDetail = "No DMER found for the case";
                     return result;
                 }
-                result.Item = new DmerCase();
-                result.Item.DmerType = dmerCase.DmerType ?? string.Empty;
-                result.Item.Status = dmerCase.DmerStatus ?? string.Empty;
-                result.Item.Provider = new Provider();
-                result.Item.Provider.Name = dmerCase.Login?.FullName ?? string.Empty;
+
+               
+                var mappedDocument = _mapper.Map<DmerCase>(dmerCase);
+                result.Item = mappedDocument;
+                result.ResultStatus = ResultStatus.Success;
+                
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
+    
+
+        public async override Task<UpdateClaimReply> UpdateClaimDmer(UpdateClaimRequest request, ServerCallContext context)
+        {
+            var result = new UpdateClaimReply();
+
+            try
+            {
+                var loginId = Guid.Parse(request.LoginId);
+                var documentId = Guid.Parse(request.DocumentId);
+                var document = _documentManager.UpdateClaimDmer(loginId, documentId);
+
+                var mappedDocument = _mapper.Map<DmerCase>(document);
+                result.Item = mappedDocument;
+
+                result.ResultStatus = ResultStatus.Success;
+            }
+            catch (Exception ex)
+            {
+                result.ResultStatus = ResultStatus.Fail;
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
+ 
+        public async override Task<UpdateClaimReply> UpdateUnClaimDmer(UpdateClaimRequest request, ServerCallContext context)
+        {
+            var result = new UpdateClaimReply();
+
+            try
+            {
+                var loginId = Guid.Parse(request.LoginId);
+                var documentId = Guid.Parse(request.DocumentId);
+                var document = _documentManager.UpdateUnClaimDmer(loginId, documentId);
+                var mappedDocument = _mapper.Map<DmerCase>(document);
+                result.Item = mappedDocument;
                 result.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)

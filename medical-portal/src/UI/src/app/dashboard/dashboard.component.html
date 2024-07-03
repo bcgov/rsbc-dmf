@@ -70,7 +70,23 @@
       @if (noResults) {
         <mat-card>
           <mat-card-content>
-            <h2>No Results Found for this search</h2>
+            <div class="noResults">
+              <p>
+                No record found for DMER Case ID
+                <b>{{ searchedCase?.idCode }}</b
+                >.Please re-enter the DMER Case ID and try again. <br />
+
+                If you think you have the incorrect ID, you will want to provide
+                <a routerLink="/getHelp"
+                  >options to the driver on how to obtain the correct DMER Case
+                  ID.
+                </a>
+                <br />
+
+                If you continue to experience issues please contact support at
+                XXX-XXX-XXXX.
+              </p>
+            </div>
           </mat-card-content>
         </mat-card>
       }
@@ -84,7 +100,11 @@
                 <div>
                   <b
                     ><a
-                      [routerLink]="['/caseDetails', searchedCase.caseId, searchedCase.idCode]"
+                      [routerLink]="[
+                        '/caseDetails',
+                        searchedCase.caseId,
+                        searchedCase.idCode
+                      ]"
                       routerLinkActive="active"
                       >{{ searchedCase.idCode }}</a
                     >
@@ -136,8 +156,19 @@
                     </div>
                   </div>
                   <div>
-                    <div>
-                      <button mat-flat-button class="primaryButton" (click)="openPopup()">
+                    <div class="search-buttons">
+                      <button
+                        mat-flat-button
+                        class="primaryButton"
+                        (click)="openClaimPopup(searchedCase)"
+                      >
+                        Claim Dmer
+                      </button>
+                      <button
+                        mat-flat-button
+                        class="primaryButton"
+                        (click)="openPopup()"
+                      >
                         Start DMER
                       </button>
                     </div>
@@ -239,7 +270,7 @@
       </div>
     </div>
     <div>
-      @for (dmer of filteredData; track dmer.caseNumber) {
+      @for (dmer of filteredData; track dmer.documentId) {
         <mat-card style="margin-bottom: 24px">
           <mat-card-content class="dmer-details">
             <div>
@@ -247,9 +278,9 @@
               <div>
                 <b>
                   <a
-                    [routerLink]="['/caseDetails', dmer.caseNumber]"
+                    [routerLink]="['/caseDetails', dmer.caseId, dmer.idCode]"
                     routerLinkActive="active"
-                    >{{ dmer.caseNumber }}
+                    >{{ dmer.idCode }}
                   </a>
                 </b>
               </div>
@@ -266,7 +297,7 @@
                 <div class="column-width">
                   <label>Date of Birth</label>
                   <div>
-                    <b>{{ dmer.birthday }}</b>
+                    <b>{{ dmer.birthDate | date: "longDate" }}</b>
                   </div>
                 </div>
                 <div class="column-width">
@@ -288,7 +319,8 @@
               </div>
 
               <div class="dmer-details-row-1">
-                This needs to be submitted by {{ dmer.complianceDate }}.
+                This needs to be submitted by
+                {{ dmer.dueDate | date: "longDate" }}.
               </div>
             </div>
           </mat-card-content>
@@ -298,7 +330,10 @@
       @if (noResults) {
         <mat-card>
           <mat-card-content>
-            <h2>No Results Found for this search</h2>
+            <h2>
+              You do not have any DMERs associated with your profile at this
+              time.
+            </h2>
           </mat-card-content>
         </mat-card>
       }

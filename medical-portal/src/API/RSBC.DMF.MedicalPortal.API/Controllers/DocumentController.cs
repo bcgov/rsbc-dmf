@@ -10,6 +10,9 @@ using Winista.Mime;
 using RSBC.DMF.MedicalPortal.API.Model;
 using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
 using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
+using Microsoft.AspNetCore.Authorization;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
+using Serilog;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -40,27 +43,40 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("MyDmers")]
-        [ProducesResponseType(typeof(IEnumerable<CaseDocument>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<DmerDocument>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         public async Task<IActionResult> GetMyDocumentsByType()
         {
-            var profile = await _userService.GetCurrentUserContext();
-            var loginIds = profile.LoginIds;
+            var result = new List<DmerDocument>();
 
-            var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
-            var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
-            var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
-            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            try
             {
-                var caseDocuments = _mapper.Map<IEnumerable<CaseDocument>>(reply.Items);
-                return Ok(caseDocuments);
+                var profile = await _userService.GetCurrentUserContext();
+                var loginIds = profile.LoginIds;
+
+                var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
+                var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
+                var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
+                if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+                {
+                    var caseDocuments = _mapper.Map<IEnumerable<DmerDocument>>(reply.Items);
+                    return Ok(caseDocuments);
+                }
+                else
+                {
+                    _logger.LogError($"{nameof(GetMyDocumentsByType)} error: unable to get documents by type - {reply.ErrorDetail}");
+                    return StatusCode(500, reply.ErrorDetail);
+                }
             }
-            else
+            catch(Exception ex)
             {
-                _logger.LogError($"{nameof(GetMyDocumentsByType)} error: unable to get documents by type - {reply.ErrorDetail}");
-                return StatusCode(500, reply.ErrorDetail);
+                _logger.LogError(ex, $"Error getting DMER's");
+                return StatusCode(500, "Bad Request");
             }
+
+           
+
         }
 
         [HttpGet("{driverId}/AllDocuments")]
@@ -174,6 +190,64 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return Ok();
         }
 
+
+        [HttpPost("claimDmer")]
+        [ProducesResponseType(typeof(CaseDocument), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [Authorize(Policy = Policies.MedicalPractitioner)]
+        public async Task<IActionResult> UpdateClaimDmerOnDocument([FromQuery] string documentId)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            var loginId = profile.LoginId;
+            var request = new UpdateClaimRequest { 
+                LoginId = loginId,
+                DocumentId = documentId
+            };
+            
+            var reply = _documentManagerClient.UpdateClaimDmer(request);
+            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            {
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
+                return Ok(caseDocument);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(UpdateClaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
+
+
+        [HttpPost("unclaimDmer")]
+        [ProducesResponseType(typeof(CaseDocument), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [Authorize(Policy = Policies.MedicalPractitioner)]
+        public async Task<IActionResult> UpdateUnclaimDmerOnDocument([FromQuery] string documentId)
+        {
+            var profile = await _userService.GetCurrentUserContext();
+            var loginId = profile.LoginId;
+
+            var request = new UpdateClaimRequest
+            {
+                LoginId = loginId,
+                DocumentId = documentId
+            };
+
+            var reply = _documentManagerClient.UpdateUnClaimDmer(request);
+
+            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            {
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
+                return Ok(caseDocument);
+            }
+            else
+            {
+                _logger.LogError($"{nameof(UpdateUnclaimDmerOnDocument)} error: unable to Unclaim DMER document - {reply.ErrorDetail}");
+                return StatusCode(500, reply.ErrorDetail);
+            }
+        }
 
     }
 }

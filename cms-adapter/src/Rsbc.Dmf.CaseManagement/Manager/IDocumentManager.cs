@@ -12,5 +12,11 @@ namespace Rsbc.Dmf.CaseManagement
         Task<IEnumerable<LegacyDocument>> GetDriverLegacyDocuments(string driverLicenseNumber, bool includeEmpty);
         IEnumerable<Document> GetDocumentsByTypeForUsers(IEnumerable<Guid> loginIds, string documentTypeCode);
         Document GetDmer(Guid caseId);
+       
+
+        Document UpdateClaimDmer(Guid loginIds, Guid documentId);
+
+        Document UpdateUnClaimDmer(Guid loginIds, Guid documentId);
+
     }
 }
