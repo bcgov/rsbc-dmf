@@ -104,9 +104,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
              
                 var result = _mapper.Map<List<CaseDocument>>(replyItemsWithDocuments);
 
-               
-                
-
                 // sort the documents
                 if (result.Count > 0)
                 {

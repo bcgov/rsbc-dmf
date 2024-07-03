@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
 using RSBC.DMF.MedicalPortal.API.Services;
@@ -75,9 +76,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result = new PatientCase();
 
                 result.CaseId = @case.Item.CaseId;
-                result.DmerType = document.Item?.DmerType ?? string.Empty;
-                
-                result.Status = document.Item?.Status ?? "Not Requested";
+                result.DmerType = string.IsNullOrEmpty(@case.Item?.DmerType) ? "Suspected Medical Condition" : @case.Item.DmerType;
+                result.Status = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
                 result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
@@ -127,6 +127,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         private string TranslateDmerStatus(string dmerStatus, string loginId)
         {
+           
+
             if (dmerStatus == "Open-Required")
             {
                 if (string.IsNullOrEmpty(loginId))
