@@ -50,9 +50,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Dto.Document, DmerCase>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.DmerStatus))
                 .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.DocumentId))
+                .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
                 .AddTransform(NullStringConverter);
+            
             CreateMap<Dto.Login, Provider>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LoginId))
                 .AddTransform(NullStringConverter);
             
         }

@@ -157,20 +157,57 @@
                   </div>
                   <div>
                     <div class="search-buttons">
-                      <button
-                        mat-flat-button
-                        class="primaryButton"
-                        (click)="openClaimPopup(searchedCase)"
-                      >
-                        Claim Dmer
-                      </button>
-                      <button
-                        mat-flat-button
-                        class="primaryButton"
-                        (click)="openPopup()"
-                      >
-                        Start DMER
-                      </button>
+                      @if (
+                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed
+                      ) {
+                        <button
+                          mat-flat-button
+                          class="primaryButton"
+                          (click)="openClaimPopup(searchedCase)"
+                        >
+                          Claim Dmer
+                        </button>
+                      }
+
+                      @if (
+                        searchedCase.status === DMERStatusEnum.RequiredClaimed
+                      ) {
+                        <button
+                          mat-flat-button
+                          class="primaryButton"
+                          (click)="openClaimPopup(searchedCase)"
+                        >
+                          Unclaim Dmer
+                        </button>
+                      }
+
+                      @if (
+                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed
+                      ) {
+                        <button
+                          mat-flat-button
+                          class="primaryButton"
+                          (click)="openPopup()"
+                        >
+                          Start DMER
+                        </button>
+                      }
+
+                      @if (
+                        searchedCase.status ===
+                          DMERStatusEnum.RequiredClaimed ||
+                        searchedCase.status === DMERStatusEnum.NonComplyClaimed
+                      ) {
+                        <div>
+                          <button
+                            mat-flat-button
+                            class="primaryButton"
+                            (click)="openPopup()"
+                          >
+                            Continue DMER
+                          </button>
+                        </div>
+                      }
                     </div>
                   </div>
                 </div>
