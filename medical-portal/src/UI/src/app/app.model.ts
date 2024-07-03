@@ -17,6 +17,14 @@ export enum DocumentTypeEnum {
   'DMER' = 'DMER',
 }
 
+export enum DMERStatusEnum {
+  'RequiredClaimed' = 'Required - Claimed',
+  'RequiredUnclaimed' = 'Required - Unclaimed',
+  'NotRequested' = 'Not Requested',
+  'NonComplyUnclaimed' = 'Non-Comply - Unclaimed',
+  'NonComplyClaimed' = 'Non-Comply - Claimed'
+}
+
 export enum SESSION_STORAGE_KEYS {
   PROFILE = 'profile'
 }

@@ -28,7 +28,7 @@ import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/m
 import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
-
+import { DMERStatusEnum } from '@app/app.model';
 
 interface Status {
   value: number;
@@ -88,7 +88,7 @@ export class DashboardComponent {
 
   isSearching: boolean = false;
   noResults: boolean = false;
-
+  DMERStatusEnum = DMERStatusEnum;
   isExpanded: Record<string, boolean> = {};
 
   pageSize = 10;
@@ -123,31 +123,28 @@ export class DashboardComponent {
 
   searchDmerCase(): void {
     console.log('search DMER Case');
-    if (
-      this.prevSearchBox === '' ||
-      this.prevSearchBox !== this.searchBox.value
-    ) {
-      let searchParams: Parameters<
-        CasesService['apiCasesSearchIdCodeGet$Json']
-      >[0] = {
-        idCode: this.searchBox.value as string,
-      };
 
-      this.isSearching = true;
-      this.noResults = false;
+    let searchParams: Parameters<
+      CasesService['apiCasesSearchIdCodeGet$Json']
+    >[0] = {
+      idCode: this.searchBox.value as string,
+    };
 
-      this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
-        next: (dmerCase) => {
-          if (dmerCase) this.searchedCase = dmerCase;
-        },
-        error: (err) => {
-          this.noResults = true;
-        },
-        complete: () => {
-          this.isSearching = false;
-        },
-      });
-    }
+    this.isSearching = true;
+    this.noResults = false;
+
+    this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
+      next: (dmerCase) => {
+        if (dmerCase) this.searchedCase = dmerCase;
+      },
+      error: (err) => {
+        this.noResults = true;
+      },
+      complete: () => {
+        this.isSearching = false;
+      },
+    });
+
     this.prevSearchBox = this.searchBox.value as string;
     this.showSearchResults = true;
   }
@@ -196,7 +193,9 @@ export class DashboardComponent {
       data: searchedCase,
     });
     dialogRef.afterClosed().subscribe((result) => {
+      //TODO # optimize this not to re-query the database on refresh
       this.getClaimedDmerCases();
+      this.searchDmerCase();
       console.log('The dialog was closed', result);
     });
   }

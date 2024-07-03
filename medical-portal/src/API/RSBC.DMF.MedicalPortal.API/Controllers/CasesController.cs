@@ -75,9 +75,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result = new PatientCase();
 
                 result.CaseId = @case.Item.CaseId;
-                result.DmerType = document.Item?.DmerType ?? string.Empty;
-                result.Status = document.Item?.Status ?? "Not Requested";
-                result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
+                result.DmerType = string.IsNullOrEmpty(@case.Item?.DmerType) ? "Suspected Medical Condition" : @case.Item.DmerType;
+                result.Status = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
+                result.Status = TranslateDmerStatus(result.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
@@ -86,7 +86,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DriverId = @case.Item.DriverId;
                 result.DocumentId = document.Item?.DocumentId ?? string.Empty;
                 
-
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)
                 {
@@ -126,6 +125,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         private string TranslateDmerStatus(string dmerStatus, string loginId)
         {
+           
+
             if (dmerStatus == "Open-Required")
             {
                 if (string.IsNullOrEmpty(loginId))
@@ -135,6 +136,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 else
                 {
                     dmerStatus = "Required - Claimed";
+                }
+            }
+
+            if(dmerStatus == "Non-Comply")
+            {
+                if (string.IsNullOrEmpty(loginId))
+                {
+                    dmerStatus = "Non-Comply - Unclaimed";
+                }
+                else
+                {
+                    dmerStatus = "Non-Comply - Claimed";
                 }
             }
             return dmerStatus;

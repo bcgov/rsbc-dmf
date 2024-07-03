@@ -6,5 +6,7 @@
         public string Email { get; set; }
         public string UserId { get; set; }
         public Driver Driver { get; set; }
+
+        public string LoginId { get; set; }
     }
 }

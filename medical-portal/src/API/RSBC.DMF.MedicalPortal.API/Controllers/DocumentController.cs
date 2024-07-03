@@ -61,6 +61,13 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
                 {
                     var caseDocuments = _mapper.Map<IEnumerable<DmerDocument>>(reply.Items);
+
+                    // Go through the list and map the DMER status
+
+                    foreach( var caseDocument in caseDocuments )
+                    {
+                        caseDocument.DmerStatus = TranslateDmerStatus(caseDocument.DmerStatus, caseDocument.LoginId);
+                    }
                     return Ok(caseDocuments);
                 }
                 else
@@ -248,6 +255,36 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
+
+        private string TranslateDmerStatus(string dmerStatus, string loginId)
+        {
+            if (dmerStatus == "Open-Required")
+            {
+                if (string.IsNullOrEmpty(loginId))
+                {
+                    dmerStatus = "Required - Unclaimed";
+                }
+                else
+                {
+                    dmerStatus = "Required - Claimed";
+                }
+            }
+
+            if (dmerStatus == "Non-Comply")
+            {
+                if (string.IsNullOrEmpty(loginId))
+                {
+                    dmerStatus = "Non-Comply - Unclaimed";
+                }
+                else
+                {
+                    dmerStatus = "Non-Comply - Claimed";
+                }
+            }
+            return dmerStatus;
+        }
+
+
 
     }
 }
