@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
 using RSBC.DMF.MedicalPortal.API.Services;
