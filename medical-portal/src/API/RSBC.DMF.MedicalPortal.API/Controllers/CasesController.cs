@@ -86,7 +86,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.DriverId = @case.Item.DriverId;
                 result.DocumentId = document.Item?.DocumentId ?? string.Empty;
                 
-
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)
                 {
