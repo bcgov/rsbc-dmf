@@ -76,6 +76,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = document.Item?.DmerType ?? string.Empty;
+                
                 result.Status = document.Item?.Status ?? "Not Requested";
                 result.Status = TranslateDmerStatus(document.Item?.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
@@ -135,6 +136,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 else
                 {
                     dmerStatus = "Required - Claimed";
+                }
+            }
+
+            if(dmerStatus == "Non-Comply")
+            {
+                if (string.IsNullOrEmpty(loginId))
+                {
+                    dmerStatus = "Non-Comply - UnClaimed";
+                }
+                else
+                {
+                    dmerStatus = "Non-Comply - Claimed";
                 }
             }
             return dmerStatus;

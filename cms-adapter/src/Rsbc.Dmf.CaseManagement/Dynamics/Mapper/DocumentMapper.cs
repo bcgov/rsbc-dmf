@@ -103,7 +103,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     case 100000005:
                         return "Non-Comply";
                     case 100000007:
-                        return "Non-Comply";
+                        return "Actioned Non-comply";
                     default:
                         return "Submitted";
                 }

@@ -11,6 +11,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.dfp_name))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.dfp_email))
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.dfp_userid))
+                .ForMember(dest => dest.LoginId, opt => opt.MapFrom(src => src.dfp_loginid))
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId));
         }
     }
