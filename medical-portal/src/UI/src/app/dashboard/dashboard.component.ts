@@ -193,6 +193,7 @@ export class DashboardComponent {
       data: searchedCase,
     });
     dialogRef.afterClosed().subscribe((result) => {
+      //TODO # optimize this not to re-query the database on refresh
       this.getClaimedDmerCases();
       this.searchDmerCase();
       console.log('The dialog was closed', result);
