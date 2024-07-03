@@ -222,6 +222,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.DocumentSubType.Name = "Sub type test";
             document.DocumentUrl = "DocumentUrl";
             document.SubmittalStatus = "Received";
+            document.IdCode = "HG123";
+            document.FaxReceivedDate = DateTimeOffset.Now;
 
             var mappedDocument = _mapper.Map<Service.Document>(document);
 
@@ -236,6 +238,8 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.DocumentSubType.Name, mappedDocument.DocumentSubType.Name);
             Assert.Equal(document.DocumentUrl, mappedDocument.DocumentUrl);
             Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
+            Assert.Equal(document.IdCode, mappedDocument.IdCode);
+            Assert.Equal(document.FaxReceivedDate, mappedDocument.FaxReceivedDate.ToDateTimeOffset());
         }
     }
 }

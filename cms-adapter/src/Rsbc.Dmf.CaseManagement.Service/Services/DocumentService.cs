@@ -114,10 +114,12 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     result.ErrorDetail = "No DMER found for the case";
                     return result;
                 }
+
                 var mappedDocument = _mapper.Map<DmerCase>(dmerCase);
+
                 result.Item = mappedDocument;
                 result.ResultStatus = ResultStatus.Success;
-                
+   
             }
             catch (Exception ex)
             {
@@ -141,7 +143,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var document = _documentManager.UpdateClaimDmer(loginId, documentId);
 
                 var mappedDocument = _mapper.Map<DmerCase>(document);
-                result.Item = mappedDocument;
+               
+                  result.Item = mappedDocument;
 
                 result.ResultStatus = ResultStatus.Success;
             }

@@ -13,5 +13,11 @@
         public string LoginId { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; }
+
+        public string CaseId { get; set; }
+        public string IdCode { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
+
+        public DateTimeOffset? BirthDate { get; set; }
     }
 }

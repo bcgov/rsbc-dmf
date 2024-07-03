@@ -5,9 +5,15 @@
   </button>
 </div>
 <div mat-dialog-content>
+  <div class="modal-content">
+    <b
+      >If you would like to open this review and its owner is a member of your
+      Endorsement Network, please close this view and click “Launch DMER”
+    </b>
+  </div>
   <div>
     <p>
-      This DMER is currently assigned to : USER Name, and they are in your
+      This review is currently assigned to: USER Name, and they are in your
       network.
     </p>
 
@@ -19,35 +25,41 @@
         Your Role is : (Not Practitioner), and you are eligibile to ASSIGN.
       </li>
     </ul>
-
-    <p>
-      If you would like to open this in_network review, Please close the modal
-      and Launch DMER
-    </p>
   </div>
   <div>
     <p>
-      Note that reassigning this review will reset its content when launched.
+      <b
+        >Note that reassigning this review to any new user will reset its
+        contents; review contents may not be shared between claimants.</b
+      >
     </p>
   </div>
   <div>
     <mat-form-field>
       <mat-label>Assign Review To</mat-label>
       <mat-select>
-        <mat-option></mat-option>
+        <mat-option>Practitioner-1</mat-option>
+        <mat-option>Practitioner-2</mat-option>
+        <mat-option>Practitioner-3</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
+  <div>
+    <label for="check-box">
+      <input type="checkbox" #confirmed id="check-box" />
+      “I would like to remove my claim"
+    </label>
+  </div>
   <div class="action-buttons">
-    <button mat-raised-button color="primary" (click)="onClaimDmer()">
-      Claim DMER
+    <button mat-flat-button class="primaryButton" (click)="onClaimDmer()">
+      Assign DMER
     </button>
     <br />
     <button
-      mat-button
-      mat-dialog-close
-      color="primary"
+      mat-flat-button
+      class="primaryButton"
       (click)="onUnclaimDmer()"
+      [disabled]="!confirmed.checked"
     >
       Unclaim DMER
     </button>

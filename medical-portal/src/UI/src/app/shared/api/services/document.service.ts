@@ -26,6 +26,7 @@ import { ApiDocumentUnclaimDmerPost$Json$Params } from '../fn/document/api-docum
 import { apiDocumentUnclaimDmerPost$Plain } from '../fn/document/api-document-unclaim-dmer-post-plain';
 import { ApiDocumentUnclaimDmerPost$Plain$Params } from '../fn/document/api-document-unclaim-dmer-post-plain';
 import { CaseDocument } from '../models/case-document';
+import { DmerDocument } from '../models/dmer-document';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentService extends BaseService {
@@ -42,7 +43,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentMyDmersGet$Plain$Response(params?: ApiDocumentMyDmersGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDocument>>> {
+  apiDocumentMyDmersGet$Plain$Response(params?: ApiDocumentMyDmersGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DmerDocument>>> {
     return apiDocumentMyDmersGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -52,9 +53,9 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentMyDmersGet$Plain(params?: ApiDocumentMyDmersGet$Plain$Params, context?: HttpContext): Observable<Array<CaseDocument>> {
+  apiDocumentMyDmersGet$Plain(params?: ApiDocumentMyDmersGet$Plain$Params, context?: HttpContext): Observable<Array<DmerDocument>> {
     return this.apiDocumentMyDmersGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<CaseDocument>>): Array<CaseDocument> => r.body)
+      map((r: StrictHttpResponse<Array<DmerDocument>>): Array<DmerDocument> => r.body)
     );
   }
 
@@ -64,7 +65,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentMyDmersGet$Json$Response(params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseDocument>>> {
+  apiDocumentMyDmersGet$Json$Response(params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DmerDocument>>> {
     return apiDocumentMyDmersGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -74,9 +75,9 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentMyDmersGet$Json(params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<Array<CaseDocument>> {
+  apiDocumentMyDmersGet$Json(params?: ApiDocumentMyDmersGet$Json$Params, context?: HttpContext): Observable<Array<DmerDocument>> {
     return this.apiDocumentMyDmersGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<CaseDocument>>): Array<CaseDocument> => r.body)
+      map((r: StrictHttpResponse<Array<DmerDocument>>): Array<DmerDocument> => r.body)
     );
   }
 

@@ -24,7 +24,11 @@
   }
   
   .mat-dialog-content {
-    padding: 20px 50px;
+    padding: 24px 50px;
+  }
+
+  .modal-content{
+    padding-top: 24px;
   }
   
   .mat-form-field {
@@ -32,8 +36,10 @@
   }
   
   .action-buttons {
-    padding-top: 100px;
+    padding-top: 12px;
     display: flex;
+    gap:12px;
+    
   }
   
   ::ng-deep .mat-dialog-container {

@@ -49,7 +49,10 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     .ForMember(dest => dest.DocumentUrl, opt => opt.MapFrom(src => src.bcgov_url))
                     .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.createdon.GetValueOrDefault()))
                     .ForMember(dest => dest.DocumentId, opt => opt.MapFrom(src => src.bcgov_documenturlid.ToString()))
-                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId));
+                    .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.bcgov_CaseId.ticketnumber))
+                    .ForMember(dest => dest.Login, opt => opt.MapFrom(src => src.dfp_LoginId))
+                    .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => src.dfp_faxreceiveddate.GetValueOrDefault()))
+                    .AddTransform(NullStringConverter);
                     
             }
 
@@ -100,7 +103,7 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics
                     case 100000005:
                         return "Non-Comply";
                     case 100000007:
-                        return "Non-Comply";
+                        return "Actioned Non-comply";
                     default:
                         return "Submitted";
                 }
