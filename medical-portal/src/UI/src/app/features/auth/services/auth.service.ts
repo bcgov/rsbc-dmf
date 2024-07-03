@@ -4,6 +4,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions } from 'keycloak-js';
 import { Role } from '../enums/identity-provider.enum';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
+import { SESSION_STORAGE_KEYS } from '@app/app.model';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Observable<void>;
@@ -52,7 +53,7 @@ export class AuthService implements IAuthService {
   }
 
   public logout(redirectUri: string): Observable<void> {
-    sessionStorage.removeItem("profile");
+    sessionStorage.removeItem(SESSION_STORAGE_KEYS.PROFILE);
     return from(this.keycloakService.logout(redirectUri));
   }
 }

@@ -5,6 +5,7 @@ namespace Pssg.SharedUtils
 {
     // NOTE this should be in a shared library with cms-adapter, so they can both use this enum
     // after moved, remove Enums.NET package from driver-portal project
+    // NOTE that the dynamic values here should only be used in cms-adapter only and they are only here for reference and ease of mapping values
     public enum SubmittalStatus
     {
         [Description("Empty")]

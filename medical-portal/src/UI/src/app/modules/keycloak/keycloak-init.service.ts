@@ -39,6 +39,7 @@ export class KeycloakInitService {
     if (authenticated) {
       // Force refresh to begin expiry timer
       await this.keycloakService.updateToken(-1);
+      // Cache profile, await for it to complete so that we can guarantee the profile is loaded before AuthGuard checks access
       await firstValueFrom(this.profileManagementService.cacheProfile());
     }
 

@@ -16,3 +16,7 @@ export enum CaseStageEnum {
 export enum DocumentTypeEnum {
   'DMER' = 'DMER',
 }
+
+export enum SESSION_STORAGE_KEYS {
+  PROFILE = 'profile'
+}
