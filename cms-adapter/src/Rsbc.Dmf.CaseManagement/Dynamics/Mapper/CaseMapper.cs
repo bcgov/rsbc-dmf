@@ -224,7 +224,7 @@ namespace Rsbc.Dmf.CaseManagement
 
 
         [Obsolete("Use TranslateDmerType instead")]
-        protected string TranslateDmerTypeRaw(int? optionSetValue)
+        private string TranslateDmerTypeRaw(int? optionSetValue)
         {
             string result = null;
             switch (optionSetValue)
