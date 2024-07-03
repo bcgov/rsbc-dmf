@@ -1,8 +1,5 @@
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
@@ -33,9 +30,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             }
         }
 
-        // Dynamics login ids matching the above Pidp user id
-
-
         public List<string> LoginIds { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }        
@@ -50,7 +44,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         private readonly IConfiguration configuration;
         private readonly ILogger<UserService> logger;
         
-
         public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration, ILogger<UserService> logger)
         {
             this.userManager = userManager;
