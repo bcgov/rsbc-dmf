@@ -191,7 +191,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.bcgov_CaseId.customerid_contact.firstname = "Joe";
             document.bcgov_CaseId.customerid_contact.lastname = "Smithers";
             document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
-          
+            document.bcgov_CaseId.dfp_dmertype = 100000001;
 
             var mappedDocument = _mapper.Map<Document>(document);
 
@@ -201,6 +201,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.bcgov_CaseId.ticketnumber, mappedDocument.Case.CaseNumber);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.fullname, mappedDocument.Case.Person.FullName);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.birthdate, mappedDocument.Case.Person.Birthday.Value);
+            Assert.Equal("Age", mappedDocument.Case.DmerType);
         }
 
         [Fact]
