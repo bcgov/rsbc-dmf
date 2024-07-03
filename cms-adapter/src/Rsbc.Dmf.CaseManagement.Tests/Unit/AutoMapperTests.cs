@@ -208,7 +208,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
         public void Map_CaseManagement_Document_To_Service_Document()
         {
             var document = new Document();
-            document.DmerType = "2 - Age";
+            document.DmerType = "Age";
             document.DmerStatus = "Clean Pass";
             document.Case = new Dto.Case();
             document.Case.CaseNumber = "C123";
@@ -216,6 +216,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.Case.Person.FirstName = "Joe";
             document.Case.Person.LastName = "Smithers";
             document.Case.Person.Birthday = new DateTime(2000, 1, 1);
+            document.Case.DmerType = "Age";
             document.Description = "Test Discription";
             document.ComplianceDate = DateTimeOffset.Now;
             document.DocumentType = new Dto.DocumentType();
@@ -242,6 +243,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
             Assert.Equal(document.IdCode, mappedDocument.IdCode);
             Assert.Equal(document.FaxReceivedDate, mappedDocument.FaxReceivedDate.ToDateTimeOffset());
+            Assert.Equal(document.Case.DmerType, mappedDocument.Case.DmerType);
         }
     }
 }
