@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text.Json;
-using System.Threading.Tasks;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Services
@@ -37,24 +30,11 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             }
         }
 
-        // Dynamics login ids matching the above Pidp user id
-
-
         public List<string> LoginIds { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }        
-        public IEnumerable<ClinicAssignment> ClinicAssignments { get; set; }
-        public ClinicAssignment CurrentClinicAssignment => ClinicAssignments.FirstOrDefault();
         public string Email { get; set; }
         public IEnumerable<string> Roles { get; set; }
-    }
-
-    public record ClinicAssignment
-    {
-        public string PractitionerId { get; set; }
-        public string Role { get; set; }
-        public string ClinicId { get; set; }
-        public string ClinicName { get; set; }
     }
 
     public class UserService : IUserService
@@ -64,7 +44,6 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         private readonly IConfiguration configuration;
         private readonly ILogger<UserService> logger;
         
-
         public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration, ILogger<UserService> logger)
         {
             this.userManager = userManager;
