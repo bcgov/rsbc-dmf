@@ -22,5 +22,7 @@ namespace Rsbc.Dmf.CaseManagement.Dto
 
         // bcgov_incident_bcgov_documenturl
         public IEnumerable<Document> Documents { get; set; }
+
+        public string DmerType { get; set; }
     }
 }

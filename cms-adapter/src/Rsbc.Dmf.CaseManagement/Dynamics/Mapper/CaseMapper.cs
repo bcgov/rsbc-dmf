@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,19 +9,53 @@ namespace Rsbc.Dmf.CaseManagement
 {
     public class CaseAutoMapperProfile : Profile
     {
+
         public CaseAutoMapperProfile()
         {
             CreateMap<incident, Dto.Case>()
                 // TODO rename
                 .ForMember(dest => dest.CaseNumber, opt => opt.MapFrom(src => src.ticketnumber))
+                .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => TranslateDmerType(src.dfp_dmertype)))
                 .ForMember(dest => dest.Person, opt => opt.MapFrom(src => src.customerid_contact))
                 .ForMember(dest => dest.LatestComplianceDate, opt => opt.MapFrom(src => src.dfp_latestcompliancedate))
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
                 .ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.bcgov_incident_bcgov_documenturl));
+                
+
         }
+
+        protected string TranslateDmerType(int? optionSetValue)
+        {
+            string result = null;
+            switch (optionSetValue)
+            {
+                case 100000000:
+                    result = "Commercial/NSC";
+                    break;
+                case 100000001:
+                    result = "Age";
+                    break;
+                case 100000002:
+                    result = "Industrial Road";
+                    break;
+                case 100000003:
+                    result = "Known Medical";
+                    break;
+                case 100000006:
+                case null:
+                    result = "Suspected Medical Condition";
+                    break;
+                case 100000005:
+                    result = "No DMER";
+                    break;
+            }
+            return result;
+        }
+
+
     }
 
-    internal class CaseMapper : IMapperAsync<incident, CaseDetail>
+    internal class CaseMapper :  IMapperAsync<incident, CaseDetail>
     {
         private readonly DynamicsContext _dynamicsContext;
 
@@ -187,7 +222,9 @@ namespace Rsbc.Dmf.CaseManagement
             return result;
         }
 
-        private string TranslateDmerTypeRaw(int? optionSetValue)
+
+        [Obsolete("Use TranslateDmerType instead")]
+        protected string TranslateDmerTypeRaw(int? optionSetValue)
         {
             string result = null;
             switch (optionSetValue)
@@ -213,5 +250,7 @@ namespace Rsbc.Dmf.CaseManagement
             }
             return result;
         }
+
+
     }
 }

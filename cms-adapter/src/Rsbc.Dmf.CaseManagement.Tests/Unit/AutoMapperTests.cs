@@ -191,6 +191,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.bcgov_CaseId.customerid_contact.firstname = "Joe";
             document.bcgov_CaseId.customerid_contact.lastname = "Smithers";
             document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
+          
 
             var mappedDocument = _mapper.Map<Document>(document);
 
