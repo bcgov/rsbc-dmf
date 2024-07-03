@@ -155,7 +155,6 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
             services.AddPidpAdapterClient(configuration);
-            services.AddTransient<ICaseQueryService, CaseService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<DocumentFactory>();
             services.AddAutoMapperSingleton();
