@@ -145,7 +145,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 if (string.IsNullOrEmpty(loginId))
                 {
-                    dmerStatus = "Non-Comply - UnClaimed";
+                    dmerStatus = "Non-Comply - Unclaimed";
                 }
                 else
                 {
