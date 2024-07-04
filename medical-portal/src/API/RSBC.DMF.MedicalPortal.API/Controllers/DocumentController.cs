@@ -55,7 +55,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 var profile = await _userService.GetCurrentUserContext();
                 var loginIds = profile.LoginIds;
 
-                var dmerDocumentTypeCode = _configuration["Constants:DmerDocumentTypeCode"];
+                var dmerDocumentTypeCode = _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] ?? "001";                
                 var request = new GetDocumentsByTypeForUsersRequest { DocumentTypeCode = dmerDocumentTypeCode, LoginIds = { loginIds } };
                 var reply = _documentManagerClient.GetDocumentsByTypeForUsers(request);
                 if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
