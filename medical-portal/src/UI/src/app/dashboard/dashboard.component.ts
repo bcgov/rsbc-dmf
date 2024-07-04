@@ -31,7 +31,7 @@ import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.
 import { DMERStatusEnum } from '@app/app.model';
 
 interface Status {
-  value: number;
+  value: string;
   viewValue: string;
 }
 @Component({
@@ -65,15 +65,10 @@ interface Status {
 })
 export class DashboardComponent {
   status: Status[] = [
-    { value: 1, viewValue: 'All Status' },
-    { value: 2, viewValue: 'Not Requested' },
-    { value: 3, viewValue: 'Required - Unclaimed' },
-    { value: 4, viewValue: 'Required - Claimed' },
-    { value: 5, viewValue: 'Submitted' },
-    // TODO values like this should only be in cms-adapter, since they are Dynamics specific data
-    { value: 100000003, viewValue: 'Reviewed' },
-    { value: 100000005, viewValue: 'Non-Comply' },
-    { value: 100000001, viewValue: 'Received' },
+    { value: 'All Status', viewValue: 'All Status' },
+    { value: 'Required - Claimed', viewValue: 'Required - Claimed' },
+    { value: 'Submitted', viewValue: 'Submitted' },
+    { value: 'Non-Comply - Claimed', viewValue: 'Non-Comply - Claimed' },
   ];
 
   selectedStatus: string = 'All Status';
