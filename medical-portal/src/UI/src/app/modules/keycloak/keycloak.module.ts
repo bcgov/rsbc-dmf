@@ -15,6 +15,8 @@ export const keycloakProvider: Provider = {
   deps: [KeycloakInitService],
 };
 
+// NOTE Keycloak seems to have unobvious lifecycle issues when replacing this NgModule with a standalone version. Later, it might be worth trying an updated version of Keycloak
+// Stackoverflow has posts with information on how to get keycloak-angular working with standalone
 @NgModule({
   imports: [KeycloakAngularModule],
   providers: [keycloakProvider],

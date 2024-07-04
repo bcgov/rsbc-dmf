@@ -34,7 +34,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string FirstName { get; set; }
         public string LastName { get; set; }        
         public string Email { get; set; }
-
+        public IEnumerable<string> Roles { get; set; }
     }
 
     public class UserService : IUserService
@@ -67,6 +67,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
                 Email = user.FindFirstValue(Claims.Email),
+                Roles = user.GetRoles(),
             });
         }
 

@@ -24,3 +24,7 @@ export enum DMERStatusEnum {
   'NonComplyUnclaimed' = 'Non-Comply - Unclaimed',
   'NonComplyClaimed' = 'Non-Comply - Claimed'
 }
+
+export enum SESSION_STORAGE_KEYS {
+  PROFILE = 'profile'
+}

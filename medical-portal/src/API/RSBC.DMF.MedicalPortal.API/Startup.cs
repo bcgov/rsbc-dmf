@@ -47,6 +47,10 @@ namespace RSBC.DMF.MedicalPortal.API
                     keycloakOptions.Realm = config.Keycloak.Config.Realm;
                     keycloakOptions.Audience = config.Keycloak.Config.Audience;
                     keycloakOptions.AuthServerUrl = config.Keycloak.Config.Url;
+                    if (environment.IsDevelopment() && configuration.GetValue<bool>("FEATURES_SIMPLE_AUTH"))
+                    {
+                        keycloakOptions.VerifyTokenAudience = false;
+                    }
                 },
                 jwtBearerOptions =>
                 {
@@ -175,6 +179,12 @@ namespace RSBC.DMF.MedicalPortal.API
                     identity.GetResourceAccessRoles(Clients.DmftStatus)
                         .Select(role => new Claim(identity.RoleClaimType, role))
                 );
+
+                if (environment.IsDevelopment() && configuration.GetValue<bool>("FEATURES_SIMPLE_AUTH"))
+                {
+                    identity.AddClaim(new Claim(identity.RoleClaimType, Roles.Practitoner));
+                    identity.AddClaim(new Claim(identity.RoleClaimType, Roles.Dmft));
+                }
 
                 // TODO I think this is wrong, we should only need to call this once but this is validating on every request
                 var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();

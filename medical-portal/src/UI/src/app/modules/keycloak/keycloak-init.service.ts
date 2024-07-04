@@ -5,6 +5,8 @@ import { AuthRoutes } from '../../features/auth/auth.routes';
 import { ConfigurationService } from '../../shared/services/configuration.service';
 // TODO
 import { environment } from '@src/environments/environment.prod';
+import { ProfileManagementService } from '@app/shared/services/profile.service';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,8 @@ export class KeycloakInitService {
   public constructor(
     private configService: ConfigurationService,
     private router: Router,
-    private keycloakService: KeycloakService
+    private keycloakService: KeycloakService,
+    private profileManagementService: ProfileManagementService
   ) {}
 
   public async load(): Promise<void> {
@@ -36,6 +39,8 @@ export class KeycloakInitService {
     if (authenticated) {
       // Force refresh to begin expiry timer
       await this.keycloakService.updateToken(-1);
+      // Cache profile, await for it to complete so that we can guarantee the profile is loaded before AuthGuard checks access
+      await firstValueFrom(this.profileManagementService.cacheProfile());
     }
 
     console.info('Keycloak initialization completed.');
