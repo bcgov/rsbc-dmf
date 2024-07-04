@@ -161,8 +161,6 @@ export class DashboardComponent {
         this.selectedStatus === 'All Status' ||
         item.dmerStatus === this.selectedStatus;
 
-      console.log(this.selectedStatus, item.dmerStatus);
-
       const matchCaseNumber =
         this.searchCasesInput?.length === 0 ||
         item.idCode?.includes(this.searchCasesInput) ||
