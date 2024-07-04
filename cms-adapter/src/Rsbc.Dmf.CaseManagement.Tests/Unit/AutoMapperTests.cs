@@ -191,6 +191,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.bcgov_CaseId.customerid_contact.firstname = "Joe";
             document.bcgov_CaseId.customerid_contact.lastname = "Smithers";
             document.bcgov_CaseId.customerid_contact.birthdate = new DateTime(2000, 1, 1);
+            document.bcgov_CaseId.dfp_dmertype = 100000001;
 
             var mappedDocument = _mapper.Map<Document>(document);
 
@@ -200,13 +201,14 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.bcgov_CaseId.ticketnumber, mappedDocument.Case.CaseNumber);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.fullname, mappedDocument.Case.Person.FullName);
             Assert.Equal(document.bcgov_CaseId.customerid_contact.birthdate, mappedDocument.Case.Person.Birthday.Value);
+            Assert.Equal("Age", mappedDocument.Case.DmerType);
         }
 
         [Fact]
         public void Map_CaseManagement_Document_To_Service_Document()
         {
             var document = new Document();
-            document.DmerType = "2 - Age";
+            document.DmerType = "Age";
             document.DmerStatus = "Clean Pass";
             document.Case = new Dto.Case();
             document.Case.CaseNumber = "C123";
@@ -214,6 +216,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             document.Case.Person.FirstName = "Joe";
             document.Case.Person.LastName = "Smithers";
             document.Case.Person.Birthday = new DateTime(2000, 1, 1);
+            document.Case.DmerType = "Age";
             document.Description = "Test Discription";
             document.ComplianceDate = DateTimeOffset.Now;
             document.DocumentType = new Dto.DocumentType();
@@ -240,6 +243,7 @@ namespace Rsbc.Dmf.CaseManagement.Tests.Unit
             Assert.Equal(document.SubmittalStatus, mappedDocument.SubmittalStatus);
             Assert.Equal(document.IdCode, mappedDocument.IdCode);
             Assert.Equal(document.FaxReceivedDate, mappedDocument.FaxReceivedDate.ToDateTimeOffset());
+            Assert.Equal(document.Case.DmerType, mappedDocument.Case.DmerType);
         }
     }
 }
