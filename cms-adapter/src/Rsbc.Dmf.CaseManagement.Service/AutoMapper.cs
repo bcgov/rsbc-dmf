@@ -43,7 +43,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .AddTransform(NullStringConverter);
             CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
             CreateMap<FullAddress, CaseManagement.FullAddress>();
-            CreateMap<Dto.Document, Document>();
+            CreateMap<Dto.Document, Document>()
+                .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
+                .AddTransform(NullStringConverter); ;
             CreateMap<Dto.Case, Case>();
             CreateMap<Dto.Person, Person>();
             CreateMap<Dto.DocumentType, DocumentType>();

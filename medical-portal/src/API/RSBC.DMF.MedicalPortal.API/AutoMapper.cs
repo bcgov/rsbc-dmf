@@ -44,8 +44,9 @@ namespace RSBC.DMF.MedicalPortal.API
                 .ForMember(dest => dest.IdCode, opt => opt.MapFrom(src => src.Case.CaseNumber))
                 .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => src.Case.Person.FullName))
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.Case.Person.Birthday))
-                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.ComplianceDate));
-                
+                .ForMember(dest => dest.DueDate, opt => opt.MapFrom(src => src.ComplianceDate))
+                .ForMember(dest => dest.DmerStatus, opt => opt.MapFrom(src => src.DmerStatus))
+                .ForMember(dest => dest.DmerType, opt => opt.MapFrom(src => src.Case.DmerType));
 
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();

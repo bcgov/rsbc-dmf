@@ -262,6 +262,7 @@ namespace Rsbc.Dmf.CaseManagement
                     .Expand(doc => doc.dfp_DocumentTypeID)
                     .Expand(doc => doc.bcgov_CaseId)
                     .Expand(doc => doc.bcgov_CaseId.customerid_contact)
+                    .Expand(doc => doc.dfp_LoginId)
                     .Where(doc => 
                         doc.dfp_DocumentTypeID.dfp_code == documentTypeCode
                         && doc.dfp_LoginId.dfp_loginid == loginId
