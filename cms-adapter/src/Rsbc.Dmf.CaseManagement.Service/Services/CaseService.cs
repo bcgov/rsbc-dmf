@@ -2047,8 +2047,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return reply;
             }
 
-            return reply;
-        }
 
         /// <summary>
         /// Get Unsent Medical Updates for clean pass and manual pass
