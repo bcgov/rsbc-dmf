@@ -292,6 +292,7 @@ message CaseDetail {
     string lastName = 22;
     string middlename = 23;
     google.protobuf.Timestamp latestComplianceDate = 24;
+    repeated MedicalConditionItem medicalConditions = 25;
 }
 
 message CreateStatusReply {	
@@ -508,6 +509,12 @@ message FlagItem {
         Message = 4;
     }
     FlagTypeOptions flagType = 4;
+}
+
+message MedicalConditionItem {
+    string id = 1;
+    string description = 2;
+    string formId = 3;
 }
 
 message DecisionItem {

@@ -91,6 +91,6 @@ namespace Rsbc.Dmf.CaseManagement
         public string LastName { get; set; }
 
         public string MiddleName { get; set; }
+        public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
     }
-
 }
