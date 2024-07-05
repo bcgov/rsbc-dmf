@@ -415,6 +415,14 @@ namespace Rsbc.Dmf.CaseManagement
                 await dynamicsContext.LoadPropertyAsync(flag, nameof(dfp_dmerflag.dfp_FlagId));
             }
 
+            //load case's medical conditions (KMCs)
+            await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_knownmedicalcondition));
+            foreach (var medicalcondition in @case.dfp_incident_dfp_knownmedicalcondition)
+            {
+                await dynamicsContext.LoadPropertyAsync(medicalcondition,
+                    nameof(dfp_knownmedicalcondition.dfp_MedicalConditionId));
+            }
+
             //load decisions
             await dynamicsContext.LoadPropertyAsync(@case, nameof(incident.dfp_incident_dfp_decision));
             foreach (var decision in @case.dfp_incident_dfp_decision)
@@ -884,6 +892,7 @@ namespace Rsbc.Dmf.CaseManagement
             {
                 var @case = dynamicsContext.incidents
                     .Expand(i => i.dfp_DriverId)
+                    //.Expand(i => i.dfp_incident_dfp_knownmedicalcondition)
                     .Where(i => i.ticketnumber == idCode)
                     .Where(i => i.statuscode != (int)StatusCodeOptionSet.Sent)
                     .FirstOrDefault();
@@ -3775,6 +3784,7 @@ namespace Rsbc.Dmf.CaseManagement
                 .Expand(i => i.dfp_ClinicId)
                 .Expand(i => i.dfp_MedicalPractitionerId)
                 .Expand(i => i.bcgov_incident_bcgov_documenturl)
+                //.Expand(i => i.dfp_incident_dfp_knownmedicalcondition)
                 .Where(i => i.statecode == 1);
 
             if (!string.IsNullOrEmpty(criteria.CaseId)) 
@@ -3905,6 +3915,32 @@ namespace Rsbc.Dmf.CaseManagement
 
             return result;
         }
+
+        /// <summary>
+        /// Get All Known Medical Conditions (KMCs)
+        /// </summary>
+        /// <returns></returns>
+        //public async Task<List<MedicalCondition>> GetMedicalConditions()
+        //{
+        //    List<MedicalCondition> result = new List<MedicalCondition>();
+
+        //    var medicalConditions = dynamicsContext.dfp_medicalconditions.Execute();
+        //    //                    //.Expand(c => c.dfp_incident_dfp_knownmedicalcondition)
+
+        //    foreach (var medicalCondition in medicalConditions)
+        //    {
+        //        var newMedicalCondition = new MedicalCondition()
+        //        {
+        //            Id = medicalCondition.dfp_id,
+        //            Description = medicalCondition.dfp_description,
+        //            FormId = medicalCondition.dfp_formid
+        //        };
+
+        //        result.Add(newMedicalCondition);
+        //    }
+
+        //    return result;
+        //}
 
         /// <summary>
         /// Get Unsent Medical Updates for clean pass and manual pass
@@ -5336,7 +5372,8 @@ namespace Rsbc.Dmf.CaseManagement
                             dfp_id = flag.Id,
                             dfp_description = flag.Description,
                             dfp_label = SanitizeLabel(flag.Description), // max 200 characters.
-                            dfp_type = (int?)FlagTypeOptionSet.Review
+                            dfp_type = (int?)FlagTypeOptionSet.Review,
+                            //dfp_formid = flag.FormId
                         };
                         dynamicsContext.AddTodfp_flags(givenFlag);
                     }

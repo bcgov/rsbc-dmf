@@ -35,6 +35,9 @@ service CaseManager {
   // Get all the flags
   rpc GetAllFlags(EmptyRequest) returns (GetAllFlagsReply);
 
+  // Get all the Medical Conditions (KMCs)
+  //rpc GetAllMedicalConditions(EmptyRequest) returns (GetAllMedicalConditionsReply);
+
   rpc GetComment (CommentIdRequest) returns (GetCommentReply);
 
   rpc GetComments (CommentsRequest) returns (GetCommentsReply);
@@ -334,6 +337,10 @@ message ManualPassRequest{
 message GetAllFlagsReply {
     repeated FlagItem Flags = 1;
 }
+
+//message GetAllMedicalConditionsReply {
+//    repeated MedicalConditionItem MedicalConditions = 1;
+//}
 
 message LegacyDecision {
 	string caseId = 1;
@@ -700,6 +707,7 @@ service UserManager {
   rpc GetPractitionerContact(PractitionerRequest) returns (PractitionerReply);
 }
 
+// TODO delete
 message PractitionerReply{
 	string contactId = 1;
 	string gender = 2;
@@ -712,6 +720,7 @@ message PractitionerReply{
 	string role = 9;
 }
 
+// TODO delete
 message PractitionerRequest{
 	string hpdid = 1;
 }

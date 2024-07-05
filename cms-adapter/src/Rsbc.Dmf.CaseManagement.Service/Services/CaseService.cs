@@ -2045,8 +2045,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
             var flags = await _caseManager.GetAllFlags();
             reply.Flags.AddRange(_mapper.Map<RepeatedField<FlagItem>>(flags));
             return reply;
-            }
+        }
 
+        //public async override Task<GetAllMedicalConditionsReply> GetAllMedicalConditions(EmptyRequest request,
+        //    ServerCallContext context)
+        //{
+        //    var reply = new GetAllMedicalConditionsReply();
+        //    var flags = await _caseManager.GetAllMedicalConditions();
+        //    foreach (var flag in flags)
+        //    {
+        //        MedicalConditionItem newFlag = new MedicalConditionItem()
+        //        {
+        //            Identifier = flag.Id,
+        //            Question = flag.Description ?? "",
+        //            FormId = flag.FormId ?? "",
+        //        };
+        //        reply.MedicalConditions.Add(newFlag);
+        //    }
+
+        //    return reply;
+        //}
 
         /// <summary>
         /// Get Unsent Medical Updates for clean pass and manual pass

@@ -70,6 +70,8 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<List<Flag>> GetAllFlags();
 
+        //Task<List<MedicalCondition>> GetAllMedicalConditions();
+
         Task<CaseSearchReply> GetUnsentMedicalPass();
 
         Task<CaseSearchReply> GetUnsentMedicalAdjudication();
