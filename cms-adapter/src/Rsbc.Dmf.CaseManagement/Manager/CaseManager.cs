@@ -185,6 +185,13 @@ namespace Rsbc.Dmf.CaseManagement
         public FlagTypeOptionSet? FlagType { get; set; }
     }
 
+    public class MedicalCondition
+    {
+        public string Id { get; set; }
+        public string Description { get; set; }
+        public string FormId { get; set; }
+    }
+
     public enum DecisionOutcome
     {        
         FitToDrive = 1,
@@ -856,6 +863,7 @@ namespace Rsbc.Dmf.CaseManagement
                 var fetchedCase = dynamicsContext.incidents
                     .Expand(c => c.dfp_DriverId)
                     .Expand(c => c.dfp_DriverId.dfp_PersonId)
+                    .Expand(c => c.dfp_incident_dfp_knownmedicalcondition)
                     .Where(d => d.incidentid == Guid.Parse(caseId))
                     .FirstOrDefault();
                 if (fetchedCase != null)                

@@ -636,6 +636,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     reply.Item.DpsProcessingDate = Timestamp.FromDateTimeOffset(c.DpsProcessingDate);
                     reply.Item.LatestComplianceDate = Timestamp.FromDateTimeOffset(c.LatestComplianceDate);
 
+                    // Medical Conditions
+                    if (c.MedicalConditions != null && c.MedicalConditions.Any())
+                        reply.Item.MedicalConditions.AddRange(_mapper.Map<IEnumerable<MedicalConditionItem>>(c.MedicalConditions));
+
                     // Driver
                     reply.Item.DriverId = c.DriverId;
                     reply.Item.Name = c.Name ?? string.Empty;

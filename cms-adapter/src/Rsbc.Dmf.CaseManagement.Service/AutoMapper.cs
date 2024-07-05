@@ -60,6 +60,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LoginId))
                 .AddTransform(NullStringConverter);
             
+            CreateMap<MedicalCondition, Service.MedicalConditionItem>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

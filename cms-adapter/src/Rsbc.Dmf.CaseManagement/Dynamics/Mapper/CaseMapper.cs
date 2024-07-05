@@ -2,6 +2,7 @@
 using Rsbc.Dmf.CaseManagement.Dynamics;
 using Rsbc.Dmf.Dynamics.Microsoft.Dynamics.CRM;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,8 +21,6 @@ namespace Rsbc.Dmf.CaseManagement
                 .ForMember(dest => dest.LatestComplianceDate, opt => opt.MapFrom(src => src.dfp_latestcompliancedate))
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
                 .ForMember(dest => dest.Documents, opt => opt.MapFrom(src => src.bcgov_incident_bcgov_documenturl));
-                
-
         }
 
         protected string TranslateDmerType(int? optionSetValue)
@@ -51,8 +50,6 @@ namespace Rsbc.Dmf.CaseManagement
             }
             return result;
         }
-
-
     }
 
     internal class CaseMapper :  IMapperAsync<incident, CaseDetail>
@@ -123,6 +120,36 @@ namespace Rsbc.Dmf.CaseManagement
                 await _dynamicsContext.LoadPropertyAsync(@case, nameof(incident.owningteam));
                 result.AssigneeTitle = @case.owningteam.name;
             }
+
+            // get the medical conditions.
+            var medicalConditions = new List<MedicalCondition>();
+            _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_knownmedicalcondition));
+
+            if (@case.dfp_incident_dfp_knownmedicalcondition != null &&
+                @case.dfp_incident_dfp_knownmedicalcondition.Count > 0)
+            {
+                foreach (var m in @case.dfp_incident_dfp_knownmedicalcondition)
+                {
+                    if (m._dfp_medicalconditionid_value != null &&
+                        m.statecode == 0 &&
+                        (m.statuscode == 1 || m.statuscode == 100000003))
+                    {
+                        var medicalCondition = await _dynamicsContext.dfp_medicalconditions
+                            .ByKey(m._dfp_medicalconditionid_value.Value).GetValueAsync();
+                        if (medicalCondition != null)
+                        {
+                            medicalConditions.Add(new MedicalCondition
+                            {
+                                Id = medicalCondition.dfp_id,
+                                Description = medicalCondition.dfp_description ?? "Unknown",
+                                FormId = medicalCondition.dfp_formid ?? string.Empty
+                            });
+                        }
+                    }
+                }
+            }
+
+            result.MedicalConditions = medicalConditions;
 
             // get the related decisions.
             _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_decision));
