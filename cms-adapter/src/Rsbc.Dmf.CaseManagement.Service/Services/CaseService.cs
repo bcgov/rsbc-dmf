@@ -1,4 +1,5 @@
 using AutoMapper;
+using Google.Protobuf.Collections;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Microsoft.AspNetCore.Authorization;
@@ -1597,7 +1598,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Title = request.Title,
                     ClinicId = request.ClinicId,
                     DriverLicenseNumber = request.DriverLicenseNumber
-                })).Items.Cast<Rsbc.Dmf.CaseManagement.DmerCase>();
+                })).Items.Cast<CaseManagement.DmerCase>();
 
                 reply.Items.Add(cases.Select(c =>
                 {
@@ -1667,10 +1668,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         DmerType = c.DmerType ?? string.Empty,
                         CaseSequence = c.CaseSequence
                     };
-                    newCase.Flags.Add(c.Flags.Select(f => new FlagItem
-                    {
-                        Identifier = f.Id, Question = f.Description ?? "Unknown", FlagType = ConvertFlagType(f.FlagType)
-                    }));
+                    newCase.Flags.AddRange(_mapper.Map<RepeatedField<FlagItem>>(c.Flags));
+                    newCase.MedicalConditions.AddRange(_mapper.Map<RepeatedField<MedicalConditionItem>>(c.MedicalConditions));
                     return newCase;
                 }));
                 reply.ResultStatus = ResultStatus.Success;
@@ -1722,13 +1721,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         }
 
-
-        /// <summary>
-        /// Update Case
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
+        // NOTE does not appear to be used
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
             var reply = new UpdateCaseReply();
@@ -1746,7 +1739,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     Flag newFlag = new Flag()
                     {
                         Description = item.Question,
-                        Id = item.Identifier
+                        Id = item.Identifier,
+                        FormId = item.FormId
                     };
                     flags.Add(newFlag);
                     _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
@@ -1973,33 +1967,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
         }
 
         /// <summary>
-        /// Convert Flag Type
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
-        {
-            FlagTypeOptions result = FlagTypeOptions.Unknown;
-            switch (value)
-            {
-                case FlagTypeOptionSet.FollowUp:
-                    result = FlagTypeOptions.FollowUp;
-                    break;
-                case FlagTypeOptionSet.Message:
-                    result = FlagTypeOptions.Message;
-                    break;
-                case FlagTypeOptionSet.Review:
-                    result = FlagTypeOptions.Review;
-                    break;
-                case FlagTypeOptionSet.Submittal:
-                    result = FlagTypeOptions.Submittal;
-                    break;
-            }
-
-            return result;
-        }
-
-        /// <summary>
         /// Convert Status Code
         /// </summary>
         /// <param name="value"></param>
@@ -2076,19 +2043,10 @@ namespace Rsbc.Dmf.CaseManagement.Service
         {
             var reply = new GetAllFlagsReply();
             var flags = await _caseManager.GetAllFlags();
-            foreach (var flag in flags)
-            {
-                FlagItem newFlag = new FlagItem()
-                {
-                    Identifier = flag.Id,
-                    Question = flag.Description ?? "",
-                    FlagType = ConvertFlagType (flag.FlagType)
-                };
-                reply.Flags.Add(newFlag);
+            reply.Flags.AddRange(_mapper.Map<RepeatedField<FlagItem>>(flags));
+            return reply;
             }
 
-            return reply;
-        }
 
         /// <summary>
         /// Get Unsent Medical Updates for clean pass and manual pass

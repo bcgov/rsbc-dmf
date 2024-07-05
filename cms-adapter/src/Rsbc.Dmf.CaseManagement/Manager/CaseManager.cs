@@ -165,17 +165,12 @@ namespace Rsbc.Dmf.CaseManagement
         public Driver Driver { get; set; }
         public Provider Provider { get; set; }
         public IEnumerable<Flag> Flags { get; set; }
-
         public IEnumerable<Decision> Decisions { get; set; }
-
         public string ClinicId { get; set; }
-
         public string ClinicName { get; set;}
-
         public string DmerType { get; set;}
-
         public int CaseSequence { get; set; }
-
+        public IEnumerable<MedicalCondition> MedicalConditions { get; set; }
     }
 
     public class Flag
@@ -183,6 +178,7 @@ namespace Rsbc.Dmf.CaseManagement
         public string Id { get; set; }
         public string Description { get; set; }
         public FlagTypeOptionSet? FlagType { get; set; }
+        public string FormId { get; set; }
     }
 
     public class MedicalCondition
@@ -2444,7 +2440,6 @@ namespace Rsbc.Dmf.CaseManagement
         /// </summary>
         /// <param name="cases"></param>
         /// <returns></returns>
-        [Obsolete]
         private CaseSearchReply MapCases(IEnumerable<incident> cases)
         {
             return new CaseSearchReply
@@ -2484,7 +2479,6 @@ namespace Rsbc.Dmf.CaseManagement
                         provider = null;
                     }
 
-
                     CaseManagement.Driver driver = new CaseManagement.Driver()
                     {
                         Id = c.dfp_DriverId?.dfp_driverid.ToString(),
@@ -2504,8 +2498,6 @@ namespace Rsbc.Dmf.CaseManagement
                         Name = CombineName(c.dfp_DriverId?.dfp_PersonId?.lastname, c.dfp_DriverId?.dfp_PersonId?.firstname)
                     };
 
-
-
                     return new DmerCase
                     {
                         Id = c.incidentid.ToString(),
@@ -2524,11 +2516,13 @@ namespace Rsbc.Dmf.CaseManagement
                             c.dfp_iscommercial == 100000000, // convert the optionset to a bool.
                         Flags = c.dfp_incident_dfp_dmerflag
                             .Where(f => f.dfp_FlagId != null) //temp defense against deleted flags
-                            .Select(f => new Flag
-                            {
-                                Id = f.dfp_FlagId?.dfp_id,
-                                Description = f.dfp_FlagId?.dfp_description
-                            }).ToArray(),
+                            .Select(f => _mapper.Map<Flag>(f.dfp_FlagId))
+                            .ToArray(),
+                        MedicalConditions = c.dfp_incident_dfp_knownmedicalcondition
+                            .Where(f => f.dfp_MedicalConditionId != null && f.statecode == 0 &&
+                                (f.statuscode == 100000003 || f.statuscode == 1))
+                            .Select(f => _mapper.Map<MedicalCondition>(f))
+                            .ToArray(),
                         Decisions = c.dfp_incident_dfp_decision
                             .Select(d => new Decision
                             {
@@ -2541,9 +2535,7 @@ namespace Rsbc.Dmf.CaseManagement
                     };
                 }).ToArray()
             };
-
         }
-
 
         /// <summary>
         /// Filter Last Case Modified
@@ -3900,7 +3892,8 @@ namespace Rsbc.Dmf.CaseManagement
                 var newFlag = new Flag()
                 {
                     Id = flag.dfp_id,
-                    Description = flag.dfp_description
+                    Description = flag.dfp_description,
+                    FormId = flag.dfp_formid
                 };
                 if (flag.dfp_type != null)
                 {
