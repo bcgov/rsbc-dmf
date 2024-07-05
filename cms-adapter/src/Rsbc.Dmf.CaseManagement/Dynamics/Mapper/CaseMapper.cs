@@ -124,7 +124,6 @@ namespace Rsbc.Dmf.CaseManagement
             // get the medical conditions.
             var medicalConditions = new List<MedicalCondition>();
             _dynamicsContext.LoadProperty(@case, nameof(incident.dfp_incident_dfp_knownmedicalcondition));
-
             if (@case.dfp_incident_dfp_knownmedicalcondition != null &&
                 @case.dfp_incident_dfp_knownmedicalcondition.Count > 0)
             {
@@ -148,7 +147,6 @@ namespace Rsbc.Dmf.CaseManagement
                     }
                 }
             }
-
             result.MedicalConditions = medicalConditions;
 
             // get the related decisions.

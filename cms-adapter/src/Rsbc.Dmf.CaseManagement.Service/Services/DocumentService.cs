@@ -101,6 +101,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        // TODO should be made generic e.g. GetDocumentByType
         public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context) 
         {
             var result = new GetDmerReply();

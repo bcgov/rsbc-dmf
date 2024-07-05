@@ -7,6 +7,7 @@ using Pssg.DocumentStorageAdapter;
 using AutoMapper;
 using Rsbc.Dmf.DriverPortal.Api.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -43,35 +44,43 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         /// <returns></returns>
         [HttpGet("Closed")]
         [Authorize(Policy = Policy.Driver)]
-        [ProducesResponseType(typeof(IEnumerable<CaseDetail>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(IEnumerable<CaseDetail>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName("GetClosedCases")]
         public async Task<ActionResult> GetClosedCases()
         {
-            var profile = await _userService.GetCurrentUserContext();
-
-            var caseStatusRequest = new CaseStatusRequest() { DriverId = profile.DriverId, Status = EntityState.Inactive };
-            var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
+            try
             {
-                var result = new List<CaseDetail>();
-                result = _mapper
-                    .Map<IEnumerable<CaseDetail>>(reply.Items)
-                    .ToList();
+                var profile = await _userService.GetCurrentUserContext();
 
-                // sort the documents
-                if (result.Count > 0)
+                var caseStatusRequest = new CaseStatusRequest() { DriverId = profile.DriverId, Status = EntityState.Inactive };
+                var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
+                if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
-                    result = result.OrderByDescending(cs => cs.OpenedDate).ToList();
-                }
+                    var result = new List<CaseDetail>();
+                    result = _mapper
+                        .Map<IEnumerable<CaseDetail>>(reply.Items)
+                        .ToList();
 
-                return Json(result);
+                    // sort the documents
+                    if (result.Count > 0)
+                    {
+                        result = result.OrderByDescending(cs => cs.OpenedDate).ToList();
+                    }
+
+                    return Json(result);
+                }
+                else
+                {
+                    _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
+                    return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogError($"{nameof(GetClosedCases)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
+                _logger.LogError($"{nameof(GetClosedCases)} failed", ex);
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
         }
 

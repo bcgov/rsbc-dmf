@@ -360,6 +360,7 @@ message DmerCase {
 	repeated DecisionItem Decisions = 35;
 	int64 caseSequence = 40;
     string documentId = 41;
+    repeated MedicalConditionItem MedicalConditions = 45;
 }
 
 message Driver {
@@ -509,6 +510,7 @@ message FlagItem {
         Message = 4;
     }
     FlagTypeOptions flagType = 4;
+    string formId = 5;
 }
 
 message MedicalConditionItem {

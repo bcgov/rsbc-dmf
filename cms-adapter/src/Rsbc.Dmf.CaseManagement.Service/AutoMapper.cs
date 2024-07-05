@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.DocumentTypeMapper;
 using static Rsbc.Dmf.CaseManagement.Dynamics.Mapper.CallbackMapper;
+using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {
@@ -27,6 +28,14 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<Timestamp, DateTimeOffset?>()
                 .ConvertUsing(x => x == null ? null : x.ToDateTimeOffset());
 
+            // to CaseManagement from proto
+            CreateMap<Callback, CaseManagement.Callback>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
+                .AddTransform(NullStringConverter);
+            CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
+            CreateMap<FullAddress, CaseManagement.FullAddress>();
+
+            // to Proto from CaseManagement
             CreateMap<CaseManagement.Address, Address>()
                 .AddTransform(NullStringConverter);
             CreateMap<CaseManagement.Driver, Driver>()
@@ -38,11 +47,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
             CreateMap<CaseManagement.Callback, Callback>()
                 .AddTransform(NullStringConverter);
-            CreateMap<Callback, CaseManagement.Callback>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => string.IsNullOrEmpty(src.Id) ? (Guid?)null : Guid.Parse(src.Id)))
-                .AddTransform(NullStringConverter);
-            CreateMap<UpdateLoginRequest, CaseManagement.UpdateLoginRequest>();
-            CreateMap<FullAddress, CaseManagement.FullAddress>();
+
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))
                 .AddTransform(NullStringConverter); ;
@@ -59,11 +64,39 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FullName))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.LoginId))
                 .AddTransform(NullStringConverter);
-            
-            CreateMap<MedicalCondition, Service.MedicalConditionItem>();
+
+            CreateMap<CaseManagement.Flag, Service.FlagItem>()
+                .ForMember(dest => dest.Identifier, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Question, opt => opt.MapFrom(src => src.Description))
+                .ForMember(dest => dest.FlagType, opt => opt.MapFrom(src => ConvertFlagType(src.FlagType)))
+                .ForMember(dest => dest.FormId, opt => opt.MapFrom(src => src.FormId ?? string.Empty))
+                .AddTransform(NullStringConverter);
+            CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>()
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description ?? "Unknown"))
+                .AddTransform(NullStringConverter);
+
+            CreateMap<CaseManagement.MedicalCondition, Service.MedicalConditionItem>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;
+
+        FlagTypeOptions ConvertFlagType(FlagTypeOptionSet? value)
+        {
+            var result = FlagTypeOptions.Unknown;
+            switch (value)
+            {
+                case FlagTypeOptionSet.FollowUp:
+                    return FlagTypeOptions.FollowUp;
+                case FlagTypeOptionSet.Message:
+                    return FlagTypeOptions.Message;
+                case FlagTypeOptionSet.Review:
+                    return FlagTypeOptions.Review;
+                case FlagTypeOptionSet.Submittal:
+                    return FlagTypeOptions.Submittal;
+            }
+
+            return result;
+        }
     }
 
     public static class AutoMapperEx
@@ -80,6 +113,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 mc.AddProfile(new ContactAutoMapperProfile());
                 mc.AddProfile(new DriverAutoMapperProfile());
                 mc.AddProfile(new LoginAutoMapperProfile());
+                mc.AddProfile(new FlagAutoMapperProfile());
+                mc.AddProfile(new MedicalConditionAutoMapperProfile());
             });
 
             var mapper = mapperConfig.CreateMapper();
