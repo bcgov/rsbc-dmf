@@ -35,7 +35,11 @@ import { CaseSubmissionsComponent } from '../case-submissions/case-submissions.c
 import { SubmissionRequirementsComponent } from '../submission-requirements/submission-requirements.component';
 import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
-import { CaseStageEnum, SubmittalStatusEnum } from '@app/app.model';
+import {
+  CaseStageEnum,
+  DocumentTypeEnum,
+  SubmittalStatusEnum,
+} from '@app/app.model';
 import { DatePipe } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { PopupService } from '../popup/popup.service';
@@ -92,6 +96,8 @@ export class CaseDetailsComponent implements OnInit {
   submissionRequirementDocuments: CaseDocument[] = [];
   driverSubmissionDocuments: CaseDocument[] = [];
   isLoading = true;
+
+  hasDmer = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -165,6 +171,9 @@ export class CaseDetailsComponent implements OnInit {
               doc.submittalStatus as SubmittalStatusEnum,
             )
           ) {
+            if (doc.documentType == DocumentTypeEnum.DMER) {
+              this.hasDmer = true;
+            }
             submissionRequirementDocuments.push(doc);
           } else if (
             ![

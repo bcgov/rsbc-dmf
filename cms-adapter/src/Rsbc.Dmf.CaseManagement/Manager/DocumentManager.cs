@@ -28,6 +28,20 @@ namespace Rsbc.Dmf.CaseManagement
             _configuration = configuration;
         }
 
+        public enum submittalStatusOptionSet
+        {
+            OpenRequired = 100000000,
+            NonComply = 100000005,
+            ActionNonCOmply = 100000007,
+            Accept = 100000001,
+            Reject = 100000004,
+            CleanPass = 100000009,
+            ManualPass = 100000012,
+            Empty = 100000013,
+            Reviewed = 100000003,
+            Uploaded = 100000010
+        }
+
         /// <summary>
         /// Get Case Legacy Documents
         /// </summary>
@@ -274,14 +288,19 @@ namespace Rsbc.Dmf.CaseManagement
 
         public Document GetDmer(Guid caseId)
         {
-            var document = dynamicsContext.bcgov_documenturls
+           
+
+            var dmerdocumentsList = dynamicsContext.bcgov_documenturls
                 .Expand(doc => doc.bcgov_CaseId)
                 .Expand(doc => doc.dfp_DocumentTypeID)
                 .Expand(doc => doc.dfp_LoginId)
-                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"])
+                .Where(doc => doc.bcgov_CaseId.incidentid == caseId && doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] 
+                 && (doc.dfp_submittalstatus == (int)submittalStatusOptionSet.OpenRequired || doc.dfp_submittalstatus == (int)submittalStatusOptionSet.NonComply)) // Verify the documents have Open required or Non Comply Documents
                 .FirstOrDefault();
 
-            return _mapper.Map<Document>(document);
+
+            return _mapper.Map<Document>(dmerdocumentsList);
+
         }
 
         /// <summary>
@@ -347,6 +366,8 @@ namespace Rsbc.Dmf.CaseManagement
         }
        
     }
+
+  
 }
 
 

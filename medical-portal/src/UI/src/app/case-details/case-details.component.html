@@ -66,13 +66,15 @@
               </div>
               <div>
                 <div>
-                  <button
-                    mat-flat-button
-                    class="primaryButton"
-                    (click)="openPopup()"
-                  >
-                    Start DMER
-                  </button>
+                  @if (hasDmer) {
+                    <button
+                      mat-flat-button
+                      class="primaryButton"
+                      (click)="openPopup()"
+                    >
+                      Start DMER
+                    </button>
+                  }
                 </div>
               </div>
               <div class="caseDetailsRow">
@@ -154,13 +156,9 @@
 
     <div>
       <h2>Case Documentation</h2>
-      <!-- <div>
-        <app-upload-document></app-upload-document>
-      </div> -->
 
       <mat-tab-group animationDuration="0ms">
         <mat-tab label="Submission Requirements">
-          <!-- <app-upload-document></app-upload-document> -->
           <app-submission-requirements
             [documents]="submissionRequirementDocuments"
             [driverId]="caseDetails?.driverId"
