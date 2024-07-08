@@ -25,7 +25,9 @@ export class AccountComponent {
   {
     this.profileManagementService.getProfile().subscribe((profile) => {
       this.fullName = profile.firstName + " " + profile.lastName;
-      this.email = profile.email + "";
+      if (profile.email) {
+        this.email = profile.email + "";
+      }
     });
     this.role = this.authService
       .getRoles()
