@@ -182,7 +182,7 @@
                       }
 
                       @if (
-                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed
+                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed && searchedCase.isOwner == true
                       ) {
                         <button
                           mat-flat-button
