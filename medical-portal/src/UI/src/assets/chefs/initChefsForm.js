@@ -157,7 +157,9 @@ function loadChefsBundleData(fetchedBundleData) {
       );
       values[key].forEach((medicalCondition) => {
         const { formId } = medicalCondition;
-        const matchingMedicalConditionComponent = Object.values.find(
+        const matchingMedicalConditionComponent = Object.values(
+          flattenedComponents,
+        ).find(
           (comp) => comp?.originalComponent?.properties?.kmcformid === formId,
         );
         if (!matchingMedicalConditionComponent) {
