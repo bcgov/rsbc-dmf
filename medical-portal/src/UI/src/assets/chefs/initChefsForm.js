@@ -160,7 +160,7 @@ function loadChefsBundleData(fetchedBundleData) {
         const matchingMedicalConditionComponent = Object.values(
           flattenedComponents,
         ).find(
-          (comp) => comp?.originalComponent?.properties?.flagformid === formId,
+          (comp) => comp?.originalComponent?.properties?.kmcformid === formId,
         );
         if (!matchingMedicalConditionComponent) {
           console.warn(
