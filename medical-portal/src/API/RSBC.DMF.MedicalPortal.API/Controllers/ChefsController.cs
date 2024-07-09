@@ -217,6 +217,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 chefsBundle.patientCase = caseResult;
                 caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
+                chefsBundle.medicalConditions = c.Item.MedicalConditions;
             }
 
             var driverInfoReply = new DriverInfoReply();

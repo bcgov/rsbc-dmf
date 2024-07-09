@@ -108,39 +108,95 @@ function checkIfInitIsComplete() {
 
     // call putChefsSubmission in case cached data differs vs. bundle + cached data
     putChefsSubmission();
+  } else {
+    console.warn(
+      `[IFRAME] checkIfInitIsComplete: not complete yet, window.loadedChefsSubmission: ${window.loadedChefsSubmission}, window.loadedChefsBundle: ${window.loadedChefsBundle}!`,
+    );
   }
 }
 
 function loadChefsBundleData(fetchedBundleData) {
   console.log("[IFRAME] START LOADING FETCHED BUNDLE DATA:");
   console.log(fetchedBundleData);
+  if (!fetchedBundleData?.patientCase || !fetchedBundleData?.driverInfo) {
+    console.warn(
+      `[IFRAME] Missing chefs bundle data, either missing patientCase or driverInfo`,
+    );
+  }
+
   const {
     patientCase: { driverLicenseNumber },
-    driverInfoReply: { surname, birthDate },
+    driverInfo: { surname, birthDate },
+    medicalConditions,
   } = fetchedBundleData;
 
   const values = {
     driverLicenseNumber,
     surname,
     birthDate,
+    medicalConditions,
   };
 
   Object.keys(values).forEach((key) => {
-    console.log(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
-
-    const component = utils.getComponent(
-      Formio.forms[window.currentFormId].components,
-      key,
-    );
-
-    if (!component) {
-      console.warn(`[IFRAME] No component found with key: ${key}`);
+    if (!values[key]) {
+      console.log(
+        `[IFRAME] Attempt to set chefsKey: ${key} FAILED, undefined value`,
+      );
       return;
     }
 
-    utils
-      .getComponent(Formio.forms[window.currentFormId].components, key)
-      .setValue(values[key]);
+    console.log(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
+    console.log(`RAWDATA:`);
+    console.log(values[key]);
+
+    // for the special case of medicalConditions bundle data, loop through each condition
+    // and set the matching CHEFS component checkbox to true if it's present
+    if (key === "medicalConditions" && values[key].length > 0) {
+      const flattenedComponents = utils.flattenComponents(
+        Formio.forms[window.currentFormId].components,
+      );
+      values[key].forEach((medicalCondition) => {
+        const { formId } = medicalCondition;
+        const matchingMedicalConditionComponent = Object.values(
+          flattenedComponents,
+        ).find(
+          (comp) => comp?.originalComponent?.properties?.flagformid === formId,
+        );
+        if (!matchingMedicalConditionComponent) {
+          console.warn(
+            `[IFRAME] loadChefsBundleData: could not find matching component for formId: ${formId}`,
+          );
+          return;
+        }
+
+        console.info(
+          `[IFRAME]: loadChefsBundleData: attempting to set matchingMedicalConditionComponent for formId: ${formId}...`,
+        );
+        utils
+          .getComponent(
+            Formio.forms[window.currentFormId].components,
+            matchingMedicalConditionComponent.key,
+          )
+          .setValue(true);
+        console.info(
+          `[IFRAME]: loadChefsBundleData: SUCCESSFULLY set matchingMedicalConditionComponent for formId: ${formId}...`,
+        );
+      });
+    } else {
+      const component = utils.getComponent(
+        Formio.forms[window.currentFormId].components,
+        key,
+      );
+
+      if (!component) {
+        console.warn(`[IFRAME] No component found with key: ${key}`);
+        return;
+      }
+
+      utils
+        .getComponent(Formio.forms[window.currentFormId].components, key)
+        .setValue(values[key]);
+    }
   });
 
   window.loadedChefsBundle = true;
@@ -157,6 +213,7 @@ function loadPreviousChefsSubmissionData(fetchedSubmissionData) {
     Object.keys(fetchedSubmissionData).length <= 0
   ) {
     console.warn("[IFRAME] No previous chefs submission data to load");
+    window.loadedChefsSubmission = true;
     return;
   }
 
