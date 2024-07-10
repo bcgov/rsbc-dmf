@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
 using System.Security.Claims;
+using AutoMapper;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Google.Protobuf;
 using Newtonsoft.Json;
@@ -24,6 +25,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     public class ChefsController : ControllerBase
     {
         private readonly ILogger<ChefsController> logger;
+        private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly IUserService userService;
         private readonly ICachedIcbcAdapterClient icbcAdapterClient;
@@ -33,13 +35,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private const string DATA_ENTITY_NAME = "incident";
         private const string DATA_FILENAME = "data.json";
 
-        public ChefsController(ILogger<ChefsController> logger, IConfiguration configuration,
+        public ChefsController(ILogger<ChefsController> logger, IMapper mapper, IConfiguration configuration,
             IUserService userService,
             CaseManager.CaseManagerClient cmsAdapterClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
         {
             this.logger = logger;
+            this.mapper = mapper;
             this.configuration = configuration;
             this.cmsAdapterClient = cmsAdapterClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
@@ -217,6 +220,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             {
                 chefsBundle.patientCase = caseResult;
                 caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
+                chefsBundle.medicalConditions = mapper.Map<IEnumerable<MedicalCondition>>(c.Item.MedicalConditions);
             }
 
             var driverInfoReply = new DriverInfoReply();
