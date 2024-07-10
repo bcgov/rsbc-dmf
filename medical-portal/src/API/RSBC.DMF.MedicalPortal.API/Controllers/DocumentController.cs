@@ -66,7 +66,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                     foreach( var caseDocument in caseDocuments )
                     {
-                        caseDocument.DmerStatus = TranslateDmerStatus(caseDocument.DmerStatus, caseDocument.LoginId);
+                        caseDocument.DmerStatus = DmerUtilities.TranslateDmerStatus(caseDocument.DmerStatus, caseDocument.LoginId);
 
                     }
                     return Ok(caseDocuments);

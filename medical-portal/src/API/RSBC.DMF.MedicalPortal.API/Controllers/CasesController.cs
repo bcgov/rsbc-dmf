@@ -75,7 +75,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = string.IsNullOrEmpty(@case.Item?.DmerType) ? "Suspected Medical Condition" : @case.Item.DmerType;
                 result.Status = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
-                result.Status = TranslateDmerStatus(result.Status, document.Item?.Provider?.Id);
+                result.Status = DmerUtilities.TranslateDmerStatus(result.Status, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
@@ -110,35 +110,5 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             return Ok(result);
         }
-
-        private string TranslateDmerStatus(string dmerStatus, string loginId)
-        {
-           
-
-            if (dmerStatus == "Open-Required")
-            {
-                if (string.IsNullOrEmpty(loginId))
-                {
-                    dmerStatus = "Required - Unclaimed";
-                }
-                else
-                {
-                    dmerStatus = "Required - Claimed";
-                }
-            }
-
-            if(dmerStatus == "Non-Comply")
-            {
-                if (string.IsNullOrEmpty(loginId))
-                {
-                    dmerStatus = "Non-Comply - Unclaimed";
-                }
-                else
-                {
-                    dmerStatus = "Non-Comply - Claimed";
-                }
-            }
-            return dmerStatus;
-        } 
     }
 }

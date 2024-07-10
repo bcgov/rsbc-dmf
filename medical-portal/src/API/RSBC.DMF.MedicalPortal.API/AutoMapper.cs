@@ -50,11 +50,8 @@ namespace RSBC.DMF.MedicalPortal.API
 
             CreateMap<EndorsementDto, Endorsement>();
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
-        }
-       
+        }  
     }
-
- 
 
     public static class AutoMapperExtensions
     {
@@ -69,7 +66,4 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddSingleton(mapper);
         }
     }
-
-  
 }
-
