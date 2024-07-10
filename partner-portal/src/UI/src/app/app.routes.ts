@@ -1,8 +1,9 @@
 import { Routes } from '@angular/router';
-import { RemedialComponent } from '@app/remedial/remedial.component';
-import { SearchComponent } from '@app/search/search.component';
 
-export const ROUTE_DENIED = 'denied';
+import { DriverSearchComponent } from './driver-search/driver-search.component';
+import { SearchComponent } from './search/search.component';
+import { RemedialComponent } from './remedial/remedial.component';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
 
@@ -12,6 +13,7 @@ export const routes: Routes = [
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },
+      { path: 'driverSearch', component: DriverSearchComponent },
     ],
   },
 ];
