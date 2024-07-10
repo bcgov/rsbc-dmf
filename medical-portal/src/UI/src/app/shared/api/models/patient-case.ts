@@ -3,6 +3,7 @@
 export interface PatientCase {
   birthDate?: string | null;
   caseId?: string | null;
+  dmerStatus?: string | null;
   dmerType?: string | null;
   documentId?: string | null;
   driverId?: string | null;
@@ -15,5 +16,6 @@ export interface PatientCase {
   latestComplianceDate?: string | null;
   middleName?: string | null;
   name?: string | null;
+  openedDate?: string | null;
   status?: string | null;
 }
