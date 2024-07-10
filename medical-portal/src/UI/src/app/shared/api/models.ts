@@ -10,6 +10,7 @@ export { DocumentSubTypes } from './models/document-sub-types';
 export { Driver } from './models/driver';
 export { Endorsement } from './models/endorsement';
 export { Licence } from './models/licence';
+export { MedicalCondition } from './models/medical-condition';
 export { PatientCase } from './models/patient-case';
 export { ProblemDetails } from './models/problem-details';
 export { UserProfile } from './models/user-profile';

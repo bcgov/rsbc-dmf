@@ -144,7 +144,7 @@
                   <div>
                     <label>DMER Status</label>
                     <div>
-                      <b>{{ searchedCase.status }}</b>
+                      <b>{{ searchedCase.dmerStatus }}</b>
                     </div>
                   </div>
                 </div>
@@ -158,7 +158,8 @@
                   <div>
                     <div class="search-buttons">
                       @if (
-                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed
+                        searchedCase.dmerStatus ===
+                        DMERStatusEnum.RequiredUnclaimed
                       ) {
                         <button
                           mat-flat-button
@@ -170,7 +171,8 @@
                       }
 
                       @if (
-                        searchedCase.status === DMERStatusEnum.RequiredClaimed
+                        searchedCase.dmerStatus ===
+                        DMERStatusEnum.RequiredClaimed
                       ) {
                         <button
                           mat-flat-button
@@ -182,7 +184,9 @@
                       }
 
                       @if (
-                        searchedCase.status === DMERStatusEnum.RequiredUnclaimed && searchedCase.isOwner == true
+                        searchedCase.dmerStatus ===
+                          DMERStatusEnum.RequiredUnclaimed &&
+                        searchedCase.isOwner == true
                       ) {
                         <button
                           mat-flat-button
@@ -194,9 +198,10 @@
                       }
 
                       @if (
-                        searchedCase.status ===
+                        searchedCase.dmerStatus ===
                           DMERStatusEnum.RequiredClaimed ||
-                        searchedCase.status === DMERStatusEnum.NonComplyClaimed
+                        searchedCase.dmerStatus ===
+                          DMERStatusEnum.NonComplyClaimed
                       ) {
                         <div>
                           <button

@@ -74,8 +74,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 result.CaseId = @case.Item.CaseId;
                 result.DmerType = string.IsNullOrEmpty(@case.Item?.DmerType) ? "Suspected Medical Condition" : @case.Item.DmerType;
-                result.Status = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
-                result.Status = TranslateDmerStatus(result.Status, document.Item?.Provider?.Id);
+                result.DmerStatus = string.IsNullOrEmpty(document.Item?.Status) ? "Not Requested" : document.Item?.Status;
+                result.DmerStatus = TranslateDmerStatus(result.DmerStatus, document.Item?.Provider?.Id);
                 result.IsOwner = document.Item?.Provider?.Id == profile.Id;
                 result.Name = document.Item?.Provider?.Name ?? string.Empty;
                 result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
@@ -83,6 +83,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 result.LatestComplianceDate = @case.Item.LatestComplianceDate?.ToDateTimeOffset();
                 result.DriverId = @case.Item.DriverId;
                 result.DocumentId = document.Item?.DocumentId ?? string.Empty;
+                result.Status = @case.Item.Status;
+                result.OpenedDate = @case.Item.OpenedDate?.ToDateTimeOffset();
+                
                 
                 // get driver info from ICBC
                 if (@case.Item.DriverLicenseNumber != null)
