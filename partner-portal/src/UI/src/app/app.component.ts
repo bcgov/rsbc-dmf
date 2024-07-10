@@ -7,12 +7,7 @@ import { PartnerPortalNavMenuComponent } from './Layout/partner-portal-nav-menu/
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './features/auth/services/auth.service';
 import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-}
+
 
 @Component({
   selector: 'app-root',
@@ -29,16 +24,18 @@ interface WeatherForecast {
   ],
 })
 export class AppComponent implements OnInit {
-  public forecasts: WeatherForecast[] = [];
+ 
 
-  constructor(private authService: AuthService, private http: HttpClient) {}
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit() {
-
     try {
       console.info('AppComponent initializing...');
       //attempt to log in
-      this.authService.isLoggedIn().subscribe((isLoggedIn:boolean) => {
+      this.authService.isLoggedIn().subscribe((isLoggedIn: boolean) => {
         console.info('Are you logged in?', isLoggedIn);
         if (!isLoggedIn) {
           console.info('Redirect to login page');
@@ -58,20 +55,5 @@ export class AppComponent implements OnInit {
     } finally {
       console.info('AppComponent initialization completed.');
     }
-
-    this.getForecasts();
   }
-
-  getForecasts() {
-    this.http.get<WeatherForecast[]>('/api/WeatherForecast').subscribe(
-      (result) => {
-        this.forecasts = result;
-      },
-      (error) => {
-        console.error(error);
-      },
-    );
-  }
-
-  title = 'Partner Portal';
 }

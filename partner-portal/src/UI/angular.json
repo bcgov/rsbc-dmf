@@ -25,6 +25,7 @@
           "options": {
             "outputPath": "dist",
             "index": "src/index.html",
+            "preserveSymlinks": true,
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
