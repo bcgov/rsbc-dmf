@@ -42,13 +42,13 @@ function getInstanceId() {
 function addUniqueWindowEventListener(event, listener) {
   // Check if the listener for the specific event has already been added
   if (!window.listenerAdded[event]) {
-    console.log(
+    console.info(
       `[IFRAME] addUniqueWindowEventListener: listener for event: ${event} has not yet been added, adding...`,
     );
     window.addEventListener(event, listener);
     window.listenerAdded[event] = true; // Update the flag for this event
   } else {
-    console.log(
+    console.info(
       `[IFRAME] addUniqueWindowEventListener: listener for event: ${event} already added, do nothing.`,
     );
   }
@@ -56,8 +56,8 @@ function addUniqueWindowEventListener(event, listener) {
 
 // Add the resize event listener to the window
 addUniqueWindowEventListener("message", (event) => {
-  console.log("[IFRAME] RX (from host): Iframe received message event:");
-  console.log(event);
+  console.info("[IFRAME] RX (from host): Iframe received message event:");
+  console.info(event);
 
   if (event.origin !== "https://localhost:4200") {
     console.warn(
@@ -76,10 +76,10 @@ addUniqueWindowEventListener("message", (event) => {
 
     const { type } = payload;
 
-    console.log(
+    console.info(
       `[IFRAME] RX (from host): Received response for type: ${type} the data:`,
     );
-    console.log(payload);
+    console.info(payload);
 
     if (type === GET_CHEFS_SUBMISSION) {
       window.chefsSubmission = payload;
@@ -103,65 +103,122 @@ addUniqueWindowEventListener("message", (event) => {
 
 function checkIfInitIsComplete() {
   if (window.loadedChefsSubmission && window.loadedChefsBundle) {
-    console.log("[IFRAME] CHEFS FORM INIT COMPLETE!");
+    console.info("[IFRAME] CHEFS FORM INIT COMPLETE!");
     window.initComplete = true;
 
     // call putChefsSubmission in case cached data differs vs. bundle + cached data
     putChefsSubmission();
+  } else {
+    console.warn(
+      `[IFRAME] checkIfInitIsComplete: not complete yet, window.loadedChefsSubmission: ${window.loadedChefsSubmission}, window.loadedChefsBundle: ${window.loadedChefsBundle}!`,
+    );
   }
 }
 
 function loadChefsBundleData(fetchedBundleData) {
-  console.log("[IFRAME] START LOADING FETCHED BUNDLE DATA:");
-  console.log(fetchedBundleData);
+  console.info("[IFRAME] START LOADING FETCHED BUNDLE DATA:");
+  console.info(fetchedBundleData);
+  if (!fetchedBundleData?.patientCase || !fetchedBundleData?.driverInfo) {
+    console.warn(
+      `[IFRAME] Missing chefs bundle data, either missing patientCase or driverInfo`,
+    );
+  }
+
   const {
     patientCase: { driverLicenseNumber },
-    driverInfoReply: { surname, birthDate },
+    driverInfo: { surname, birthDate },
+    medicalConditions,
   } = fetchedBundleData;
 
   const values = {
     driverLicenseNumber,
     surname,
     birthDate,
+    medicalConditions,
   };
 
   Object.keys(values).forEach((key) => {
-    console.log(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
-
-    const component = utils.getComponent(
-      Formio.forms[window.currentFormId].components,
-      key,
-    );
-
-    if (!component) {
-      console.warn(`[IFRAME] No component found with key: ${key}`);
+    if (!values[key]) {
+      console.info(
+        `[IFRAME] Attempt to set chefsKey: ${key} FAILED, undefined value`,
+      );
       return;
     }
 
-    utils
-      .getComponent(Formio.forms[window.currentFormId].components, key)
-      .setValue(values[key]);
+    console.info(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
+    console.info(`RAWDATA:`);
+    console.info(values[key]);
+
+    // for the special case of medicalConditions bundle data, loop through each condition
+    // and set the matching CHEFS component checkbox to true if it's present
+    if (key === "medicalConditions" && values[key].length > 0) {
+      const flattenedComponents = utils.flattenComponents(
+        Formio.forms[window.currentFormId].components,
+      );
+      values[key].forEach((medicalCondition) => {
+        const { formId } = medicalCondition;
+        const matchingMedicalConditionComponent = Object.values(
+          flattenedComponents,
+        ).find(
+          (comp) => comp?.originalComponent?.properties?.kmcformid === formId,
+        );
+        if (!matchingMedicalConditionComponent) {
+          console.warn(
+            `[IFRAME] loadChefsBundleData: could not find matching component for formId: ${formId}`,
+          );
+          return;
+        }
+
+        console.info(
+          `[IFRAME]: loadChefsBundleData: attempting to set matchingMedicalConditionComponent for formId: ${formId}...`,
+        );
+        utils
+          .getComponent(
+            Formio.forms[window.currentFormId].components,
+            matchingMedicalConditionComponent.key,
+          )
+          .setValue(true);
+        console.info(
+          `[IFRAME]: loadChefsBundleData: SUCCESSFULLY set matchingMedicalConditionComponent for formId: ${formId}...`,
+        );
+      });
+    } else {
+      const component = utils.getComponent(
+        Formio.forms[window.currentFormId].components,
+        key,
+      );
+
+      if (!component) {
+        console.warn(`[IFRAME] No component found with key: ${key}`);
+        return;
+      }
+
+      utils
+        .getComponent(Formio.forms[window.currentFormId].components, key)
+        .setValue(values[key]);
+    }
   });
 
   window.loadedChefsBundle = true;
 
-  console.log("[IFRAME] FINISHED LOADING FETCHED BUNDLE DATA!");
+  console.info("[IFRAME] FINISHED LOADING FETCHED BUNDLE DATA!");
 
   checkIfInitIsComplete();
 }
 
 function loadPreviousChefsSubmissionData(fetchedSubmissionData) {
-  console.log("[IFRAME] START LOADING PREVIOUSLY CACHED SUBMISSION DATA:");
+  console.info("[IFRAME] START LOADING PREVIOUSLY CACHED SUBMISSION DATA:");
   if (
     !fetchedSubmissionData ||
     Object.keys(fetchedSubmissionData).length <= 0
   ) {
     console.warn("[IFRAME] No previous chefs submission data to load");
+    window.loadedChefsSubmission = true;
     return;
   }
 
   Object.keys(fetchedSubmissionData).forEach((key) => {
-    console.log(
+    console.info(
       `[IFRAME] SETTING... key: ${key}, value: ${fetchedSubmissionData[key]}`,
     );
 
@@ -182,7 +239,7 @@ function loadPreviousChefsSubmissionData(fetchedSubmissionData) {
 
   window.loadedChefsSubmission = true;
 
-  console.log("[IFRAME] FINISH LOADING PREVIOUSLY CACHED SUBMISSION DATA!");
+  console.info("[IFRAME] FINISH LOADING PREVIOUSLY CACHED SUBMISSION DATA!");
 
   checkIfInitIsComplete();
 }
@@ -233,7 +290,7 @@ function putChefsSubmission(status = "Draft") {
   const messageObj = JSON.parse(JSON.stringify(message));
 
   if (window.cachedMessage === JSON.stringify(messageObj)) {
-    console.log(
+    console.info(
       "[IFRAME] No change in form data, skip posting message to parent...",
     );
     return;
@@ -248,12 +305,12 @@ window.putChefsSubmission = putChefsSubmission;
 
 // On initial load, fetch any bundle or existing draft submission to load in data
 if (!window.hasLoaded) {
-  console.log(`[IFRAME] Found currentFormId: ${Object.keys(Formio.forms)[0]}`);
+  console.info(`[IFRAME] Found currentFormId: ${Object.keys(Formio.forms)[0]}`);
   window.currentFormId = Object.keys(Formio.forms)[0];
 
   if (!window.currentFormId || window.currentFormId == 0) {
-    console.log("[IFRAME] No form id found yet... waiting...");
-    console.log(Formio.forms);
+    console.info("[IFRAME] No form id found yet... waiting...");
+    console.info(Formio.forms);
     return;
   }
   getChefsSubmission();

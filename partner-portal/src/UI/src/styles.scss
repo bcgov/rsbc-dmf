@@ -2,309 +2,384 @@
 
 /* Provide sufficient contrast against white background */
 :root {
-    
-    --media-mobile-max-width: 896px;
+  // Mobile max width
+  --media-mobile-max-width: 896px;
+}
+
+a {
+  color: #003366;
+}
+
+code {
+  color: #e01a76;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #003366;
+  border-color: #003366;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #808080;
+}
+
+table td {
+  border: 1px solid #808080;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-dialog-actions {
+  padding-bottom: 30px;
+}
+
+.full-width-dialog .mat-dialog-container {
+  max-width: 100vw !important;
+  width: 100vw !important;
+}
+
+
+
+.mat-form-field-appearance-outline.mat-form-field-disabled
+  .mat-form-field-outline {
+  background-color: #f2f2f2 !important;
+}
+
+.mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled
+  .mat-form-field-infix::after {
+  color: black;
+}
+
+.link-underline-reverse {
+  text-decoration: none;
+  &:hover,
+  &:focus {
+    text-decoration: underline;
   }
-  
-  a {
+}
+
+.bc-gov-alertbanner {
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding: 15px;
+
+  font-family: "BC Sans", "Noto Sans", Arial, "sans serif";
+  color: #313132;
+  font-size: 16px;
+  line-height: 1.5em;
+}
+
+.bc-gov-alertbanner:before {
+  float: left;
+  font-family: "Font Awesome 5 Free";
+  font-size: larger;
+  font-style: normal;
+  line-height: 1;
+  margin-right: 10px;
+  position: relative;
+  top: 3px;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bc-gov-alertbanner p {
+  font-size: 18px;
+  margin: 0;
+  padding-left: 35px;
+}
+
+.bc-gov-alertbanner-error {
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  color: #a12622;
+}
+
+.bc-gov-alertbanner-error:before {
+  content: "\f06a";
+}
+
+.bc-gov-alertbanner-error a {
+  color: #843534;
+}
+
+.bc-gov-alertbanner-warning {
+  background-color: #f9f1c6;
+  border-color: #faebcc;
+  color: #6c4a00;
+}
+
+.bc-gov-alertbanner-warning:before {
+  content: "\f071";
+}
+
+.bc-gov-alertbanner-warning a {
+  color: #66512c;
+}
+
+.bc-gov-alertbanner-info {
+  background-color: #fef4dd;
+  border: solid 1px #fbdb8b;
+  color: #81692c;
+  margin:30px 60px 0 60px;padding:20px 20px 0 20px;
+}
+
+.bc-gov-alertbanner-info a {
+  color: #5b4a1f;
+}
+
+.bc-gov-alertbanner-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #2d4821;
+}
+
+.bc-gov-alertbanner-success:before {
+  content: "\f058";
+}
+
+.bc-gov-alertbanner-success a {
+  color: #2b542c;
+}
+
+.container {
+  max-width: 1262px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.navbar-brand {
+  text-decoration: none;
+}
+
+.table-actions {
+  margin-top: 10px;
+  width: 100%;
+  height: 100px;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+
+  letter-spacing: normal;
+  line-height: normal;
+  font-kerning: normal;
+  font-feature-settings: "kern";
+  text-transform: none;
+  text-rendering: optimizeLegibility;
+
+  p {
+    font-family: "BC Sans Regular", "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
     color: #003366;
   }
-  
-  code {
-    color: #e01a76;
-  }
-  
-  .btn-primary {
-    color: #fff;
-    background-color: #003366;
-    border-color: #003366;
-  }
-  
-  table {
-    border-collapse: collapse;
-    border: 1px solid #808080;
-  }
-  
-  table td {
-    border: 1px solid #808080;
-  }
-  
-  .mat-form-field {
-    width: 100%;
-  }
-  
-  .mat-dialog-actions {
-    padding-bottom: 30px;
-  }
-  
-  .full-width-dialog .mat-dialog-container {
-    max-width: 100vw !important;
-    width: 100vw !important;
-  }
-  
-  /*
-  .mat-form-field-appearance-outline .mat-form-field-outline-thick {
-    opacity: 1 !important;
-    color:rgb(0, 51, 102) !important;
-  } */
-  
-  .mat-form-field-appearance-outline.mat-form-field-disabled
-    .mat-form-field-outline {
-    background-color: #f2f2f2 !important;
-  }
-  
-  .mat-input-element:disabled,
-  .mat-form-field-type-mat-native-select.mat-form-field-disabled
-    .mat-form-field-infix::after {
-    color: black;
-  }
-  
-  .link-underline-reverse {
-    text-decoration: none;
-    &:hover,
-    &:focus {
-      text-decoration: underline;
-    }
-  }
-  
-  .bc-gov-alertbanner {
-    border: 1px solid transparent;
-    border-radius: 4px;
+  a {
     font-weight: 700;
-    margin-bottom: 20px;
-    padding: 15px;
-  
-    font-family: "BC Sans", "Noto Sans", Arial, "sans serif";
-    color: #313132;
-    font-size: 16px;
-    line-height: 1.5em;
-  }
-  
-  .bc-gov-alertbanner:before {
-    float: left;
-    font-family: "Font Awesome 5 Free";
-    font-size: larger;
-    font-style: normal;
-    line-height: 1;
-    margin-right: 10px;
-    position: relative;
-    top: 3px;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-  }
-  
-  .bc-gov-alertbanner p {
-    font-size: 18px;
-    margin: 0;
-    padding-left: 35px;
-  }
-  
-  .bc-gov-alertbanner-error {
-    background-color: #f2dede;
-    border-color: #ebccd1;
-    color: #a12622;
-  }
-  
-  .bc-gov-alertbanner-error:before {
-    content: "\f06a";
-  }
-  
-  .bc-gov-alertbanner-error a {
-    color: #843534;
-  }
-  
-  .bc-gov-alertbanner-warning {
-    background-color: #f9f1c6;
-    border-color: #faebcc;
-    color: #6c4a00;
-  }
-  
-  .bc-gov-alertbanner-warning:before {
-    content: "\f071";
-  }
-  
-  .bc-gov-alertbanner-warning a {
-    color: #66512c;
-  }
-  
-  .bc-gov-alertbanner-info {
-    background-color: #fef4dd;
-    border: solid 1px #fbdb8b;
-    color: #81692c;
-    margin:30px 60px 0 60px;padding:20px 20px 0 20px;
-  }
-  
-  .bc-gov-alertbanner-info a {
-    color: #5b4a1f;
-  }
-  
-  .bc-gov-alertbanner-success {
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-    color: #2d4821;
-  }
-  
-  .bc-gov-alertbanner-success:before {
-    content: "\f058";
-  }
-  
-  .bc-gov-alertbanner-success a {
-    color: #2b542c;
-  }
-  
-  .container {
-    max-width: 1262px;
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-  
-  .navbar-brand {
-    text-decoration: none;
-  }
-  
-  .table-actions {
-    margin-top: 10px;
-    width: 100%;
-    height: 100px;
-    text-align: center;
-    font-size: 16px;
-    font-style: normal;
-  
-    letter-spacing: normal;
-    line-height: normal;
-    font-kerning: normal;
-    font-feature-settings: "kern";
-    text-transform: none;
-    text-rendering: optimizeLegibility;
-  
-    p {
-      font-family: "BC Sans Regular", "BC Sans", sans-serif;
-      font-weight: 400;
-      font-style: normal;
-      color: #003366;
-    }
-    a {
-      font-weight: 700;
-      font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
-      color: #003366;
-      display: inline;
-      vertical-align: middle;
-      .mat-icon {
-        margin-left: 5px;
-        vertical-align: top;
-      }
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    color: #003366;
+    display: inline;
+    vertical-align: middle;
+    .mat-icon {
+      margin-left: 5px;
+      vertical-align: top;
     }
   }
-  
-  body {
-    margin: 0;
-  }
-  .page-divider {
-    background-color: rgba(231, 184, 85, 1);
-    height: 6px;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .page-desc {
-    background-color: #ecf5ff;
-    width: 100%;
-    padding-top: 50px;
-    padding-bottom: 50px;
-  
-    h1 {
-      color: rgb(0, 51, 102);
-      font-family: "BC Sans Bold", "BC Sans Regular", "BC Sans", sans-serif;
-      font-weight: 700;
-      font-size: 52px;
-      line-height: 60px;
-      font-style: normal;
-    }
-  }
-  
-  .list {
-    
-    h2 {
-      font-weight: bold;
-      color: #003366;
-      font-size: 31px;
-      border-left: 3px solid #fcba19;
-      padding-left: 10px;
-      padding-top: 10px;
-      padding-bottom: 10px;
-    }
-  
-    p {
-      padding-left: 13px;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-  }
-  
-  * {
+}
+
+body {
+  margin: 0;
+}
+.page-divider {
+  background-color: rgba(231, 184, 85, 1);
+  height: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page-desc {
+  background-color: #ecf5ff;
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+
+  h1 {
+    color: rgb(0, 51, 102);
     font-family: "BC Sans Bold", "BC Sans Regular", "BC Sans", sans-serif;
-    font-size: 16px;
+    font-weight: 700;
+    font-size: 52px;
+    line-height: 60px;
+    font-style: normal;
   }
-  
-  li {
-    font-size: 16px;
-    text-align: left;
-    line-height: 24px;
-  }
-  
-  .definationCard {
-    margin-top: 12px;
-  }
-  
-  .definationContent {
-    margin-left: 12px;
-  }
-  
-  a.accordion-btn {
-    background-color: #f1f1f3;
-    border: none;
-    padding: 5px 8px;
-    color: #1c5a97;
-    text-decoration: none !important;
-    cursor: pointer;
-  }
-  
-  .accordion-bar {
-    background-color: #f1f1f1;
-    padding: 5px 0px;
-  }
-  
-  .accordion-btn-container {
-    padding-bottom: 10px;
-  }
-  
-  .panel-header {
-    background-color: #f1f1f3;
-    border-color: #f1f1f3;
-    padding-left: 8px;
-    cursor: pointer;
-  }
-  
-  .accordian-Title {
+}
+
+.list {
+  //padding-top: 32px;
+  h2 {
     font-weight: bold;
     color: #003366;
-    max-width: 95%;
+    font-size: 31px;
+    border-left: 3px solid #fcba19;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  p {
+    padding-left: 13px;
     font-size: 16px;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
+    line-height: 1.6;
   }
-  
-  .accordian-types {
-    margin-bottom: 10px;
-    margin-top: 10px;
+}
+
+* {
+  font-family: "BC Sans Bold", "BC Sans Regular", "BC Sans", sans-serif;
+  // font-weight: 400;
+  font-size: 16px;
+}
+
+li {
+  font-size: 16px;
+  text-align: left;
+  line-height: 24px;
+}
+
+.definationCard {
+  margin-top: 12px;
+}
+
+.definationContent {
+  margin-left: 12px;
+}
+
+a.accordion-btn {
+  background-color: #f1f1f3;
+  border: none;
+  padding: 5px 8px;
+  color: #1c5a97;
+  text-decoration: none !important;
+  cursor: pointer;
+}
+
+.accordion-bar {
+  background-color: #f1f1f1;
+  padding: 5px 0px;
+}
+
+.accordion-btn-container {
+  padding-bottom: 10px;
+}
+
+.panel-header {
+  background-color: #f1f1f3;
+  border-color: #f1f1f3;
+  padding-left: 8px;
+  cursor: pointer;
+}
+
+.accordian-Title {
+  font-weight: bold;
+  color: #003366;
+  max-width: 95%;
+  font-size: 16px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.accordian-types {
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.mat-accordion .mat-expansion-panel:not(.mat-expanded),
+.mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
+  margin-bottom: 12px;
+}
+
+.numberOfItems {
+  display: flex;
+  justify-content: center;
+  height: 90px;
+  background: inherit;
+  background-color: rgba(242, 242, 242, 1);
+  border: none;
+  border-radius: 5px;
+  align-items: center;
+  color: #003366;
+  flex-direction: column;
+}
+
+.viewMore:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #003366;
+}
+
+.ViewMoreIcon {
+  position: absolute;
+  color: #003366;
+}
+
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+
+  .mat-mdc-button-base.primaryButton {
+    border-width: 0px;
+    width: 170px;
+    height: 49px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    color: #f2f2f2;
+    background-color: #003366;
+    cursor: pointer;
+    --mdc-filled-button-label-text-color: #f2f2f2;
+    --mdc-filled-button-container-color: #003366;
   }
-  
-  .mat-accordion .mat-expansion-panel:not(.mat-expanded),
-  .mat-accordion .mat-expansion-panel:not(.mat-expansion-panel-spacing) {
-    margin-bottom: 12px;
+
+  .mat-mdc-button-base.primaryButton:disabled, button[disabled] {
+    border: 1px solid #999999;
+    background: rgb(217, 228, 255);
+    color: rgb(0, 0, 0);
   }
-  
+
+  .mat-mdc-button-base.cancelButton {
+    border-width: 0px;
+    width: 170px;
+    height: 49px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    border: 2px solid #003366;
+    background-color: #ffff;
+    color: #003366;
+  }
+
+  a {
+    cursor: pointer;
+    color: #003366;
+    text-decoration: underline;
+    font-weight: bold;
+
+  }
+
   .numberOfItems {
     display: flex;
     justify-content: center;
@@ -317,93 +392,14 @@
     color: #003366;
     flex-direction: column;
   }
-  
+
   .viewMore:hover {
     text-decoration: underline;
     cursor: pointer;
     color: #003366;
   }
-  
+
   .ViewMoreIcon {
     position: absolute;
     color: #003366;
   }
-  
-
-  html,
-  body {
-    height: 100%;
-  }
-  body {
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-  }
-  
-
-  
-    .mat-mdc-button-base.primaryButton {
-      border-width: 0px;
-      width: 170px;
-      height: 49px;
-      font-family: "BC Sans Bold", "BC Sans", sans-serif;
-      font-weight: 700;
-      font-style: normal;
-      font-size: 16px;
-      color: #f2f2f2;
-      background-color: #003366;
-      cursor: pointer;
-      --mdc-filled-button-label-text-color: #f2f2f2;
-      --mdc-filled-button-container-color: #003366;
-    }
-  
-    .mat-mdc-button-base.primaryButton:disabled, button[disabled] {
-      border: 1px solid #999999;
-      background: rgb(217, 228, 255);
-      color: rgb(0, 0, 0);
-    }
-  
-    .mat-mdc-button-base.cancelButton {
-      border-width: 0px;
-      width: 170px;
-      height: 49px;
-      font-family: "BC Sans Bold", "BC Sans", sans-serif;
-      font-weight: 700;
-      font-style: normal;
-      font-size: 16px;
-      border: 2px solid #003366;
-      background-color: #ffff;
-      color: #003366;
-    }
-  
-    a {
-      cursor: pointer;
-      color: #003366;
-      text-decoration: underline;
-      font-weight: bold;
-  
-    }
-  
-    .numberOfItems {
-      display: flex;
-      justify-content: center;
-      height: 90px;
-      background: inherit;
-      background-color: rgba(242, 242, 242, 1);
-      border: none;
-      border-radius: 5px;
-      align-items: center;
-      color: #003366;
-      flex-direction: column;
-    }
-  
-    .viewMore:hover {
-      text-decoration: underline;
-      cursor: pointer;
-      color: #003366;
-    }
-  
-    .ViewMoreIcon {
-      position: absolute;
-      color: #003366;
-    }
-  
