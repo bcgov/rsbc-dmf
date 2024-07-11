@@ -56,7 +56,6 @@ namespace RSBC.DMF.MedicalPortal.API
         }
     }
 
-
     public static class AutoMapperExtensions
     {
         public static void AddAutoMapperSingleton(this IServiceCollection services)

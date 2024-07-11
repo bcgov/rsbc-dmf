@@ -37,10 +37,13 @@ export class AuthService implements IAuthService {
     return of(this.keycloakService.isLoggedIn());
   }
 
+  // NOTE everyone that can login has access to all pages e.g. Practitioner, MOA/MOM
+  // MOA/MOM will have restricted access on each page with feature level permissions
   public hasAccess(): boolean {
     //console.info('getUserRoles', this.keycloakService.getUserRoles());
     //return this.keycloakService.isLoggedIn() && this.keycloakService.isUserInRole(Role.Enrolled);
-    return !!this.profileManagementService.getCachedProfile().roles?.includes(Role.Enrolled);
+    //return !!this.profileManagementService.getCachedProfile().roles?.includes(Role.Enrolled);
+    return true;
   }
 
   public getRoles(): Role[] {

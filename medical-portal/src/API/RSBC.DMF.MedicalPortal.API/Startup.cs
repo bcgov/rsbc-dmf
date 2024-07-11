@@ -252,8 +252,7 @@ namespace RSBC.DMF.MedicalPortal.API
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers()
-                    .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled, Policies.Oidc);
+                endpoints.MapControllers().RequireAuthorization(Policies.Oidc);
             });
         }
 
