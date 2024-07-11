@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RSBC.DMF.MedicalPortal.API.Services;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -29,7 +30,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 Email = profile.Email,
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
-                Roles = profile.Roles
+                Roles = profile.Roles,
+                Endorsements = profile.Endorsements
             };
         }
 
@@ -40,6 +42,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             public string LastName { get; set; }
             public string Email { get; set; }
             public IEnumerable<string> Roles { get; set; }
+            public IEnumerable<Endorsement> Endorsements { get; set; }
         }
     }
 }

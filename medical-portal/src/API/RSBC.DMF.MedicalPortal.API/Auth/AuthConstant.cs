@@ -18,7 +18,9 @@ public class AuthConstant
         public const string Roles = "roles";
         public const string LoginIds = "login_ids";
         public const string Scope = "scope";
+        public const string Endorsements = "endorsements";
     }
+
     public static class Roles
     {
         // PIdP Role Placeholders
@@ -26,12 +28,14 @@ public class AuthConstant
         public const string Moa = "MOA";
         public const string Dmft = "DMFT_ENROLLED";
     }
+
     public static class Policies
     {
         public const string Oidc = "oidc";
         public const string MedicalPractitioner = "medical-practitioner";
         public const string Enrolled = "dmft-enrolled";
     }
+
     public static class Clients
     {
         public const string License = "LICENCE-STATUS";

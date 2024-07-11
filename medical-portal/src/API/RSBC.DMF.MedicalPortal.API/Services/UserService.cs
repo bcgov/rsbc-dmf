@@ -1,7 +1,11 @@
+using AutoMapper;
+using EnumsNET;
+using PidpAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
+using RSBC.DMF.MedicalPortal.API.Utilities;
+using RSBC.DMF.MedicalPortal.API.ViewModels;
 using System.Security.Claims;
-using System.Text.Json;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Services
@@ -19,9 +23,11 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
     public record UserContext
     {
-        // Pidp user id
+        // Pidp User Id
         public string Id { get; set; }
 
+        // TODO should only be accessible by Practitioner, MOA/MOM should be using LoginIds
+        // TODO set this in Login instead
         public string LoginId
         {
             get
@@ -35,21 +41,26 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         public string LastName { get; set; }        
         public string Email { get; set; }
         public IEnumerable<string> Roles { get; set; }
+        public IEnumerable<Endorsement> Endorsements { get; set; }
     }
 
     public class UserService : IUserService
     {
-        private readonly UserManager.UserManagerClient userManager;
+        private readonly UserManager.UserManagerClient _userManager;
+        private readonly PidpManager.PidpManagerClient _pidpAdapterClient;
         private readonly IHttpContextAccessor httpContext;
+        private readonly IMapper _mapper;
         private readonly IConfiguration configuration;
-        private readonly ILogger<UserService> logger;
+        private readonly ILogger<UserService> _logger;
         
-        public UserService(UserManager.UserManagerClient userManager, IHttpContextAccessor httpContext, IConfiguration configuration, ILogger<UserService> logger)
+        public UserService(UserManager.UserManagerClient userManager, PidpManager.PidpManagerClient pidpAdapterClient, IHttpContextAccessor httpContext, IMapper mapper, IConfiguration configuration, ILogger<UserService> logger)
         {
-            this.userManager = userManager;
+            _userManager = userManager;
+            _pidpAdapterClient = pidpAdapterClient;
             this.httpContext = httpContext;
+            _mapper = mapper;
             this.configuration = configuration;
-            this.logger = logger;
+            _logger = logger;
         }
 
         public async Task<UserContext> GetCurrentUserContext() => await GetUserContext(httpContext.HttpContext.User);
@@ -63,11 +74,12 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             return await Task.FromResult(new UserContext
             {
                 Id = user.FindFirstValue(Claims.PreferredUsername),
-                LoginIds = loginIds != null ? JsonSerializer.Deserialize<List<string>>(loginIds) : null,
+                LoginIds = user.GetClaim<List<string>>(Claims.LoginIds),
                 FirstName = user.FindFirstValue(ClaimTypes.GivenName),
                 LastName = user.FindFirstValue(ClaimTypes.Surname),
                 Email = user.FindFirstValue(Claims.Email),
                 Roles = user.GetRoles(),
+                Endorsements = user.GetClaim<IEnumerable<Endorsement>>(Claims.Endorsements)
             });
         }
 
@@ -75,8 +87,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             try
             {
-                logger.LogDebug("Processing login {0}", user.Identity.Name);
-                logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
+                _logger.LogDebug("Processing login {0}", user.Identity.Name);
+                _logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
 
                 var loginRequest = new UserLoginRequest();
                 loginRequest.UserType = UserType.MedicalPractitionerUserType;
@@ -86,30 +98,77 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                 loginRequest.FirstName = user.FindFirstValue(ClaimTypes.GivenName);
                 loginRequest.LastName = user.FindFirstValue(ClaimTypes.Surname);
 
-                var loginResponse = await userManager.LoginAsync(loginRequest);
-                if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
+                var loginResponse = await _userManager.LoginAsync(loginRequest);
+                if (loginResponse.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
 
-                var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
-                if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
+                var searchResults = await _userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId });
+                if (searchResults.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
 
                 var userProfile = searchResults.User.SingleOrDefault();
                 if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
 
                 var claims = new List<Claim>();
-                //claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
-                //claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
-                claims.Add(new Claim(Claims.LoginIds, JsonSerializer.Serialize(loginResponse.LoginIds.ToList())));
+                claims.AddClaim(Claims.LoginIds, loginResponse.LoginIds.ToList());
+                var endorsements = await GetEndorsements(loginRequest.ExternalSystemUserId);
+                claims.AddClaim(Claims.Endorsements, endorsements);
                 user.AddIdentity(new ClaimsIdentity(claims));
 
-                logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
+                _logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
                 return user;
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error logging in user {0}", user.Identity.Name);
+                _logger.LogError(ex, "Error logging in user {0}", user.Identity.Name);
                 throw;
             }
+        }
+
+        public async Task<IEnumerable<Endorsement>> GetEndorsements(string userId)
+        {
+            var getEndorsementsRequest = new GetEndorsementsRequest { UserId = userId };
+            var reply = await _pidpAdapterClient.GetEndorsementsAsync(getEndorsementsRequest);
+            if (reply.ResultStatus == PidpAdapter.ResultStatus.Fail)
+            {
+                _logger.LogError($"{nameof(GetEndorsements)} error: unable to get endorsements - {reply.ErrorDetail}");
+                return null;
+            }
+            var endorsements = _mapper.Map<IEnumerable<Endorsement>>(reply.Endorsements);
+
+            // TODO optimize by getting all loginIds in one cms-adapter call
+            //var loginIdMap = _cmsAdapterClient.GetLoginIds(new GetLoginIdsRequest { UserId = endorsement.UserId });
+
+            // TODO remove this temporary hack
+            var i = 1;
+            foreach (var endorsement in endorsements)
+            {
+                // add loginId
+                var searchRequest = new UsersSearchRequest { ExternalSystemUserId = endorsement.UserId, ExternalSystem = ExternalSystem.Bcsc.AsString(EnumFormat.Description) };
+                var usersSearchReply = (await _userManager.SearchAsync(searchRequest));
+                if (usersSearchReply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+                {
+                    var loginId = usersSearchReply.User.FirstOrDefault()?.Id;
+                    if (!string.IsNullOrEmpty(loginId))
+                    {
+                        endorsement.LoginId = Guid.Parse(loginId);
+                    }
+                }
+                // add name, email, and role
+                if (endorsement.Licence != null && endorsement.Licence.Any(endorsement => endorsement.StatusCode == "ACTIVE"))
+                {
+                    endorsement.FullName = $"PRACTITIONER FAKE{i}";
+                    endorsement.Email = $"fake.prac{i}@mailinator.com";
+                    endorsement.Role = "Practitioner";
+                }
+                else
+                {
+                    endorsement.FullName = $"MOA FAKE{i}";
+                    endorsement.Email = $"fake.moa{i}@mailinator.com";
+                }
+                i++;
+            }
+
+            return endorsements;
         }
 
         /// <summary>
@@ -124,7 +183,13 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             {
                 LoginId = userId, Email = email
             };
-            var result = await userManager.SetEmailAsync(request);
-          }
+            var result = await _userManager.SetEmailAsync(request);
         }
+
+        public async Task<bool> IsUserInNetwork(Guid loginId)
+        {
+            var profile = await GetCurrentUserContext();
+            return profile.Endorsements.Any(e => e.LoginId == loginId);
+        }
+    }
 }

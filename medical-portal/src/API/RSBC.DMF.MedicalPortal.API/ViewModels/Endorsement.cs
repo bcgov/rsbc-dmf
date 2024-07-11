@@ -2,7 +2,13 @@
 {
     public class Endorsement
     {
+        // Pidp User Id (hpdid)
         public string UserId { get; set; }
+
+        // cms loginId
+        public Guid LoginId { get; set; }
+
+        // Pidp data
         public string FullName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
