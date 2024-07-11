@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "2dbb3552-8769-4a7c-8a60-fc78be42a179",
+		"name": "DMFT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "730057"
+	},
+	"item": [
+		{
+			"name": "OneHealth",
+			"item": [
+				{
+					"name": "GET Endorsements",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "challengeAlgorithm",
+									"value": "S256",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "TSq7EALXSLYY7509Hxzkn7upSPYA1JKy",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/auth?&kc_idp_hint=bcsc",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "clientId",
+									"value": "DMFT-WEBAPP",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7215/api/2p3qysl7dn6kvboslzc2k7uimevuxusk/contacts",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7215",
+							"path": [
+								"api",
+								"2p3qysl7dn6kvboslzc2k7uimevuxusk",
+								"contacts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET SearchCaseByIdCode",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Driver Info",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Profile Current",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}
