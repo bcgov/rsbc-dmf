@@ -76,7 +76,7 @@ export class DashboardComponent {
   public searchBox = new FormControl('');
   public prevSearchBox: string = '';
   public searchCasesInput: string = '';
-  public searchedCase?: PatientCase;
+  public searchedCase?: PatientCase | null;
   public practitionerDMERList: DmerDocument[] = [];
   public filteredData?: DmerDocument[] = [];
   public _allDocuments?: DmerDocument[] | null = [];
@@ -127,6 +127,7 @@ export class DashboardComponent {
 
     this.isSearching = true;
     this.noResults = false;
+    this.searchedCase = null;
 
     this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
       next: (dmerCase) => {

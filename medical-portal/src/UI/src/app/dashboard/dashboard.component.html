@@ -24,7 +24,7 @@
     <mat-card-content>
       <form>
         <div style="width: 100%">
-          <label class="form-label">DMER Case ID</label>
+          <label class="form-label" for="dmer-search">DMER Case ID</label>
 
           <div class="search-container">
             <mat-form-field class="search-input" appearance="outline">
@@ -32,6 +32,7 @@
                 matInput
                 placeholder="Enter the DMER Case ID to start or access a DMER "
                 [formControl]="searchBox"
+                id="dmer-search"
               />
             </mat-form-field>
             <button
@@ -60,7 +61,7 @@
     <div class="result-card">
       @if (isSearching) {
         <div>
-          Showing Search Results for <b>{{ searchedCase?.idCode }}</b>
+          Showing Search Results for <b>{{ searchBox.value }}</b>
           <button mat-button color="primary" (click)="clearResults()">
             Clear
           </button>
@@ -73,7 +74,7 @@
             <div class="noResults">
               <p>
                 No record found for DMER Case ID
-                <b>{{ searchedCase?.idCode }}</b
+                <b>{{ searchBox.value }}</b
                 >.Please re-enter the DMER Case ID and try again. <br />
 
                 If you think you have the incorrect ID, you will want to provide
@@ -271,12 +272,13 @@
     </p>
     <div class="filter-dmer">
       <div>
-        <mat-form-field class="cases-input" appearance="outline">
+        <mat-form-field class="cases-input" appearance="outline" for="search-filter">
           <input
             matInput
             type="text"
             placeholder="Search by Name or Case ID"
             [(ngModel)]="searchCasesInput"
+            id="search-filter"
           />
           <button
             matSuffix
