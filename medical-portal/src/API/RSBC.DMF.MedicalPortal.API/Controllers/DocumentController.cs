@@ -255,7 +255,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
                 else
                 {
-                _logger.LogError($"{nameof(AssignDmer)} error: unable to Claim/Assign DMER document - {reply.ErrorDetail}");
+                _logger.LogError($"{nameof(AssignDmerClaim)} error: unable to Claim/Assign DMER document - {reply.ErrorDetail}");
                 return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
         }
