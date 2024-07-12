@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal", "API\partner-portal.csproj", "{4F6F52AD-5F2D-4C40-9DD7-175A059C41ED}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{FD5EAD1B-E4A5-4600-8628-40B92043C76C}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "partner-portal.client", "UI\partner-portal.client.esproj", "{C96B1A45-C911-4957-BA80-9641E2B4F3EC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F6F52AD-5F2D-4C40-9DD7-175A059C41ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6F52AD-5F2D-4C40-9DD7-175A059C41ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6F52AD-5F2D-4C40-9DD7-175A059C41ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F6F52AD-5F2D-4C40-9DD7-175A059C41ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD5EAD1B-E4A5-4600-8628-40B92043C76C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD5EAD1B-E4A5-4600-8628-40B92043C76C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD5EAD1B-E4A5-4600-8628-40B92043C76C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD5EAD1B-E4A5-4600-8628-40B92043C76C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96B1A45-C911-4957-BA80-9641E2B4F3EC}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA2E1866-ECCF-426C-9886-991DD75933D2}
+	EndGlobalSection
+EndGlobal

@@ -31,10 +31,10 @@ jobs:
         with:
           dotnet-version: "8.0.x"
       - name: Install dependencies
-        run: dotnet restore partner-portal.Server.csproj
+        run: dotnet restore partner-portal.csproj
         working-directory: ${{env.working-directory}}${{env.solution-folder}}      
 
       - name: Build
-        run: dotnet build --configuration Release --no-restore partner-portal.Server.csproj
+        run: dotnet build --configuration Release --no-restore partner-portal.csproj
         working-directory: ${{env.working-directory}}${{env.solution-folder}}
 
