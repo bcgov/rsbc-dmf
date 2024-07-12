@@ -8,18 +8,16 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Rsbc.Dmf.CaseManagement.Helpers;
 using RSBC.DMF.MedicalPortal.API;
 using RSBC.DMF.MedicalPortal.API.Services;
 using Moq;
-//using Pssg.DocumentStorageAdapter.Helpers;
-//using Rsbc.Dmf.CaseManagement.Helpers;
+using Pssg.DocumentStorageAdapter.Helpers;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
+using RSBC.DMF.MedicalPortal.API.Model;
 
 
 /// <summary>
@@ -40,12 +38,13 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             builder.ConfigureTestServices(services =>
             {
                 // add policy but then fake success always, the RequireClaim is bypassed
-                //services.AddAuthorization(options =>
-                //{
-                //    // policy needed to bypass services with attribute [Authorize(Policy = Policy.Driver)]
-                //    options.AddPolicy(Policy.Driver, policy => policy.RequireClaim(UserClaimTypes.DriverId));
-                //});
-                //services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
+                services.AddAuthorization(options =>
+                {
+                    // policy needed to bypass services with attribute [Authorize(Policy = Policies.MedicalPractitioner)]
+                    options.AddPolicy(Policies.Oidc, policy => policy.RequireAssertion(assert => true));
+                    options.AddPolicy(Policies.MedicalPractitioner, policy => policy.RequireClaim(ClaimTypes.Role, Roles.Practitoner));
+                });
+                services.AddSingleton<IPolicyEvaluator, FakePolicyEvaluator>();
 
                 services.AddControllers(options =>
                 {
@@ -53,6 +52,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 });
 
                 services.AddTransient<IUserService, UserService>();
+                services.AddTransient<DocumentFactory>();
 
                 services.AddAutoMapperSingleton();
 
@@ -60,20 +60,16 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
                 var context = new DefaultHttpContext();
                 var user = new ClaimsPrincipal();
-                //var userId = _configuration["USER_SUBJECT"] ?? "SubjectId";
-                //var userId = "6c24e1c4-0bd1-4812-ad6a-b012e0c3ed8c";
-                //var driverId = _configuration["DRIVER_WITH_USER"] ?? "DriverId";
                 var claims = new List<Claim>
                 {
-                //    new Claim(ClaimTypes.Sid, userId),
-                //    new Claim(UserClaimTypes.DriverId, driverId),
-                //    new Claim(ClaimTypes.Email, "Email"),
-                //    new Claim(ClaimTypes.Upn, $"ExternalSystemUserId"),
-                //    new Claim(ClaimTypes.GivenName, ""),
-                //    new Claim(ClaimTypes.Surname, "MASON"),
-                //    new Claim(UserClaimTypes.BirthDate, "01/01/2000"),
-                //    new Claim(UserClaimTypes.DisplayName, "John Smith")
-                    new Claim(Claims.LoginIds, _configuration["Tests:LoginIds"])
+                    new Claim(Claims.PreferredUsername, _configuration["TEST_PIDP_USER_ID"]),
+                    new Claim(Claims.LoginIds, $"[\"{_configuration["TEST_LOGIN_IDS"]}\"]"),
+                    new Claim(ClaimTypes.GivenName, "John"),
+                    new Claim(ClaimTypes.Surname, "Smith"),
+                    new Claim(Claims.Email, "john.smith@mailinator.com"),
+                    // not sure if this is the correct role, should be whatever Api uses for ClaimsIdentity.RoleClaimType
+                    new Claim(Claims.Roles, Policies.MedicalPractitioner),
+                    //new Claim(Claims.Endorsements, null)
                 };
                 user.AddIdentity(new ClaimsIdentity(claims));
                 context.User = user;
@@ -82,20 +78,20 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.AddHttpContextAccessor();
 
                 // document storage client
-                //string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
-                //if (string.IsNullOrEmpty(documentStorageAdapterURI))
-                //{
-                //    // add the mock
-                //    var documentStorageAdapterClient = DocumentStorageHelper.CreateMock(_configuration);
-                //    services.AddTransient(_ => documentStorageAdapterClient);
-                //}
-                //else
-                //{
-                //    services.AddDocumentStorageClient(_configuration);
-                //}
+                string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
+                if (string.IsNullOrEmpty(documentStorageAdapterURI))
+                {
+                    // add the mock
+                    var documentStorageAdapterClient = DocumentStorageHelper.CreateMock(_configuration);
+                    services.AddTransient(_ => documentStorageAdapterClient);
+                }
+                else
+                {
+                    services.AddDocumentStorageClient(_configuration);
+                }
 
                 // case management client
-                string cmsAdapterURI = _configuration["CMS:ServerUrl"];
+                string cmsAdapterURI = _configuration["CMS_ADAPTER_URI"];
                 if (string.IsNullOrEmpty(cmsAdapterURI))
                 {
                     // setup from Mock
@@ -104,7 +100,20 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 }
                 else
                 {
-                    services.AddCaseManagementAdapterClient(_configuration.GetSection("CMS"));
+                    services.AddCaseManagementAdapterClient(_configuration);
+                }
+
+                // pidp adapter client
+                string pidpAdapterURI = _configuration["PIDP_ADAPTER_URI"];
+                if (string.IsNullOrEmpty(pidpAdapterURI))
+                {
+                    // setup from Mock
+                    //var pidpAdapterClient = PidpHelper.CreateMock(_configuration);
+                    //services.AddTransient(_ => pidpAdapterClient);
+                }
+                else
+                {
+                    services.AddPidpAdapterClient(_configuration);
                 }
             });
 
@@ -114,25 +123,25 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 .UseConfiguration(_configuration);
         }
 
-        //public class FakePolicyEvaluator : IPolicyEvaluator
-        //{
-        //    public virtual async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
-        //    {
-        //        var principal = new ClaimsPrincipal();
-        //        principal.AddIdentity(
-        //            new ClaimsIdentity(new[] {
-        //                new Claim(UserClaimTypes.DriverId, "DriverId")
-        //            }
-        //        ));
+    public class FakePolicyEvaluator : IPolicyEvaluator
+    {
+        public virtual async Task<AuthenticateResult> AuthenticateAsync(AuthorizationPolicy policy, HttpContext context)
+        {
+            var principal = new ClaimsPrincipal();
+            principal.AddIdentity(
+                new ClaimsIdentity(new[] {
+                    // NOTE the role used in the Api is ClaimsIdentity.RoleClaimType, not ClaimTypes.Role
+                    new Claim(ClaimTypes.Role, Roles.Practitoner)
+                }));
 
-        //        return await Task.FromResult(
-        //            AuthenticateResult.Success(new AuthenticationTicket(principal, new AuthenticationProperties(), null)));
-        //    }
+            return await Task.FromResult(
+                AuthenticateResult.Success(new AuthenticationTicket(principal, new AuthenticationProperties(), null)));
+        }
 
-        //    public virtual async Task<PolicyAuthorizationResult> AuthorizeAsync(AuthorizationPolicy policy,
-        //        AuthenticateResult authenticationResult, HttpContext context, object resource)
-        //    {
-        //        return await Task.FromResult(PolicyAuthorizationResult.Success());
-        //    }
-        //}
+        public virtual async Task<PolicyAuthorizationResult> AuthorizeAsync(AuthorizationPolicy policy,
+            AuthenticateResult authenticationResult, HttpContext context, object resource)
+        {
+            return await Task.FromResult(PolicyAuthorizationResult.Success());
+        }
     }
+}

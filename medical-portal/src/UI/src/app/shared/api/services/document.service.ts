@@ -137,7 +137,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentClaimDmerPost$Plain$Response(params?: ApiDocumentClaimDmerPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+  apiDocumentClaimDmerPost$Plain$Response(params?: ApiDocumentClaimDmerPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
     return apiDocumentClaimDmerPost$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -147,9 +147,9 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentClaimDmerPost$Plain(params?: ApiDocumentClaimDmerPost$Plain$Params, context?: HttpContext): Observable<CaseDocument> {
+  apiDocumentClaimDmerPost$Plain(params?: ApiDocumentClaimDmerPost$Plain$Params, context?: HttpContext): Observable<DmerDocument> {
     return this.apiDocumentClaimDmerPost$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CaseDocument>): CaseDocument => r.body)
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
     );
   }
 
@@ -159,7 +159,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentClaimDmerPost$Json$Response(params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+  apiDocumentClaimDmerPost$Json$Response(params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
     return apiDocumentClaimDmerPost$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -169,9 +169,14 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentClaimDmerPost$Json(params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<CaseDocument> {
+  apiDocumentClaimDmerPost$Json(params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<DmerDocument> {
     return this.apiDocumentClaimDmerPost$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CaseDocument>): CaseDocument => r.body)
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
+    );
+  }
+
+  }
+
     );
   }
 
@@ -184,7 +189,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentUnclaimDmerPost$Plain$Response(params?: ApiDocumentUnclaimDmerPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+  apiDocumentUnclaimDmerPost$Plain$Response(params?: ApiDocumentUnclaimDmerPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
     return apiDocumentUnclaimDmerPost$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -194,9 +199,9 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentUnclaimDmerPost$Plain(params?: ApiDocumentUnclaimDmerPost$Plain$Params, context?: HttpContext): Observable<CaseDocument> {
+  apiDocumentUnclaimDmerPost$Plain(params?: ApiDocumentUnclaimDmerPost$Plain$Params, context?: HttpContext): Observable<DmerDocument> {
     return this.apiDocumentUnclaimDmerPost$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CaseDocument>): CaseDocument => r.body)
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
     );
   }
 
@@ -206,7 +211,7 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentUnclaimDmerPost$Json$Response(params?: ApiDocumentUnclaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+  apiDocumentUnclaimDmerPost$Json$Response(params?: ApiDocumentUnclaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
     return apiDocumentUnclaimDmerPost$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -216,9 +221,9 @@ export class DocumentService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentUnclaimDmerPost$Json(params?: ApiDocumentUnclaimDmerPost$Json$Params, context?: HttpContext): Observable<CaseDocument> {
+  apiDocumentUnclaimDmerPost$Json(params?: ApiDocumentUnclaimDmerPost$Json$Params, context?: HttpContext): Observable<DmerDocument> {
     return this.apiDocumentUnclaimDmerPost$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<CaseDocument>): CaseDocument => r.body)
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
     );
   }
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace RSBC.Tests.Unit.DMF.MedicalPortal.API.Integration
         //[Fact]
         public async Task Get_Documents_By_Type_For_User()
         {
-            var loginIds = _configuration["Test:LoginIds"];
+            var loginIds = _configuration["TEST_LOGIN_IDS"];
             if (string.IsNullOrEmpty(loginIds))
                 return;
 
@@ -25,6 +24,35 @@ namespace RSBC.Tests.Unit.DMF.MedicalPortal.API.Integration
             var clientResult = await HttpClientSendRequest<IEnumerable<CaseDocument>>(request);
 
             Assert.NotNull(clientResult);
+        }
+
+        [Fact]
+        public async Task Claim_Dmer()
+        {
+            var documentId = _configuration["TEST_DMER_DOCUMENT_ID"];
+            if (string.IsNullOrEmpty(documentId))
+                return;
+
+            // unclaim dmer, so we know we are starting from a known state of LoginId being null
+            var request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/UnclaimDmer?documentId={documentId}");
+            SetContent(request, documentId);
+            var clientResult = await HttpClientSendRequest<DmerDocument>(request);
+
+            Assert.Null(clientResult.LoginId);
+
+            // claim dmer
+            request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/ClaimDmer?documentId={documentId}");
+            SetContent(request, documentId);
+            clientResult = await HttpClientSendRequest<DmerDocument>(request);
+
+            Assert.NotNull(clientResult.LoginId);
+
+            // unclaim dmer
+            request = new HttpRequestMessage(HttpMethod.Post, $"{DOCUMENT_API_BASE}/UnclaimDmer?documentId={documentId}");
+            SetContent(request, documentId);
+            clientResult = await HttpClientSendRequest<DmerDocument>(request);
+
+            Assert.Null(clientResult.LoginId);
         }
     }
 }

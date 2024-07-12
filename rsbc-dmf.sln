@@ -49,6 +49,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.Scheduler", "sched
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "system-status", "system-status\src\system-status.csproj", "{DAB76B7E-57B8-45BC-A12E-F72797107060}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.DriverPortal.Tests", "driver-portal\src\Tests\Rsbc.Dmf.DriverPortal.Tests.csproj", "{AB02397F-3C62-4264-B07A-432C86F25B7B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Unit.Tests.Interfaces.Icbc", "icbc-adapter\src\Pssg.Unit.Tests.Interfaces.Icbc\Pssg.Unit.Tests.Interfaces.Icbc.csproj", "{6A7FD681-350D-4264-A8D0-058B72C1CC09}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +147,14 @@ Global
 		{DAB76B7E-57B8-45BC-A12E-F72797107060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAB76B7E-57B8-45BC-A12E-F72797107060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAB76B7E-57B8-45BC-A12E-F72797107060}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB02397F-3C62-4264-B07A-432C86F25B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB02397F-3C62-4264-B07A-432C86F25B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB02397F-3C62-4264-B07A-432C86F25B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB02397F-3C62-4264-B07A-432C86F25B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A7FD681-350D-4264-A8D0-058B72C1CC09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A7FD681-350D-4264-A8D0-058B72C1CC09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A7FD681-350D-4264-A8D0-058B72C1CC09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A7FD681-350D-4264-A8D0-058B72C1CC09}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

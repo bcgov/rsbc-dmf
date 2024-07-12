@@ -310,26 +310,30 @@ namespace Rsbc.Dmf.CaseManagement
         /// <returns></returns>
         public Document UpdateClaimDmer(Guid loginId, Guid documentId)
         {
-            ResultStatusReply result = new ResultStatusReply()
+            var result = new ResultStatusReply()
             {
                 Success = false
             };
 
-            var loggedinUser = dynamicsContext.dfp_logins.Where(login => login.dfp_loginid ==  loginId).FirstOrDefault();
+            var loggedinUser = dynamicsContext.dfp_logins
+                .Where(login => login.dfp_loginid ==  loginId)
+                .FirstOrDefault();
 
             var querydocument = dynamicsContext.bcgov_documenturls
-            .Expand(doc => doc.dfp_DocumentTypeID)
-            .Expand(doc => doc.dfp_LoginId)
-            .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId ).FirstOrDefault();
+                .Expand(doc => doc.dfp_DocumentTypeID)
+                .Expand(doc => doc.dfp_LoginId)
+                .Where(doc => doc.dfp_DocumentTypeID.dfp_code == _configuration["CONSTANTS_DOCUMENT_TYPE_DMER"] && doc.bcgov_documenturlid == documentId)
+                .FirstOrDefault();
             if (querydocument != null && loggedinUser != null)
             {
-              dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);     
+                dynamicsContext.SetLink(querydocument, nameof(bcgov_documenturl.dfp_LoginId), loggedinUser);
+                querydocument.dfp_LoginId = loggedinUser;
             }
+
             dynamicsContext.SaveChanges();
-
             dynamicsContext.Detach(querydocument);
-
             result.Success = true;
+
             return _mapper.Map<Document>(querydocument);
         }
 

@@ -101,7 +101,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-        // TODO should be made generic e.g. GetDocumentByType
         public async override Task<GetDmerReply> GetDmer(CaseIdRequest request, ServerCallContext context) 
         {
             var result = new GetDmerReply();
@@ -131,8 +130,6 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
-    
-
         public async override Task<UpdateClaimReply> UpdateClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
@@ -142,11 +139,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 var loginId = Guid.Parse(request.LoginId);
                 var documentId = Guid.Parse(request.DocumentId);
                 var document = _documentManager.UpdateClaimDmer(loginId, documentId);
-
-                var mappedDocument = _mapper.Map<DmerCase>(document);
-               
-                  result.Item = mappedDocument;
-
+                result.Item = _mapper.Map<DmerCase>(document);
                 result.ResultStatus = ResultStatus.Success;
             }
             catch (Exception ex)
