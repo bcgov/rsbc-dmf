@@ -37,6 +37,7 @@ import { CasesService, DocumentService } from '@app/shared/api/services';
 import { CaseDocument, PatientCase } from '@app/shared/api/models';
 import {
   CaseStageEnum,
+  DMERStatusEnum,
   DocumentTypeEnum,
   SubmittalStatusEnum,
 } from '@app/app.model';
@@ -96,8 +97,7 @@ export class CaseDetailsComponent implements OnInit {
   submissionRequirementDocuments: CaseDocument[] = [];
   driverSubmissionDocuments: CaseDocument[] = [];
   isLoading = true;
-
-  hasDmer = false;
+  DMERStatusEnum = DMERStatusEnum;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -171,9 +171,6 @@ export class CaseDetailsComponent implements OnInit {
               doc.submittalStatus as SubmittalStatusEnum,
             )
           ) {
-            if (doc.documentType == DocumentTypeEnum.DMER) {
-              this.hasDmer = true;
-            }
             submissionRequirementDocuments.push(doc);
           } else if (
             ![

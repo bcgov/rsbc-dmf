@@ -66,7 +66,11 @@
               </div>
               <div>
                 <div>
-                  @if (hasDmer) {
+                  @if (
+                    caseDetails?.dmerStatus ===
+                      DMERStatusEnum.RequiredClaimed ||
+                    caseDetails?.dmerStatus === DMERStatusEnum.NonComplyClaimed
+                  ) {
                     <button
                       mat-flat-button
                       class="primaryButton"
