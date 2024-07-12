@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CaseDocument } from '../../models/case-document';
+import { DmerDocument } from '../../models/dmer-document';
 
 export interface ApiDocumentClaimDmerPost$Json$Params {
   documentId?: string;
 }
 
-export function apiDocumentClaimDmerPost$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<CaseDocument>> {
+export function apiDocumentClaimDmerPost$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
   const rb = new RequestBuilder(rootUrl, apiDocumentClaimDmerPost$Json.PATH, 'post');
   if (params) {
     rb.query('documentId', params.documentId, {});
@@ -23,7 +23,7 @@ export function apiDocumentClaimDmerPost$Json(http: HttpClient, rootUrl: string,
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<CaseDocument>;
+      return r as StrictHttpResponse<DmerDocument>;
     })
   );
 }

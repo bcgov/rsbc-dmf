@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PidpAdapter.Service", "pidp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "S3", "document-storage-adapter\src\Pssg.Interfaces.S3\S3.csproj", "{28397334-64CA-45A7-993A-6C415A6380ED}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSBC.Tests.Unit.DMF.MedicalPortal.API", "medical-portal\src\API\RSBC.Tests.Unit.DMF.MedicalPortal.API\RSBC.Tests.Unit.DMF.MedicalPortal.API.csproj", "{91FE31DA-BEC7-426B-898E-813C435E3577}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Moq", "document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj", "{4E74E6E0-9318-46D2-9505-D1DED88F9D4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +87,14 @@ Global
 		{28397334-64CA-45A7-993A-6C415A6380ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28397334-64CA-45A7-993A-6C415A6380ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28397334-64CA-45A7-993A-6C415A6380ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91FE31DA-BEC7-426B-898E-813C435E3577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91FE31DA-BEC7-426B-898E-813C435E3577}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91FE31DA-BEC7-426B-898E-813C435E3577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91FE31DA-BEC7-426B-898E-813C435E3577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E74E6E0-9318-46D2-9505-D1DED88F9D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E74E6E0-9318-46D2-9505-D1DED88F9D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E74E6E0-9318-46D2-9505-D1DED88F9D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E74E6E0-9318-46D2-9505-D1DED88F9D4B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

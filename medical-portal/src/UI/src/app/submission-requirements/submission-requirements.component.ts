@@ -27,7 +27,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DocumentTypeService } from '@app/shared/api/services';
 import { MatIcon } from '@angular/material/icon';
 import { PopupService } from '@app/popup/popup.service';
-import { DocumentTypeEnum } from '@app/app.model';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -50,7 +49,6 @@ import { DocumentTypeEnum } from '@app/app.model';
 })
 export class SubmissionRequirementsComponent {
   fileToUpload: File | null = null;
-  documentTypeDmer = DocumentTypeEnum.DMER;
 
   constructor(
     private _snackBar: MatSnackBar,

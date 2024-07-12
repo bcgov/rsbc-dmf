@@ -12,7 +12,7 @@ using CaseDocument = RSBC.DMF.MedicalPortal.API.ViewModels.CaseDocument;
 using Driver = Rsbc.Dmf.CaseManagement.Service.Driver;
 using Microsoft.AspNetCore.Authorization;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
-using Serilog;
+using System.Net;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -28,7 +28,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
         private readonly DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly DocumentFactory _documentFactory;
-
 
         public DocumentController(DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IMapper mapper, IConfiguration configuration, ILoggerFactory loggerFactory, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, DocumentFactory documentFactory)
         {
@@ -198,9 +197,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return Ok();
         }
 
-
         [HttpPost("claimDmer")]
-        [ProducesResponseType(typeof(CaseDocument), 200)]
+        [ProducesResponseType(typeof(DmerDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
@@ -208,27 +206,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         {
             var profile = await _userService.GetCurrentUserContext();
             var loginId = profile.LoginId;
-            var request = new UpdateClaimRequest { 
-                LoginId = loginId,
-                DocumentId = documentId
-            };
-            
-            var reply = _documentManagerClient.UpdateClaimDmer(request);
-            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-            {
-                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
-                return Ok(caseDocument);
-            }
-            else
-            {
-                _logger.LogError($"{nameof(UpdateClaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
-                return StatusCode(500, reply.ErrorDetail);
-            }
+            return await AssignDmerClaim(loginId, documentId);
         }
-
-
+            
         [HttpPost("unclaimDmer")]
-        [ProducesResponseType(typeof(CaseDocument), 200)]
+        [ProducesResponseType(typeof(DmerDocument), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
@@ -257,35 +239,25 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
         }
 
-        private string TranslateDmerStatus(string dmerStatus, string loginId)
+        private async Task<ActionResult> AssignDmerClaim(string loginId, string documentId)
         {
-            if (dmerStatus == "Open-Required")
+            var request = new UpdateClaimRequest
             {
-                if (string.IsNullOrEmpty(loginId))
-                {
-                    dmerStatus = "Required - Unclaimed";
-                }
-                else
-                {
-                    dmerStatus = "Required - Claimed";
-                }
-            }
+                LoginId = loginId,
+                DocumentId = documentId
+            };
 
-            if (dmerStatus == "Non-Comply")
+            var reply = await _documentManagerClient.UpdateClaimDmerAsync(request);
+            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
             {
-                if (string.IsNullOrEmpty(loginId))
-                {
-                    dmerStatus = "Non-Comply - Unclaimed";
+                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
+                return Ok(caseDocument);
                 }
                 else
                 {
-                    dmerStatus = "Non-Comply - Claimed";
-                }
+                _logger.LogError($"{nameof(AssignDmerClaim)} error: unable to Claim/Assign DMER document - {reply.ErrorDetail}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail);
             }
-            return dmerStatus;
         }
-
-
-
     }
 }

@@ -69,18 +69,16 @@ namespace RSBC.DMF.MedicalPortal.API.Services
         {
             if (user == null) throw new ArgumentNullException(nameof(user));
 
-            var loginIds = user.FindFirstValue(Claims.LoginIds);
+            var userContext = new UserContext();
+            userContext.Id = user.FindFirstValue(Claims.PreferredUsername);
+            userContext.LoginIds = user.GetClaim<List<string>>(Claims.LoginIds);
+            userContext.FirstName = user.FindFirstValue(ClaimTypes.GivenName);
+            userContext.LastName = user.FindFirstValue(ClaimTypes.Surname);
+            userContext.Email = user.FindFirstValue(Claims.Email);
+            userContext.Roles = user.GetRoles();
+            userContext.Endorsements = user.GetClaim<IEnumerable<Endorsement>>(Claims.Endorsements);
 
-            return await Task.FromResult(new UserContext
-            {
-                Id = user.FindFirstValue(Claims.PreferredUsername),
-                LoginIds = user.GetClaim<List<string>>(Claims.LoginIds),
-                FirstName = user.FindFirstValue(ClaimTypes.GivenName),
-                LastName = user.FindFirstValue(ClaimTypes.Surname),
-                Email = user.FindFirstValue(Claims.Email),
-                Roles = user.GetRoles(),
-                Endorsements = user.GetClaim<IEnumerable<Endorsement>>(Claims.Endorsements)
-            });
+            return await Task.FromResult(userContext);
         }
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
