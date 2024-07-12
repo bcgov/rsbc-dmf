@@ -7,7 +7,6 @@ using System.Security.Claims;
 using AutoMapper;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Google.Protobuf;
-using Google.Protobuf.Collections;
 using Newtonsoft.Json;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.IcbcAdapter;
