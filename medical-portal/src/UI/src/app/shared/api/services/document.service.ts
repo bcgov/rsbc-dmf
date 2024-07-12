@@ -175,11 +175,6 @@ export class DocumentService extends BaseService {
     );
   }
 
-  }
-
-    );
-  }
-
   /** Path part for operation `apiDocumentUnclaimDmerPost()` */
   static readonly ApiDocumentUnclaimDmerPostPath = '/api/Document/unclaimDmer';
 
