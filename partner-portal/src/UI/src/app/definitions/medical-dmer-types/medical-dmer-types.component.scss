@@ -1,0 +1,37 @@
+.definitionCard {
+    margin-top: 12px;
+  }
+  
+  .definitionContent {
+    margin-left: 12px;
+  }
+  
+  .no-reimbursement-chips {
+    background-color: #fff;
+    border: 2px solid #fcba19;
+    padding: 2px;
+    border-radius: 4px;
+  }
+  
+  .reimbursement-chips {
+    background-color: #fff;
+    border: 2px solid #38598a;
+    border-radius: 4px;
+    padding: 2px;
+  }
+  
+  .chips {
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .dmerTypes {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .dmerDefinitions {
+    display: flex;
+    gap: 24px;
+  }
+  
