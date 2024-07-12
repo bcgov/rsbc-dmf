@@ -280,11 +280,45 @@ function getChefsBundle() {
 }
 
 function putChefsSubmission(status = "Draft") {
+  const flattenedComponents = utils.flattenComponents(
+    Formio.forms[window.currentFormId].components,
+  );
+
+  // get all components that contain a property called 'flagformid' which is only used by case flags
+  const chefsFlagComponents = Object.values(flattenedComponents).filter(
+    (comp) => comp?.originalComponent?.properties?.flagformid,
+  );
+
+  const flags = {};
+
+  // add the flag 'flagformid' and the true/false value of the flag to the flags obj
+  // this flags object is then processed in the backend and mapped to flags present in dynamics
+  chefsFlagComponents.forEach((comp) => {
+    const key = comp.originalComponent?.key;
+    const flagformid = comp.originalComponent?.properties?.flagformid;
+
+    console.info(
+      `[IFRAME] putChefsSubmission: attempting to add chefs flagformid: ${flagformid}...`,
+    );
+
+    const value = utils
+      .getComponent(Formio.forms[window.currentFormId].components, key)
+      .getValue();
+
+    if (flagformid) {
+      flags[flagformid] = value;
+      console.info(
+        `[IFRAME] putChefsSubmission: successfully added chefs flagformid: ${flagformid}, value: ${value}`,
+      );
+    }
+  });
+
   const message = {
     instanceId: getInstanceId(),
     type: PUT_CHEFS_SUBMISSION,
     status,
     submission: data,
+    flags,
   };
 
   const messageObj = JSON.parse(JSON.stringify(message));
