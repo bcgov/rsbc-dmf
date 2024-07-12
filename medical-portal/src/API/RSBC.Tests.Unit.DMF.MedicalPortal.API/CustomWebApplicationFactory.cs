@@ -57,25 +57,28 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.AddAutoMapperSingleton();
 
                 // setup http context with mocked user claims
-                var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
-                var context = new DefaultHttpContext();
-                var user = new ClaimsPrincipal();
-                var claims = new List<Claim>
+                if (_configuration["TEST_PIDP_USER_ID"] != null)
                 {
-                    new Claim(Claims.PreferredUsername, _configuration["TEST_PIDP_USER_ID"]),
-                    new Claim(Claims.LoginIds, $"[\"{_configuration["TEST_LOGIN_IDS"]}\"]"),
-                    new Claim(ClaimTypes.GivenName, "John"),
-                    new Claim(ClaimTypes.Surname, "Smith"),
-                    new Claim(Claims.Email, "john.smith@mailinator.com"),
-                    // not sure if this is the correct role, should be whatever Api uses for ClaimsIdentity.RoleClaimType
-                    new Claim(Claims.Roles, Policies.MedicalPractitioner),
-                    //new Claim(Claims.Endorsements, null)
-                };
-                user.AddIdentity(new ClaimsIdentity(claims));
-                context.User = user;
-                mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
-                services.AddTransient(x => mockHttpContextAccessor.Object);
-                services.AddHttpContextAccessor();
+                    var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
+                    var context = new DefaultHttpContext();
+                    var user = new ClaimsPrincipal();
+                    var claims = new List<Claim>
+                    {
+                        new Claim(Claims.PreferredUsername, _configuration["TEST_PIDP_USER_ID"]),
+                        new Claim(Claims.LoginIds, $"[\"{_configuration["TEST_LOGIN_IDS"]}\"]"),
+                        new Claim(ClaimTypes.GivenName, "John"),
+                        new Claim(ClaimTypes.Surname, "Smith"),
+                        new Claim(Claims.Email, "john.smith@mailinator.com"),
+                        // not sure if this is the correct role, should be whatever Api uses for ClaimsIdentity.RoleClaimType
+                        new Claim(Claims.Roles, Policies.MedicalPractitioner),
+                        //new Claim(Claims.Endorsements, null)
+                    };
+                    user.AddIdentity(new ClaimsIdentity(claims));
+                    context.User = user;
+                    mockHttpContextAccessor.Setup(x => x.HttpContext).Returns(context);
+                    services.AddTransient(x => mockHttpContextAccessor.Object);
+                    services.AddHttpContextAccessor();
+                }
 
                 // document storage client
                 string documentStorageAdapterURI = _configuration["DOCUMENT_STORAGE_ADAPTER_URI"];
