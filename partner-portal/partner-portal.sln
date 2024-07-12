@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal", "src\API\partner-portal.csproj", "{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "partner-portal.client", "src\UI\partner-portal.client.esproj", "{041ADFDE-C27D-4024-96BF-726DB5AB2100}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Service", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj", "{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj", "{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Release|Any CPU.Build.0 = Release|Any CPU
+		{041ADFDE-C27D-4024-96BF-726DB5AB2100}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1139EF29-593D-4545-8166-9EFE7EA3021B}
+	EndGlobalSection
+EndGlobal
