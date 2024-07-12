@@ -1,0 +1,165 @@
+{
+	"info": {
+		"_postman_id": "2dbb3552-8769-4a7c-8a60-fc78be42a179",
+		"name": "DMFT",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "730057"
+	},
+	"item": [
+		{
+			"name": "OneHealth",
+			"item": [
+				{
+					"name": "GET Endorsements",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "clientSecret",
+									"value": "{{keycloakClientSecret}}",
+									"type": "string"
+								},
+								{
+									"key": "challengeAlgorithm",
+									"value": "S256",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code_with_pkce",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/auth?&kc_idp_hint=bcsc",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "clientId",
+									"value": "DMFT-WEBAPP",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7215/api/contacts/gxc6lwqkfz5jh55e2kcrjnzbolbvkdj5@bcsc/endorsements",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7215",
+							"path": [
+								"api",
+								"contacts",
+								"gxc6lwqkfz5jh55e2kcrjnzbolbvkdj5@bcsc",
+								"endorsements"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "GET SearchCaseByIdCode",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "clientSecret",
+							"value": "{{keycloakClientSecret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "DMFT-WEBAPP",
+							"type": "string"
+						},
+						{
+							"key": "challengeAlgorithm",
+							"value": "S256",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "authorization_code_with_pkce",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/token",
+							"type": "string"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://common-logon-test.hlth.gov.bc.ca/auth/realms/moh_applications/protocol/openid-connect/auth?&kc_idp_hint=bcsc",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": true,
+							"type": "boolean"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/api/Cases/search/D0Y8X6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"Cases",
+						"search",
+						"D0Y8X6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Driver Info",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET Profile Current",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

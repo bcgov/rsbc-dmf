@@ -19,6 +19,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PidpAdapter.Client", "..\..\..\pidp-adapter\src\PidpAdapter.Client\PidpAdapter.Client.csproj", "{6C4720BB-3FBA-40F2-B34C-8EF5E3A84B3A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{83EB0A9A-ED63-42EE-BC45-526F94FD9BF9}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		DMFT.postman_collection.json = DMFT.postman_collection.json
+		Dockerfile = Dockerfile
+		ReadMe.md = ReadMe.md
+		start.ps1 = start.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
