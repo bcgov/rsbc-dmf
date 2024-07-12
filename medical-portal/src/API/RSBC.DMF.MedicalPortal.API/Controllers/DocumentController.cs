@@ -209,19 +209,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return await AssignDmerClaim(loginId, documentId);
         }
             
-            var reply = _documentManagerClient.UpdateClaimDmer(request);
-            if (reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-            {
-                var caseDocument = _mapper.Map<DmerDocument>(reply.Item);
-                return Ok(caseDocument);
-            }
-            else
-            {
-                _logger.LogError($"{nameof(UpdateClaimDmerOnDocument)} error: unable to Claim DMER document - {reply.ErrorDetail}");
-                return StatusCode(500, reply.ErrorDetail);
-            }
-        }
-
         [HttpPost("unclaimDmer")]
         [ProducesResponseType(typeof(DmerDocument), 200)]
         [ProducesResponseType(401)]
