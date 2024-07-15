@@ -2,7 +2,7 @@
 
 namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
 {
-    public class Callback
+    public class CaseCallback
     {
         public Guid Id { get; set; }
         public DateTimeOffset RequestCallback { get; set; }

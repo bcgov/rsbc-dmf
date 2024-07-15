@@ -29,7 +29,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate)
                 .AddTransform(NullStringConverter);
             CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
-            CreateMap<Callback, ViewModels.Callback>()
+            CreateMap<Callback, ViewModels.CaseCallback>()
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
         }
 
