@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Rsbc.Dmf.PartnerPortal.Api;
 using Serilog;
 using System.Net;
 using System.Security.Claims;
@@ -67,8 +69,10 @@ services.AddAuthorization(options =>
 });
 
 services.AddSerilogBootstrapLogger();
-services.AddCmsAdapterGrpcService(config);
-Console.WriteLine($"cms-adapter grpc service registered.");
+
+// grpc clients
+services.AddDocumentStorageClient(builder.Configuration);
+services.AddCaseManagementAdapterClient(builder.Configuration);
 
 var corsPolicy = "CorsPolicy";
 services.AddCors(options =>

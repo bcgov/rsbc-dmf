@@ -5,10 +5,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e182f0d9-dde2-4bf5-8f01-7d6d3e5d780c</UserSecretsId>
-    <SpaRoot>..\UI\partner-portal.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run start</SpaProxyLaunchCommand>
+    <SpaRoot>..\partner-portal.client</SpaRoot>
+    <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
-    <RootNamespace>Rsbc.Dmf.PartnerPortal.Api</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,6 +21,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="partner-portal.client.esproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Enums.NET" Version="5.0.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.27.2" />
     <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.4" />
@@ -39,9 +46,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
-    <ProjectReference Include="..\UI\partner-portal.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
+    <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+    <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
+
   </ItemGroup>
 
 </Project>
