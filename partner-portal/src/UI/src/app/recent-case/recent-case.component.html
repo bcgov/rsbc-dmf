@@ -6,7 +6,7 @@
         <div>
           <b>
             <a>
-              <!-- <h3>{{ caseDetails?.idCode }}</h3> -->
+              <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>
         </div>
@@ -15,28 +15,28 @@
       <div style="grid-area: B">
         <label>Case Type</label>
         <div>
-          <!-- <b>{{ caseDetails?.caseType }}</b> -->
+          <b>{{ caseDetails?.caseType }}</b>
         </div>
       </div>
 
       <div style="grid-area: C">
         <label>DMER Type</label>
         <div>
-          <!-- <b>{{ caseDetails?.dmerType }}</b> -->
+          <b>{{ caseDetails?.dmerType }}</b>
         </div>
       </div>
 
       <div style="grid-area: D">
         <label>Outstanding Documents</label>
         <div>
-          <!-- <b>{{ caseDetails?.outstandingDocuments }}</b> -->
+          <b>{{ caseDetails?.outstandingDocuments }}</b>
         </div>
       </div>
 
       <div style="grid-area: E">
         <label> Decision Outcome </label>
         <div>
-          <!-- <b>{{ caseDetails?.latestDecision }}</b> -->
+          <b>{{ caseDetails?.latestDecision }}</b>
         </div>
       </div>
     </mat-card-content>
@@ -52,7 +52,8 @@
   >
     <mat-step state="circle">
       <ng-template matStepLabel>
-        <!-- Opened:<br /> {{ caseDetails?.openedDate | date: "longDate" }} -->
+        Opened:<br />
+        <!-- {{ caseDetails?.openedDate | date: "longDate" }} -->
       </ng-template>
     </mat-step>
     <mat-step state="circle">
