@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal.Server", "partner-portal.Server.csproj", "{EC121326-AB76-4E60-B9F3-62B3929B7C3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal.Server", "partner-portal.csproj", "{EC121326-AB76-4E60-B9F3-62B3929B7C3F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{B8D665F6-9FDB-47D4-9E49-ED61AF1E2B92}"
 EndProject
