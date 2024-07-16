@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter.Client
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.PartnerPortal.Api.Tests", "partner-portal\src\API\Rsbc.Dmf.PartnerPortal.Api.Tests\Rsbc.Dmf.PartnerPortal.Api.Tests.csproj", "{C615071F-29A7-42CC-9C9A-02B6DD1BCB3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "shared-utils\SharedUtils.csproj", "{326764B2-79A8-45C5-808A-83B4EA60B680}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
