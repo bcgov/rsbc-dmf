@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Moq\Rsbc.Dmf.CaseManagement.Moq.csproj" />
     <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Moq\Pssg.DocumentStorageAdapter.Moq.csproj" />
+    <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
     <ProjectReference Include="..\driver-portal.csproj" />
   </ItemGroup>
 
