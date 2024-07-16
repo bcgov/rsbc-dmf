@@ -86,16 +86,16 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                     new GrpcChannelOptions
                     { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
-                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
+                var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
                 // call the token service to get a token.
-                var tokenRequest = new Rsbc.DocumentStorageAdapter.TokenRequest
+                var tokenRequest = new Pssg.DocumentStorageAdapter.TokenRequest
                 {
                     Secret = configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
                 };
 
                 var tokenReply = initialClient.GetToken(tokenRequest);
 
-                if (tokenReply != null && tokenReply.ResultStatus == Rsbc.DocumentStorageAdapter.ResultStatus.Success)
+                if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                 {
                     // Add the bearer token to the client.
                     httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
@@ -104,7 +104,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                         new GrpcChannelOptions
                         { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
-                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
+                    services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
                 }
             }
         }
@@ -116,7 +116,6 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             if (!string.IsNullOrEmpty(icbcAdapterURI))
             {
                 var httpClientHandler = new HttpClientHandler();
-
                 // Return `true` to allow certificates that are untrusted/invalid                    
                 httpClientHandler.ServerCertificateCustomValidationCallback =
                     HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
