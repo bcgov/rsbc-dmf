@@ -107,18 +107,15 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
             //    claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, loginResponse.DriverLicenseNumber));
             //}
             var userId = user.FindFirstValue("preferred_username");
-            if(userId == "nvff34nxpxfy76pkenii7lmwvwhdj36q@bcsc" )
+            if(userId == configuration["LOGGEDIN_USER_ID"] )
             {
-                claims.Add(new Claim(UserClaimTypes.DriverId, "4b732e7d-b2aa-45fb-af95-4d31a4617e7c"));
-                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, "00200173"));
+                claims.Add(new Claim(UserClaimTypes.DriverId, configuration["ICBC_TEST_DRIVER_ID"]));
+                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, configuration["ICBC_TEST_DL"]));
 
             }
 
 
             user.AddIdentity(new ClaimsIdentity(claims));
-
-
-
             //logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
 
             return user;
