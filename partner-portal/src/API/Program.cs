@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api;
 using Serilog;
 using System.Net;
@@ -69,10 +70,15 @@ services.AddAuthorization(options =>
 });
 
 services.AddSerilogBootstrapLogger();
+services.AddMemoryCache();
 
 // grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration);
+
+// Add ICBC Adapter
+services.AddIcbcAdapterClient(builder.Configuration); 
+services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
 var corsPolicy = "CorsPolicy";
 services.AddCors(options =>

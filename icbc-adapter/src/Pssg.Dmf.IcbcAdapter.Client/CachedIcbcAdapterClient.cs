@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Rsbc.Dmf.IcbcAdapter;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
-namespace Pssg.Dmf.IcbcAdapter.Client
+namespace Rsbc.Dmf.IcbcAdapter.Client
 {
     public interface ICachedIcbcAdapterClient
     {
