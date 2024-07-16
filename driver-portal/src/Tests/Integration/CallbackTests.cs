@@ -9,6 +9,7 @@ using System;
 using static Rsbc.Dmf.CaseManagement.Service.Callback.Types;
 using SharedUtils;
 using Google.Protobuf.WellKnownTypes;
+using Rsbc.Dmf.DriverPortal.Api;
 
 namespace Rsbc.Dmf.DriverPortal.Tests.Integration
 {
@@ -23,14 +24,17 @@ namespace Rsbc.Dmf.DriverPortal.Tests.Integration
             if (string.IsNullOrEmpty(driverId))
                 return;
 
-            var callback = new Callback();
-            callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime().ToTimestamp();
-            callback.Subject = "Driver Portal Integration Test";
-            callback.CallStatus = CallbackCallStatus.Open;
+            var callback = new CallbackRequest();
+            callback.RequestCallback = new DateTime(2000, 1, 1).ToUniversalTime();
+            //callback.Subject = "Driver Portal Integration Test";
+            // TODO we probably don't need this enum in the proto file
+            //callback.CallStatus = CallbackCallStatus.Open;
             callback.Origin = (int)UserCode.Portal;
-            callback.Phone = "1112223333";
-            callback.Priority = CallbackPriority.Low;
-            callback.PreferredTime = PreferredTime.Morning;
+            //callback.Phone = "1112223333";
+            // TODO we probably don't need this enum in the proto file
+            //callback.Priority = CallbackPriority.Low;
+            // TODO we probably don't need this enum in the proto file
+            //callback.PreferredTime = PreferredTime.Morning;
             var request = new HttpRequestMessage(HttpMethod.Post, $"{CALLBACK_API_BASE}/create");
             SetContent(request, callback);
 
