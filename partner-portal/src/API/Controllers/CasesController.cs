@@ -103,10 +103,6 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
                 result = _mapper.Map<CaseDetail>(c.Item);
-                // these properties are needed in other mappings but not here, only show minimal information
-                result.DriverId = null;
-                result.EligibleLicenseClass = null;
-
             }
 
             return Json(result);

@@ -13,6 +13,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
     {
         Task<UserContext> GetCurrentUserContext();
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
+        Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
     }
 
     public record UserContext
@@ -66,6 +67,58 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
                 DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
                 DriverLicenseNumber = user.FindFirstValue(UserClaimTypes.DriverLicenseNumber)
             });
+        }
+
+
+        public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
+        {
+            logger.LogDebug("Processing login {0}", user.Identity.Name);
+            logger.LogDebug(" claims:\n{0}", string.Join(",\n", user.Claims.Select(c => $"{c.Type}: {c.Value}")));
+
+            //var loginRequest = new UserLoginRequest
+            //{
+            //    UserType = UserType.DriverUserType,
+            //    ExternalSystem = user.FindFirstValue("http://schemas.microsoft.com/identity/claims/identityprovider") ?? user.FindFirstValue("idp"),
+            //    ExternalSystemUserId = user.FindFirstValue(ClaimTypes.NameIdentifier) ?? user.FindFirstValue("sub"),
+            //    FirstName = user.FindFirstValue(UserClaimTypes.GivenName) ?? user.FindFirstValue("first_name") ?? string.Empty,
+            //    LastName = user.FindFirstValue(UserClaimTypes.FamilyName) ?? user.FindFirstValue("last_name") ?? string.Empty,
+            //    UserProfiles = { new UserProfile() }
+            //};
+            //var loginResponse = await userManager.LoginAsync(loginRequest);
+            //if (loginResponse.ResultStatus == ResultStatus.Fail) throw new Exception(loginResponse.ErrorDetail);
+
+            //var searchResults = await userManager.SearchAsync(new UsersSearchRequest { UserId = loginResponse.UserId, UserType = UserType.DriverUserType });
+            //if (searchResults.ResultStatus == ResultStatus.Fail) throw new Exception(searchResults.ErrorDetail);
+
+            //var userProfile = searchResults.User.SingleOrDefault();
+            //if (userProfile == null) throw new Exception($"User {loginResponse.UserId} not found");
+
+            var claims = new List<Claim>();
+            //claims.Add(new Claim(ClaimTypes.Sid, loginResponse.UserId));
+            //claims.Add(new Claim(ClaimTypes.Email, loginResponse.UserEmail));
+            //claims.Add(new Claim(ClaimTypes.Upn, $"{userProfile.ExternalSystemUserId}@{userProfile.ExternalSystem}"));
+            //claims.Add(new Claim(ClaimTypes.GivenName, userProfile.FirstName));
+            //claims.Add(new Claim(ClaimTypes.Surname, userProfile.LastName));
+            //claims.Add(new Claim(UserClaimTypes.DisplayName, user.Claims.Single(u => u.Type == UserClaimTypes.DisplayName).Value));
+
+            //if (!string.IsNullOrEmpty(loginResponse.DriverId))
+            //{
+            //    claims.Add(new Claim(UserClaimTypes.DriverId, loginResponse.DriverId));
+            //    claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, loginResponse.DriverLicenseNumber));
+            //}
+            var userId = user.FindFirstValue("preferred_username");
+            if(userId == configuration["LOGGEDIN_USER_ID"] )
+            {
+                claims.Add(new Claim(UserClaimTypes.DriverId, configuration["ICBC_TEST_DRIVER_ID"]));
+                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, configuration["ICBC_TEST_DL"]));
+
+            }
+
+
+            user.AddIdentity(new ClaimsIdentity(claims));
+            //logger.LogInformation("User {0} ({1}@{2}) logged in", userProfile.Id, userProfile.ExternalSystemUserId, userProfile.ExternalSystem);
+
+            return user;
         }
     }
 }

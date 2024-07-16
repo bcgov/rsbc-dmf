@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "prestart": "node aspnetcore-https",
-    "start:windows": "ng serve --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\" --host=127.0.0.1",
-    "start:default": "ng serve --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\" --host=127.0.0.1"
+    "gen-api": "ng-openapi-gen -i http://localhost:8080/swagger/v1/swagger.json -o ./src/app/shared/api --ignoreUnusedModels true"
   },
   "private": true,
   "dependencies": {
@@ -24,9 +23,11 @@
     "@angular/platform-browser-dynamic": "^17.3.7",
     "@angular/platform-server": "^17.3.7",
     "@angular/router": "^17.3.7",
+    "angular-oauth2-oidc": "^17.0.2",
     "jest-editor-support": "*",
     "keycloak-angular": "^15.2.1",
     "keycloak-js": "^24.0.4",
+    "oidc-client": "^1.11.5",
     "run-script-os": "*",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -43,6 +44,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ng-openapi-gen": "^0.51.0",
     "prettier": "^3.3.2",
     "typescript": "~5.4.2"
   }
