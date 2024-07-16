@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement", "cms-adapter\src\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj", "{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter.Client", "icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj", "{736A218B-E3EF-44D0-8E4D-68B39BA99A9D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.PartnerPortal.Api.Tests", "partner-portal\src\API\Rsbc.Dmf.PartnerPortal.Api.Tests\Rsbc.Dmf.PartnerPortal.Api.Tests.csproj", "{C615071F-29A7-42CC-9C9A-02B6DD1BCB3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

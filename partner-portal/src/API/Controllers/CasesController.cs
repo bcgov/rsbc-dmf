@@ -8,7 +8,6 @@ using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
 using System.Net;
 
-
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -44,7 +43,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Closed")]
-       // [Authorize(Policy = Policy.Driver)]
+        //[Authorize(Policy = Policy.Driver)]
         [ProducesResponseType(typeof(IEnumerable<CaseDetail>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
