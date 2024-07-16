@@ -1,4 +1,4 @@
-﻿namespace Rsbc.Dmf.PartnerPortal.ViewModels;
+﻿namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 
 public class Driver
 {

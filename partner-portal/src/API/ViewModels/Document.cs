@@ -1,9 +1,9 @@
-﻿namespace Rsbc.Dmf.PartnerPortal.ViewModels;
+﻿namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 
 /// <summary>
 /// Container for a Document object.  Used by DFCMS and DPS
 /// </summary>
-public class Document
+ public class Document
 {
     /// <summary>
     /// The file contents
@@ -60,4 +60,5 @@ public class Document
     public string Description { get; set; }
     public string DocumentUrl { get; set; }
     public string SubmittalStatus { get; set; }
+}
 }
