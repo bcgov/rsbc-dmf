@@ -109,8 +109,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
             var userId = user.FindFirstValue("preferred_username");
             if(userId == "nvff34nxpxfy76pkenii7lmwvwhdj36q@bcsc" )
             {
-                claims.Add(new Claim(UserClaimTypes.DriverId, "e27d7c69-3913-4116-a360-f5e990200289"));
-                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, "00200289"));
+                claims.Add(new Claim(UserClaimTypes.DriverId, "4b732e7d-b2aa-45fb-af95-4d31a4617e7c"));
+                claims.Add(new Claim(UserClaimTypes.DriverLicenseNumber, "00200173"));
 
             }
 

@@ -70,6 +70,7 @@ services.AddAuthorization(options =>
 });
 
 // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
+// TODO # "remove loggerFactory.Create and get the loggerFactory from ".AddSerilogBootstrapLogger"
 using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .SetMinimumLevel(LogLevel.Trace)
     .AddConsole());

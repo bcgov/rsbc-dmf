@@ -7,7 +7,6 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CallbackService } from './services/callback.service';
 import { CasesService } from './services/cases.service';
-import { ConfigService } from './services/config.service';
 
 /**
  * Module that provides all services and configuration.
@@ -20,7 +19,6 @@ import { ConfigService } from './services/config.service';
     ApplicationVersionInfoService,
     CallbackService,
     CasesService,
-    ConfigService,
     ApiConfiguration
   ],
 })

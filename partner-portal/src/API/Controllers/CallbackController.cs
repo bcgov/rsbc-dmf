@@ -35,6 +35,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(Create))]
         public async Task<IActionResult> Create([FromBody] Callback callback)
         {
+            // TODO # Replace the callback view model to "CallbackRequest"
             var profile = await _userService.GetCurrentUserContext();
 
             // security check

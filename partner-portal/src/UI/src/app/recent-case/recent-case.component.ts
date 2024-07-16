@@ -25,6 +25,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CasesService } from '@app/shared/api/services';
 import { CaseDetail } from '@app/shared/api/models';
+import { CaseStageEnum } from '@app/app.model';
 
 @Component({
   selector: 'app-recent-case',
@@ -56,7 +57,7 @@ import { CaseDetail } from '@app/shared/api/models';
 })
 export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
-  driverId = 'e27d7c69-3913-4116-a360-f5e990200289';
+  driverId = '4b732e7d-b2aa-45fb-af95-4d31a4617e7c';
 
   selectedIndex = 0;
   panelOpenState = false;
@@ -89,22 +90,22 @@ export class RecentCaseComponent implements OnInit {
       .apiCasesMostRecentGet$Json(this.driverId as string)
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
-        if (recentCase.status === 'Opened') {
+        if (recentCase.status === CaseStageEnum.Opened) {
           this.selectedIndex = 0;
         }
-        if (recentCase.status === 'Open Pending Submission') {
+        if (recentCase.status === CaseStageEnum.OpenPendingSubmission) {
           this.selectedIndex = 1;
         }
-        if (recentCase.status === 'Under Review') {
+        if (recentCase.status === CaseStageEnum.UnderReview) {
           this.selectedIndex = 2;
         }
-        if (recentCase.status === 'File End Tasks') {
+        if (recentCase.status === CaseStageEnum.FileEndTasks) {
           this.selectedIndex = 3;
         }
-        if (recentCase.status === 'Intake Validation') {
+        if (recentCase.status === CaseStageEnum.IntakeValidation) {
           this.selectedIndex = 4;
         }
-        if (recentCase.status === 'Closed') {
+        if (recentCase.status === CaseStageEnum.Closed) {
           this.selectedIndex = 5;
         }
       });
