@@ -11,6 +11,13 @@
     <RootNamespace>Rsbc.Dmf.PartnerPortal.Api</RootNamespace>
   </PropertyGroup>
 
+  <!-- TODO remove this after moving PartnerPortal.Api project -->
+  <ItemGroup>
+    <Compile Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+    <EmbeddedResource Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+    <None Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Remove="AppSettings.json" />
   </ItemGroup>
