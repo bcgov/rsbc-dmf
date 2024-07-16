@@ -8,7 +8,15 @@
     <SpaRoot>..\UI\partner-portal.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run start</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+    <RootNamespace>Rsbc.Dmf.PartnerPortal.Api</RootNamespace>
   </PropertyGroup>
+
+  <!-- TODO remove this after moving PartnerPortal.Api project -->
+  <ItemGroup>
+    <Compile Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+    <EmbeddedResource Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+    <None Remove="Rsbc.Dmf.PartnerPortal.Api.Tests\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="AppSettings.json" />
@@ -23,6 +31,7 @@
   <ItemGroup>
     <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
@@ -38,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+    <ProjectReference Include="..\..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj" />
     <ProjectReference Include="..\UI\partner-portal.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
