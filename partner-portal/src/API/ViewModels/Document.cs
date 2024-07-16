@@ -61,4 +61,3 @@
     public string DocumentUrl { get; set; }
     public string SubmittalStatus { get; set; }
 }
-}

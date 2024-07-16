@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Pssg.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.IcbcAdapter;
-using Rsbc.Dmf.PartnerPortal.ViewModels;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using System.Net;
 
 [Route("api/[controller]")]

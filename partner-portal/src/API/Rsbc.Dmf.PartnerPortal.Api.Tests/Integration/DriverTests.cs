@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Rsbc.Dmf.PartnerPortal.ViewModels;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using Xunit;
 
 public class DriverTests : ApiIntegrationTestBase
