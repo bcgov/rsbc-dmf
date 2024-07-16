@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.PartnerPortal.Api;
+using Rsbc.Dmf.PartnerPortal.Api.Services;
 using Serilog;
 using System.Net;
 using System.Security.Claims;
@@ -68,11 +69,22 @@ services.AddAuthorization(options =>
         .RequireRole(Claims.IdentityProvider, Roles.Dmft));
 });
 
+// NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
+// TODO # "remove loggerFactory.Create and get the loggerFactory from ".AddSerilogBootstrapLogger"
+using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+    .SetMinimumLevel(LogLevel.Trace)
+    .AddConsole());
+
 services.AddSerilogBootstrapLogger();
+services.AddHttpContextAccessor();
+services.AddAutoMapperSingleton(loggerFactory);
 
 // grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration);
+
+services.AddTransient<IUserService, UserService>();
+
 
 var corsPolicy = "CorsPolicy";
 services.AddCors(options =>
@@ -110,7 +122,10 @@ try
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers()
-            .RequireAuthorization(Policies.MedicalPractitioner, Policies.Enrolled, Policies.Oidc);
+            //.RequireAuthorization(
+            //Policies.MedicalPractitioner, 
+            //Policies.Enrolled, Policies.Oidc)
+            ;
     });
     app.MapSwagger();
     app.Run();
@@ -148,8 +163,8 @@ async Task OnTokenValidatedAsync(TokenValidatedContext context)
         context.Principal.AddIdentity(identity);
 
         // TODO I think this is wrong, we should only need to call this once but this is validating on every request
-        //var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-        //context.Principal = await userService.Login(context.Principal);
+        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+        context.Principal = await userService.Login(context.Principal);
     }
 }
 

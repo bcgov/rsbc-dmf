@@ -35,6 +35,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(Create))]
         public async Task<IActionResult> Create([FromBody] Callback callback)
         {
+            // TODO # Replace the callback view model to "CallbackRequest"
             var profile = await _userService.GetCurrentUserContext();
 
             // security check
@@ -63,13 +64,13 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
 
         [HttpGet("driver")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.CaseCallback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDriverCallbacks))]
         public async Task<ActionResult> GetDriverCallbacks()
         {
-            var result = new List<ViewModels.Callback>();
+            var result = new List<ViewModels.CaseCallback>();
 
             var profile = await _userService.GetCurrentUserContext();
 
@@ -77,7 +78,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
-                result = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
+                result = _mapper.Map<List<ViewModels.CaseCallback>>(driverCallbacks.Items);
             }
             else
             {

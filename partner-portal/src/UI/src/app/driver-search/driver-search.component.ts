@@ -8,6 +8,7 @@ import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/c
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
 import { EligibleLicenseClassComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/eligible-license-class/eligible-license-class.component';
+import { RecentCaseComponent } from '@app/recent-case/recent-case.component';
 
 @Component({
   selector: 'app-driver-search',
@@ -22,6 +23,7 @@ import { EligibleLicenseClassComponent } from '../../../../../../shared-portal-u
     MedicalDmerTypesComponent,
     DecisionOutcomeComponent,
     EligibleLicenseClassComponent,
+    RecentCaseComponent
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
