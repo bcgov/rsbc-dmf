@@ -108,6 +108,57 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 }
             }
         }
+
+        public static IServiceCollection AddIcbcAdapterClient(this IServiceCollection services, IConfiguration configuration)
+        {
+            // Add ICBC Adapter
+            string icbcAdapterURI = configuration["ICBC_ADAPTER_URI"];
+            if (!string.IsNullOrEmpty(icbcAdapterURI))
+            {
+                var httpClientHandler = new HttpClientHandler();
+                // Return `true` to allow certificates that are untrusted/invalid                    
+                httpClientHandler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+                var httpClient = new HttpClient(httpClientHandler)
+                {
+                    Timeout = TimeSpan.FromMinutes(30),
+                    DefaultRequestVersion = HttpVersion.Version20
+                };
+
+                if (!string.IsNullOrEmpty(configuration["ICBC_ADAPTER_JWT_SECRET"]))
+                {
+                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI,
+                    new GrpcChannelOptions
+                    { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+                    var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
+
+                // call the token service to get a token.
+                    var tokenRequest = new IcbcAdapter.TokenRequest
+                {
+                        Secret = configuration["ICBC_ADAPTER_JWT_SECRET"]
+                };
+                var tokenReply = initialClient.GetToken(tokenRequest);
+                    if (tokenReply != null && tokenReply.ResultStatus == IcbcAdapter.ResultStatus.Success)
+                {
+                    // Add the bearer token to the client.
+                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                        Log.Logger.Information("GetToken successfuly.");
+
+                        var channel = GrpcChannel.ForAddress(icbcAdapterURI,
+                        new GrpcChannelOptions
+                        { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+                        services.AddTransient(_ => new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(channel));
+                    }
+                    else
+                    {
+                        Log.Logger.Information("GetToken failed {0}.", tokenReply?.ErrorDetail);
+                    }
+                }
+            }
+
+            return services;
+        }
     }
 }
  
