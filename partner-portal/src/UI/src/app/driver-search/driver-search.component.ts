@@ -49,7 +49,7 @@ export class DriverSearchComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  driverId = 'e27d7c69-3913-4116-a360-f5e990200173';
+  driverId = '';
 
   _closedCaseDetails: CaseDetail[] | null = [];
 
