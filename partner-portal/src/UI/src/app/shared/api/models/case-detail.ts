@@ -1,30 +1,24 @@
 /* tslint:disable */
 /* eslint-disable */
-import { MedicalConditionItem } from '../models/medical-condition-item';
-import { Timestamp } from '../models/timestamp';
+import { Comment } from '../models/comment';
+import { Document } from '../models/document';
 export interface CaseDetail {
   assigneeTitle?: string | null;
-  birthDate?: Timestamp;
   caseId?: string | null;
-  caseSequence?: number;
+  caseSequence?: number | null;
   caseType?: string | null;
-  decisionDate?: Timestamp;
+  comments?: Array<Comment> | null;
+  decisionDate?: string | null;
   decisionForClass?: string | null;
   dmerType?: string | null;
-  dpsProcessingDate?: Timestamp;
+  documents?: Array<Document> | null;
+  dpsProcessingDate?: string;
   driverId?: string | null;
-  driverLicenseNumber?: string | null;
   eligibleLicenseClass?: string | null;
-  firstName?: string | null;
   idCode?: string | null;
-  lastActivityDate?: Timestamp;
-  lastName?: string | null;
-  latestComplianceDate?: Timestamp;
+  lastActivityDate?: string;
   latestDecision?: string | null;
-  medicalConditions?: Array<MedicalConditionItem> | null;
-  middlename?: string | null;
-  name?: string | null;
-  openedDate?: Timestamp;
+  openedDate?: string;
   outstandingDocuments?: number;
   status?: string | null;
   title?: string | null;

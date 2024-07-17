@@ -57,7 +57,7 @@ import { CaseStageEnum } from '@app/app.model';
 })
 export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
-  driverId = '4b732e7d-b2aa-45fb-af95-4d31a4617e7c';
+  driverId = '';
 
   selectedIndex = 0;
   panelOpenState = false;

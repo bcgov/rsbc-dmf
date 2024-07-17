@@ -32,26 +32,31 @@ mat-card {
     gap: 32px;
     padding-top: 32px;
   }
+
   .search-content{
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
   }
 
   .driver{
     padding-bottom: 32px;
   }
 
-
   .driver-lookup{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 40%;
   }
 
   .case-lookup{
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 40%;
+  }
+
+  .input-width{
+    width:280px;
   }
 
   .mat-mdc-button-base.remedialButton {
