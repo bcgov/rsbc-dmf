@@ -53,6 +53,8 @@ namespace RSBC.DMF.MedicalPortal.API
             CreateMap<PidpAdapter.Licence, ViewModels.Licence>();
 
             CreateMap<MedicalConditionItem, MedicalCondition>();
+            CreateMap<FlagItem, ViewModels.Flag>();
+            CreateMap<ViewModels.Flag, FlagItem>();
         }
     }
 

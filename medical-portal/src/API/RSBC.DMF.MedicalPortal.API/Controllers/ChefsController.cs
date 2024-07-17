@@ -16,6 +16,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 using CMSResultStatus = Rsbc.Dmf.CaseManagement.Service.ResultStatus;
 using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
 using Driver = RSBC.DMF.MedicalPortal.API.ViewModels.Driver;
+using EmptyRequest = Rsbc.Dmf.CaseManagement.Service.EmptyRequest;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
@@ -140,6 +141,38 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
             else if (status == SubmissionStatus.Final)
             {
+                Dictionary<string, object> chefsFlags = submission.Flags;
+
+                // get a list of all available Case Flags 
+                var f = cmsAdapterClient.GetAllFlags(new EmptyRequest());
+                if (f == null || f.Flags.Count == 0)
+                {
+                    logger.LogInformation("Could not find all flags in the CMS");
+                    return StatusCode((int)HttpStatusCode.NotFound,
+                        "Not found error - could not find all flags in the CMS");
+                }
+
+                IEnumerable<Flag> allCaseFlags = mapper.Map<IEnumerable<Flag>>(f.Flags);
+                
+                // if any Case Flags are present and active (true) in CHEFS, update Case and set IsCleanPass to false
+                var matchedFlags = allCaseFlags.Where(flag =>
+                    chefsFlags.ContainsKey(flag.FormId) && (bool)chefsFlags[flag.FormId]).ToArray();
+
+                UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
+                {
+                    CaseId = caseId,
+                    IsCleanPass = matchedFlags.Length == 0
+                };
+
+                foreach (var item in matchedFlags)
+                {
+                    updateCaseRequest.Flags.Add(mapper.Map<FlagItem>(item));
+                }
+
+                var caseResult = cmsAdapterClient.UpdateCase(updateCaseRequest);
+                
+                logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
+
                 jsonData = new UploadFileRequest()
                 {
                     ContentType = "application/json",
