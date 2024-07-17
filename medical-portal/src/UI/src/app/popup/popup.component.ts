@@ -1,9 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -81,12 +76,13 @@ export class PopupComponent {
       type: string;
       status: SubmissionStatus;
       submission: any;
+      flags: any | undefined;
     };
   }): void {
     if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
 
     const {
-      data: { instanceId, type, status, submission },
+      data: { instanceId, type, status, submission, flags },
     } = event;
 
     if (instanceId !== this.instanceId) {
@@ -147,6 +143,7 @@ export class PopupComponent {
         body: {
           status,
           submission,
+          flags,
         },
       };
       this.chefsService
