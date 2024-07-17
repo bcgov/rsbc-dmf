@@ -4,16 +4,16 @@ export const environment = {
   // TODO remove this and use api/Config to get keycloak options, move the initOptions to AppSettings.json if they don't already exist
   keycloakOptions: {
     config: {
-      url: 'https://common-logon-test.hlth.gov.bc.ca/auth',
-      realm: 'moh_applications',
-      clientId: 'DMFT-WEBAPP',
+      url: 'https://dev.common-sso.justice.gov.bc.ca/auth',
+      realm: 'ISB',
+      clientId: 'RSBC-DMF-PartnerPortal-Web'
     },
     initOptions: {
       onLoad: 'check-sso',
       flow: 'standard',
       responseMode: 'fragment',
       pkceMethod: 'S256',
-      checkLoginIframe: true
+      checkLoginIframe: false
     },
   },
 };

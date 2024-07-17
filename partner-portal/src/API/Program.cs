@@ -89,7 +89,6 @@ services.AddCaseManagementAdapterClient(builder.Configuration);
 services.AddTransient<IUserService, UserService>();
 services.AddTransient<DocumentFactory>();
 
-
 // Add ICBC Adapter
 services.AddIcbcAdapterClient(builder.Configuration); 
 services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
@@ -164,11 +163,6 @@ async Task OnTokenValidatedAsync(TokenValidatedContext context)
         //    identity.GetResourceAccessRoles(Clients.DmftStatus)
         //        .Select(role => new Claim(identity.RoleClaimType, role))
         //);
-
-        // TODO remove this hardcoded code block
-        identity.AddClaim(new Claim(identity.RoleClaimType, Roles.Practitoner));
-        identity.AddClaim(new Claim(identity.RoleClaimType, Roles.Dmft));
-        context.Principal.AddIdentity(identity);
 
         // TODO I think this is wrong, we should only need to call this once but this is validating on every request
         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();

@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { ConfigurationService } from '../../shared/services/configuration.service';
+// TODO get keycloakOptions from api/Config
 import { environment } from 'src/environments/environment.prod';
-// TODO
-
 
 @Injectable({
   providedIn: 'root',
