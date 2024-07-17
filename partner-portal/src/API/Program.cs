@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api;
+using Rsbc.Dmf.PartnerPortal.Api.Model;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
 using Serilog;
 using System.Net;
@@ -86,6 +87,7 @@ services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration);
 
 services.AddTransient<IUserService, UserService>();
+services.AddTransient<DocumentFactory>();
 
 
 // Add ICBC Adapter
