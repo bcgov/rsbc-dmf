@@ -152,9 +152,7 @@ function loadChefsBundleData(fetchedBundleData) {
     // for the special case of medicalConditions bundle data, loop through each condition
     // and set the matching CHEFS component checkbox to true if it's present
     if (key === "medicalConditions" && values[key].length > 0) {
-      const flattenedComponents = utils.flattenComponents(
-        Formio.forms[window.currentFormId].components,
-      );
+      const flattenedComponents = getFlattenedComponents();
       values[key].forEach((medicalCondition) => {
         const { formId } = medicalCondition;
         const matchingMedicalConditionComponent = Object.values(
@@ -279,10 +277,12 @@ function getChefsBundle() {
   window.parent.postMessage(messageObj, "https://localhost:4200/"); // Use a specific origin instead of '*' for better security
 }
 
+function getFlattenedComponents() {
+  return utils.flattenComponents(Formio.forms[window.currentFormId].components);
+}
+
 function putChefsSubmission(status = "Draft") {
-  const flattenedComponents = utils.flattenComponents(
-    Formio.forms[window.currentFormId].components,
-  );
+  const flattenedComponents = getFlattenedComponents();
 
   // get all components that contain a property called 'flagformid' which is only used by case flags
   const chefsFlagComponents = Object.values(flattenedComponents).filter(
