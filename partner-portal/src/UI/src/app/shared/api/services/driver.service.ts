@@ -13,7 +13,7 @@ import { apiDriverInfoDriverLicenceNumberGet$Json } from '../fn/driver/api-drive
 import { ApiDriverInfoDriverLicenceNumberGet$Json$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-json';
 import { apiDriverInfoDriverLicenceNumberGet$Plain } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
 import { ApiDriverInfoDriverLicenceNumberGet$Plain$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
-import { Document } from '../models/document';
+import { Driver } from '../models/driver';
 
 @Injectable({ providedIn: 'root' })
 export class DriverService extends BaseService {
@@ -30,7 +30,7 @@ export class DriverService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Plain$Response(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+  apiDriverInfoDriverLicenceNumberGet$Plain$Response(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
     return apiDriverInfoDriverLicenceNumberGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -40,9 +40,9 @@ export class DriverService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Plain(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<Array<Document>> {
+  apiDriverInfoDriverLicenceNumberGet$Plain(params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<Driver> {
     return this.apiDriverInfoDriverLicenceNumberGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+      map((r: StrictHttpResponse<Driver>): Driver => r.body)
     );
   }
 
@@ -52,7 +52,7 @@ export class DriverService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Json$Response(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+  apiDriverInfoDriverLicenceNumberGet$Json$Response(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
     return apiDriverInfoDriverLicenceNumberGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -62,9 +62,9 @@ export class DriverService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDriverInfoDriverLicenceNumberGet$Json(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
+  apiDriverInfoDriverLicenceNumberGet$Json(params: ApiDriverInfoDriverLicenceNumberGet$Json$Params, context?: HttpContext): Observable<Driver> {
     return this.apiDriverInfoDriverLicenceNumberGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+      map((r: StrictHttpResponse<Driver>): Driver => r.body)
     );
   }
 
