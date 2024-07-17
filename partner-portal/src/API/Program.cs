@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api;
+using Rsbc.Dmf.PartnerPortal.Api.Model;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
 using Serilog;
 using System.Net;
@@ -31,6 +32,7 @@ services.AddKeycloakWebApiAuthentication(
         keycloakOptions.Realm = config["KEYCLOAK_REALM"];
         keycloakOptions.Audience = config["KEYCLOAK_AUDIENCE"];
         keycloakOptions.AuthServerUrl = config["KEYCLOAK_AUTH_URL"];
+        keycloakOptions.VerifyTokenAudience = false;
     },
     jwtBearerOptions =>
     {
@@ -86,6 +88,7 @@ services.AddDocumentStorageClient(builder.Configuration);
 services.AddCaseManagementAdapterClient(builder.Configuration);
 
 services.AddTransient<IUserService, UserService>();
+services.AddTransient<DocumentFactory>();
 
 
 // Add ICBC Adapter
