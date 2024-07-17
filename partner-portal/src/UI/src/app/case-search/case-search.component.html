@@ -19,6 +19,12 @@
           <b>123444</b>
         </div>
       </div>
+      <div>
+        <label>Case Id</label>
+        <div>
+          <b>WX1234</b>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
@@ -42,7 +48,7 @@
   </div>
 </div>
 
-<div class="container" style="padding-top: 24px">
+<div class="container" style="padding-top: 32px">
   <div class="list">
     <h2>Most Recent Case</h2>
     <div>
@@ -50,97 +56,10 @@
     </div>
   </div>
 
-  <div class="list topPadding">
-    <h2>Closed Cases</h2>
-
-    <div>
-      <mat-card
-        *ngFor="let closedCase of closedCaseDetails"
-        [ngClass]="{
-          open: closedCase.caseId && isExpanded[closedCase.caseId],
-        }"
-      >
-        <mat-card-content class="closedCaseContent">
-          <div style="text-align: center">
-            <mat-icon
-              (click)="toggleIsExpandable(closedCase.caseId)"
-              class="expandedIcon"
-            >
-              expand_circle_down
-            </mat-icon>
-          </div>
-          <div style="display: flex; flex-direction: column">
-            <div class="case-details-border">&nbsp;</div>
-            <div>&nbsp;</div>
-          </div>
-          <div style="flex: 1">
-            <div class="caseDetailRow">
-              <div>
-                <label>Created Date</label>
-                <div>
-                  <b>{{ closedCase?.openedDate | date: "longDate" }}</b>
-                </div>
-              </div>
-
-              <div>
-                <label>Case Id</label>
-                <div>
-                  <b>{{ closedCase?.idCode }}</b>
-                </div>
-              </div>
-
-              <div>
-                <label>Case Type</label>
-                <div>
-                  <b>{{ closedCase?.caseType }}</b>
-                </div>
-              </div>
-
-              <div>
-                <label>Decision Outcome</label>
-                <div>
-                  <b>{{ closedCase?.latestDecision }}</b>
-                </div>
-              </div>
-            </div>
-
-            <div
-              class="caseDetailRow caseBorder"
-              *ngIf="closedCase.caseId && isExpanded?.[closedCase.caseId]"
-            >
-              <div>
-                <label> Decision date </label>
-                <div>
-                  <b>{{ closedCase?.decisionDate | date: "longDate" }}</b>
-                </div>
-              </div>
-              <div>
-                <label>Eligible License Class</label>
-                <div>
-                  <b>{{ closedCase?.decisionForClass }}</b>
-                </div>
-              </div>
-              <div></div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-    <div *ngIf="!isLoading && closedCaseDetails?.length === 0">
-      <mat-card>
-        <mat-card-content>
-          <b>No Closed Cases found</b>
-        </mat-card-content>
-      </mat-card>
-    </div>
+  <div class="list" style="padding-top: 32px">
+    <h2>Case Documentation</h2>
   </div>
-  <div
-    class="numberOfItems"
-    *ngIf="closedCaseDetails && closedCaseDetails.length > 0"
-  >
-    Showing {{ closedCaseDetails.length }} of
-    {{ closedCaseDetails.length }} records
-  </div>
+
   <div class="list">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">
@@ -185,10 +104,18 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header class="panel-header">
             <mat-panel-title class="accordian-Title">
-              Eligible License Class
+              Submission Type
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <app-eligible-license-class></app-eligible-license-class>
+          <app-submission-type></app-submission-type>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header class="panel-header">
+            <mat-panel-title class="accordian-Title">
+              Submission Status
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <app-submission-status></app-submission-status>
         </mat-expansion-panel>
       </mat-accordion>
     </div>

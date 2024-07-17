@@ -43,8 +43,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("Closed")]
-        //[Authorize(Policy = Policy.Driver)]
-        [ProducesResponseType(typeof(IEnumerable<CaseDetail>), (int)HttpStatusCode.OK)]
+       //[Authorize(Policy = Policy.Driver)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.CaseDetail>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName("GetClosedCases")]
@@ -58,9 +58,9 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
                 if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
                 {
-                    var result = new List<CaseDetail>();
+                    var result = new List<ViewModels.CaseDetail>();
                     result = _mapper
-                        .Map<IEnumerable<CaseDetail>>(reply.Items)
+                        .Map<IEnumerable<ViewModels.CaseDetail>>(reply.Items)
                         .ToList();
 
                     // sort the documents
@@ -89,20 +89,20 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         /// </summary>        
         [HttpGet("MostRecent")]
         //[Authorize(Policy = Policy.Driver)]
-        [ProducesResponseType(typeof(CaseDetail), 200)]
+        [ProducesResponseType(typeof(ViewModels.CaseDetail), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName("MostRecent")]
         public async Task<ActionResult> GetMostRecentCase()
         {
-            var result = new CaseDetail();
+            var result = new ViewModels.CaseDetail();
 
             var profile = await _userService.GetCurrentUserContext();
 
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
-                result = _mapper.Map<CaseDetail>(c.Item);
+                result = _mapper.Map<ViewModels.CaseDetail>(c.Item);
             }
 
             return Json(result);
