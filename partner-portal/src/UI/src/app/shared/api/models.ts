@@ -9,7 +9,7 @@ export { CaseCallback } from './models/case-callback';
 export { CaseDetail } from './models/case-detail';
 export { Comment } from './models/comment';
 export { Document } from './models/document';
-export { DocumentSubTypes } from './models/document-sub-types';
+export { DocumentSubType } from './models/document-sub-type';
 export { Driver } from './models/driver';
 export { OkResult } from './models/ok-result';
 export { PreferredTime } from './models/preferred-time';

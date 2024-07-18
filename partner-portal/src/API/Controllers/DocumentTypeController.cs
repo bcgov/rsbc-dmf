@@ -27,7 +27,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
         // get document sub types that are children of driver document type code that matchs configuration value
         [HttpGet("documentSubType")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.DocumentSubTypes>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.DocumentSubType>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDriverDocumentSubTypes))]
@@ -43,7 +43,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
 
             // return mapped results
-            var result = _mapper.Map<IEnumerable<ViewModels.DocumentSubTypes>>(reply.Items);
+            var result = _mapper.Map<IEnumerable<ViewModels.DocumentSubType>>(reply.Items);
             return Json(result);
         }
     }

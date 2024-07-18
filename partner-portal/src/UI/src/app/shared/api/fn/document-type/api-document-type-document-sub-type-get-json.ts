@@ -6,12 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { DocumentSubTypes } from '../../models/document-sub-types';
+import { DocumentSubType } from '../../models/document-sub-type';
 
 export interface ApiDocumentTypeDocumentSubTypeGet$Json$Params {
 }
 
-export function apiDocumentTypeDocumentSubTypeGet$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubTypes>>> {
+export function apiDocumentTypeDocumentSubTypeGet$Json(http: HttpClient, rootUrl: string, params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubType>>> {
   const rb = new RequestBuilder(rootUrl, apiDocumentTypeDocumentSubTypeGet$Json.PATH, 'get');
   if (params) {
   }
@@ -21,7 +21,7 @@ export function apiDocumentTypeDocumentSubTypeGet$Json(http: HttpClient, rootUrl
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<DocumentSubTypes>>;
+      return r as StrictHttpResponse<Array<DocumentSubType>>;
     })
   );
 }
