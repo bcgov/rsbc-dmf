@@ -93,6 +93,10 @@ services.AddTransient<DocumentFactory>();
 services.AddIcbcAdapterClient(builder.Configuration); 
 services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
+// session variables for storing the results from driver search
+services.AddDistributedMemoryCache();
+services.AddSession(options => options.IdleTimeout = TimeSpan.FromHours(1));
+
 var corsPolicy = "CorsPolicy";
 services.AddCors(options =>
 {
@@ -126,6 +130,7 @@ try
     app.UseSwaggerUI();
     app.UseAuthentication();
     app.UseAuthorization();
+    app.UseSession();
     app.UseEndpoints(endpoints =>
     {
         endpoints.MapControllers()
