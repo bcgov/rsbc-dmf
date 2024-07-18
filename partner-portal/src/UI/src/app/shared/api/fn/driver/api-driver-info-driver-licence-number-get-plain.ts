@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Document } from '../../models/document';
+import { Driver } from '../../models/driver';
 
 export interface ApiDriverInfoDriverLicenceNumberGet$Plain$Params {
   driverLicenceNumber: string;
 }
 
-export function apiDriverInfoDriverLicenceNumberGet$Plain(http: HttpClient, rootUrl: string, params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+export function apiDriverInfoDriverLicenceNumberGet$Plain(http: HttpClient, rootUrl: string, params: ApiDriverInfoDriverLicenceNumberGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Driver>> {
   const rb = new RequestBuilder(rootUrl, apiDriverInfoDriverLicenceNumberGet$Plain.PATH, 'get');
   if (params) {
     rb.path('driverLicenceNumber', params.driverLicenceNumber, {});
@@ -23,7 +23,7 @@ export function apiDriverInfoDriverLicenceNumberGet$Plain(http: HttpClient, root
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Document>>;
+      return r as StrictHttpResponse<Driver>;
     })
   );
 }

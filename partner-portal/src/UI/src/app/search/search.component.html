@@ -11,20 +11,21 @@
             <div class="search-content">
               <div class="driver-lookup">
                 <div>
-                  <label class="form-label">Driver's License Number</label>
+                  <label class="form-label">Driver's Licence Number</label>
                   <div>
                     <mat-form-field appearance="outline" class="input-width">
                       <input
                         matInput
                         name="driverLicenseNumber"
-                        placeholder="Driver License Number"
+                        [(ngModel)]="driverLicenceNumber"
+                        placeholder="Driver Licence Number"
                       />
                     </mat-form-field>
                   </div>
                 </div>
 
                 <div>
-                  <button mat-flat-button class="primaryButton">Search</button>
+                  <button mat-flat-button class="primaryButton" (click)="search()">Search</button>
                 </div>
               </div>
 
