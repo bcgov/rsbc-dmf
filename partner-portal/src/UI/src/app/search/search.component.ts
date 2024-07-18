@@ -33,12 +33,10 @@ export class SearchComponent {
   ) { }
 
   search() {
-    console.log("driver licence number", this.driverLicenceNumber);
     this.driverService
       .apiDriverInfoDriverLicenceNumberGet$Json({ driverLicenceNumber: this.driverLicenceNumber })
       .subscribe({
         next: (driver) => {
-          console.log('driver', driver);
           this.router.navigateByUrl(`caseSearch?firstName=${driver.firstName}&lastName=${driver.lastName}&driverLicenceNumber=${driver.licenseNumber}`);
         },
         error:(error) => {
