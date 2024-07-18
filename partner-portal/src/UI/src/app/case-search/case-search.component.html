@@ -48,19 +48,22 @@
   </div>
 </div>
 
-<div class="container" style="padding-top: 32px">
-  <div class="list">
+<div class="container">
+  <div class="list top-padding">
     <h2>Most Recent Case</h2>
     <div>
       <app-recent-case></app-recent-case>
     </div>
   </div>
 
-  <div class="list" style="padding-top: 32px">
+  <div class="list top-padding">
     <h2>Case Documentation</h2>
+    <div>
+      <app-submission-requirements></app-submission-requirements>
+    </div>
   </div>
 
-  <div class="list">
+  <div class="list top-padding">
     <h2>Definitions</h2>
     <div class="accordion-btn-container">
       <a class="accordion-btn show-btn" (click)="accordion.openAll()">
