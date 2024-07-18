@@ -5,6 +5,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
+import { Router } from '@angular/router';
 import { DriverService } from '@app/shared/api/services';
 
 @Component({
@@ -26,14 +27,23 @@ import { DriverService } from '@app/shared/api/services';
 export class SearchComponent {
   driverLicenceNumber = '';
 
-  constructor(private driverService: DriverService) { }
+  constructor(
+    private driverService: DriverService,
+    private router: Router,
+  ) { }
 
   search() {
     console.log("driver licence number", this.driverLicenceNumber);
     this.driverService
       .apiDriverInfoDriverLicenceNumberGet$Json({ driverLicenceNumber: this.driverLicenceNumber })
-      .subscribe((driver) => {
-        console.log('driver', driver);
+      .subscribe({
+        next: (driver) => {
+          console.log('driver', driver);
+          this.router.navigateByUrl(`caseSearch?firstName=${driver.firstName}&lastName=${driver.lastName}&driverLicenceNumber=${driver.licenseNumber}`);
+        },
+        error:(error) => {
+          console.error('error', error);
+        }
       });
   }
 }
