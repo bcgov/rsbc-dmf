@@ -5,9 +5,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>e182f0d9-dde2-4bf5-8f01-7d6d3e5d780c</UserSecretsId>
-    <SpaRoot>..\UI\partner-portal.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
     <RootNamespace>Rsbc.Dmf.PartnerPortal.Api</RootNamespace>
   </PropertyGroup>
 
@@ -35,7 +32,6 @@
     <PackageReference Include="Keycloak.AuthServices.Authentication" Version="2.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
     <PackageReference Include="Serilog" Version="3.1.1" />
@@ -54,9 +50,6 @@
     <ProjectReference Include="..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
     <ProjectReference Include="..\..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj" />
     <ProjectReference Include="..\..\..\shared-utils\SharedUtils.csproj" />
-    <ProjectReference Include="..\UI\partner-portal.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
 
 </Project>

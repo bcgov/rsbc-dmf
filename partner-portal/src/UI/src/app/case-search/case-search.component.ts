@@ -9,6 +9,9 @@ import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/m
 import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
 import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
 import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
+import { SubmissionRequirementsComponent } from '../../app/submission-requirements/submission-requirements.component';
+import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-case-search',
@@ -23,7 +26,10 @@ import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/pr
     MedicalDmerTypesComponent,
     DecisionOutcomeComponent,
     SubmissionTypeComponent,
-    SubmissionStatusComponent
+    SubmissionStatusComponent,
+    SubmissionRequirementsComponent,
+    SubmissionHistoryComponent,
+    RouterLink,
   ],
   templateUrl: './case-search.component.html',
   styleUrl: './case-search.component.scss',

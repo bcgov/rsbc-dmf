@@ -6,3 +6,9 @@ export enum CaseStageEnum {
   'IntakeValidation' = 'Intake Validation',
   'Closed' = 'Closed',
 }
+
+export enum SubmittalStatusEnum {
+  'OpenRequired' = 'Open-Required',
+  'Issued' = 'Issued',
+  'Sent' = 'Sent',
+}
