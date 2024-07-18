@@ -10,6 +10,8 @@ import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/pro
 import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
 import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
 import { SubmissionRequirementsComponent } from '../../app/submission-requirements/submission-requirements.component';
+import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-case-search',
@@ -25,7 +27,9 @@ import { SubmissionRequirementsComponent } from '../../app/submission-requiremen
     DecisionOutcomeComponent,
     SubmissionTypeComponent,
     SubmissionStatusComponent,
-    SubmissionRequirementsComponent
+    SubmissionRequirementsComponent,
+    SubmissionHistoryComponent,
+    RouterLink,
   ],
   templateUrl: './case-search.component.html',
   styleUrl: './case-search.component.scss',
