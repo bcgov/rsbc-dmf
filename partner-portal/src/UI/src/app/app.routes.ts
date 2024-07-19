@@ -6,6 +6,7 @@ import { RemedialComponent } from './remedial/remedial.component';
 import { AssistDriverComponent } from './assist-driver/assist-driver.component';
 import { CaseSearchComponent } from './case-search/case-search.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
+import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'search', pathMatch: 'full' },
@@ -20,6 +21,7 @@ export const routes: Routes = [
       { path: 'assistDriver', component: AssistDriverComponent },
       { path: 'caseSearch', component: CaseSearchComponent },
       { path: 'submissionHistory', component: SubmissionHistoryComponent },
+      { path: 'letterToDriver', component: LettersToDriverComponent },
     ],
   },
 ];

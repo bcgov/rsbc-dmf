@@ -73,14 +73,13 @@ export class SubmissionHistoryComponent implements OnInit {
     //private loginService: LoginService
   ) {}
 
-  driverId = 'e27d7c69-3913-4116-a360-f5e990200173';
+  driverId = ' ';
 
   ngOnInit(): void {
-    // this.getAllDocuments('e27d7c69-3913-4116-a360-f5e990200173');
     if (this.driverId) {
       this.getAllDocuments(this.driverId as string);
     } else {
-      console.log('No Letter Documents');
+      console.log('No Submission History Documents');
     }
   }
 
