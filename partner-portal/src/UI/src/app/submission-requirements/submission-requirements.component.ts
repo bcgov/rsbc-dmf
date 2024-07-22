@@ -39,6 +39,8 @@ import {
   DocumentTypeService,
 } from '../../app/shared/api/services';
 import { DocumentSubType } from '../shared/api/models';
+import { SubmittalStatusEnum } from '@app/app.model';
+import { Document } from '../shared/api/models';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -71,13 +73,13 @@ import { DocumentSubType } from '../shared/api/models';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SubmissionRequirementsComponent implements OnInit {
-  @Input() submissionRequirementDocuments?: Document[] | null = [];
+  submissionRequirementDocuments?: Document[] | null = [];
+
   @Output() viewLetter = new EventEmitter<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   fileToUpload: File | null = null;
   documentSubTypes?: DocumentSubType[];
-  //selectedValue = '';
   acceptControl = new FormControl(false);
   @Input() isLoading = true;
 
@@ -94,8 +96,17 @@ export class SubmissionRequirementsComponent implements OnInit {
   uploadForm = this.fb.group({
     documentSubType: ['', Validators.required],
   });
+
+  driverId = 'e27d7c69-3913-4116-a360-f5e990200173';
+
   ngOnInit() {
     this.getDocumentSubtypes();
+
+    if (this.driverId) {
+      this.getSubmissionRequireDocuments(this.driverId as string);
+    } else {
+      console.log('No Submission Requirement Documents');
+    }
   }
 
   getDocumentSubtypes() {
@@ -177,6 +188,27 @@ export class SubmissionRequirementsComponent implements OnInit {
         });
         this.showUpload = false;
         this.isFileUploading = false;
+      });
+  }
+
+  getSubmissionRequireDocuments(driverId: string) {
+    this.documetService
+      .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+      .subscribe((submissiondocs: any) => {
+        if (!submissiondocs) {
+          return;
+        }
+        this.submissionRequirementDocuments = [];
+        submissiondocs.forEach((doc: any) => {
+          if (
+            SubmittalStatusEnum.OpenRequired.includes(
+              doc.submittalStatus as SubmittalStatusEnum,
+            )
+          ) {
+            this.submissionRequirementDocuments?.push(doc);
+          }
+        });
+        this.isLoading = false;
       });
   }
 }
