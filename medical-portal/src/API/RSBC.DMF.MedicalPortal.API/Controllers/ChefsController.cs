@@ -142,6 +142,8 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else if (status == SubmissionStatus.Final)
             {
                 Dictionary<string, object> chefsFlags = submission.Flags;
+                string chefsAssign = submission.Assign;
+                string chefsPriority = submission.Priority;
 
                 // get a list of all available Case Flags 
                 var f = cmsAdapterClient.GetAllFlags(new EmptyRequest());
@@ -161,7 +163,6 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
                 {
                     CaseId = caseId,
-                    IsCleanPass = matchedFlags.Length == 0
                 };
 
                 foreach (var item in matchedFlags)

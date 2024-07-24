@@ -77,12 +77,14 @@ export class PopupComponent {
       status: SubmissionStatus;
       submission: any;
       flags: any | undefined;
+      assign: string;
+      priority: string;
     };
   }): void {
     if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
 
     const {
-      data: { instanceId, type, status, submission, flags },
+      data: { instanceId, type, status, submission, flags, assign, priority },
     } = event;
 
     if (instanceId !== this.instanceId) {
@@ -144,6 +146,8 @@ export class PopupComponent {
           status,
           submission,
           flags,
+          assign,
+          priority,
         },
       };
       this.chefsService
