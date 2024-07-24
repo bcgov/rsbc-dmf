@@ -2,7 +2,11 @@
 {
     public class Driver
     {
+        public string Id { get; set; }
+
         public bool? Flag51 { get; set; }
+
+        public string FirstName { get; set; }
 
         /// <summary>
         /// Last Name

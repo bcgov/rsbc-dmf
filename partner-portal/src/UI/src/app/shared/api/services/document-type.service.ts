@@ -13,7 +13,7 @@ import { apiDocumentTypeDocumentSubTypeGet$Json } from '../fn/document-type/api-
 import { ApiDocumentTypeDocumentSubTypeGet$Json$Params } from '../fn/document-type/api-document-type-document-sub-type-get-json';
 import { apiDocumentTypeDocumentSubTypeGet$Plain } from '../fn/document-type/api-document-type-document-sub-type-get-plain';
 import { ApiDocumentTypeDocumentSubTypeGet$Plain$Params } from '../fn/document-type/api-document-type-document-sub-type-get-plain';
-import { DocumentSubTypes } from '../models/document-sub-types';
+import { DocumentSubType } from '../models/document-sub-type';
 
 @Injectable({ providedIn: 'root' })
 export class DocumentTypeService extends BaseService {
@@ -30,7 +30,7 @@ export class DocumentTypeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentTypeDocumentSubTypeGet$Plain$Response(params?: ApiDocumentTypeDocumentSubTypeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubTypes>>> {
+  apiDocumentTypeDocumentSubTypeGet$Plain$Response(params?: ApiDocumentTypeDocumentSubTypeGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubType>>> {
     return apiDocumentTypeDocumentSubTypeGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -40,9 +40,9 @@ export class DocumentTypeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentTypeDocumentSubTypeGet$Plain(params?: ApiDocumentTypeDocumentSubTypeGet$Plain$Params, context?: HttpContext): Observable<Array<DocumentSubTypes>> {
+  apiDocumentTypeDocumentSubTypeGet$Plain(params?: ApiDocumentTypeDocumentSubTypeGet$Plain$Params, context?: HttpContext): Observable<Array<DocumentSubType>> {
     return this.apiDocumentTypeDocumentSubTypeGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<DocumentSubTypes>>): Array<DocumentSubTypes> => r.body)
+      map((r: StrictHttpResponse<Array<DocumentSubType>>): Array<DocumentSubType> => r.body)
     );
   }
 
@@ -52,7 +52,7 @@ export class DocumentTypeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentTypeDocumentSubTypeGet$Json$Response(params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubTypes>>> {
+  apiDocumentTypeDocumentSubTypeGet$Json$Response(params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<DocumentSubType>>> {
     return apiDocumentTypeDocumentSubTypeGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -62,9 +62,9 @@ export class DocumentTypeService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiDocumentTypeDocumentSubTypeGet$Json(params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<Array<DocumentSubTypes>> {
+  apiDocumentTypeDocumentSubTypeGet$Json(params?: ApiDocumentTypeDocumentSubTypeGet$Json$Params, context?: HttpContext): Observable<Array<DocumentSubType>> {
     return this.apiDocumentTypeDocumentSubTypeGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<DocumentSubTypes>>): Array<DocumentSubTypes> => r.body)
+      map((r: StrictHttpResponse<Array<DocumentSubType>>): Array<DocumentSubType> => r.body)
     );
   }
 

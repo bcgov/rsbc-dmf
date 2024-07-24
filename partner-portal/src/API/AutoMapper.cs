@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.IcbcAdapter;
 using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.PartnerPortal.Api
@@ -19,6 +20,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
 
             CreateMap<Timestamp, DateTimeOffset>()
                 .ConvertUsing(src => src.ToDateTimeOffset());
+
             CreateMap<LegacyDocument, ViewModels.Document>()
                 .ForMember(dest => dest.ImportDate, opt => opt.MapFrom(src => ImportDateConverter(src)))
                 .ForMember(dest => dest.BcMailSent, opt => opt.MapFrom(src => src.DocumentType == "Letter Out BCMail" && src.ImportDate != null))
@@ -31,6 +33,9 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
             CreateMap<Callback, ViewModels.CaseCallback>()
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
+            CreateMap<DriverInfoReply, ViewModels.Driver>()
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName));
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

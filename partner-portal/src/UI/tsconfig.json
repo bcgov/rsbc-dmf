@@ -21,8 +21,10 @@
     "useDefineForClassFields": false,
     "paths": {
       "@shared/core-ui": [
-        "../../../shared-portal-ui/projects/core-ui/src/public-api",
+        "../../../shared-portal-ui/projects/core-ui/src",
       ] ,
+      "@app/*": ["./src/app/*"],
+      "@src/*": ["./src/*"],
       "@angular/*": [
         "./node_modules/@angular/*"
      ],
