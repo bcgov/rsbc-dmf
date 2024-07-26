@@ -11,7 +11,7 @@ import { ChefsSubmission } from '../../models/chefs-submission';
 export interface ApiChefsSubmissionPut$Params {
   caseId?: string;
   documentId?: string;
-  body?: ChefsSubmission
+      body?: ChefsSubmission
 }
 
 export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
