@@ -18,6 +18,7 @@ using DocumentStorageResultStatus = Pssg.DocumentStorageAdapter.ResultStatus;
 using Driver = RSBC.DMF.MedicalPortal.API.ViewModels.Driver;
 using EmptyRequest = Rsbc.Dmf.CaseManagement.Service.EmptyRequest;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
+using Rsbc.Dmf.IcbcAdapter.Client;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
