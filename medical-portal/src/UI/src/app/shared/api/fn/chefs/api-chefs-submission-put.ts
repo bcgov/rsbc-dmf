@@ -10,13 +10,15 @@ import { ChefsSubmission } from '../../models/chefs-submission';
 
 export interface ApiChefsSubmissionPut$Params {
   caseId?: string;
-      body?: ChefsSubmission
+  documentId?: string;
+  body?: ChefsSubmission
 }
 
 export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
   const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
   if (params) {
     rb.query('caseId', params.caseId, {});
+    rb.query('documentId', params.documentId, {});
     rb.body(params.body, 'application/*+json');
   }
 
