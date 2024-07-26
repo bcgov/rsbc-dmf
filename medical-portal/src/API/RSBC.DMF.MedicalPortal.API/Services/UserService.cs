@@ -149,7 +149,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                         endorsement.LoginId = Guid.Parse(loginId);
                     }
                 }
-                if (endorsement.Licence != null && endorsement.Licence.Any(endorsement => endorsement.StatusCode == "ACTIVE"))
+                if (endorsement.Licence != null /*&& endorsement.Licence.Any(endorsement => endorsement.StatusCode == "ACTIVE")*/)
                 {
                     endorsement.Role = "Practitioner";
                 }
