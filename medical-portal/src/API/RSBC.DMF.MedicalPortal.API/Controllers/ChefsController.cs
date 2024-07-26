@@ -200,6 +200,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(500, reply.ErrorDetail);
             }
 
+            // TODO Create a PDF based on jsonData, user friendly values is not in scope of initial version
+            // Upload a copy of the PDF to S3
+            // UploadPDF reuse logic of UploadJson
 
             dataFileKey = reply.FileName;
             dataFileSize = jsonData.Data.Length;
