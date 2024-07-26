@@ -11,16 +11,14 @@ using Serilog.Events;
 using System.Net;
 using System.Security.Claims;
 using System.Reflection;
-using Grpc.Net.Client;
-using Pssg.DocumentStorageAdapter;
 using System.Data;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 using RSBC.DMF.MedicalPortal.API.Auth.Extension;
 using Keycloak.AuthServices.Authentication;
-using Keycloak.AuthServices.Common;
 using Newtonsoft.Json;
 using RSBC.DMF.MedicalPortal.API.Model;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Rsbc.Dmf.IcbcAdapter.Client;
 
 namespace RSBC.DMF.MedicalPortal.API
 {

@@ -24,6 +24,16 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
 
         public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request)
         {
+            // TODO not completed but this is the basic idea
+            // feature flag to return a simple response for ICBC in development environment, useful when Dynamics DL do not match ICBC DL
+            //var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            //if (environment == Environments.Development && _configuration.GetValue<bool>("FEATURES_SIMPLE_ICBC"))
+            //{
+            //    result.FirstName = "John";
+            //    result.LastName = "Smith";
+            //    result.BirthDate = new DateTime(1980, 1, 1);
+            //}
+
             DriverInfoReply reply = null;
             try
             {
