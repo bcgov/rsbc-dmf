@@ -5,21 +5,22 @@ import { Router, RouterLink } from '@angular/router';
 import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
-import { LoginService } from '../shared/services/login.service';
+import { UserService } from '../shared/services/user.service';
 import { DatePipe } from '@angular/common';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { CaseStageEnum } from '@app/app.model';
 
 @Component({
     selector: 'app-recent-case',
     templateUrl: './recent-case.component.html',
     styleUrls: ['./recent-case.component.scss'],
     providers: [
-        {
-            provide: STEPPER_GLOBAL_OPTIONS,
-            useValue: { displayDefaultIndicatorType: false },
-        },
+      {
+          provide: STEPPER_GLOBAL_OPTIONS,
+          useValue: { displayDefaultIndicatorType: false },
+      },
     ],
     standalone: true,
     imports: [
@@ -45,12 +46,11 @@ export class RecentCaseComponent implements OnInit {
   selectedIndex = 0;
   panelOpenState = false;
 
-
   @ViewChild('stepper') stepper!: MatStepper;
 
   constructor(
     private caseManagementService: CaseManagementService,
-    private loginService: LoginService,
+    private userService: UserService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
@@ -70,26 +70,27 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    let userId = this.userService.getUserId();
     this.caseManagementService
-      .getMostRecentCase(this.loginService.userProfile?.id as string)
+      .getMostRecentCase(userId)
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
-        if (recentCase.status === 'Opened') {
+        if (recentCase.status === CaseStageEnum.Opened) {
           this.selectedIndex = 0;
         }
-        if (recentCase.status === 'Open Pending Submission') {
+        if (recentCase.status === CaseStageEnum.OpenPendingSubmission) {
           this.selectedIndex = 1;
         }
-        if (recentCase.status === 'Under Review') {
+        if (recentCase.status === CaseStageEnum.UnderReview) {
           this.selectedIndex = 2;
         }
-        if (recentCase.status === 'File End Tasks') {
+        if (recentCase.status === CaseStageEnum.FileEndTasks) {
           this.selectedIndex = 3;
         }
-        if (recentCase.status === 'Intake Validation') {
+        if (recentCase.status === CaseStageEnum.IntakeValidation) {
           this.selectedIndex = 4;
         }
-        if (recentCase.status === 'Closed') {
+        if (recentCase.status === CaseStageEnum.Closed) {
           this.selectedIndex = 5;
         }
       });
