@@ -27,6 +27,9 @@ message GetEndorsementsReply {
 message EndorsementDto {
 	string userId = 1;
 	repeated Licence licences = 2;
+	string firstName = 3;
+	string lastName = 4;
+	string email = 5;
 }
 
 message Licence {
