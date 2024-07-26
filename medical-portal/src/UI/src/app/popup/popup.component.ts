@@ -18,17 +18,17 @@ export class PopupComponent {
   public sanitizedSource!: SafeResourceUrl;
   iframeUrl: string | null = null;
   instanceId: string | null = null;
-  caseId: string | null = null;
+  caseId: string;
+  documentId: string;
 
   constructor(
     private popupService: PopupService,
     private chefsService: ChefsService,
     private sanitizer: DomSanitizer,
-    @Inject(MAT_DIALOG_DATA) public data: { caseId: string | null },
+    @Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
   ) {
-    if (data.caseId) {
       this.caseId = data.caseId;
-    }
+      this.documentId = data.documentId;
   }
 
   getSourceURL(): SafeResourceUrl {
@@ -142,6 +142,7 @@ export class PopupComponent {
     ) {
       let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
         caseId: this.caseId,
+        documentId: this.documentId,
         body: {
           status,
           submission,

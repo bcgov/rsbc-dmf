@@ -114,22 +114,16 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpPut("submission")]
-        public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromBody] ChefsSubmission submission)
+        public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)
         {
-            UserContext profile = await this.userService.GetCurrentUserContext();
-
-            // get the practitioner ID
-            string practitionerId = User.FindFirstValue("sid");
-
-            string status = submission.Status;
-
-            logger.LogInformation($"PUT Submission - userId is {profile.Id}, practitionerId is {practitionerId}");
+            var profile = await this.userService.GetCurrentUserContext();
+            logger.LogInformation($"PUT Submission - userId is {profile.Id}");
 
             var jsonString = JsonSerializer.Serialize(submission);
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
 
             UploadFileRequest jsonData = null;
-            if (status == SubmissionStatus.Draft)
+            if (submission.Status == SubmissionStatus.Draft)
             {
                 jsonData = new UploadFileRequest()
                 {
@@ -140,28 +134,34 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     FolderName = caseId
                 };
             }
-            else if (status == SubmissionStatus.Final)
+            else if (submission.Status == SubmissionStatus.Final)
             {
-                Dictionary<string, object> chefsFlags = submission.Flags;
-                string chefsAssign = submission.Assign;
-                string chefsPriority = submission.Priority;
+                // TODO clean up these comments and use these values on a new service e.g. UpdateDmer
+                string chefsAssign = submission.Assign;         // Queue? e.g. Team - Intake, Team - Adjudicator, Team - Nurse Case Manager
+                string chefsPriority = submission.Priority;     // DPS Priority e.g. Regular (prioritycode - 1 Critical Review, 2 Regular, 3 Urgent, 4 Expedited 100,000,000)
+                // TODO these are just here for reference, could use some of these lines in the UpdateDmer service or maybe something already exists
+                //bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
+                //bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
+                //bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
+                //bcgovDocumentUrl.dfp_documentorigin = TranslateDocumentOrigin(request.Origin);
+                //bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
 
                 // get a list of all available Case Flags 
-                var f = cmsAdapterClient.GetAllFlags(new EmptyRequest());
-                if (f == null || f.Flags.Count == 0)
+                var getAllFlagsReply = cmsAdapterClient.GetAllFlags(new EmptyRequest());
+                if (getAllFlagsReply == null || getAllFlagsReply.Flags.Count == 0)
                 {
                     logger.LogInformation("Could not find all flags in the CMS");
-                    return StatusCode((int)HttpStatusCode.NotFound,
-                        "Not found error - could not find all flags in the CMS");
+                    return StatusCode((int)HttpStatusCode.NotFound, "Not found error - could not find all flags in the CMS");
                 }
 
-                IEnumerable<Flag> allCaseFlags = mapper.Map<IEnumerable<Flag>>(f.Flags);
+                var allCaseFlags = mapper.Map<IEnumerable<Flag>>(getAllFlagsReply.Flags);
                 
                 // if any Case Flags are present and active (true) in CHEFS, update Case and set IsCleanPass to false
-                var matchedFlags = allCaseFlags.Where(flag =>
-                    chefsFlags.ContainsKey(flag.FormId) && (bool)chefsFlags[flag.FormId]).ToArray();
+                var matchedFlags = allCaseFlags
+                    .Where(flag => submission.Flags.ContainsKey(flag.FormId) && (bool)submission.Flags[flag.FormId])
+                    .ToArray();
 
-                UpdateCaseRequest updateCaseRequest = new UpdateCaseRequest()
+                var updateCaseRequest = new UpdateCaseRequest()
                 {
                     CaseId = caseId,
                 };
@@ -191,23 +191,24 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 return StatusCode(500);
             }
 
-            string dataFileKey = "";
+            var dataFileKey = "";
             Int64 dataFileSize = 0;
 
             var reply = documentStorageAdapterClient.UploadFile(jsonData);
-
             if (reply.ResultStatus != DocumentStorageResultStatus.Success)
             {
-                logger.LogError(
-                    $"{nameof(PutSubmission)} error: unable to upload documents for this case - {reply.ErrorDetail}");
+                logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {reply.ErrorDetail}");
                 return StatusCode(500, reply.ErrorDetail);
             }
 
+            // TODO Create a PDF based on jsonData, user friendly values is not in scope of initial version
+            // Upload a copy of the PDF to S3
+            // UploadPDF reuse logic of UploadJson
 
             dataFileKey = reply.FileName;
             dataFileSize = jsonData.Data.Length;
 
-            if (status == SubmissionStatus.Final)
+            if (submission.Status == SubmissionStatus.Final)
             {
                 // TriageRequest triageRequest = new TriageRequest()
                 // {
@@ -221,8 +222,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 // };
             }
 
-            logger.LogInformation(
-                $"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {dataFileKey}, dataFileSize: {dataFileSize}, reply: {JsonSerializer.Serialize(reply)}");
+            logger.LogInformation($"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {dataFileKey}, dataFileSize: {dataFileSize}, reply: {JsonSerializer.Serialize(reply)}");
 
             return Ok(submission);
         }

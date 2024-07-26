@@ -134,7 +134,9 @@ export class DashboardComponent {
         if (dmerCase) this.searchedCase = dmerCase;
       },
       error: (err) => {
+        // TODO display user friendly message
         this.noResults = true;
+        console.error("Failed to get case", err);
       },
       complete: () => {
         this.isSearching = false;
@@ -179,7 +181,11 @@ export class DashboardComponent {
   }
 
   openPopup() {
-    this.popupService.openPopup();
+    if (!this.searchedCase) {
+      console.error('Case data was missing', this.searchedCase);
+      return;
+    }
+    this.popupService.openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string);
   }
 
   openClaimPopup(searchedCase: PatientCase) {

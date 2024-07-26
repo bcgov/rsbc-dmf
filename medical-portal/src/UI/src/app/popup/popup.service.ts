@@ -8,9 +8,9 @@ import { PopupComponent } from './popup.component';
 export class PopupService {
   constructor(private dialog: MatDialog) {}
 
-  openPopup(caseId?: string | null) {
+  openPopup(caseId: string, documentId: string) {
     this.dialog.open(PopupComponent, {
-      data: { caseId },
+      data: { caseId, documentId },
       width: '80vw',
       maxWidth: '80vw',
     });

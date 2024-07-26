@@ -161,8 +161,4 @@ export class SubmissionRequirementsComponent {
         this.uploadedDocument.emit();
       });
   }
-
-  openPopup() {
-    this.popupService.openPopup();
-  }
 }
