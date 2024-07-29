@@ -186,7 +186,7 @@ export class GetAssistanceComponent implements OnInit {
       .afterClosed()
       .subscribe({
         next: () => {
-          let userId = this.userService.getUserId();
+          const userId = this.userService.getUserId();
           this.getCallbackRequests(userId);
         },
       });
