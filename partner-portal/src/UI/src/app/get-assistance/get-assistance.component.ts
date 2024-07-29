@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-//import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import {
   ViewportScroller,
   NgIf,
@@ -8,8 +7,6 @@ import {
   DatePipe,
 } from '@angular/common';
 //import { LoginService } from '../shared/services/login.service';
-//import { Callback, Callback2, PreferredTime } from '../shared/api/models';
-import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -26,6 +23,9 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
+import { CallbackService } from '@app/shared/api/services';
+import { CaseCallback, PreferredTime } from '@app/shared/api/models';
+import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 
 interface CallBackTopic {
   value: string;
@@ -73,7 +73,7 @@ export class GetAssistanceComponent implements OnInit {
   showCallBackCreate = false;
 
   constructor(
-    //private caseManagementService: CaseManagementService,
+    private callBackService: CallbackService,
     private viewportScroller: ViewportScroller,
     /// private loginService: LoginService,
     public dialog: MatDialog,
@@ -93,13 +93,13 @@ export class GetAssistanceComponent implements OnInit {
   pageSize = 10;
   display: HelpTopics = HelpTopics.ALL_TOPICS;
 
-  filteredCallbacks?: any[] | null = [];
+  filteredCallbacks?: CaseCallback[] | null = [];
 
-  _allCallBackRequests?: any[] | null = [];
+  _allCallBackRequests?: CaseCallback[] | null = [];
 
   disableCallBack = true;
 
-  @Input() set allCallBacks(callbacks: any[] | null | undefined) {
+  @Input() set allCallBacks(callbacks: CaseCallback[] | null | undefined) {
     this._allCallBackRequests = callbacks;
 
     this._allCallBackRequests?.forEach((req) => {
@@ -115,7 +115,8 @@ export class GetAssistanceComponent implements OnInit {
 
   showCallBack = false;
 
-  //showOpenCallbackMessagePredicate = (r: Callback2) => r.callStatus === 'Open';
+  showOpenCallbackMessagePredicate = (r: CaseCallback) =>
+    r.callStatus === 'Open';
 
   selectedValue?: string | undefined | null;
 
@@ -126,25 +127,27 @@ export class GetAssistanceComponent implements OnInit {
     { value: '4', viewValue: 'Request extension' },
   ];
 
+  driverId = ' ';
+
   ngOnInit(): void {
-    // if (this.loginService.userProfile) {
-    //   this.getCallbackRequests(this.loginService.userProfile.id as string);
-    // }
+    if (this.driverId) {
+      this.getCallbackRequests(this.driverId as string);
+    }
   }
 
   getCallbackRequests(driverId: string) {
-    // this.caseManagementService
-    //   .getCallBackRequest(driverId)
-    //   .subscribe((callBacks: any) => {
-    //     this._allCallBackRequests = callBacks;
-    //     this.filteredCallbacks = this._allCallBackRequests?.slice(
-    //       0,
-    //       this.pageSize
-    //     );
-    //     this.disableCallBack = !!callBacks.find(
-    //       (y: any) => y.callStatus == 'Open'
-    //     );
-    //   });
+    this.callBackService
+      .apiCallbackDriverGet$Json(driverId)
+      .subscribe((callBacks: any) => {
+        this._allCallBackRequests = callBacks;
+        this.filteredCallbacks = this._allCallBackRequests?.slice(
+          0,
+          this.pageSize,
+        );
+        this.disableCallBack = !!callBacks.find(
+          (y: any) => y.callStatus == 'Open',
+        );
+      });
   }
 
   isCreatingCallBack = false;
@@ -159,27 +162,27 @@ export class GetAssistanceComponent implements OnInit {
     }
 
     const callback: any = {
-      // phone: String(this.callbackRequestForm.value.phone),
-      // preferredTime: this.callbackRequestForm.value
-      //   .preferredTime as PreferredTime,
-      // subject: this.callBackTopics.find(
-      //   (x) => x.value == this.callbackRequestForm.value.subject,
-      // )?.viewValue,
+      phone: String(this.callbackRequestForm.value.phone),
+      preferredTime: this.callbackRequestForm.value
+        .preferredTime as PreferredTime,
+      subject: this.callBackTopics.find(
+        (x) => x.value == this.callbackRequestForm.value.subject,
+      )?.viewValue,
     };
     this.isCreatingCallBack = true;
-    // this.caseManagementService
-    //   .createCallBackRequest({ body: callback })
-    //   .subscribe(() => {
-    //     this.callbackRequestForm.reset();
-    //     this.getCallbackRequests(this.loginService.userProfile?.id as string);
-    //     this.showCallBack = false;
-    //     this._snackBar.open('Successfully created call back request', 'Close', {
-    //       horizontalPosition: 'center',
-    //       verticalPosition: 'top',
-    //       duration: 5000,
-    //     });
-    //     this.isCreatingCallBack = false;
-    //   });
+    this.callBackService
+      .apiCallbackCreatePost$Json({ body: callback })
+      .subscribe(() => {
+        this.callbackRequestForm.reset();
+        this.getCallbackRequests(this.driverId as string);
+        this.showCallBack = false;
+        this._snackBar.open('Successfully created call back request', 'Close', {
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          duration: 5000,
+        });
+        this.isCreatingCallBack = false;
+      });
   }
 
   openCancelCallbackDialog(callback: any) {
@@ -194,7 +197,7 @@ export class GetAssistanceComponent implements OnInit {
       .afterClosed()
       .subscribe({
         next: () => {
-          //this.getCallbackRequests(this.loginService.userProfile?.id as string);
+          this.getCallbackRequests(this.driverId as string);
         },
       });
   }
