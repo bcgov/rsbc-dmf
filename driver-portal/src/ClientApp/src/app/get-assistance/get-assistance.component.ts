@@ -117,7 +117,7 @@ export class GetAssistanceComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    var userId = this.userService.getUserId();
+    const userId = this.userService.getUserId();
     if (userId) {
       this.getCallbackRequests(userId);
     }
@@ -162,7 +162,7 @@ export class GetAssistanceComponent implements OnInit {
       .createCallBackRequest({ body: callback })
       .subscribe(() => {
         this.callbackRequestForm.reset();
-        let userId = this.userService.getUserId();
+        const userId = this.userService.getUserId();
         this.getCallbackRequests(userId);
         this.showCallBack = false;
         this._snackBar.open('Successfully created call back request', 'Close', {

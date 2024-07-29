@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ProfileService } from '../api/services';
 import { LoginService } from './login.service';
 
 @Injectable({

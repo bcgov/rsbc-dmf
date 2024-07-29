@@ -70,7 +70,7 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    let userId = this.userService.getUserId();
+    const userId = this.userService.getUserId();
     this.caseManagementService
       .getMostRecentCase(userId)
       .subscribe((recentCase) => {
