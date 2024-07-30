@@ -6,11 +6,11 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Callback } from '../../models/callback';
+import { CallbackRequest } from '../../models/callback-request';
 import { OkResult } from '../../models/ok-result';
 
 export interface ApiCallbackCreatePost$Plain$Params {
-      body?: Callback
+      body?: CallbackRequest
 }
 
 export function apiCallbackCreatePost$Plain(http: HttpClient, rootUrl: string, params?: ApiCallbackCreatePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
