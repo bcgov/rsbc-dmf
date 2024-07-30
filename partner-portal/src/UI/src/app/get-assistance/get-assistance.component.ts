@@ -8,7 +8,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { UserService } from '../shared/services/user.service';
-import { Callback/*, Callback2*/, PreferredTime } from '../shared/api/models';
+import { CaseCallback/*, Callback2*/, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -27,8 +27,6 @@ import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
 import { CallbackService } from '@app/shared/api/services';
-import { CaseCallback, PreferredTime } from '@app/shared/api/models';
-import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 
 interface CallBackTopic {
   value: string;
