@@ -281,7 +281,7 @@ function getFlattenedComponents() {
   return utils.flattenComponents(Formio.forms[window.currentFormId].components);
 }
 
-function putChefsSubmission(status = "Draft") {
+function getCaseFlags() {
   const flattenedComponents = getFlattenedComponents();
 
   // get all components that contain a property called 'flagformid' which is only used by case flags
@@ -298,7 +298,7 @@ function putChefsSubmission(status = "Draft") {
     const flagformid = comp.originalComponent?.properties?.flagformid;
 
     console.info(
-      `[IFRAME] putChefsSubmission: attempting to add chefs flagformid: ${flagformid}...`,
+      `[IFRAME] getCaseFlags: attempting to add chefs flagformid: ${flagformid}...`,
     );
 
     const value = utils
@@ -308,10 +308,148 @@ function putChefsSubmission(status = "Draft") {
     if (flagformid) {
       flags[flagformid] = value;
       console.info(
-        `[IFRAME] putChefsSubmission: successfully added chefs flagformid: ${flagformid}, value: ${value}`,
+        `[IFRAME] getCaseFlags: successfully added chefs flagformid: ${flagformid}, value: ${value}`,
       );
     }
   });
+
+  return flags;
+}
+
+function getPriority() {
+  const flattenedComponents = getFlattenedComponents();
+
+  // get all components that contain a property called 'flagformid' which is only used by case flags
+  const priorityComponents = Object.values(flattenedComponents).filter(
+    (comp) => comp?.originalComponent?.properties?.priority,
+  );
+
+  const selectedPrioritiesComponents = [];
+
+  // add the flag 'flagformid' and the true/false value of the flag to the flags obj
+  // this flags object is then processed in the backend and mapped to flags present in dynamics
+  priorityComponents.forEach((comp) => {
+    const key = comp.originalComponent?.key;
+    const priority = comp.originalComponent?.properties?.priority;
+
+    const value = utils
+      .getComponent(Formio.forms[window.currentFormId].components, key)
+      .getValue();
+
+    console.info(
+      `[IFRAME] getPriority: attempting to add chefs priority: ${priority} with value: ${value}...`,
+    );
+
+    if (value) {
+      selectedPrioritiesComponents.push(comp);
+      console.info(
+        `[IFRAME] getPriority: successfully added chefs priority: ${priority}, value: ${value}`,
+      );
+    }
+  });
+
+  if (
+    selectedPrioritiesComponents.length === 0 ||
+    selectedPrioritiesComponents.length > 1
+  ) {
+    console.error(
+      "[IFRAME] getPriority: Found zero or more than one component with priority attribute, failed to determine correct value",
+    );
+    console.error("priorityComponents");
+    console.error(priorityComponents);
+    console.error("selectedPrioritiesComponents");
+    console.error(selectedPrioritiesComponents);
+    return "";
+  }
+
+  const priorityComponent = selectedPrioritiesComponents[0];
+
+  const priority = priorityComponent.originalComponent?.properties?.priority;
+
+  if (!priority) {
+    console.error(
+      `[IFRAME] getPriority: Failed to find priority attribute on component`,
+    );
+    console.error(priorityComponents);
+    return "";
+  }
+
+  console.info(
+    `[IFRAME] getPriority: Successfully found priority with value: ${priority}!`,
+  );
+
+  return priority;
+}
+
+function getAssign() {
+  const flattenedComponents = getFlattenedComponents();
+
+  // get all components that contain a property called 'flagformid' which is only used by case flags
+  const assignComponents = Object.values(flattenedComponents).filter(
+    (comp) => comp?.originalComponent?.properties?.assign,
+  );
+
+  const selectedAssignComponents = [];
+
+  // add the flag 'flagformid' and the true/false value of the flag to the flags obj
+  // this flags object is then processed in the backend and mapped to flags present in dynamics
+  assignComponents.forEach((comp) => {
+    const key = comp.originalComponent?.key;
+    const assign = comp.originalComponent?.properties?.assign;
+
+    const value = utils
+      .getComponent(Formio.forms[window.currentFormId].components, key)
+      .getValue();
+
+    console.info(
+      `[IFRAME] getAssign: attempting to add chefs assign: ${assign} with value: ${value}...`,
+    );
+
+    if (value) {
+      selectedAssignComponents.push(comp);
+      console.info(
+        `[IFRAME] getAssign: successfully added chefs assign: ${assign}, value: ${value}`,
+      );
+    }
+  });
+
+  if (
+    selectedAssignComponents.length === 0 ||
+    selectedAssignComponents.length > 1
+  ) {
+    console.error(
+      "[IFRAME] getAssign: Found zero or more than one component with assign attribute, failed to determine correct value",
+    );
+    console.error("selectedAssignComponents");
+    console.error(selectedAssignComponents);
+    console.error("assignComponents");
+    console.error(assignComponents);
+    return "";
+  }
+
+  const assignComponent = selectedAssignComponents[0];
+
+  const assign = assignComponent.originalComponent?.properties?.assign;
+
+  if (!assign) {
+    console.error(
+      `[IFRAME] getAssign: Failed to find assign attribute on component`,
+    );
+    console.error(assignComponents);
+    return "";
+  }
+
+  console.info(
+    `[IFRAME] getAssign: Successfully found assign with value: ${assign}!`,
+  );
+
+  return assign;
+}
+
+function putChefsSubmission(status = "Draft") {
+  const flags = getCaseFlags();
+  const priority = status === "Final" ? getPriority() : "";
+  const assign = status === "Final" ? getAssign() : "";
 
   const message = {
     instanceId: getInstanceId(),
@@ -319,6 +457,8 @@ function putChefsSubmission(status = "Draft") {
     status,
     submission: data,
     flags,
+    priority,
+    assign,
   };
 
   const messageObj = JSON.parse(JSON.stringify(message));

@@ -1721,22 +1721,20 @@ namespace Rsbc.Dmf.CaseManagement.Service
 
         }
 
-        // NOTE does not appear to be used
+        // NOTE used by DocumentTriageService and ChefsController
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
             var reply = new UpdateCaseReply();
+
             try
             {
-                _logger.LogInformation(
-                    $"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
+                _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
 
                 // convert the flags to a list of strings.
-
-                List<Flag> flags = new List<Flag>();
-
+                var flags = new List<Flag>();
                 foreach (var item in request.Flags)
                 {
-                    Flag newFlag = new Flag()
+                    var newFlag = new Flag()
                     {
                         Description = item.Question,
                         Id = item.Identifier,
@@ -1747,20 +1745,15 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 }
 
                 // set the flags.
-
                 var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
                 _logger.LogInformation($"Set Flags result is {x.Success}.");
 
                 // update files.
-
-                _logger.LogInformation(
-                    $"Add file - {request.CaseId}, files - {request.DataFileKey} {request.PdfFileKey}");
-
+                _logger.LogInformation($"Add file - {request.CaseId}, files - {request.DataFileKey} {request.PdfFileKey}");
                 if (!string.IsNullOrEmpty(request.PdfFileKey))
                 {
                     await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize);
                 }
-
                 if (!string.IsNullOrEmpty(request.DataFileKey))
                 {
                     await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize);

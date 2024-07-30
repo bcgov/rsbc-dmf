@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
+using Rsbc.Dmf.IcbcAdapter.Client;
 using RSBC.DMF.MedicalPortal.API.Services;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 using System.ComponentModel.DataAnnotations;

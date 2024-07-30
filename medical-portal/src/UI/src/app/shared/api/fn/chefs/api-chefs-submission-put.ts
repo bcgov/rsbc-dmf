@@ -10,6 +10,7 @@ import { ChefsSubmission } from '../../models/chefs-submission';
 
 export interface ApiChefsSubmissionPut$Params {
   caseId?: string;
+  documentId?: string;
       body?: ChefsSubmission
 }
 
@@ -17,6 +18,7 @@ export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?
   const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
   if (params) {
     rb.query('caseId', params.caseId, {});
+    rb.query('documentId', params.documentId, {});
     rb.body(params.body, 'application/*+json');
   }
 

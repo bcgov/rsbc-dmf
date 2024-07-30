@@ -195,7 +195,10 @@ export class CaseDetailsComponent implements OnInit {
   }
 
   openPopup() {
-    console.log(this.caseId() as string);
-    this.popupService.openPopup(this.caseId() as string);
+    if (!this.caseDetails) {
+      console.error('Case data was missing', this.caseDetails);
+      return;
+    }
+    this.popupService.openPopup(this.caseId() as string, this.caseDetails.documentId as string);
   }
 }

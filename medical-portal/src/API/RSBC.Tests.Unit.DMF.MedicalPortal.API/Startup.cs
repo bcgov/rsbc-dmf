@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RSBC.DMF.MedicalPortal.API;
 using RSBC.DMF.MedicalPortal.API.ViewModels;
 
 public class Startup
@@ -16,6 +17,19 @@ public class Startup
             .AddEnvironmentVariables()
             .Build();
         services.AddSingleton<IConfiguration>(_configuration);
+
+        // pidp adapter client
+        string pidpAdapterURI = _configuration["PIDP_ADAPTER_URI"];
+        if (string.IsNullOrEmpty(pidpAdapterURI))
+        {
+            // setup from Mock
+            //var pidpAdapterClient = PidpHelper.CreateMock(_configuration);
+            //services.AddTransient(_ => pidpAdapterClient);
+        }
+        else
+        {
+            services.AddPidpAdapterClient(_configuration);
+        }
 
         //using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
         //    .SetMinimumLevel(LogLevel.Trace)

@@ -9,22 +9,7 @@
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Protobuf Include="../../../../document-storage-adapter/src/Pssg.DocumentStorageAdapter/Protos/documentStorageAdapter.proto" GrpcServices="Client">
-      <Link>gRPC Prototypes\documentStorageAdapter.proto</Link>
-    </Protobuf>
-    <Protobuf Include="../../../../icbc-adapter/src/Pssg.Dmf.IcbcAdapter/Protos/icbcAdapter.proto" GrpcServices="Client">
-      <Link>gRPC Prototypes\icbcAdapter.proto</Link>
-    </Protobuf>
-    <!-- Commenting out for now, may need to re-add this -->
-    <!-- <Protobuf Include="../../../../document-triage-service/src/Protos/documentTriage.proto"
-      GrpcServices="Client">
-      <Link>gRPC Prototypes\documentTriage.proto</Link>
-    </Protobuf> -->
-  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Enums.NET" Version="5.0.0" />
@@ -46,16 +31,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\" />
-    <Folder Include="gRPC Prototypes\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj" />
+    <ProjectReference Include="..\..\..\..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj" />
     <ProjectReference Include="..\..\..\..\pidp-adapter\src\PidpAdapter.Client\PidpAdapter.Client.csproj" />
     <ProjectReference Include="..\..\..\..\shared-utils\SharedUtils.csproj" />
-
-
   </ItemGroup>
 </Project>

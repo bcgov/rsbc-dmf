@@ -18,17 +18,17 @@ export class PopupComponent {
   public sanitizedSource!: SafeResourceUrl;
   iframeUrl: string | null = null;
   instanceId: string | null = null;
-  caseId: string | null = null;
+  caseId: string;
+  documentId: string;
 
   constructor(
     private popupService: PopupService,
     private chefsService: ChefsService,
     private sanitizer: DomSanitizer,
-    @Inject(MAT_DIALOG_DATA) public data: { caseId: string | null },
+    @Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
   ) {
-    if (data.caseId) {
       this.caseId = data.caseId;
-    }
+      this.documentId = data.documentId;
   }
 
   getSourceURL(): SafeResourceUrl {
@@ -77,12 +77,14 @@ export class PopupComponent {
       status: SubmissionStatus;
       submission: any;
       flags: any | undefined;
+      assign: string;
+      priority: string;
     };
   }): void {
     if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
 
     const {
-      data: { instanceId, type, status, submission, flags },
+      data: { instanceId, type, status, submission, flags, assign, priority },
     } = event;
 
     if (instanceId !== this.instanceId) {
@@ -140,10 +142,13 @@ export class PopupComponent {
     ) {
       let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
         caseId: this.caseId,
+        documentId: this.documentId,
         body: {
           status,
           submission,
           flags,
+          assign,
+          priority,
         },
       };
       this.chefsService
