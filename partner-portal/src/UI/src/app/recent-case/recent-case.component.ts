@@ -1,30 +1,15 @@
-import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Router, RouterLink } from '@angular/router';
+import { CaseDetail } from '@app/shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import {
-  MatStepper,
-  MatStep,
-  MatStepLabel,
-  MatStepperIcon,
-} from '@angular/material/stepper';
-//import { LoginService } from '../shared/services/login.service';
+import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
+import { UserService } from '../shared/services/user.service';
 import { DatePipe } from '@angular/common';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
-import { CasesService } from '@app/shared/api/services';
-import { CaseDetail } from '@app/shared/api/models';
 import { CaseStageEnum } from '@app/app.model';
 
 @Component({
@@ -51,13 +36,12 @@ import { CaseStageEnum } from '@app/app.model';
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     DatePipe,
-    MatAccordion,
+    MatAccordion
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class RecentCaseComponent implements OnInit {
   public caseDetails: CaseDetail | undefined;
-  driverId = '';
 
   selectedIndex = 0;
   panelOpenState = false;
@@ -65,10 +49,10 @@ export class RecentCaseComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
 
   constructor(
-    private caseManagementService: CasesService,
-    //private loginService: LoginService,
+    private caseManagementService: CaseManagementService,
+    private userService: UserService,
     private breakpointObserver: BreakpointObserver,
-    private router: Router,
+    private router: Router
   ) {}
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
@@ -86,8 +70,9 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    let userId = this.userService.getUserId();
     this.caseManagementService
-      .apiCasesMostRecentGet$Json(this.driverId as string)
+      .getMostRecentCase(userId)
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {
