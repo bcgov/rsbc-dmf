@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import {
   ViewportScroller,
   NgIf,
@@ -6,7 +7,9 @@ import {
   NgClass,
   DatePipe,
 } from '@angular/common';
-//import { LoginService } from '../shared/services/login.service';
+import { UserService } from '../shared/services/user.service';
+import { Callback/*, Callback2*/, PreferredTime } from '../shared/api/models';
+import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -73,9 +76,9 @@ export class GetAssistanceComponent implements OnInit {
   showCallBackCreate = false;
 
   constructor(
-    private callBackService: CallbackService,
+    private caseManagementService: CaseManagementService,
     private viewportScroller: ViewportScroller,
-    /// private loginService: LoginService,
+    private userService: UserService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private fb: FormBuilder,
@@ -127,25 +130,24 @@ export class GetAssistanceComponent implements OnInit {
     { value: '4', viewValue: 'Request extension' },
   ];
 
-  driverId = ' ';
-
   ngOnInit(): void {
-    if (this.driverId) {
-      this.getCallbackRequests(this.driverId as string);
+    var userId = this.userService.getUserId();
+    if (userId) {
+      this.getCallbackRequests(userId);
     }
   }
 
   getCallbackRequests(driverId: string) {
-    this.callBackService
-      .apiCallbackDriverGet$Json(driverId)
+    this.caseManagementService
+      .getCallBackRequest(driverId)
       .subscribe((callBacks: any) => {
         this._allCallBackRequests = callBacks;
         this.filteredCallbacks = this._allCallBackRequests?.slice(
           0,
-          this.pageSize,
+          this.pageSize
         );
         this.disableCallBack = !!callBacks.find(
-          (y: any) => y.callStatus == 'Open',
+          (y: any) => y.callStatus == 'Open'
         );
       });
   }
@@ -163,18 +165,19 @@ export class GetAssistanceComponent implements OnInit {
 
     const callback: any = {
       phone: String(this.callbackRequestForm.value.phone),
-      preferredTime: this.callbackRequestForm.value
-        .preferredTime as PreferredTime,
+      //preferredTime: this.callbackRequestForm.value
+      //  .preferredTime as PreferredTime,
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject,
       )?.viewValue,
     };
     this.isCreatingCallBack = true;
-    this.callBackService
-      .apiCallbackCreatePost$Json({ body: callback })
+    this.caseManagementService
+      .createCallBackRequest({ body: callback })
       .subscribe(() => {
         this.callbackRequestForm.reset();
-        this.getCallbackRequests(this.driverId as string);
+        let userId = this.userService.getUserId();
+        this.getCallbackRequests(userId);
         this.showCallBack = false;
         this._snackBar.open('Successfully created call back request', 'Close', {
           horizontalPosition: 'center',
@@ -197,7 +200,8 @@ export class GetAssistanceComponent implements OnInit {
       .afterClosed()
       .subscribe({
         next: () => {
-          this.getCallbackRequests(this.driverId as string);
+          let userId = this.userService.getUserId();
+          this.getCallbackRequests(userId);
         },
       });
   }

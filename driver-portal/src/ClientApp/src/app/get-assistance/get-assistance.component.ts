@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller, NgIf, NgFor, NgClass, DatePipe } from '@angular/common';
-import { LoginService } from '../shared/services/login.service';
+import { UserService } from '../shared/services/user.service';
+// TODO ideally we would not have a dependency on generated code
 import { Callback, Callback2, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -64,7 +65,7 @@ export class GetAssistanceComponent implements OnInit {
   constructor(
     private caseManagementService: CaseManagementService,
     private viewportScroller: ViewportScroller,
-    private loginService: LoginService,
+    private userService: UserService,
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private fb: FormBuilder
@@ -116,8 +117,9 @@ export class GetAssistanceComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    if (this.loginService.userProfile) {
-      this.getCallbackRequests(this.loginService.userProfile.id as string);
+    const userId = this.userService.getUserId();
+    if (userId) {
+      this.getCallbackRequests(userId);
     }
   }
 
@@ -160,7 +162,8 @@ export class GetAssistanceComponent implements OnInit {
       .createCallBackRequest({ body: callback })
       .subscribe(() => {
         this.callbackRequestForm.reset();
-        this.getCallbackRequests(this.loginService.userProfile?.id as string);
+        const userId = this.userService.getUserId();
+        this.getCallbackRequests(userId);
         this.showCallBack = false;
         this._snackBar.open('Successfully created call back request', 'Close', {
           horizontalPosition: 'center',
@@ -183,7 +186,8 @@ export class GetAssistanceComponent implements OnInit {
       .afterClosed()
       .subscribe({
         next: () => {
-          this.getCallbackRequests(this.loginService.userProfile?.id as string);
+          const userId = this.userService.getUserId();
+          this.getCallbackRequests(userId);
         },
       });
   }
@@ -218,6 +222,5 @@ export class GetAssistanceComponent implements OnInit {
     const pageSize = (this.filteredCallbacks?.length ?? 0) + this.pageSize;
 
     this.filteredCallbacks = this._allCallBackRequests?.slice(0, pageSize);
-    
   }
 }
