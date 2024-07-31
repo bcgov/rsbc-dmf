@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatToolbar } from '@angular/material/toolbar';
@@ -19,6 +20,8 @@ import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { CasesService } from '@app/shared/api/services';
 import { CaseDetail } from '@app/shared/api/models';
 import { MatIcon } from '@angular/material/icon';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CommentsComponent } from '@app/comments/comments.component';
 
 @Component({
   selector: 'app-driver-search',
@@ -38,13 +41,18 @@ import { MatIcon } from '@angular/material/icon';
     NgFor,
     MatIcon,
     NgIf,
+    MatDialogModule,
+    CommentsComponent,
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class DriverSearchComponent implements OnInit {
+  readonly dialog = inject(MatDialog);
+
   isExpanded: Record<string, boolean> = {};
+
   isLoading = true;
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
@@ -88,5 +96,20 @@ export class DriverSearchComponent implements OnInit {
 
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
+  }
+
+  openCommentsDialog() {
+    const dialogRef = this.dialog.open(CommentsComponent, {
+      height: '730px',
+      width: '400px',
+      position: {
+        bottom: '8px',
+        right: '8px',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }

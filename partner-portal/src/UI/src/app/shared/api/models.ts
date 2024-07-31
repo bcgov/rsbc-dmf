@@ -15,3 +15,4 @@ export { OkResult } from './models/ok-result';
 export { PreferredTime } from './models/preferred-time';
 export { ProblemDetails } from './models/problem-details';
 export { Timestamp } from './models/timestamp';
+export { UserContext } from './models/user-context';
