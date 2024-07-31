@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
@@ -14,27 +16,38 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
         private readonly IMemoryCache _cacheService;
         private readonly IcbcAdapterClient _icbcAdapterClient;
         private readonly ILogger _logger;
+        private readonly IConfiguration _configuration;
 
-        public CachedIcbcAdapterClient(IMemoryCache cacheService, IcbcAdapterClient icbcAdapterClient, ILoggerFactory loggerFactory)
+        public CachedIcbcAdapterClient(IMemoryCache cacheService, IcbcAdapterClient icbcAdapterClient, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
             _cacheService = cacheService;
             _icbcAdapterClient = icbcAdapterClient;
             _logger = loggerFactory.CreateLogger<CachedIcbcAdapterClient>();
+            _configuration = configuration;
         }
 
         public async Task<DriverInfoReply> GetDriverInfoAsync(DriverInfoRequest request)
         {
-            // TODO not completed but this is the basic idea
-            // feature flag to return a simple response for ICBC in development environment, useful when Dynamics DL do not match ICBC DL
-            //var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            //if (environment == Environments.Development && _configuration.GetValue<bool>("FEATURES_SIMPLE_ICBC"))
-            //{
-            //    result.FirstName = "John";
-            //    result.LastName = "Smith";
-            //    result.BirthDate = new DateTime(1980, 1, 1);
-            //}
-
             DriverInfoReply reply = null;
+
+            // feature flag to return a simple response for ICBC in development environment, useful when Dynamics DL do not match ICBC DL
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (environment == Environments.Development && _configuration["FEATURES_SIMPLE_ICBC"] == "true")
+            {
+                reply = new DriverInfoReply();
+                reply.GivenName = "John";
+                reply.Surname = "Smith";
+                reply.BirthDate = new DateTime(1980, 1, 1).ToString();
+                reply.AddressLine1 = "123 Main St";
+                reply.City = "Victoria";
+                reply.Country = "Canada";
+                reply.Postal = "V8V 3V3";
+                reply.Province = "BC";
+                reply.Sex = "M";
+                reply.ResultStatus = ResultStatus.Success;
+                return reply;
+            }
+
             try
             {
                 var key = GetHashKey(nameof(IcbcAdapterClient.GetDriverInfo), request.DriverLicence);
