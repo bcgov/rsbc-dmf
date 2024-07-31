@@ -53,7 +53,7 @@ export class RecentCaseComponent implements OnInit {
     private userService: UserService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
-  ) {}
+  ) { }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
   ngAfterViewInit(): void {
