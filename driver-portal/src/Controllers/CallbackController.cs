@@ -34,7 +34,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Create))]
-        public async Task<IActionResult> Create([FromBody] Callback callback)
+        public async Task<IActionResult> Create([FromBody] CallbackRequest callbackRequest)
         {
             var profile = await _userService.GetCurrentUserContext();
 
@@ -45,6 +45,10 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
             }
 
+            var callback = new Callback();
+            callback.Phone = callbackRequest.Phone;
+            callback.PreferredTime = (Callback.Types.PreferredTime)callbackRequest.PreferredTime;
+            callback.Subject = callbackRequest.Subject;
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;
