@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Configuration2 } from '../../models/configuration-2';
+import { UserProfile2 } from '../../models/user-profile-2';
 
-export interface ApiConfigGet$Plain$Params {
+export interface ApiProfileCurrentGet$Plain$Params {
 }
 
-export function apiConfigGet$Plain(http: HttpClient, rootUrl: string, params?: ApiConfigGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Configuration2>> {
-  const rb = new RequestBuilder(rootUrl, apiConfigGet$Plain.PATH, 'get');
+export function apiProfileCurrentGet$Plain(http: HttpClient, rootUrl: string, params?: ApiProfileCurrentGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<UserProfile2>> {
+  const rb = new RequestBuilder(rootUrl, apiProfileCurrentGet$Plain.PATH, 'get');
   if (params) {
   }
 
@@ -21,9 +21,9 @@ export function apiConfigGet$Plain(http: HttpClient, rootUrl: string, params?: A
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Configuration2>;
+      return r as StrictHttpResponse<UserProfile2>;
     })
   );
 }
 
-apiConfigGet$Plain.PATH = '/api/Config';
+apiProfileCurrentGet$Plain.PATH = '/api/Profile/current';

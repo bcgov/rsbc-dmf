@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export enum CallbackCallStatus {
-  Open = 'Open',
-  Closed = 'Closed'
+  $0 = 0,
+  $1 = 1
 }

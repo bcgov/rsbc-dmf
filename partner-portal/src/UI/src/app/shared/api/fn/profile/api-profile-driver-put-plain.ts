@@ -6,15 +6,15 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CallbackRequest } from '../../models/callback-request';
-import { OkResult } from '../../models/ok-result';
+import { DriverUpdate2 } from '../../models/driver-update-2';
+import { OkResult2 } from '../../models/ok-result-2';
 
-export interface ApiCallbackCreatePost$Plain$Params {
-      body?: CallbackRequest
+export interface ApiProfileDriverPut$Plain$Params {
+      body?: DriverUpdate2
 }
 
-export function apiCallbackCreatePost$Plain(http: HttpClient, rootUrl: string, params?: ApiCallbackCreatePost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult>> {
-  const rb = new RequestBuilder(rootUrl, apiCallbackCreatePost$Plain.PATH, 'post');
+export function apiProfileDriverPut$Plain(http: HttpClient, rootUrl: string, params?: ApiProfileDriverPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<OkResult2>> {
+  const rb = new RequestBuilder(rootUrl, apiProfileDriverPut$Plain.PATH, 'put');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
@@ -24,9 +24,9 @@ export function apiCallbackCreatePost$Plain(http: HttpClient, rootUrl: string, p
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<OkResult>;
+      return r as StrictHttpResponse<OkResult2>;
     })
   );
 }
 
-apiCallbackCreatePost$Plain.PATH = '/api/Callback/create';
+apiProfileDriverPut$Plain.PATH = '/api/Profile/driver';
