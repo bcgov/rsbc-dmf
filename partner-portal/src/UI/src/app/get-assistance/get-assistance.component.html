@@ -369,7 +369,8 @@
                     <b>{{ callback.callStatus }}</b>
                   </div>
                 </div>
-                <div *ngIf="callback.callStatus === CallStatus.$0">
+                <!-- TODO this should be using CallStatus enum -->
+                <div *ngIf="callback.callStatus === 0">
                   <div>
                     <button
                       mat-flat-button
