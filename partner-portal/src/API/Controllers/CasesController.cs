@@ -97,7 +97,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         {
             var result = new ViewModels.CaseDetail();
 
-            var profile = await _userService.GetCurrentUserContext();
+            var profile =  _userService.GetDriverInfo();
 
             var c = _cmsAdapterClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
             if (c != null && c.ResultStatus == CaseManagement.Service.ResultStatus.Success)

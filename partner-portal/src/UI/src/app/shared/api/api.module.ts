@@ -7,6 +7,7 @@ import { ApiConfiguration, ApiConfigurationParams } from './api-configuration';
 import { ApplicationVersionInfoService } from './services/application-version-info.service';
 import { CallbackService } from './services/callback.service';
 import { CasesService } from './services/cases.service';
+import { CommentsService } from './services/comments.service';
 import { DocumentService } from './services/document.service';
 import { DocumentTypeService } from './services/document-type.service';
 import { DriverService } from './services/driver.service';
@@ -22,6 +23,7 @@ import { DriverService } from './services/driver.service';
     ApplicationVersionInfoService,
     CallbackService,
     CasesService,
+    CommentsService,
     DocumentService,
     DocumentTypeService,
     DriverService,

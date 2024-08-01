@@ -70,4 +70,14 @@ public class DriverController : Controller
             return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
         }
     }
-}
+
+    [HttpGet("driverSession")]
+    [ProducesResponseType(typeof(UserContext), (int)HttpStatusCode.OK)]
+    [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+    [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+    [ActionName(nameof(GetDriverSession))]
+    public ActionResult<UserContext> GetDriverSession()
+    {
+        return Json(_userService.GetDriverInfo());
+    }
+    }
