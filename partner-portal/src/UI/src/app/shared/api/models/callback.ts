@@ -1,9 +1,9 @@
 /* tslint:disable */
 /* eslint-disable */
-import { CallbackCallStatus } from '../models/callback-call-status';
+import { CallStatus } from '../models/call-status';
 import { PreferredTime } from '../models/preferred-time';
 export interface Callback {
-  callStatus?: CallbackCallStatus;
+  callStatus?: CallStatus;
   closed?: string;
   id?: string;
   phone?: string | null;
