@@ -45,6 +45,7 @@ namespace RSBC.DMF.MedicalPortal.API
                     keycloakOptions.Realm = config.Keycloak.Config.Realm;
                     keycloakOptions.Audience = config.Keycloak.Config.Audience;
                     keycloakOptions.AuthServerUrl = config.Keycloak.Config.Url;
+                    keycloakOptions.VerifyTokenAudience = false;
                     if (environment.IsDevelopment() && configuration.GetValue<bool>("FEATURES_SIMPLE_AUTH"))
                     {
                         keycloakOptions.VerifyTokenAudience = false;
