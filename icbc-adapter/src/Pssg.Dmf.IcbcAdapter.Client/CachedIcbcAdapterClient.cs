@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
@@ -30,9 +29,8 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
         {
             DriverInfoReply reply = null;
 
-            // feature flag to return a simple response for ICBC in development environment, useful when Dynamics DL do not match ICBC DL
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (environment == Environments.Development && _configuration["FEATURES_SIMPLE_ICBC"] == "true")
+            // feature flag to return a simple response for ICBC, useful when Dynamics DL do not match ICBC DL
+            if (!string.IsNullOrEmpty(_configuration["FEATURES_SIMPLE_ICBC"]))
             {
                 reply = new DriverInfoReply();
                 reply.GivenName = "John";
