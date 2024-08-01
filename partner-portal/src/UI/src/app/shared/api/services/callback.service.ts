@@ -21,7 +21,7 @@ import { apiCallbackDriverGet$Json } from '../fn/callback/api-callback-driver-ge
 import { ApiCallbackDriverGet$Json$Params } from '../fn/callback/api-callback-driver-get-json';
 import { apiCallbackDriverGet$Plain } from '../fn/callback/api-callback-driver-get-plain';
 import { ApiCallbackDriverGet$Plain$Params } from '../fn/callback/api-callback-driver-get-plain';
-import { CaseCallback } from '../models/case-callback';
+import { Callback } from '../models/callback';
 import { OkResult } from '../models/ok-result';
 
 @Injectable({ providedIn: 'root' })
@@ -86,7 +86,7 @@ export class CallbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCallbackDriverGet$Plain$Response(params?: ApiCallbackDriverGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseCallback>>> {
+  apiCallbackDriverGet$Plain$Response(params?: ApiCallbackDriverGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
     return apiCallbackDriverGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -96,9 +96,9 @@ export class CallbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCallbackDriverGet$Plain(params?: ApiCallbackDriverGet$Plain$Params, context?: HttpContext): Observable<Array<CaseCallback>> {
+  apiCallbackDriverGet$Plain(params?: ApiCallbackDriverGet$Plain$Params, context?: HttpContext): Observable<Array<Callback>> {
     return this.apiCallbackDriverGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<CaseCallback>>): Array<CaseCallback> => r.body)
+      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
     );
   }
 
@@ -108,7 +108,7 @@ export class CallbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCallbackDriverGet$Json$Response(params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseCallback>>> {
+  apiCallbackDriverGet$Json$Response(params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
     return apiCallbackDriverGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -118,9 +118,9 @@ export class CallbackService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCallbackDriverGet$Json(params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<Array<CaseCallback>> {
+  apiCallbackDriverGet$Json(params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<Array<Callback>> {
     return this.apiCallbackDriverGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<CaseCallback>>): Array<CaseCallback> => r.body)
+      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
     );
   }
 

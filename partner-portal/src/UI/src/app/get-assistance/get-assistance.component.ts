@@ -8,7 +8,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { UserService } from '../shared/services/user.service';
-import { CaseCallback/*, Callback2*/, PreferredTime } from '../shared/api/models';
+import { Callback, CallStatus, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -94,13 +94,13 @@ export class GetAssistanceComponent implements OnInit {
   pageSize = 10;
   display: HelpTopics = HelpTopics.ALL_TOPICS;
 
-  filteredCallbacks?: CaseCallback[] | null = [];
+  filteredCallbacks?: Callback[] | null = [];
 
-  _allCallBackRequests?: CaseCallback[] | null = [];
+  _allCallBackRequests?: Callback[] | null = [];
 
   disableCallBack = true;
 
-  @Input() set allCallBacks(callbacks: CaseCallback[] | null | undefined) {
+  @Input() set allCallBacks(callbacks: Callback[] | null | undefined) {
     this._allCallBackRequests = callbacks;
 
     this._allCallBackRequests?.forEach((req) => {
@@ -116,8 +116,8 @@ export class GetAssistanceComponent implements OnInit {
 
   showCallBack = false;
 
-  showOpenCallbackMessagePredicate = (r: CaseCallback) =>
-    r.callStatus === 'Open';
+  showOpenCallbackMessagePredicate = (r: Callback) =>
+    r.callStatus === CallStatus.$0;
 
   selectedValue?: string | undefined | null;
 
