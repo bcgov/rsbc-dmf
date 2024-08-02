@@ -41,6 +41,7 @@ import {
 import { DocumentSubType } from '../shared/api/models';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { Document } from '../shared/api/models';
+import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -84,7 +85,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   @Input() isLoading = true;
 
   constructor(
-    private documetService: DocumentService,
+    private caseManagementService: CaseManagementService,
     private documentSubTypeService: DocumentTypeService,
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -97,16 +98,10 @@ export class SubmissionRequirementsComponent implements OnInit {
     documentSubType: ['', Validators.required],
   });
 
-  driverId = 'e27d7c69-3913-4116-a360-f5e990200173';
-
   ngOnInit() {
     this.getDocumentSubtypes();
 
-    if (this.driverId) {
-      this.getSubmissionRequireDocuments(this.driverId as string);
-    } else {
-      console.log('No Submission Requirement Documents');
-    }
+    this.getSubmissionRequireDocuments();
   }
 
   getDocumentSubtypes() {
@@ -191,9 +186,9 @@ export class SubmissionRequirementsComponent implements OnInit {
       });
   }
 
-  getSubmissionRequireDocuments(driverId: string) {
-    this.documetService
-      .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+  getSubmissionRequireDocuments() {
+    this.caseManagementService
+      .getAllDriverDocuments()
       .subscribe((submissiondocs: any) => {
         if (!submissiondocs) {
           return;

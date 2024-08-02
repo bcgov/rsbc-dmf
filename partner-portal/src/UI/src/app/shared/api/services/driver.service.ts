@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiDriverAllDocumentsGet$Json } from '../fn/driver/api-driver-all-documents-get-json';
+import { ApiDriverAllDocumentsGet$Json$Params } from '../fn/driver/api-driver-all-documents-get-json';
+import { apiDriverAllDocumentsGet$Plain } from '../fn/driver/api-driver-all-documents-get-plain';
+import { ApiDriverAllDocumentsGet$Plain$Params } from '../fn/driver/api-driver-all-documents-get-plain';
 import { apiDriverDriverSessionGet$Json } from '../fn/driver/api-driver-driver-session-get-json';
 import { ApiDriverDriverSessionGet$Json$Params } from '../fn/driver/api-driver-driver-session-get-json';
 import { apiDriverDriverSessionGet$Plain } from '../fn/driver/api-driver-driver-session-get-plain';
@@ -17,6 +21,7 @@ import { apiDriverInfoDriverLicenceNumberGet$Json } from '../fn/driver/api-drive
 import { ApiDriverInfoDriverLicenceNumberGet$Json$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-json';
 import { apiDriverInfoDriverLicenceNumberGet$Plain } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
 import { ApiDriverInfoDriverLicenceNumberGet$Plain$Params } from '../fn/driver/api-driver-info-driver-licence-number-get-plain';
+import { Document } from '../models/document';
 import { Driver } from '../models/driver';
 import { UserContext } from '../models/user-context';
 
@@ -24,6 +29,53 @@ import { UserContext } from '../models/user-context';
 export class DriverService extends BaseService {
   constructor(config: ApiConfiguration, http: HttpClient) {
     super(config, http);
+  }
+
+  /** Path part for operation `apiDriverAllDocumentsGet()` */
+  static readonly ApiDriverAllDocumentsGetPath = '/api/Driver/AllDocuments';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDriverAllDocumentsGet$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDriverAllDocumentsGet$Plain$Response(params?: ApiDriverAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+    return apiDriverAllDocumentsGet$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDriverAllDocumentsGet$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDriverAllDocumentsGet$Plain(params?: ApiDriverAllDocumentsGet$Plain$Params, context?: HttpContext): Observable<Array<Document>> {
+    return this.apiDriverAllDocumentsGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDriverAllDocumentsGet$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDriverAllDocumentsGet$Json$Response(params?: ApiDriverAllDocumentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Document>>> {
+    return apiDriverAllDocumentsGet$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDriverAllDocumentsGet$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDriverAllDocumentsGet$Json(params?: ApiDriverAllDocumentsGet$Json$Params, context?: HttpContext): Observable<Array<Document>> {
+    return this.apiDriverAllDocumentsGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Document>>): Array<Document> => r.body)
+    );
   }
 
   /** Path part for operation `apiDriverInfoDriverLicenceNumberGet()` */

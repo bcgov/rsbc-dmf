@@ -15,7 +15,7 @@ import {
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService,
+    private driverService: DriverService,
     private documentService: DocumentService,
     //private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
@@ -41,8 +41,8 @@ export class CaseManagementService {
   //   return this.driversService.apiDriverDocumentsGet$Json(params);
   // }
 
-  public getAllDriverDocuments(driverId: string) {
-    return this.documentService.apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+  public getAllDriverDocuments() {
+    return this.driverService.apiDriverAllDocumentsGet$Json()
   }
 
   // public getAllDocuments(
