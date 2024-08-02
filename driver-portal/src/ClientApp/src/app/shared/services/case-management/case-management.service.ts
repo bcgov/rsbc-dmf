@@ -39,10 +39,8 @@ export class CaseManagementService {
     return this.driversService.apiDriverDocumentsGet$Json(params);
   }
 
-  public getAllDocuments(
-    params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
-  ) {
-    return this.driversService.apiDriverAllDocumentsGet$Json(params);
+  public getAllDocuments() {
+    return this.driversService.apiDriverAllDocumentsGet$Json();
   }
 
   public getDownloadDocument(

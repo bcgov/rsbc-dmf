@@ -1,8 +1,9 @@
+// IMPORTANT keep this file identical to partner-portal submissin-history.component
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
-import { LoginService } from '../shared/services/login.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
@@ -59,22 +60,16 @@ export class SubmissionHistoryComponent implements OnInit {
   }
 
   constructor(
-    private caseManagementService: CaseManagementService,
-    private loginService: LoginService
+    private caseManagementService: CaseManagementService
   ) {}
 
   ngOnInit(): void {
-    // this.getAllDocuments('e27d7c69-3913-4116-a360-f5e990200173');
-    if (this.loginService.userProfile?.id) {
-      this.getAllDocuments(this.loginService.userProfile?.id as string);
-    } else {
-      console.log('No Letter Documents');
-    }
+    this.getAllDocuments();
   }
 
-  getAllDocuments(driverId: string) {
+  getAllDocuments() {
     this.caseManagementService
-      .getAllDocuments({ driverId })
+      .getAllDocuments()
       .subscribe((allDocuments: any) => {
         this._allDocuments = allDocuments;
         this.filteredDocuments = this._allDocuments?.slice(0, this.pageSize);
