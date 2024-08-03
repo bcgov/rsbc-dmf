@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal submission-requirements.component
+
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
@@ -34,10 +36,6 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import {
-  DocumentService,
-  DocumentTypeService,
-} from '../../app/shared/api/services';
 import { DocumentSubType } from '../shared/api/models';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { Document } from '../shared/api/models';
@@ -86,7 +84,6 @@ export class SubmissionRequirementsComponent implements OnInit {
 
   constructor(
     private caseManagementService: CaseManagementService,
-    private documentSubTypeService: DocumentTypeService,
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
@@ -105,9 +102,9 @@ export class SubmissionRequirementsComponent implements OnInit {
   }
 
   getDocumentSubtypes() {
-    this.documentSubTypeService
-      .apiDocumentTypeDocumentSubTypeGet$Json({})
-      .subscribe((response) => {
+    this.caseManagementService
+      .getDocumentSubTypes()
+      .subscribe((response: DocumentSubType[]) => {
         this.documentSubTypes = response;
       });
   }

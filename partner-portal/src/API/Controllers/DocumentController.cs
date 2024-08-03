@@ -139,7 +139,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 return StatusCode(500, documentSubTypeGuidReply.ErrorDetail);
             }
 
-            var profile = await _userService.GetCurrentUserContext();
+            var user = _userService.GetDriverInfo();
 
             // read file stream into byte array
             var fileStream = new MemoryStream((int)file.Length);
@@ -162,7 +162,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 Data = ByteString.CopyFrom(bytes),
                 EntityName = "dfp_driver",
                 FileName = file.FileName,
-                FolderName = profile.DriverId,
+                FolderName = user.DriverId,
             };
             var fileReply = _documentStorageAdapterClient.UploadFile(request);
             if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
@@ -172,9 +172,9 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
             // create document and then link to driver
             var driver = new Driver();
-            driver.Id = profile.DriverId;
+            driver.Id = user.DriverId;
 
-            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
+            var document = _documentFactory.Create(driver, user.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
             document.DocumentSubTypeId = documentSubTypeGuidReply.Id.ToString();
             var result = _cmsAdapterClient.CreateUnsolicitedDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
