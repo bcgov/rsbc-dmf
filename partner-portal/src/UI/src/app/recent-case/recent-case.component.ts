@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal recent-case.component
+
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';

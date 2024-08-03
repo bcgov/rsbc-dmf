@@ -1,4 +1,4 @@
-// IMPORTANT keep this file identical to driver-portal submissin-history.component
+// IMPORTANT keep this file identical to driver-portal submission-history.component
 
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
