@@ -52,7 +52,6 @@ export class RecentCaseComponent implements OnInit {
 
   constructor(
     private caseManagementService: CaseManagementService,
-    private userService: UserService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
@@ -72,9 +71,8 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    const userId = this.userService.getUserId();
     this.caseManagementService
-      .getMostRecentCase(userId)
+      .getMostRecentCase()
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {
