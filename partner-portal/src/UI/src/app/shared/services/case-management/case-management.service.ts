@@ -15,7 +15,7 @@ import {
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService,
+    private driverService: DriverService,
     private documentService: DocumentService,
     //private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
@@ -23,10 +23,8 @@ export class CaseManagementService {
     private commentsService: CommentsService
   ) { }
 
-  public getMostRecentCase(
-    params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]
-  ) {
-    return this.casesService.apiCasesMostRecentGet$Json(params);
+  public getMostRecentCase() {
+    return this.casesService.apiCasesMostRecentGet$Json();
   }
 
   public getClosedCases(
@@ -41,15 +39,9 @@ export class CaseManagementService {
   //   return this.driversService.apiDriverDocumentsGet$Json(params);
   // }
 
-  public getAllDriverDocuments(driverId: string) {
-    return this.documentService.apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+  public getAllDriverDocuments() {
+    return this.driverService.apiDriverAllDocumentsGet$Json()
   }
-
-  // public getAllDocuments(
-  //   params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
-  // ) {
-  //   return this.driversService.apiDriverAllDocumentsGet$Json(params);
-  // }
 
   public getDownloadDocument(
     params: Parameters<DocumentService['apiDocumentDocumentIdGet$Json']>[0]
@@ -74,6 +66,10 @@ export class CaseManagementService {
   // ) {
   //   return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
   // }
+
+  public getDocumentSubTypes() {
+    return this.documentTypeService.apiDocumentTypeDocumentSubTypeGet$Json();
+  }
 
   public getCallBackRequest(
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]

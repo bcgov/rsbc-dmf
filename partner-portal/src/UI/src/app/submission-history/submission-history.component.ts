@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal submission-history.component
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import {
   MatAccordion,
@@ -6,7 +8,6 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { Document } from '../shared/api/models';
-//import { LoginService } from '../shared/services/login.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
@@ -14,8 +15,8 @@ import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
 import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
 import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
-import { DocumentService } from '@app/shared/api/services';
 import { SubmittalStatusEnum } from '@app/app.model';
+import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-submission-history',
@@ -69,23 +70,16 @@ export class SubmissionHistoryComponent implements OnInit {
   submissionHistoryDocuments: Document[] = [];
 
   constructor(
-    private documentService: DocumentService,
-    //private loginService: LoginService
+    private caseManagementService: CaseManagementService,
   ) {}
 
-  driverId = ' ';
-
   ngOnInit(): void {
-    if (this.driverId) {
-      this.getAllDocuments(this.driverId as string);
-    } else {
-      console.log('No Submission History Documents');
-    }
+    this.getAllDocuments();
   }
 
-  getAllDocuments(driverId: string) {
-    this.documentService
-      .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+  getAllDocuments() {
+    this.caseManagementService
+      .getAllDriverDocuments()
       .subscribe((allDocuments: any) => {
         if (!allDocuments) {
           return;

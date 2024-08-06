@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal submission-requirements.component
+
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
@@ -34,13 +36,10 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
-import {
-  DocumentService,
-  DocumentTypeService,
-} from '../../app/shared/api/services';
 import { DocumentSubType } from '../shared/api/models';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { Document } from '../shared/api/models';
+import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -84,8 +83,7 @@ export class SubmissionRequirementsComponent implements OnInit {
   @Input() isLoading = true;
 
   constructor(
-    private documetService: DocumentService,
-    private documentSubTypeService: DocumentTypeService,
+    private caseManagementService: CaseManagementService,
     private _http: HttpClient,
     private _snackBar: MatSnackBar,
     public dialog: MatDialog,
@@ -97,22 +95,16 @@ export class SubmissionRequirementsComponent implements OnInit {
     documentSubType: ['', Validators.required],
   });
 
-  driverId = 'e27d7c69-3913-4116-a360-f5e990200173';
-
   ngOnInit() {
     this.getDocumentSubtypes();
 
-    if (this.driverId) {
-      this.getSubmissionRequireDocuments(this.driverId as string);
-    } else {
-      console.log('No Submission Requirement Documents');
-    }
+    this.getSubmissionRequireDocuments();
   }
 
   getDocumentSubtypes() {
-    this.documentSubTypeService
-      .apiDocumentTypeDocumentSubTypeGet$Json({})
-      .subscribe((response) => {
+    this.caseManagementService
+      .getDocumentSubTypes()
+      .subscribe((response: DocumentSubType[]) => {
         this.documentSubTypes = response;
       });
   }
@@ -191,9 +183,9 @@ export class SubmissionRequirementsComponent implements OnInit {
       });
   }
 
-  getSubmissionRequireDocuments(driverId: string) {
-    this.documetService
-      .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+  getSubmissionRequireDocuments() {
+    this.caseManagementService
+      .getAllDriverDocuments()
       .subscribe((submissiondocs: any) => {
         if (!submissiondocs) {
           return;

@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D0A09E19-A9EB-452F-AF34-3B65784FE118}"
 	ProjectSection(SolutionItems) = preProject
 		..\..\.github\workflows\cd-driver-portal-ui.yml = ..\..\.github\workflows\cd-driver-portal-ui.yml
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\..\shared-utils\SharedUtils.csproj", "{EBF21CF9-7758-467A-A2BD-B044E804D106}"

@@ -30,6 +30,39 @@ public class DriverController : Controller
         _configuration = configuration;
     }
 
+    [HttpGet("AllDocuments")]
+    [ProducesResponseType(typeof(IEnumerable<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Document>), 200)]
+    [ProducesResponseType(401)]
+    [ProducesResponseType(500)]
+    [ActionName("GetAllDocuments")]
+    public async Task<ActionResult> GetAllDocuments()
+    {
+        var user = _userService.GetDriverInfo();
+
+        var driverIdRequest = new DriverIdRequest() { Id = user.DriverId };
+        var reply = _caseManagerClient.GetDriverDocumentsById(driverIdRequest);
+        if (reply != null && reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+        {
+            // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
+            var replyItemsWithDocuments = reply.Items;
+
+            var result = _mapper.Map<List<Rsbc.Dmf.PartnerPortal.Api.ViewModels.Document>>(replyItemsWithDocuments);
+
+            // sort the documents
+            if (result.Count > 0)
+            {
+                result = result.OrderByDescending(cs => cs.CreateDate).ToList();
+            }
+
+            return Json(result);
+        }
+        else
+        {
+            _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {user.DriverId}", reply.ErrorDetail);
+            return StatusCode(500, reply.ErrorDetail);
+        }
+    }
+
     [HttpGet("info/{driverLicenceNumber}")]
     [ProducesResponseType(typeof(Rsbc.Dmf.PartnerPortal.Api.ViewModels.Driver), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
@@ -80,4 +113,4 @@ public class DriverController : Controller
     {
         return Json(_userService.GetDriverInfo());
     }
-    }
+}

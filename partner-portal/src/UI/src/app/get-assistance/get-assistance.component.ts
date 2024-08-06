@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal get-assistance.component
+
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import {
@@ -26,7 +28,6 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
-import { CallbackService } from '@app/shared/api/services';
 
 interface CallBackTopic {
   value: string;
