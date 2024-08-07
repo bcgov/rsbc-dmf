@@ -6,6 +6,6 @@ import { GetAssistanceComponent } from '../get-assistance/get-assistance.compone
   standalone: true,
   imports: [GetAssistanceComponent],
   templateUrl: './assist-driver.component.html',
-  styleUrl: './assist-driver.component.css',
+  styleUrl: './assist-driver.component.scss',
 })
 export class AssistDriverComponent {}
