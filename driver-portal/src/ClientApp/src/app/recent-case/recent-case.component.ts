@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to partner-portal recent-case.component
+
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
@@ -50,7 +52,6 @@ export class RecentCaseComponent implements OnInit {
 
   constructor(
     private caseManagementService: CaseManagementService,
-    private userService: UserService,
     private breakpointObserver: BreakpointObserver,
     private router: Router
   ) {}
@@ -70,9 +71,8 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    const userId = this.userService.getUserId();
     this.caseManagementService
-      .getMostRecentCase(userId)
+      .getMostRecentCase()
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {

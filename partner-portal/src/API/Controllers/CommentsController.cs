@@ -31,7 +31,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         }
 
         [HttpGet("")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.CaseCallback>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetCaseComments))]

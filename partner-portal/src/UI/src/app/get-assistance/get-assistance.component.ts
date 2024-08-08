@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to driver-portal get-assistance.component
+
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import {
@@ -8,7 +10,7 @@ import {
   DatePipe,
 } from '@angular/common';
 import { UserService } from '../shared/services/user.service';
-import { CaseCallback/*, Callback2*/, PreferredTime } from '../shared/api/models';
+import { Callback, CallStatus, PreferredTime } from '../shared/api/models';
 import { CancelCallbackDialogComponent } from './cancel-callback-dialog/cancel-callback-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,7 +28,6 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
-import { CallbackService } from '@app/shared/api/services';
 
 interface CallBackTopic {
   value: string;
@@ -94,13 +95,13 @@ export class GetAssistanceComponent implements OnInit {
   pageSize = 10;
   display: HelpTopics = HelpTopics.ALL_TOPICS;
 
-  filteredCallbacks?: CaseCallback[] | null = [];
+  filteredCallbacks?: Callback[] | null = [];
 
-  _allCallBackRequests?: CaseCallback[] | null = [];
+  _allCallBackRequests?: Callback[] | null = [];
 
   disableCallBack = true;
 
-  @Input() set allCallBacks(callbacks: CaseCallback[] | null | undefined) {
+  @Input() set allCallBacks(callbacks: Callback[] | null | undefined) {
     this._allCallBackRequests = callbacks;
 
     this._allCallBackRequests?.forEach((req) => {
@@ -116,8 +117,8 @@ export class GetAssistanceComponent implements OnInit {
 
   showCallBack = false;
 
-  showOpenCallbackMessagePredicate = (r: CaseCallback) =>
-    r.callStatus === 'Open';
+  showOpenCallbackMessagePredicate = (r: Callback) =>
+    r.callStatus === CallStatus.$0;
 
   selectedValue?: string | undefined | null;
 

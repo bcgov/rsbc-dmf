@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to partner-portal letters-to-driver.component
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';

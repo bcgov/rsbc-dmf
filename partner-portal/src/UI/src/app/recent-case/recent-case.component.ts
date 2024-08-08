@@ -1,11 +1,12 @@
+// IMPORTANT keep this file identical to driver-portal recent-case.component
+
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CaseDetail } from '@app/shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
-import { UserService } from '../shared/services/user.service';
 import { DatePipe } from '@angular/common';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
@@ -70,9 +71,8 @@ export class RecentCaseComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    let userId = this.userService.getUserId();
     this.caseManagementService
-      .getMostRecentCase(userId)
+      .getMostRecentCase()
       .subscribe((recentCase) => {
         this.caseDetails = recentCase;
         if (recentCase.status === CaseStageEnum.Opened) {

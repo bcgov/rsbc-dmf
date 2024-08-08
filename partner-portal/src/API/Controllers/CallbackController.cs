@@ -33,7 +33,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(Create))]
-        public async Task<IActionResult> Create([FromBody] Callback callback)
+        public async Task<IActionResult> Create([FromBody] CallbackRequest callbackRequest)
         {
             // TODO # Replace the callback view model to "CallbackRequest"
             var profile = await _userService.GetCurrentUserContext();
@@ -45,6 +45,10 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(Cancel)} security failed.");
             }
 
+            var callback = new Callback();
+            callback.Phone = callbackRequest.Phone;
+            callback.PreferredTime = (Callback.Types.PreferredTime)callbackRequest.PreferredTime;
+            callback.Subject = callbackRequest.Subject;
             callback.CaseId = mostRecentCaseReply.Item.CaseId;
             callback.Origin = (int)UserCode.Portal;
             callback.Priority = CallbackPriority.Normal;
@@ -64,13 +68,13 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
 
         [HttpGet("driver")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.CaseCallback>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetDriverCallbacks))]
         public async Task<ActionResult> GetDriverCallbacks()
         {
-            var result = new List<ViewModels.CaseCallback>();
+            var result = new List<ViewModels.Callback>();
 
             var profile = await _userService.GetCurrentUserContext();
 
@@ -78,7 +82,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
             if (driverCallbacks?.ResultStatus == ResultStatus.Success)
             {
-                result = _mapper.Map<List<ViewModels.CaseCallback>>(driverCallbacks.Items);
+                result = _mapper.Map<List<ViewModels.Callback>>(driverCallbacks.Items);
             }
             else
             {

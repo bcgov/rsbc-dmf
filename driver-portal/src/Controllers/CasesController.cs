@@ -106,7 +106,17 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 // these properties are needed in other mappings but not here, only show minimal information
                 result.DriverId = null;
                 result.EligibleLicenseClass = null;
-
+            }
+            else
+            {
+                if (c.ResultStatus == CaseManagement.Service.ResultStatus.Fail)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, c.ErrorDetail);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NotFound, "Most recent case not found.");
+                }
             }
             
             return Json(result);

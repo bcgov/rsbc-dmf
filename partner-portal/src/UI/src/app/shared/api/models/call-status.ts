@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-export enum CallbackPriority {
+export enum CallStatus {
   $0 = 0,
-  $1 = 1,
-  $2 = 2
+  $1 = 1
 }

@@ -6,12 +6,12 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { CaseCallback } from '../../models/case-callback';
+import { Callback } from '../../models/callback';
 
 export interface ApiCallbackDriverGet$Json$Params {
 }
 
-export function apiCallbackDriverGet$Json(http: HttpClient, rootUrl: string, params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<CaseCallback>>> {
+export function apiCallbackDriverGet$Json(http: HttpClient, rootUrl: string, params?: ApiCallbackDriverGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
   const rb = new RequestBuilder(rootUrl, apiCallbackDriverGet$Json.PATH, 'get');
   if (params) {
   }
@@ -21,7 +21,7 @@ export function apiCallbackDriverGet$Json(http: HttpClient, rootUrl: string, par
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<CaseCallback>>;
+      return r as StrictHttpResponse<Array<Callback>>;
     })
   );
 }
