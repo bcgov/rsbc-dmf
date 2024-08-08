@@ -19,6 +19,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "shared-utils
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{5613B8CF-A575-48AB-99AF-56527430C169}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter", "icbc-adapter\src\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj", "{FAD63B70-C5E2-466D-A1FD-B545E85827A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter", "document-storage-adapter\src\Pssg.DocumentStorageAdapter\Pssg.DocumentStorageAdapter.csproj", "{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{5613B8CF-A575-48AB-99AF-56527430C169}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5613B8CF-A575-48AB-99AF-56527430C169}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5613B8CF-A575-48AB-99AF-56527430C169}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD63B70-C5E2-466D-A1FD-B545E85827A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD63B70-C5E2-466D-A1FD-B545E85827A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD63B70-C5E2-466D-A1FD-B545E85827A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD63B70-C5E2-466D-A1FD-B545E85827A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

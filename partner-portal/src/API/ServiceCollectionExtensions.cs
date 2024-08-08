@@ -1,4 +1,5 @@
-﻿using Grpc.Net.Client;
+﻿using Grpc.Core;
+using Grpc.Net.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pssg.DocumentStorageAdapter;
@@ -45,7 +46,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                     // call the token service to get a token.
                     var tokenRequest = new Rsbc.Dmf.CaseManagement.Service.TokenRequest { Secret = clientSecret };
 
-                    var tokenReply = initialClient.GetToken(tokenRequest);
+                    var tokenReply = initialClient.GetToken(tokenRequest, new CallOptions().WithWaitForReady(true));
+
                     if (tokenReply != null && tokenReply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
                     {
                         // Add the bearer token to the client.
@@ -93,7 +95,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                     Secret = configuration["DOCUMENT_STORAGE_ADAPTER_JWT_SECRET"]
                 };
 
-                var tokenReply = initialClient.GetToken(tokenRequest);
+                var tokenReply = initialClient.GetToken(tokenRequest, new CallOptions().WithWaitForReady(true));
 
                 if (tokenReply != null && tokenReply.ResultStatus == Pssg.DocumentStorageAdapter.ResultStatus.Success)
                 {
@@ -117,8 +119,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
             {
                 var httpClientHandler = new HttpClientHandler();
                 // Return `true` to allow certificates that are untrusted/invalid                    
-                httpClientHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                httpClientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
                 var httpClient = new HttpClient(httpClientHandler)
                 {
@@ -128,21 +129,21 @@ namespace Rsbc.Dmf.PartnerPortal.Api
 
                 if (!string.IsNullOrEmpty(configuration["ICBC_ADAPTER_JWT_SECRET"]))
                 {
-                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI,
-                    new GrpcChannelOptions
-                    { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI, new GrpcChannelOptions { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
                     var initialClient = new IcbcAdapter.IcbcAdapter.IcbcAdapterClient(initialChannel);
 
-                // call the token service to get a token.
+                    // call the token service to get a token.
                     var tokenRequest = new IcbcAdapter.TokenRequest
-                {
-                        Secret = configuration["ICBC_ADAPTER_JWT_SECRET"]
-                };
-                var tokenReply = initialClient.GetToken(tokenRequest);
+                    {
+                            Secret = configuration["ICBC_ADAPTER_JWT_SECRET"]
+                    };
+
+                    var tokenReply = initialClient.GetToken(tokenRequest, new CallOptions().WithWaitForReady(true));
+
                     if (tokenReply != null && tokenReply.ResultStatus == IcbcAdapter.ResultStatus.Success)
-                {
-                    // Add the bearer token to the client.
-                    httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
+                    {
+                        // Add the bearer token to the client.
+                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
                         Log.Logger.Information("GetToken successfuly.");
 
                         var channel = GrpcChannel.ForAddress(icbcAdapterURI,
@@ -161,4 +162,3 @@ namespace Rsbc.Dmf.PartnerPortal.Api
         }
     }
 }
- 
