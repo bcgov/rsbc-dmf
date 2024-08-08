@@ -2,7 +2,7 @@
 
 To run the solution in the root folder, you will need to add the following in multiple startup projects configuration:
 - partner-portal
-- Rsbc.Dmf.CaseManagement
+- Rsbc.Dmf.CaseManagement.Service
 - Pssg.Dmf.IcbcAdapter
 - Pssg.DocumentStorageAdapter
 
