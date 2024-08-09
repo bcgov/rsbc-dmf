@@ -1,6 +1,6 @@
 ## LOGIN
 
-Use your own IDIR account e.g. @gov.bc.ca
+Use your own IDIR account e.g. john.smith@gov.bc.ca
 
 ## RUN
 
