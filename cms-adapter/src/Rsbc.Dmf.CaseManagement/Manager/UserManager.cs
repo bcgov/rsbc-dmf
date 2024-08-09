@@ -138,6 +138,8 @@ namespace Rsbc.Dmf.CaseManagement
             this.dynamicsContext = dynamicsContext;
         }
 
+        // NOTE Practitioner data now comes from OneHealth, the Practitioner Dynamics code is probably completely irrelevant now
+        // TODO confirm and delete code
         #region Practitioner
 
         public contact contact { get; private set; }
