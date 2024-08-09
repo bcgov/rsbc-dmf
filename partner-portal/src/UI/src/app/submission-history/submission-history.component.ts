@@ -94,6 +94,7 @@ export class SubmissionHistoryComponent implements OnInit {
         this._allDocuments = allDocuments;
         this.submissionHistoryDocuments = [];
 
+        // can be moved to driver portal
         allDocuments.forEach((doc: any) => {
           if (
             ![
@@ -105,6 +106,7 @@ export class SubmissionHistoryComponent implements OnInit {
             this.submissionHistoryDocuments.push(doc);
           }
         });
+
         this.filteredDocuments = this.submissionHistoryDocuments.slice(
           0,
           this.pageSize,

@@ -107,6 +107,7 @@ export class LettersToDriverComponent implements OnInit {
     link.click();
   }
 
+  // TODO move this to driver portal as well
   getLetterOutDocument(driverId: string) {
     this.documentService
       .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
