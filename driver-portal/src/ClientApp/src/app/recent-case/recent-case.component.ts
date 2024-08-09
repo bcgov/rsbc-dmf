@@ -7,7 +7,6 @@ import { Router, RouterLink } from '@angular/router';
 import { CaseDetail } from '../shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
-import { UserService } from '../shared/services/user.service';
 import { DatePipe } from '@angular/common';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { MatIcon } from '@angular/material/icon';
