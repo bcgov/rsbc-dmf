@@ -13,7 +13,7 @@ namespace Rsbc.Dmf.CaseManagement.Client
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config, ILoggerFactory loggerFactory)
         {
-            var logger = loggerFactory.CreateLogger("AddCaseManagementAdapterClient");
+            var logger = loggerFactory.CreateLogger(nameof(AddCaseManagementAdapterClient));
 
             var serviceUrl = config["CMS_ADAPTER_URI"];
             var clientSecret = config["CMS_ADAPTER_JWT_SECRET"];

@@ -145,9 +145,11 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
     .AddConsole());
 
 // grpc clients
+// TODO use Pssg.DocumentStorageAdapter.Client ServiceCollectionExtensions AddDocumentStorageClient instead
 services.AddDocumentStorageClient(builder.Configuration);
-// NOTE use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
+// TODO use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
 services.AddCaseManagementAdapterClient(builder.Configuration);
+// TODO use Pssg.Dmf.IcbcAdapter.Client ServiceCollectionExtensions AddIcbcAdapterClient instead
 services.AddIcbcAdapterClient(builder.Configuration, loggerFactory);
 
 // Health Checks
