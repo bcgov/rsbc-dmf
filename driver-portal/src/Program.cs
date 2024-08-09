@@ -146,6 +146,7 @@ using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
 
 // grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
+// NOTE use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
 services.AddCaseManagementAdapterClient(builder.Configuration);
 services.AddIcbcAdapterClient(builder.Configuration, loggerFactory);
 
