@@ -10,6 +10,7 @@ using TokenRequest = Rsbc.Dmf.IcbcAdapter.TokenRequest;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
+    // TODO delete this file and use the ServiceCollectionExtensions in the gRPC client projects instead
     public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddCaseManagementAdapterClient(this IServiceCollection services, IConfiguration config)

@@ -141,11 +141,12 @@ namespace RSBC.DMF.MedicalPortal.API
 
             // Add Case Management Service
 
-            // NOTE use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
+            // TODO use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
             // Add Case Management System (CMS) Adapter 
             services.AddCaseManagementAdapterClient(configuration);
 
             // Add Document Storage Adapter
+            // TODO use Pssg.DocumentStorageAdapter.Client ServiceCollectionExtensions AddDocumentStorageClient instead
             services.AddDocumentStorageClient(configuration);
 
             // Add ICBC Adapter
