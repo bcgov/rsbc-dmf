@@ -33,6 +33,7 @@ services.AddKeycloakWebApiAuthentication(
         keycloakOptions.Realm = config["KEYCLOAK_REALM"];
         keycloakOptions.Audience = config["KEYCLOAK_AUDIENCE"];
         keycloakOptions.AuthServerUrl = config["KEYCLOAK_AUTH_URL"];
+        keycloakOptions.VerifyTokenAudience = false;
     },
     jwtBearerOptions =>
     {

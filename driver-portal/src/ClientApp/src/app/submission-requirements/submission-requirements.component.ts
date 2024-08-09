@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to partner-portal submissin-requirements.component
+
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {
   CallbackService,
   CasesService,
+  CommentsService,
   DocumentService,
   DocumentTypeService,
   DriverService,
@@ -14,17 +15,16 @@ import {
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService,
+    private driverService: DriverService,
     private documentService: DocumentService,
     //private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
-    private callbacService: CallbackService
-  ) {}
+    private callbackService: CallbackService,
+    private commentsService: CommentsService
+  ) { }
 
-  public getMostRecentCase(
-    params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]
-  ) {
-    return this.casesService.apiCasesMostRecentGet$Json(params);
+  public getMostRecentCase() {
+    return this.casesService.apiCasesMostRecentGet$Json();
   }
 
   public getClosedCases(
@@ -39,11 +39,9 @@ export class CaseManagementService {
   //   return this.driversService.apiDriverDocumentsGet$Json(params);
   // }
 
-  // public getAllDocuments(
-  //   params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
-  // ) {
-  //   return this.driversService.apiDriverAllDocumentsGet$Json(params);
-  // }
+  public getAllDriverDocuments() {
+    return this.driverService.apiDriverAllDocumentsGet$Json()
+  }
 
   public getDownloadDocument(
     params: Parameters<DocumentService['apiDocumentDocumentIdGet$Json']>[0]
@@ -69,24 +67,33 @@ export class CaseManagementService {
   //   return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
   // }
 
+  public getDocumentSubTypes() {
+    return this.documentTypeService.apiDocumentTypeDocumentSubTypeGet$Json();
+  }
+
   public getCallBackRequest(
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
   ) {
-    return this.callbacService.apiCallbackDriverGet$Json(params);
+    return this.callbackService.apiCallbackDriverGet$Json(params);
   }
 
   public createCallBackRequest(
     params: Parameters<CallbackService['apiCallbackCreatePost$Json']>[0]
   ) {
-    return this.callbacService.apiCallbackCreatePost$Json(params);
+    return this.callbackService.apiCallbackCreatePost$Json(params);
   }
 
   public cancelCallBackRequest(
     params: Parameters<CallbackService['apiCallbackCancelPut$Json']>[0]
   ) {
-    return this.callbacService.apiCallbackCancelPut$Json(params);
+    return this.callbackService.apiCallbackCancelPut$Json(params);
   }
 
+  public getComments(
+    params: Parameters<CommentsService['apiCommentsGet$Json']>[0]
+  ) {
+    return this.commentsService.apiCommentsGet$Json(params);
+  }
   // public getDriverAddress(
   //   params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
   // ) {

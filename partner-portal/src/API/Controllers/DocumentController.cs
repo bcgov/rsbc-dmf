@@ -11,7 +11,6 @@ using static Pssg.DocumentStorageAdapter.DocumentStorageAdapter;
 using System.Net;
 using Google.Protobuf;
 using Microsoft.AspNetCore.Http;
-using static Rsbc.Dmf.CaseManagement.Service.DocumentManager;
 using Winista.Mime;
 
 
@@ -140,7 +139,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 return StatusCode(500, documentSubTypeGuidReply.ErrorDetail);
             }
 
-            var profile = await _userService.GetCurrentUserContext();
+            var user = _userService.GetDriverInfo();
 
             // read file stream into byte array
             var fileStream = new MemoryStream((int)file.Length);
@@ -163,7 +162,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
                 Data = ByteString.CopyFrom(bytes),
                 EntityName = "dfp_driver",
                 FileName = file.FileName,
-                FolderName = profile.DriverId,
+                FolderName = user.DriverId,
             };
             var fileReply = _documentStorageAdapterClient.UploadFile(request);
             if (fileReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
@@ -173,9 +172,9 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
             // create document and then link to driver
             var driver = new Driver();
-            driver.Id = profile.DriverId;
+            driver.Id = user.DriverId;
 
-            var document = _documentFactory.Create(driver, profile.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
+            var document = _documentFactory.Create(driver, user.Id, fileReply.FileName, "Submitted Document", _configuration["DRIVER_DOCUMENT_TYPE_CODE"]);
             document.DocumentSubTypeId = documentSubTypeGuidReply.Id.ToString();
             var result = _cmsAdapterClient.CreateUnsolicitedDocumentOnDriver(document);
             if (result.ResultStatus != CaseManagement.Service.ResultStatus.Success)
@@ -184,39 +183,6 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
 
             return Ok();
-        }
-
-        [HttpGet("{driverId}/AllDocuments")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.Document>), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetAllDocuments")]
-        public async Task<ActionResult> GetAllDocuments([FromRoute] string driverId)
-        {
-            var profile = await _userService.GetCurrentUserContext();
-
-            var driverIdRequest = new DriverIdRequest() { Id = driverId };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
-            if (reply != null && reply.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
-            {
-                // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
-                var replyItemsWithDocuments = reply.Items;
-
-                var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
-
-                // sort the documents
-                if (result.Count > 0)
-                {
-                    result = result.OrderByDescending(cs => cs.CreateDate).ToList();
-                }
-
-                return Json(result);
-            }
-            else
-            {
-                _logger.LogError($"{nameof(GetAllDocuments)} failed for driverId: {driverId}", reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
-            }
         }
     }
 }

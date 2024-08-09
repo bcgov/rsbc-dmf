@@ -31,11 +31,12 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate)
                 .AddTransform(NullStringConverter);
             CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
-            CreateMap<Callback, ViewModels.CaseCallback>()
+            CreateMap<Callback, ViewModels.Callback>()
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
             CreateMap<DriverInfoReply, ViewModels.Driver>()
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName));
+            CreateMap<LegacyComment, ViewModels.Comment>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

@@ -6,32 +6,27 @@ namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
     {
         /// <summary>
         /// The text body of the comment.
-        /// </summary>
-        [Required]
+        /// </summary
         public string CommentText { get; set; }
+
         /// <summary>
         /// The Drivers License Number
         /// </summary>
-        [Required]
-
         public Driver Driver { get; set; }
 
         /// <summary>
         /// Sequence Number
         /// </summary>
-
         public long? SequenceNumber { get; set; }
 
         /// <summary>
         /// Comment Type Code - typically "W" for DFWEB
         /// </summary>
-        [Required]
         public string CommentTypeCode { get; set; }
 
         /// <summary>
         /// The User ID for the user making the comment
         /// </summary>
-        [Required]
         public string UserId { get; set; }
 
         /// <summary>
@@ -50,3 +45,5 @@ namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
         public DateTimeOffset? CommentDate { get; set; }
     }
 }
+
+

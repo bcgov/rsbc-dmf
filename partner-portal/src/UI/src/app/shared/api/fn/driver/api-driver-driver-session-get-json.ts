@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Configuration } from '../../models/configuration';
+import { UserContext } from '../../models/user-context';
 
-export interface ApiConfigGet$Json$Params {
+export interface ApiDriverDriverSessionGet$Json$Params {
 }
 
-export function apiConfigGet$Json(http: HttpClient, rootUrl: string, params?: ApiConfigGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Configuration>> {
-  const rb = new RequestBuilder(rootUrl, apiConfigGet$Json.PATH, 'get');
+export function apiDriverDriverSessionGet$Json(http: HttpClient, rootUrl: string, params?: ApiDriverDriverSessionGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<UserContext>> {
+  const rb = new RequestBuilder(rootUrl, apiDriverDriverSessionGet$Json.PATH, 'get');
   if (params) {
   }
 
@@ -21,9 +21,9 @@ export function apiConfigGet$Json(http: HttpClient, rootUrl: string, params?: Ap
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Configuration>;
+      return r as StrictHttpResponse<UserContext>;
     })
   );
 }
 
-apiConfigGet$Json.PATH = '/api/Config';
+apiDriverDriverSessionGet$Json.PATH = '/api/Driver/driverSession';

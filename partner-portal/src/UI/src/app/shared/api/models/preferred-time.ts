@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export enum PreferredTime {
-  Anytime = 'Anytime',
-  Morning = 'Morning',
-  Evening = 'Evening',
+  $0 = 0,
+  $1 = 1,
+  $2 = 2
 }

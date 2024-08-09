@@ -5,9 +5,9 @@ export interface Comment {
   caseId?: string | null;
   commentDate?: string | null;
   commentId?: string | null;
-  commentText: string;
-  commentTypeCode: string;
-  driver: Driver;
+  commentText?: string | null;
+  commentTypeCode?: string | null;
+  driver?: Driver;
   sequenceNumber?: number | null;
-  userId: string;
+  userId?: string | null;
 }

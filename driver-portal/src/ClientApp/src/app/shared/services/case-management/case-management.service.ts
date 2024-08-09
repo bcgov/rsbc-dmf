@@ -21,10 +21,8 @@ export class CaseManagementService {
     private callbacService: CallbackService
   ) {}
 
-  public getMostRecentCase(
-    params: Parameters<CasesService['apiCasesMostRecentGet$Json']>[0]
-  ) {
-    return this.casesService.apiCasesMostRecentGet$Json(params);
+  public getMostRecentCase() {
+    return this.casesService.apiCasesMostRecentGet$Json();
   }
 
   public getClosedCases(
@@ -39,10 +37,8 @@ export class CaseManagementService {
     return this.driversService.apiDriverDocumentsGet$Json(params);
   }
 
-  public getAllDocuments(
-    params: Parameters<DriverService['apiDriverAllDocumentsGet$Json']>[0]
-  ) {
-    return this.driversService.apiDriverAllDocumentsGet$Json(params);
+  public getAllDocuments() {
+    return this.driversService.apiDriverAllDocumentsGet$Json();
   }
 
   public getDownloadDocument(

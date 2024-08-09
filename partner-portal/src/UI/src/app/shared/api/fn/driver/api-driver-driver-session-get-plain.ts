@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Configuration } from '../../models/configuration';
+import { UserContext } from '../../models/user-context';
 
-export interface ApiConfigGet$Plain$Params {
+export interface ApiDriverDriverSessionGet$Plain$Params {
 }
 
-export function apiConfigGet$Plain(http: HttpClient, rootUrl: string, params?: ApiConfigGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Configuration>> {
-  const rb = new RequestBuilder(rootUrl, apiConfigGet$Plain.PATH, 'get');
+export function apiDriverDriverSessionGet$Plain(http: HttpClient, rootUrl: string, params?: ApiDriverDriverSessionGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<UserContext>> {
+  const rb = new RequestBuilder(rootUrl, apiDriverDriverSessionGet$Plain.PATH, 'get');
   if (params) {
   }
 
@@ -21,9 +21,9 @@ export function apiConfigGet$Plain(http: HttpClient, rootUrl: string, params?: A
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Configuration>;
+      return r as StrictHttpResponse<UserContext>;
     })
   );
 }
 
-apiConfigGet$Plain.PATH = '/api/Config';
+apiDriverDriverSessionGet$Plain.PATH = '/api/Driver/driverSession';

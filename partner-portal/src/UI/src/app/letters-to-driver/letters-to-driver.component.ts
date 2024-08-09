@@ -1,10 +1,8 @@
+// IMPORTANT keep this file identical to driver-portal letters-to-driver.component
+
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { Document } from '../shared/api/models';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -13,7 +11,6 @@ import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
 import { LetterTopicComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
-import { DocumentService } from '@app/shared/api/services';
 import { SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
@@ -40,7 +37,7 @@ import { SubmittalStatusEnum } from '@app/app.model';
   ],
 })
 export class LettersToDriverComponent implements OnInit {
-  constructor(private documentService: DocumentService) {}
+  constructor(private caseManagementService: CaseManagementService) {}
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
@@ -89,8 +86,8 @@ export class LettersToDriverComponent implements OnInit {
 
   downloadLetters(documentId: string | null | undefined) {
     if (!documentId) return;
-    this.documentService
-      .apiDocumentDocumentIdGet$Json({ documentId })
+    this.caseManagementService
+      .getDownloadDocument({ documentId })
       .subscribe((res) => {
         this.downloadFile(res);
       });
@@ -109,8 +106,7 @@ export class LettersToDriverComponent implements OnInit {
 
   // TODO move this to driver portal as well
   getLetterOutDocument(driverId: string) {
-    this.documentService
-      .apiDocumentDriverIdAllDocumentsGet$Json({ driverId })
+    this.caseManagementService.getAllDriverDocuments()
       .subscribe((letterDocuments: any) => {
         if (!letterDocuments) {
           return;

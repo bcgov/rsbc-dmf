@@ -15,6 +15,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
         void SetDriverInfo(ViewModels.Driver driver);
+        UserContext GetDriverInfo();
     }
 
     public record UserContext
@@ -58,19 +59,16 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
 
             return await Task.FromResult(new UserContext
             {
-                //Id = user.FindFirstValue(ClaimTypes.Sid),
-                //BirthDate = user.FindFirstValue(UserClaimTypes.BirthDate),
-                //DriverId = user.FindFirstValue(UserClaimTypes.DriverId),
-                //FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
-                //LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
-                //Email = user.FindFirstValue(ClaimTypes.Email),
-                //ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
-                //DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
-                //DriverLicenseNumber = user.FindFirstValue(UserClaimTypes.DriverLicenseNumber)
-                FirstName = httpContext.HttpContext.Session.GetString(ClaimTypes.GivenName),
-                LastName = httpContext.HttpContext.Session.GetString(ClaimTypes.Surname),
-                DriverId = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverId),
-                DriverLicenseNumber = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverLicenseNumber)
+                Id = user.FindFirstValue(ClaimTypes.Sid),
+                BirthDate = user.FindFirstValue(UserClaimTypes.BirthDate),
+                DriverId = user.FindFirstValue(UserClaimTypes.DriverId),
+                FirstName = user.FindFirstValue(UserClaimTypes.GivenName),
+                LastName = user.FindFirstValue(UserClaimTypes.FamilyName),
+                Email = user.FindFirstValue(ClaimTypes.Email),
+                ExternalUserName = user.FindFirstValue(ClaimTypes.Upn),
+                DisplayName = user.FindFirstValue(UserClaimTypes.DisplayName),
+                DriverLicenseNumber = user.FindFirstValue(UserClaimTypes.DriverLicenseNumber)
+
             });
         }
 
@@ -123,6 +121,17 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Services
             httpContext.HttpContext.Session.SetString(ClaimTypes.Surname, driver.LastName);
             httpContext.HttpContext.Session.SetString(UserClaimTypes.DriverId, driver.Id);
             httpContext.HttpContext.Session.SetString(UserClaimTypes.DriverLicenseNumber, driver.LicenseNumber);
+        }
+
+        public UserContext GetDriverInfo()
+        {
+            var user = new UserContext();
+          
+            user.FirstName = httpContext.HttpContext.Session.GetString(ClaimTypes.GivenName); 
+            user.LastName = httpContext.HttpContext.Session.GetString(ClaimTypes.Surname); 
+            user.DriverId = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverId); 
+            user.DriverLicenseNumber = httpContext.HttpContext.Session.GetString(UserClaimTypes.DriverLicenseNumber); 
+            return user;
         }
     }
 }

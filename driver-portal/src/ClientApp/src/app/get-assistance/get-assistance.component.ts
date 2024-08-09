@@ -1,3 +1,5 @@
+// IMPORTANT keep this file identical to partner-portal get-assistance.component
+
 import { Component, Input, OnInit } from '@angular/core';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
 import { ViewportScroller, NgIf, NgFor, NgClass, DatePipe } from '@angular/common';
