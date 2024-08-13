@@ -104,6 +104,7 @@ export class LettersToDriverComponent implements OnInit {
     link.click();
   }
 
+  // TODO move this to driver portal as well
   getLetterOutDocument(driverId: string) {
     this.caseManagementService.getAllDriverDocuments()
       .subscribe((letterDocuments: any) => {

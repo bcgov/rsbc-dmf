@@ -217,6 +217,7 @@ namespace Rsbc.Dmf.IcbcAdapter
                 services.AddTransient(_ => icbcClient);
             }
 
+            // NOTE use Rsbc.Dmf.CaseManagement.Client ServiceCollectionExtensions AddCaseManagementAdapterClient instead
             // Add Case Management System (CMS) Adapter 
 
             string cmsAdapterURI = Configuration["CMS_ADAPTER_URI"];
