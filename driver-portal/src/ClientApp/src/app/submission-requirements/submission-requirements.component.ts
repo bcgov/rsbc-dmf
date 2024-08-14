@@ -91,6 +91,8 @@ export class SubmissionRequirementsComponent implements OnInit {
   })
   ngOnInit() {
     this.getDocumentSubtypes();
+
+    // TODO match with driver portal
   }
 
   getDocumentSubtypes() {

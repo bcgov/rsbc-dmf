@@ -5,6 +5,7 @@ using Rsbc.Dmf.CaseManagement.Service;
 
 namespace Rsbc.Dmf.DriverPortal.Api
 {
+    // TODO delete this file and use the gRPC client ServiceCollectionExtensions methods instead
     public static class Configuration
     {
         public static void AddDocumentStorageClient(this IServiceCollection services, IConfiguration configuration)

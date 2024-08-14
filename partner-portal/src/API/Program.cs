@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Pssg.DocumentStorageAdapter.Client;
+using Pssg.Dmf.IcbcAdapter.Client;
+using Rsbc.Dmf.CaseManagement.Client;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api;
 using Rsbc.Dmf.PartnerPortal.Api.Model;
@@ -85,13 +88,13 @@ services.AddMemoryCache();
 
 // grpc clients
 services.AddDocumentStorageClient(builder.Configuration);
-services.AddCaseManagementAdapterClient(builder.Configuration);
+services.AddCaseManagementAdapterClient(builder.Configuration, loggerFactory);
 
 services.AddTransient<IUserService, UserService>();
 services.AddTransient<DocumentFactory>();
 
 // Add ICBC Adapter
-services.AddIcbcAdapterClient(builder.Configuration); 
+services.AddIcbcAdapterClient(builder.Configuration, loggerFactory); 
 services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
 // session variables for storing the results from driver search
