@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{83
 		.editorconfig = .editorconfig
 		DMFT.postman_collection.json = DMFT.postman_collection.json
 		Dockerfile = Dockerfile
-		ReadMe.md = ReadMe.md
+		..\..\ReadMe.md = ..\..\ReadMe.md
 		start.ps1 = start.ps1
 	EndProjectSection
 EndProject
