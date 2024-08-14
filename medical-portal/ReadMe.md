@@ -1,14 +1,12 @@
-## OVERVIEW
-Road Safety BC Driver Medical Fitness - Medical Practitioner Portal
-Repository: https://github.com/bcgov/rsbc-dmf/tree/main/medical-portal
-Authors: Quartech
+# Road Safety BC Driver Medical Fitness - Medical Practitioner Portal
+[Repository](https://github.com/bcgov/rsbc-dmf/tree/main/medical-portal)
 
 ## DOCUMENTATION
-Confluence: https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Practitioner+Portal+and+eDMER
+[Confluence](https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Practitioner+Portal+and+eDMER)
+[Jira](https://jag.gov.bc.ca/jirarsi/secure/RapidBoard.jspa?rapidView=2503&projectKey=DFTDP)
 
 ## PREREQUISITES
 - Keycloak
-- Chefs
 - AWS S3
 - OpenShift
 
@@ -25,27 +23,33 @@ Confluence: https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Practit
 ## RUN
 Run solution "\medical-portal.sln" to run all projects needed for medical portal or run individual projects as needed
 
+You will need to add the following in VS "Configure Startup Projects...":
+- Rsbc.Dmf.CaseManagement.Service
+- Pssg.Dmf.IcbcAdapter
+- Pssg.DocumentStorageAdapter
+- PidpAdapter.Service
+- RSBC.DMF.MedicalPortal.API
+
 ## DEPLOY
-Github Actions: 
-https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml
-https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-medical-portal-api.yml
-https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml
-https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-medical-portal-ui.yml
+[Github Action - Api CI](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-api.yml)
+[Github Action - Api CD](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-medical-portal-api.yml)
+[Github Action - UI CI](https://github.com/bcgov/rsbc-dmf/actions/workflows/ci-medical-portal-ui.yml)
+[Github Action - UI CD](https://github.com/bcgov/rsbc-dmf/actions/workflows/cd-medical-portal-ui.yml)
 
 ## DEBUG
-Splunk: https://splunk.jag.gov.bc.ca/
+[Splunk](https://splunk.jag.gov.bc.ca/)
 
 ## TEST
 - See project "\RSBC.Tests.Unit.DMF.MedicalPortal.API\RSBC.Tests.Unit.DMF.MedicalPortal.API.csproj" for unit tests
-- Swagger UI http://localhost:5000/swagger/index.html
+- [Swagger UI](http://localhost:5000/swagger/index.html)
 - Postman see file "\DMFT.postman_collection.json"
 
 ## RESOURCES
-OpenShift Silver: https://oauth-openshift.apps.silver.devops.gov.bc.ca/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole.apps.silver.devops.gov.bc.ca%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=bd57c0b6
-Keycloak: https://test.healthprovideridentityportal.gov.bc.ca/
+[OpenShift Silver](https://oauth-openshift.apps.silver.devops.gov.bc.ca/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole.apps.silver.devops.gov.bc.ca%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=bd57c0b6)
+[Keycloak](https://test.healthprovideridentityportal.gov.bc.ca/)
 AWS S3
-Chefs: https://submit.digital.gov.bc.ca/app/
-Chefs test eDMER form: https://submit.digital.gov.bc.ca/app/form/manage?f=5383fc89-b219-49a2-924c-251cd1557eb8
+[Chefs](https://submit.digital.gov.bc.ca/app/)
+[Chefs test eDMER form](https://submit.digital.gov.bc.ca/app/form/manage?f=5383fc89-b219-49a2-924c-251cd1557eb8)
 
 ## ONEHEALTH
 The local, DEV, and TEST environments all use OneHealth for authentication and to load the endorsements with licences. 
@@ -61,8 +65,7 @@ HOW TO ADD ENDORSEMENTS
 2. Navigate to endorsements
 3. Enter the email of user B and request endorsement
 4. Logout
-5. Navigate to Mailhog
-https://mailhog-test.healthprovideridentityportal.gov.bc.ca/
+5. Navigate to [Mailhog](https://mailhog-test.healthprovideridentityportal.gov.bc.ca/)
 6. Open new email from user A and click "this link" and follow the instructions in the email
 7. Login as user B after clicking the link
 8. At the top of the page, you will see an pending endorsement link, click on the link
@@ -75,6 +78,6 @@ https://mailhog-test.healthprovideridentityportal.gov.bc.ca/
 15. Under incoming requests, you will see an request from user B, click Approve
 16. You will receive a new email and also see a new "Working relationship" for both users
 
-Contacts:
-Nick Mailhot
+### Contacts
+Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
 Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X users, which were suppose to be persisted for our testing
