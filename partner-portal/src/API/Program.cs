@@ -15,6 +15,9 @@ using Rsbc.Dmf.PartnerPortal.Api.Services;
 using Serilog;
 using System.Net;
 using System.Security.Claims;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 Console.WriteLine($"Starting Partner Portal Api.");
 var builder = WebApplication.CreateBuilder(args);
@@ -125,6 +128,11 @@ services.AddSwaggerGen(options =>
     });
 });
 
+// Health Checks
+services
+    .AddHealthChecks()
+    .AddCheck("partner-portal", () => HealthCheckResult.Healthy("OK"));
+
 try
 {
     var app = builder.Build();
@@ -144,6 +152,17 @@ try
             ;
     });
     app.MapSwagger();
+    app.UseHealthChecks("/hc/ready", new HealthCheckOptions
+    {
+        Predicate = _ => true,
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
+
+    app.UseHealthChecks("/hc/live", new HealthCheckOptions
+    {
+        // Exclude all checks and return a 200-Ok.
+        Predicate = _ => false
+    });
     app.Run();
     Console.WriteLine("Program configuration completed.");
 }
