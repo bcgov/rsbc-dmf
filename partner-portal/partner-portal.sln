@@ -3,29 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal", "partner-portal\src\API\partner-portal.csproj", "{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "partner-portal", "src\API\partner-portal.csproj", "{58EC794C-6CCE-4278-BE6C-DBAC6B981C78}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Client", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Client\Rsbc.Dmf.CaseManagement.Client.csproj", "{99A5F3A6-1C50-4747-8F77-02DE3DD46BD2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Service", "cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj", "{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement.Service", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement.Service\Rsbc.Dmf.CaseManagement.Service.csproj", "{C7C543D4-10E9-4A78-89D6-EA12820BB8CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement", "cms-adapter\src\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj", "{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.CaseManagement", "..\cms-adapter\src\Rsbc.Dmf.CaseManagement\Rsbc.Dmf.CaseManagement.csproj", "{50DDFB74-6346-4BC1-8C8A-F8C3ED89B9F7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter.Client", "icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj", "{736A218B-E3EF-44D0-8E4D-68B39BA99A9D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter.Client", "..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter.Client\Pssg.Dmf.IcbcAdapter.Client.csproj", "{736A218B-E3EF-44D0-8E4D-68B39BA99A9D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.PartnerPortal.Api.Tests", "partner-portal\src\API\Rsbc.Dmf.PartnerPortal.Api.Tests\Rsbc.Dmf.PartnerPortal.Api.Tests.csproj", "{C615071F-29A7-42CC-9C9A-02B6DD1BCB3F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Rsbc.Dmf.PartnerPortal.Api.Tests", "src\API\Rsbc.Dmf.PartnerPortal.Api.Tests\Rsbc.Dmf.PartnerPortal.Api.Tests.csproj", "{C615071F-29A7-42CC-9C9A-02B6DD1BCB3F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "shared-utils\SharedUtils.csproj", "{63624CD2-1998-4FE7-B7E5-6B697F7E8202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUtils", "..\shared-utils\SharedUtils.csproj", "{63624CD2-1998-4FE7-B7E5-6B697F7E8202}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{5613B8CF-A575-48AB-99AF-56527430C169}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter.Client", "..\document-storage-adapter\src\Pssg.DocumentStorageAdapter.Client\Pssg.DocumentStorageAdapter.Client.csproj", "{5613B8CF-A575-48AB-99AF-56527430C169}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter", "icbc-adapter\src\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj", "{FAD63B70-C5E2-466D-A1FD-B545E85827A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.Dmf.IcbcAdapter", "..\icbc-adapter\src\Pssg.Dmf.IcbcAdapter\Pssg.Dmf.IcbcAdapter.csproj", "{FAD63B70-C5E2-466D-A1FD-B545E85827A4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter", "document-storage-adapter\src\Pssg.DocumentStorageAdapter\Pssg.DocumentStorageAdapter.csproj", "{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pssg.DocumentStorageAdapter", "..\document-storage-adapter\src\Pssg.DocumentStorageAdapter\Pssg.DocumentStorageAdapter.csproj", "{F48E38AB-5AA1-4F07-B7A7-5B7DDEBEA333}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B487153C-3BE0-42AC-87B2-315750F477F2}"
 	ProjectSection(SolutionItems) = preProject
-		partner-portal\ReadMe.md = partner-portal\ReadMe.md
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
 Global

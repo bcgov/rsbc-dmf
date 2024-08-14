@@ -24,10 +24,10 @@
 Run solution "\partner-portal.sln" to run all projects needed for partner portal or run individual projects as needed
 
 You will need to add the following in VS "Configure Startup Projects...":
-- partner-portal
 - Rsbc.Dmf.CaseManagement.Service
 - Pssg.Dmf.IcbcAdapter
 - Pssg.DocumentStorageAdapter
+- partner-portal
 
 NOTE you will probably need to update the ICBC adapter port if it's 8080, to another port that is not in use already. Check Properties/launchSettings.json
 
