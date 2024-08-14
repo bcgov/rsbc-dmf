@@ -45,10 +45,10 @@ Splunk: https://splunk.jag.gov.bc.ca/
 
 ## TEST
 - See project "Rsbc.Dmf.PartnerPortal.Api.Tests\Rsbc.Dmf.PartnerPortal.Api.Tests.csproj" for unit tests
-- Swagger UI http://localhost:8080/swagger/index.html
+- [Swagger UI](http://localhost:8080/swagger/index.html)
 - Postman see file "\DMFT.postman_collection.json"
 
 ## RESOURCES
-OpenShift Silver: https://oauth-openshift.apps.silver.devops.gov.bc.ca/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole.apps.silver.devops.gov.bc.ca%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=bd57c0b6
-Keycloak: https://common-logon-test.hlth.gov.bc.ca/auth/
+[OpenShift Silver](https://oauth-openshift.apps.silver.devops.gov.bc.ca/oauth/authorize?client_id=console&redirect_uri=https%3A%2F%2Fconsole.apps.silver.devops.gov.bc.ca%2Fauth%2Fcallback&response_type=code&scope=user%3Afull&state=bd57c0b6)
+[Keycloak](https://common-logon-test.hlth.gov.bc.ca/auth/)
 AWS S3
