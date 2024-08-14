@@ -5,8 +5,8 @@
 		<Nullable>enable</Nullable>
 		<IsPackable>false</IsPackable>
 		<SpaRoot>ClientApp\</SpaRoot>
-		<SpaProxyServerUrl>https://localhost:44405</SpaProxyServerUrl>
-		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+		<SpaProxyServerUrl>https://localhost:4200</SpaProxyServerUrl>
+		<SpaProxyLaunchCommand>npm run start</SpaProxyLaunchCommand>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>83A221DE-E3D0-4A04-9E52-E4EA8E6F9EBE</UserSecretsId>
 		<RootNamespace>Rsbc.Dmf.DriverPortal.Api</RootNamespace>
