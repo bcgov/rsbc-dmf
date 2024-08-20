@@ -1,0 +1,114 @@
+<div class="container">
+  <div class="submissions">
+    <div>
+      <div>
+        <span class="file-upload">
+          RSBC is asking for specific submissions to conduct their evaluation.
+          These submissions can be documents or reports that you or your medical
+          practitioner can provide. Once you upload a document or report, the
+          requirement will be moved to the Document History tab.
+        </span>
+        <br />
+        <span class="file-upload">
+          Please be aware that if your medical practitioner or you have sent a
+          document by fax, it may take some time for it to be removed from this
+          list.
+        </span>
+        <br />
+        <span class="file-upload">
+          <b>Uploading Submission Requirements</b> <br />
+          Use the Upload button to upload specific submission requirements.
+        </span>
+        <br />
+        <span class="file-upload"><b>File Upload Specifications</b></span>
+        <ul>
+          <li>Maximum file size: 20MB</li>
+          <li>Accepted file types: PDF,PNG,JPEG</li>
+        </ul>
+      </div>
+      <div style="padding-bottom: 24px">
+        <button
+          class="primaryButton"
+          mat-flat-button
+          (click)="openUploadFile()"
+        >
+          Upload File
+        </button>
+      </div>
+      @if(showUpload) {
+      <div class="fileUpload">
+        <b> Upload Your File</b>
+        <br />
+        1. Select the appropriate document type based on the submission
+        requirement below. <br />
+        2. Browse for your file <br />
+        3. Click Upload <br />
+        File button Certain documents cannot be uploaded (e.g., example here).
+        Learn how to submit additional documentation.
+
+        <!-- <div style="padding-top: 24px">
+          <mat-form-field appearance="outline" style="width: 350px">
+            <mat-label>Select Document Type</mat-label>
+            <mat-select
+              name="documentType"
+              [formControl]="uploadForm.controls.documentSubType"
+            >
+              @for (documentType of documentSubTypes; track documentType) {
+              <mat-option [value]="documentType.id">{{
+                documentType.name
+              }}</mat-option>
+              }
+            </mat-select>
+            @if (uploadForm.controls.documentSubType.getError('required')) {
+            <mat-error>This Field is required</mat-error>
+            }
+          </mat-form-field>
+        </div> -->
+
+        <!-- <ngx-dropzone [multiple]="false" (change)="onSelect($event)">
+          <ngx-dropzone-label
+            ><div>
+              <mat-icon> file_present </mat-icon>
+              <div>
+                <p>
+                  Browse your file <br />
+                  File Upload Specifications <br />
+                  Maximum file size: 20MB <br />
+                  Accepted file types: PDF,PNG,JPEG
+                </p>
+              </div>
+            </div></ngx-dropzone-label
+          >
+          @if(fileToUpload) {
+          <ngx-dropzone-preview [removable]="true" (removed)="onRemove()">
+            <ngx-dropzone-label>
+              {{ fileToUpload.name }} ({{ fileToUpload.type }})
+            </ngx-dropzone-label>
+          </ngx-dropzone-preview>
+          }
+        </ngx-dropzone>
+        <div style="padding-top: 24px">
+          <label>
+            <input type="checkbox" #confirmed [formControl]="acceptControl" />
+            By checking this box, I confirm that I am submitting an unaltered
+            copy of documentation provided by a medical professional.
+          </label>
+        </div> -->
+
+        <!-- <div class="uploadbutton">
+          <button mat-flat-button class="primaryButton" (click)="fileUpload()">
+            Upload File
+          </button>
+          <button
+            mat-flat-button
+            class="cancelButton"
+            (click)="closeUploadFile()"
+          >
+            Cancel
+          </button>
+        </div> -->
+      </div>
+      }
+    </div>
+  </div>
+</div>

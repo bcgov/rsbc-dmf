@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SharedPortalLibComponent } from './shared-portal-lib.component';
+import { UploadDocumentComponent } from './upload-document.component';
 
-describe('SharedPortalLibComponent', () => {
-  let component: SharedPortalLibComponent;
-  let fixture: ComponentFixture<SharedPortalLibComponent>;
+describe('UploadDocumentComponent', () => {
+  let component: UploadDocumentComponent;
+  let fixture: ComponentFixture<UploadDocumentComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedPortalLibComponent]
+      imports: [UploadDocumentComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(SharedPortalLibComponent);
+    fixture = TestBed.createComponent(UploadDocumentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

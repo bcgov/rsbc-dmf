@@ -2,9 +2,6 @@
  * Public API Surface of shared-portal-lib
  */
 
-export * from './lib/shared-portal-lib.service';
-export * from './lib/shared-portal-lib.component';
-
 // Layout
 export *from './lib/layout/header/header.component'
 //export *from './lib/layout/footer/footer.component'
@@ -23,4 +20,4 @@ export *from './lib/layout/nav-menu/nav-menu.component'
 // export *from './lib/case-definitions/dmer-status/dmer-status.component'
 
 // // Upload-Document
-// export *from './lib/upload-document/upload-document.component'
+export *from './lib/upload-document/upload-document.component'

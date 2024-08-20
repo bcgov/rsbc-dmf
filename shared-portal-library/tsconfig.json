@@ -20,7 +20,7 @@
       ],
       "@angular/*": [
        "./node_modules/@angular/*"
-      ],
+      ]
     },
     "importHelpers": true,
     "target": "ES2022",

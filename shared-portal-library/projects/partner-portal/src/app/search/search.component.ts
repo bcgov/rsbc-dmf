@@ -7,13 +7,13 @@ import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { DriverService } from '@app/shared/api/services';
-import { SharedPortalLibComponent } from '@shared/portal-ui';
+import { UploadDocumentComponent } from '@shared/portal-ui';
 
 @Component({
   selector: 'app-search',
   standalone: true,
   imports: [
-    SharedPortalLibComponent,
+    UploadDocumentComponent,
     MatCardModule,
     CommonModule,
     MatButtonModule,
