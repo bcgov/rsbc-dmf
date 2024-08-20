@@ -1,0 +1,102 @@
+mat-card {
+    margin-bottom: 24px;
+  }
+  
+  .mat-mdc-card {
+    border: 1px solid gray;
+    box-shadow: none !important;
+    margin: 30px 0 30px 0;
+    padding: 12px;
+  
+    .mat-mdc-card-header {
+      padding-top: 12px;
+  
+      .mat-mdc-card-header-text {
+        width: 100%;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .form-label {
+    font-family: "BCSans-Bold", "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    line-height: 10px;;
+  }
+  
+  .search{
+    display: flex; 
+    flex-direction: row; 
+    gap: 32px;
+    padding-top: 32px;
+  }
+
+  .search-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .driver{
+    padding-bottom: 32px;
+  }
+
+  .driver-lookup{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+  }
+
+  .case-lookup{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+  }
+
+  .input-width{
+    width:280px;
+  }
+
+  .mat-mdc-button-base.remedialButton {
+    border-width: 0px;
+    width: 264px;
+    height: 50px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: #f2f2f2;
+    background-color: #003366;
+    cursor: pointer;
+    --mdc-filled-button-label-text-color: #f2f2f2;
+    --mdc-filled-button-container-color: #003366;
+  }
+
+  .assistance {
+    background: #fff;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    border: 2px solid #fcba19;
+    padding: 35px;
+    border-radius: 4px;
+    box-shadow: 0px 5px 5px 0px rgba(0, 51, 102, 0.35);
+  }
+
+  .assistance h2 {
+    color: #003366;
+    margin-bottom: 16px;
+  }
+
+  .assistance__contacts {
+    display: flex;
+    width: 400px;
+    justify-content: space-between;
+  }
+
+  h2.large {
+    font-size: 30px;
+  }

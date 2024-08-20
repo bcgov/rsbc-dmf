@@ -1,0 +1,113 @@
+.p {
+  font-family: "BC Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  text-align: left;
+}
+
+.recentCaseContent {
+  display: flex;
+  gap: 35px;
+}
+
+.recentCaseContent > div {
+  flex: 1;
+  padding-right: 24px;
+}
+
+.recentCaseContent > div:first-child {
+  border-right: 2px solid grey;
+}
+
+.caseStatus{
+  padding-top: 24px;
+
+}
+
+.mat-mdc-card {
+  background-color: #f1f1f3;
+  box-shadow: none !important;
+  margin: 30px 0 30px 0;
+  padding: 32px;
+
+  .mat-mdc-card-header {
+    padding-top: 12px;
+
+    .mat-mdc-card-header-text {
+      width: 100%;
+      vertical-align: middle;
+    }
+  }
+
+  .mat-mdc- -content {
+    padding: 5px 10px;
+  }
+  .mat-mdc-card-actions {
+    padding: 8px !important;
+    margin: 8px !important;
+    display: flex;
+    flex-flow: row-reverse nowrap;
+  }
+}
+
+.mat-mdc-card.caseStatus {
+  background-color: white;
+  border: 1px solid #c3cddc;
+}
+
+mat-stepper {
+  background-color: rgba(236, 245, 255, 1);
+  border-radius: 5px;
+  padding: 8px;
+}
+
+::ng-deep .mat-horizontal-stepper-header {
+  pointer-events: none !important;
+}
+
+::ng-deep .mat-step-header .mat-step-icon-state-done {
+  background-color: rgba(0, 0, 0, 0.54);
+}
+
+::ng-deep .mat-step-header .mat-step-label.mat-step-label-active {
+  color: #003366;
+}
+::ng-deep
+  .mat-step-label.mat-step-label-active.mat-step-label-selected
+  > .mat-step-text-label {
+  color: #003366;
+  font-weight: 700;
+
+  border: 2px solid #f1f1f3;
+  border-radius: 2px;
+  background-color: #f1f1f3;
+  // padding-top: 20px;
+}
+
+// mat-card:hover {
+//   background-color: white;
+//   border: 2px solid #003366;
+//   cursor: pointer;
+// }
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .recentCaseContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "A A"
+      "B C"
+      "D E";
+  }
+
+  .recentCaseContent > div:first-child {
+    border-right: none;
+    border-bottom: 2px solid grey;
+  }
+
+  mat-stepper {
+    orientation: "vertical";
+  }
+}

@@ -1,0 +1,121 @@
+<div>
+  <mat-card>
+    <mat-card-content class="recentCaseContent">
+      <div style="grid-area: A">
+        <label>Case ID</label>
+        <div>
+          <b>
+            <a>
+              <h3>{{ caseDetails?.idCode }}</h3>
+            </a>
+          </b>
+        </div>
+      </div>
+
+      <div style="grid-area: B">
+        <label>Case Type</label>
+        <div>
+          <b>{{ caseDetails?.caseType }}</b>
+        </div>
+      </div>
+
+      <div style="grid-area: C">
+        <label>DMER Type</label>
+        <div>
+          <b>{{ caseDetails?.dmerType }}</b>
+        </div>
+      </div>
+
+      <div style="grid-area: D">
+        <label>Outstanding Documents</label>
+        <div>
+          <b>{{ caseDetails?.outstandingDocuments }}</b>
+        </div>
+      </div>
+
+      <div style="grid-area: E">
+        <label> Decision Outcome </label>
+        <div>
+          <b>{{ caseDetails?.latestDecision }}</b>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div>
+  <mat-stepper
+    labelPosition="bottom"
+    #stepper
+    [selectedIndex]="selectedIndex"
+    orientation="horizontal"
+  >
+    <mat-step state="circle">
+      <ng-template matStepLabel>
+        Opened:<br />
+        {{ caseDetails?.openedDate | date: "longDate" }}
+      </ng-template>
+    </mat-step>
+    <mat-step state="circle">
+      <ng-template matStepLabel>Open Pending Submission</ng-template>
+    </mat-step>
+    <mat-step state="circle">
+      <ng-template matStepLabel>Under Review</ng-template>
+    </mat-step>
+    <mat-step state="circle">
+      <ng-template matStepLabel>Decision rendered</ng-template>
+    </mat-step>
+    <mat-step state="circle">
+      <ng-template matStepLabel>Resolved</ng-template>
+    </mat-step>
+    <!-- Icon overrides. -->
+    <ng-template matStepperIcon="edit">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="active">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="done">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+    <ng-template matStepperIcon="number">
+      <mat-icon>circle</mat-icon>
+    </ng-template>
+  </mat-stepper>
+</div>
+
+<div class="caseStatus">
+  <mat-accordian>
+    <mat-expansion-panel
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header class="panel-header">
+        <mat-panel-title class="accordian-Title">
+          Understanding Case Statuses
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div>
+        <p><b>Opened – </b>This is the date the case was opened with RSBC.</p>
+        <p>
+          <b>Open Pending Submission –</b> Document(s) have been requested by
+          RSBC and have not yet been received.
+        </p>
+        <p>
+          <b>Under Review –</b> The case has at least one document submitted and
+          a decision has not yet been made.
+        </p>
+        <p>
+          <b>Decision Rendered –</b> A decision has been rendered and the case
+          will close in 30 days unless new additions to the case received during
+          this time change the decision.
+        </p>
+        <p>
+          <b>Resolved –</b> The case is now closed. If new information is
+          received, a new case will be opened rather than adding it to a closed
+          case.
+        </p>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordian>
+</div>
