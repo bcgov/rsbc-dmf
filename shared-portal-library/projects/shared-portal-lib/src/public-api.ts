@@ -8,7 +8,7 @@ export * from './lib/shared-portal-lib.component';
 // Layout
 export *from './lib/layout/header/header.component'
 //export *from './lib/layout/footer/footer.component'
-//export *from './lib/layout/nav-menu/nav-menu.component'
+export *from './lib/layout/nav-menu/nav-menu.component'
 
 // Case Definitions
 // export *from './lib/case-definitions/case-status/case-status.component'
