@@ -136,6 +136,7 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             // TODO optimize by getting all loginIds in one cms-adapter call
             //var loginIdMap = _cmsAdapterClient.GetLoginIds(new GetLoginIdsRequest { UserId = endorsement.UserId });
 
+            // attach loginId and role to the endorsements
             foreach (var endorsement in endorsements)
             {
                 // add loginId
@@ -149,9 +150,14 @@ namespace RSBC.DMF.MedicalPortal.API.Services
                         endorsement.LoginId = Guid.Parse(loginId);
                     }
                 }
-                if (endorsement.Licence != null /*&& endorsement.Licence.Any(endorsement => endorsement.StatusCode == "ACTIVE")*/)
+
+                if (endorsement.Licences != null && endorsement.Licences.Any(endorsement => endorsement.StatusCode == LicenceStatusCode.Active))
                 {
-                    endorsement.Role = "Practitioner";
+                    endorsement.Role = Roles.Practitoner;
+                } 
+                else 
+                {
+                    endorsement.Role = Roles.Moa;
                 }
             }
 

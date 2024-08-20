@@ -19,4 +19,11 @@ namespace RSBC.DMF.MedicalPortal.API
         [Description("idir")]
         Idir
     }
+
+    public static class LicenceStatusCode
+    {
+        public const string Active = "ACTIVE";
+        public const string Inactive = "INACTIVE";
+        public const string Terminated = "TERMINATED";
+    }
 }

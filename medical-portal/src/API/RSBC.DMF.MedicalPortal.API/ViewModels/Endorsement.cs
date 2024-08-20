@@ -13,7 +13,7 @@
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Role { get; set; }
-        public IEnumerable<Licence> Licence { get; set; }
+        public IEnumerable<Licence> Licences { get; set; }
     }
 
     public class Licence
