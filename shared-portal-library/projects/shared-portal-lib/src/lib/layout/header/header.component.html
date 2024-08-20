@@ -1,0 +1,108 @@
+<header class="site-header">
+  <div class="container">
+    <div class="site-header-content">
+      <a href="">
+        <img
+          src="assets/images/bc-logo-text-en.svg"
+          class="site-logo"
+          alt="B.C. Government Logo"
+        />
+      </a>
+      <div class="title">RoadSafetyBC (RSBC) Driver Portal</div>
+
+      <div class="profile">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon class="icon-display">account_circle</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item routerLink="/getAssistance">My Account</button>
+          <button mat-menu-item (click)="logOut()">Sign out</button>
+        </mat-menu>
+        <!-- <div>
+          <h3>{{ profileInitials }}</h3>
+        </div> -->
+      </div>
+      <div class="profile">
+        <!-- <h1 class="avatar" routerLink="/userProfile" style="cursor: pointer">
+        {{ profileInitials }}
+      </h1> -->
+        <div>
+          <span class="user-name" routerLink="/userProfile">{{
+            profileName
+          }}</span
+          ><br />
+        </div>
+        <!-- <button mat-button [matMenuTriggerFor]="menu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="logOut()">Sign out</button>
+      </mat-menu> -->
+      </div>
+
+      <div class="mobile-menu">
+        <button mat-button (click)="showMobileMenu = !showMobileMenu">
+          <mat-icon style="color: white; transform: scale(2)">menu</mat-icon>
+        </button>
+        @if (showMobileMenu) {
+        <div
+          style="
+            width: 100vw;
+            position: absolute;
+            left: 0;
+            background: white;
+            border-radius: 4px;
+            margin-top: 24px;
+          "
+        >
+          <!-- <div class="mobile-menu-content">
+            <h1>RoadSafetyBC (RSBC) Driver Portal</h1>
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/dashboard'"
+              (click)="showMobileMenu = false"
+              >Dashboard</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/cases'"
+              (click)="showMobileMenu = false"
+              >Cases</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/lettersToDriver'"
+              (click)="showMobileMenu = false"
+              >Letters To Driver</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/submissionHistory'"
+              (click)="showMobileMenu = false"
+              >Submission History</a
+            >
+            <a
+              routerLinkActive="active"
+              [routerLink]="'/account'"
+              (click)="showMobileMenu = false"
+            >
+              Account
+            </a>
+            <div style="display: flex; gap: 24px; padding-top: 24px">
+              <button
+                [routerLink]="'/getAssistance'"
+                (click)="showMobileMenu = false"
+              >
+                Get Assistance
+              </button>
+              <button (click)="showMobileMenu = false; logOut()">
+                Sign out
+              </button>
+            </div>
+          </div> -->
+        </div>
+        }
+      </div>
+    </div>
+  </div>
+</header>
