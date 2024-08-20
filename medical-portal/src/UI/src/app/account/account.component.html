@@ -39,7 +39,9 @@
   <div class="list">
     <h2>PIdP Endorsements</h2>
     <div>
+      @if (endorsements.length > 0) {
       <mat-card>
+        @for (endorsement of endorsements; track endorsement.userId) {
         <mat-card-content class="endorsementeContent">
           <div style="text-align: center">
             <mat-icon (click)="toggleIsExpandable()" class="expandedIcon">
@@ -56,19 +58,19 @@
               <div>
                 <label>Full Name</label>
                 <div>
-                  <b>Shelby Drew</b>
+                  <b>{{ endorsement.firstName + " " + endorsement.lastName }}</b>
                 </div>
               </div>
               <div>
                 <label>Email</label>
                 <div>
-                  <b>shelby.drewhealth.ca</b>
+                  <b>{{ endorsement.email }}</b>
                 </div>
               </div>
               <div>
                 <label>Role</label>
                 <div>
-                  <b>Practitioner</b>
+                  <b>{{ endorsement.role }}</b>
                 </div>
               </div>
               <div>
@@ -88,16 +90,18 @@
                 padding-bottom: 20px;
               "
             >
-              <div>
+              <!-- <div>
                 <label>Licenses</label>
                 <div>
                   <b></b>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </mat-card-content>
+        }
       </mat-card>
+      }
     </div>
   </div>
 </div>

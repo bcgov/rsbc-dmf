@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RoleDescription } from '@app/features/auth/enums/identity-provider.enum';
 import { AuthService } from '@app/features/auth/services/auth.service';
+import { Endorsement } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 
 @Component({
@@ -19,6 +20,7 @@ export class AccountComponent {
   fullName: string = "";
   email: string = "";
   role: string = "";
+  endorsements: Endorsement[] = [];
 
   public constructor(private authService: AuthService, private profileManagementService: ProfileManagementService)
   {
@@ -28,6 +30,9 @@ export class AccountComponent {
         this.email = profile.email + "";
       }
       console.log("endorsement response", profile.endorsements);
+      if (profile.endorsements) {
+        this.endorsements = profile.endorsements;
+      }
     });
     this.role = this.authService
       .getRoles()

@@ -4,6 +4,7 @@
 ## DOCUMENTATION
 [Confluence](https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Partners+Portal)
 [Jira](https://jag.gov.bc.ca/jirarsi/secure/RapidBoard.jspa?rapidView=2503&projectKey=DFTDP)
+[Wireframes](https://dmft.number41media.com/)
 
 ## PREREQUISITES
 - Keycloak
@@ -22,6 +23,7 @@
 
 ## RUN
 Run solution "\partner-portal.sln" to run all projects needed for partner portal or run individual projects as needed
+To run the frontend, cd to folder /partner-portal/src/UI and run `npm run start`
 
 You will need to add the following in VS "Configure Startup Projects...":
 - Rsbc.Dmf.CaseManagement.Service
