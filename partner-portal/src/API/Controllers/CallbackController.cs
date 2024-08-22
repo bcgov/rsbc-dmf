@@ -35,8 +35,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(Create))]
         public async Task<IActionResult> Create([FromBody] CallbackRequest callbackRequest)
         {
-            // TODO # Replace the callback view model to "CallbackRequest"
-            var profile = await _userService.GetCurrentUserContext();
+            var profile = _userService.GetDriverInfo();
 
             // security check
             var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
@@ -76,7 +75,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         {
             var result = new List<ViewModels.Callback>();
 
-            var profile = await _userService.GetCurrentUserContext();
+            var profile = _userService.GetDriverInfo();
 
             var driverIdRequest = new DriverIdRequest { Id = profile.DriverId };
             var driverCallbacks = _callbackManagerClient.GetDriverCallbacks(driverIdRequest);
@@ -99,7 +98,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         [ActionName(nameof(Cancel))]
         public async Task<IActionResult> Cancel([FromBody] CallbackCancelRequest callback)
         {
-            var profile = await _userService.GetCurrentUserContext();
+            var profile = _userService.GetDriverInfo();
 
             // security check by using user owned case
             var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
