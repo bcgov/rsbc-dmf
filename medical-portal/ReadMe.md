@@ -4,6 +4,7 @@
 ## DOCUMENTATION
 [Confluence](https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Practitioner+Portal+and+eDMER)
 [Jira](https://jag.gov.bc.ca/jirarsi/secure/RapidBoard.jspa?rapidView=2503&projectKey=DFTDP)
+[Wireframes](https://dmft.number41media.com/)
 
 ## PREREQUISITES
 - Keycloak
@@ -22,6 +23,7 @@
 
 ## RUN
 Run solution "\medical-portal.sln" to run all projects needed for medical portal or run individual projects as needed
+To run the frontend, cd to folder /medical-portal/src/UI and run `npm run start`
 
 You will need to add the following in VS "Configure Startup Projects...":
 - Rsbc.Dmf.CaseManagement.Service
@@ -81,3 +83,6 @@ HOW TO ADD ENDORSEMENTS
 ### Contacts
 Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
 Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X users, which were suppose to be persisted for our testing
+
+## TROUBLE SHOOTING
+- If you find that gRPC client is not updating the models, delete the gRPC client and service bin and obj folders (bonus points for adding a project xml script to delete these folders on clean)

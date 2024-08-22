@@ -1,4 +1,5 @@
 ﻿namespace RSBC.DMF.MedicalPortal.API.Auth;
+
 public class AuthConstant
 {
     public static class Claims
