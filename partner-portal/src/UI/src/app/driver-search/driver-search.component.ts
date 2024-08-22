@@ -17,11 +17,12 @@ import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/pro
 import { EligibleLicenseClassComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/eligible-license-class/eligible-license-class.component';
 import { RecentCaseComponent } from '../../app/recent-case/recent-case.component';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
-import { CasesService } from '@app/shared/api/services';
 import { CaseDetail } from '@app/shared/api/models';
 import { MatIcon } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
+import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-driver-search',
@@ -57,9 +58,10 @@ export class DriverSearchComponent implements OnInit {
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
-  driverId = '';
-
   _closedCaseDetails: CaseDetail[] | null = [];
+
+   // Get Driver details
+   driverDetails = this.userService.getCachedriver();
 
   @Input() set closedCaseDetails(caseDetails: CaseDetail[] | null) {
     if (caseDetails !== undefined) {
@@ -75,19 +77,22 @@ export class DriverSearchComponent implements OnInit {
     return this._closedCaseDetails;
   }
 
-  constructor(private caseService: CasesService) {}
+  constructor(
+     private caseManagementService: CaseManagementService,
+     private userService: UserService,
+     ) {}
 
   ngOnInit(): void {
-    if (this.driverId) {
-      this.getClosedCases(this.driverId as string);
+    if (this.driverDetails.id) {
+      this.getClosedCases(this.driverDetails.id as string);
     } else {
       console.log('No user profile');
     }
   }
 
   getClosedCases(driverId: string) {
-    this.caseService
-      .apiCasesClosedGet$Json({ driverId })
+    this.caseManagementService
+      .getClosedCases({ driverId })
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
         this.isLoading = false;

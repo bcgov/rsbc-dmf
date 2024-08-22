@@ -3,7 +3,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CaseDetail } from '@app/shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
@@ -12,6 +12,7 @@ import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionP
 import { MatIcon } from '@angular/material/icon';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CaseStageEnum } from '@app/app.model';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-recent-case',
