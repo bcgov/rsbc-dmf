@@ -366,16 +366,14 @@
                 <div>
                   <label>Call Status</label>
                   <div>
-                    <b>{{ callback.callStatus }}</b>
+                    <b>{{CallStatusDescription.get(callback.callStatus)}}</b>
                   </div>
                 </div>
-                <!-- TODO this should be using CallStatus enum -->
                 <div *ngIf="callback.callStatus === 0">
                   <div>
                     <button
                       mat-flat-button
-                      (click)="openCancelCallbackDialog(callback)"
-                    >
+                      (click)="openCancelCallbackDialog(callback)">
                       Cancel Callback
                     </button>
                   </div>
@@ -389,8 +387,7 @@
                   border-top: 2px solid gray;
                   padding-top: 20px;
                   padding-bottom: 20px;
-                "
-              >
+                ">
                 <div>
                   <label>Discription</label>
                   <div>
