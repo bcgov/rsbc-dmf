@@ -7,6 +7,7 @@ import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { DriverService } from '@app/shared/api/services';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-search',
@@ -30,6 +31,7 @@ export class SearchComponent {
   constructor(
     private driverService: DriverService,
     private router: Router,
+    private userService: UserService
   ) { }
 
   search() {
@@ -37,9 +39,10 @@ export class SearchComponent {
       .apiDriverInfoDriverLicenceNumberGet$Json({ driverLicenceNumber: this.driverLicenceNumber })
       .subscribe({
         next: (driver) => {
-          this.router.navigateByUrl(`caseSearch?firstName=${driver.firstName}&lastName=${driver.lastName}&driverLicenceNumber=${driver.licenseNumber}`);
+          this.userService.setCacheDriver(driver);
+          this.router.navigateByUrl('/driverSearch');
         },
-        error:(error) => {
+        error: (error) => {
           console.error('error', error);
         }
       });

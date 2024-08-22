@@ -12,6 +12,7 @@ import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
 import { LetterTopicComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/letter-topic/letter-topic.component';
 import { SubmittalStatusEnum } from '@app/app.model';
+import { UserService } from '@app/shared/services/user.service';
 
 @Component({
   selector: 'app-letters-to-driver',
@@ -37,7 +38,7 @@ import { SubmittalStatusEnum } from '@app/app.model';
   ],
 })
 export class LettersToDriverComponent implements OnInit {
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(private caseManagementService: CaseManagementService, private userService: UserService) {}
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
@@ -63,12 +64,13 @@ export class LettersToDriverComponent implements OnInit {
 
   letterOutDocuments: Document[] = [];
 
-  driverId = ' ';
+    // Get Driver details
+    driverDetails = this.userService.getCachedriver();
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    if (this.driverId) {
-      this.getLetterOutDocument(this.driverId as string);
+    if (this.driverDetails.id) {
+      this.getLetterOutDocument(this.driverDetails.id as string);
     } else {
       console.log('No Letter Our Documents');
     }

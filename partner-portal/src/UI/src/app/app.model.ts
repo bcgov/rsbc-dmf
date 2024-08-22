@@ -12,3 +12,7 @@ export enum SubmittalStatusEnum {
   'Issued' = 'Issued',
   'Sent' = 'Sent',
 }
+
+export enum SESSION_STORAGE_KEYS {
+  DRIVER = 'driver'
+}

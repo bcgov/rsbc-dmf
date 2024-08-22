@@ -51,9 +51,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         public async Task<ActionResult> GetClosedCases()
         {
             try
-            {
-                var profile = await _userService.GetCurrentUserContext();
-
+           {
+                var profile = _userService.GetDriverInfo();
                 var caseStatusRequest = new CaseStatusRequest() { DriverId = profile.DriverId, Status = EntityState.Inactive };
                 var reply = _cmsAdapterClient.GetCases(caseStatusRequest);
                 if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)

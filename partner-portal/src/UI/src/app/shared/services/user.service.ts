@@ -1,13 +1,34 @@
 import { Injectable } from '@angular/core';
+import { DriverService } from '../api/services';
+import { Driver, UserContext } from '../api/models';
+import { Observable } from 'rxjs';
+import { SESSION_STORAGE_KEYS } from '@app/app.model';
 //import { ProfileService } from '../api/services';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  constructor() { }
+  constructor(private driverService: DriverService) { }
 
   getUserId(): string {
-    return "not to be committed to source control";
+    return this.getCachedriver().id as string;
   }
+
+  getDriverSession(): Observable<UserContext> {
+    return this.driverService.apiDriverDriverSessionGet$Json();
+  }
+
+  getCachedriver(): UserContext {
+    let driver = sessionStorage.getItem(SESSION_STORAGE_KEYS.DRIVER);
+    if (!driver) return {};
+    return JSON.parse(driver) as UserContext;
+  }
+
+  // Set cache driver on driver serach
+  setCacheDriver(driver: Driver) {
+    sessionStorage.setItem(SESSION_STORAGE_KEYS.DRIVER, JSON.stringify(driver));
+  }
+
+
 }
