@@ -5,7 +5,7 @@ export interface Endorsement {
   email?: string | null;
   firstName?: string | null;
   lastName?: string | null;
-  licence?: Array<Licence> | null;
+  licences?: Array<Licence> | null;
   loginId?: string;
   role?: string | null;
   userId?: string | null;

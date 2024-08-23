@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import {
   MAT_DIALOG_DATA,
@@ -9,9 +9,12 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { DocumentService } from '@app/shared/api/services';
-import { PatientCase } from '@app/shared/api/models';
+import { Endorsement, PatientCase } from '@app/shared/api/models';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProfileManagementService } from '@app/shared/services/profile.service';
+import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { LicenceStatusCode } from '@app/shared/enum/licence-status-code.enum';
 
 @Component({
   selector: 'app-claim-dmer-popup',
@@ -27,14 +30,24 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './claim-dmer-popup.component.html',
   styleUrl: './claim-dmer-popup.component.scss',
 })
-export class ClaimDmerPopupComponent {
+export class ClaimDmerPopupComponent implements OnInit {
+  public practitioners: Endorsement[] = [];
+
   constructor(
     private documentService: DocumentService,
     @Inject(MAT_DIALOG_DATA) public data: PatientCase,
     @Inject(MatDialogRef<ClaimDmerPopupComponent>)
     private dialogRef: MatDialogRef<ClaimDmerPopupComponent>,
     private _snackBar: MatSnackBar,
-  ) {}
+    private profileManagementService: ProfileManagementService
+  ) { }
+
+  ngOnInit(): void {
+    this.practitioners = this.profileManagementService
+      .getCachedProfile()
+      .endorsements?.filter(e => e.role === Role.Practitioner && e.licences?.some(l => l.statusCode === LicenceStatusCode.Active))
+        || [];
+ }
 
   onClaimDmer() {
     this.documentService

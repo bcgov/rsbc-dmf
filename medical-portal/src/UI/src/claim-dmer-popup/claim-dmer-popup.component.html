@@ -38,9 +38,9 @@
     <mat-form-field>
       <mat-label>Assign Review To</mat-label>
       <mat-select>
-        <mat-option>Practitioner-1</mat-option>
-        <mat-option>Practitioner-2</mat-option>
-        <mat-option>Practitioner-3</mat-option>
+        @for (practitioner of practitioners; track practitioner.userId) {
+          <mat-option>{{ practitioner.firstName + " " + practitioner.lastName }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
