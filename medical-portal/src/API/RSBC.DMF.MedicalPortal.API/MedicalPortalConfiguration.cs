@@ -6,6 +6,7 @@ public class MedicalPortalConfiguration
 {
     public SettingsConfiguration Settings { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
+    public bool FeatureSimpleAuth { get; set; }
 
     public class SettingsConfiguration
     {

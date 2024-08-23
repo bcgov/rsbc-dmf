@@ -35,6 +35,8 @@ public class AuthConstant
         public const string Oidc = "oidc";
         public const string MedicalPractitioner = "medical-practitioner";
         public const string Enrolled = "dmft-enrolled";
+        // user is a practitioner in your network with an active licence
+        public const string NetworkPractitioner = "network-practitioner";
     }
 
     public static class Clients

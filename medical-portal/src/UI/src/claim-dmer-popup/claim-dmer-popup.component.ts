@@ -32,6 +32,7 @@ import { LicenceStatusCode } from '@app/shared/enum/licence-status-code.enum';
 })
 export class ClaimDmerPopupComponent implements OnInit {
   public practitioners: Endorsement[] = [];
+  public selectedPractitioner?: string;
 
   constructor(
     private documentService: DocumentService,
@@ -49,13 +50,29 @@ export class ClaimDmerPopupComponent implements OnInit {
         || [];
  }
 
+ onAssignDmer() {
+  this.documentService
+    .apiDocumentAssignDmerPost$Json({
+      documentId: this.data.documentId as string,
+      loginId: this.selectedPractitioner
+    })
+    .subscribe(() => {
+      this._snackBar.open('Successfully assigned the DMER', 'Close', {
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        duration: 5000,
+      });
+      this.dialogRef.close();
+    });
+}
+
   onClaimDmer() {
     this.documentService
       .apiDocumentClaimDmerPost$Json({
         documentId: this.data.documentId as string,
       })
       .subscribe(() => {
-        this._snackBar.open('Successfully Claimed the DMER', 'Close', {
+        this._snackBar.open('Successfully claimed the DMER', 'Close', {
           horizontalPosition: 'center',
           verticalPosition: 'top',
           duration: 5000,

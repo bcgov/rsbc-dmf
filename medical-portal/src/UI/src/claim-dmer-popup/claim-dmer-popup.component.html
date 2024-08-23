@@ -37,9 +37,9 @@
   <div>
     <mat-form-field>
       <mat-label>Assign Review To</mat-label>
-      <mat-select>
+      <mat-select [(value)]="selectedPractitioner">
         @for (practitioner of practitioners; track practitioner.userId) {
-          <mat-option>{{ practitioner.firstName + " " + practitioner.lastName }}</mat-option>
+          <mat-option [value]="practitioner.loginId">{{ practitioner.firstName + " " + practitioner.lastName }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
@@ -51,7 +51,7 @@
     </label>
   </div>
   <div class="action-buttons">
-    <button mat-flat-button class="primaryButton" (click)="onClaimDmer()">
+    <button mat-flat-button class="primaryButton" (click)="onAssignDmer()">
       Assign DMER
     </button>
     <br />
