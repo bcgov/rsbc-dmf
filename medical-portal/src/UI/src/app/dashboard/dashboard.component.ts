@@ -109,6 +109,7 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.profileManagementService.getProfile().subscribe((profile) => {
+      // TODO will be using "accessLevel" in other areas, move to profile service
       this.accessLevel = profile.roles?.find((role) => role === Role.Practitioner) ? Role.Practitioner : Role.Moa;
       this.profile = profile;
     });
