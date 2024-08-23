@@ -21,7 +21,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
 
 import { CasesService, DocumentService } from '../shared/api/services';
-import { CaseDocument, DmerDocument, PatientCase } from '../shared/api/models';
+import { DmerDocument, PatientCase, UserProfile } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
@@ -29,7 +29,8 @@ import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
 import { DMERStatusEnum } from '@app/app.model';
-import { DmerButtonsComponent } from '@app/dmer-buttons/dmer-buttons.component';
+import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { ProfileManagementService } from '@app/shared/services/profile.service';
 
 interface Status {
   value: string;
@@ -57,8 +58,7 @@ interface Status {
     MatExpansionPanel,
     MedicalDmerTypesComponent,
     MatDialogModule,
-    ClaimDmerPopupComponent,
-    DmerButtonsComponent
+    ClaimDmerPopupComponent
 ],
 
   templateUrl: './dashboard.component.html',
@@ -82,6 +82,8 @@ export class DashboardComponent {
   public practitionerDMERList: DmerDocument[] = [];
   public filteredData?: DmerDocument[] = [];
   public _allDocuments?: DmerDocument[] | null = [];
+  public profile?: UserProfile;
+  public accessLevel: Role = Role.Moa;
 
   isSearching: boolean = false;
   noResults: boolean = false;
@@ -97,15 +99,8 @@ export class DashboardComponent {
     private documentService: DocumentService,
     private popupService: PopupService,
     private dialog: MatDialog,
-  ) {
-    console.info('At Dashboard Constructor');
-  }
-
-  public updateDmerCases()
-  {
-    this.getClaimedDmerCases();
-    this.searchDmerCase();
-  }
+    private profileManagementService: ProfileManagementService
+  ) { }
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
@@ -113,7 +108,15 @@ export class DashboardComponent {
   }
 
   ngOnInit(): void {
+    this.profileManagementService.getProfile().subscribe((profile) => {
+      this.accessLevel = profile.roles?.find((role) => role === Role.Practitioner) ? Role.Practitioner : Role.Moa;
+      this.profile = profile;
+    });
     this.getClaimedDmerCases();
+  }
+
+  public get Role() {
+    return Role;
   }
 
   getClaimedDmerCases() {
@@ -188,5 +191,27 @@ export class DashboardComponent {
     const pageSize = (this.filteredData?.length ?? 0) + this.pageSize;
 
     this.filteredData = this._allDocuments?.slice(0, pageSize);
+  }
+
+  openPopup() {
+    if (!this.searchedCase) {
+      console.error('Case data was missing', this.searchedCase);
+      return;
+    }
+    this.popupService.openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string);
+  }
+
+  openClaimPopup(searchedCase: PatientCase) {
+    const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
+      height: '600px',
+      width: '820px',
+      data: searchedCase,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      //TODO # optimize this not to re-query the database on refresh
+      this.getClaimedDmerCases();
+      this.searchDmerCase();
+      console.log('The dialog was closed', result);
+    });
   }
 }

@@ -166,16 +166,26 @@ namespace RSBC.DMF.MedicalPortal.API
                 && identity.IsAuthenticated)
             {
                 // Flatten the Resource Access claim
-                identity.AddClaims(
-                    identity.GetResourceAccessRoles(Clients.License)
-                        .Select(role => new Claim(identity.RoleClaimType, role))
-                );
 
-                identity.AddClaims(
-                    identity.GetResourceAccessRoles(Clients.DmftStatus)
-                        .Select(role => new Claim(identity.RoleClaimType, role))
-                );
+                var licenseRoles = identity
+                    .GetResourceAccessRoles(Clients.License)
+                    .Select(role => new Claim(identity.RoleClaimType, role));
+                if (licenseRoles.Any())
+                {
+                    identity.AddClaims(licenseRoles);
+                }
+                else
+                {
+                    var moaRoleClaim = new Claim(identity.RoleClaimType, Roles.Moa);
+                    identity.AddClaim(moaRoleClaim);
+                }
 
+                // TODO check for DMFT enrolled, currently allowing non-enrolled users access
+                var enrolledRoles = identity
+                    .GetResourceAccessRoles(Clients.DmftStatus)
+                    .Select(role => new Claim(identity.RoleClaimType, role));
+                identity.AddClaims(enrolledRoles);
+                
                 if (environment.IsDevelopment() && configuration.GetValue<bool>("FEATURES_SIMPLE_AUTH"))
                 {
                     identity.AddClaim(new Claim(identity.RoleClaimType, Roles.Practitoner));
@@ -183,6 +193,7 @@ namespace RSBC.DMF.MedicalPortal.API
                 }
 
                 // TODO I think this is wrong, we should only need to call this once but this is validating on every request
+                var claims = identity.Claims;
                 var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
                 context.Principal = await userService.Login(context.Principal);
             }
