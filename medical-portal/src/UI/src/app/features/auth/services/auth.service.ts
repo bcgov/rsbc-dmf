@@ -50,6 +50,9 @@ export class AuthService implements IAuthService {
     const roleNames = this.keycloakService
       .getUserRoles()
       .filter((role) => role !== Role.Enrolled);
+    // TODO roles should come from Api and Api should add MOA role, for now just use MOA role if no other role exists
+    if (roleNames.length == 0)
+      roleNames.push(Role.Moa);
     return roleNames
       .map((role) => Object.values(Role).find((value) => value === role))
       .filter((role) => role !== undefined) as Role[];

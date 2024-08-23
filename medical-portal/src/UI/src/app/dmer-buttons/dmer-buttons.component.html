@@ -1,0 +1,58 @@
+<div class="search-buttons">
+  @if (
+    role == Role.Practitioner &&
+    searchedCase?.dmerStatus === DMERStatusEnum.RequiredUnclaimed
+  ) {
+    <button
+      mat-flat-button
+      class="primaryButton"
+      (click)="searchedCase != null && openClaimPopup(searchedCase)"
+    >
+      Claim Dmer
+    </button>
+  }
+
+  @if (
+    searchedCase?.dmerStatus ===
+    DMERStatusEnum.RequiredClaimed
+  ) {
+    <button
+      mat-flat-button
+      class="primaryButton"
+      (click)="searchedCase != null && openClaimPopup(searchedCase)"
+    >
+      Unclaim Dmer
+    </button>
+  }
+
+  @if (
+    searchedCase?.dmerStatus ===
+      DMERStatusEnum.RequiredUnclaimed &&
+    searchedCase?.isOwner == true
+  ) {
+    <button
+      mat-flat-button
+      class="primaryButton"
+      (click)="openPopup()"
+    >
+      Start DMER
+    </button>
+  }
+
+  @if (
+    searchedCase?.dmerStatus ===
+      DMERStatusEnum.RequiredClaimed ||
+    searchedCase?.dmerStatus ===
+      DMERStatusEnum.NonComplyClaimed
+  ) {
+    <div>
+      <button
+        mat-flat-button
+        class="primaryButton"
+        (click)="openPopup()"
+      >
+        Continue DMER
+      </button>
+    </div>
+  }
+</div>

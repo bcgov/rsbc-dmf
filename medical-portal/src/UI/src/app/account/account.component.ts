@@ -25,11 +25,11 @@ export class AccountComponent {
   public constructor(private authService: AuthService, private profileManagementService: ProfileManagementService)
   {
     this.profileManagementService.getProfile().subscribe((profile) => {
+      console.info('profile response', profile);
       this.fullName = profile.firstName + " " + profile.lastName;
       if (profile.email) {
         this.email = profile.email + "";
       }
-      console.log("endorsement response", profile.endorsements);
       if (profile.endorsements) {
         this.endorsements = profile.endorsements;
       }

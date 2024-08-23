@@ -29,6 +29,7 @@ import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
 import { DMERStatusEnum } from '@app/app.model';
+import { DmerButtonsComponent } from '@app/dmer-buttons/dmer-buttons.component';
 
 interface Status {
   value: string;
@@ -57,7 +58,8 @@ interface Status {
     MedicalDmerTypesComponent,
     MatDialogModule,
     ClaimDmerPopupComponent,
-  ],
+    DmerButtonsComponent
+],
 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -99,6 +101,12 @@ export class DashboardComponent {
     console.info('At Dashboard Constructor');
   }
 
+  public updateDmerCases()
+  {
+    this.getClaimedDmerCases();
+    this.searchDmerCase();
+  }
+
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
     this.viewportScroller.scrollToAnchor(elementId);
@@ -131,7 +139,9 @@ export class DashboardComponent {
 
     this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
       next: (dmerCase) => {
-        if (dmerCase) this.searchedCase = dmerCase;
+        if (dmerCase) {
+          this.searchedCase = dmerCase;
+        }
       },
       error: (err) => {
         // TODO display user friendly message
@@ -178,27 +188,5 @@ export class DashboardComponent {
     const pageSize = (this.filteredData?.length ?? 0) + this.pageSize;
 
     this.filteredData = this._allDocuments?.slice(0, pageSize);
-  }
-
-  openPopup() {
-    if (!this.searchedCase) {
-      console.error('Case data was missing', this.searchedCase);
-      return;
-    }
-    this.popupService.openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string);
-  }
-
-  openClaimPopup(searchedCase: PatientCase) {
-    const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
-      height: '600px',
-      width: '820px',
-      data: searchedCase,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      //TODO # optimize this not to re-query the database on refresh
-      this.getClaimedDmerCases();
-      this.searchDmerCase();
-      console.log('The dialog was closed', result);
-    });
   }
 }

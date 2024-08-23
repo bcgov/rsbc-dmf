@@ -4,7 +4,7 @@
 ## DOCUMENTATION
 [Confluence](https://jag.gov.bc.ca/wiki/display/DFTP/%5BProject+Base%5D+-+Practitioner+Portal+and+eDMER)
 [Jira](https://jag.gov.bc.ca/jirarsi/secure/RapidBoard.jspa?rapidView=2503&projectKey=DFTDP)
-[Wireframes](https://dmft.number41media.com/)
+[Wireframes](https://dmft.number41media.com/Wireframes/partner_portal/)
 
 ## PREREQUISITES
 - Keycloak
@@ -62,7 +62,7 @@ Use the PIDP0000X users, since the dmfw0000X users are not in a usable state and
 To add a licence to a PIDP user, use any licence type and use licence number that matches X e.g. PIDP00001 would have licence 1
 To enrol the user in DMFT, click on the access link on top menu, click on "Get Access" link on the page, click on "Driver Medical Fitness", and then click on the "Enrol" button
 
-HOW TO ADD ENDORSEMENTS
+### How to add endorsements
 1. Login as user A
 2. Navigate to endorsements
 3. Enter the email of user B and request endorsement
@@ -86,3 +86,9 @@ Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X 
 
 ## TROUBLE SHOOTING
 - If you find that gRPC client is not updating the models, delete the gRPC client and service bin and obj folders (bonus points for adding a project xml script to delete these folders on clean)
+
+## HOW-TO
+
+### How to claim a DMER
+1. Login in as any user
+2. 
