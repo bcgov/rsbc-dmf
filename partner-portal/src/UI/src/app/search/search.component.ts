@@ -28,6 +28,7 @@ import { UserService } from '@app/shared/services/user.service';
 })
 export class SearchComponent {
   driverLicenceNumber = '';
+  idCode = '';
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -47,6 +48,20 @@ export class SearchComponent {
           console.error('error', error);
         }
       });
+  }
+
+
+  searchByCaseId(){
+    this.caseManagementService.searchByCaseId({idCode: this.idCode})
+    .subscribe({
+      next: (caseDetails) => {
+        this.router.navigateByUrl('/caseSearch', {state: caseDetails});
+      },
+      error: (error) => {
+        console.error('error', error);
+      }
+  
+    });
   }
 }
 

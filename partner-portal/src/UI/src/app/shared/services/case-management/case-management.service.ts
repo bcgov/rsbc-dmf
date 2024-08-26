@@ -101,9 +101,11 @@ export class CaseManagementService {
   ) {
     return this.driverService.apiDriverInfoDriverLicenceNumberGet$Json(params);
   }
-  // public getDriverAddress(
-  //   params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
-  // ) {
-  //   return this.driversService.apiDriverInfoGet$Json(params);
-  // }
+
+
+  public searchByCaseId(
+    params: Parameters<CasesService['apiCasesSearchIdCodeGet$Json']>[0]
+  ) {
+    return this.casesService.apiCasesSearchIdCodeGet$Json(params);
+  }
 }

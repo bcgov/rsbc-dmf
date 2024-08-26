@@ -38,9 +38,15 @@
                   <label class="form-label">Case Id</label>
                   <div>
                     <mat-form-field appearance="outline" class="input-width">
-                      <input matInput name="caseId" placeholder="Case Id" />
+                      <input 
+                      matInput name="caseId" 
+                      [(ngModel)]="idCode"
+                      placeholder="Case Id" />
                     </mat-form-field>
                   </div>
+                </div>
+                <div>
+                  <button mat-flat-button class="primaryButton" (click)="searchByCaseId()">Search</button>
                 </div>
                 <div>
                   <span>

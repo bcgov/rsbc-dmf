@@ -5,8 +5,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
+using Rsbc.Dmf.IcbcAdapter.Client;
 using Rsbc.Dmf.PartnerPortal.Api.Services;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using System.Net;
+using static Rsbc.Dmf.IcbcAdapter.IcbcAdapter;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
@@ -20,6 +23,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
         private readonly ILogger<CasesController> _logger;
+        private readonly ICachedIcbcAdapterClient _icbcAdapterClient;
 
         public CasesController(
             IConfiguration configuration,
@@ -27,7 +31,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
             IUserService userService,
             IMapper mapper,
-            ILoggerFactory loggerFactory
+            ILoggerFactory loggerFactory,
+            ICachedIcbcAdapterClient icbcAdapterClient
         )
         {
             _configuration = configuration;
@@ -36,6 +41,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             _userService = userService;
             _mapper = mapper;
             _logger = loggerFactory.CreateLogger<CasesController>();
+            _icbcAdapterClient = icbcAdapterClient;
         }
 
         /// <summary>
@@ -105,6 +111,71 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpGet("search/{idCode}")]
+        [ProducesResponseType(typeof(CaseSearch), 200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(500)]
+        [ActionName("SearchCaseByIdCode")]
+        public async Task<ActionResult> SearchCaseByIdCode([FromRoute] string idCode)
+        {
+            var profile = _userService.GetDriverInfo();
+
+            var result = new ViewModels.CaseSearch();
+
+            if (string.IsNullOrEmpty(idCode) || idCode == Guid.Empty.ToString())
+            {
+                return BadRequest("The Case Number was invalid.");
+            }
+
+            // get case by id code
+            var getCaseByIdCodeRequest = new GetCaseByIdCodeRequest { IdCode = idCode };
+            var @case = await _cmsAdapterClient.GetCaseByIdCodeAsync(getCaseByIdCodeRequest);
+            if (@case?.Item?.CaseId == null)
+            {
+                return NotFound();
+            }
+            if (@case.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Fail)
+            {
+                _logger.LogError($"Error getting case by id code: {0}", @case.ErrorDetail);
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get case.");
+            }
+
+
+            if (@case != null && @case.ResultStatus == Rsbc.Dmf.CaseManagement.Service.ResultStatus.Success)
+            {
+                result = new ViewModels.CaseSearch();
+
+                result.CaseId = @case.Item.CaseId;
+                result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
+                result.IdCode = @case.Item.IdCode;
+                result.DriverId = @case.Item.DriverId;
+             
+                // get driver info from ICBC
+                if (@case.Item.DriverLicenseNumber != null)
+                {
+                    result.DriverLicenseNumber = @case.Item.DriverLicenseNumber;
+                    var request = new IcbcAdapter.DriverInfoRequest();
+                    request.DriverLicence = @case.Item.DriverLicenseNumber;
+                    var driverInfoReply = await _icbcAdapterClient.GetDriverInfoAsync(request);
+                    if (driverInfoReply.ResultStatus == Rsbc.Dmf.IcbcAdapter.ResultStatus.Fail)
+                    {
+                        _logger.LogError($"Failed to get icbc driver info details: {0}", driverInfoReply.ErrorDetail);
+                        return StatusCode((int)HttpStatusCode.InternalServerError, "Failed to get icbc driver info details.");
+                    }
+                    result.FirstName = driverInfoReply.GivenName;
+                    result.LastName = driverInfoReply.Surname;
+                    
+                }
+            }
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
         }
 
     }
