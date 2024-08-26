@@ -200,9 +200,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpPost("claimDmer")]
-        [ProducesResponseType(typeof(DmerDocument), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         public async Task<IActionResult> UpdateClaimDmerOnDocument([FromQuery] string documentId)
         {
@@ -213,7 +213,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         // TODO https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#use-exceptions-to-modify-the-response
         [HttpPost("assignDmer")]
-        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         public async Task<IActionResult> AssignClaimDmerOnDocument([FromQuery] string documentId, [FromQuery] Guid loginId)

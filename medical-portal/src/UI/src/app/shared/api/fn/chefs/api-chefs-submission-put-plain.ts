@@ -8,14 +8,14 @@ import { RequestBuilder } from '../../request-builder';
 
 import { ChefsSubmission } from '../../models/chefs-submission';
 
-export interface ApiChefsSubmissionPut$Params {
+export interface ApiChefsSubmissionPut$Plain$Params {
   caseId?: string;
   documentId?: string;
       body?: ChefsSubmission
 }
 
-export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut.PATH, 'put');
+export function apiChefsSubmissionPut$Plain(http: HttpClient, rootUrl: string, params?: ApiChefsSubmissionPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsSubmission>> {
+  const rb = new RequestBuilder(rootUrl, apiChefsSubmissionPut$Plain.PATH, 'put');
   if (params) {
     rb.query('caseId', params.caseId, {});
     rb.query('documentId', params.documentId, {});
@@ -23,13 +23,13 @@ export function apiChefsSubmissionPut(http: HttpClient, rootUrl: string, params?
   }
 
   return http.request(
-    rb.build({ responseType: 'text', accept: '*/*', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return (r as HttpResponse<any>).clone({ body: undefined }) as StrictHttpResponse<void>;
+      return r as StrictHttpResponse<ChefsSubmission>;
     })
   );
 }
 
-apiChefsSubmissionPut.PATH = '/api/Chefs/submission';
+apiChefsSubmissionPut$Plain.PATH = '/api/Chefs/submission';

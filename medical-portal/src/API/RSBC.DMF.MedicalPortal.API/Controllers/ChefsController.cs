@@ -120,7 +120,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
         // TODO why is this triggered when loading the chefs form?
         [HttpPut("submission")]
-        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(PutSubmission))]
         public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)

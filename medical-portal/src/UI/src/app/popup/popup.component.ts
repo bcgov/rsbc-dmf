@@ -1,5 +1,5 @@
-import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, ElementRef, Inject, ViewChild, TemplateRef } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions } from '@angular/material/dialog';
 import { PopupService } from './popup.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChefsService } from '../shared/api/services';
@@ -9,12 +9,13 @@ import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
 @Component({
   selector: 'app-popup',
   standalone: true,
-  imports: [],
+  imports: [MatDialogActions],
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss',
 })
 export class PopupComponent {
   @ViewChild('iframe') iframe!: ElementRef;
+  @ViewChild('warningDialog') warningDialog!: TemplateRef<any>;
   public sanitizedSource!: SafeResourceUrl;
   iframeUrl: string | null = null;
   instanceId: string | null = null;
@@ -26,6 +27,7 @@ export class PopupComponent {
     private chefsService: ChefsService,
     private sanitizer: DomSanitizer,
     @Inject(MAT_DIALOG_DATA) public data: { caseId: string, documentId: string },
+    private dialog: MatDialog
   ) {
       this.caseId = data.caseId;
       this.documentId = data.documentId;
@@ -140,7 +142,7 @@ export class PopupComponent {
       submission &&
       this.caseId
     ) {
-      let params: Parameters<ChefsService['apiChefsSubmissionPut']>[0] = {
+      let params: Parameters<ChefsService['apiChefsSubmissionPut$Json']>[0] = {
         caseId: this.caseId,
         documentId: this.documentId,
         body: {
@@ -151,10 +153,15 @@ export class PopupComponent {
           priority,
         },
       };
+      let previouSubmissionStatus = status;
       this.chefsService
-        .apiChefsSubmissionPut({ ...params })
+        .apiChefsSubmissionPut$Json({ ...params })
         .subscribe((submission) => {
           console.log(submission);
+          // if submission status was final but returned draft, it is because the user lacked permissions, so display a warning dialog
+          if (previouSubmissionStatus == SubmissionStatus.Final && submission.status == SubmissionStatus.Draft) {
+            this.dialog.open(this.warningDialog);
+          }
           return submission;
         });
     }

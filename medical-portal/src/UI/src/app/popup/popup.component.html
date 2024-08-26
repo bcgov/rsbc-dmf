@@ -9,6 +9,12 @@
   >
   </iframe>
 </div>
-<!-- <div mat-dialog-actions>
-  <button mat-button (click)="closePopup()">Close</button>
-</div> -->
+
+<ng-template #warningDialog>
+  <div matDialogContent style="margin:40px">
+    <b>Warning:</b> only a licenced practitioner can submit the form for final submission, saved the form as a draft.
+  </div>
+  <!--mat-dialog-actions align="end">
+    <button mat-flat-button matDialogClose class="primaryButton">Dismiss</button>
+  </mat-dialog-actions-->
+</ng-template>

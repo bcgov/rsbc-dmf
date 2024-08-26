@@ -14,7 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { Role } from '@app/features/auth/enums/identity-provider.enum';
-import { LicenceStatusCode } from '@app/shared/enum/licence-status-code.enum';
+import { LicenceStatusCode } from '@app/app.model';
 
 @Component({
   selector: 'app-claim-dmer-popup',
