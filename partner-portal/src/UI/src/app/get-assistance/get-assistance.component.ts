@@ -28,7 +28,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
-import { CallStatusDescription } from '@app/features/auth/enums/call-back.enum';
+import { CallStatusDescription } from '@app/shared/enums/call-back.enum';
 
 interface CallBackTopic {
   value: string;
