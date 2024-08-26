@@ -8,11 +8,11 @@ namespace RSBC.DMF.MedicalPortal.API.Auth
     // check the loginId is in network of endorsed practitioners with valid licence
     public class NetworkPractitionerAuthorizationHandler : AuthorizationHandler<NetworkPractitionerRequirement, Guid>
     {
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, NetworkPractitionerRequirement requirement, Guid loginId)
+        protected async override Task HandleRequirementAsync(AuthorizationHandlerContext context, NetworkPractitionerRequirement requirement, Guid loginId)
         {
             if (!context.User.HasClaim(c => c.Type == Claims.Endorsements))
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var endorsements = context.User.GetClaim<IEnumerable<Endorsement>>(Claims.Endorsements);
@@ -21,7 +21,7 @@ namespace RSBC.DMF.MedicalPortal.API.Auth
                 context.Succeed(requirement);
             }
 
-            return Task.CompletedTask;
+            return;
         }
     }
 

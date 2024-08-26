@@ -19,6 +19,8 @@ using Driver = RSBC.DMF.MedicalPortal.API.ViewModels.Driver;
 using EmptyRequest = Rsbc.Dmf.CaseManagement.Service.EmptyRequest;
 using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 using Rsbc.Dmf.IcbcAdapter.Client;
+using Microsoft.AspNetCore.Authorization;
+using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -33,15 +35,20 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly ICachedIcbcAdapterClient icbcAdapterClient;
         private readonly CaseManager.CaseManagerClient cmsAdapterClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
+        private readonly IAuthorizationService _authorizationService;
 
         private const string DATA_ENTITY_NAME = "incident";
         private const string DATA_FILENAME = "data.json";
 
-        public ChefsController(ILogger<ChefsController> logger, IMapper mapper, IConfiguration configuration,
+        public ChefsController(
+            ILogger<ChefsController> logger,
+            IMapper mapper,
+            IConfiguration configuration,
             IUserService userService,
             CaseManager.CaseManagerClient cmsAdapterClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
-            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient)
+            DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
+            IAuthorizationService authorizationService)
         {
             this.logger = logger;
             this.mapper = mapper;
@@ -50,6 +57,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;
             this.icbcAdapterClient = icbcAdapterClient;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("submission")]
@@ -60,9 +68,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
             [FromQuery] string status = SubmissionStatus.Draft)
         {
-            UserContext profile = await this.userService.GetCurrentUserContext();
-            logger.LogInformation(
-                $"GET Submission - SubmissionStatus: {status}, userId is {profile.Id}, caseId is ${caseId}");
+            var profile = await this.userService.GetCurrentUserContext();
+
+            logger.LogInformation($"GET Submission - SubmissionStatus: {status}, userId is {profile.Id}, caseId is ${caseId}");
 
             string documentUrl = "";
 
@@ -78,8 +86,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentUrl == "")
             {
                 logger.LogError($"Unexpected error - unable to generate documentUrl");
-                return StatusCode((int)HttpStatusCode.InternalServerError,
-                    "Unexpected error - unable to generate documentUrl");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "Unexpected error - unable to generate documentUrl");
             }
 
             // fetch the file from S3
@@ -91,8 +98,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 logger.LogError($"Not found error - unable to fetch file");
-                return StatusCode((int)HttpStatusCode.NotFound,
-                    "Not found error - unable to fetch file from storage");
+                return StatusCode((int)HttpStatusCode.NotFound, "Not found error - unable to fetch file from storage");
             }
 
             byte[] fileContents = documentReply.Data.ToByteArray();
@@ -100,8 +106,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             try
             {
-                var jsonData =
-                    JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent);
+                var jsonData = JsonConvert.DeserializeObject<ChefsSubmission>(jsonContent);
                 string formattedJson = JsonConvert.SerializeObject(jsonData, Formatting.Indented);
                 logger.LogInformation("JSON Data: {0}", formattedJson);
                 return Ok(jsonData);
@@ -113,7 +118,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
         }
 
+        // TODO why is this triggered when loading the chefs form?
         [HttpPut("submission")]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(PutSubmission))]
         public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)
         {
             var profile = await this.userService.GetCurrentUserContext();
@@ -121,6 +130,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
             var jsonString = JsonSerializer.Serialize(submission);
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
+
+            // to submit final, make sure they are licenced practitioner, otherwise submission should be a draft
+            submission.Status = await CheckFinalSubmissionAuthorization(submission.Status);
 
             UploadFileRequest jsonData = null;
             if (submission.Status == SubmissionStatus.Draft)
@@ -155,7 +167,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
 
                 var allCaseFlags = mapper.Map<IEnumerable<Flag>>(getAllFlagsReply.Flags);
-                
+
                 // if any Case Flags are present and active (true) in CHEFS, update Case and set IsCleanPass to false
                 var matchedFlags = allCaseFlags
                     .Where(flag => submission.Flags.ContainsKey(flag.FormId) && (bool)submission.Flags[flag.FormId])
@@ -172,7 +184,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
 
                 var caseResult = cmsAdapterClient.UpdateCase(updateCaseRequest);
-                
+
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
 
                 jsonData = new UploadFileRequest()
@@ -232,7 +244,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
-        public async Task<ActionResult> GetChefsBundle([Required] [FromQuery] string caseId)
+        public async Task<ActionResult> GetChefsBundle([Required][FromQuery] string caseId)
         {
             var chefsBundle = new ChefsBundle();
             var caseResult = new PatientCase();
@@ -298,6 +310,20 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
 
             return Ok(chefsBundle);
+        }
+
+        private async Task<string> CheckFinalSubmissionAuthorization(string submissionStatus)
+        {
+            if (submissionStatus == SubmissionStatus.Final)
+            {
+                var user = userService.GetUser();
+                var authorizationResult = await _authorizationService.AuthorizeAsync(user, Policies.MedicalPractitioner);
+                if (!authorizationResult.Succeeded)
+                {
+                    return SubmissionStatus.Draft;
+                }
+            }
+            return submissionStatus;
         }
     }
 }

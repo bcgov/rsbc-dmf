@@ -50,6 +50,7 @@ namespace RSBC.DMF.MedicalPortal.API.Auth
                     //.RequireClaim(Claims.Scope, "medical-portal")
                 );
 
+                // attribute policies
                 options.AddPolicy(
                     Policies.MedicalPractitioner,
                     policy => policy
@@ -60,14 +61,22 @@ namespace RSBC.DMF.MedicalPortal.API.Auth
                     .RequireAuthenticatedUser()
                     .RequireRole(Claims.IdentityProvider, Roles.Dmft));
 
+                // run-time policies 
                 options.AddPolicy(
                     Policies.NetworkPractitioner,
                     policy => policy
                         .RequireAuthenticatedUser()
                         .Requirements.Add(new NetworkPractitionerRequirement()));
+
+                options.AddPolicy(
+                    Policies.MedicalPractitioner,
+                    policy => policy
+                        .RequireAuthenticatedUser()
+                        .Requirements.Add(new PractitionerRequirement()));
             });
 
             services.AddSingleton<IAuthorizationHandler, NetworkPractitionerAuthorizationHandler>();
+            services.AddSingleton<IAuthorizationHandler, PractitionerAuthorizationHandler>();
 
             return services;
         }

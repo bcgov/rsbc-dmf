@@ -1,7 +1,6 @@
-﻿namespace PidpAdapter
+﻿namespace PidpAdapter;
+
+public class Constants
 {
-    public class Constants
-    {
-        public const string CorsPolicy = "CorsPolicy";
-    }
+    public const string CorsPolicy = "CorsPolicy";
 }
