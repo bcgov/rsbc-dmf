@@ -3,7 +3,6 @@ using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
-using System.Security.Claims;
 using AutoMapper;
 using UploadFileRequest = Pssg.DocumentStorageAdapter.UploadFileRequest;
 using Google.Protobuf;
@@ -28,36 +27,39 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     [Route("api/[controller]")]
     public class ChefsController : ControllerBase
     {
+        private readonly IUserService userService;
+        private readonly ICachedIcbcAdapterClient icbcAdapterClient;
+        private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly PdfService _pdfService;
         private readonly ILogger<ChefsController> logger;
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
-        private readonly IUserService userService;
-        private readonly ICachedIcbcAdapterClient icbcAdapterClient;
-        private readonly CaseManager.CaseManagerClient cmsAdapterClient;
-        private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
-        private readonly IAuthorizationService _authorizationService;
 
         private const string DATA_ENTITY_NAME = "incident";
         private const string DATA_FILENAME = "data.json";
 
         public ChefsController(
-            ILogger<ChefsController> logger,
-            IMapper mapper,
-            IConfiguration configuration,
             IUserService userService,
             CaseManager.CaseManagerClient cmsAdapterClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            PdfService pdfService,
+            ILogger<ChefsController> logger,
+            IMapper mapper,
+            IConfiguration configuration)
         {
-            this.logger = logger;
-            this.mapper = mapper;
-            this.configuration = configuration;
-            this.cmsAdapterClient = cmsAdapterClient;
+            _cmsAdapterClient = cmsAdapterClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;
             this.icbcAdapterClient = icbcAdapterClient;
             _authorizationService = authorizationService;
+            _pdfService = pdfService;
+            this.logger = logger;
+            this.mapper = mapper;
+            this.configuration = configuration;
         }
 
         [HttpGet("submission")]
@@ -125,41 +127,75 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         [ActionName(nameof(PutSubmission))]
         public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)
         {
-            var profile = await this.userService.GetCurrentUserContext();
-            logger.LogInformation($"PUT Submission - userId is {profile.Id}");
+            // invalid arguments
+            if (
+                submission == null ||
+                (submission.Status != SubmissionStatus.Draft && submission.Status != SubmissionStatus.Final)
+                || string.IsNullOrEmpty(caseId) || string.IsNullOrEmpty(documentId))
+            {
+                logger.LogError($"{nameof(PutSubmission)} error: invalid submission");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
 
+            // serialize and log the payload
             var jsonString = JsonSerializer.Serialize(submission);
             logger.LogInformation($"ChefsSubmission payload: {jsonString}");
 
             // to submit final, make sure they are licenced practitioner, otherwise submission should be a draft
             submission.Status = await CheckFinalSubmissionAuthorization(submission.Status);
 
-            UploadFileRequest jsonData = null;
+            // prepare the JSON data
+            var jsonUploadRequest = new UploadFileRequest()
+            {
+                ContentType = "application/json",
+                Data = ByteString.CopyFromUtf8(jsonString),
+            };
             if (submission.Status == SubmissionStatus.Draft)
             {
-                jsonData = new UploadFileRequest()
-                {
-                    ContentType = "application/json",
-                    Data = ByteString.CopyFromUtf8(jsonString),
-                    EntityName = DATA_ENTITY_NAME,
-                    FileName = DATA_FILENAME,
-                    FolderName = caseId
-                };
+                jsonUploadRequest.EntityName = DATA_ENTITY_NAME;
+                jsonUploadRequest.FileName = DATA_FILENAME;
+                jsonUploadRequest.FolderName = caseId;
             }
             else if (submission.Status == SubmissionStatus.Final)
             {
-                // TODO clean up these comments and use these values on a new service e.g. UpdateDmer
-                string chefsAssign = submission.Assign;         // Queue? e.g. Team - Intake, Team - Adjudicator, Team - Nurse Case Manager
-                string chefsPriority = submission.Priority;     // DPS Priority e.g. Regular (prioritycode - 1 Critical Review, 2 Regular, 3 Urgent, 4 Expedited 100,000,000)
-                // TODO these are just here for reference, could use some of these lines in the UpdateDmer service or maybe something already exists
-                //bcgovDocumentUrl.dfp_priority = TranslatePriorityCode(request.Priority);
-                //bcgovDocumentUrl.dfp_issuedate = DateTimeOffset.Now;
-                //bcgovDocumentUrl.dfp_dpspriority = TranslatePriorityCode(request.Priority);
-                //bcgovDocumentUrl.dfp_documentorigin = TranslateDocumentOrigin(request.Origin);
-                //bcgovDocumentUrl.dfp_queue = TranslateQueueCode(request.Queue);
+                jsonUploadRequest.EntityName = "dfp";
+                jsonUploadRequest.FileName = $"{caseId}.json";
+                jsonUploadRequest.FolderName = "triage-request";
+            }
+
+            // upload the JSON data to S3
+            var jsonUploadReply = documentStorageAdapterClient.UploadFile(jsonUploadRequest);
+            if (jsonUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
+            {
+                logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {jsonUploadReply.ErrorDetail}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, jsonUploadReply.ErrorDetail);
+            }
+            logger.LogInformation($"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {jsonUploadReply.FileName}, dataFileSize: {jsonUploadRequest.Data.Length}, reply: {JsonSerializer.Serialize(jsonUploadReply)}");
+
+            if (submission.Status == SubmissionStatus.Final) 
+            {
+                // create a PDF version of the JSON data
+                var pdfData = _pdfService.GeneratePdf(jsonString);
+
+                // upload the PDF version to S3
+                var pdfUploadRequest = new UploadFileRequest
+                {
+                    ContentType = "application/pdf",
+                    Data = ByteString.CopyFrom(pdfData),
+                    EntityName = "dfp",
+                    FileName = $"{caseId}.pdf",
+                    FolderName = "triage-request"
+                };
+                var pdfUploadReply = documentStorageAdapterClient.UploadFile(pdfUploadRequest);
+                if (pdfUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
+                {
+                    logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {pdfUploadReply.ErrorDetail}");
+                    return StatusCode((int)HttpStatusCode.InternalServerError, pdfUploadReply.ErrorDetail);
+                }
+                logger.LogInformation($"PUT Submission - Successfully uploaded PDF to S3, dataFileKey: {pdfUploadReply.FileName}, dataFileSize: {pdfData.Length}, reply: {JsonSerializer.Serialize(pdfUploadReply)}");
 
                 // get a list of all available Case Flags 
-                var getAllFlagsReply = cmsAdapterClient.GetAllFlags(new EmptyRequest());
+                var getAllFlagsReply = _cmsAdapterClient.GetAllFlags(new EmptyRequest());
                 if (getAllFlagsReply == null || getAllFlagsReply.Flags.Count == 0)
                 {
                     logger.LogInformation("Could not find all flags in the CMS");
@@ -173,68 +209,27 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     .Where(flag => submission.Flags.ContainsKey(flag.FormId) && (bool)submission.Flags[flag.FormId])
                     .ToArray();
 
-                var updateCaseRequest = new UpdateCaseRequest()
-                {
-                    CaseId = caseId,
-                };
+                var updateCaseRequest = new UpdateCaseRequest();
+                updateCaseRequest.IsDmer = true;
+                updateCaseRequest.CaseId = caseId;
+                updateCaseRequest.Priority = submission.Priority;
+                updateCaseRequest.Assign = submission.Assign;
+                // used to add Document linked to case for the JSON data S3 file
+                updateCaseRequest.DataFileKey = jsonUploadReply.FileName;
+                updateCaseRequest.DataFileSize = jsonUploadRequest.Data.Length;
+                // used to add Document linked to case for the PDF version
+                updateCaseRequest.PdfFileKey = pdfUploadReply.FileName;
+                updateCaseRequest.PdfFileSize = pdfUploadRequest.Data.Length;
 
                 foreach (var item in matchedFlags)
                 {
                     updateCaseRequest.Flags.Add(mapper.Map<FlagItem>(item));
                 }
 
-                var caseResult = cmsAdapterClient.UpdateCase(updateCaseRequest);
+                var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
 
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
-
-                jsonData = new UploadFileRequest()
-                {
-                    ContentType = "application/json",
-                    Data = ByteString.CopyFromUtf8(jsonString),
-                    EntityName = "dfp",
-                    FileName = $"{caseId}.json",
-                    FolderName = "triage-request"
-                };
             }
-
-            if (jsonData == null)
-            {
-                logger.LogError($"{nameof(PutSubmission)} error: unable to get upload jsonData");
-                return StatusCode(500);
-            }
-
-            var dataFileKey = "";
-            Int64 dataFileSize = 0;
-
-            var reply = documentStorageAdapterClient.UploadFile(jsonData);
-            if (reply.ResultStatus != DocumentStorageResultStatus.Success)
-            {
-                logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {reply.ErrorDetail}");
-                return StatusCode(500, reply.ErrorDetail);
-            }
-
-            // TODO Create a PDF based on jsonData, user friendly values is not in scope of initial version
-            // Upload a copy of the PDF to S3
-            // UploadPDF reuse logic of UploadJson
-
-            dataFileKey = reply.FileName;
-            dataFileSize = jsonData.Data.Length;
-
-            if (submission.Status == SubmissionStatus.Final)
-            {
-                // TriageRequest triageRequest = new TriageRequest()
-                // {
-                //     Processed = false,
-                //     TimeCreated = Timestamp.FromDateTime(DateTimeOffset.Now.UtcDateTime),
-                //     Id = profile.Id,
-                //     DataFileKey = dataFileKey,
-                //     DataFileSize = dataFileSize,
-                //     PractitionerId = practitionerId == null ? "" : practitionerId,
-                //     ClinicId = "" // in order to pass this by value we would need some way to pass the data to the PHSA controller.
-                // };
-            }
-
-            logger.LogInformation($"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {dataFileKey}, dataFileSize: {dataFileSize}, reply: {JsonSerializer.Serialize(reply)}");
 
             return Ok(submission);
         }
@@ -262,7 +257,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             // set caseId to return to CHEFS
             chefsBundle.caseId = caseId;
 
-            var c = cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
+            var c = _cmsAdapterClient.GetCaseDetail(new CaseIdRequest { CaseId = caseId });
             if (c != null && c.ResultStatus == CMSResultStatus.Success)
             {
                 chefsBundle.patientCase = caseResult;

@@ -465,6 +465,9 @@ message UpdateCaseRequest{
     int64 pdfFileSize = 5;
     string dataFileKey = 6;
     int64 dataFileSize = 7;
+    string priority = 8;
+    string assign = 9;
+    bool isDmer = 10;
 }
 
 message UpdateCaseReply {	

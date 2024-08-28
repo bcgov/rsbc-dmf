@@ -115,6 +115,7 @@ namespace RSBC.DMF.MedicalPortal.API
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<DocumentFactory>();
             services.AddAutoMapperSingleton();
+            services.AddPdfService();
         }
 
         private MedicalPortalConfiguration InitializeConfiguration(IServiceCollection services)

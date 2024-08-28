@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Pssg.SharedUtils;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +14,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Rsbc.Dmf.CaseManagement.Service.DecisionItem.Types;
-using static Rsbc.Dmf.CaseManagement.Service.FlagItem.Types;
 using static Rsbc.Dmf.CaseManagement.Service.PdfDocument.Types;
 
 namespace Rsbc.Dmf.CaseManagement.Service
@@ -1718,9 +1718,9 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
 
             return reply;
-
         }
 
+        // Updates the case flags, and potentially link the bcgov_documenturl data and pdf file documents, if the S3 info is provided 
         // NOTE used by DocumentTriageService and ChefsController
         public async override Task<UpdateCaseReply> UpdateCase(UpdateCaseRequest request, ServerCallContext context)
         {
@@ -1731,9 +1731,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 _logger.LogInformation($"UPDATE CASE - {request.CaseId}, clean pass is {request.IsCleanPass}, files - {request.DataFileKey} {request.PdfFileKey}");
 
                 // convert the flags to a list of strings.
+                var hasFlags = false;
                 var flags = new List<Flag>();
                 foreach (var item in request.Flags)
                 {
+                    hasFlags = true;
                     var newFlag = new Flag()
                     {
                         Description = item.Question,
@@ -1744,6 +1746,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                     _logger.LogInformation($"Added flag {item.Question} to flags for set case flags.");
                 }
 
+                SubmittalStatus? submittalStatus = null;
+                if (request.IsDmer)
+                {
+                    submittalStatus = hasFlags ? SubmittalStatus.Uploaded : SubmittalStatus.CleanPass;
+                }
                 // set the flags.
                 var x = await _caseManager.SetCaseFlags(request.CaseId, request.IsCleanPass, flags);
                 _logger.LogInformation($"Set Flags result is {x.Success}.");
@@ -1752,11 +1759,11 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 _logger.LogInformation($"Add file - {request.CaseId}, files - {request.DataFileKey} {request.PdfFileKey}");
                 if (!string.IsNullOrEmpty(request.PdfFileKey))
                 {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize);
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.PdfFileKey, request.PdfFileSize, request.Priority, request.Assign, (int?)submittalStatus);
                 }
                 if (!string.IsNullOrEmpty(request.DataFileKey))
                 {
-                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize);
+                    await _caseManager.AddDocumentUrlToCaseIfNotExist(request.CaseId, request.DataFileKey, request.DataFileSize, request.Priority, request.Assign, (int?)submittalStatus);
                 }
                 reply.ResultStatus = ResultStatus.Success;
             }
