@@ -29,102 +29,110 @@
   </mat-card>
 </div>
 
-<div class="top-nav">
+<div>
   <div class="container">
-    <mat-toolbar class="top-nav">
-      <div class="nav-bar-items">
-        <div>
-          <a routerLinkActive="active">Driver Cases</a>
-          <a routerLinkActive="active" routerLink="/letterToDriver">
-            Letters to Driver
-          </a>
-          <a routerLinkActive="active" routerLink="/submissionHistory">
-            Submission History
-          </a>
-          <a routerLinkActive="active">Comments</a>
-          <a routerLinkActive="active" routerLink="/assistDriver">
-            Assist Driver
-          </a>
+    <mat-tab-group animationDuration="0ms">
+      <mat-tab label="Driver Cases">
+        <div class="container">
+          <div class="list top-padding">
+            <h2>Most Recent Case</h2>
+            <div>
+              <app-recent-case></app-recent-case>
+            </div>
+          </div>
+
+          <div class="list top-padding">
+            <h2>Case Documentation</h2>
+            <div>
+              <app-submission-requirements></app-submission-requirements>
+            </div>
+          </div>
+
+          <div class="list top-padding">
+            <h2>Definitions</h2>
+            <div class="accordion-btn-container">
+              <a class="accordion-btn show-btn" (click)="accordion.openAll()">
+                Expand All
+              </a>
+              <span class="accordion-bar">&nbsp;|&nbsp;</span>
+              <a class="accordion-btn hide-btn" (click)="accordion.closeAll()">
+                Collapse All
+              </a>
+            </div>
+            <div>
+              <mat-accordion multi>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">Case type</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-case-type></app-case-type>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">
+                      Case Status
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-case-status></app-case-status>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">DMER type</mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-medical-dmer-types></app-medical-dmer-types>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">
+                      Decision outcome
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-decision-outcome></app-decision-outcome>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">
+                      Submission Type
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-submission-type></app-submission-type>
+                </mat-expansion-panel>
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header class="panel-header">
+                    <mat-panel-title class="accordian-Title">
+                      Submission Status
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <app-submission-status></app-submission-status>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </div>
+          </div>
         </div>
-        <div></div>
-      </div>
-    </mat-toolbar>
+
+      </mat-tab>
+      <mat-tab label="Letters to Driver">
+        <app-letters-to-driver></app-letters-to-driver>
+      </mat-tab>
+      <mat-tab label="Submission History">
+        <app-submission-history></app-submission-history>
+      </mat-tab>
+      <mat-tab label="Comments">
+        <app-comments (click)="openCommentsDialog()"></app-comments>
+      </mat-tab>
+      <mat-tab label="Assist Driver">
+        <app-get-assistance></app-get-assistance>
+      </mat-tab>
+    </mat-tab-group> 
+
   </div>
 </div>
 
-<div class="container">
-  <div class="list top-padding">
-    <h2>Most Recent Case</h2>
-    <div>
-      <app-recent-case></app-recent-case>
-    </div>
-  </div>
-
-  <div class="list top-padding">
-    <h2>Case Documentation</h2>
-    <div>
-      <app-submission-requirements></app-submission-requirements>
-    </div>
-  </div>
-
-  <div class="list top-padding">
-    <h2>Definitions</h2>
-    <div class="accordion-btn-container">
-      <a class="accordion-btn show-btn" (click)="accordion.openAll()">
-        Expand All
-      </a>
-      <span class="accordion-bar">&nbsp;|&nbsp;</span>
-      <a class="accordion-btn hide-btn" (click)="accordion.closeAll()">
-        Collapse All
-      </a>
-    </div>
-    <div>
-      <mat-accordion multi>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">Case type</mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-case-type></app-case-type>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Case Status
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-case-status></app-case-status>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">DMER type</mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-medical-dmer-types></app-medical-dmer-types>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Decision outcome
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-decision-outcome></app-decision-outcome>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Submission Type
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-submission-type></app-submission-type>
-        </mat-expansion-panel>
-        <mat-expansion-panel>
-          <mat-expansion-panel-header class="panel-header">
-            <mat-panel-title class="accordian-Title">
-              Submission Status
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <app-submission-status></app-submission-status>
-        </mat-expansion-panel>
-      </mat-accordion>
-    </div>
-  </div>
+<!-- Comments button -->
+<div style="
+position: fixed;
+right: 0;
+bottom: 550px;
+rotate: 90deg;">
+  <button  (click)="openCommentsDialog()">Comments</button>
 </div>
