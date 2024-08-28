@@ -17,6 +17,7 @@ form {
   align-items: center;
   padding-bottom: 1px;
 }
+
 .search-input {
   // width: 845px;
     flex: 1;
@@ -38,12 +39,10 @@ form {
   font-weight: 700;
 }
 
-
 .search-button:hover {
   text-decoration: underline;
   opacity: 0.8;
 }
-
 
 .search-container {
   display: flex;
@@ -64,7 +63,7 @@ form {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-    
+
 }
 
 .filter-icon{
@@ -147,7 +146,7 @@ mat-card {
  flex-direction: row;
  flex: 1;
   gap: 125px;
-  
+
 
 }
 
@@ -174,5 +173,5 @@ mat-card {
   .dmer-details-row-1{
     gap:20px;
   }
-  
+
 }

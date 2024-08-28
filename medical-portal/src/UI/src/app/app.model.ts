@@ -25,6 +25,12 @@ export enum DMERStatusEnum {
   'NonComplyClaimed' = 'Non-Comply - Claimed'
 }
 
+export enum LicenceStatusCode {
+  Active = 'ACTIVE',
+  Inactive = 'INACTIVE',
+  Terminated = 'TERMINATED',
+}
+
 export enum SESSION_STORAGE_KEYS {
   PROFILE = 'profile'
 }

@@ -22,6 +22,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
     {
         private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly IUserService _userService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _configuration;
         private readonly ILogger<DocumentController> _logger;
@@ -29,10 +30,11 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly DocumentStorageAdapterClient _documentStorageAdapterClient;
         private readonly DocumentFactory _documentFactory;
 
-        public DocumentController(DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IMapper mapper, IConfiguration configuration, ILoggerFactory loggerFactory, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, DocumentFactory documentFactory)
+        public DocumentController(DocumentManager.DocumentManagerClient documentManagerClient, IUserService userService, IAuthorizationService authorizationService, IMapper mapper, IConfiguration configuration, ILoggerFactory loggerFactory, CaseManager.CaseManagerClient cmsAdapterClient, DocumentStorageAdapterClient documentStorageAdapterClient, DocumentFactory documentFactory)
         {
             _documentManagerClient = documentManagerClient;
             _userService = userService;
+            _authorizationService = authorizationService;
             _mapper = mapper;
             _configuration = configuration;
             _logger = loggerFactory.CreateLogger<DocumentController>();
@@ -198,9 +200,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpPost("claimDmer")]
-        [ProducesResponseType(typeof(DmerDocument), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
+        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         public async Task<IActionResult> UpdateClaimDmerOnDocument([FromQuery] string documentId)
         {
@@ -208,7 +210,31 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             var loginId = profile.LoginId;
             return await AssignDmerClaim(loginId, documentId);
         }
-            
+
+        // TODO https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#use-exceptions-to-modify-the-response
+        [HttpPost("assignDmer")]
+        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> AssignClaimDmerOnDocument([FromQuery] string documentId, [FromQuery] Guid loginId)
+        {
+            if (loginId == Guid.Empty)
+            {
+                return BadRequest("Invalid loginId");
+            }
+
+            var user = _userService.GetUser();
+            var authorizationResult = await _authorizationService.AuthorizeAsync(user, loginId, Policies.NetworkPractitioner);
+            if (authorizationResult.Succeeded)
+            {
+                return await AssignDmerClaim(loginId.ToString(), documentId);
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.Unauthorized);
+            }
+        }
+
         [HttpPost("unclaimDmer")]
         [ProducesResponseType(typeof(DmerDocument), 200)]
         [ProducesResponseType(401)]

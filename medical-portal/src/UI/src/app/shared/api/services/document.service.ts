@@ -9,6 +9,10 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { apiDocumentAssignDmerPost$Json } from '../fn/document/api-document-assign-dmer-post-json';
+import { ApiDocumentAssignDmerPost$Json$Params } from '../fn/document/api-document-assign-dmer-post-json';
+import { apiDocumentAssignDmerPost$Plain } from '../fn/document/api-document-assign-dmer-post-plain';
+import { ApiDocumentAssignDmerPost$Plain$Params } from '../fn/document/api-document-assign-dmer-post-plain';
 import { apiDocumentClaimDmerPost$Json } from '../fn/document/api-document-claim-dmer-post-json';
 import { ApiDocumentClaimDmerPost$Json$Params } from '../fn/document/api-document-claim-dmer-post-json';
 import { apiDocumentClaimDmerPost$Plain } from '../fn/document/api-document-claim-dmer-post-plain';
@@ -171,6 +175,53 @@ export class DocumentService extends BaseService {
    */
   apiDocumentClaimDmerPost$Json(params?: ApiDocumentClaimDmerPost$Json$Params, context?: HttpContext): Observable<DmerDocument> {
     return this.apiDocumentClaimDmerPost$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
+    );
+  }
+
+  /** Path part for operation `apiDocumentAssignDmerPost()` */
+  static readonly ApiDocumentAssignDmerPostPath = '/api/Document/assignDmer';
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDocumentAssignDmerPost$Plain()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentAssignDmerPost$Plain$Response(params?: ApiDocumentAssignDmerPost$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
+    return apiDocumentAssignDmerPost$Plain(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDocumentAssignDmerPost$Plain$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentAssignDmerPost$Plain(params?: ApiDocumentAssignDmerPost$Plain$Params, context?: HttpContext): Observable<DmerDocument> {
+    return this.apiDocumentAssignDmerPost$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiDocumentAssignDmerPost$Json()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentAssignDmerPost$Json$Response(params?: ApiDocumentAssignDmerPost$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<DmerDocument>> {
+    return apiDocumentAssignDmerPost$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiDocumentAssignDmerPost$Json$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  apiDocumentAssignDmerPost$Json(params?: ApiDocumentAssignDmerPost$Json$Params, context?: HttpContext): Observable<DmerDocument> {
+    return this.apiDocumentAssignDmerPost$Json$Response(params, context).pipe(
       map((r: StrictHttpResponse<DmerDocument>): DmerDocument => r.body)
     );
   }

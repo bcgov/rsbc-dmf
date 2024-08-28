@@ -17,8 +17,10 @@ import { apiChefsSubmissionGet$Json } from '../fn/chefs/api-chefs-submission-get
 import { ApiChefsSubmissionGet$Json$Params } from '../fn/chefs/api-chefs-submission-get-json';
 import { apiChefsSubmissionGet$Plain } from '../fn/chefs/api-chefs-submission-get-plain';
 import { ApiChefsSubmissionGet$Plain$Params } from '../fn/chefs/api-chefs-submission-get-plain';
-import { apiChefsSubmissionPut } from '../fn/chefs/api-chefs-submission-put';
-import { ApiChefsSubmissionPut$Params } from '../fn/chefs/api-chefs-submission-put';
+import { apiChefsSubmissionPut$Json } from '../fn/chefs/api-chefs-submission-put-json';
+import { ApiChefsSubmissionPut$Json$Params } from '../fn/chefs/api-chefs-submission-put-json';
+import { apiChefsSubmissionPut$Plain } from '../fn/chefs/api-chefs-submission-put-plain';
+import { ApiChefsSubmissionPut$Plain$Params } from '../fn/chefs/api-chefs-submission-put-plain';
 import { ChefsBundle } from '../models/chefs-bundle';
 import { ChefsSubmission } from '../models/chefs-submission';
 
@@ -80,23 +82,45 @@ export class ChefsService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiChefsSubmissionPut()` instead.
+   * To access only the response body, use `apiChefsSubmissionPut$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiChefsSubmissionPut$Response(params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<StrictHttpResponse<void>> {
-    return apiChefsSubmissionPut(this.http, this.rootUrl, params, context);
+  apiChefsSubmissionPut$Plain$Response(params?: ApiChefsSubmissionPut$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsSubmission>> {
+    return apiChefsSubmissionPut$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiChefsSubmissionPut$Response()` instead.
+   * To access the full response (for headers, for example), `apiChefsSubmissionPut$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiChefsSubmissionPut(params?: ApiChefsSubmissionPut$Params, context?: HttpContext): Observable<void> {
-    return this.apiChefsSubmissionPut$Response(params, context).pipe(
-      map((r: StrictHttpResponse<void>): void => r.body)
+  apiChefsSubmissionPut$Plain(params?: ApiChefsSubmissionPut$Plain$Params, context?: HttpContext): Observable<ChefsSubmission> {
+    return this.apiChefsSubmissionPut$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ChefsSubmission>): ChefsSubmission => r.body)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiChefsSubmissionPut$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiChefsSubmissionPut$Json$Response(params?: ApiChefsSubmissionPut$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<ChefsSubmission>> {
+    return apiChefsSubmissionPut$Json(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `apiChefsSubmissionPut$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiChefsSubmissionPut$Json(params?: ApiChefsSubmissionPut$Json$Params, context?: HttpContext): Observable<ChefsSubmission> {
+    return this.apiChefsSubmissionPut$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<ChefsSubmission>): ChefsSubmission => r.body)
     );
   }
 

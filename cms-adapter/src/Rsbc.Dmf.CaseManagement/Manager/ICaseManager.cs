@@ -74,7 +74,7 @@ namespace Rsbc.Dmf.CaseManagement
 
         Task<CaseSearchReply> GetUnsentMedicalAdjudication();
 
-        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize);
+        Task AddDocumentUrlToCaseIfNotExist(string dmerIdentifier, string fileKey, Int64 fileSize, string priority, string assign, int? submittalStatus);
 
         DateTimeOffset GetDpsProcessingDate();
 

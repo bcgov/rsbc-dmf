@@ -21,7 +21,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
 
 import { CasesService, DocumentService } from '../shared/api/services';
-import { CaseDocument, DmerDocument, PatientCase } from '../shared/api/models';
+import { DmerDocument, PatientCase, UserProfile } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
@@ -29,6 +29,8 @@ import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
 import { DMERStatusEnum } from '@app/app.model';
+import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { ProfileManagementService } from '@app/shared/services/profile.service';
 
 interface Status {
   value: string;
@@ -56,8 +58,8 @@ interface Status {
     MatExpansionPanel,
     MedicalDmerTypesComponent,
     MatDialogModule,
-    ClaimDmerPopupComponent,
-  ],
+    ClaimDmerPopupComponent
+],
 
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -80,6 +82,8 @@ export class DashboardComponent {
   public practitionerDMERList: DmerDocument[] = [];
   public filteredData?: DmerDocument[] = [];
   public _allDocuments?: DmerDocument[] | null = [];
+  public profile?: UserProfile;
+  public accessLevel: Role = Role.Moa;
 
   isSearching: boolean = false;
   noResults: boolean = false;
@@ -95,9 +99,8 @@ export class DashboardComponent {
     private documentService: DocumentService,
     private popupService: PopupService,
     private dialog: MatDialog,
-  ) {
-    console.info('At Dashboard Constructor');
-  }
+    private profileManagementService: ProfileManagementService
+  ) { }
 
   public onClick(event: any, elementId: string): void {
     event.preventDefault();
@@ -105,7 +108,16 @@ export class DashboardComponent {
   }
 
   ngOnInit(): void {
+    this.profileManagementService.getProfile().subscribe((profile) => {
+      // TODO will be using "accessLevel" in other areas, move to profile service
+      this.accessLevel = profile.roles?.find((role) => role === Role.Practitioner) ? Role.Practitioner : Role.Moa;
+      this.profile = profile;
+    });
     this.getClaimedDmerCases();
+  }
+
+  public get Role() {
+    return Role;
   }
 
   getClaimedDmerCases() {
@@ -131,7 +143,9 @@ export class DashboardComponent {
 
     this.casesService.apiCasesSearchIdCodeGet$Json(searchParams).subscribe({
       next: (dmerCase) => {
-        if (dmerCase) this.searchedCase = dmerCase;
+        if (dmerCase) {
+          this.searchedCase = dmerCase;
+        }
       },
       error: (err) => {
         // TODO display user friendly message

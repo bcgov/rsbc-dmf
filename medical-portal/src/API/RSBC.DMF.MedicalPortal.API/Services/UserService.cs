@@ -13,11 +13,9 @@ namespace RSBC.DMF.MedicalPortal.API.Services
     public interface IUserService
     {
         Task<UserContext> GetCurrentUserContext();
-
         Task<UserContext> GetUserContext(ClaimsPrincipal user);
-
+        ClaimsPrincipal GetUser();
         Task<ClaimsPrincipal> Login(ClaimsPrincipal user);
-
         Task SetEmail(string userId, string email);
     }
 
@@ -80,6 +78,8 @@ namespace RSBC.DMF.MedicalPortal.API.Services
 
             return await Task.FromResult(userContext);
         }
+
+        public ClaimsPrincipal GetUser() => httpContext.HttpContext.User;
 
         public async Task<ClaimsPrincipal> Login(ClaimsPrincipal user)
         {
