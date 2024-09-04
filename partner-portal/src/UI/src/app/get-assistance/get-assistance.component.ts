@@ -28,6 +28,8 @@ import { MatSelect } from '@angular/material/select';
 import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CdkMenu, CdkMenuItem } from '@angular/cdk/menu';
+import { CallStatusDescription } from '@app/app.model';
+
 
 interface CallBackTopic {
   value: string;
@@ -72,6 +74,7 @@ enum HelpTopics {
 })
 export class GetAssistanceComponent implements OnInit {
   HelpTopics = HelpTopics;
+  CallStatusDescription = CallStatusDescription;
   showCallBackCreate = false;
 
   constructor(
@@ -146,7 +149,7 @@ export class GetAssistanceComponent implements OnInit {
           this.pageSize
         );
         this.disableCallBack = !!callBacks.find(
-          (y: any) => y.callStatus == 'Open'
+          (y: any) => CallStatusDescription.get(y.callStatus) == 'Open'
         );
       });
   }
@@ -164,8 +167,7 @@ export class GetAssistanceComponent implements OnInit {
 
     const callback: any = {
       phone: String(this.callbackRequestForm.value.phone),
-      //preferredTime: this.callbackRequestForm.value
-      //  .preferredTime as PreferredTime,
+      //preferredTime: this.callbackRequestForm.value.preferredTime as PreferredTime,
       subject: this.callBackTopics.find(
         (x) => x.value == this.callbackRequestForm.value.subject,
       )?.viewValue,

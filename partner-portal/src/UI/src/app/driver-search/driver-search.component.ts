@@ -23,6 +23,9 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
+import { MatTabsModule } from '@angular/material/tabs';
+import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
+import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 
 @Component({
   selector: 'app-driver-search',
@@ -44,6 +47,9 @@ import { UserService } from '@app/shared/services/user.service';
     NgIf,
     MatDialogModule,
     CommentsComponent,
+    MatTabsModule,
+    LettersToDriverComponent,
+    GetAssistanceComponent,
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',

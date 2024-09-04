@@ -6,6 +6,7 @@ export { CallbackCancelRequest } from './models/callback-cancel-request';
 export { CallbackRequest } from './models/callback-request';
 export { CallStatus } from './models/call-status';
 export { CaseDetail } from './models/case-detail';
+export { CaseSearch } from './models/case-search';
 export { Comment } from './models/comment';
 export { Document } from './models/document';
 export { DocumentSubType } from './models/document-sub-type';

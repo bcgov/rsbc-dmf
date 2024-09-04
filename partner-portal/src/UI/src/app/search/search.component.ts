@@ -7,6 +7,7 @@ import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { DriverService } from '@app/shared/api/services';
+import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 
 @Component({
@@ -27,16 +28,17 @@ import { UserService } from '@app/shared/services/user.service';
 })
 export class SearchComponent {
   driverLicenceNumber = '';
+  idCode = '';
 
   constructor(
-    private driverService: DriverService,
+    private caseManagementService: CaseManagementService,
     private router: Router,
     private userService: UserService
   ) { }
 
   search() {
-    this.driverService
-      .apiDriverInfoDriverLicenceNumberGet$Json({ driverLicenceNumber: this.driverLicenceNumber })
+    this.caseManagementService
+      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
@@ -47,6 +49,22 @@ export class SearchComponent {
         }
       });
   }
+
+
+  searchByCaseId(){
+    this.caseManagementService.searchByCaseId({idCode: this.idCode})
+    .subscribe({
+      next: (caseDetails) => {
+        this.router.navigateByUrl('/caseSearch', {state: caseDetails});
+      },
+      error: (error) => {
+        console.error('error', error);
+      }
+  
+    });
+  }
 }
+
+
 
 
