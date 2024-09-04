@@ -63,9 +63,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("submission")]
-        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsSubmission), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(GetSubmission))]
         public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
             [FromQuery] string status = SubmissionStatus.Draft)
@@ -88,7 +88,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentUrl == "")
             {
                 logger.LogError($"Unexpected error - unable to generate documentUrl");
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Unexpected error - unable to generate documentUrl");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Unexpected error - unable to generate documentUrl");
             }
 
             // fetch the file from S3
@@ -100,7 +100,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 logger.LogError($"Not found error - unable to fetch file");
-                return StatusCode((int)HttpStatusCode.NotFound, "Not found error - unable to fetch file from storage");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - unable to fetch file from storage");
             }
 
             byte[] fileContents = documentReply.Data.ToByteArray();
@@ -116,14 +116,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             catch (JsonException ex)
             {
                 logger.LogError("Error deserializing JSON content: {0}", ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Error processing JSON content");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error processing JSON content");
             }
         }
 
         // TODO why is this triggered when loading the chefs form?
         [HttpPut("submission")]
-        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsSubmission), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(PutSubmission))]
         public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)
         {
@@ -134,7 +134,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 || string.IsNullOrEmpty(caseId) || string.IsNullOrEmpty(documentId))
             {
                 logger.LogError($"{nameof(PutSubmission)} error: invalid submission");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             // serialize and log the payload
@@ -168,7 +168,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (jsonUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
             {
                 logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {jsonUploadReply.ErrorDetail}");
-                return StatusCode((int)HttpStatusCode.InternalServerError, jsonUploadReply.ErrorDetail);
+                return StatusCode(StatusCodes.Status500InternalServerError, jsonUploadReply.ErrorDetail);
             }
             logger.LogInformation($"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {jsonUploadReply.FileName}, dataFileSize: {jsonUploadRequest.Data.Length}, reply: {JsonSerializer.Serialize(jsonUploadReply)}");
 
@@ -190,7 +190,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (pdfUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
                 {
                     logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {pdfUploadReply.ErrorDetail}");
-                    return StatusCode((int)HttpStatusCode.InternalServerError, pdfUploadReply.ErrorDetail);
+                    return StatusCode(StatusCodes.Status500InternalServerError, pdfUploadReply.ErrorDetail);
                 }
                 logger.LogInformation($"PUT Submission - Successfully uploaded PDF to S3, dataFileKey: {pdfUploadReply.FileName}, dataFileSize: {pdfData.Length}, reply: {JsonSerializer.Serialize(pdfUploadReply)}");
 
@@ -235,9 +235,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("bundle")]
-        [ProducesResponseType(typeof(ChefsBundle), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
         public async Task<ActionResult> GetChefsBundle([Required][FromQuery] string caseId)
         {
@@ -276,8 +276,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else
             {
                 logger.LogInformation("Could not find DriverLicenseNumber in the case details");
-                return StatusCode((int)HttpStatusCode.NotFound,
-                    "Not found error - could not find case details or driver license number");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find case details or driver license number");
             }
 
             if (driverInfoReply.ResultStatus == ResultStatus.Success)
@@ -300,8 +299,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else
             {
                 logger.LogInformation("Could not find icbc driver info details");
-                return StatusCode((int)HttpStatusCode.NotFound,
-                    "Not found error - could not find icbc driver info details");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find icbc driver info details");
             }
 
             return Ok(chefsBundle);

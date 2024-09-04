@@ -83,6 +83,7 @@ To enrol the user in DMFT, click on the access link on top menu, click on "Get A
 ### Contacts
 Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
 Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X users, which were suppose to be persisted for our testing
+Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morgan either. In theory, would triage to contact Nick Mailhot
 
 ## TROUBLE SHOOTING
 - If you find that gRPC client is not updating the models, delete the gRPC client and service bin and obj folders (bonus points for adding a project xml script to delete these folders on clean)
@@ -90,5 +91,5 @@ Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X 
 ## HOW-TO
 
 ### How to claim a DMER
-1. Login in as any user
+1. Login in as a practitioner
 2. 
