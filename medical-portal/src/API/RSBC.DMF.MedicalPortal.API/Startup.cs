@@ -1,5 +1,4 @@
 using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -13,8 +12,6 @@ using System.Security.Claims;
 using System.Reflection;
 using System.Data;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
-using RSBC.DMF.MedicalPortal.API.Auth.Extension;
-using Keycloak.AuthServices.Authentication;
 using Newtonsoft.Json;
 using RSBC.DMF.MedicalPortal.API.Model;
 using JsonSerializer = System.Text.Json.JsonSerializer;
