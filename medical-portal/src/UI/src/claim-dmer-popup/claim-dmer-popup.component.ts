@@ -44,10 +44,23 @@ export class ClaimDmerPopupComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.practitioners = this.profileManagementService
-      .getCachedProfile()
-      .endorsements?.filter(e => e.role === Role.Practitioner && e.licences?.some(l => l.statusCode === LicenceStatusCode.Active))
-        || [];
+    var profile = this.profileManagementService.getCachedProfile();
+    // get current logged in user
+    var loggedInUser: Endorsement = {
+      userId: profile.id,
+      loginId: profile.loginId,
+      firstName: profile.firstName,
+      lastName: profile.lastName,
+      email: profile.email,
+      // TODO move this somewhere the logic can be reused
+      role: profile.roles?.some(r => r == Role.Practitioner) ? Role.Practitioner : Role.Moa,
+      licences: []
+    }
+    // combine with the endorsed practitioners with active licence
+    this.practitioners = [
+      loggedInUser,
+      ...profile .endorsements?.filter(e => e.role === Role.Practitioner && e.licences?.some(l => l.statusCode === LicenceStatusCode.Active)) as Endorsement[]
+    ];
  }
 
  onAssignDmer() {

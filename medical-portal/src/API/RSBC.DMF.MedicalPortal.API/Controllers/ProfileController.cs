@@ -21,12 +21,15 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public async Task<ActionResult<UserProfile>> GetCurrentProfile()
         {
             var profile = await userService.GetCurrentUserContext();
-
-            if (profile == null) return NotFound();
+            if (profile == null)
+            {
+                return NotFound();
+            }
 
             return new UserProfile
             {
                 Id = profile.Id,
+                LoginId = profile.LoginId,
                 Email = profile.Email,
                 FirstName = profile.FirstName,
                 LastName = profile.LastName,
@@ -38,6 +41,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public record UserProfile
         {
             public string Id { get; set; }
+            public string LoginId { get; set; }
             public string FirstName { get; set; }
             public string LastName { get; set; }
             public string Email { get; set; }
