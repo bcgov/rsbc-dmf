@@ -37,6 +37,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName));
             CreateMap<LegacyComment, ViewModels.Comment>();
+            CreateMap<Driver, ViewModels.Driver>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

@@ -9,6 +9,7 @@ using Rsbc.Dmf.PartnerPortal.Api.Services;
 using SharedUtils;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
+using System.Threading.Channels;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
@@ -30,8 +31,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("")]
-        [ProducesResponseType(typeof(IEnumerable<ViewModels.Callback>), 200)]
+        [HttpGet("getComments")]
+        [ProducesResponseType(typeof(IEnumerable<ViewModels.Comment>), 200)]
         [ProducesResponseType(401)]
         [ProducesResponseType(500)]
         [ActionName(nameof(GetCaseComments))]
@@ -39,10 +40,11 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
         {
             var result = new List<ViewModels.Comment>();
 
-            var profile = await _userService.GetCurrentUserContext();
+            var profile = _userService.GetDriverInfo();
 
-            var commentsRequest = new DriverLicenseRequest { DriverLicenseNumber = profile.DriverLicenseNumber };
-            var getComments = _caseManagerClient.GetAllDriverComments(commentsRequest);
+            var commentsRequest = new DriverLicenseRequest {DriverLicenseNumber = profile.DriverLicenseNumber};
+            var getComments = _caseManagerClient.GetDriverComments(commentsRequest);
+
             if (getComments?.ResultStatus == ResultStatus.Success)
             {
                 result = _mapper.Map<List<ViewModels.Comment>>(getComments.Items);

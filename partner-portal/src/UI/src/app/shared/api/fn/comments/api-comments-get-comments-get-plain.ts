@@ -8,16 +8,16 @@ import { RequestBuilder } from '../../request-builder';
 
 import { Callback } from '../../models/callback';
 
-export interface ApiCommentsGet$Json$Params {
+export interface ApiCommentsGetCommentsGet$Plain$Params {
 }
 
-export function apiCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsGet$Json.PATH, 'get');
+export function apiCommentsGetCommentsGet$Plain(http: HttpClient, rootUrl: string, params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsGetCommentsGet$Plain.PATH, 'get');
   if (params) {
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -26,4 +26,4 @@ export function apiCommentsGet$Json(http: HttpClient, rootUrl: string, params?: 
   );
 }
 
-apiCommentsGet$Json.PATH = '/api/Comments';
+apiCommentsGetCommentsGet$Plain.PATH = '/api/Comments/getComments';

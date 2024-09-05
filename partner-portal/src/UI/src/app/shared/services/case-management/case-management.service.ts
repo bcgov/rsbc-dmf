@@ -23,6 +23,7 @@ export class CaseManagementService {
     private commentsService: CommentsService
   ) { }
 
+  // Case
   public getMostRecentCase() {
     return this.casesService.apiCasesMostRecentGet$Json();
   }
@@ -33,12 +34,7 @@ export class CaseManagementService {
     return this.casesService.apiCasesClosedGet$Json(params);
   }
 
-  // public getDriverDocuments(
-  //   params: Parameters<DriverService['apiDriverDocumentsGet$Json']>[0]
-  // ) {
-  //   return this.driversService.apiDriverDocumentsGet$Json(params);
-  // }
-
+  // Documents
   public getAllDriverDocuments() {
     return this.driverService.apiDriverAllDocumentsGet$Json()
   }
@@ -49,28 +45,12 @@ export class CaseManagementService {
     return this.documentService.apiDocumentDocumentIdGet$Json(params);
   }
 
-  // public userRegistration(
-  //   params: Parameters<ProfileService['apiProfileRegisterPut$Json$Response']>[0]
-  // ) {
-  //   return this.profileService.apiProfileRegisterPut$Json$Response(params);
-  // }
-
-  // public updateDriverProfile(
-  //   params: Parameters<ProfileService['apiProfileDriverPut$Json$Response']>[0]
-  // ) {
-  //   return this.profileService.apiProfileDriverPut$Json$Response(params);
-  // }
-
-  // public getDocumentSubTypes(
-  //   params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
-  // ) {
-  //   return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
-  // }
-
   public getDocumentSubTypes() {
     return this.documentTypeService.apiDocumentTypeDocumentSubTypeGet$Json();
   }
 
+
+  // Call Back
   public getCallBackRequest(
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
   ) {
@@ -89,13 +69,7 @@ export class CaseManagementService {
     return this.callbackService.apiCallbackCancelPut$Json(params);
   }
 
-  public getComments(
-    params: Parameters<CommentsService['apiCommentsGet$Json']>[0]
-  ) {
-    return this.commentsService.apiCommentsGet$Json(params);
-  }
-
-
+ // Search 
   public searchByDriver(
     params: Parameters<DriverService['apiDriverInfoDriverLicenceNumberGet$Json']>[0]
   ) {
@@ -107,5 +81,13 @@ export class CaseManagementService {
     params: Parameters<CasesService['apiCasesSearchIdCodeGet$Json']>[0]
   ) {
     return this.casesService.apiCasesSearchIdCodeGet$Json(params);
+  }
+
+  // Comments
+
+  public getComments(
+    params: Parameters<CommentsService['apiCommentsGetCommentsGet$Json']>[0]
+  ) {
+    return this.commentsService.apiCommentsGetCommentsGet$Json(params);
   }
 }
