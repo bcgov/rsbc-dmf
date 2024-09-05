@@ -47,6 +47,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
             CreateMap<CaseManagement.DocumentSubType, DocumentSubType>();
             CreateMap<CaseManagement.Callback, Callback>()
                 .AddTransform(NullStringConverter);
+            CreateMap<UpdateDocumentRequest, UpdateDocumentCommand>();
 
             CreateMap<Dto.Document, Document>()
                 .ForMember(dest => dest.Provider, opt => opt.MapFrom(src => src.Login))

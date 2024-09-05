@@ -9,4 +9,5 @@ public class ChefsBundle
     public PatientCase patientCase { get; set; }
     public Driver driverInfo { get; set; }
     public IEnumerable<MedicalCondition> medicalConditions { get; set; }
+    public string dmerType { get; set; }
 }

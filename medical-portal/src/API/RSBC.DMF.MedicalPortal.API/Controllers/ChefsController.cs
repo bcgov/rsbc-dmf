@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
@@ -20,6 +19,7 @@ using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Microsoft.AspNetCore.Authorization;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
+using Pssg.SharedUtils;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -30,6 +30,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IUserService userService;
         private readonly ICachedIcbcAdapterClient icbcAdapterClient;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
         private readonly IAuthorizationService _authorizationService;
         private readonly PdfService _pdfService;
@@ -43,6 +44,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public ChefsController(
             IUserService userService,
             CaseManager.CaseManagerClient cmsAdapterClient,
+            DocumentManager.DocumentManagerClient documentManagerClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
             IAuthorizationService authorizationService,
@@ -52,6 +54,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             IConfiguration configuration)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _documentManagerClient = documentManagerClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;
             this.icbcAdapterClient = icbcAdapterClient;
@@ -199,7 +202,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (getAllFlagsReply == null || getAllFlagsReply.Flags.Count == 0)
                 {
                     logger.LogInformation("Could not find all flags in the CMS");
-                    return StatusCode((int)HttpStatusCode.NotFound, "Not found error - could not find all flags in the CMS");
+                    return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find all flags in the CMS");
                 }
 
                 var allCaseFlags = mapper.Map<IEnumerable<Flag>>(getAllFlagsReply.Flags);
@@ -227,6 +230,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 }
 
                 var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
+
+                // update DMER document status to "Under Reviewed" on success
+                if (caseResult.ResultStatus == CMSResultStatus.Success)
+                {
+                    var UpdateDocumentRequest = new UpdateDocumentRequest
+                    {
+                        Id = documentId,
+                        // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
+                        SubmittalStatus = (int)SubmittalStatus.UnderReview
+                    };
+                    _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
+                }
 
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
             }
@@ -263,6 +278,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 chefsBundle.patientCase = caseResult;
                 caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
                 chefsBundle.medicalConditions = mapper.Map<IEnumerable<MedicalCondition>>(c.Item.MedicalConditions);
+                chefsBundle.dmerType = c.Item.DmerType;
             }
 
             var driverInfoReply = new DriverInfoReply();
