@@ -92,4 +92,13 @@ Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morg
 
 ### How to claim a DMER
 1. Login in as a practitioner
-2. 
+2. Search for a DMER case id e.g. "H8B2S1"
+3. 
+
+### How to update chefs form scripts
+Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]
+1. In source control, update the files assets/chefs, to keep track of changes
+2. Login to chefs, and select the eDMER form
+3. Near the top of the form, there is a transparent control called "initChefsForm", edit the control
+4. Click on the "Data" tab and expand the "Calculated Value" panel
+5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.
