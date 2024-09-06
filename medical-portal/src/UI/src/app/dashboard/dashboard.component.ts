@@ -1,7 +1,6 @@
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 
@@ -199,7 +198,11 @@ export class DashboardComponent {
       console.error('Case data was missing', this.searchedCase);
       return;
     }
-    this.popupService.openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string);
+    this.popupService
+      .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
+      .subscribe((result) => {
+        this.searchDmerCase();
+      });;
   }
 
   openClaimPopup(searchedCase: PatientCase) {

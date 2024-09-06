@@ -57,15 +57,13 @@ export class PopupComponent {
 
   sendMessage(type: string, payload: any) {
     if (this.iframe?.nativeElement?.contentWindow) {
-      console.log(
-        `[HOST] TX (to iframe): Host fulfilled request of type: ${type} and retrieved payload:`,
-      );
-      console.log(payload);
+      console.log(`[HOST] TX (to iframe): Host fulfilled request of type: ${type} and retrieved payload:`, payload);
       this.iframe.nativeElement.contentWindow.postMessage(
         JSON.stringify({
           type,
           ...(payload ? payload : {}),
         }),
+        // TODO this should be configurable
         'https://submit.digital.gov.bc.ca',
       );
     }
@@ -83,6 +81,7 @@ export class PopupComponent {
       priority: string;
     };
   }): void {
+    // TODO this should be configurable
     if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
 
     const {
@@ -90,16 +89,11 @@ export class PopupComponent {
     } = event;
 
     if (instanceId !== this.instanceId) {
-      console.warn(
-        `[HOST] RX (from iframe): Ignoring message from old instanceId: ${instanceId}, current instanceId is: ${this.instanceId}`,
-      );
+      console.warn( `[HOST] RX (from iframe): Ignoring message from old instanceId: ${instanceId}, current instanceId is: ${this.instanceId}`);
       return;
     }
 
-    console.log(
-      `[HOST] RX (from iframe): Host received request of type: ${type} begin processing...:`,
-    );
-    console.log(event);
+    console.log(`[HOST] RX (from iframe): Host received request of type: ${type} begin processing...:`, event);
 
     if (type === 'GET_CHEFS_BUNDLE' && this.caseId) {
       let params: Parameters<ChefsService['apiChefsBundleGet$Json']>[0] = {
@@ -128,11 +122,7 @@ export class PopupComponent {
           if (error.status === 404) {
             this.sendMessage(type, {});
           } else {
-            console.error(
-              '[HOST] apiChefsSubmissionGet An error occurred:',
-              error,
-            );
-            // Handle other types of errors here
+            console.error('[HOST] apiChefsSubmissionGet An error occurred:', error);
           }
         },
       );
