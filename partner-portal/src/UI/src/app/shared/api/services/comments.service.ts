@@ -13,7 +13,7 @@ import { apiCommentsGetCommentsGet$Json } from '../fn/comments/api-comments-get-
 import { ApiCommentsGetCommentsGet$Json$Params } from '../fn/comments/api-comments-get-comments-get-json';
 import { apiCommentsGetCommentsGet$Plain } from '../fn/comments/api-comments-get-comments-get-plain';
 import { ApiCommentsGetCommentsGet$Plain$Params } from '../fn/comments/api-comments-get-comments-get-plain';
-import { Callback } from '../models/callback';
+import { Comment } from '../models/comment';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService extends BaseService {
@@ -30,7 +30,7 @@ export class CommentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGetCommentsGet$Plain$Response(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
+  apiCommentsGetCommentsGet$Plain$Response(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
     return apiCommentsGetCommentsGet$Plain(this.http, this.rootUrl, params, context);
   }
 
@@ -40,9 +40,9 @@ export class CommentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGetCommentsGet$Plain(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<Array<Callback>> {
+  apiCommentsGetCommentsGet$Plain(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<Array<Comment>> {
     return this.apiCommentsGetCommentsGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
+      map((r: StrictHttpResponse<Array<Comment>>): Array<Comment> => r.body)
     );
   }
 
@@ -52,7 +52,7 @@ export class CommentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGetCommentsGet$Json$Response(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
+  apiCommentsGetCommentsGet$Json$Response(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
     return apiCommentsGetCommentsGet$Json(this.http, this.rootUrl, params, context);
   }
 
@@ -62,9 +62,9 @@ export class CommentsService extends BaseService {
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGetCommentsGet$Json(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<Array<Callback>> {
+  apiCommentsGetCommentsGet$Json(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<Array<Comment>> {
     return this.apiCommentsGetCommentsGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
+      map((r: StrictHttpResponse<Array<Comment>>): Array<Comment> => r.body)
     );
   }
 

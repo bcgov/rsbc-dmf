@@ -912,3 +912,12 @@ message GetDriverCallbacksReply {
 
 // END CallbackManager
 ////////////////////////
+
+// START CommentManager
+
+
+service CommentManager{
+ rpc GetCommentOnDriver (DriverIdRequest) returns (GetCommentsReply);
+}
+
+// END CommentManager

@@ -18,14 +18,14 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
     [ApiController]
     public class CommentsController : Controller
     {
-        private readonly CallbackManager.CallbackManagerClient _callbackManagerClient;
+        private readonly CommentManager.CommentManagerClient _commentManagerClient;
         private readonly CaseManagerClient _caseManagerClient;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public CommentsController(CallbackManager.CallbackManagerClient callbackManagerClient, CaseManager.CaseManagerClient caseManagerClient, IUserService userService, IMapper mapper)
+        public CommentsController(CommentManager.CommentManagerClient commentManagerClient, CaseManager.CaseManagerClient caseManagerClient, IUserService userService, IMapper mapper)
         {
-            _callbackManagerClient = callbackManagerClient;
+            _commentManagerClient = commentManagerClient;
             _caseManagerClient = caseManagerClient;
             _userService = userService;
             _mapper = mapper;
@@ -42,8 +42,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
             var profile = _userService.GetDriverInfo();
 
-            var commentsRequest = new DriverLicenseRequest {DriverLicenseNumber = profile.DriverLicenseNumber};
-            var getComments = _caseManagerClient.GetDriverComments(commentsRequest);
+            var commentsRequest = new DriverIdRequest {Id = profile.DriverId};
+            var getComments = _commentManagerClient.GetCommentOnDriver(commentsRequest);
 
             if (getComments?.ResultStatus == ResultStatus.Success)
             {

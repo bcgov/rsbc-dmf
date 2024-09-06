@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Pssg.SharedUtils;
 using Rsbc.Dmf.CaseManagement.Service;
 using Rsbc.Dmf.IcbcAdapter;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using System.Linq.Expressions;
 
 namespace Rsbc.Dmf.PartnerPortal.Api
@@ -26,18 +27,19 @@ namespace Rsbc.Dmf.PartnerPortal.Api
                 .ForMember(dest => dest.BcMailSent, opt => opt.MapFrom(src => src.DocumentType == "Letter Out BCMail" && src.ImportDate != null))
                 .ForMember(dest => dest.FaxReceivedDate, opt => opt.MapFrom(src => FaxReceivedDateConverter(src)))
                 .ForMember(dest => dest.SubmittalStatus, opt => opt.MapFrom(src => GroupSubmittalStatusUtil.GroupSubmittalStatus(src.SubmittalStatus)));
-            CreateMap<CaseDetail, ViewModels.CaseDetail>()
+            CreateMap<CaseManagement.Service.CaseDetail, ViewModels.CaseDetail>()
                 .ForMember(dest => dest.CaseType, opt => opt.MapFrom(src => src.CaseType == "DMER" ? "Solicited" : "Unsolicited"))
                 .AfterMap((src, dest) => dest.DecisionDate = dest.DecisionDate == DateTimeOffset.MinValue ? null : dest.DecisionDate)
                 .AddTransform(NullStringConverter);
-            CreateMap<DocumentSubType, ViewModels.DocumentSubType>();
-            CreateMap<Callback, ViewModels.Callback>()
+            CreateMap<CaseManagement.Service.DocumentSubType, ViewModels.DocumentSubType>();
+            CreateMap<CaseManagement.Service.Callback, ViewModels.Callback>()
                 .ForMember(dest => dest.Topic, opt => opt.MapFrom(src => src.Subject));
             CreateMap<DriverInfoReply, ViewModels.Driver>()
                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Surname))
                 .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.GivenName));
             CreateMap<LegacyComment, ViewModels.Comment>();
-            CreateMap<Driver, ViewModels.Driver>();
+            CreateMap<CaseManagement.Service.Driver, ViewModels.Driver>();
+            CreateMap<Comment, ViewModels.Comment>();
         }
 
         private Expression<Func<string, string>> NullStringConverter = x => x ?? string.Empty;

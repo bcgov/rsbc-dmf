@@ -44,9 +44,9 @@ export class CommentsComponent implements OnInit {
     return this._allcommentRequest;
   }
 
-  getComments(driverLicenseNumber: string) {
-    console.log(driverLicenseNumber)
-    this.caseManagementService.getComments(driverLicenseNumber).subscribe((comments: any) => {
+  getComments(driverId: string) {
+    console.log(driverId)
+    this.caseManagementService.getComments(driverId).subscribe((comments: any) => {
       this._allcommentRequest = comments;
     });
   }

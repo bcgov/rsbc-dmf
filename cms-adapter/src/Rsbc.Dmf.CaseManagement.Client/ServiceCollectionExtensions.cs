@@ -43,6 +43,7 @@ namespace Rsbc.Dmf.CaseManagement.Client
                     services.AddTransient(_ => new UserManager.UserManagerClient(channel));
                     services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                     services.AddTransient(_ => new CallbackManager.CallbackManagerClient(channel));
+                    services.AddTransient(_ => new CommentManager.CommentManagerClient(channel));
                     logger.LogInformation("CMS Adapter Service added without authentication");
                 }
                 else
@@ -61,6 +62,7 @@ namespace Rsbc.Dmf.CaseManagement.Client
                         services.AddTransient(_ => new UserManager.UserManagerClient(channel));
                         services.AddTransient(_ => new DocumentManager.DocumentManagerClient(channel));
                         services.AddTransient(_ => new CallbackManager.CallbackManagerClient(channel));
+                        services.AddTransient(_ => new CommentManager.CommentManagerClient(channel));
                         logger.LogInformation("CMS Adapter Service added with authentication");
                     }
                     else
