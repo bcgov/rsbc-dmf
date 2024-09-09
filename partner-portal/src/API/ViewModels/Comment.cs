@@ -43,6 +43,8 @@ namespace Rsbc.Dmf.PartnerPortal.Api.ViewModels
         /// Date the comment was made
         /// </summary>
         public DateTimeOffset? CommentDate { get; set; }
+
+        public string Origin { get; set; }
     }
 }
 

@@ -20,7 +20,9 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 .ForMember(dest => dest.CommentTypeCode, opt => opt.MapFrom(src => TranslateCommentTypeCodeFromInt(src.dfp_commenttype)))
                 .ForMember(dest => dest.CommentDate, opt => opt.MapFrom(src => src.createdon))
                 .ForMember(dest => dest.Driver, opt => opt.MapFrom(src => src.dfp_DriverId))
-                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.dfp_userid));
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.dfp_userid))
+                .ForMember(dest => dest.Origin, opt => opt.MapFrom(src => TranslateOriginType(src.dfp_origin)));
+                
 
             }
 
@@ -53,6 +55,25 @@ namespace Rsbc.Dmf.CaseManagement.Dynamics.Mapper
                 }
                 return result;
             }
+
+            public string TranslateOriginType(int? originTypeCode) {
+
+                string result;
+                switch (originTypeCode) {
+                    case 100000000:
+                        result = "User";
+                        break;
+                    case 100000001:
+                        result = "System";
+                        break;
+                     default :
+                        result = "System";
+                        break;
+                }
+
+                return result;
+            }
+
         }
     }
 }

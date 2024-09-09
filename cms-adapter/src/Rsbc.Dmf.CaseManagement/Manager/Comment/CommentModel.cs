@@ -16,5 +16,7 @@ namespace Rsbc.Dmf.CaseManagement.Manager.Comment
         public Driver Driver { get; set; }
         public string Assignee { get; set; }
         public string SignatureName { get; set; }
+
+        public string Origin { get; set; }  
     }
 }

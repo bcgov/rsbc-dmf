@@ -77,7 +77,9 @@ namespace Rsbc.Dmf.CaseManagement
                                     CommentTypeCode = TranslateCommentTypeCodeFromInt(comment.dfp_commenttype),
                                     SequenceNumber = sequenceNumber,
                                     UserId = comment.dfp_userid,
-                                    Driver = driver
+                                    Driver = driver,
+                                    Origin = TranslateOriginType(comment.dfp_origin),
+                                    
                                 };
 
                                 if (comment.owninguser != null &&
@@ -127,6 +129,27 @@ namespace Rsbc.Dmf.CaseManagement
             }
             return result;
         }
+
+        public string TranslateOriginType(int? originTypeCode)
+        {
+
+            string result;
+            switch (originTypeCode)
+            {
+                case 100000000:
+                    result = "User";
+                    break;
+                case 100000001:
+                    result = "System";
+                    break;
+                default:
+                    result = "System";
+                    break;
+            }
+
+            return result;
+        }
+
     }
 
 
