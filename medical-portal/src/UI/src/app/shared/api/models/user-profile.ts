@@ -6,6 +6,7 @@ export interface UserProfile {
   endorsements?: Array<Endorsement> | null;
   firstName?: string | null;
   id?: string | null;
+  loginId?: string;
   lastName?: string | null;
   roles?: Array<string> | null;
 }

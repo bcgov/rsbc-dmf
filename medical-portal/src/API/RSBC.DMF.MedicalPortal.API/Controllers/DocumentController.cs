@@ -200,9 +200,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpPost("claimDmer")]
-        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DmerDocument), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Authorize(Policy = Policies.MedicalPractitioner)]
         public async Task<IActionResult> UpdateClaimDmerOnDocument([FromQuery] string documentId)
         {
@@ -211,11 +211,10 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             return await AssignDmerClaim(loginId, documentId);
         }
 
-        // TODO https://learn.microsoft.com/en-us/aspnet/core/web-api/handle-errors?view=aspnetcore-8.0#use-exceptions-to-modify-the-response
         [HttpPost("assignDmer")]
-        [ProducesResponseType(typeof(DmerDocument), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(DmerDocument), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AssignClaimDmerOnDocument([FromQuery] string documentId, [FromQuery] Guid loginId)
         {
             if (loginId == Guid.Empty)
@@ -224,14 +223,19 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             }
 
             var user = _userService.GetUser();
-            var authorizationResult = await _authorizationService.AuthorizeAsync(user, loginId, Policies.NetworkPractitioner);
-            if (authorizationResult.Succeeded)
+            var hasAccess = user.IsInRole(Roles.Practitoner);
+            if (!hasAccess)
+            {
+                var authorizationResult = await _authorizationService.AuthorizeAsync(user, loginId, Policies.NetworkPractitioner);
+                hasAccess = authorizationResult.Succeeded;
+            }
+            if (hasAccess)
             {
                 return await AssignDmerClaim(loginId.ToString(), documentId);
             }
             else
             {
-                return StatusCode((int)HttpStatusCode.Unauthorized);
+                return StatusCode(StatusCodes.Status401Unauthorized);
             }
         }
 

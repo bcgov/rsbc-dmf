@@ -130,6 +130,26 @@ namespace Rsbc.Dmf.CaseManagement.Service
             return result;
         }
 
+        public async override Task<UpdateDocumentReply> UpdateDocument(UpdateDocumentRequest request, ServerCallContext context)
+        {
+            var result = new UpdateDocumentReply();
+
+            try
+            {
+                var command = _mapper.Map<UpdateDocumentCommand>(request);
+                var isSuccess = _documentManager.UpdateDocument(command);
+                result.ResultStatus = isSuccess ? ResultStatus.Success : ResultStatus.Fail;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating document");
+                result.ErrorDetail = ex.Message;
+            }
+
+            return result;
+        }
+
         public async override Task<UpdateClaimReply> UpdateClaimDmer(UpdateClaimRequest request, ServerCallContext context)
         {
             var result = new UpdateClaimReply();
