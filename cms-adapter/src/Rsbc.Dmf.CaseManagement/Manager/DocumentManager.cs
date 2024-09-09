@@ -303,6 +303,23 @@ namespace Rsbc.Dmf.CaseManagement
 
         }
 
+        // NOTE you can add command properties similar to "SubmittalStatus", as long you check for not default, so that it does not break existing functionality
+        public bool UpdateDocument(UpdateDocumentCommand request)
+        {
+            var document = dynamicsContext.bcgov_documenturls
+                .Where(x => x.bcgov_documenturlid == request.Id)
+                .FirstOrDefault();
+
+            if (request.SubmittalStatus != default)
+            {
+                document.dfp_submittalstatus = request.SubmittalStatus;
+            }
+
+            dynamicsContext.UpdateObject(document);
+            dynamicsContext.SaveChanges();
+            return true;
+        }
+
         /// <summary>
         /// 
         /// </summary>

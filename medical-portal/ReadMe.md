@@ -83,6 +83,7 @@ To enrol the user in DMFT, click on the access link on top menu, click on "Get A
 ### Contacts
 Mailhot, Nicholas <Nick.Mailhot@nttdata.com> - Scrum Master
 Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X users, which were suppose to be persisted for our testing
+Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morgan either. In theory, would triage to contact Nick Mailhot
 
 ## TROUBLE SHOOTING
 - If you find that gRPC client is not updating the models, delete the gRPC client and service bin and obj folders (bonus points for adding a project xml script to delete these folders on clean)
@@ -90,5 +91,14 @@ Sekhon, Khushwinder <Khushwinder.Sekhon@gov.bc.ca> - For updating the dmfw0000X 
 ## HOW-TO
 
 ### How to claim a DMER
-1. Login in as any user
-2. 
+1. Login in as a practitioner
+2. Search for a DMER case id e.g. "H8B2S1"
+3. 
+
+### How to update chefs form scripts
+Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]
+1. In source control, update the files assets/chefs, to keep track of changes
+2. Login to chefs, and select the eDMER form
+3. Near the top of the form, there is a transparent control called "initChefsForm", edit the control
+4. Click on the "Data" tab and expand the "Calculated Value" panel
+5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.

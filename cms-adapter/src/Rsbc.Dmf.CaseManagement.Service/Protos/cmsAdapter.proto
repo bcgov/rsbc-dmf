@@ -544,18 +544,28 @@ service DocumentManager {
     rpc GetDmer(CaseIdRequest) returns (GetDmerReply);
     rpc GetDriverAndCaseDocuments(GetDriverAndCaseDocumentsRequest) returns (GetDriverAndCaseDocumentsReply);
     
-  // Update Claim DMER on documents
+    // Update Claim DMER on documents
+    rpc UpdateDocument(UpdateDocumentRequest) returns (UpdateDocumentReply);
     rpc UpdateClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
-    rpc UpdateUnClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply);
- 
+    rpc UpdateUnClaimDmer(UpdateClaimRequest) returns (UpdateClaimReply); 
 }
 
-message UpdateClaimRequest{
+message UpdateDocumentRequest {
+    string id = 1;
+    int32 submittalStatus = 2;
+}
+
+message UpdateDocumentReply {
+    ResultStatus resultStatus = 1;
+    string errorDetail = 2;
+}
+
+message UpdateClaimRequest {
   string loginId = 1;
   string documentId = 2;
 }
 
-message UpdateClaimReply{
+message UpdateClaimReply {
     ResultStatus resultStatus = 1;
     string errorDetail = 2;
     DmerCase item = 3;

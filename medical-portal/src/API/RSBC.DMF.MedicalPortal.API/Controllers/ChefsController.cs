@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Rsbc.Dmf.CaseManagement.Service;
 using RSBC.DMF.MedicalPortal.API.Services;
@@ -20,6 +19,7 @@ using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using Microsoft.AspNetCore.Authorization;
 using static RSBC.DMF.MedicalPortal.API.Auth.AuthConstant;
+using Pssg.SharedUtils;
 
 namespace RSBC.DMF.MedicalPortal.API.Controllers
 {
@@ -30,6 +30,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         private readonly IUserService userService;
         private readonly ICachedIcbcAdapterClient icbcAdapterClient;
         private readonly CaseManager.CaseManagerClient _cmsAdapterClient;
+        private readonly DocumentManager.DocumentManagerClient _documentManagerClient;
         private readonly DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient;
         private readonly IAuthorizationService _authorizationService;
         private readonly PdfService _pdfService;
@@ -43,6 +44,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         public ChefsController(
             IUserService userService,
             CaseManager.CaseManagerClient cmsAdapterClient,
+            DocumentManager.DocumentManagerClient documentManagerClient,
             ICachedIcbcAdapterClient icbcAdapterClient,
             DocumentStorageAdapter.DocumentStorageAdapterClient documentStorageAdapterClient,
             IAuthorizationService authorizationService,
@@ -52,6 +54,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             IConfiguration configuration)
         {
             _cmsAdapterClient = cmsAdapterClient;
+            _documentManagerClient = documentManagerClient;
             this.documentStorageAdapterClient = documentStorageAdapterClient;
             this.userService = userService;
             this.icbcAdapterClient = icbcAdapterClient;
@@ -63,9 +66,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("submission")]
-        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsSubmission), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(GetSubmission))]
         public async Task<ActionResult> GetSubmission([FromQuery] string caseId,
             [FromQuery] string status = SubmissionStatus.Draft)
@@ -88,7 +91,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentUrl == "")
             {
                 logger.LogError($"Unexpected error - unable to generate documentUrl");
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Unexpected error - unable to generate documentUrl");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Unexpected error - unable to generate documentUrl");
             }
 
             // fetch the file from S3
@@ -100,7 +103,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (documentReply.ResultStatus != Pssg.DocumentStorageAdapter.ResultStatus.Success)
             {
                 logger.LogError($"Not found error - unable to fetch file");
-                return StatusCode((int)HttpStatusCode.NotFound, "Not found error - unable to fetch file from storage");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - unable to fetch file from storage");
             }
 
             byte[] fileContents = documentReply.Data.ToByteArray();
@@ -116,14 +119,14 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             catch (JsonException ex)
             {
                 logger.LogError("Error deserializing JSON content: {0}", ex.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, "Error processing JSON content");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error processing JSON content");
             }
         }
 
         // TODO why is this triggered when loading the chefs form?
         [HttpPut("submission")]
-        [ProducesResponseType(typeof(ChefsSubmission), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsSubmission), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(PutSubmission))]
         public async Task<ActionResult> PutSubmission([FromQuery] string caseId, [FromQuery] string documentId, [FromBody] ChefsSubmission submission)
         {
@@ -134,7 +137,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 || string.IsNullOrEmpty(caseId) || string.IsNullOrEmpty(documentId))
             {
                 logger.LogError($"{nameof(PutSubmission)} error: invalid submission");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             // serialize and log the payload
@@ -168,7 +171,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             if (jsonUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
             {
                 logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {jsonUploadReply.ErrorDetail}");
-                return StatusCode((int)HttpStatusCode.InternalServerError, jsonUploadReply.ErrorDetail);
+                return StatusCode(StatusCodes.Status500InternalServerError, jsonUploadReply.ErrorDetail);
             }
             logger.LogInformation($"PUT Submission - Successfully uploaded JSON to S3, dataFileKey: {jsonUploadReply.FileName}, dataFileSize: {jsonUploadRequest.Data.Length}, reply: {JsonSerializer.Serialize(jsonUploadReply)}");
 
@@ -190,7 +193,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (pdfUploadReply.ResultStatus != DocumentStorageResultStatus.Success)
                 {
                     logger.LogError($"{nameof(PutSubmission)} error: unable to upload documents for this case - {pdfUploadReply.ErrorDetail}");
-                    return StatusCode((int)HttpStatusCode.InternalServerError, pdfUploadReply.ErrorDetail);
+                    return StatusCode(StatusCodes.Status500InternalServerError, pdfUploadReply.ErrorDetail);
                 }
                 logger.LogInformation($"PUT Submission - Successfully uploaded PDF to S3, dataFileKey: {pdfUploadReply.FileName}, dataFileSize: {pdfData.Length}, reply: {JsonSerializer.Serialize(pdfUploadReply)}");
 
@@ -199,7 +202,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 if (getAllFlagsReply == null || getAllFlagsReply.Flags.Count == 0)
                 {
                     logger.LogInformation("Could not find all flags in the CMS");
-                    return StatusCode((int)HttpStatusCode.NotFound, "Not found error - could not find all flags in the CMS");
+                    return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find all flags in the CMS");
                 }
 
                 var allCaseFlags = mapper.Map<IEnumerable<Flag>>(getAllFlagsReply.Flags);
@@ -228,6 +231,18 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
 
                 var caseResult = _cmsAdapterClient.UpdateCase(updateCaseRequest);
 
+                // update DMER document status to "Under Reviewed" on success
+                if (caseResult.ResultStatus == CMSResultStatus.Success)
+                {
+                    var UpdateDocumentRequest = new UpdateDocumentRequest
+                    {
+                        Id = documentId,
+                        // TODO portals should be agnostic of Dynamics specific values, this should be an enum [translated in CMS] or string value
+                        SubmittalStatus = (int)SubmittalStatus.UnderReview
+                    };
+                    _documentManagerClient.UpdateDocument(UpdateDocumentRequest);
+                }
+
                 logger.LogInformation($"Case Update Result is {caseResult.ResultStatus}");
             }
 
@@ -235,9 +250,9 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
         }
 
         [HttpGet("bundle")]
-        [ProducesResponseType(typeof(ChefsBundle), (int)HttpStatusCode.OK)]
-        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ProducesResponseType(typeof(ChefsBundle), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ActionName(nameof(GetChefsBundle))]
         public async Task<ActionResult> GetChefsBundle([Required][FromQuery] string caseId)
         {
@@ -263,6 +278,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                 chefsBundle.patientCase = caseResult;
                 caseResult.DriverLicenseNumber = c.Item.DriverLicenseNumber;
                 chefsBundle.medicalConditions = mapper.Map<IEnumerable<MedicalCondition>>(c.Item.MedicalConditions);
+                chefsBundle.dmerType = c.Item.DmerType;
             }
 
             var driverInfoReply = new DriverInfoReply();
@@ -276,8 +292,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else
             {
                 logger.LogInformation("Could not find DriverLicenseNumber in the case details");
-                return StatusCode((int)HttpStatusCode.NotFound,
-                    "Not found error - could not find case details or driver license number");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find case details or driver license number");
             }
 
             if (driverInfoReply.ResultStatus == ResultStatus.Success)
@@ -300,8 +315,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
             else
             {
                 logger.LogInformation("Could not find icbc driver info details");
-                return StatusCode((int)HttpStatusCode.NotFound,
-                    "Not found error - could not find icbc driver info details");
+                return StatusCode(StatusCodes.Status404NotFound, "Not found error - could not find icbc driver info details");
             }
 
             return Ok(chefsBundle);

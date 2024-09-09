@@ -24,16 +24,19 @@ namespace RSBC.DMF.MedicalPortal.API.Services
             var margins = new MarginSettings() { Top = 3, Bottom = 3, Left = 0.5, Right = 0.5, Unit = Unit.Inches };          
             var doc = new HtmlToPdfDocument()
             {
-                GlobalSettings = {
+                GlobalSettings = 
+                {
                     ColorMode = ColorMode.Color,
                     Orientation = Orientation.Portrait,
                     PaperSize = PaperKind.Letter,
                     DPI = 72,
                     Margins = margins
                 },
-                Objects = {
-                    new ObjectSettings() {
-                        LoadSettings = { BlockLocalFileAccess = false ,  LoadErrorHandling = ContentErrorHandling.Abort },
+                Objects = 
+                {
+                    new ObjectSettings() 
+                    {
+                        LoadSettings = { BlockLocalFileAccess = false, LoadErrorHandling = ContentErrorHandling.Abort },
                         PagesCount = true,
                         HtmlContent = html,
                         WebSettings = { DefaultEncoding = "utf-8",},
