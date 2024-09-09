@@ -1,8 +1,8 @@
 import { NgFor } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
@@ -10,37 +10,41 @@ import { Comment } from '@app/shared/api/models';
 @Component({
   selector: 'app-comments',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, MatIconModule, MatCardModule, NgFor],
+  imports: [MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule, MatCardModule, NgFor, MatDialogClose],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentsComponent implements OnInit {
 
   _allcommentRequest: Comment[] = [];
-    // Get Driver details
-    driverDetails = this.userService.getCachedriver();
-
-  constructor(private caseManagementService: CaseManagementService, private userService: UserService,) { }
+  // Get Driver details
+  driverDetails = this.userService.getCachedriver();
+ 
+   constructor(
+    
+    private caseManagementService: CaseManagementService,
+    private userService: UserService
+  ) { }
 
   ngOnInit(): void {
     if (this.driverDetails.id) {
       this.getComments(this.driverDetails.id as string)
     }
-    else{
+    else {
       console.log('No Comments for this user')
     }
 
   }
 
-  
+
   @Input() set allComments(comments: Comment[]) {
-    if(comments)
-    this._allcommentRequest = comments;
+    if (comments)
+      this._allcommentRequest = comments;
     //this.filteredCallbacks = this._allCallBackRequests?.slice(0, this.pageSize);
   }
 
- get allComments(){
+  get allComments() {
     return this._allcommentRequest;
   }
 
@@ -50,4 +54,6 @@ export class CommentsComponent implements OnInit {
       this._allcommentRequest = comments;
     });
   }
+
+ 
 }

@@ -44,7 +44,7 @@ namespace Rsbc.Dmf.CaseManagement
                     };
 
                     // get the cases for that driver.
-                    var comments = _dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid && i.dfp_origin == (int?)OriginTypes.User
+                    var comments = _dynamicsContext.dfp_comments.Where(i => i._dfp_driverid_value == driverItem.dfp_driverid && i.dfp_icbc == true
                     ).OrderByDescending(x => x.dfp_legacyid).OrderByDescending(x => x.createdon).ToList();
 
 

@@ -45,7 +45,6 @@ import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.compo
     NgFor,
     MatIcon,
     NgIf,
-    MatDialogModule,
     CommentsComponent,
     MatTabsModule,
     LettersToDriverComponent,
