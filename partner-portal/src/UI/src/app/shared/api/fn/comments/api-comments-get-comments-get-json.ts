@@ -6,13 +6,13 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { Callback } from '../../models/callback';
+import { Comment } from '../../models/comment';
 
-export interface ApiCommentsGet$Json$Params {
+export interface ApiCommentsGetCommentsGet$Json$Params {
 }
 
-export function apiCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
-  const rb = new RequestBuilder(rootUrl, apiCommentsGet$Json.PATH, 'get');
+export function apiCommentsGetCommentsGet$Json(http: HttpClient, rootUrl: string, params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
+  const rb = new RequestBuilder(rootUrl, apiCommentsGetCommentsGet$Json.PATH, 'get');
   if (params) {
   }
 
@@ -21,9 +21,9 @@ export function apiCommentsGet$Json(http: HttpClient, rootUrl: string, params?: 
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<Array<Callback>>;
+      return r as StrictHttpResponse<Array<Comment>>;
     })
   );
 }
 
-apiCommentsGet$Json.PATH = '/api/Comments';
+apiCommentsGetCommentsGet$Json.PATH = '/api/Comments/getComments';

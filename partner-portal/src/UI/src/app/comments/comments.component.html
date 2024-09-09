@@ -19,12 +19,12 @@
 </div>
 
 <mat-dialog-content class="mat-typography">
-  <mat-card>
+  <mat-card *ngFor = "let comments of allComments" style="margin-bottom: 12px;">
     <mat-card-content>
       <div>
-        A new document requirement was added to case by  user.
+      {{comments.commentText}}
       </div>
-      <div>ICBC - Jan 12, 2023</div>
+      <div>{{comments.commentTypeCode}} - {{comments.commentDate}}</div>
     </mat-card-content>
   </mat-card>
 </mat-dialog-content>

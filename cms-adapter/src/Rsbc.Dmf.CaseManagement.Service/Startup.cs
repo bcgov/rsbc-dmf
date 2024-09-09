@@ -144,6 +144,7 @@ namespace Rsbc.Dmf.CaseManagement.Service
                 endpoints.MapGrpcService<UserService>();
                 endpoints.MapGrpcService<DocumentService>();
                 endpoints.MapGrpcService<CallbackService>();
+                endpoints.MapGrpcService<CommentService>();
 
                 endpoints.MapControllers();
                 

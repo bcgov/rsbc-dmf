@@ -9,11 +9,11 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
-import { apiCommentsGet$Json } from '../fn/comments/api-comments-get-json';
-import { ApiCommentsGet$Json$Params } from '../fn/comments/api-comments-get-json';
-import { apiCommentsGet$Plain } from '../fn/comments/api-comments-get-plain';
-import { ApiCommentsGet$Plain$Params } from '../fn/comments/api-comments-get-plain';
-import { Callback } from '../models/callback';
+import { apiCommentsGetCommentsGet$Json } from '../fn/comments/api-comments-get-comments-get-json';
+import { ApiCommentsGetCommentsGet$Json$Params } from '../fn/comments/api-comments-get-comments-get-json';
+import { apiCommentsGetCommentsGet$Plain } from '../fn/comments/api-comments-get-comments-get-plain';
+import { ApiCommentsGetCommentsGet$Plain$Params } from '../fn/comments/api-comments-get-comments-get-plain';
+import { Comment } from '../models/comment';
 
 @Injectable({ providedIn: 'root' })
 export class CommentsService extends BaseService {
@@ -21,50 +21,50 @@ export class CommentsService extends BaseService {
     super(config, http);
   }
 
-  /** Path part for operation `apiCommentsGet()` */
-  static readonly ApiCommentsGetPath = '/api/Comments';
+  /** Path part for operation `apiCommentsGetCommentsGet()` */
+  static readonly ApiCommentsGetCommentsGetPath = '/api/Comments/getComments';
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiCommentsGet$Plain()` instead.
+   * To access only the response body, use `apiCommentsGetCommentsGet$Plain()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGet$Plain$Response(params?: ApiCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
-    return apiCommentsGet$Plain(this.http, this.rootUrl, params, context);
+  apiCommentsGetCommentsGet$Plain$Response(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
+    return apiCommentsGetCommentsGet$Plain(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiCommentsGet$Plain$Response()` instead.
+   * To access the full response (for headers, for example), `apiCommentsGetCommentsGet$Plain$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGet$Plain(params?: ApiCommentsGet$Plain$Params, context?: HttpContext): Observable<Array<Callback>> {
-    return this.apiCommentsGet$Plain$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
+  apiCommentsGetCommentsGet$Plain(params?: ApiCommentsGetCommentsGet$Plain$Params, context?: HttpContext): Observable<Array<Comment>> {
+    return this.apiCommentsGetCommentsGet$Plain$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Comment>>): Array<Comment> => r.body)
     );
   }
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiCommentsGet$Json()` instead.
+   * To access only the response body, use `apiCommentsGetCommentsGet$Json()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGet$Json$Response(params?: ApiCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Callback>>> {
-    return apiCommentsGet$Json(this.http, this.rootUrl, params, context);
+  apiCommentsGetCommentsGet$Json$Response(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<StrictHttpResponse<Array<Comment>>> {
+    return apiCommentsGetCommentsGet$Json(this.http, this.rootUrl, params, context);
   }
 
   /**
    * This method provides access only to the response body.
-   * To access the full response (for headers, for example), `apiCommentsGet$Json$Response()` instead.
+   * To access the full response (for headers, for example), `apiCommentsGetCommentsGet$Json$Response()` instead.
    *
    * This method doesn't expect any request body.
    */
-  apiCommentsGet$Json(params?: ApiCommentsGet$Json$Params, context?: HttpContext): Observable<Array<Callback>> {
-    return this.apiCommentsGet$Json$Response(params, context).pipe(
-      map((r: StrictHttpResponse<Array<Callback>>): Array<Callback> => r.body)
+  apiCommentsGetCommentsGet$Json(params?: ApiCommentsGetCommentsGet$Json$Params, context?: HttpContext): Observable<Array<Comment>> {
+    return this.apiCommentsGetCommentsGet$Json$Response(params, context).pipe(
+      map((r: StrictHttpResponse<Array<Comment>>): Array<Comment> => r.body)
     );
   }
 
