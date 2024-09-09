@@ -8,10 +8,10 @@
   <div class="filter">
     <div>Filter-By</div>
     <div>
-      <button mat-button aria-label="Filter By system">
+      <button mat-button aria-label="Filter By system" (click)="filterBySystem()">
         <mat-icon> account_circle</mat-icon> Person
       </button>
-      <button mat-button aria-label="Filter By Person">
+      <button mat-button aria-label="Filter By Person" (click)="filterByUser()">
         <mat-icon>devices</mat-icon> System
       </button>
     </div>
@@ -20,11 +20,11 @@
 
 <mat-dialog-content class="mat-typography">
   <mat-card *ngFor = "let comments of allComments" style="margin-bottom: 12px;">
-    <mat-card-content>
+    <mat-card-content *ngIf = "comments.origin === filterBy">
       <div>
       {{comments.commentText}}
       </div>
-      <div>{{comments.commentTypeCode}} - {{comments.commentDate}}</div>
+      <div>{{comments.origin}} - {{comments.commentDate | date : "longDate"}}</div>
     </mat-card-content>
   </mat-card>
 </mat-dialog-content>

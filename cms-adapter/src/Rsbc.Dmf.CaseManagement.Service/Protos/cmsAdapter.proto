@@ -237,6 +237,7 @@ message LegacyComment {
 	Driver Driver = 8;
 	string Assignee = 9;
 	string SignatureName = 10;
+    string Origin  = 11;
 }
 
 message GetDocumentRequest {	

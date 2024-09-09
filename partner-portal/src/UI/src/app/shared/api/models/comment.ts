@@ -8,6 +8,7 @@ export interface Comment {
   commentText?: string | null;
   commentTypeCode?: string | null;
   driver?: Driver;
+  origin?: string | null;
   sequenceNumber?: number | null;
   userId?: string | null;
 }

@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, OnInit, Inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,15 +7,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
 import { Comment } from '@app/shared/api/models';
+import { CommentOrigin } from '@app/app.model';
 @Component({
   selector: 'app-comments',
   standalone: true,
-  imports: [MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule, MatCardModule, NgFor, MatDialogClose],
+  imports: [MatDialogContent, MatDialogActions, MatButtonModule, MatIconModule, MatCardModule, NgFor, NgIf, MatDialogClose, DatePipe],
   templateUrl: './comments.component.html',
   styleUrl: './comments.component.scss',
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentsComponent implements OnInit {
+  filterBy = CommentOrigin.User; 
 
   _allcommentRequest: Comment[] = [];
   // Get Driver details
@@ -55,5 +57,11 @@ export class CommentsComponent implements OnInit {
     });
   }
 
+  filterBySystem(){
+   this.filterBy = CommentOrigin.User;
+  }
  
+  filterByUser(){
+    this.filterBy = CommentOrigin.System; 
+  }
 }

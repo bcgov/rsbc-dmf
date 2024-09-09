@@ -22,3 +22,8 @@ export const CallStatusDescription = new Map<number | undefined, string>([
   [1, 'Closed']
 ])
  
+
+export enum CommentOrigin{
+  'System' = 'System',
+  'User' = 'User'
+}

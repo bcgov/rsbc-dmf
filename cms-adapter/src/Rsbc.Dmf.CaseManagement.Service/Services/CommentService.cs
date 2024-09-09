@@ -47,7 +47,8 @@ namespace Rsbc.Dmf.CaseManagement.Service
                         UserId = item.UserId ?? string.Empty,
                         Driver = driver,
                         CommentText = item.CommentText ?? string.Empty,
-                        SignatureName = item.SignatureName ?? string.Empty
+                        SignatureName = item.SignatureName ?? string.Empty,
+                        Origin = item.Origin ?? string.Empty,
                     });
                 }
                 reply.ResultStatus = ResultStatus.Success;
