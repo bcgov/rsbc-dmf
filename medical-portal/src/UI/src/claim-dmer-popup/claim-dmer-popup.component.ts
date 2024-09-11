@@ -48,7 +48,7 @@ export class ClaimDmerPopupComponent implements OnInit {
     // get current logged in user
     var loggedInUser: Endorsement = {
       userId: profile.id,
-      loginId: profile.loginId,
+      loginId: profile.loginId as string,
       firstName: profile.firstName,
       lastName: profile.lastName,
       email: profile.email,

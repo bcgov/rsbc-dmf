@@ -128,6 +128,7 @@ function loadChefsBundleData(fetchedBundleData) {
     patientCase: { driverLicenseNumber },
     driverInfo: { surname, birthDate },
     medicalConditions,
+    dmerType
   } = fetchedBundleData;
 
   const values = {
@@ -135,13 +136,12 @@ function loadChefsBundleData(fetchedBundleData) {
     surname,
     birthDate,
     medicalConditions,
+    dmerType
   };
 
   Object.keys(values).forEach((key) => {
     if (!values[key]) {
-      console.info(
-        `[IFRAME] Attempt to set chefsKey: ${key} FAILED, undefined value`,
-      );
+      console.error(`[IFRAME] Attempt to set chefsKey: ${key} FAILED, undefined value`);
       return;
     }
 
