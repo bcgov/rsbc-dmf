@@ -102,3 +102,29 @@ Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarla
 3. Near the top of the form, there is a transparent control called "initChefsForm", edit the control
 4. Click on the "Data" tab and expand the "Calculated Value" panel
 5. Edit the "Javascript" textarea. You can copy the initChefsForm.js script and paste here.
+
+### How to add a field to chefs form
+1. Create a new version of the chefs form by clicking on the "+" button
+2. Add an input field to chefs form, use camelCase for the field e.g. "firstName" on the "API" tab
+3. Add a "Display" -> Label to the input field
+4. If you need to style the input field, add a class key and unique value on the "API" tab -> Custom properties
+5. Edit the assets/chefs/initChefsForm.js loadChefsBundleData method, update the const object and the "values" that matches the field name above e.g.
+```
+  const {
+    patientCase: { driverLicenseNumber },
+    driverInfo: { firstName, surname, birthDate, licenceClass },
+    medicalConditions,
+    dmerType
+  } = fetchedBundleData;
+
+  const values = {
+    driverLicenseNumber,
+    firstName,
+    surname,
+    birthDate,
+    medicalConditions,
+    dmerType,
+    licenceClass
+  };
+```
+6. Save and publish the chefs form

@@ -4,9 +4,6 @@ using Pssg.DocumentStorageAdapter;
 using Rsbc.Dmf.CaseManagement.Service;
 using Serilog;
 using System.Net;
-using Rsbc.Dmf.IcbcAdapter;
-using ResultStatus = Rsbc.Dmf.IcbcAdapter.ResultStatus;
-using TokenRequest = Rsbc.Dmf.IcbcAdapter.TokenRequest;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -22,7 +19,7 @@ namespace RSBC.DMF.MedicalPortal.API
             {
                 var httpClientHandler = new HttpClientHandler();
                 if (!validateServerCertificate) // Ignore certificate errors in non-production modes.
-                    // This allows you to use OpenShift self-signed certificates for testing.
+                                                // This allows you to use OpenShift self-signed certificates for testing.
                 {
                     // Return `true` to allow certificates that are untrusted/invalid
                     httpClientHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
@@ -87,7 +84,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                 var initialChannel = GrpcChannel.ForAddress(documentStorageAdapterURI,
                     new GrpcChannelOptions
-                        { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+                    { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                 var initialClient = new DocumentStorageAdapter.DocumentStorageAdapterClient(initialChannel);
                 // call the token service to get a token.
@@ -105,7 +102,7 @@ namespace RSBC.DMF.MedicalPortal.API
 
                     var channel = GrpcChannel.ForAddress(documentStorageAdapterURI,
                         new GrpcChannelOptions
-                            { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
+                        { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
 
                     services.AddTransient(_ => new DocumentStorageAdapter.DocumentStorageAdapterClient(channel));
                 }
@@ -121,7 +118,7 @@ namespace RSBC.DMF.MedicalPortal.API
             {
                 var httpClientHandler = new HttpClientHandler();
                 if (!validateServerCertificate) // Ignore certificate errors in non-production modes.
-                    // This allows you to use OpenShift self-signed certificates for testing.
+                                                // This allows you to use OpenShift self-signed certificates for testing.
                 {
                     // Return `true` to allow certificates that are untrusted/invalid
                     httpClientHandler.ServerCertificateCustomValidationCallback =
@@ -154,58 +151,6 @@ namespace RSBC.DMF.MedicalPortal.API
                 else
                 {
                     Log.Logger.Information("Error getting token for Pidp Service");
-                }
-            }
-
-            return services;
-        }
-
-        public static IServiceCollection AddIcbcAdapterClient(this IServiceCollection services,
-            IConfiguration configuration)
-        {
-            // Add ICBC Adapter
-            string icbcAdapterURI = configuration["ICBC_ADAPTER_URI"];
-            if (!string.IsNullOrEmpty(icbcAdapterURI))
-            {
-                var httpClientHandler = new HttpClientHandler();
-                // Return `true` to allow certificates that are untrusted/invalid                    
-                httpClientHandler.ServerCertificateCustomValidationCallback =
-                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-
-                var httpClient = new HttpClient(httpClientHandler)
-                {
-                    Timeout = TimeSpan.FromMinutes(30),
-                    DefaultRequestVersion = HttpVersion.Version20
-                };
-
-                if (!string.IsNullOrEmpty(configuration["ICBC_ADAPTER_JWT_SECRET"]))
-                {
-                    var initialChannel = GrpcChannel.ForAddress(icbcAdapterURI,
-                        new GrpcChannelOptions
-                            { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
-                    var initialClient = new IcbcAdapter.IcbcAdapterClient(initialChannel);
-
-                    // call the token service to get a token.
-                    var tokenRequest = new TokenRequest
-                    {
-                        Secret = configuration["ICBC_ADAPTER_JWT_SECRET"]
-                    };
-                    var tokenReply = initialClient.GetToken(tokenRequest);
-                    if (tokenReply != null && tokenReply.ResultStatus == ResultStatus.Success)
-                    {
-                        // Add the bearer token to the client.
-                        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {tokenReply.Token}");
-                        Log.Logger.Information("GetToken successfuly.");
-
-                        var channel = GrpcChannel.ForAddress(icbcAdapterURI,
-                            new GrpcChannelOptions
-                                { HttpClient = httpClient, MaxReceiveMessageSize = null, MaxSendMessageSize = null });
-                        services.AddTransient(_ => new IcbcAdapter.IcbcAdapterClient(channel));
-                    }
-                    else
-                    {
-                        Log.Logger.Information("GetToken failed {0}.", tokenReply?.ErrorDetail);
-                    }
                 }
             }
 

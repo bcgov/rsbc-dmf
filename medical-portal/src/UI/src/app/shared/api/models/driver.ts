@@ -7,6 +7,7 @@ export interface Driver {
   driverLicenceNumber?: string | null;
   givenName?: string | null;
   height?: number;
+  licenceClass?: number;
   name?: string | null;
   sex?: string | null;
   surname?: string | null;

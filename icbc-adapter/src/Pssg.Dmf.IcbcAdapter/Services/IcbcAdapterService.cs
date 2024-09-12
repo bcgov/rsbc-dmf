@@ -60,6 +60,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Services
                 result.Country = reply.ADDR?.CNTY ?? string.Empty;
                 result.Sex = reply.SEX ?? string.Empty;
                 result.Surname = reply.INAM?.SURN ?? string.Empty;
+                result.LicenceClass = reply.DR1MST?.LCLS ?? default;
                 result.ResultStatus = ResultStatus.Success;
             }
 

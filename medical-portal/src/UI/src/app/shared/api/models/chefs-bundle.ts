@@ -5,6 +5,7 @@ import { MedicalCondition } from '../models/medical-condition';
 import { PatientCase } from '../models/patient-case';
 export interface ChefsBundle {
   caseId?: string | null;
+  dmerType?: string | null;
   driverInfo?: Driver;
   medicalConditions?: Array<MedicalCondition> | null;
   patientCase?: PatientCase;
