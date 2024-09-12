@@ -126,7 +126,7 @@ function loadChefsBundleData(fetchedBundleData) {
 
   const {
     patientCase: { driverLicenseNumber },
-    driverInfo: { surname, birthDate },
+    driverInfo: { surname, birthDate, licenceClass },
     medicalConditions,
     dmerType
   } = fetchedBundleData;
@@ -136,7 +136,8 @@ function loadChefsBundleData(fetchedBundleData) {
     surname,
     birthDate,
     medicalConditions,
-    dmerType
+    dmerType,
+    licenceClass
   };
 
   Object.keys(values).forEach((key) => {

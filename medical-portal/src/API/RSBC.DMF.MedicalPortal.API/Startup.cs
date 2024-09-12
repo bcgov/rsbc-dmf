@@ -17,6 +17,7 @@ using RSBC.DMF.MedicalPortal.API.Model;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Rsbc.Dmf.IcbcAdapter.Client;
 using RSBC.DMF.MedicalPortal.API.Auth;
+using Pssg.Dmf.IcbcAdapter.Client;
 
 namespace RSBC.DMF.MedicalPortal.API
 {
@@ -103,9 +104,14 @@ namespace RSBC.DMF.MedicalPortal.API
             // TODO use Pssg.DocumentStorageAdapter.Client ServiceCollectionExtensions AddDocumentStorageClient instead
             services.AddDocumentStorageClient(configuration);
 
+            // NOTE temporary logger code, replace after adding logger e.g. Serilog/Splunk
+            // TODO # "remove loggerFactory.Create and get the loggerFactory from ".AddSerilogBootstrapLogger"
+            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddConsole());
+
             // Add ICBC Adapter
-            // TODO use Pssg.Dmf.IcbcAdapter.Client ServiceCollectionExtensions AddIcbcAdapterClient instead
-            services.AddIcbcAdapterClient(configuration);
+            services.AddIcbcAdapterClient(configuration, loggerFactory);
             services.AddSingleton<ICachedIcbcAdapterClient, CachedIcbcAdapterClient>();
 
             services.AddPidpAdapterClient(configuration);

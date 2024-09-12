@@ -1,6 +1,7 @@
 # MedicalPractitionerPortal
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.2.
+See /ReadMe.md in the root folder for general instructions and how to use chefs form. This ReadMe.md contains commands to run, build, test, and serve the frontend
 
 ## Install Packages
 
@@ -35,4 +36,3 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 change directory to root folder
 `docker build --file ./medical-portal/src/UI/Dockerfile . --tag medical-portal-ui`
 `docker run -p 4200:4200 --rm --name medical-portal-ui medical-portal-ui`
-

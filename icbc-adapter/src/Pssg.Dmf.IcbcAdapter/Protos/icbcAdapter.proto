@@ -47,6 +47,7 @@ message DriverInfoReply {
     string sex = 9;
     string province = 10;
     string country = 11;
+    int32 licenceClass = 12;
 }
 
 enum ResultStatus {

@@ -13,5 +13,6 @@ namespace RSBC.DMF.MedicalPortal.API.ViewModels
         public double Height { get; set; }
         public Address Address { get; set; }
         public string DriverLicenceNumber { get; set; }
+        public int LicenceClass { get; set; }
     }
 }

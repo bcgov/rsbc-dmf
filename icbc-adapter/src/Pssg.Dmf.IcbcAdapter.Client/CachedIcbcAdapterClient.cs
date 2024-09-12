@@ -42,6 +42,7 @@ namespace Rsbc.Dmf.IcbcAdapter.Client
                 reply.Postal = "V8V 3V3";
                 reply.Province = "BC";
                 reply.Sex = "M";
+                reply.LicenceClass = 500;
                 reply.ResultStatus = ResultStatus.Success;
                 return reply;
             }

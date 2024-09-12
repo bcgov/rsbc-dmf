@@ -304,6 +304,7 @@ namespace RSBC.DMF.MedicalPortal.API.Controllers
                     Surname = driverInfoReply.Surname,
                     BirthDate = driverInfoReply.BirthDate,
                     DriverLicenceNumber = caseResult.DriverLicenseNumber,
+                    LicenceClass = driverInfoReply.LicenceClass,
                     Address = new Address()
                     {
                         Line1 = driverInfoReply.AddressLine1,
