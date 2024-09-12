@@ -214,15 +214,22 @@
                           </button>
                         </div>
                       }
-                    </div>                  </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div style="padding-left: 18px">
-                This needs to be submitted by:
-                <b>
-                  {{ searchedCase.latestComplianceDate | date: "longDate" }}</b
-                >
-              </div>
+
+              @if( searchedCase.dmerStatus !==
+              DMERStatusEnum.NotRequested) 
+              {
+                <div style="padding-left: 18px" >
+                  This needs to be submitted by:
+                  <b>
+                    {{ searchedCase.latestComplianceDate | date: "longDate" }}</b
+                  >
+                </div>
+              }
+             
             </div>
           </div>
         </mat-card-content>
