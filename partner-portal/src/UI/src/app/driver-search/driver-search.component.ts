@@ -26,6 +26,7 @@ import { UserService } from '@app/shared/services/user.service';
 import { MatTabsModule } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
+import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
 
 @Component({
   selector: 'app-driver-search',
@@ -49,6 +50,7 @@ import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.compo
     MatTabsModule,
     LettersToDriverComponent,
     GetAssistanceComponent,
+    SubmissionHistoryComponent
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',

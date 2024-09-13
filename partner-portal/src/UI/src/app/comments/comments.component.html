@@ -1,8 +1,16 @@
 <div mat-dialog-title class="title">
-  <h2>Comments</h2>
+  <div>
+    <h2>Comments</h2>
+  </div>
+ <div>
+  <button mat-icon-button aria-label="Add Comment" (click)="addComment()">
+    <mat-icon>add</mat-icon> 
+  </button>
   <button mat-icon-button aria-label="Close" mat-dialog-close>
     <mat-icon>close</mat-icon>
   </button>
+ </div>
+  
 </div>
 <div>
   <div class="filter">
