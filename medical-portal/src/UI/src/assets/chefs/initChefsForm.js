@@ -17,6 +17,7 @@ util	An alias for "utils".
 var GET_CHEFS_SUBMISSION = "GET_CHEFS_SUBMISSION";
 var GET_CHEFS_BUNDLE = "GET_CHEFS_BUNDLE";
 var PUT_CHEFS_SUBMISSION = "PUT_CHEFS_SUBMISSION";
+var cors_origin = "https://dev.roadsafetybc.gov.bc.ca";
 
 window.isSubmitted = window.isSubmitted || false;
 
@@ -42,15 +43,11 @@ function getInstanceId() {
 function addUniqueWindowEventListener(event, listener) {
   // Check if the listener for the specific event has already been added
   if (!window.listenerAdded[event]) {
-    console.info(
-      `[IFRAME] addUniqueWindowEventListener: listener for event: ${event} has not yet been added, adding...`,
-    );
+    console.info(`[IFRAME] addUniqueWindowEventListener: listener for event: ${event} has not yet been added, adding...`);
     window.addEventListener(event, listener);
     window.listenerAdded[event] = true; // Update the flag for this event
   } else {
-    console.info(
-      `[IFRAME] addUniqueWindowEventListener: listener for event: ${event} already added, do nothing.`,
-    );
+    console.info(`[IFRAME] addUniqueWindowEventListener: listener for event: ${event} already added, do nothing.`);
   }
 }
 
@@ -59,10 +56,9 @@ addUniqueWindowEventListener("message", (event) => {
   console.info("[IFRAME] RX (from host): Iframe received message event:");
   console.info(event);
 
-  if (event.origin !== "https://localhost:4200") {
-    console.warn(
-      `[IFRAME] Ignore event from unrecognized origin: ${event.origin}`,
-    );
+  if (event.origin !== "https://dev.roadsafetybc.gov.bc.ca" && event.origin !== "https://test.roadsafetybc.gov.bc.ca" && event.origin !== "https://roadsafetybc.gov.bc.ca")
+  {
+    console.warn(`[IFRAME] Ignore event from unrecognized origin: ${event.origin}`);
     return;
   }
 
@@ -76,10 +72,7 @@ addUniqueWindowEventListener("message", (event) => {
 
     const { type } = payload;
 
-    console.info(
-      `[IFRAME] RX (from host): Received response for type: ${type} the data:`,
-    );
-    console.info(payload);
+    console.info(`[IFRAME] RX (from host): Received response for type: ${type} the data:`, payload);
 
     if (type === GET_CHEFS_SUBMISSION) {
       window.chefsSubmission = payload;
@@ -109,19 +102,14 @@ function checkIfInitIsComplete() {
     // call putChefsSubmission in case cached data differs vs. bundle + cached data
     putChefsSubmission();
   } else {
-    console.warn(
-      `[IFRAME] checkIfInitIsComplete: not complete yet, window.loadedChefsSubmission: ${window.loadedChefsSubmission}, window.loadedChefsBundle: ${window.loadedChefsBundle}!`,
-    );
+    console.warn(`[IFRAME] checkIfInitIsComplete: not complete yet, window.loadedChefsSubmission: ${window.loadedChefsSubmission}, window.loadedChefsBundle: ${window.loadedChefsBundle}!`);
   }
 }
 
 function loadChefsBundleData(fetchedBundleData) {
-  console.info("[IFRAME] START LOADING FETCHED BUNDLE DATA:");
-  console.info(fetchedBundleData);
+  console.info("[IFRAME] START LOADING FETCHED BUNDLE DATA:", fetchedBundleData);
   if (!fetchedBundleData?.patientCase || !fetchedBundleData?.driverInfo) {
-    console.warn(
-      `[IFRAME] Missing chefs bundle data, either missing patientCase or driverInfo`,
-    );
+    console.warn(`[IFRAME] Missing chefs bundle data, either missing patientCase or driverInfo`);
   }
 
   const {
@@ -147,8 +135,7 @@ function loadChefsBundleData(fetchedBundleData) {
     }
 
     console.info(`[IFRAME] SETTING... chefsKey: ${key}, value: ${values[key]}`);
-    console.info(`RAWDATA:`);
-    console.info(values[key]);
+    console.info(`RAWDATA:`, values[key]);
 
     // for the special case of medicalConditions bundle data, loop through each condition
     // and set the matching CHEFS component checkbox to true if it's present
@@ -162,24 +149,18 @@ function loadChefsBundleData(fetchedBundleData) {
           (comp) => comp?.originalComponent?.properties?.kmcformid === formId,
         );
         if (!matchingMedicalConditionComponent) {
-          console.warn(
-            `[IFRAME] loadChefsBundleData: could not find matching component for formId: ${formId}`,
-          );
+          console.warn(`[IFRAME] loadChefsBundleData: could not find matching component for formId: ${formId}`);
           return;
         }
 
-        console.info(
-          `[IFRAME]: loadChefsBundleData: attempting to set matchingMedicalConditionComponent for formId: ${formId}...`,
-        );
+        console.info(`[IFRAME]: loadChefsBundleData: attempting to set matchingMedicalConditionComponent for formId: ${formId}...`);
         utils
           .getComponent(
             Formio.forms[window.currentFormId].components,
             matchingMedicalConditionComponent.key,
           )
           .setValue(true);
-        console.info(
-          `[IFRAME]: loadChefsBundleData: SUCCESSFULLY set matchingMedicalConditionComponent for formId: ${formId}...`,
-        );
+        console.info(`[IFRAME]: loadChefsBundleData: SUCCESSFULLY set matchingMedicalConditionComponent for formId: ${formId}...`);
       });
     } else {
       const component = utils.getComponent(
@@ -217,9 +198,7 @@ function loadPreviousChefsSubmissionData(fetchedSubmissionData) {
   }
 
   Object.keys(fetchedSubmissionData).forEach((key) => {
-    console.info(
-      `[IFRAME] SETTING... key: ${key}, value: ${fetchedSubmissionData[key]}`,
-    );
+    console.info(`[IFRAME] SETTING... key: ${key}, value: ${fetchedSubmissionData[key]}`);
 
     const component = utils.getComponent(
       Formio.forms[window.currentFormId].components,
@@ -264,7 +243,7 @@ function getChefsSubmission() {
 
   const messageObj = JSON.parse(JSON.stringify(message));
 
-  window.parent.postMessage(messageObj, "https://localhost:4200/"); // Use a specific origin instead of '*' for better security
+  window.parent.postMessage(messageObj, cors_origin); // Use a specific origin instead of '*' for better security
 }
 
 function getChefsBundle() {
@@ -275,7 +254,7 @@ function getChefsBundle() {
 
   const messageObj = JSON.parse(JSON.stringify(message));
 
-  window.parent.postMessage(messageObj, "https://localhost:4200/"); // Use a specific origin instead of '*' for better security
+  window.parent.postMessage(messageObj, cors_origin); // Use a specific origin instead of '*' for better security
 }
 
 function getFlattenedComponents() {
@@ -298,9 +277,7 @@ function getCaseFlags() {
     const key = comp.originalComponent?.key;
     const flagformid = comp.originalComponent?.properties?.flagformid;
 
-    console.info(
-      `[IFRAME] getCaseFlags: attempting to add chefs flagformid: ${flagformid}...`,
-    );
+    console.info(`[IFRAME] getCaseFlags: attempting to add chefs flagformid: ${flagformid}...`);
 
     const value = utils
       .getComponent(Formio.forms[window.currentFormId].components, key)
@@ -308,9 +285,7 @@ function getCaseFlags() {
 
     if (flagformid) {
       flags[flagformid] = value;
-      console.info(
-        `[IFRAME] getCaseFlags: successfully added chefs flagformid: ${flagformid}, value: ${value}`,
-      );
+      console.info(`[IFRAME] getCaseFlags: successfully added chefs flagformid: ${flagformid}, value: ${value}`);
     }
   });
 
@@ -337,15 +312,11 @@ function getPriority() {
       .getComponent(Formio.forms[window.currentFormId].components, key)
       .getValue();
 
-    console.info(
-      `[IFRAME] getPriority: attempting to add chefs priority: ${priority} with value: ${value}...`,
-    );
+    console.info(`[IFRAME] getPriority: attempting to add chefs priority: ${priority} with value: ${value}...`);
 
     if (value) {
       selectedPrioritiesComponents.push(comp);
-      console.info(
-        `[IFRAME] getPriority: successfully added chefs priority: ${priority}, value: ${value}`,
-      );
+      console.info(`[IFRAME] getPriority: successfully added chefs priority: ${priority}, value: ${value}`);
     }
   });
 
@@ -353,13 +324,9 @@ function getPriority() {
     selectedPrioritiesComponents.length === 0 ||
     selectedPrioritiesComponents.length > 1
   ) {
-    console.error(
-      "[IFRAME] getPriority: Found zero or more than one component with priority attribute, failed to determine correct value",
-    );
-    console.error("priorityComponents");
-    console.error(priorityComponents);
-    console.error("selectedPrioritiesComponents");
-    console.error(selectedPrioritiesComponents);
+    console.error("[IFRAME] getPriority: Found zero or more than one component with priority attribute, failed to determine correct value");
+    console.error("priorityComponents", priorityComponents);
+    console.error("selectedPrioritiesComponents", selectedPrioritiesComponents);
     return "";
   }
 
@@ -368,16 +335,11 @@ function getPriority() {
   const priority = priorityComponent.originalComponent?.properties?.priority;
 
   if (!priority) {
-    console.error(
-      `[IFRAME] getPriority: Failed to find priority attribute on component`,
-    );
-    console.error(priorityComponents);
+    console.error(`[IFRAME] getPriority: Failed to find priority attribute on component`, priorityComponents);
     return "";
   }
 
-  console.info(
-    `[IFRAME] getPriority: Successfully found priority with value: ${priority}!`,
-  );
+  console.info(`[IFRAME] getPriority: Successfully found priority with value: ${priority}!`);
 
   return priority;
 }
@@ -402,15 +364,11 @@ function getAssign() {
       .getComponent(Formio.forms[window.currentFormId].components, key)
       .getValue();
 
-    console.info(
-      `[IFRAME] getAssign: attempting to add chefs assign: ${assign} with value: ${value}...`,
-    );
+    console.info(`[IFRAME] getAssign: attempting to add chefs assign: ${assign} with value: ${value}...`);
 
     if (value) {
       selectedAssignComponents.push(comp);
-      console.info(
-        `[IFRAME] getAssign: successfully added chefs assign: ${assign}, value: ${value}`,
-      );
+      console.info(`[IFRAME] getAssign: successfully added chefs assign: ${assign}, value: ${value}`);
     }
   });
 
@@ -421,10 +379,8 @@ function getAssign() {
     console.error(
       "[IFRAME] getAssign: Found zero or more than one component with assign attribute, failed to determine correct value",
     );
-    console.error("selectedAssignComponents");
-    console.error(selectedAssignComponents);
-    console.error("assignComponents");
-    console.error(assignComponents);
+    console.error("selectedAssignComponents", selectedAssignComponents);
+    console.error("assignComponents", assignComponents);
     return "";
   }
 
@@ -433,16 +389,11 @@ function getAssign() {
   const assign = assignComponent.originalComponent?.properties?.assign;
 
   if (!assign) {
-    console.error(
-      `[IFRAME] getAssign: Failed to find assign attribute on component`,
-    );
-    console.error(assignComponents);
+    console.error(`[IFRAME] getAssign: Failed to find assign attribute on component`, assignComponents);
     return "";
   }
 
-  console.info(
-    `[IFRAME] getAssign: Successfully found assign with value: ${assign}!`,
-  );
+  console.info(`[IFRAME] getAssign: Successfully found assign with value: ${assign}!`);
 
   return assign;
 }
@@ -465,14 +416,12 @@ function putChefsSubmission(status = "Draft") {
   const messageObj = JSON.parse(JSON.stringify(message));
 
   if (window.cachedMessage === JSON.stringify(messageObj)) {
-    console.info(
-      "[IFRAME] No change in form data, skip posting message to parent...",
-    );
+    console.info("[IFRAME] No change in form data, skip posting message to parent...");
     return;
   }
 
   // Send the message to the parent window
-  window.parent.postMessage(messageObj, "https://localhost:4200/"); // Use a specific origin instead of '*' for better security
+  window.parent.postMessage(messageObj, cors_origin); // Use a specific origin instead of '*' for better security
   window.cachedMessage = JSON.stringify(messageObj);
 }
 

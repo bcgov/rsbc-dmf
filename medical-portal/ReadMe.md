@@ -95,6 +95,11 @@ Morgan Wayling morgan.wayling@gov.bc.ca - Project manager? No response from Morg
 2. Search for a DMER case id e.g. "H8B2S1"
 3. 
 
+### Chefs IFrame origin
+Currently, the IFrame origin only allows `var cors_origin = "https://dev.roadsafetybc.gov.bc.ca";`, see top code section of assets/chefs/initChefsForm.js.
+If you want to test chefs form locally, edit the cors_origin to be `var cors_origin = "https://localhost:4020";`
+In the future, we could consider replacing the iframe or doing something like this [StackOverflow](https://stackoverflow.com/questions/52002608/javascript-window-opener-postmessage-cross-origin-with-multiple-sub-domains)
+
 ### How to update chefs form scripts
 Contact Shiv for admin access to chefs (MacFarlane, Shiv PSSG:EX)[<Shiv.MacFarlane@gov.bc.ca>]
 1. In source control, update the files assets/chefs, to keep track of changes
