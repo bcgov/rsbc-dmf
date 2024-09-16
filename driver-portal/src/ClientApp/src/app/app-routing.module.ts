@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account/account.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CaseComponent } from './case/case.component';
-import { CaseDetailsComponent } from './case-details/case-details.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
@@ -27,7 +26,6 @@ const routes: Routes = [
     component: DashboardComponent,
   },
   { path: 'cases', component: CaseComponent },
-  { path: 'caseDetails', component: CaseDetailsComponent },
   { path: 'submissionHistory', component: SubmissionHistoryComponent },
   { path: 'lettersToDriver', component: LettersToDriverComponent }, 
   { path: 'userRegistration', component: UserRegistrationComponent },

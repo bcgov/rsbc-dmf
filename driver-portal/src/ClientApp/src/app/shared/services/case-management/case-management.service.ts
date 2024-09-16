@@ -21,6 +21,7 @@ export class CaseManagementService {
     private callbacService: CallbackService
   ) {}
 
+  // Case
   public getMostRecentCase() {
     return this.casesService.apiCasesMostRecentGet$Json();
   }
@@ -29,16 +30,6 @@ export class CaseManagementService {
     params: Parameters<CasesService['apiCasesClosedGet$Json']>[0]
   ) {
     return this.casesService.apiCasesClosedGet$Json(params);
-  }
-
-  public getDriverDocuments(
-    params: Parameters<DriverService['apiDriverDocumentsGet$Json']>[0]
-  ) {
-    return this.driverService.apiDriverDocumentsGet$Json(params);
-  }
-
-  public getAllDocuments() {
-    return this.driverService.apiDriverAllDocumentsGet$Json();
   }
 
   // Documents
@@ -52,6 +43,13 @@ export class CaseManagementService {
     return this.documentService.apiDocumentDocumentIdGet$Json(params);
   }
 
+  public getDocumentSubTypes(
+    params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
+  ) {
+    return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
+  }
+
+  // User Registration
   public userRegistration(
     params: Parameters<ProfileService['apiProfileRegisterPut$Json$Response']>[0]
   ) {
@@ -64,12 +62,13 @@ export class CaseManagementService {
     return this.profileService.apiProfileDriverPut$Json$Response(params);
   }
 
-  public getDocumentSubTypes(
-    params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
+  public getDriverAddress(
+    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
   ) {
-    return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
+    return this.driverService.apiDriverInfoGet$Json(params);
   }
-
+ 
+ // Call backs
   public getCallBackRequest(
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
   ) {
@@ -88,9 +87,5 @@ export class CaseManagementService {
     return this.callbacService.apiCallbackCancelPut$Json(params);
   }
 
-  public getDriverAddress(
-    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
-  ) {
-    return this.driverService.apiDriverInfoGet$Json(params);
-  }
+  
 }

@@ -30,79 +30,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             _logger = loggerFactory.CreateLogger<DriverController>();
         }
 
-        /// <summary>
-        /// Get case submissions, submission requirements, and letters to driver documents for a given driver
-        /// NOTE that this retrieves all documents for the driver and there is no guarantee that a document is linked to a case
-        /// </summary>
-        /// <returns>CaseDocuments</returns>
-        [HttpGet("Documents")]
-        [ProducesResponseType(typeof(CaseDocuments), 200)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(500)]
-        [ActionName("GetCaseDocuments")]
-        public async Task<ActionResult> GetCaseDocuments()
-        {
-            var profile = await _userService.GetCurrentUserContext();
-
-            var driverIdRequest = new DriverIdRequest() { Id = profile.DriverId };
-            var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
-            if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
-            {
-                var result = new CaseDocuments();
-                var replyItemsExcludingUploaded = reply.Items.Where(i => i.SubmittalStatus != "Uploaded");
-                foreach (var item in replyItemsExcludingUploaded)
-                {
-                    var document = _mapper.Map<ViewModels.Document>(item);
-
-                    switch (document.SubmittalStatus)
-                    {
-                        case "Received":
-                            // exclude documents with no key
-                            if (!string.IsNullOrEmpty(document.DocumentUrl))
-                            {
-                                result.CaseSubmissions.Add(document);
-                            }
-                            break;
-                        case "Open-Required":
-                            // this category by design has documents with no key
-                            result.SubmissionRequirements.Add(document);
-                            break;
-                        case "Issued":
-                            // exclude documents with no key
-                            // Issued is the new status for Letter outs and these are displayed in Letter To Driver Tab
-                            if (!string.IsNullOrEmpty(document.DocumentUrl))
-                            {
-                                result.LettersToDriver.Add(document);
-                            }
-                            break;
-                    }
-                }
-
-                // sort the documents
-                if (result.CaseSubmissions.Count > 0)
-                {
-                    result.CaseSubmissions = result.CaseSubmissions.OrderByDescending(cs => cs.CreateDate).ToList();
-                }
-
-                if (result.SubmissionRequirements.Count > 0)
-                {
-                    result.SubmissionRequirements = result.SubmissionRequirements.OrderByDescending(cs => cs.CreateDate).ToList();
-                }
-
-                if (result.LettersToDriver.Count > 0)
-                {
-                    result.LettersToDriver = result.LettersToDriver.OrderByDescending(cs => cs.CreateDate).ToList();
-                }
-
-                return Json(result);
-            }
-            else
-            {
-                _logger.LogError($"{nameof(GetCaseDocuments)} failed for driverId: {profile.DriverId}", reply.ErrorDetail);
-                return StatusCode(500, reply.ErrorDetail);
-            }
-        }
-
+       
         /// <summary>
         /// Get all documents for a given driver but filter out documents without a url
         /// </summary>
@@ -132,20 +60,6 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 
                 return Json(result);
 
-
-                // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
-               /* var replyItemsWithDocuments = reply.Items
-                    .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
-                    .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent" );
-                var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
-
-                // sort the documents
-                if (result.Count > 0)
-                {
-                    result = result.OrderByDescending(cs => cs.CreateDate).ToList();
-                }
-
-                return Json(result);*/
             }
             else
             {
