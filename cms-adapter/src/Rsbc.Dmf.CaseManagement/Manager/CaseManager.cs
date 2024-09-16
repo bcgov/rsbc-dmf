@@ -1429,26 +1429,10 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
+            // 2024-09-16 Changed logic to use type 999 in cases where a provided document type is not found.
             if (result == null)
             {
-                Serilog.Log.Information($"Attempting to add {documentTypeCode} {documentType}");
-                // try to create.
-                var newRecord = new dfp_submittaltype()
-                {
-                    dfp_apidocumenttype = documentTypeCode,
-                    dfp_code = documentTypeCode,
-                    dfp_name = documentType ?? documentTypeCode
-                };
-
-                if (businessArea != null)
-                {
-                    newRecord.dfp_businessarea = ConvertStringToBusinessArea(businessArea);
-                }
-
-                dynamicsContext.AddTodfp_submittaltypes(newRecord);
-                dynamicsContext.SaveChanges();
-
-                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == documentTypeCode).FirstOrDefault();
+                result = dynamicsContext.dfp_submittaltypes.Where(d => d.dfp_apidocumenttype == "999").FirstOrDefault();
             }
 
             return result;
