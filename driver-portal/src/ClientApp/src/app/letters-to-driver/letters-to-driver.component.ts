@@ -36,8 +36,7 @@ import { LoginService } from '@app/shared/services/login.service';
     ],
 })
 export class LettersToDriverComponent implements OnInit {
-  constructor(private caseManagementService: CaseManagementService,  
-    private loginService: LoginService) 
+  constructor(private caseManagementService: CaseManagementService) 
     {}
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
