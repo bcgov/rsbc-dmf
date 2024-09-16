@@ -179,8 +179,8 @@ export class DashboardComponent {
 
       const matchCaseNumber =
         this.searchCasesInput?.length === 0 ||
-        item.idCode?.includes(this.searchCasesInput) ||
-        item.fullName?.includes(this.searchCasesInput);
+        item.idCode?.toLowerCase().includes(this.searchCasesInput?.toLowerCase()) ||
+        item.fullName?.toLowerCase().includes(this.searchCasesInput?.toLowerCase());
 
       if (matchStatus && matchCaseNumber) return true;
       else return false;
