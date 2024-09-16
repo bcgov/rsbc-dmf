@@ -30,7 +30,8 @@ var env = builder.Environment;
 var isDevelopment = env.EnvironmentName == "Development";
 
 var config = builder.Configuration;
-
+var appConfiguration = new AppConfiguration(config);
+services.AddSingleton(appConfiguration);
 
 services.AddKeycloakWebApiAuthentication(
     keycloakOptions =>
