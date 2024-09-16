@@ -14,7 +14,7 @@ import {
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService,
+    private driverService: DriverService,
     private documentService: DocumentService,
     private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
@@ -34,11 +34,16 @@ export class CaseManagementService {
   public getDriverDocuments(
     params: Parameters<DriverService['apiDriverDocumentsGet$Json']>[0]
   ) {
-    return this.driversService.apiDriverDocumentsGet$Json(params);
+    return this.driverService.apiDriverDocumentsGet$Json(params);
   }
 
   public getAllDocuments() {
-    return this.driversService.apiDriverAllDocumentsGet$Json();
+    return this.driverService.apiDriverAllDocumentsGet$Json();
+  }
+
+  // Documents
+  public getAllDriverDocuments() {
+    return this.driverService.apiDriverAllDocumentsGet$Json();
   }
 
   public getDownloadDocument(
@@ -86,6 +91,6 @@ export class CaseManagementService {
   public getDriverAddress(
     params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
   ) {
-    return this.driversService.apiDriverInfoGet$Json(params);
+    return this.driverService.apiDriverInfoGet$Json(params);
   }
 }

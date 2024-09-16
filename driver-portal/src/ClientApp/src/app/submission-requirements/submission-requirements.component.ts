@@ -28,6 +28,7 @@ import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
 import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { CaseStatusComponent, CaseTypeComponent, DecisionOutcomeComponent, DmerTypeComponent, SubmissionStatusComponent, SubmissionTypeComponent } from '@shared/core-ui';
+import { SubmittalStatusEnum } from '@app/app.model';
 
 @Component({
     selector: 'app-submission-requirements',
@@ -92,12 +93,13 @@ export class SubmissionRequirementsComponent implements OnInit {
   ngOnInit() {
     this.getDocumentSubtypes();
 
-    // TODO match with driver portal
+    this.getSubmissionRequireDocuments();
   }
 
   getDocumentSubtypes() {
-    this.caseManagementService.getDocumentSubTypes({}).subscribe((response) => {
-      this.documentSubTypes = response;
+    this.caseManagementService.getDocumentSubTypes({})
+    .subscribe((response) => {
+    this.documentSubTypes = response;
     });
   }
   public files: any[] = [];
@@ -169,6 +171,27 @@ export class SubmissionRequirementsComponent implements OnInit {
         });
         this.showUpload = false;
         this.isFileUploading = false;
+      });
+  }
+
+  getSubmissionRequireDocuments() {
+    this.caseManagementService
+      .getAllDriverDocuments()
+      .subscribe((submissiondocs: any) => {
+        if (!submissiondocs) {
+          return;
+        }
+        this.submissionRequirementDocuments = [];
+        submissiondocs.forEach((doc: any) => {
+          if (
+            SubmittalStatusEnum.OpenRequired.includes(
+              doc.submittalStatus as SubmittalStatusEnum,
+            )
+          ) {
+            this.submissionRequirementDocuments?.push(doc);
+          }
+        });
+        this.isLoading = false;
       });
   }
 }

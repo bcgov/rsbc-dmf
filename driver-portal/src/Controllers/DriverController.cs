@@ -6,6 +6,7 @@ using Rsbc.Dmf.DriverPortal.Api.Services;
 using Rsbc.Dmf.DriverPortal.ViewModels;
 using Rsbc.Dmf.IcbcAdapter;
 using System.Net;
+using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 
 namespace Rsbc.Dmf.DriverPortal.Api.Controllers
 {
@@ -119,8 +120,21 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
             var reply = _cmsAdapterClient.GetDriverDocumentsById(driverIdRequest);
             if (reply.ResultStatus == CaseManagement.Service.ResultStatus.Success)
             {
+                var replyItemsWithDocuments = reply.Items;
+
+                var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
+
+                // sort the documents
+                if (result.Count > 0)
+                {
+                    result = result.OrderByDescending(cs => cs.CreateDate).ToList();
+                }
+
+                return Json(result);
+
+
                 // This includes all the documents except Open Required, Issued, Sent documents on Submission History Tab
-                var replyItemsWithDocuments = reply.Items
+               /* var replyItemsWithDocuments = reply.Items
                     .Where(i => !string.IsNullOrEmpty(i.DocumentUrl))
                     .Where(i => i.SubmittalStatus != "Open-Required" && i.SubmittalStatus != "Issued" && i.SubmittalStatus != "Sent" );
                 var result = _mapper.Map<List<ViewModels.Document>>(replyItemsWithDocuments);
@@ -131,7 +145,7 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                     result = result.OrderByDescending(cs => cs.CreateDate).ToList();
                 }
 
-                return Json(result);
+                return Json(result);*/
             }
             else
             {
@@ -139,7 +153,8 @@ namespace Rsbc.Dmf.DriverPortal.Api.Controllers
                 return StatusCode(500, reply.ErrorDetail);
             }
         }
-       
+
+
         [HttpGet("info")]
         [ProducesResponseType(typeof(IEnumerable<ViewModels.Document>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
