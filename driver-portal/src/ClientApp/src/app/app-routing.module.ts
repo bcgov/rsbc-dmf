@@ -6,10 +6,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { CaseComponent } from './case/case.component';
 import { CaseDetailsComponent } from './case-details/case-details.component';
 import { SubmissionHistoryComponent } from './submission-history/submission-history.component';
-import { LetterDetailsComponent } from './letter-details/letter-details.component';
 import { UserRegistrationComponent } from './user-registration/user-registration.component';
 import { GetAssistanceComponent } from './get-assistance/get-assistance.component';
 import { SubmissionRequirementsComponent } from './submission-requirements/submission-requirements.component';
+import { LettersToDriverComponent } from './letters-to-driver/letters-to-driver.component';
 
 
 const routes: Routes = [
@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'cases', component: CaseComponent },
   { path: 'caseDetails', component: CaseDetailsComponent },
   { path: 'submissionHistory', component: SubmissionHistoryComponent },
-  { path: 'lettersToDriver', component: LetterDetailsComponent },
+  { path: 'lettersToDriver', component: LettersToDriverComponent }, 
   { path: 'userRegistration', component: UserRegistrationComponent },
   { path: 'getAssistance', component: GetAssistanceComponent },
   { path:'submissionRequirement', component:SubmissionRequirementsComponent}

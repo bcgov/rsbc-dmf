@@ -1,5 +1,3 @@
-// IMPORTANT keep this file identical to partner-portal letters-to-driver.component
-
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
@@ -10,6 +8,8 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent, LetterTopicComponent } from '@shared/core-ui';
+import { SubmittalStatusEnum } from '@app/app.model';
+import { LoginService } from '@app/shared/services/login.service';
 
 
 @Component({
@@ -36,7 +36,9 @@ import { CaseTypeComponent, LetterTopicComponent } from '@shared/core-ui';
     ],
 })
 export class LettersToDriverComponent implements OnInit {
-  constructor(private caseManagementService: CaseManagementService) {}
+  constructor(private caseManagementService: CaseManagementService,  
+    private loginService: LoginService) 
+    {}
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   isExpanded: Record<string, boolean> = {};
@@ -59,9 +61,21 @@ export class LettersToDriverComponent implements OnInit {
     this.filteredDocuments = this._letterDocuments?.slice(0, this.pageSize);
   }
 
+  letterOutDocuments: Document[] = [];
+
   ngOnInit(): void {
     window.scrollTo(0, 0);
+    if(this.loginService.userProfile?.id){
+      this.getLetterOutDocument(
+        this.loginService.userProfile?.id as string
+      );
+    }
+    else{
+      console.log('No Letter Our Documents');
+    }
+    
   }
+
   toggleIsExpandable(id?: string | null) {
     if (id) this.isExpanded[id] = !this.isExpanded[id];
   }
@@ -90,5 +104,31 @@ export class LettersToDriverComponent implements OnInit {
     link.href = url;
     link.download = 'LetterOut.pdf';
     link.click();
+  }
+
+  getLetterOutDocument(driverId: string) {
+    this.caseManagementService.getAllDriverDocuments()
+      .subscribe((letterDocuments: any) => {
+        if (!letterDocuments) {
+          return;
+        }
+        this._letterDocuments = letterDocuments;
+        this.letterOutDocuments = [];
+        letterDocuments.forEach((letter: any) => {
+          if (
+            [SubmittalStatusEnum.Issued, SubmittalStatusEnum.Sent].includes(
+              letter.submittalStatus as SubmittalStatusEnum,
+            )
+          ) {
+            this.letterOutDocuments.push(letter);
+          }
+        });
+
+        this.filteredDocuments = this.letterOutDocuments.slice(
+          0,
+          this.pageSize,
+        );
+        this.isLoading = false;
+      });
   }
 }

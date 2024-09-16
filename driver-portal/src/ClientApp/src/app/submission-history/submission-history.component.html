@@ -27,7 +27,7 @@
   <div class="list">
     <div>
       <mat-card
-        *ngFor="let document of allDriverDocuments"
+        *ngFor="let document of filteredDocuments"
         [ngClass]="{
           open: document.documentId && isExpanded[document.documentId]
         }"
@@ -99,7 +99,7 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div *ngIf ="!isLoading && allDriverDocuments?.length === 0" >
+    <div *ngIf ="!isLoading && submissionHistoryDocuments?.length === 0" >
       <mat-card>
         <mat-card-content>
           <b>No Submission History records found for this case</b>
@@ -111,17 +111,17 @@
   <div
     class="numberOfItems"
     *ngIf="
-      allDriverDocuments &&
-      allDriverDocuments.length > 0 &&
+    submissionHistoryDocuments &&
+    submissionHistoryDocuments.length > 0 &&
       filteredDocuments &&
       filteredDocuments.length > 0
     "
   >
     Showing {{ filteredDocuments.length }} of
-    {{ allDriverDocuments.length }} records
+    {{ submissionHistoryDocuments.length }} records
     <br />
     <a
-      *ngIf="filteredDocuments.length < allDriverDocuments.length"
+      *ngIf="filteredDocuments.length < submissionHistoryDocuments.length"
       (click)="viewMore()"
       class="viewMore"
       ><b style="color: #003366">View more records</b>
