@@ -1,3 +1,4 @@
+// IMPORTANT keep this file identical to partner-portal letters-to-driver.component
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
@@ -9,7 +10,6 @@ import { NgFor, NgClass, NgIf, DatePipe } from '@angular/common';
 import { QuickLinksComponent } from '../quick-links/quick-links.component';
 import { CaseTypeComponent, LetterTopicComponent } from '@shared/core-ui';
 import { SubmittalStatusEnum } from '@app/app.model';
-import { LoginService } from '@app/shared/services/login.service';
 
 
 @Component({
