@@ -65,15 +65,7 @@ export class LettersToDriverComponent implements OnInit {
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    if(this.loginService.userProfile?.id){
-      this.getLetterOutDocument(
-        this.loginService.userProfile?.id as string
-      );
-    }
-    else{
-      console.log('No Letter Our Documents');
-    }
-    
+    this.getLetterOutDocument();  
   }
 
   toggleIsExpandable(id?: string | null) {
@@ -106,7 +98,7 @@ export class LettersToDriverComponent implements OnInit {
     link.click();
   }
 
-  getLetterOutDocument(driverId: string) {
+  getLetterOutDocument() {
     this.caseManagementService.getAllDriverDocuments()
       .subscribe((letterDocuments: any) => {
         if (!letterDocuments) {
