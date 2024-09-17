@@ -1,4 +1,6 @@
 <div class="container">
+  <div class="list ">
+    <h2>Letters To Driver</h2>
   <div class="submissions">
     <div>
       <p>
@@ -113,17 +115,17 @@
   <div
     class="numberOfItems"
     *ngIf="
-      letterDocuments &&
-      letterDocuments.length > 0 &&
+    letterOutDocuments &&
+    letterOutDocuments.length > 0 &&
       filteredDocuments &&
       filteredDocuments.length > 0
     "
   >
     Showing {{ filteredDocuments.length }} of
-    {{ letterDocuments.length }} records
+    {{ letterOutDocuments.length }} records
     <br />
     <a
-      *ngIf="filteredDocuments.length < letterDocuments.length"
+      *ngIf="filteredDocuments.length < letterOutDocuments.length"
       (click)="viewMore()"
       class="viewMore"
       ><b style="color: #003366">View more records</b>
@@ -162,5 +164,6 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+  </div>
   </div>
 </div>

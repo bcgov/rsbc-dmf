@@ -29,6 +29,7 @@
     "@angular/platform-server": "^17.3.7",
     "@angular/router": "^17.3.7",
     "angular-oauth2-oidc": "^15.0.1",
+    "axios": "1.7",
     "bootstrap": "^5.2.3",
     "chart.js": "^4.3.0",
     "ejs": "^3.1.10",
