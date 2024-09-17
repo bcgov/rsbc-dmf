@@ -165,7 +165,7 @@
                         <button
                           mat-flat-button
                           class="primaryButton"
-                          (click)="openClaimPopup(searchedCase)"
+                          (click)="openClaimPopup(searchedCase.documentId)"
                         >
                           Claim Dmer
                         </button>
@@ -178,7 +178,7 @@
                         <button
                           mat-flat-button
                           class="primaryButton"
-                          (click)="openClaimPopup(searchedCase)"
+                          (click)="openClaimPopup(searchedCase.documentId)"
                         >
                           Unclaim Dmer
                         </button>
@@ -220,7 +220,7 @@
               </div>
 
               @if( searchedCase.dmerStatus !==
-              DMERStatusEnum.NotRequested) 
+              DMERStatusEnum.NotRequested)
               {
                 <div style="padding-left: 18px" >
                   This needs to be submitted by:
@@ -229,7 +229,7 @@
                   >
                 </div>
               }
-             
+
             </div>
           </div>
         </mat-card-content>
@@ -365,6 +365,11 @@
                 This needs to be submitted by
                 {{ dmer.dueDate | date: "longDate" }}.
               </div>
+
+              <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
+                Unclaim Dmer
+              </button>
+
             </div>
           </mat-card-content>
         </mat-card>
