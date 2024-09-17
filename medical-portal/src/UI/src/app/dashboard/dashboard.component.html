@@ -349,6 +349,7 @@
                     <b>{{ dmer.dmerType }}</b>
                   </div>
                 </div>
+
                 <div class="column-width">
                   <label>DMER Status</label>
                   <div>
@@ -358,17 +359,21 @@
                       {{ " " }}
                     }
                   </div>
+
                 </div>
               </div>
 
               <div class="dmer-details-row-1">
-                This needs to be submitted by
-                {{ dmer.dueDate | date: "longDate" }}.
+                <div class="three-column-width">
+                  This needs to be submitted by
+                  {{ dmer.dueDate | date: "longDate" }}.
+                </div>
+                <div class="three-column-width right">
+                  <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
+                    Unclaim Dmer
+                  </button>
+                </div>
               </div>
-
-              <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
-                Unclaim Dmer
-              </button>
 
             </div>
           </mat-card-content>
