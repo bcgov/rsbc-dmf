@@ -40,6 +40,12 @@ import { DocumentSubType } from '../shared/api/models';
 import { SubmittalStatusEnum } from '@app/app.model';
 import { Document } from '../shared/api/models';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
+import { CaseStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-status/case-status.component';
+import { CaseTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/case-type/case-type.component';
+import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
+import { DecisionOutcomeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/decision-outcome/decision-outcome.component';
+import { SubmissionTypeComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-type/submission-type.component';
+import { SubmissionStatusComponent } from '../../../../../../shared-portal-ui/projects/core-ui/src/lib/case-definitions/submission-status/submission-status.component';
 
 @Component({
   selector: 'app-submission-requirements',
@@ -68,6 +74,12 @@ import { CaseManagementService } from '@app/shared/services/case-management/case
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     DatePipe,
+    CaseStatusComponent,
+    CaseTypeComponent,
+    MedicalDmerTypesComponent,
+    DecisionOutcomeComponent,
+    SubmissionTypeComponent,
+    SubmissionStatusComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
