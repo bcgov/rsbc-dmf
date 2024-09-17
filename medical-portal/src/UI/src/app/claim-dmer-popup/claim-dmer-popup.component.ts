@@ -36,7 +36,7 @@ export class ClaimDmerPopupComponent implements OnInit {
 
   constructor(
     private documentService: DocumentService,
-    @Inject(MAT_DIALOG_DATA) public data: PatientCase,
+    @Inject(MAT_DIALOG_DATA) public documentId: string,
     @Inject(MatDialogRef<ClaimDmerPopupComponent>)
     private dialogRef: MatDialogRef<ClaimDmerPopupComponent>,
     private _snackBar: MatSnackBar,
@@ -66,7 +66,7 @@ export class ClaimDmerPopupComponent implements OnInit {
  onAssignDmer() {
   this.documentService
     .apiDocumentAssignDmerPost$Json({
-      documentId: this.data.documentId as string,
+      documentId: this.documentId as string,
       loginId: this.selectedPractitioner
     })
     .subscribe(() => {
@@ -82,7 +82,7 @@ export class ClaimDmerPopupComponent implements OnInit {
   onClaimDmer() {
     this.documentService
       .apiDocumentClaimDmerPost$Json({
-        documentId: this.data.documentId as string,
+        documentId: this.documentId as string,
       })
       .subscribe(() => {
         this._snackBar.open('Successfully claimed the DMER', 'Close', {
@@ -95,9 +95,10 @@ export class ClaimDmerPopupComponent implements OnInit {
   }
 
   onUnclaimDmer() {
+    console.log('Unclaiming DMER', this.documentId);
     this.documentService
       .apiDocumentUnclaimDmerPost$Json({
-        documentId: this.data.documentId as string,
+        documentId: this.documentId as string,
       })
       .subscribe(() => {
         this._snackBar.open('Successfully Unclaimed the DMER', 'Close', {
