@@ -173,7 +173,6 @@ export class DashboardComponent {
     //TODO # optimize this not to re-query the database on refresh
     this.getClaimedDmerCases();
     this.searchDmerCase();
-    console.log('The dialog was closed');
   }
 
   openClaimPopup(documentId?: string | null) {
