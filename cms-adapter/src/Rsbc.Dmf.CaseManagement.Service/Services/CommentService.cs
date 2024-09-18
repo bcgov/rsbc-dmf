@@ -4,6 +4,7 @@ using Grpc.Core;
 using Google.Protobuf.WellKnownTypes;
 using System.Threading.Tasks;
 using System;
+using Rsbc.Dmf.CaseManagement.Manager.Comment;
 
 namespace Rsbc.Dmf.CaseManagement.Service
 {        
@@ -61,5 +62,69 @@ namespace Rsbc.Dmf.CaseManagement.Service
             }
             return reply;
         }
+
+        /// <summary>
+        /// Add Case Comment
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public async override Task<CreateStatusReply> AddCaseComment(LegacyComment request, ServerCallContext context)
+        {
+            var reply = new CreateStatusReply();
+
+            CaseManagement.Driver driver = new CaseManagement.Driver();
+            if (request.Driver != null)
+            {
+                driver.DriverLicenseNumber = request.Driver.DriverLicenseNumber;
+                driver.Surname = request.Driver.Surname;
+            }
+
+            var commentDate = request.CommentDate.ToDateTimeOffset();
+
+            if (commentDate.Year < 1753)
+            {
+                commentDate = DateTimeOffset.Now;
+            }
+
+            string caseIdString = null;
+            Guid caseId;
+
+            if (Guid.TryParse(request.CaseId, out caseId))
+            {
+                caseIdString = caseId.ToString();
+            }
+
+            var newComment = new Comment
+            {
+                CaseId = caseIdString,
+                CommentText = request.CommentText,
+                CommentTypeCode = request.CommentTypeCode,
+                SequenceNumber = (int)request.SequenceNumber,
+                UserId = request.UserId,
+                Driver = driver,
+                CommentDate = commentDate,
+                CommentId = request.CommentId
+            };
+
+            var result = await _commentManager.AddCaseComment(newComment);
+
+            if (result.Success)
+            {
+                reply.ResultStatus = ResultStatus.Success;
+                reply.Id = result.Id;
+            }
+            else
+            {
+                reply.ResultStatus = ResultStatus.Fail;
+                reply.ErrorDetail = result.ErrorDetail ?? string.Empty;
+            }
+
+
+
+            return reply;
+        }
     }
+
+   
 }

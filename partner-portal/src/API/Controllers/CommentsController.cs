@@ -10,6 +10,8 @@ using SharedUtils;
 using System.Net;
 using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using System.Threading.Channels;
+using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
+using Rsbc.Dmf.PartnerPortal.Api.Model;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
@@ -55,6 +57,49 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             }
 
             return Json(result);
+        }
+
+        [HttpPost("create")]
+        [ProducesResponseType(typeof(OkResult), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        [ActionName(nameof(CreateComment))]
+        public async Task<IActionResult> CreateComment([FromBody] CommentRequest commentRequest)
+        {
+            var profile = _userService.GetDriverInfo();
+
+            // security check
+            var mostRecentCaseReply = _caseManagerClient.GetMostRecentCaseDetail(new DriverIdRequest { Id = profile.DriverId });
+            if (mostRecentCaseReply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, mostRecentCaseReply.ErrorDetail ?? $"{nameof(CreateComment)} security failed.");
+            }
+
+            var comment = new LegacyComment();
+
+            comment.CommentText = commentRequest.CommentText;
+            comment.CommentDate = DateTime.UtcNow.ToTimestamp();
+            comment.CommentId = profile.Id;
+            comment.CaseId = mostRecentCaseReply.Item.CaseId;
+            comment.CommentTypeCode = "I";
+            comment.Origin = "Partner-Portal";
+            comment.SequenceNumber = 0;
+            comment.Driver = new CaseManagement.Service.Driver();
+            
+            comment.Driver.DriverLicenseNumber = profile.DriverLicenseNumber;
+            comment.Driver.Surname = profile.LastName;
+            
+
+            // create Comment
+            var reply = _commentManagerClient.AddCaseComment(comment);
+            if (reply.ResultStatus != ResultStatus.Success)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, reply.ErrorDetail ?? $"{nameof(comment)} failed.");
+            }
+            else
+            {
+                return Ok();
+            }
         }
 
     }

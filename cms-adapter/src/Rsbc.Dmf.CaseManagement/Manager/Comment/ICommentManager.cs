@@ -9,5 +9,7 @@ namespace Rsbc.Dmf.CaseManagement
     public interface ICommentManager
     {
         Task<IEnumerable<Comment>> GetCommentOnDriver(Guid driverId);
+
+        Task<CreateStatusReply> AddCaseComment(Comment request);
     }
 }
