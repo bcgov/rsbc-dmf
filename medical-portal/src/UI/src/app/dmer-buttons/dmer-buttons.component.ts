@@ -37,7 +37,6 @@ export class DmerButtonsComponent {
   ) { }
 
   ngOnInit(): void {
-    console.log('DMER Buttons Component Initialized', this.searchedCase);
     let profile = this.profileManagementService.getCachedProfile();
     // TODO will be using "accessLevel" in other areas, move to profile service
     this.accessLevel = profile.roles?.find((role) => role === Role.Practitioner) ? Role.Practitioner : Role.Moa;

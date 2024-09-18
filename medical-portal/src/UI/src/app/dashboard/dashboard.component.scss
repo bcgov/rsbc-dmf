@@ -134,7 +134,6 @@ mat-card {
   }
 }
 
-
 .dmer-details-row{
   display: flex;
   flex-direction: column;
@@ -143,16 +142,9 @@ mat-card {
 
 .dmer-details-row-1{
   display: flex;
- flex-direction: row;
- flex: 1;
+  flex-direction: row;
+  flex: 1;
   gap: 125px;
-
-
-}
-
-.search-buttons{
-  display: flex;
-  gap:10px;
 }
 
 .column-width{
@@ -173,5 +165,4 @@ mat-card {
   .dmer-details-row-1{
     gap:20px;
   }
-
 }
