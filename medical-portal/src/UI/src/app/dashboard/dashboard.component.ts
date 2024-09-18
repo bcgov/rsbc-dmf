@@ -26,7 +26,7 @@ import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { PopupService } from '@app/popup/popup.service';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.component';
+import { ClaimDmerPopupComponent } from '@app/claim-dmer-popup/claim-dmer-popup.component';
 import { DMERStatusEnum } from '@app/app.model';
 import { Role } from '@app/features/auth/enums/identity-provider.enum';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
@@ -198,11 +198,11 @@ export class DashboardComponent {
       });;
   }
 
-  openClaimPopup(searchedCase: PatientCase) {
+  openClaimPopup(documentId?: string | null) {
     const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
       height: '600px',
       width: '820px',
-      data: searchedCase,
+      data: documentId,
     });
     dialogRef.afterClosed().subscribe((result) => {
       //TODO # optimize this not to re-query the database on refresh
