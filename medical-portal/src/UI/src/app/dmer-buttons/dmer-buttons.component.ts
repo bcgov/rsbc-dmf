@@ -50,7 +50,7 @@ export class DmerButtonsComponent {
     }
     this.popupService
       .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
-      .subscribe((result) => {
+      .subscribe(() => {
         this.popupClosed.emit();
       });
   }
@@ -61,7 +61,7 @@ export class DmerButtonsComponent {
       width: '820px',
       data: documentId,
     });
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.popupClosed.emit();
     });
   }

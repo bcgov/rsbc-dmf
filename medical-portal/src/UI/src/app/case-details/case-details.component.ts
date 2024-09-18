@@ -44,6 +44,7 @@ import {
 import { DatePipe } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
 import { PopupService } from '../popup/popup.service';
+import { DmerButtonsComponent } from "../dmer-buttons/dmer-buttons.component";
 
 @Component({
   selector: 'app-case-details',
@@ -69,7 +70,8 @@ import { PopupService } from '../popup/popup.service';
     CaseSubmissionsComponent,
     SubmissionRequirementsComponent,
     DatePipe,
-  ],
+    DmerButtonsComponent
+],
   templateUrl: './case-details.component.html',
   styleUrl: './case-details.component.scss',
   viewProviders: [MatExpansionPanel],
@@ -104,7 +106,7 @@ export class CaseDetailsComponent implements OnInit {
     private casesService: CasesService,
     private documentService: DocumentService,
     private popupService: PopupService,
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     this.breakpointObserver
