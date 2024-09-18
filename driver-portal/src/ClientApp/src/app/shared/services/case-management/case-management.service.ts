@@ -14,13 +14,14 @@ import {
 export class CaseManagementService {
   constructor(
     private casesService: CasesService,
-    private driversService: DriverService,
+    private driverService: DriverService,
     private documentService: DocumentService,
     private profileService: ProfileService,
     private documentTypeService: DocumentTypeService,
     private callbacService: CallbackService
   ) {}
 
+  // Case
   public getMostRecentCase() {
     return this.casesService.apiCasesMostRecentGet$Json();
   }
@@ -31,14 +32,9 @@ export class CaseManagementService {
     return this.casesService.apiCasesClosedGet$Json(params);
   }
 
-  public getDriverDocuments(
-    params: Parameters<DriverService['apiDriverDocumentsGet$Json']>[0]
-  ) {
-    return this.driversService.apiDriverDocumentsGet$Json(params);
-  }
-
-  public getAllDocuments() {
-    return this.driversService.apiDriverAllDocumentsGet$Json();
+  // Documents
+  public getAllDriverDocuments() {
+    return this.driverService.apiDriverAllDocumentsGet$Json();
   }
 
   public getDownloadDocument(
@@ -47,6 +43,13 @@ export class CaseManagementService {
     return this.documentService.apiDocumentDocumentIdGet$Json(params);
   }
 
+  public getDocumentSubTypes(
+    params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
+  ) {
+    return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
+  }
+
+  // User Registration
   public userRegistration(
     params: Parameters<ProfileService['apiProfileRegisterPut$Json$Response']>[0]
   ) {
@@ -59,12 +62,13 @@ export class CaseManagementService {
     return this.profileService.apiProfileDriverPut$Json$Response(params);
   }
 
-  public getDocumentSubTypes(
-    params: Parameters<DocumentTypeService['apiDocumentTypeDriverGet$Json']>[0]
+  public getDriverAddress(
+    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
   ) {
-    return this.documentTypeService.apiDocumentTypeDriverGet$Json(params);
+    return this.driverService.apiDriverInfoGet$Json(params);
   }
-
+ 
+ // Call backs
   public getCallBackRequest(
     params: Parameters<CallbackService['apiCallbackDriverGet$Json']>[0]
   ) {
@@ -83,9 +87,5 @@ export class CaseManagementService {
     return this.callbacService.apiCallbackCancelPut$Json(params);
   }
 
-  public getDriverAddress(
-    params: Parameters<DriverService['apiDriverInfoGet$Json']>[0]
-  ) {
-    return this.driversService.apiDriverInfoGet$Json(params);
-  }
+  
 }
