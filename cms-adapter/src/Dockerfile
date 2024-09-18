@@ -4,17 +4,17 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_ID
 ARG BUILD_VERSION
 WORKDIR /src
-COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj", "Rsbc.Dmf.CaseManagement.Service/"]
-COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement/Rsbc.Dmf.CaseManagement.csproj", "Rsbc.Dmf.CaseManagement/"]
-COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Tests/Rsbc.Dmf.CaseManagement.Tests.csproj", "Rsbc.Dmf.CaseManagement.Tests/"]
-COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Moq/Rsbc.Dmf.CaseManagement.Moq.csproj", "Rsbc.Dmf.CaseManagement.Moq/"]
-COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Client/Rsbc.Dmf.CaseManagement.Client.csproj", "Rsbc.Dmf.CaseManagement.Client/"]
-COPY ["cms-adapter/src/cms-adapter.sln", "./"]
+COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/"]
+COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement/Rsbc.Dmf.CaseManagement.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement/"]
+COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Tests/Rsbc.Dmf.CaseManagement.Tests.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Tests/"]
+COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Moq/Rsbc.Dmf.CaseManagement.Moq.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Moq/"]
+COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Client/Rsbc.Dmf.CaseManagement.Client.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Client/"]
+COPY ["cms-adapter/src/cms-adapter.sln", "cms-adapter/src/"]
 
-RUN dotnet restore .
-COPY cms-adapter/src .
+RUN dotnet restore cms-adapter/src/
+COPY . .
 RUN dotnet test -c Release
-RUN dotnet publish "Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj" /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish --no-restore
+RUN dotnet publish "cms-adapter/src/Rsbc.Dmf.CaseManagement.Service/Rsbc.Dmf.CaseManagement.Service.csproj" /p:Version="$BUILD_VERSION" /p:InformationalVersion="$BUILD_ID" -c Release -o /app/publish --no-restore
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 ARG BUILD_ID
