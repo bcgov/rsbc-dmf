@@ -28,8 +28,8 @@ jobs:
         run: docker pull $IMAGE_ID || true
 
       - name: Build image
-        working-directory: ./cms-adapter/src
-        run: docker build . --file Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
+        working-directory: ./
+        run: docker build . --file cms-adapter/src/Dockerfile --build-arg BUILD_ID --build-arg BUILD_VERSION="$BUILD_PREFIX`expr $RUN_NUMBER % 256`" --tag $IMAGE_NAME --cache-from=$IMAGE_ID
 
       - name: Push image
         run: |
