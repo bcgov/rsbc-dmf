@@ -74,12 +74,10 @@ export class SubmissionHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('ngOnInit submission-history');
     this.getAllDocuments();
   }
 
   getAllDocuments() {
-    console.log('getAllDocuments');
     this.caseManagementService
       .getAllDriverDocuments()
       .subscribe((allDocuments: any) => {
@@ -91,7 +89,6 @@ export class SubmissionHistoryComponent implements OnInit {
         this.submissionHistoryDocuments = [];
 
         // can be moved to driver portal
-        console.log('allDocuments', allDocuments);
         allDocuments.forEach((doc: any) => {
           if (
             ![
@@ -103,7 +100,6 @@ export class SubmissionHistoryComponent implements OnInit {
             this.submissionHistoryDocuments.push(doc);
           }
         });
-        console.log('submissionHistoryDocuments', this.submissionHistoryDocuments);
         this.filteredDocuments = this.submissionHistoryDocuments.slice(
           0,
           this.pageSize,
