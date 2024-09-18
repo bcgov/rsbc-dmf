@@ -10,6 +10,8 @@ COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Tests/Rsbc.Dmf.CaseManagement.Tes
 COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Moq/Rsbc.Dmf.CaseManagement.Moq.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Moq/"]
 COPY ["cms-adapter/src/Rsbc.Dmf.CaseManagement.Client/Rsbc.Dmf.CaseManagement.Client.csproj", "cms-adapter/src/Rsbc.Dmf.CaseManagement.Client/"]
 COPY ["cms-adapter/src/cms-adapter.sln", "cms-adapter/src/"]
+COPY ["cms-adapter/src/cms-adapter.sln", "cms-adapter/src/"]
+COPY ["shared-utils/SharedUtils.csproj","shared-utils"]
 
 RUN dotnet restore cms-adapter/src/
 COPY . .
