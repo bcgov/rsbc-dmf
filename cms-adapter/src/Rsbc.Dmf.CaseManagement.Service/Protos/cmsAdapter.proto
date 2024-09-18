@@ -928,7 +928,14 @@ message GetDriverCallbacksReply {
 
 
 service CommentManager{
+
+// Get Comments
  rpc GetCommentOnDriver (DriverIdRequest) returns (GetCommentsReply);
+
+ // Add Comments
+  rpc AddCaseComment (LegacyComment) returns (CreateStatusReply);
 }
+
+
 
 // END CommentManager
