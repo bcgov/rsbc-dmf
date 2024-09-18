@@ -30,6 +30,7 @@ import { ClaimDmerPopupComponent } from '@src/claim-dmer-popup/claim-dmer-popup.
 import { DMERStatusEnum } from '@app/app.model';
 import { Role } from '@app/features/auth/enums/identity-provider.enum';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
+import { DmerButtonsComponent } from '@app/dmer-buttons/dmer-buttons.component';
 
 interface Status {
   value: string;
@@ -57,7 +58,7 @@ interface Status {
     MatExpansionPanel,
     MedicalDmerTypesComponent,
     MatDialogModule,
-    ClaimDmerPopupComponent
+    DmerButtonsComponent
 ],
 
   templateUrl: './dashboard.component.html',
@@ -82,7 +83,6 @@ export class DashboardComponent {
   public filteredData?: DmerDocument[] = [];
   public _allDocuments?: DmerDocument[] | null = [];
   public profile?: UserProfile;
-  public accessLevel: Role = Role.Moa;
 
   isSearching: boolean = false;
   noResults: boolean = false;
@@ -97,7 +97,6 @@ export class DashboardComponent {
     private casesService: CasesService,
     private documentService: DocumentService,
     private popupService: PopupService,
-    private dialog: MatDialog,
     private profileManagementService: ProfileManagementService
   ) { }
 
@@ -107,17 +106,11 @@ export class DashboardComponent {
   }
 
   ngOnInit(): void {
-    this.profileManagementService.getProfile().subscribe((profile) => {
-      // TODO will be using "accessLevel" in other areas, move to profile service
-      this.accessLevel = profile.roles?.find((role) => role === Role.Practitioner) ? Role.Practitioner : Role.Moa;
-      this.profile = profile;
-    });
+    this.profile = this.profileManagementService.getCachedProfile();
     this.getClaimedDmerCases();
   }
 
-  public get Role() {
-    return Role;
-  }
+
 
   getClaimedDmerCases() {
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
