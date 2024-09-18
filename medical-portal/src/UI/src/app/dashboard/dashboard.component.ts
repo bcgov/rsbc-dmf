@@ -186,29 +186,10 @@ export class DashboardComponent {
     this.filteredData = this._allDocuments?.slice(0, pageSize);
   }
 
-  openPopup() {
-    if (!this.searchedCase) {
-      console.error('Case data was missing', this.searchedCase);
-      return;
-    }
-    this.popupService
-      .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
-      .subscribe((result) => {
-        this.searchDmerCase();
-      });;
-  }
-
-  openClaimPopup(documentId?: string | null) {
-    const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
-      height: '600px',
-      width: '820px',
-      data: documentId,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      //TODO # optimize this not to re-query the database on refresh
-      this.getClaimedDmerCases();
-      this.searchDmerCase();
-      console.log('The dialog was closed', result);
-    });
+  popupClosed() {
+    //TODO # optimize this not to re-query the database on refresh
+    this.getClaimedDmerCases();
+    this.searchDmerCase();
+    console.log('The dialog was closed');
   }
 }

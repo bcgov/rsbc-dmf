@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCommonModule } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -32,6 +32,7 @@ export class DmerButtonsComponent {
   public accessLevel: Role = Role.Moa;
   @Input() public searchedCase?: PatientCase | null;
   DMERStatusEnum = DMERStatusEnum;
+  @Output() public popupClosed = new EventEmitter();
 
   constructor(
     private profileManagementService: ProfileManagementService,
@@ -59,19 +60,15 @@ export class DmerButtonsComponent {
     //   });
   }
 
-  openClaimPopup(documentId?: string | null): Observable<any> {
+  openClaimPopup(documentId?: string | null) {
     const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
       height: '600px',
       width: '820px',
       data: documentId,
     });
-    return dialogRef.afterClosed();
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   //TODO # optimize this not to re-query the database on refresh
-    //   this.getClaimedDmerCases();
-    //   this.searchDmerCase();
-    //   console.log('The dialog was closed', result);
-    // });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.popupClosed.emit();
+    });
   }
 
   public get Role() {
