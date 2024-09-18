@@ -6,6 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { DMERStatusEnum } from '@app/app.model';
 import { ClaimDmerPopupComponent } from '@app/claim-dmer-popup/claim-dmer-popup.component';
 import { Role } from '@app/features/auth/enums/identity-provider.enum';
+import { PopupService } from '@app/popup/popup.service';
 import { PatientCase } from '@app/shared/api/models';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { Observable } from 'rxjs';
@@ -15,13 +16,8 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [
     MatCommonModule,
-    //MatExpansionModule,
-    //MatCardModule,
-    //MatIconModule,
-    //MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    //MatSelectModule,
     ClaimDmerPopupComponent
   ],
   templateUrl: './dmer-buttons.component.html',
@@ -37,9 +33,8 @@ export class DmerButtonsComponent {
   constructor(
     private profileManagementService: ProfileManagementService,
     private dialog: MatDialog,
-  ) {
-
-  }
+    private popupService: PopupService
+  ) { }
 
   ngOnInit(): void {
     console.log('DMER Buttons Component Initialized', this.searchedCase);
@@ -53,11 +48,11 @@ export class DmerButtonsComponent {
       console.error('Case data was missing', this.searchedCase);
       return;
     }
-    // this.popupService
-    //   .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
-    //   .subscribe((result) => {
-    //     this.searchDmerCase();
-    //   });
+    this.popupService
+      .openPopup(this.searchedCase.caseId as string, this.searchedCase.documentId as string)
+      .subscribe((result) => {
+        this.popupClosed.emit();
+      });
   }
 
   openClaimPopup(documentId?: string | null) {

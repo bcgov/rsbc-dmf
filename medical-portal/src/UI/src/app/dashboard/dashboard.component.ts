@@ -1,14 +1,5 @@
-import {
-  CUSTOM_ELEMENTS_SCHEMA,
-  Component,
-  ViewChild,
-} from '@angular/core';
-
-import {
-  MatExpansionModule,
-  MatAccordion,
-  MatExpansionPanel,
-} from '@angular/material/expansion';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewChild } from '@angular/core';
+import { MatExpansionModule, MatAccordion, MatExpansionPanel } from '@angular/material/expansion';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,17 +9,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { DmerStatusComponent } from '@shared/core-ui';
-
 import { CasesService, DocumentService } from '../shared/api/services';
 import { DmerDocument, PatientCase, UserProfile } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
-import { PopupService } from '@app/popup/popup.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ClaimDmerPopupComponent } from '@app/claim-dmer-popup/claim-dmer-popup.component';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DMERStatusEnum } from '@app/app.model';
-import { Role } from '@app/features/auth/enums/identity-provider.enum';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { DmerButtonsComponent } from '@app/dmer-buttons/dmer-buttons.component';
 
@@ -36,6 +23,7 @@ interface Status {
   value: string;
   viewValue: string;
 }
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -54,13 +42,11 @@ interface Status {
     RouterLink,
     RouterLinkActive,
     DmerStatusComponent,
-    //DmerTypeComponent,
     MatExpansionPanel,
     MedicalDmerTypesComponent,
     MatDialogModule,
     DmerButtonsComponent
-],
-
+  ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -96,7 +82,6 @@ export class DashboardComponent {
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
-    private popupService: PopupService,
     private profileManagementService: ProfileManagementService
   ) { }
 
