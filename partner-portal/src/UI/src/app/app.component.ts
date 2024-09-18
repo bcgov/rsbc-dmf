@@ -7,6 +7,7 @@ import { PartnerPortalNavMenuComponent } from './Layout/partner-portal-nav-menu/
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './features/auth/services/auth.service';
 import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
+import { ConfigurationService } from './shared/services/configuration.service';
 
 
 @Component({
@@ -24,31 +25,39 @@ import { IdentityProvider } from './features/auth/enums/identity-provider.enum';
   ],
 })
 export class AppComponent implements OnInit {
- 
+
 
   constructor(
     private authService: AuthService,
+    private configService: ConfigurationService,
     private http: HttpClient,
   ) {}
 
   ngOnInit() {
     try {
       console.info('AppComponent initializing...');
-      //attempt to log in
-      this.authService.isLoggedIn().subscribe((isLoggedIn: boolean) => {
-        console.info('Are you logged in?', isLoggedIn);
-        if (!isLoggedIn) {
-          console.info('Redirect to login page');
-          this.authService.login({
-            idpHint: IdentityProvider.BCSC,
-            // TODO add medical-portal scope and move this to api/Config
-            scope: 'openid profile email',
-          });
-        } else {
-          // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
-          //this.isLoading = false;
-        }
+
+      // TODO this should be moved to APP_INITIALIZER but last time it was attempted, Keycloak had issues in standalone mode
+      // load configuration
+      this.configService.load().subscribe(() => {
+
+        //attempt to log in
+        this.authService.isLoggedIn().subscribe((isLoggedIn: boolean) => {
+          console.info('Are you logged in?', isLoggedIn);
+          if (!isLoggedIn) {
+            console.info('Redirect to login page');
+            this.authService.login({
+              idpHint: IdentityProvider.BCSC,
+              // TODO add medical-portal scope and move this to api/Config
+              scope: 'openid profile email',
+            });
+          } else {
+            // for spinner status, this will likely change when the keycloak auth lifecycle events are refactored
+            //this.isLoading = false;
+          }
+        });
       });
+
     } catch (e) {
       console.error(e);
       throw e;
