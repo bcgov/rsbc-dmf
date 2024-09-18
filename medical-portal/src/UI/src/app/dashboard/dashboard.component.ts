@@ -14,10 +14,11 @@ import { DmerDocument, PatientCase, UserProfile } from '../shared/api/models';
 import { MatCommonModule } from '@angular/material/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MedicalDmerTypesComponent } from '@app/definitions/medical-dmer-types/medical-dmer-types.component';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DMERStatusEnum } from '@app/app.model';
 import { ProfileManagementService } from '@app/shared/services/profile.service';
 import { DmerButtonsComponent } from '@app/dmer-buttons/dmer-buttons.component';
+import { ClaimDmerPopupComponent } from '@app/claim-dmer-popup/claim-dmer-popup.component';
 
 interface Status {
   value: string;
@@ -82,7 +83,8 @@ export class DashboardComponent {
     private viewportScroller: ViewportScroller,
     private casesService: CasesService,
     private documentService: DocumentService,
-    private profileManagementService: ProfileManagementService
+    private profileManagementService: ProfileManagementService,
+    private dialog: MatDialog,
   ) { }
 
   public onClick(event: any, elementId: string): void {
@@ -95,8 +97,6 @@ export class DashboardComponent {
     this.getClaimedDmerCases();
   }
 
-
-
   getClaimedDmerCases() {
     this.documentService.apiDocumentMyDmersGet$Json({}).subscribe((data) => {
       this.practitionerDMERList = data;
@@ -106,8 +106,6 @@ export class DashboardComponent {
   }
 
   searchDmerCase(): void {
-    console.log('search DMER Case');
-
     let searchParams: Parameters<
       CasesService['apiCasesSearchIdCodeGet$Json']
     >[0] = {
@@ -176,5 +174,13 @@ export class DashboardComponent {
     this.getClaimedDmerCases();
     this.searchDmerCase();
     console.log('The dialog was closed');
+  }
+
+  openClaimPopup(documentId?: string | null) {
+    const dialogRef = this.dialog.open(ClaimDmerPopupComponent, {
+      height: '600px',
+      width: '820px',
+      data: documentId,
+    });
   }
 }
