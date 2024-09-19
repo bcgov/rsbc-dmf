@@ -182,33 +182,7 @@ namespace Rsbc.Dmf.CaseManagement
                 }
             }
 
-            else // update
-            {
-                try
-                {
-                    Guid key = Guid.Parse(request.CommentId);
-                    comment = _dynamicsContext.dfp_comments.ByKey(key).GetValue();
-                    comment.dfp_commenttype = TranslateCommentTypeCodeToInt(request.CommentTypeCode);
-                    comment.dfp_icbc = request.CommentTypeCode == "W" || request.CommentTypeCode == "I";
-                    comment.dfp_userid = request.UserId;
-                    comment.dfp_commentdetails = request.CommentText;
-                    comment.dfp_date = request.CommentDate;
-                    comment.overriddencreatedon = request.CommentDate;
-
-                    _dynamicsContext.UpdateObject(comment);
-                    _dynamicsContext.SaveChanges();
-
-                    result.Success = true;
-                    result.Id = comment.dfp_commentid.ToString();
-
-                }
-                catch (Exception ex)
-                {
-                    Serilog.Log.Error(ex, "CreateLegacyCaseComment Update Comment Error");
-                    result.Success = false;
-                    result.ErrorDetail = "CreateLegacyCaseComment Update Comment Error " + ex.Message;
-                }
-            }
+           
 
             if (!string.IsNullOrEmpty(request.CaseId))
             {
