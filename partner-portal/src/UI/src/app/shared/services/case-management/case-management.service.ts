@@ -90,4 +90,10 @@ export class CaseManagementService {
   ) {
     return this.commentsService.apiCommentsGetCommentsGet$Json(params);
   }
+
+  public addComments(
+    params: Parameters<CommentsService['apiCommentsCreatePost$Json']>[0]
+  ) {
+    return this.commentsService.apiCommentsCreatePost$Json(params);
+  }
 }

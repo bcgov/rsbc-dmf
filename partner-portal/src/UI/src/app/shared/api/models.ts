@@ -9,6 +9,7 @@ export { CallStatus } from './models/call-status';
 export { CaseDetail } from './models/case-detail';
 export { CaseSearch } from './models/case-search';
 export { Comment } from './models/comment';
+export { CommentRequest } from './models/comment-request';
 export { Document } from './models/document';
 export { DocumentSubType } from './models/document-sub-type';
 export { Driver } from './models/driver';

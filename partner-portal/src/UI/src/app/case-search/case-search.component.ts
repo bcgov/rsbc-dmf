@@ -13,6 +13,7 @@ import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driv
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-case-search',
@@ -29,7 +30,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     LettersToDriverComponent,
     GetAssistanceComponent,
     CommentsComponent,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule
   ],
   templateUrl: './case-search.component.html',
   styleUrl: './case-search.component.scss',
