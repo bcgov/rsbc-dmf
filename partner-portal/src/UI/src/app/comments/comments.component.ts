@@ -89,8 +89,17 @@ export class CommentsComponent implements OnInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+    dialogRef.afterClosed()
+    
+    .subscribe({
+      next:() => {
+      let driverId = this.driverDetails.id;
+      if(driverId != null){
+        this.getComments(driverId);
+      }
+      
+      }
+      
     });
 
   }

@@ -5,11 +5,17 @@
       </button>
 </div>
 <mat-dialog-content>
-    <mat-form-field>
-        <textarea matInput maxlength="200"></textarea>
-    </mat-form-field>
+    <form>
+        <mat-form-field>
+            <textarea matInput maxlength="200" [formControl]="commentsForm.controls.commentText"></textarea>
+            @if(commentsForm.controls.commentText.getError("required")){
+                <mat-error>This Field is required</mat-error>
+            }
+        </mat-form-field>
+    </form>
+    
 </mat-dialog-content>
 <mat-dialog-actions class="actionButtons">
-    <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-raised-button color="primary">Send</button>
+    <button class="cancelButton" mat-flat-button mat-dialog-close>Cancel</button>
+    <button class="primaryButton" mat-flat-button (click)="AddComment()">Send</button>
 </mat-dialog-actions>
