@@ -185,9 +185,7 @@
       <mat-tab label="Submission History">
         <app-submission-history></app-submission-history>
       </mat-tab>
-      <mat-tab label="Comments">
-       <app-comments></app-comments>
-      </mat-tab>
+     
       <mat-tab label="Assist Driver">
         <app-get-assistance></app-get-assistance>
       </mat-tab>
@@ -195,11 +193,12 @@
 </div>
 
 <!-- Comments button -->
+
 <div style="
-position: fixed;
-right: 0;
-bottom: 550px;
+position: absolute;
+right: -70px;
+bottom: 450px;
 rotate: 90deg;">
-  <button  (click)="openCommentsDialog()">Comments </button>
+  <button mat-button class="commentsButton" (click)="openCommentsDialog()"><mat-icon class="matIcon">edit_document</mat-icon> Comments </button>
 </div>
 
