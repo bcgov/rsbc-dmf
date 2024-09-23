@@ -14,12 +14,15 @@
 </div>
 <div>
   <div class="filter">
-    <div>Filter-By</div>
+    <div>Filter:</div>
     <div>
-      <button mat-button aria-label="Filter By system" (click)="filterBySystem()">
+      <button mat-button aria-label="All" (click)="filterByAllComments()" [style.background]="!filterBy? '#ddd' : 'none' ">
+        All
+      </button>
+      <button mat-button aria-label="Filter By Person" (click)="filterByUser()" [style.background]="filterBy === CommentOrigin.User ? '#ddd' : 'none' ">
         <mat-icon> account_circle</mat-icon> Person
       </button>
-      <button mat-button aria-label="Filter By Person" (click)="filterByUser()">
+      <button mat-button aria-label="Filter By System" (click)="filterBySystem()" [style.background]="filterBy === CommentOrigin.System ? '#ddd' : 'none' ">
         <mat-icon>devices</mat-icon> System
       </button>
     </div>
@@ -27,13 +30,49 @@
 </div>
 
 <mat-dialog-content class="mat-typography">
-  <mat-card *ngFor = "let comments of allComments" style="margin-bottom: 12px;">
-    <mat-card-content *ngIf = "comments.origin === filterBy">
-      <div>
-      {{comments.commentText}}
+  <mat-card *ngFor = "let comments of filteredComments" style="margin-bottom: 12px;">
+    <mat-card-content>
+      <div class="comments">  
+        @if(comments.origin === "User"){
+          <mat-icon style="width:36px"> account_circle</mat-icon>
+        }
+        @if(comments.origin === "System"){
+          <mat-icon style="width:136px">devices</mat-icon>
+        }
+        <div>
+       <div>
+        {{comments.commentText}}
+       </div>
+        <div>{{comments.origin}} - {{comments.commentDate | date : "longDate"}}</div>
+        </div>
+        
       </div>
-      <div>{{comments.origin}} - {{comments.commentDate | date : "longDate"}}</div>
+      
     </mat-card-content>
   </mat-card>
 </mat-dialog-content>
+
+<div
+      class="numberOfItems"
+      style="margin-bottom: 32px"
+      *ngIf="
+        allComments &&
+        allComments.length > 0 &&
+        filteredComments &&
+        filteredComments.length > 0
+      "
+    >
+      Showing {{ filteredComments.length }} of
+      {{ allCommentsLength }} records
+      <br />
+      <a
+        *ngIf="filteredComments.length < allCommentsLength"
+        (click)="viewMore()"
+        class="viewMore"
+        ><b style="color: #003366">View more records</b>
+        <mat-icon class="ViewMoreIcon">expand_circle_down</mat-icon></a
+      >
+    </div>
+
+
 

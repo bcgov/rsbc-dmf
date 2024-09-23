@@ -29,11 +29,16 @@ import { AddCommentsComponent } from './add-comments/add-comments.component';
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentsComponent implements OnInit {
+  CommentOrigin = CommentOrigin;
   readonly dialog = inject(MatDialog);
 
-  filterBy = CommentOrigin.User; 
+  filterBy: CommentOrigin | null = null; 
 
+  isExpanded: Record<string, boolean> = {};
+  pageSize = 10;
+  filteredComments : Comment[] | null = [];
   _allcommentRequest: Comment[] = [];
+
   // Get Driver details
   driverDetails = this.userService.getCachedriver();
  
@@ -53,30 +58,40 @@ export class CommentsComponent implements OnInit {
 
   }
 
-
   @Input() set allComments(comments: Comment[]) {
     if (comments)
       this._allcommentRequest = comments;
-    //this.filteredCallbacks = this._allCallBackRequests?.slice(0, this.pageSize);
+      this.filteredComments = this._allcommentRequest.slice(0, this.pageSize);
   }
 
   get allComments() {
     return this._allcommentRequest;
   }
 
+  get allCommentsLength() {
+    return this.allComments.filter((c) => !this.filterBy || c.origin === this.filterBy).length;
+  }
+
   getComments(driverId: string) {
-    console.log(driverId)
     this.caseManagementService.getComments(driverId).subscribe((comments: any) => {
       this._allcommentRequest = comments;
+      this.filteredComments = this._allcommentRequest?.slice(0, this.pageSize);
     });
   }
 
-  filterBySystem(){
+  filterByAllComments(){
+    this.filterBy = null;
+    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
+   }
+
+  filterByUser(){
    this.filterBy = CommentOrigin.User;
+   this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
   }
  
-  filterByUser(){
+  filterBySystem(){
     this.filterBy = CommentOrigin.System; 
+    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
   }
 
   addComment(){
@@ -88,19 +103,21 @@ export class CommentsComponent implements OnInit {
         right: '60px',
       },
     });
-
-    dialogRef.afterClosed()
-    
+    dialogRef.afterClosed()  
     .subscribe({
       next:() => {
       let driverId = this.driverDetails.id;
       if(driverId != null){
         this.getComments(driverId);
-      }
-      
-      }
-      
+      }   
+      }   
     });
 
+  }
+
+  viewMore() {
+    const pageSize = (this.filteredComments?.length ?? 0) + this.pageSize;
+
+    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, pageSize);
   }
 }
