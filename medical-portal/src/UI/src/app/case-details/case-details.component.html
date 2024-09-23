@@ -64,23 +64,9 @@
                   <b></b>
                 </div>
               </div>
-              <div>
-                <div>
-                  @if (
-                    caseDetails?.dmerStatus ===
-                      DMERStatusEnum.RequiredClaimed ||
-                    caseDetails?.dmerStatus === DMERStatusEnum.NonComplyClaimed
-                  ) {
-                    <button
-                      mat-flat-button
-                      class="primaryButton"
-                      (click)="openPopup()"
-                    >
-                      Start DMER
-                    </button>
-                  }
-                </div>
-              </div>
+
+              <app-dmer-buttons [searchedCase]="this.caseDetails"></app-dmer-buttons>
+
               <div class="caseDetailsRow">
                 This needs to be submitted by :
                 <b>{{
