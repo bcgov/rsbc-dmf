@@ -100,7 +100,6 @@ export class SubmissionHistoryComponent implements OnInit {
             this.submissionHistoryDocuments.push(doc);
           }
         });
-
         this.filteredDocuments = this.submissionHistoryDocuments.slice(
           0,
           this.pageSize,

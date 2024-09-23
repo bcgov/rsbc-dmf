@@ -26,7 +26,7 @@
 To login, use dmfw0000X users, where X is a number from 1 to 20. The number part should be 5 digits padded with zeros e.g. dmfw00010
 
 You will need to add the following in VS "Configure Startup Projects...":
-- partner-portal
+- driver-portal
 - Rsbc.Dmf.CaseManagement.Service
 - Pssg.Dmf.IcbcAdapter
 - Pssg.DocumentStorageAdapter

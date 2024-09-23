@@ -156,66 +156,9 @@
                       <b>{{ searchedCase.birthDate | date: "longDate" }}</b>
                     </div>
                   </div>
-                  <div>
-                    <div class="search-buttons">
-                      @if (
-                        accessLevel === Role.Practitioner &&
-                        searchedCase.dmerStatus === DMERStatusEnum.RequiredUnclaimed
-                      ) {
-                        <button
-                          mat-flat-button
-                          class="primaryButton"
-                          (click)="openClaimPopup(searchedCase.documentId)"
-                        >
-                          Claim Dmer
-                        </button>
-                      }
 
-                      @if (
-                        searchedCase.dmerStatus ===
-                        DMERStatusEnum.RequiredClaimed
-                      ) {
-                        <button
-                          mat-flat-button
-                          class="primaryButton"
-                          (click)="openClaimPopup(searchedCase.documentId)"
-                        >
-                          Unclaim Dmer
-                        </button>
-                      }
+                  <app-dmer-buttons [searchedCase]="this.searchedCase" (popupClosed)="this.popupClosed()"></app-dmer-buttons>
 
-                      @if (
-                        searchedCase.dmerStatus ===
-                          DMERStatusEnum.RequiredUnclaimed &&
-                        searchedCase.isOwner == true
-                      ) {
-                        <button
-                          mat-flat-button
-                          class="primaryButton"
-                          (click)="openPopup()"
-                        >
-                          Start DMER
-                        </button>
-                      }
-
-                      @if (
-                        searchedCase.dmerStatus ===
-                          DMERStatusEnum.RequiredClaimed ||
-                        searchedCase.dmerStatus ===
-                          DMERStatusEnum.NonComplyClaimed
-                      ) {
-                        <div>
-                          <button
-                            mat-flat-button
-                            class="primaryButton"
-                            (click)="openPopup()"
-                          >
-                            Continue DMER
-                          </button>
-                        </div>
-                      }
-                    </div>
-                  </div>
                 </div>
               </div>
 
@@ -364,11 +307,10 @@
               </div>
 
               <div class="dmer-details-row-1">
-                <div class="three-column-width">
-                  This needs to be submitted by
-                  {{ dmer.dueDate | date: "longDate" }}.
-                </div>
-                <div class="three-column-width right">
+                This needs to be submitted by
+                {{ dmer.dueDate | date: "longDate" }}.
+
+                <div class="right full-width">
                   <button mat-flat-button class="primaryButton" (click)="openClaimPopup(dmer.documentId)">
                     Unclaim Dmer
                   </button>
