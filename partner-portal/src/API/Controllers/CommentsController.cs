@@ -12,6 +12,7 @@ using static Rsbc.Dmf.CaseManagement.Service.CaseManager;
 using System.Threading.Channels;
 using Rsbc.Dmf.PartnerPortal.Api.ViewModels;
 using Rsbc.Dmf.PartnerPortal.Api.Model;
+using System.ComponentModel.Design;
 
 namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 {
@@ -77,17 +78,20 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
 
             var comment = new LegacyComment();
 
-            comment.CommentText = commentRequest.CommentText;
+
+
+            comment.CommentText = commentRequest.CommentText ?? string.Empty;
             comment.CommentDate = DateTime.UtcNow.ToTimestamp();
-            comment.CommentId = profile.Id;
             comment.CaseId = mostRecentCaseReply.Item.CaseId;
             comment.CommentTypeCode = "I";
-            comment.Origin = "Partner-Portal";
-            comment.SequenceNumber = 0;
+            comment.Origin = "User";
+            comment.UserId = profile.DriverId;
+            comment.CommentId = profile.DisplayName;
+
             comment.Driver = new CaseManagement.Service.Driver();
-            
             comment.Driver.DriverLicenseNumber = profile.DriverLicenseNumber;
-            comment.Driver.Surname = profile.LastName;
+            comment.Driver.Surname = profile.LastName?? string.Empty;
+
             
 
             // create Comment

@@ -15,6 +15,26 @@
      width: 100%
   }
 
+  .commentsButton {
+    border-width: 0px;
+    width: 220px;
+    height: 70px;
+    font-family: "BC Sans Bold", "BC Sans", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 16px;
+    letter-spacing: 1px;
+    color: #003366 !important;
+    background-color: #f1f1f3;
+    text-decoration: underline;
+  }
+  
+  .matIcon{
+    color: #003366;
+    transform: scale(1);
+  }
+  
+
   .mat-tab-header{
     background-color: rgba(236, 245, 255, 1) !important;
     border: none;

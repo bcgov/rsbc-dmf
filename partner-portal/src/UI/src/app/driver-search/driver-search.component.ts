@@ -18,7 +18,7 @@ import { EligibleLicenseClassComponent } from '../../../../../../shared-portal-u
 import { RecentCaseComponent } from '../../app/recent-case/recent-case.component';
 import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { CaseDetail } from '@app/shared/api/models';
-import { MatIcon } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CommentsComponent } from '@app/comments/comments.component';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
@@ -27,6 +27,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { LettersToDriverComponent } from '@app/letters-to-driver/letters-to-driver.component';
 import { GetAssistanceComponent } from '@app/get-assistance/get-assistance.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-driver-search',
@@ -44,13 +45,14 @@ import { SubmissionHistoryComponent } from '@app/submission-history/submission-h
     RecentCaseComponent,
     DatePipe,
     NgFor,
-    MatIcon,
     NgIf,
     CommentsComponent,
     MatTabsModule,
     LettersToDriverComponent,
     GetAssistanceComponent,
-    SubmissionHistoryComponent
+    SubmissionHistoryComponent,
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './driver-search.component.html',
   styleUrl: './driver-search.component.scss',
