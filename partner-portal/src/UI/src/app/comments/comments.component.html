@@ -16,7 +16,7 @@
   <div class="filter">
     <div>Filter:</div>
     <div>
-      <button mat-button aria-label="All" (click)="filterBy = null" [style.background]="!filterBy? '#ddd' : 'none' ">
+      <button mat-button aria-label="All" (click)="filterByAllComments()" [style.background]="!filterBy? '#ddd' : 'none' ">
         All
       </button>
       <button mat-button aria-label="Filter By Person" (click)="filterByUser()" [style.background]="filterBy === CommentOrigin.User ? '#ddd' : 'none' ">

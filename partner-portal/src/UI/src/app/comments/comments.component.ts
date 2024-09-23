@@ -79,6 +79,11 @@ export class CommentsComponent implements OnInit {
     });
   }
 
+  filterByAllComments(){
+    this.filterBy = null;
+    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
+   }
+
   filterByUser(){
    this.filterBy = CommentOrigin.User;
    this.filteredComments = this._allcommentRequest?.filter((c) => !this.filterBy || c.origin === this.filterBy).slice(0, this.pageSize);
