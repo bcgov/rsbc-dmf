@@ -35,6 +35,14 @@
   text-decoration: underline;
 }
 
+.comment{
+position: absolute;
+right: -70px;
+bottom: 450px;
+rotate: 90deg;
+z-index: 999;
+}
+
 .matIcon{
   color: #003366;
   transform: scale(1);

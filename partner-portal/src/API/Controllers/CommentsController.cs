@@ -86,8 +86,7 @@ namespace Rsbc.Dmf.PartnerPortal.Api.Controllers
             comment.CommentTypeCode = "I";
             comment.Origin = "User";
             comment.UserId = profile.DriverId;
-            comment.CommentId = profile.DisplayName;
-
+           
             comment.Driver = new CaseManagement.Service.Driver();
             comment.Driver.DriverLicenseNumber = profile.DriverLicenseNumber;
             comment.Driver.Surname = profile.LastName?? string.Empty;
