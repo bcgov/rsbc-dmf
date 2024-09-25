@@ -98,6 +98,15 @@ mat-card {
     justify-content: space-between;
   }
 
+  .noResults{
+    padding-top: 12px;
+    font-family: "BC Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: #D23C42;
+  }
+
   h2.large {
     font-size: 30px;
   }

@@ -3,7 +3,7 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CaseManagementService } from '../shared/services/case-management/case-management.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CaseDetail } from '@app/shared/api/models';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatStepper, MatStep, MatStepLabel, MatStepperIcon } from '@angular/material/stepper';
@@ -38,7 +38,8 @@ import { UserService } from '@app/shared/services/user.service';
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
     DatePipe,
-    MatAccordion
+    MatAccordion,
+    RouterLinkActive,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -47,6 +48,7 @@ export class RecentCaseComponent implements OnInit {
 
   selectedIndex = 0;
   panelOpenState = false;
+  idCode = '';
 
   @ViewChild('stepper') stepper!: MatStepper;
 
@@ -95,5 +97,19 @@ export class RecentCaseComponent implements OnInit {
           this.selectedIndex = 5;
         }
       });
+  }
+
+  searchByCaseId(){
+    this.caseManagementService.searchByCaseId({idCode: this.idCode})
+    .subscribe({
+      next: (caseDetails) => {
+        this.router.navigate(['/caseSearch', this.idCode as string], {state: caseDetails});
+      },
+      error: (error) => {
+      
+        console.error('error', error);
+      }
+  
+    });
   }
 }

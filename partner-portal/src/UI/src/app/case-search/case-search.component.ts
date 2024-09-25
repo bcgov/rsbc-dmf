@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbar } from '@angular/material/toolbar';
 import { RecentCaseComponent } from '@app/recent-case/recent-case.component';
 import { SubmissionRequirementsComponent } from '../../app/submission-requirements/submission-requirements.component';
 import { SubmissionHistoryComponent } from '@app/submission-history/submission-history.component';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { CaseSearch } from '@app/shared/api/models';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -38,23 +38,38 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class CaseSearchComponent implements OnInit{
 
-  idCode = '';
+  //idCode = '';
+  caseId = input<string>();
 
   @ViewChild(MatAccordion) accordion!: MatAccordion;
   
   readonly dialog = inject(MatDialog);
   
-  caseDetails: CaseSearch = this.router.getCurrentNavigation()?.extras.state as CaseSearch;
+  caseDetails: CaseSearch | null = null;
   
   constructor(
     private caseManagementService: CaseManagementService,
-    private activatedRoute: ActivatedRoute, 
-    private router: Router  
   ) {}
     
   ngOnInit(): void {
+    this.searchByCaseId();
+    console.log(this.caseDetails, this.caseId())
   }
   
+
+  searchByCaseId(){
+    this.caseManagementService.searchByCaseId({idCode: this.caseId() as string})
+    .subscribe({
+      next: (caseDetails) => {
+        this.caseDetails = caseDetails
+      },
+      error: (error) => {
+        console.error('error', error);
+      }
+  
+    });
+  }
+
   openCommentsDialog() {
     const dialogRef = this.dialog.open(CommentsComponent, {
       height: '730px',

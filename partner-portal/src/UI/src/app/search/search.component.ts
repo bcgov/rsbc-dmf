@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatError } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { CaseSearch } from '@app/shared/api/models';
 import { DriverService } from '@app/shared/api/services';
 import { CaseManagementService } from '@app/shared/services/case-management/case-management.service';
 import { UserService } from '@app/shared/services/user.service';
@@ -29,6 +30,7 @@ import { UserService } from '@app/shared/services/user.service';
 export class SearchComponent {
   driverLicenceNumber = '';
   idCode = '';
+  noResults: boolean = false;
 
   constructor(
     private caseManagementService: CaseManagementService,
@@ -37,14 +39,16 @@ export class SearchComponent {
   ) { }
 
   search() {
+    this.noResults = false;
     this.caseManagementService
       .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
       .subscribe({
         next: (driver) => {
           this.userService.setCacheDriver(driver);
-          this.router.navigateByUrl('/driverSearch');
+          this.router.navigate(['/driverSearch', this.driverLicenceNumber as string]);
         },
         error: (error) => {
+          this.noResults = true;
           console.error('error', error);
         }
       });
@@ -52,12 +56,14 @@ export class SearchComponent {
 
 
   searchByCaseId(){
+    this.noResults = false;
     this.caseManagementService.searchByCaseId({idCode: this.idCode})
     .subscribe({
       next: (caseDetails) => {
-        this.router.navigateByUrl('/caseSearch', {state: caseDetails});
+        this.router.navigate(['/caseSearch', this.idCode as string], {state: caseDetails});
       },
       error: (error) => {
+        this.noResults = true;
         console.error('error', error);
       }
   

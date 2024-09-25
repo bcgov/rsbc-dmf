@@ -68,6 +68,7 @@ export class DriverSearchComponent implements OnInit {
   @ViewChild(MatAccordion) accordion!: MatAccordion;
 
   _closedCaseDetails: CaseDetail[] | null = [];
+  driverLicenceNumber = '';
 
    // Get Driver details
    driverDetails = this.userService.getCachedriver();
@@ -97,6 +98,8 @@ export class DriverSearchComponent implements OnInit {
     } else {
       console.log('No user profile');
     }
+
+  this.search();
   }
 
   getClosedCases(driverId: string) {
@@ -105,6 +108,22 @@ export class DriverSearchComponent implements OnInit {
       .subscribe((closedCases: any) => {
         this.closedCaseDetails = closedCases;
         this.isLoading = false;
+      });
+  }
+
+
+  search() {
+    this.caseManagementService
+      .searchByDriver({ driverLicenceNumber: this.driverLicenceNumber })
+      .subscribe({
+        next: (driver) => {
+          this.userService.setCacheDriver(driver);
+          this.driverDetails = this.driverDetails;
+        },
+        error: (error) => {
+         
+          console.error('error', error);
+        }
       });
   }
 
