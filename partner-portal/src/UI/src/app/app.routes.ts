@@ -17,11 +17,11 @@ export const routes: Routes = [
     children: [
       { path: 'search', component: SearchComponent },
       { path: 'remedial', component: RemedialComponent },
-      { path: 'driverSearch', component: DriverSearchComponent },
+      { path: 'driverSearch/:driverLicenceNumber', component: DriverSearchComponent },
       { path: 'assistDriver', component: AssistDriverComponent },
-      { path: 'caseSearch', component: CaseSearchComponent },
       { path: 'submissionHistory', component: SubmissionHistoryComponent },
       { path: 'letterToDriver', component: LettersToDriverComponent },
+      {path: 'caseSearch/:caseId', component: CaseSearchComponent },
     ],
   },
 ];

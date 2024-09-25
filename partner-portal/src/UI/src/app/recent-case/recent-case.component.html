@@ -5,7 +5,7 @@
         <label>Case ID</label>
         <div>
           <b>
-            <a>
+            <a [routerLink]="['/caseSearch', caseDetails?.idCode]" routerLinkActive="active">
               <h3>{{ caseDetails?.idCode }}</h3>
             </a>
           </b>

@@ -45,21 +45,23 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div>
+                <div >
                   <button mat-flat-button class="primaryButton" (click)="searchByCaseId()">Search</button>
                 </div>
-                <div>
+                <div style="padding-top: 10px;">
                   <span>
                     Missing DMER Case ID?
-                    <a
-                      >Find out options for the driver to obtain their DMER Case
-                      ID.</a
-                    >
+                    <a> Find out options for the driver to obtain their DMER Case ID. </a>
                   </span>
                 </div>
               </div>
             </div>
           </form>
+          @if(noResults){
+            <div class="noResults">
+              RoadSafetyBC (RSBC) does not have a driver medical fitness record of any active or historical cases assigned to this driver. Check if there is a case at <a style="color:#D23C42 ;">Remedial.</a>
+            </div>
+          }
         </mat-card-content>
       </mat-card>
     </div>
