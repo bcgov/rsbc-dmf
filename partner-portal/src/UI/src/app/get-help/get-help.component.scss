@@ -1,0 +1,75 @@
+.help-topics {
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 218px;
+    max-width: 280px;
+    background-color: rgb(255, 255, 255);
+    padding: 6px 0;
+    align-items: flex-start;
+  }
+  
+  .help-topics-item {
+    background-color: transparent;
+    cursor: pointer;
+    border: none;
+  
+    user-select: none;
+    min-width: 64px;
+    line-height: 36px;
+    padding: 10px 20px;
+    border-radius: 4px;
+  }
+  
+  .help-topics-item:hover {
+    background-color: rgb(208, 208, 208);
+  }
+  
+  .help-topics-item:active {
+    background-color: rgb(170, 170, 170);
+  }
+
+  .help-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  
+    > .mat-mdc-card {
+      border: 2px solid #606060;
+      cursor: pointer;
+    }
+  }
+  
+  .help {
+    display: flex;
+    gap: 32px;
+  }
+  
+  .helpDetails {
+    line-height: 4;
+  }
+
+  .padding-top{
+    padding-top: 32px;
+  }
+
+  
+  .text {
+    position: absolute;
+    align-self: flex-start;
+    padding: 10px 10px 10px 10px;
+    box-sizing: border-box;
+  }
+
+  @media only screen and (max-width: 896px) {
+    .assistance-page {
+      display: block;
+    }
+  
+    .help {
+      display: block;
+    }
+
+    .inputWidth {
+      width: 100%;
+    }
+  }
