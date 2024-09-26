@@ -5,11 +5,12 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ChefsService } from '../shared/api/services';
 import { v4 as uuidv4 } from 'uuid';
 import { SubmissionStatus } from '@app/features/chefs/enums/chefs-status.enum';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-popup',
   standalone: true,
-  imports: [MatDialogActions],
+  imports: [MatDialogActions, MatIcon],
   templateUrl: './popup.component.html',
   styleUrl: './popup.component.scss',
 })
@@ -82,7 +83,10 @@ export class PopupComponent {
     };
   }): void {
     // TODO this should be configurable
-    if (event.origin !== 'https://submit.digital.gov.bc.ca') return; // Ensure message is from expected origin
+    if (event.origin !== 'https://submit.digital.gov.bc.ca') {
+      console.error(`Event message origin was not expected: ${event.origin}`);
+      return; // Ensure message is from expected origin
+    }
 
     const {
       data: { instanceId, type, status, submission, flags, assign, priority },
